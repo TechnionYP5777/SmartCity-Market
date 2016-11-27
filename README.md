@@ -7,10 +7,7 @@ The software will also improve the costumer buying experience.
 
 General Features:
 
-1. Manage the supermarket inventory supply:
-	1.1 Products amount.
-	1.2 Products location.
-	1.3 Products Experation date.
+1. Manage the supermarket inventory supply: Products amount, Products location and Products Experation date.
 	
 2. Support SmartCodes: special barcode which identifies the product information such
    as price, expiration date, manufacture, “allergic” ingredients, etc.
