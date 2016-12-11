@@ -4,10 +4,33 @@
   <artifactId>SmartCity-Market</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
+  <build>
+  	<pluginManagement>
+  		<plugins>
+  			<plugin>
+  				<groupId>org.apache.maven.plugins</groupId>
+  				<artifactId>maven-compiler-plugin</artifactId>
+  				<version>3.6.0</version>	
+  				<configuration>
+  					<source>1.8</source>
+  					<target>1.8</target>
+  				</configuration>  				
+  			</plugin>
+  		</plugins>
+  	</pluginManagement>
+  </build>
   <modules>
   	<module>Server</module>
   	<module>Common</module>
   	<module>Cart</module>
   	<module>Employee</module>
   </modules>
+  <dependencies>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.12</version>
+  		<scope>test</scope>
+  	</dependency>
+  </dependencies>
 </project>

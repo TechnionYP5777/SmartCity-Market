@@ -1,4 +1,4 @@
-package test.ClientServerCommunicationTest;
+package ClientServerCommunicationTest;
 
 import static org.junit.Assert.*;
 
@@ -11,9 +11,9 @@ import java.net.UnknownHostException;
 
 import org.junit.Test;
 
-import main.ClientServerCommunication.ClientRequestHandler;
-import main.ClientServerCommunication.ProcessRequest;
-import main.ClientServerCommunication.ThreadPooledServer;
+import ClientServerCommunication.ClientRequestHandler;
+import ClientServerCommunication.ProcessRequest;
+import ClientServerCommunication.ThreadPooledServer;
 
 /**
  * @author Aviad Cohen

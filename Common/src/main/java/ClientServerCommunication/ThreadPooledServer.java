@@ -1,4 +1,4 @@
-package main.ClientServerCommunication;
+package ClientServerCommunication;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,6 +7,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import ClientServerCommunication.ProcessRequest;
+import ClientServerCommunication.ServerWorkerRunnable;
 
 /** ThreadPooledServer - Handles the server connection between and multiple clients.
  * The name says it all - the server will have a pool for all the clients requests

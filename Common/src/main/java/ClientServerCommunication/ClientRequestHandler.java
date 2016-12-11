@@ -1,4 +1,4 @@
-package main.ClientServerCommunication;
+package ClientServerCommunication;
 
 import java.io.BufferedReader;
 import java.io.IOException;

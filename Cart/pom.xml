@@ -6,4 +6,11 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>Cart</artifactId>
+  <dependencies>
+  	<dependency>
+  		<groupId>SmartCity-Market</groupId>
+  		<artifactId>Common</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>
