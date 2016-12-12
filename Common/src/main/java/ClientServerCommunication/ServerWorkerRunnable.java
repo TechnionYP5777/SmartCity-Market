@@ -34,7 +34,8 @@ public class ServerWorkerRunnable implements Runnable{
     /**
      * The main function which will always run when the server is processing the client requests.
      */
-    public void run() {
+    @Override
+	public void run() {
         LOGGER.log(Level.FINE, "Server started to process request from port " + clientSocket.getPort());
 		
 		processRequest.process(clientSocket);

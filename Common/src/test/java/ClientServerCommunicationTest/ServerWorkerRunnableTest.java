@@ -55,6 +55,7 @@ public class ServerWorkerRunnableTest {
 	
 	private class ServerProcessRequestHelloWorld implements ProcessRequest {
 
+		@Override
 		public void process(Socket s) {
             BufferedReader in = null;
             PrintWriter out = null;
