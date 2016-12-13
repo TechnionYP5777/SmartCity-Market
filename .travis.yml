@@ -11,8 +11,5 @@ notifications:
  email:
   - smart.market.cs@gmail.com 
 
-
-mvn test
-
-
-
+script:
+ - mvn test
