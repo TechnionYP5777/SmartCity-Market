@@ -114,7 +114,7 @@ public class ThreadPooledServer implements Runnable{
      * @return - true if the server stopped, otherwise false.
      */
     public synchronized boolean isStopped(){
-    	String state = isStopped ? "running" : "no running";
+    	String state = (isStopped ? "" : "no ") + "running";
         LOGGER.log(Level.FINE, "Server is currently " + state);
         
         return isStopped;
