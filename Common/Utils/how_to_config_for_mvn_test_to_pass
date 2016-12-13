@@ -1,0 +1,20 @@
+-On your Eclipse IDE, go into Window > Preferences > Java > Installed JREs > and check your installed JREs. You should have an entry with a JDK there.
+ Select the Execution Env for JRE/JSE (should be jdk8 for each one). Click OK
+ Then Right-Click on your Project -> Maven -> Update Project
+
+-Setup JAVA_HOME enviroment var:
+	sudo vi /etc/enviroment
+	Press "i" for getting in edit mode and add these lines:
+		JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
+		export JAVA_HOME
+	exit vim using "ESC" --> ":" --> "wq" --> "Enter"
+	run this cmd: . /etc/enviroment/
+
+-Run 'mvn test' cmd from shell to see if build & tests are going all fine. (should see "SUCCESS" near each project)
+
+
+Regards, 
+
+Idan Atias
+idan2k3@gmail.com
+
