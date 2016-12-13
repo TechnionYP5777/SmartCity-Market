@@ -3,6 +3,12 @@ language: java
 jdk:
  - oraclejdk8
 
+# blocklist: add here branches you don't want build using Travis
+branches:
+ except:
+ - master
+
+# safe list: add here branches you want to verify the build & tests will pass
 branches:
  only:
   - Travis_integration
