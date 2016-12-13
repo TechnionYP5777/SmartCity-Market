@@ -6,16 +6,18 @@ jdk:
 # blocklist: add here branches you don't want build using Travis
 branches:
  except:
- - master
+ - Travis_integration
 
 # safe list: add here branches you want to verify the build & tests will pass
 branches:
  only:
-  - Travis_integration
+  - master
 
+# add this if you want to be notified about successfull/failed builds to your mail.
 notifications:
  email:
   - smart.market.cs@gmail.com 
 
+# add this if you use maven for your project and want to verify mvn build is successful and all unit tests pass.
 script:
  - mvn test
