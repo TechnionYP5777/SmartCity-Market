@@ -1,0 +1,5 @@
+package SQLDatabase;
+
+class SQLDatabaseEntities {
+	
+}
