@@ -22,7 +22,8 @@ import ClientServerCommunication.ThreadPooledServer;
 public class ThreadPooledServerTest {
 
 	private static final int SERVER_PORT = 9002;
-	private static final String SERVER_HOST_NAME = "localhost";
+	private static final String SERVER_HOST_NAME_LOCAL = "localhost";
+	private static final String SERVER_HOST_IP         = "127.100.100.1";
 	private static final int TIMEOUT = 1000;
 	private static final String CLIENT_MSG_HELLO = "Hello";
 	private static final String SERVER_MSG_WORLD = "World!";
@@ -50,11 +51,17 @@ public class ThreadPooledServerTest {
 	
 	private class ClientRunner implements Runnable  {
 		
+		private String serverIP;
+		
+		public ClientRunner(String serverIP) {
+			this.serverIP = serverIP;
+		}
+		
 		@Override
 		public void run() {
 			ClientRequestHandler clientRequestManager = null;
 			try {
-				clientRequestManager = new ClientRequestHandler(SERVER_PORT, SERVER_HOST_NAME, TIMEOUT);
+				clientRequestManager = new ClientRequestHandler(SERVER_PORT, serverIP, TIMEOUT);
 			} catch (UnknownHostException | RuntimeException e1) {
 				e1.printStackTrace();
 				fail();
@@ -72,16 +79,50 @@ public class ThreadPooledServerTest {
 		}
 	}
 	
-	@Test public void ServerWorkerRunnableHelloWorldTest () {
+	@Test public void ServerWorkerRunnableHelloWorldLocalTest () {
 		ProcessRequestTester processRequestTester = new ProcessRequestTester();
-		ThreadPooledServer server = new ThreadPooledServer(SERVER_PORT, 1, processRequestTester);
+		ThreadPooledServer server = null;
+		try {
+			server = new ThreadPooledServer(SERVER_PORT, 1, processRequestTester);
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+			fail();
+		}
 		Thread client;
 		new Thread(server).start();
 		
 		/* waiting for server to run */
 		while (server.isStopped());
 		
-		client = new Thread(new ClientRunner());
+		client = new Thread(new ClientRunner(SERVER_HOST_NAME_LOCAL));
+		client.start();
+		
+		try {
+			client.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		server.stop();
+	}
+	
+	@Test public void ServerWorkerRunnableHelloWorldIPTest () {
+		ProcessRequestTester processRequestTester = new ProcessRequestTester();
+		ThreadPooledServer server = null;
+		try {
+			server = new ThreadPooledServer(SERVER_PORT, 1, processRequestTester, SERVER_HOST_IP);
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+			fail();
+		}
+		Thread client;
+		new Thread(server).start();
+		
+		/* waiting for server to run */
+		while (server.isStopped());
+		
+		client = new Thread(new ClientRunner(SERVER_HOST_IP));
 		client.start();
 		
 		try {

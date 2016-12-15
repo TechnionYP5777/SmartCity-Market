@@ -1,7 +1,5 @@
 package SQLDatabaseTest;
 
-import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,9 +21,8 @@ public class SQLDatabaseConnectionTest {
 
 	@Test
 	public void testInitialize() {
+		@SuppressWarnings("unused")
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		
-		
 	}
 
 }

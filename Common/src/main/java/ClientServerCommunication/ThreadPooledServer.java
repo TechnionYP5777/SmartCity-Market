@@ -1,7 +1,9 @@
 package ClientServerCommunication;
 
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,30 +21,38 @@ import ClientServerCommunication.ServerWorkerRunnable;
 
 public class ThreadPooledServer implements Runnable{
 
+	private static final int backlog = 50;
 	private static final Logger LOGGER = Logger.getLogger(ThreadPooledServer.class.getName());
 	
 	private int serverPort;
 	private ServerSocket serverSocket;
+	private InetAddress ipAddress;
 	private boolean isStopped;
 	private ExecutorService threadPool;
 	private ProcessRequest processRequest;
-
-	// TODO Currently, the server supports only "localhost" (127.0.0.1). Need to add support to connection by selected ip.
 	
 	/**
 	 * Create the thread pool server.
 	 * @param serverPort - the server port.
 	 * @param numOfThreads - the number of threads which will work concurrently.
-	 * @param processRequest - the object which processes the clients requests (also send
+	 * @param r - the object which processes the clients requests (also send
 	 * responds and receive requests.
+	 * @param ipAddress - the server IP address to listen on
+	 * @throws UnknownHostException 
 	 */
-    public ThreadPooledServer(int serverPort, int numOfThreads, ProcessRequest processRequest) {
+	private void initializeServer(int serverPort, int numOfThreads, ProcessRequest r, String ipAddress) throws UnknownHostException {
         this.serverPort = serverPort;
         this.serverSocket = null;
         this.isStopped = false;
-        this.processRequest = processRequest;
+        this.processRequest = r;
         
-        if (processRequest == null)
+        try {
+			this.ipAddress = InetAddress.getByName(ipAddress);
+		} catch (UnknownHostException e) {
+			throw new UnknownHostException("Server failed in initialization, unknown ip address " + ipAddress);
+		}
+        
+        if (r == null)
 			throw new NullPointerException("Server failed in initialization, processRequest can't be null");
         
         if (numOfThreads < 0)
@@ -52,6 +62,15 @@ public class ThreadPooledServer implements Runnable{
         threadPool = Executors.newFixedThreadPool(numOfThreads);
         
         LOGGER.log(Level.FINE, "Server initialized successfully with " + numOfThreads + " threads, port number " + serverPort);
+	}
+
+    public ThreadPooledServer(int serverPort, int numOfThreads, ProcessRequest processRequest) throws UnknownHostException {
+    	/* Use default IP is localhost */
+    	initializeServer(serverPort, numOfThreads, processRequest, "127.0.0.1");
+    }
+	
+    public ThreadPooledServer(int serverPort, int numOfThreads, ProcessRequest processRequest, String ipAddress) throws UnknownHostException {
+    	initializeServer(serverPort, numOfThreads, processRequest, ipAddress);
     }
 
     /**
@@ -125,7 +144,7 @@ public class ThreadPooledServer implements Runnable{
      */
     private void openServerSocket() {
         try {
-            this.serverSocket = new ServerSocket(this.serverPort);
+            this.serverSocket = new ServerSocket(this.serverPort, backlog, this.ipAddress);
         } catch (IOException e) {
             throw new RuntimeException("Server failed to open port " + serverPort, e);
         }

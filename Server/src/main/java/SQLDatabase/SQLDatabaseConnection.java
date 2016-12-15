@@ -1,8 +1,5 @@
 package SQLDatabase;
 
-import SQLDatabase.SQLDatabaseEntities;
-import SQLDatabase.SQLDatabaseEntities.IngredientsTable;
-
 /**
  * SqlDBConnection - Handles the server request to the SQL database.
  * 
