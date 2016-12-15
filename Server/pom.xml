@@ -12,5 +12,15 @@
   		<artifactId>Common</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
+  	<dependency>
+  		<groupId>org.hsqldb</groupId>
+  		<artifactId>hsqldb</artifactId>
+  		<version>2.3.4</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.healthmarketscience.sqlbuilder</groupId>
+  		<artifactId>sqlbuilder</artifactId>
+  		<version>2.1.5</version>
+  	</dependency>
   </dependencies>
 </project>
