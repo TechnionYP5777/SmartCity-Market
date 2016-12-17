@@ -1,7 +1,6 @@
 package BasicCommonClasses;
 
-import java.time.LocalDate; 
-//TODO: replace java.util.Date with JodaTime
+import org.joda.time.LocalDate;
 
 /** SmartCode - basic class represent the SmartCode product:
  * A combination of barcode and expiration date.

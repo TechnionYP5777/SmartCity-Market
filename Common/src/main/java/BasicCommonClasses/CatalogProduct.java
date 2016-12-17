@@ -4,7 +4,6 @@ package BasicCommonClasses;
  */
 
 import java.util.HashSet;
-//import java.awt.Image;
 
 //TODO: decide about the logic off add/remove location - PlaceInMarket
 
@@ -142,7 +141,5 @@ public class CatalogProduct {
 	@Override
 	public boolean equals(Object ¢) {
 		return ¢ == this || (¢ != null && getClass() == ¢.getClass() && barcode == ((CatalogProduct) ¢).barcode);
-	}
-	
-	
+	}	
 }

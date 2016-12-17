@@ -2,7 +2,7 @@ package BasicCommonClassesTest;
 
 import static org.junit.Assert.fail;
 
-import java.time.LocalDate;
+import org.joda.time.LocalDate;
 
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ import BasicCommonClasses.SmartCode;
  * @since 2016-12-11 */
 public class ProductPackageTest {
 	@Test public void ProductPackageTestMethod() {
-		LocalDate ld = LocalDate.of(2016,12,11);
+		LocalDate ld = new LocalDate(2016,12,11);
 		SmartCode sc = new SmartCode(123, ld);
 		Location lo = new Location(1,1,PlaceInMarket.WAREHOUSE);
 		ProductPackage pp = new ProductPackage(sc,2,lo);
@@ -27,7 +27,7 @@ public class ProductPackageTest {
 		pp.setLocation(lo);
 		if (!sc.equals(pp.getSmartCode()) || pp.getAmount() != 1 || !lo.equals(pp.getLocation())) 
 			fail();
-		LocalDate ld2 = LocalDate.of(2015, 12, 12);
+		LocalDate ld2 = new LocalDate(2015, 12, 12);
 		SmartCode sc2 = new SmartCode(111,ld2);
 		ProductPackage pp2 = new ProductPackage(sc2, 1, lo);
 		if (pp2.equals(pp))

@@ -4,7 +4,7 @@ package BasicCommonClasses;
  * @since 
  */
 
-import java.time.LocalDate;
+import org.joda.time.LocalDate;
 
 /** CartProduct - The product from the Cart (/costumer) perspective. 
  * @param amount - The number of items of the same product in the cart.
