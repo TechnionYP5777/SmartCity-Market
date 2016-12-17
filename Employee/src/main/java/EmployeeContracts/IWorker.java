@@ -1,5 +1,7 @@
 package EmployeeContracts;
 
+import BasicCommonClasses.CatalogProduct;
+
 /** IWorker - This interface represent the Worker client functionality.
  * 
  * @author Shimon Azulay
@@ -20,6 +22,6 @@ public interface IWorker {
 	void logout();
 	
 	// TODO - SHOULD BE INT OR LONG?
-	int viewProductFromCatalog();
+	CatalogProduct viewProductFromCatalog(int barcode);
 
 }

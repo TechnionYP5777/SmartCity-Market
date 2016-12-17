@@ -15,6 +15,10 @@ public abstract class ClientCommunicationHandler {
 
 	protected ClientRequestHandler clientRequestHandler;
 	protected static final Logger LOGGER = Logger.getLogger(ClientRequestHandler.class.getName());
+	protected int clientId;
+	protected String username;
+	protected String password;
+	
 
 	protected void establishCommunication(int port, String host, int timeout)
 			throws UnknownHostException, RuntimeException {
