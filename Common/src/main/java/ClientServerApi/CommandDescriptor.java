@@ -32,8 +32,7 @@ public enum CommandDescriptor {
 	LOGIN,
 	/**
 	 * Description: Client login command to get in the system and receive unique sender id from server.
-	 * param1: String userName
-	 * param2: String password
+	 * param1: Login.
 	 * retval: int senderId (in senderId field).
 	 *
 	 * result_codes:
@@ -53,6 +52,7 @@ public enum CommandDescriptor {
 	LOGOUT,
 	/**
 	 * Description: Client logout command for logging out of server.
+	 * param1: String username.
 	 * retval: void
 	 *
 	 * result_codes:

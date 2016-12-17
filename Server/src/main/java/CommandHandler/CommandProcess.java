@@ -8,6 +8,10 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.gson.Gson;
+
+import BasicCommonClasses.Login;
+import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import ClientServerCommunication.ProcessRequest;
@@ -19,28 +23,58 @@ public class CommandProcess implements ProcessRequest {
 	private CommandWrapper inCommandWrapper;
 	private CommandWrapper outCommandWrapper;
 	
+	private void loginCommand() {		
+		Login login;
+		
+		LOGGER.log(Level.FINE, "Login command called");
+		
+		login = new Gson().fromJson(inCommandWrapper.getData(), Login.class);
+		
+		//TODO Noam - call SQL Login here and insert result to outCommandWrapper using try-catch
+		
+		LOGGER.log(Level.FINE, "Login with User " + login.getUserName() + " finished");
+	}
+	
+	private void logoutCommand() {
+		String username;
+		
+		LOGGER.log(Level.FINE, "Logout command called");
+		
+		username = new Gson().fromJson(inCommandWrapper.getData(), String.class);
+		
+		//TODO Noam - call SQL Logout here and insert result to outCommandWrapper using try-catch
+		
+		LOGGER.log(Level.FINE, "Logout with User " + username + " finished");
+	}
+	
+	private void viewProductFromCatalogCommand() {
+		SmartCode smartCode;
+		
+		LOGGER.log(Level.FINE, "View Product From Catalog command called");
+		
+		smartCode = new Gson().fromJson(inCommandWrapper.getData(), SmartCode.class);
+		
+		//TODO Noam - call SQL View Product From Catalog here and insert result to outCommandWrapper using try-catch
+		
+		LOGGER.log(Level.FINE, "View Product From Catalog with product barcode  " + smartCode.getBarcode() + " finished");
+	}
+	
 	private void interpretCommand(String command) {
 		inCommandWrapper = CommandWrapper.fromGson(command);
 		
 		switch(inCommandWrapper.getCommandDescriptor()) {
 		case LOGIN:
-			//TODO Aviad - Added support to Login command
-			LOGGER.log(Level.SEVERE, "Login command currectly unsupported");
-			outCommandWrapper.setResultDescriptor(ResultDescriptor.SM_INVALID_CMD_DESCRIPTOR);
+			loginCommand();
 
 			break;
 			
 		case LOGOUT:
-			//TODO Aviad - Added support to Logout command
-			LOGGER.log(Level.SEVERE, "Logout command currectly unsupported");
-			outCommandWrapper.setResultDescriptor(ResultDescriptor.SM_INVALID_CMD_DESCRIPTOR);
+			logoutCommand();
 			
 			break;
 			
 		case VIEW_PRODUCT_FROM_CATALOG:
-			//TODO Aviad - Added support to VIEW_PRODUCT_FROM_CATALOG command
-			LOGGER.log(Level.SEVERE, "VIEW PRODUCT FROM CATALOG command currectly unsupported");
-			outCommandWrapper.setResultDescriptor(ResultDescriptor.SM_INVALID_CMD_DESCRIPTOR);
+			viewProductFromCatalogCommand();
 			
 			break;
 			
