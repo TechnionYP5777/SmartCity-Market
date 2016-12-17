@@ -2,7 +2,7 @@ package ClientServerApi;
 
 import com.google.gson.Gson;
 
-public class CommandWrapper {
+public class CommandWrapper implements Cloneable {
 	/**
 	 * Command wrapper for sending packages between client and server:
 	 * Fields:
@@ -37,13 +37,28 @@ public class CommandWrapper {
 		this.data = retVal;
 	}
 	
+	public CommandWrapper(ResultDescriptor resultDescriptor) {
+		this.resultDescriptor = resultDescriptor;
+	}
+	
 	//Methods:
 	public String toGson(){
 		return new Gson().toJson(this);
 	}
 	
-	public CommandWrapper fromGson(String cmdWrap) {
+	public static CommandWrapper fromGson(String cmdWrap) {
 		return new Gson().fromJson(cmdWrap, CommandWrapper.class);
+	}
+	
+	public Object clone() throws CloneNotSupportedException {
+		CommandWrapper $ = (CommandWrapper)super.clone();
+		   
+		$.setSenderID(this.senderID);
+		$.setCommandDescriptor(this.commandDescriptor);
+		$.setResultDescriptor(this.resultDescriptor);
+		$.setData(this.data);
+
+		return $;
 	}
 	
 	public int getSenderID() {
