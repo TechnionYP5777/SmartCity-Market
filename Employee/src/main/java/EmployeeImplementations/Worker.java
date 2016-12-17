@@ -30,6 +30,7 @@ public class Worker extends ClientCommunicationHandler implements IWorker {
 
 		LOGGER.log(Level.FINE,
 				"Creating login command wrapper with username: " + username + " and password: " + password);
+		@SuppressWarnings("unused")
 		CommandWrapper commandWrapper = new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.LOGIN);
 
 		// TODO - FOR IDAN: HOW TO SET DATA STRING ?

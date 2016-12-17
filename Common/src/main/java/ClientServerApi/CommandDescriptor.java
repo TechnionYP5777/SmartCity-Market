@@ -17,7 +17,7 @@ public enum CommandDescriptor {
 	// Connection:
 	LOGIN,
 	/**
-	 * Description: Client login command to get in the system and receive uniq sender id from server.
+	 * Description: Client login command to get in the system and receive unique sender id from server.
 	 * param1: String userName
 	 * param2: String password
 	 * retval: int senderId

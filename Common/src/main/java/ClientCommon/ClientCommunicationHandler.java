@@ -22,8 +22,7 @@ public abstract class ClientCommunicationHandler {
 	}
 
 	protected void terminateCommunication() {
-		if (clientRequestHandler != null) {
+		if (clientRequestHandler != null)
 			clientRequestHandler.finishRequest();
-		}
 	}
 }

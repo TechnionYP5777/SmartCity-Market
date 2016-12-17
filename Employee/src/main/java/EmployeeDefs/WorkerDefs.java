@@ -7,8 +7,8 @@ package EmployeeDefs;
 
 public class WorkerDefs {
 	
-	public final static int port = 80;
-	public final static String host ="127.0.0.1";
-	public final static int timeout = 10000;
-	public final static int loginCommandSenderId = -1;
+	public static final int port = 80;
+	public static final String host = "127.0.0.1";
+	public static final int timeout = 10000;
+	public static final int loginCommandSenderId = -1;
 }
