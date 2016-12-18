@@ -50,6 +50,7 @@ public class CommandWrapper implements Cloneable {
 		return new Gson().fromJson(cmdWrap, CommandWrapper.class);
 	}
 	
+	@Override
 	public Object clone() throws CloneNotSupportedException {
 		CommandWrapper $ = (CommandWrapper)super.clone();
 		   
