@@ -3,9 +3,9 @@ package BasicCommonClasses;
  * @author Lior Ben Ami
  */
 
+import java.awt.image.BufferedImage;
 import java.util.HashSet;
 
-//TODO: decide about the logic off add/remove location - PlaceInMarket
 
 /** CatalogProduct - The info of a product of the market's catalog. 
  * @param barcode - Is the unique key.
@@ -19,19 +19,18 @@ public class CatalogProduct {
 	Manufacturer manufacturer;
 	String description;
 	double price;
-	//TODO: activate the image property
-	//Image image;
+	BufferedImage image;
 	HashSet<Location> locations;
 	
 	public CatalogProduct(long barcode, String name, HashSet<Ingredient> ingredients, Manufacturer manufacturer,
-			String description, double price, /*Image image,*/ HashSet<Location> locations) {
+			String description, double price, BufferedImage image,HashSet<Location> locations) {
 		this.barcode = barcode;
 		this.name = name;
 		this.ingredients = ingredients;
 		this.manufacturer = manufacturer;
 		this.description = description;
 		this.price = price;
-		//this.image = image;
+		this.image = image;
 		this.locations = locations;
 	}
 
@@ -82,15 +81,13 @@ public class CatalogProduct {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-/*
-	public Image getImage() {
+	public BufferedImage getImage() {
 		return image;
 	}
 
-	public void setImage(Image ¢) {
+	public void setImage(BufferedImage ¢) {
 		this.image = ¢;
 	}
-*/
 
 	public HashSet<Location> getLocations() {
 		return locations;
