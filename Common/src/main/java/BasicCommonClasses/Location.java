@@ -1,35 +1,34 @@
 package BasicCommonClasses;
 
-//TODO: decide about the logic off placeInMarket -C'tor, set...
 /** Location - the SmartMarket is mapped by the locations of its product.
  * @see main.BasicCommonClasses.PlaceInMarket
  * @author Lior Ben Ami
  * @since 2016-12-09 */
 public class Location {
-	int passage;
-	int column;
+	int x;
+	int y;
 	PlaceInMarket placeInMarket;
 	
-	public Location(int passage, int column, PlaceInMarket placeInMarket) {
-		this.passage = passage;
-		this.column = column;
+	public Location(int x, int y, PlaceInMarket placeInMarket) {
+		this.x = x;
+		this.y = y;
 		this.placeInMarket = placeInMarket;
 	}
 	
-	public int getPassage() {
-		return passage;
+	public int getX() {
+		return x;
 	}
 
-	public void setPassage(int passage) {
-		this.passage = passage;
+	public void setX(int x) {
+		this.x = x;
 	}
 
-	public int getColumn() {
-		return column;
+	public int getY() {
+		return y;
 	}
 
-	public void setColumn(int column) {
-		this.column = column;
+	public void setY(int y) {
+		this.y = y;
 	}
 
 	public PlaceInMarket getPlaceInMarket() {
@@ -42,12 +41,12 @@ public class Location {
 
 	@Override
 	public int hashCode() {
-		return 31 * (passage + 31 * (column + 31)) + ((placeInMarket == null) ? 0 : placeInMarket.hashCode());
+		return 31 * (x + 31 * (y + 31)) + ((placeInMarket == null) ? 0 : placeInMarket.hashCode());
 	}
 	
 	@Override
 	public boolean equals(Object ¢) {
-		return ¢ == this || (¢ != null && getClass() == ¢.getClass() && column == ((Location) ¢).column && passage == ((Location) ¢).passage
+		return ¢ == this || (¢ != null && getClass() == ¢.getClass() && y == ((Location) ¢).y && x == ((Location) ¢).x
 				&& placeInMarket == ((Location) ¢).placeInMarket);
 	}
 

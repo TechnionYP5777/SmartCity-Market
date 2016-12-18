@@ -13,18 +13,18 @@ import BasicCommonClasses.PlaceInMarket;;
 public class LocationTest {
 	@Test public void LocationTestMethod() {
 		Location lo = new Location(1,1,PlaceInMarket.WAREHOUSE);
-		if (lo.getPassage() != 1 || lo.getColumn() != 1 || lo.getPlaceInMarket() != PlaceInMarket.WAREHOUSE)
+		if (lo.getX() != 1 || lo.getY() != 1 || lo.getPlaceInMarket() != PlaceInMarket.WAREHOUSE)
 			fail();
-		lo.setPassage(2);
-		lo.setColumn(2);
+		lo.setX(2);
+		lo.setY(2);
 		lo.setPlaceInMarket(PlaceInMarket.STORE);
 		//TODO: add null check?
-		if (lo.getPassage() != 2 || lo.getColumn() != 2 || lo.getPlaceInMarket() != PlaceInMarket.STORE)
+		if (lo.getX() != 2 || lo.getY() != 2 || lo.getPlaceInMarket() != PlaceInMarket.STORE)
 			fail();
 		Location lo2 = new Location(1,2,PlaceInMarket.STORE);
 		if (lo2.equals(lo))
 			fail();
-		lo2.setPassage(2);
+		lo2.setX(2);
 		if (!lo2.equals(lo))
 			fail();
 	}

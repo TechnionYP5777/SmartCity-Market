@@ -21,7 +21,7 @@ public class ProductPackageTest {
 		if (!sc.equals(pp.getSmartCode()) || pp.getAmount() != 2 || !lo.equals(pp.getLocation())) 
 			fail();
 		sc.setBarcode(111);
-		lo.setPassage(2);
+		lo.setX(2);
 		pp.setSmartCode(sc);
 		pp.setAmount(1);
 		pp.setLocation(lo);
