@@ -1,12 +1,12 @@
-package ClientCommon;
+package EmployeeCommon;
 
 import java.net.UnknownHostException;
 import java.util.logging.Logger;
 
 import ClientServerCommunication.ClientRequestHandler;
 
-/** ClientCommunicationHandler - This abstract holds common functionality for 
- * the clients such as worker, manager, cart.
+/** AEmployee - This abstract holds common functionality for 
+ * the Employee such as worker, manager.
  * 
  * @author Shimon Azulay
  * @since 2016-12-17 */

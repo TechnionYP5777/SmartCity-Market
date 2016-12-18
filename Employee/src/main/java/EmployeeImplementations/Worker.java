@@ -8,9 +8,9 @@ import com.google.gson.Gson;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
-import ClientCommon.ClientCommunicationHandler;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
+import EmployeeCommon.AEmployee;
 import EmployeeContracts.IWorker;
 import EmployeeDefs.WorkerDefs;
 
@@ -21,7 +21,7 @@ import EmployeeDefs.WorkerDefs;
  * @since 2016-12-17
  */
 
-public class Worker extends ClientCommunicationHandler implements IWorker {
+public class Worker extends AEmployee implements IWorker {
 
 	@Override
 	public void login(String username, String password) {
