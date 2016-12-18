@@ -11,7 +11,7 @@ import ClientServerCommunication.ClientRequestHandler;
  * @author Shimon Azulay
  * @since 2016-12-17 */
 
-public abstract class ClientCommunicationHandler {
+public abstract class AEmployee {
 
 	protected ClientRequestHandler clientRequestHandler;
 	protected static final Logger LOGGER = Logger.getLogger(ClientRequestHandler.class.getName());
