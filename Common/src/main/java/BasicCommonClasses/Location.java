@@ -49,4 +49,5 @@ public class Location {
 		return ¢ == this || (¢ != null && getClass() == ¢.getClass() && y == ((Location) ¢).y && x == ((Location) ¢).x
 				&& placeInMarket == ((Location) ¢).placeInMarket);
 	}
+
 }

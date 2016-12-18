@@ -1,14 +1,6 @@
 package BasicCommonClassesTest;
 
 import static org.junit.Assert.fail;
-
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import javax.imageio.ImageIO;
-
 import org.junit.Test;
 
 import BasicCommonClasses.Location;
@@ -21,11 +13,9 @@ import BasicCommonClasses.Manufacturer;;
 /**@author Lior Ben Ami
  * @since 2016-12-11 */
 public class CatalogProductTest {
-	@Test public void CatalogProductTestMethod() throws MalformedURLException, IOException {
+	@Test public void CatalogProductTestMethod() {
 		Manufacturer man = new Manufacturer(11,"Osem");
-		BufferedImage im = ImageIO.read(
-				new URL("https://www.extremetech.com/wp-content/uploads/2012/05/Linux-logo-without-version-number-banner-sized.jpg"));
-		CatalogProduct cp = new CatalogProduct(11, "Bamba", null, man, "", 12, im, null);
+		CatalogProduct cp = new CatalogProduct(11, "Bamba", null, man, "", 12, null);
 		if (cp.getBarcode() != 11 || !"Bamba".equals(cp.getName()) || cp.getIngredients() != null ||
 				!cp.getManufacturer().equals(man) || !"".equals(cp.getDescription()) || 
 				cp.getPrice() != 12 || cp.getLocations() != null)
@@ -44,7 +34,7 @@ public class CatalogProductTest {
 				!description.equals(cp.getDescription()) || cp.getPrice() != 7.35 || 
 				cp.getLocations().size() != 1 || !cp.getLocations().contains(lo))
 			fail();
-		CatalogProduct cp2 = new CatalogProduct(111, "Bamba", null, man, "", 12, im, null);
+		CatalogProduct cp2 = new CatalogProduct(111, "Bamba", null, man, "", 12, null);
 		if (!cp2.equals(cp))
 			fail();
 		cp2.setBarcode(11);
