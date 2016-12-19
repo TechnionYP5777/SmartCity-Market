@@ -7,10 +7,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.Random;
+
 import com.google.gson.Gson;
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
 import com.healthmarketscience.sqlbuilder.CreateTableQuery;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
+import com.healthmarketscience.sqlbuilder.UnaryCondition;
 import com.healthmarketscience.sqlbuilder.ValidationException;
 
 import BasicCommonClasses.CatalogProduct;
@@ -33,7 +36,9 @@ import SQLDatabase.SQLDatabaseEntities.ProductsPackagesTable;
 import SQLDatabase.SQLDatabaseEntities.WorkersTable;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
+import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
+import SQLDatabase.SQLDatabaseException.WorkerAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
 
 /**
@@ -61,7 +66,8 @@ public class SQLDatabaseConnection {
 	private static final String SQL_PARAM = "?";
 
 	@SuppressWarnings("unused")
-	private static final Long SESSION_IDS_BEGIN = 10000L;
+	private static final Integer SESSION_IDS_BEGIN = 10000;
+	private static final Integer TRYS_NUMBER = 1000;
 
 	private Connection connection;
 	private static boolean isEntitiesInitialized;
@@ -159,8 +165,54 @@ public class SQLDatabaseConnection {
 		}
 		return $;
 	}
+	
+	
+	private int generateSessionID(boolean forWorker) throws CriticalError, NumberOfConnectionsExceeded{
+		
+		int minVal, maxVal;
+		int $;
+		
+		if (!forWorker) {
+			minVal = 1;
+			maxVal = SESSION_IDS_BEGIN - 1;
+		} else {
+			minVal = SESSION_IDS_BEGIN;
+			maxVal = Integer.MAX_VALUE;
+		}
+		
+		// trying to find available random session id.
+		for (int i=0; i<TRYS_NUMBER; ++i){
+			//generate number between mivVal to maxVal (include)
+			$ = new Random().nextInt(minVal - maxVal) + minVal;
+			
+			String query = (forWorker
+					? new SelectQuery().addAllTableColumns(WorkersTable.table)
+							.addCondition(BinaryCondition.equalTo(WorkersTable.sessionIDCol, PARAM_MARK))
+					: new SelectQuery().addAllTableColumns(CartsListTable.table)
+							.addCondition(BinaryCondition.equalTo(CartsListTable.cartIDCol, PARAM_MARK))
+							.addCondition(UnaryCondition.isNotNull(CartsListTable.listIDCol))).validate()
+					+ "";
+			
+			PreparedStatement statement = getParameterizedQuery(query, $);
+			ResultSet result;
+			
+			try {
+				result = statement.executeQuery();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new CriticalError();
+			}
+			
+			if (!isResultSetRowsExist(result))
+				return $;
+		}
+		
+		throw new NumberOfConnectionsExceeded();
+		
+	}
 
-	public int WorkerLogin(String username, String password) throws AuthenticationError, CriticalError {
+	public int WorkerLogin(String username, String password)
+			throws AuthenticationError, WorkerAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
 		String query = new SelectQuery().addAllTableColumns(WorkersTable.table)
 				.addCondition(BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK))
 				.addCondition(BinaryCondition.equalTo(WorkersTable.workerPasswordCol, PARAM_MARK)).validate() + "";
@@ -175,10 +227,14 @@ public class SQLDatabaseConnection {
 			throw new CriticalError();
 		}
 
-		// if no result - throw exception
-		if (!isResultSetRowsExist(result))
+		// if no results or more than one - throw exception
+		if (getResultSetRowCount(result) != 1)
 			throw new SQLDatabaseException.AuthenticationError();
-
+		
+		int newSessionID = generateSessionID(true);
+		
+		
+		
 		return 1001;
 	}
 

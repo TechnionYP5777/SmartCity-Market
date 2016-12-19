@@ -60,4 +60,14 @@ public class SQLDatabaseException extends Exception {
 	public static class WorkerAlreadyConnected extends SQLDatabaseException {
 		private static final long serialVersionUID = 1L;
 	}
+	
+	/**
+	 * Thrown when no connection available
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class NumberOfConnectionsExceeded extends SQLDatabaseException {
+		private static final long serialVersionUID = 1L;
+	}
 }
