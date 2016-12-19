@@ -2,14 +2,15 @@ package EmployeeCommon;
 
 import java.net.UnknownHostException;
 import java.util.logging.Logger;
-
 import ClientServerCommunication.ClientRequestHandler;
 
-/** AEmployee - This abstract holds common functionality for 
- * the Employee such as worker, manager.
+/**
+ * AEmployee - This abstract holds common functionality for the Employee such as
+ * worker, manager.
  * 
  * @author Shimon Azulay
- * @since 2016-12-17 */
+ * @since 2016-12-17
+ */
 
 public abstract class AEmployee {
 
@@ -18,7 +19,6 @@ public abstract class AEmployee {
 	protected int clientId;
 	protected String username;
 	protected String password;
-	
 
 	protected void establishCommunication(int port, String host, int timeout)
 			throws UnknownHostException, RuntimeException {

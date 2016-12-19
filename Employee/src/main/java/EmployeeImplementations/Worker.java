@@ -25,15 +25,15 @@ public class Worker extends AEmployee implements IWorker {
 
 	@Override
 	public void login(String username, String password) {
-		this.username = username;
-		this.password = password;
+		LOGGER.log(Level.FINE,
+				"Establish communication with server: port: " + WorkerDefs.port + " host: " + WorkerDefs.host);
 		try {
-			LOGGER.log(Level.FINE,
-					"Establish communication with server: port: " + WorkerDefs.port + " host: " + WorkerDefs.host);
 			establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		} catch (UnknownHostException | RuntimeException e) {
-			// TODO handle exceptions
+			LOGGER.log(Level.SEVERE,
+					"Creating communication with the server encounter severe fault: " + e.getMessage());
 			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
 		}
 
 		LOGGER.log(Level.FINE,
@@ -42,17 +42,24 @@ public class Worker extends AEmployee implements IWorker {
 		String commandData = new Gson().toJson(login);
 		CommandWrapper commandWrapper = new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.LOGIN,
 				commandData);
-		String jsonResponse = null; // TODO change this to initial value
+		String jsonResponse = null;
 		LOGGER.log(Level.FINE, "Sending login command to server");
 		try {
-			jsonResponse = this.clientRequestHandler.sendRequestWithRespond(commandWrapper.toGson());
+			jsonResponse = this.clientRequestHandler.sendRequestWithRespond(commandWrapper.toGson());			
 		} catch (IOException e) {
-			// TODO Handle exceptions
 			e.printStackTrace();
+			LOGGER.log(Level.SEVERE,
+					"Sending login command to server encounter sever fault : " + e.getMessage());
+			terminateCommunication();
+			throw new RuntimeException(e.getMessage());
 		}
 		CommandWrapper commandDescriptor = CommandWrapper.fromGson(jsonResponse);
-		// TODO handle faults
+		
+		// TODO Talk about the way handling with the resultDescriptor
+		
 		clientId = commandDescriptor.getSenderID();
+		this.username = username;
+		this.password = password;
 		LOGGER.log(Level.FINE, "Login to server succeed. Client id is: " + clientId);
 	}
 
@@ -62,18 +69,22 @@ public class Worker extends AEmployee implements IWorker {
 		LOGGER.log(Level.FINE, "Creating logout command wrapper with username: " + username);
 		String commandData = new Gson().toJson(username);
 		CommandWrapper commandWrapper = new CommandWrapper(clientId, CommandDescriptor.LOGOUT, commandData);
-		String jsonResponse = null; // TODO change this to initial value
+		String jsonResponse = null;
 		LOGGER.log(Level.FINE, "Sending logout command to server with clientId: " + clientId);
 		try {
 			jsonResponse = this.clientRequestHandler.sendRequestWithRespond(commandWrapper.toGson());
 		} catch (IOException e) {
-			// TODO Handle exceptions
 			e.printStackTrace();
+			LOGGER.log(Level.SEVERE,
+					"Sending logout command to server encounter sever fault : " + e.getMessage());
+			throw new RuntimeException(e.getMessage());
 		}
+		// TODO - delete this after talk about the way handling with the resultDescriptor
+		if (jsonResponse != null)
+			jsonResponse.length();
 
-		// TODO - check return code?
 		LOGGER.log(Level.FINE, "logout from server succeed.");
-
+		
 		LOGGER.log(Level.FINE, "Terminate the communiction with server");
 		terminateCommunication();
 	}
@@ -85,17 +96,19 @@ public class Worker extends AEmployee implements IWorker {
 		String commandData = new Gson().toJson(barcode);
 		CommandWrapper commandWrapper = new CommandWrapper(clientId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
 				commandData);
-		String jsonResponse = null; // TODO change this to initial value
+		String jsonResponse = null;
 		LOGGER.log(Level.FINE, "Sending viewProductFromCatalog command to server with clientId: " + clientId);
 		try {
 			jsonResponse = this.clientRequestHandler.sendRequestWithRespond(commandWrapper.toGson());
 		} catch (IOException e) {
-			// TODO Handle exceptions
 			e.printStackTrace();
+			LOGGER.log(Level.SEVERE,
+					"Sending viewProductFromCatalog command to server encounter sever fault : " + e.getMessage());
+			throw new RuntimeException(e.getMessage());
 		}
 
 		CommandWrapper commandDescriptor = CommandWrapper.fromGson(jsonResponse);
-		// TODO handle faults
+		// TODO Talk about the way handling with the resultDescriptor
 		LOGGER.log(Level.FINE, "viewProductFromCatalog command succeed.");
 		return new Gson().fromJson(commandDescriptor.getData(), CatalogProduct.class);
 	}
