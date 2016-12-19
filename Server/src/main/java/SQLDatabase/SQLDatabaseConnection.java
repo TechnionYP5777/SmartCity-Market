@@ -60,7 +60,7 @@ public class SQLDatabaseConnection {
 	private static final String SQL_PARAM = "?";
 
 	@SuppressWarnings("unused")
-	private static final Long SESSION_IDS_BEGIN = 1000L;
+	private static final Long SESSION_IDS_BEGIN = 10000L;
 
 	private Connection connection;
 	private static boolean isEntitiesInitialized;
@@ -159,7 +159,7 @@ public class SQLDatabaseConnection {
 		return $;
 	}
 
-	public long WorkerLogin(String username, String password) throws AuthenticationError, CriticalError {
+	public int WorkerLogin(String username, String password) throws AuthenticationError, CriticalError {
 		String query = new SelectQuery().addAllTableColumns(WorkersTable.table)
 				.addCondition(BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK))
 				.addCondition(BinaryCondition.equalTo(WorkersTable.workerPasswordCol, PARAM_MARK)).validate() + "";
@@ -181,12 +181,12 @@ public class SQLDatabaseConnection {
 		return 1001;
 	}
 
-	public void WorkerLogout(Long sessionID) throws WorkerNotConnected, CriticalError {
-
+	public void WorkerLogout(Integer sessionID, String username) throws WorkerNotConnected, CriticalError {
 		checkSessionEstablished(sessionID);
+
 	}
 
-	public String getProductFromCatalog(Long sessionID, long barcode)
+	public String getProductFromCatalog(Integer sessionID, long barcode)
 			throws ProductNotExistInCatalog, WorkerNotConnected, CriticalError {
 
 		checkSessionEstablished(sessionID);
@@ -213,11 +213,11 @@ public class SQLDatabaseConnection {
 		HashSet<Location> locations = new HashSet<Location>();
 		locations.add(new Location(1, 1, PlaceInMarket.STORE));
 
-		return new Gson().toJson((new CatalogProduct(1234567890L, "Milk 3%", ingredients, new Manufacturer(334, "Tnuva"), "",
-				10.0, locations)));
+		return new Gson().toJson((new CatalogProduct(1234567890L, "Milk 3%", ingredients,
+				new Manufacturer(334, "Tnuva"), "", 10.0, locations)));
 	}
 
-	private void checkSessionEstablished(Long sessionID) throws WorkerNotConnected, CriticalError {
+	private void checkSessionEstablished(Integer sessionID) throws WorkerNotConnected, CriticalError {
 		try {
 			if (sessionID != null && sessionID != 1001 && !isResultSetRowsExist(
 					getParameterizedQuery((new SelectQuery().addAllTableColumns(WorkersTable.table)
@@ -250,9 +250,7 @@ public class SQLDatabaseConnection {
 
 		PreparedStatement $;
 		try {
-			$ = connection.prepareStatement(query,
-					ResultSet.TYPE_SCROLL_SENSITIVE,
-					ResultSet.CONCUR_UPDATABLE);
+			$ = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new CriticalError();

@@ -35,7 +35,7 @@ public class SQLDatabaseConnectionTest {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 
-		long session = 0;
+		int session = 0;
 		try {
 			session = sqlConnection.WorkerLogin("admin", "admin");
 
@@ -45,7 +45,7 @@ public class SQLDatabaseConnectionTest {
 		}
 
 		try {
-			sqlConnection.WorkerLogout(session);
+			sqlConnection.WorkerLogout(session,"admin");
 		} catch (CriticalError | WorkerNotConnected e) {
 			e.printStackTrace();
 			fail();
