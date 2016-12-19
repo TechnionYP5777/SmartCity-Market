@@ -14,6 +14,7 @@ import BasicCommonClasses.Location;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import SQLDatabase.SQLDatabaseConnection;
+import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
@@ -27,6 +28,28 @@ public class SQLDatabaseConnectionTest {
 	public void testInitialize() {
 		@SuppressWarnings("unused")
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+	}
+
+	@Test
+	public void testWorkerConnection() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		long session = 0;
+		try {
+			session = sqlConnection.WorkerLogin("admin", "admin");
+
+		} catch (AuthenticationError | CriticalError e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.WorkerLogout(session);
+		} catch (CriticalError | WorkerNotConnected e) {
+			e.printStackTrace();
+			fail();
+		}
 	}
 
 	@Test
