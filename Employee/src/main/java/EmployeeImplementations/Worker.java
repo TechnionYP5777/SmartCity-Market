@@ -3,9 +3,6 @@ package EmployeeImplementations;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
-
-import com.google.gson.Gson;
-
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
 import ClientServerApi.CommandDescriptor;
@@ -13,6 +10,8 @@ import ClientServerApi.CommandWrapper;
 import EmployeeCommon.AEmployee;
 import EmployeeContracts.IWorker;
 import EmployeeDefs.WorkerDefs;
+import UtilsContracts.IClientRequestHandler;
+import UtilsContracts.ISerialization;
 
 /**
  * Worker - This class represent the worker functionality implementation.
@@ -22,6 +21,14 @@ import EmployeeDefs.WorkerDefs;
  */
 
 public class Worker extends AEmployee implements IWorker {
+	
+	
+	public Worker(ISerialization serialization, IClientRequestHandler clientRequestHandler) {
+		
+		this.serialization = serialization;
+		this.clientRequestHandler = clientRequestHandler;
+		
+	}
 
 	@Override
 	public void login(String username, String password) {
@@ -39,7 +46,7 @@ public class Worker extends AEmployee implements IWorker {
 		LOGGER.log(Level.FINE,
 				"Creating login command wrapper with username: " + username + " and password: " + password);
 		Login login = new Login(username, password);
-		String commandData = new Gson().toJson(login);
+		String commandData = serialization.serialize(login);
 		CommandWrapper commandWrapper = new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.LOGIN,
 				commandData);
 		String jsonResponse = null;
@@ -66,7 +73,7 @@ public class Worker extends AEmployee implements IWorker {
 	public void logout() {
 
 		LOGGER.log(Level.FINE, "Creating logout command wrapper with username: " + username);
-		String commandData = new Gson().toJson(username);
+		String commandData = serialization.serialize(username);
 		CommandWrapper commandWrapper = new CommandWrapper(clientId, CommandDescriptor.LOGOUT, commandData);
 		String jsonResponse = null;
 		LOGGER.log(Level.FINE, "Sending logout command to server with clientId: " + clientId);
@@ -90,7 +97,7 @@ public class Worker extends AEmployee implements IWorker {
 	public CatalogProduct viewProductFromCatalog(int barcode) {
 
 		LOGGER.log(Level.FINE, "Creating viewProductFromCatalog command wrapper with barcode: " + barcode);
-		String commandData = new Gson().toJson(barcode);
+		String commandData = serialization.serialize(barcode);
 		CommandWrapper commandWrapper = new CommandWrapper(clientId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
 				commandData);
 		String jsonResponse = null;
@@ -109,7 +116,7 @@ public class Worker extends AEmployee implements IWorker {
 		resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 
 		LOGGER.log(Level.FINE, "viewProductFromCatalog command succeed.");
-		return new Gson().fromJson(commandDescriptor.getData(), CatalogProduct.class);
+		return serialization.deserialize(commandDescriptor.getData(), CatalogProduct.class);
 	}
 
 }

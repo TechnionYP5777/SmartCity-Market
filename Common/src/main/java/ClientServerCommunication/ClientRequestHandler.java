@@ -11,27 +11,24 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import UtilsContracts.IClientRequestHandler;
+
 /** ClientRequestHandler - Handles the client request from the server.
  * The handler opens a socket for the client an handles the client requests
  * sending and receiving the responds.
  * @author Aviad Cohen
  * @since 2016-12-08 */
 
-public class ClientRequestHandler {
+public class ClientRequestHandler implements IClientRequestHandler {
 	
 	private static final Logger LOGGER = Logger.getLogger(ClientRequestHandler.class.getName());
 	
     private Socket socket;
     
-    /** 
-     * Create a client request handler and opens a client socket for a given server.
-     * @param serverPort - the server port number.
-     * 		  serverHostName - the server host name.
-     * 		  timeout - the timeout for send/receive messages in milliseconds.
-     * @throws UnknownHostException, RuntimeException
-     */
-    public ClientRequestHandler(int serverPort, String serverHostName, int timeout) throws UnknownHostException, RuntimeException {    	
-  	   	if (timeout <= 0)
+    @Override
+	public void createSocket(int serverPort, String serverHostName, int timeout)
+			throws UnknownHostException, RuntimeException {
+    	if (timeout <= 0)
 			throw new RuntimeException("Client request manager failed to initialize with non positive timeout "
 					+ timeout + " miliseconds");
     	
@@ -54,7 +51,8 @@ public class ClientRequestHandler {
 		}
     	
     	LOGGER.log(Level.FINE, "Client request handler initialized successfully with host " + serverHostName + " on port " + serverPort);
-    }
+		
+	}
 
     /** 
      * Receive a respond from the server.
@@ -99,6 +97,7 @@ public class ClientRequestHandler {
      * This function might throw exception due to timeout/failure.
      * This is the safest way to send a request.
      */
+    @Override
 	public String sendRequestWithRespond(String request) throws IOException {
 		sendRequest(request);
 		
@@ -111,6 +110,7 @@ public class ClientRequestHandler {
      * Use this function only if you know what you are doing - not getting back a 
      * respond can be unsafe!
      */
+	@Override
 	public void sendRequestNoRespond(String request) throws IOException {
 		sendRequest(request);
 	}
@@ -120,6 +120,7 @@ public class ClientRequestHandler {
      * @return - the server respond.
      * This function might throw exception due to timeout/failure.
      */
+	@Override
 	public String waitForRespond() throws IOException {
 		return getRespond();
 	}
@@ -127,6 +128,7 @@ public class ClientRequestHandler {
 	/**
 	 * Close socket with the server.
 	 */
+	@Override
 	public void finishRequest() {
 		try {
 			socket.close();
@@ -134,4 +136,6 @@ public class ClientRequestHandler {
 			throw new RuntimeException("Client request handler failed to close socket", e);
 		}
 	}
+
+	
 }

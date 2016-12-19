@@ -21,12 +21,12 @@ public class ClientRequestHandlerTest {
 	private static final String SERVER_HOST_NAME = "localhost";
 	private static final String SERVER_UKNOWN_HOST_NAME = "unknown12345";
 	private static final int TIMEOUT = 500;
-	
+
 	private ServerSocket serverSocket;
 	private int portTest = SERVER_PORT;
-	
+
 	private class ServerTest implements Runnable {
-		
+
 		private void closeServerSocket() {
 			try {
 				serverSocket.close();
@@ -34,15 +34,15 @@ public class ClientRequestHandlerTest {
 				e.printStackTrace();
 				fail();
 			}
-			
+
 			serverSocket = null;
 			++portTest;
 		}
-		
+
 		@Override
 		public void run() {
 			serverSocket = null;
-			
+
 			try {
 				serverSocket = new ServerSocket(portTest);
 				serverSocket.accept();
@@ -50,43 +50,48 @@ public class ClientRequestHandlerTest {
 				e1.printStackTrace();
 				fail();
 			}
-			
+
 			closeServerSocket();
 		}
 	}
-	
-	@Test public void ClientRequestHandlerLegalTimeoutTest () {
+
+	@Test
+	public void ClientRequestHandlerLegalTimeoutTest() {
 		new Thread(new ServerTest()).start();
-		
+
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 			fail();
 		}
-		
+
 		try {
-			new ClientRequestHandler(portTest, SERVER_HOST_NAME, TIMEOUT).finishRequest();
+			ClientRequestHandler clientRequestHandler = new ClientRequestHandler();
+			clientRequestHandler.createSocket(portTest, SERVER_HOST_NAME, TIMEOUT);
+			clientRequestHandler.finishRequest();
 		} catch (UnknownHostException | RuntimeException e) {
 			e.printStackTrace();
 			fail();
 		}
 	}
-	
-	@Test public void ClientRequestHandlerZeroTimeoutTest () {
+
+	@Test
+	public void ClientRequestHandlerZeroTimeoutTest() {
 		try {
-			new ClientRequestHandler(portTest, SERVER_HOST_NAME, 0);
+			(new ClientRequestHandler()).createSocket(portTest, SERVER_HOST_NAME, 0);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			fail();
 		} catch (RuntimeException e) {
 			/* success */
-		} 
+		}
 	}
 
-	@Test public void ClientRequestHandlerNegativeTimeoutTest () {	
+	@Test
+	public void ClientRequestHandlerNegativeTimeoutTest() {
 		try {
-			new ClientRequestHandler(portTest, SERVER_HOST_NAME, -1);
+			(new ClientRequestHandler()).createSocket(portTest, SERVER_HOST_NAME, -1);
 		} catch (RuntimeException e) {
 			/* success */
 		} catch (UnknownHostException e) {
@@ -95,9 +100,12 @@ public class ClientRequestHandlerTest {
 		}
 	}
 
-	@Test public void ClientRequestHandlerUnknownHostTest () {				
+	@Test
+	public void ClientRequestHandlerUnknownHostTest() {
 		try {
-			new ClientRequestHandler(portTest, SERVER_UKNOWN_HOST_NAME, TIMEOUT).finishRequest();
+			ClientRequestHandler clientRequestHandler = new ClientRequestHandler();
+			clientRequestHandler.createSocket(portTest, SERVER_UKNOWN_HOST_NAME, TIMEOUT);
+			clientRequestHandler.finishRequest();
 		} catch (UnknownHostException e) {
 			/* success */
 		} catch (RuntimeException e) {

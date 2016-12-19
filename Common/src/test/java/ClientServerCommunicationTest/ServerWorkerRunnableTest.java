@@ -35,7 +35,8 @@ public class ServerWorkerRunnableTest {
 			ClientRequestHandler clientRequestManager = null;
 
 			try {
-				clientRequestManager = new ClientRequestHandler(SERVER_PORT, SERVER_HOST_NAME, TIMEOUT);
+				clientRequestManager = new ClientRequestHandler();
+				clientRequestManager.createSocket(SERVER_PORT, SERVER_HOST_NAME, TIMEOUT);
 			} catch (UnknownHostException | RuntimeException e1) {
 				e1.printStackTrace();
 				fail();

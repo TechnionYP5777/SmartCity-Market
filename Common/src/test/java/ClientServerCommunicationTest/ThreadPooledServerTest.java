@@ -61,7 +61,8 @@ public class ThreadPooledServerTest {
 		public void run() {
 			ClientRequestHandler clientRequestManager = null;
 			try {
-				clientRequestManager = new ClientRequestHandler(SERVER_PORT, serverIP, TIMEOUT);
+				clientRequestManager = new ClientRequestHandler();
+				clientRequestManager.createSocket(SERVER_PORT, serverIP, TIMEOUT);
 			} catch (UnknownHostException | RuntimeException e1) {
 				e1.printStackTrace();
 				fail();
