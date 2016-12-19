@@ -45,18 +45,17 @@ public class Worker extends AEmployee implements IWorker {
 		String jsonResponse = null;
 		LOGGER.log(Level.FINE, "Sending login command to server");
 		try {
-			jsonResponse = this.clientRequestHandler.sendRequestWithRespond(commandWrapper.toGson());			
+			jsonResponse = this.clientRequestHandler.sendRequestWithRespond(commandWrapper.toGson());
 		} catch (IOException e) {
 			e.printStackTrace();
-			LOGGER.log(Level.SEVERE,
-					"Sending login command to server encounter sever fault : " + e.getMessage());
+			LOGGER.log(Level.SEVERE, "Sending login command to server encounter sever fault : " + e.getMessage());
 			terminateCommunication();
 			throw new RuntimeException(e.getMessage());
 		}
 		CommandWrapper commandDescriptor = CommandWrapper.fromGson(jsonResponse);
-		
-		// TODO Talk about the way handling with the resultDescriptor
-		
+
+		resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+
 		clientId = commandDescriptor.getSenderID();
 		this.username = username;
 		this.password = password;
@@ -75,17 +74,15 @@ public class Worker extends AEmployee implements IWorker {
 			jsonResponse = this.clientRequestHandler.sendRequestWithRespond(commandWrapper.toGson());
 		} catch (IOException e) {
 			e.printStackTrace();
-			LOGGER.log(Level.SEVERE,
-					"Sending logout command to server encounter sever fault : " + e.getMessage());
+			LOGGER.log(Level.SEVERE, "Sending logout command to server encounter sever fault : " + e.getMessage());
 			throw new RuntimeException(e.getMessage());
 		}
-		// TODO - delete this after talk about the way handling with the resultDescriptor
-		if (jsonResponse != null)
-			jsonResponse.length();
 
+		resultDescriptorHandler(CommandWrapper.fromGson(jsonResponse).getResultDescriptor());
+			
 		LOGGER.log(Level.FINE, "logout from server succeed.");
-		
-		LOGGER.log(Level.FINE, "Terminate the communiction with server");
+
+		LOGGER.log(Level.FINE, "Terminating the communiction with server");
 		terminateCommunication();
 	}
 
@@ -108,7 +105,9 @@ public class Worker extends AEmployee implements IWorker {
 		}
 
 		CommandWrapper commandDescriptor = CommandWrapper.fromGson(jsonResponse);
-		// TODO Talk about the way handling with the resultDescriptor
+		
+		resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+
 		LOGGER.log(Level.FINE, "viewProductFromCatalog command succeed.");
 		return new Gson().fromJson(commandDescriptor.getData(), CatalogProduct.class);
 	}
