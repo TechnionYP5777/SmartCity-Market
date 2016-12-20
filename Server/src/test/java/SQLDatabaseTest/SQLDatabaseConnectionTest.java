@@ -26,8 +26,7 @@ public class SQLDatabaseConnectionTest {
 
 	@Test
 	public void testInitialize() {
-		@SuppressWarnings("unused")
-		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		new SQLDatabaseConnection().hashCode();
 	}
 
 	@Test
