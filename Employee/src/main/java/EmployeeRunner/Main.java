@@ -1,7 +1,12 @@
 package EmployeeRunner;
 
 import java.io.*;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
+import BasicCommonClasses.CatalogProduct;
 import ClientServerCommunication.ClientRequestHandler;
 import EmployeeContracts.IWorker;
 import EmployeeImplementations.Worker;
@@ -18,7 +23,7 @@ import UtilsImplementations.Serialization;
  */
 public class Main {
 
-	// Standard input
+	// Standard input:
 	static final InputStreamReader cin = new InputStreamReader(System.in);
 
 	// commands id's:
@@ -37,38 +42,46 @@ public class Main {
 
 	static final int passwordLen = 10;
 
+	// logger:
+	static final Level verbosity = Level.ALL;
+
 	public static void main(String args[]) throws IOException {
 		IClientRequestHandler clientRequestHandler = new ClientRequestHandler();
 		ISerialization serialization = new Serialization();
 		IWorker worker = new Worker(serialization, clientRequestHandler);
+		setLoggerVerbosity();
 
 		try {
 			printCommandsInfo();
 			char cmdId;
 			do {
 				cmdId = (char) cin.read();
-
-				switch (cmdId) {
-				case '1':
-					loginHandler(worker);
-					printCommandsInfo();
-					break;
-				case '2':
-					logoutHandler(worker);
-					printCommandsInfo();
-					break;
-				case '3':
-					viewCatalogProdcutHandler(worker);
-					printCommandsInfo();
-					break;
-				case '0':
-					endSessionHandler();
-					break;
-				case '\n':
-					// for ignoring the enter key
-					break;
-				default:
-					System.out.println("input=(" + cmdId + ") is not a valid cmd-id. Please retry: ");
+				try {
+					switch (cmdId) {
+					case '1':
+						loginHandler(worker);
+						printCommandsInfo();
+						break;
+					case '2':
+						logoutHandler(worker);
+						printCommandsInfo();
+						break;
+					case '3':
+						viewCatalogProdcutHandler(worker);
+						printCommandsInfo();
+						break;
+					case '0':
+						endSessionHandler();
+						break;
+					case '\n':
+						// for ignoring the enter key
+						break;
+					default:
+						System.out.println("input=(" + cmdId + ") is not a valid cmd-id. Please retry: ");
+						printCommandsInfo();
+					}
+				} catch (Exception e){
+					System.out.println(e.getMessage());
 					printCommandsInfo();
 				}
 			} while (cmdId != '0');
@@ -85,6 +98,7 @@ public class Main {
 
 	private static void logoutHandler(IWorker ¢) {
 		¢.logout();
+		System.out.println("Logged out successfully");
 	}
 
 	private static void viewCatalogProdcutHandler(IWorker w) throws IOException {
@@ -92,7 +106,10 @@ public class Main {
 		String barcodeString = getLineFromStdin(barcodeLen);
 		int barcode = Integer.parseInt(barcodeString);
 		System.out.println("barcode inserted is: " + barcode);
-		w.viewProductFromCatalog(barcode);
+		CatalogProduct catProd = w.viewProductFromCatalog(barcode);
+		System.out.println("Product name: " + catProd.getName());
+		System.out.println("Product price: " + catProd.getPrice());
+		System.out.println("Product description: " + catProd.getDescription());
 	}
 
 	private static void loginHandler(IWorker w) throws IOException {
@@ -100,6 +117,7 @@ public class Main {
 		String userName = getLineFromStdin(userNameLen);
 		System.out.println("Enter your password: ");
 		w.login(userName, getLineFromStdin(passwordLen));
+		System.out.println("Logged in successfully");
 	}
 
 	private static String getLineFromStdin(int len) throws IOException {
@@ -125,6 +143,16 @@ public class Main {
 			if (line[¢] != '\n')
 				$ += line[¢];
 		return $;
+	}
+
+	private static void setLoggerVerbosity() {
+	    ConsoleHandler handler = new ConsoleHandler();
+	    handler.setFormatter(new SimpleFormatter());
+	    handler.setLevel(verbosity);
+
+		Logger.getLogger(Worker.class.getName()).setLevel(verbosity);
+
+	    Logger.getLogger(Worker.class.getName()).addHandler(handler);
 	}
 
 	private static void printCommandsInfo() {
