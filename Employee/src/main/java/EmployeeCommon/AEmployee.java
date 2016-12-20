@@ -1,10 +1,13 @@
 package EmployeeCommon;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ClientServerApi.ResultDescriptor;
 import ClientServerCommunication.ClientRequestHandler;
+import EmployeeDefs.WorkerDefs;
 import UtilsContracts.IClientRequestHandler;
 import UtilsContracts.ISerialization;
 
@@ -25,9 +28,17 @@ public abstract class AEmployee {
 	protected String username;
 	protected String password;
 
-	protected void establishCommunication(int port, String host, int timeout)
-			throws UnknownHostException, RuntimeException {
-		clientRequestHandler.createSocket(port, host, timeout);
+	protected void establishCommunication(int port, String host, int timeout) {
+		LOGGER.log(Level.FINE,
+				"Establish communication with server: port: " + WorkerDefs.port + " host: " + WorkerDefs.host);
+		try {
+			clientRequestHandler.createSocket(port, host, timeout);
+		} catch (UnknownHostException | RuntimeException e) {
+			LOGGER.log(Level.SEVERE,
+					"Creating communication with the server encounter severe fault: " + e.getMessage());
+			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 
 	protected void terminateCommunication() {
@@ -35,7 +46,18 @@ public abstract class AEmployee {
 			clientRequestHandler.finishRequest();
 	}
 
-	// TODO Add protected handler to each of them.
+	protected String sendRequestWithRespondToServer(String request) {
+		LOGGER.log(Level.FINE, "Sending command to server");
+		try {
+			return this.clientRequestHandler.sendRequestWithRespond(request);
+		} catch (IOException e) {
+			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, "Sending logout command to server encounter sever fault : " + e.getMessage());
+			terminateCommunication();
+			throw new RuntimeException(e.getMessage());
+		}
+	}
+
 	protected void resultDescriptorHandler(ResultDescriptor ¢) {
 
 		switch (¢) {

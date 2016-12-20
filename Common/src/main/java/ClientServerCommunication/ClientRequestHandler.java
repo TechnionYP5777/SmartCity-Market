@@ -24,7 +24,7 @@ public class ClientRequestHandler implements IClientRequestHandler {
 	private static final Logger LOGGER = Logger.getLogger(ClientRequestHandler.class.getName());
 	
     private Socket socket;
-    
+     
     @Override
 	public void createSocket(int serverPort, String serverHostName, int timeout)
 			throws UnknownHostException, RuntimeException {
