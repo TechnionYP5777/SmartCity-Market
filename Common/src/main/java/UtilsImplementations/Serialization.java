@@ -18,7 +18,7 @@ public class Serialization implements ISerialization {
 
 	@Override
 	public String serialize(Object toSerialize) {
-		return gson.toJson(gson);
+		return gson.toJson(toSerialize);
 	}
 
 	@Override

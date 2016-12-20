@@ -3,6 +3,7 @@ package EmployeeImplementations;
 import java.util.logging.Level;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
+import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import EmployeeCommon.AEmployee;
@@ -64,7 +65,7 @@ public class Worker extends AEmployee implements IWorker {
 	public CatalogProduct viewProductFromCatalog(int barcode) {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		LOGGER.log(Level.FINE, "Creating viewProductFromCatalog command wrapper with barcode: " + barcode);
-		String commandData = serialization.serialize(barcode);
+		String commandData = serialization.serialize(new SmartCode(barcode, null));
 		CommandWrapper commandWrapper = new CommandWrapper(clientId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
 				commandData);
 		String jsonResponse = sendRequestWithRespondToServer(commandWrapper.toGson());

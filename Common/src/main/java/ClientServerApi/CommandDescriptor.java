@@ -73,7 +73,7 @@ public enum CommandDescriptor {
 	VIEW_PRODUCT_FROM_CATALOG;
 	/**
 	 * Description: Client command for getting the relevant catalog product represented by a barcode.
-	 * param1: int barcode
+	 * param1: SmartCode - smartcode with barcode and null on expertionDate
 	 * retval: CatalogProduct.
 	 *
 	 * result_codes:
