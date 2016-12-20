@@ -1,6 +1,6 @@
 package ClientServerApi;
 
-import com.google.gson.Gson;
+import UtilsImplementations.Serialization;
 
 public class CommandWrapper implements Cloneable {
 	/**
@@ -42,12 +42,13 @@ public class CommandWrapper implements Cloneable {
 	}
 	
 	//Methods:
+	// TODO change methods name
 	public String toGson(){
-		return new Gson().toJson(this);
+		return new Serialization().serialize(this);
 	}
 	
 	public static CommandWrapper fromGson(String cmdWrap) {
-		return new Gson().fromJson(cmdWrap, CommandWrapper.class);
+		return new Serialization().deserialize(cmdWrap, CommandWrapper.class);
 	}
 	
 	@Override
