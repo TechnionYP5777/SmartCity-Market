@@ -3,27 +3,21 @@ package UtilsImplementations;
 import com.google.gson.Gson;
 
 /**
- * Serialization - This class implement the ISerialization contract interface and use Gson for the 
- * serialization service.
+ * Serialization - This class gives serialization service
  * 
  * @author Shimon Azulay
  * @since 2016-12-19
  */
 
-import UtilsContracts.ISerialization;
-
-public class Serialization implements ISerialization {
+public class Serialization {
 	
-	private Gson gson = new Gson();
-
-	@Override
-	public String serialize(Object toSerialize) {
-		return gson.toJson(toSerialize);
+	public static String serialize(Object toSerialize) {
+		return new Gson().toJson(toSerialize);
 	}
 
-	@Override
-	public <T> T deserialize(String toDeserialize, Class<T> classType) {
-		return gson.fromJson(toDeserialize, classType);
+
+	public static <T> T deserialize(String toDeserialize, Class<T> classType) {
+		return new Gson().fromJson(toDeserialize, classType);
 	}
 
 }

@@ -43,12 +43,12 @@ public class CommandWrapper implements Cloneable {
 	
 	//Methods:
 	// TODO change methods name
-	public String toGson(){
-		return new Serialization().serialize(this);
+	public String serialize(){
+		return Serialization.serialize(this);
 	}
 	
-	public static CommandWrapper fromGson(String cmdWrap) {
-		return new Serialization().deserialize(cmdWrap, CommandWrapper.class);
+	public static CommandWrapper deserialize(String cmdWrap) {
+		return Serialization.deserialize(cmdWrap, CommandWrapper.class);
 	}
 	
 	@Override

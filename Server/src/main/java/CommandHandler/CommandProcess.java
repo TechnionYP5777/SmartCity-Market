@@ -113,7 +113,7 @@ public class CommandProcess implements ProcessRequest {
 	}
 	
 	private void interpretCommand(String command) {
-		inCommandWrapper = CommandWrapper.fromGson(command);
+		inCommandWrapper = CommandWrapper.deserialize(command);
 		
 		switch(inCommandWrapper.getCommandDescriptor()) {
 		case LOGIN:
@@ -165,14 +165,14 @@ public class CommandProcess implements ProcessRequest {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 			LOGGER.log(Level.SEVERE, "Failed to get string command");
 			
-			out.println(outCommandWrapper.toGson());
+			out.println(outCommandWrapper.serialize());
 			
 			return;
 		}
 		
 		interpretCommand(command);
 		
-		out.println(outCommandWrapper.toGson());
+		out.println(outCommandWrapper.serialize());
 	}
 
 }

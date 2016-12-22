@@ -9,7 +9,6 @@ import ClientServerApi.ResultDescriptor;
 import ClientServerCommunication.ClientRequestHandler;
 import EmployeeDefs.WorkerDefs;
 import UtilsContracts.IClientRequestHandler;
-import UtilsContracts.ISerialization;
 
 /**
  * AEmployee - This abstract holds common functionality for the Employee such as
@@ -21,10 +20,9 @@ import UtilsContracts.ISerialization;
 
 public abstract class AEmployee {
 
-	protected ISerialization serialization;
 	protected IClientRequestHandler clientRequestHandler;
 	protected static final Logger LOGGER = Logger.getLogger(ClientRequestHandler.class.getName());
-	protected int clientId;
+	protected int clientId = WorkerDefs.loginCommandSenderId;
 	protected String username;
 	protected String password;
 
@@ -67,7 +65,7 @@ public abstract class AEmployee {
 		case SM_INVALID_SENDER_ID:
 			break;
 		case SM_CATALOG_PRODUCT_DOES_NOT_EXIST:
-			throw new RuntimeException("Catalog product could not be found");
+			throw new RuntimeException(WorkerDefs.loginCmdCatalogProductNotFound);
 		case SM_ERR:
 			break;
 		case SM_INVALID_CMD_DESCRIPTOR:
@@ -75,11 +73,11 @@ public abstract class AEmployee {
 		case SM_INVALID_PARAMETER:
 			break;
 		case SM_SENDER_IS_ALREADY_CONNECTED:
-			throw new RuntimeException("The user is already connected to the server");
+			throw new RuntimeException(WorkerDefs.loginCmdUserAlreadyConnected);
 		case SM_SENDER_IS_NOT_CONNECTED:
-			throw new RuntimeException("The user is not connected to the server");
+			throw new RuntimeException(WorkerDefs.loginCmdUserNotConnected);
 		case SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD:
-			throw new RuntimeException("Wrong username or password");
+			throw new RuntimeException(WorkerDefs.loginCmdWrongUserOrPass);
 		default:
 			break;
 		}

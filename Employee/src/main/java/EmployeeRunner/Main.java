@@ -11,8 +11,6 @@ import ClientServerCommunication.ClientRequestHandler;
 import EmployeeContracts.IWorker;
 import EmployeeImplementations.Worker;
 import UtilsContracts.IClientRequestHandler;
-import UtilsContracts.ISerialization;
-import UtilsImplementations.Serialization;
 
 /**
  * This is the employee main: This will temporarily replace GUI until it's
@@ -47,8 +45,7 @@ public class Main {
 
 	public static void main(String args[]) throws IOException {
 		IClientRequestHandler clientRequestHandler = new ClientRequestHandler();
-		ISerialization serialization = new Serialization();
-		IWorker worker = new Worker(serialization, clientRequestHandler);
+		IWorker worker = new Worker(clientRequestHandler);
 		setLoggerVerbosity();
 
 		try {
@@ -80,7 +77,7 @@ public class Main {
 						System.out.println("input=(" + cmdId + ") is not a valid cmd-id. Please retry: ");
 						printCommandsInfo();
 					}
-				} catch (Exception e){
+				} catch (Exception e) {
 					System.out.println(e.getMessage());
 					printCommandsInfo();
 				}
@@ -146,13 +143,13 @@ public class Main {
 	}
 
 	private static void setLoggerVerbosity() {
-	    ConsoleHandler handler = new ConsoleHandler();
-	    handler.setFormatter(new SimpleFormatter());
-	    handler.setLevel(verbosity);
+		ConsoleHandler handler = new ConsoleHandler();
+		handler.setFormatter(new SimpleFormatter());
+		handler.setLevel(verbosity);
 
 		Logger.getLogger(Worker.class.getName()).setLevel(verbosity);
 
-	    Logger.getLogger(Worker.class.getName()).addHandler(handler);
+		Logger.getLogger(Worker.class.getName()).addHandler(handler);
 	}
 
 	private static void printCommandsInfo() {

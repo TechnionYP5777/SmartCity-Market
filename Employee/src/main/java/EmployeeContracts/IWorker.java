@@ -1,6 +1,7 @@
 package EmployeeContracts;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.Login;
 
 /** IWorker - This interface represent the Worker client functionality.
  * 
@@ -8,6 +9,12 @@ import BasicCommonClasses.CatalogProduct;
  * @since 2016-12-17 */
 
 public interface IWorker {
+		
+	/**
+	 * 
+	 * @return username and password in holding class LoginParameters
+	 */
+	Login getWorkerLoginDetails();
 	
 	/**
 	 * login method use for the worker to login to the server.
@@ -21,7 +28,11 @@ public interface IWorker {
 	 */
 	void logout();
 	
-	// TODO - SHOULD BE INT OR LONG?
+	/**
+	 * gets catalog product by barcode
+	 * @param barcode
+	 * @return
+	 */
 	CatalogProduct viewProductFromCatalog(int barcode);
 
 }
