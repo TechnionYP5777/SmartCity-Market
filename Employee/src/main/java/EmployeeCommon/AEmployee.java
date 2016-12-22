@@ -19,7 +19,7 @@ import UtilsContracts.IClientRequestHandler;
 
 public abstract class AEmployee {
 
-	static Logger log = Logger.getLogger(AEmployee.class.getName());
+	protected static Logger log = Logger.getLogger(AEmployee.class.getName());
 	
 	protected IClientRequestHandler clientRequestHandler;
 	protected int clientId = WorkerDefs.loginCommandSenderId;

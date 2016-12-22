@@ -6,11 +6,13 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
 import BasicCommonClasses.CatalogProduct;
-import ClientServerCommunication.ClientRequestHandler;
 import EmployeeContracts.IWorker;
+import EmployeeDI.WorkerDiConfigurator;
 import EmployeeImplementations.Worker;
-import UtilsContracts.IClientRequestHandler;
 
 /**
  * This is the employee main: This will temporarily replace GUI until it's
@@ -45,13 +47,13 @@ public class Main {
 	// logger:
 	static final Level verbosity = Level.ALL;
 
-	public static void main(String args[]) throws IOException {
-		IClientRequestHandler clientRequestHandler = new ClientRequestHandler();
-		IWorker worker = new Worker(clientRequestHandler);
-		
+	public static void main(String args[]) throws IOException {		
 		/* Setting  log properties */
 		PropertyConfigurator.configure("../log4j.properties");
 		log.setLevel(verbosity);
+
+		Injector injector = Guice.createInjector(new WorkerDiConfigurator());
+		Worker worker = injector.getInstance(Worker.class);
 
 		try {
 			printCommandsInfo();

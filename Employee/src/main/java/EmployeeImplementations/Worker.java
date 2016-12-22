@@ -1,7 +1,6 @@
 package EmployeeImplementations;
 
-import org.apache.log4j.Logger;
-
+import com.google.inject.Inject;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.SmartCode;
@@ -22,8 +21,8 @@ import UtilsImplementations.Serialization;
 
 public class Worker extends AEmployee implements IWorker {
 
-	static Logger log = Logger.getLogger(Worker.class.getName());
-	
+
+	@Inject
 	public Worker(IClientRequestHandler clientRequestHandler) {
 
 		this.clientRequestHandler = clientRequestHandler;
