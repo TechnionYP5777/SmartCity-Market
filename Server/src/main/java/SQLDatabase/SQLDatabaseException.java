@@ -5,7 +5,7 @@ package SQLDatabase;
  * throw
  * 
  * @author Noam Yefet
- *
+ * @since 2016-12-14
  */
 public class SQLDatabaseException extends Exception {
 

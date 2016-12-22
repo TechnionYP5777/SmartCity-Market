@@ -39,8 +39,9 @@ import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
 /**
  * SqlDBConnection - Handles the server request to the SQL database.
  * 
- * 
  * @author Noam Yefet
+ * @since 2016-12-14
+
  */
 public class SQLDatabaseConnection {
 

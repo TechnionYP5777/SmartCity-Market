@@ -14,6 +14,9 @@ import org.apache.log4j.PropertyConfigurator;
  * This class runs the server from initialization to shutdown.
  * 
  * Please run ServerMain to see usage.
+ * 
+ * @author Aviad Cohen
+ * @since 2016-12-18
  */
 public class Main {
 	

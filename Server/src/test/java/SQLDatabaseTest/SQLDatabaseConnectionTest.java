@@ -21,6 +21,7 @@ import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
 
 /**
  * @author Noam Yefet
+ * @since 2016-12-14
  */
 public class SQLDatabaseConnectionTest {
 

@@ -4,6 +4,7 @@ package SQLDatabase;
  * SQLDatabaseStrings - contains strings to use in {@link SQLDatabaseConnection}
  * 
  * @author Noam Yefet
+ * @since 2016-12-14
  */
 public class SQLDatabaseStrings {
 

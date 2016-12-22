@@ -23,6 +23,7 @@ import SQLDatabase.SQLDatabaseStrings.WORKERS_TABLE;
  * sub-classes) for better organizing
  * 
  * @author Noam Yefet
+ * @since 2016-12-14
  */
 class SQLDatabaseEntities {
 

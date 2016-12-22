@@ -21,6 +21,13 @@ import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
 
+/**
+ * CommandProcess - This struct will proccess the command from the clients.
+ * 
+ * @author Aviad Cohen
+ * @since 2016-12-14
+ */
+
 public class CommandProcess implements ProcessRequest {
 
 	static Logger log = Logger.getLogger(CommandProcess.class.getName());
