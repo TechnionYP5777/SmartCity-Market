@@ -8,8 +8,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 import UtilsContracts.IClientRequestHandler;
 
@@ -21,7 +21,7 @@ import UtilsContracts.IClientRequestHandler;
 
 public class ClientRequestHandler implements IClientRequestHandler {
 	
-	private static final Logger LOGGER = Logger.getLogger(ClientRequestHandler.class.getName());
+	static Logger log = Logger.getLogger(ClientRequestHandler.class.getName());
 	
     private Socket socket;
      
@@ -50,7 +50,7 @@ public class ClientRequestHandler implements IClientRequestHandler {
 					"Client request manager failed to set timeout " + timeout + " miliseconds", e);
 		}
     	
-    	LOGGER.log(Level.FINE, "Client request handler initialized successfully with host " + serverHostName + " on port " + serverPort);
+    	log.info("Client request handler initialized successfully with host " + serverHostName + " on port " + serverPort);
 		
 	}
 
@@ -66,7 +66,7 @@ public class ClientRequestHandler implements IClientRequestHandler {
     		while ($ == null)
     			$ = in.readLine();
     		
-        	LOGGER.log(Level.FINE, "Client request handler got respond: " + $);
+        	log.info("Client request handler got respond: " + $);
         	
         	return $;
 		} catch (java.net.SocketTimeoutException e) {
@@ -84,7 +84,7 @@ public class ClientRequestHandler implements IClientRequestHandler {
 		try {
 	    	(new PrintWriter(socket.getOutputStream(), true)).println(request);
 	    	
-	    	LOGGER.log(Level.FINE, "Client request handler sent request: " + request);
+	    	log.info("Client request handler sent request: " + request);
 		} catch (IOException e) {
 			throw new RuntimeException("Client request handler failed to send request: " + request, e);
 		}

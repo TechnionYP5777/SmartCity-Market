@@ -2,8 +2,8 @@ package ClientServerCommunication;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 /** ServerWorkerRunnable - Handles the server connection between and one client.
  * Each thread will run a server worker and will process the clients requests/
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 public class ServerWorkerRunnable implements Runnable{
 
-	public static final Logger LOGGER = Logger.getLogger(ServerWorkerRunnable.class.getName());
+	static Logger log = Logger.getLogger(ServerWorkerRunnable.class.getName());
 	
     private Socket clientSocket;
     private ProcessRequest processRequest;
@@ -26,7 +26,7 @@ public class ServerWorkerRunnable implements Runnable{
     public ServerWorkerRunnable(Socket clientSocket, ProcessRequest processRequest) {
     	if (clientSocket == null || processRequest == null)
 			throw new NullPointerException();
-    	
+    	    	
         this.clientSocket = clientSocket;
         this.processRequest = processRequest;
     }
@@ -36,7 +36,7 @@ public class ServerWorkerRunnable implements Runnable{
      */
     @Override
 	public void run() {
-        LOGGER.log(Level.FINE, "Server started to process request from port " + clientSocket.getPort());
+        log.info("Server started to process request from port " + clientSocket.getPort());
 		
 		processRequest.process(clientSocket);
 		
@@ -47,6 +47,6 @@ public class ServerWorkerRunnable implements Runnable{
 					"Server failed to close client socket", e);
 		}
 		
-		LOGGER.log(Level.FINE, "Server process request from port " + clientSocket.getPort() + " finished");
+		log.info("Server process request from port " + clientSocket.getPort() + " finished");
     }
 }

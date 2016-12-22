@@ -1,10 +1,10 @@
 package EmployeeRunner;
 
 import java.io.*;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import BasicCommonClasses.CatalogProduct;
 import ClientServerCommunication.ClientRequestHandler;
@@ -21,6 +21,8 @@ import UtilsContracts.IClientRequestHandler;
  */
 public class Main {
 
+	static Logger log = Logger.getLogger(Main.class.getName());
+	
 	// Standard input:
 	static final InputStreamReader cin = new InputStreamReader(System.in);
 
@@ -46,7 +48,10 @@ public class Main {
 	public static void main(String args[]) throws IOException {
 		IClientRequestHandler clientRequestHandler = new ClientRequestHandler();
 		IWorker worker = new Worker(clientRequestHandler);
-		setLoggerVerbosity();
+		
+		/* Setting  log properties */
+		PropertyConfigurator.configure("../log4j.properties");
+		log.setLevel(verbosity);
 
 		try {
 			printCommandsInfo();
@@ -140,16 +145,6 @@ public class Main {
 			if (line[¢] != '\n')
 				$ += line[¢];
 		return $;
-	}
-
-	private static void setLoggerVerbosity() {
-		ConsoleHandler handler = new ConsoleHandler();
-		handler.setFormatter(new SimpleFormatter());
-		handler.setLevel(verbosity);
-
-		Logger.getLogger(Worker.class.getName()).setLevel(verbosity);
-
-		Logger.getLogger(Worker.class.getName()).addHandler(handler);
 	}
 
 	private static void printCommandsInfo() {

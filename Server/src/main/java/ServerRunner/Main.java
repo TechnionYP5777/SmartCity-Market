@@ -1,16 +1,14 @@
 package ServerRunner;
 
 import java.net.UnknownHostException;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
-import ClientServerCommunication.ServerWorkerRunnable;
 import ClientServerCommunication.ThreadPooledServer;
 import CommandHandler.CommandProcess;
 
 import org.apache.commons.cli.*;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  * This class runs the server from initialization to shutdown.
@@ -18,6 +16,8 @@ import org.apache.commons.cli.*;
  * Please run ServerMain to see usage.
  */
 public class Main {
+	
+	static Logger log = Logger.getLogger(Main.class.getName());
 	
 	private static final Integer DEFAULT_NUMBER_OF_THREADS = 5;
 	private static final Integer DEFAULT_TIME_OF_TIMEOUT_IN_SECONDS = 120;
@@ -32,7 +32,7 @@ public class Main {
 		/* setting default timeout to 120 seconds */
 		numOfThreads = DEFAULT_NUMBER_OF_THREADS;
 		timeout      = DEFAULT_TIME_OF_TIMEOUT_IN_SECONDS;
-		verbosity    = Level.SEVERE;
+		verbosity    = Level.FATAL;
 		
         Options options = new Options();
 
@@ -76,31 +76,18 @@ public class Main {
         	timeout = Integer.valueOf(cmd.getOptionValue("timeout"));
         
         if (cmd.getOptionValue("verbose") != null)
-			verbosity = Level.parse(cmd.getOptionValue("verbose"));
+			verbosity = Level.toLevel(cmd.getOptionValue("verbose"));
         
 		return true;
-	}
-	
-	private static void setLoggerVerbosity() {
-		//TODO - Noam - please add SQL logger when it's ready (see issue #86)
-	    ConsoleHandler handler = new ConsoleHandler();
-	    handler.setFormatter(new SimpleFormatter());
-	    handler.setLevel(verbosity);
-	    
-		Logger.getLogger(ThreadPooledServer.class.getName()).setLevel(verbosity);
-		Logger.getLogger(ServerWorkerRunnable.class.getName()).setLevel(verbosity);
-		Logger.getLogger(CommandProcess.class.getName()).setLevel(verbosity);
-	    
-	    Logger.getLogger(ThreadPooledServer.class.getName()).addHandler(handler);
-	    Logger.getLogger(ServerWorkerRunnable.class.getName()).addHandler(handler);
-	    Logger.getLogger(CommandProcess.class.getName()).addHandler(handler);
 	}
 	
 	public static void main(String[] args) {
 		if (!parseArguments(args))
 			return;
 		
-		setLoggerVerbosity();
+		/* Setting log properties */
+		PropertyConfigurator.configure("../log4j.properties");
+		log.setLevel(verbosity);
 		
 		CommandProcess commandProcess = new CommandProcess();
 		ThreadPooledServer server = null;
@@ -109,11 +96,11 @@ public class Main {
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 
-			System.out.println("Server IP address leads to unknown host, server won't start.");
+			log.fatal("Server IP address leads to unknown host, server won't start.");
 			return;
 		}
 		
-        System.out.println("Starting Server.");
+		log.info("Starting Server.");
 		new Thread(server).start();
 
 	    try
@@ -123,10 +110,10 @@ public class Main {
 	    catch (InterruptedException e) 
         {
 	    	/* Get interrupt to stop server */
-            System.out.println("Server Got interrupted.");
+	    	log.info("Server Got interrupted.");
         }
 	    
-        System.out.println("Stopping server.");
+	    log.info("Stopping server.");
 		
 		server.stop();
 	}

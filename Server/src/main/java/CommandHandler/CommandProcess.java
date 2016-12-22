@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
 
@@ -23,7 +23,7 @@ import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
 
 public class CommandProcess implements ProcessRequest {
 
-	public static final Logger LOGGER = Logger.getLogger(CommandProcess.class.getName());
+	static Logger log = Logger.getLogger(CommandProcess.class.getName());
 	
 	private CommandWrapper inCommandWrapper;
 	private CommandWrapper outCommandWrapper;
@@ -32,7 +32,7 @@ public class CommandProcess implements ProcessRequest {
 		Login login;
 		SQLDatabaseConnection sqlDatabaseConnection = new SQLDatabaseConnection();
 		
-		LOGGER.log(Level.FINE, "Login command called");
+		log.info("Login command called");
 		
 		login = new Gson().fromJson(inCommandWrapper.getData(), Login.class);
 				
@@ -40,26 +40,26 @@ public class CommandProcess implements ProcessRequest {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 			outCommandWrapper.setSenderID((sqlDatabaseConnection.WorkerLogin(login.getUserName(), login.getPassword())));
 			
-			LOGGER.log(Level.FINE, "Login command succeded with sender ID " + outCommandWrapper.getSenderID());
+			log.info("Login command succeded with sender ID " + outCommandWrapper.getSenderID());
 		} catch (AuthenticationError e) {
-			LOGGER.log(Level.FINE, "Login command failed, username dosen't exist or wrong password received");
+			log.info("Login command failed, username dosen't exist or wrong password received");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD);			
 		} catch (CriticalError e) {
-			LOGGER.log(Level.SEVERE, "Login command failed, critical error occured from SQL Database connection");
+			log.fatal("Login command failed, critical error occured from SQL Database connection");
 			
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 			e.printStackTrace();
 		}
 		
-		LOGGER.log(Level.FINE, "Login with User " + login.getUserName() + " finished");
+		log.info( "Login with User " + login.getUserName() + " finished");
 	}
 	
 	private void logoutCommand() {
 		String username;
 		SQLDatabaseConnection sqlDatabaseConnection = new SQLDatabaseConnection();
 		
-		LOGGER.log(Level.FINE, "Logout command called");
+		log.info("Logout command called");
 		
 		username = new Gson().fromJson(inCommandWrapper.getData(), String.class);
 		
@@ -67,52 +67,54 @@ public class CommandProcess implements ProcessRequest {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 			sqlDatabaseConnection.WorkerLogout(inCommandWrapper.getSenderID(), username);
 			
-			LOGGER.log(Level.FINE, "Logout command succeded with sender ID " + inCommandWrapper.getSenderID());
+			log.info("Logout command succeded with sender ID " + inCommandWrapper.getSenderID());
 		} catch (WorkerNotConnected e) {
-			LOGGER.log(Level.FINE, "Logout command failed, username dosen't login to the system");
+			log.info("Logout command failed, username dosen't login to the system");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);			
 		} catch (CriticalError e) {
-			LOGGER.log(Level.SEVERE, "Logout command failed, critical error occured from SQL Database connection");
+			log.fatal("Logout command failed, critical error occured from SQL Database connection");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 			e.printStackTrace();
 		}
 		
-		LOGGER.log(Level.FINE, "Logout with User " + username + " finished");
+		log.info("Logout with User " + username + " finished");
 	}
 	
 	private void viewProductFromCatalogCommand() {
 		SmartCode smartCode;
 		SQLDatabaseConnection sqlDatabaseConnection = new SQLDatabaseConnection();
 		
-		LOGGER.log(Level.FINE, "View Product From Catalog command called");
+		log.info("View Product From Catalog command called");
 		
 		smartCode = new Gson().fromJson(inCommandWrapper.getData(), SmartCode.class);
 		
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, sqlDatabaseConnection.getProductFromCatalog(inCommandWrapper.getSenderID(), smartCode.getBarcode()));
 			
-			LOGGER.log(Level.FINE, "Get product from catalog command secceeded with barcode " + smartCode.getBarcode());
+			log.info("Get product from catalog command secceeded with barcode " + smartCode.getBarcode());
 		} catch (ProductNotExistInCatalog e) {
-			LOGGER.log(Level.FINE, "Get product from catalog command failed, product dosen't exist in the system");
+			log.info("Get product from catalog command failed, product dosen't exist in the system");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST);
 		} catch (WorkerNotConnected e) {
-			LOGGER.log(Level.FINE, "Get product from catalog command failed, username dosen't login to the system");
+			log.info("Get product from catalog command failed, username dosen't login to the system");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
 		} catch (CriticalError e) {
-			LOGGER.log(Level.SEVERE, "Get product from catalog command failed, critical error occured from SQL Database connection");
+			log.fatal("Get product from catalog command failed, critical error occured from SQL Database connection");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 			e.printStackTrace();
 		}
 		
-		LOGGER.log(Level.FINE, "View Product From Catalog with product barcode  " + smartCode.getBarcode() + " finished");
+		log.info("View Product From Catalog with product barcode  " + smartCode.getBarcode() + " finished");
 	}
 	
 	private void interpretCommand(String command) {
+		log.info("New command received: " + command);
+		
 		inCommandWrapper = CommandWrapper.deserialize(command);
 		
 		switch(inCommandWrapper.getCommandDescriptor()) {
@@ -139,7 +141,7 @@ public class CommandProcess implements ProcessRequest {
 			} catch (CloneNotSupportedException e) {
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 				
-				LOGGER.log(Level.SEVERE, "Failed to clone command");
+				log.fatal("Failed to clone command");
 				
 				return;
 			}
@@ -152,7 +154,7 @@ public class CommandProcess implements ProcessRequest {
         BufferedReader in = null;
         PrintWriter out = null;
     	String command = null;
-        
+    	        
 		try {
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -163,7 +165,7 @@ public class CommandProcess implements ProcessRequest {
 				command = in.readLine();
 		} catch (IOException e1) {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
-			LOGGER.log(Level.SEVERE, "Failed to get string command");
+			log.fatal("Failed to get string command");
 			
 			out.println(outCommandWrapper.serialize());
 			
