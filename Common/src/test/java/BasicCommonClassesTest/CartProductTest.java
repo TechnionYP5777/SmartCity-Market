@@ -12,7 +12,8 @@ import BasicCommonClasses.CartProduct;
 public class CartProductTest {
 	@Test public void CartProductTestMethod() {
 		Manufacturer man = new Manufacturer(11,"Osem");
-		CatalogProduct catp = new CatalogProduct(11, "Bamba", null, man, "", 12, null);
+		String bambaIm = "https://www.osem.co.il/tm-content/uploads/2015/01/Bamba_classic_80g3.png3-308x308.png";
+		CatalogProduct catp = new CatalogProduct(11, "Bamba", null, man, "", 12, bambaIm, null);
 		LocalDate ld = new LocalDate(2016,12,11);
 		CartProduct crp = new CartProduct(catp, ld, 0);
 		if (!catp.equals(crp.getCatalogProduct()) || !ld.equals(crp.getExpirationDate()) ||

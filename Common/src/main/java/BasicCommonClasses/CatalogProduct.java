@@ -19,19 +19,18 @@ public class CatalogProduct {
 	Manufacturer manufacturer;
 	String description;
 	double price;
-	//TODO: activate the image property
-	//Image image;
+	String imageUrl;
 	HashSet<Location> locations;
 	
 	public CatalogProduct(long barcode, String name, HashSet<Ingredient> ingredients, Manufacturer manufacturer,
-			String description, double price, /*Image image,*/ HashSet<Location> locations) {
+			String description, double price, String imageUrl, HashSet<Location> locations) {
 		this.barcode = barcode;
 		this.name = name;
 		this.ingredients = ingredients;
 		this.manufacturer = manufacturer;
 		this.description = description;
 		this.price = price;
-		//this.image = image;
+		this.imageUrl = imageUrl;
 		this.locations = locations;
 	}
 
@@ -82,15 +81,15 @@ public class CatalogProduct {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-/*
-	public Image getImage() {
-		return image;
+
+	public String getImageUrl() {
+		return imageUrl;
 	}
 
-	public void setImage(Image ¢) {
-		this.image = ¢;
+	public void setImageUrl(String ¢) {
+		this.imageUrl = ¢;
 	}
-*/
+
 
 	public HashSet<Location> getLocations() {
 		return locations;

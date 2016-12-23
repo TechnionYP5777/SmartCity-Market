@@ -39,7 +39,7 @@ public class ViewProductFromCatalogTest {
 	@Test
 	public void ViewProductFromCatalogSuccessfulTest() {
 		CatalogProduct catalogProduct = new CatalogProduct(1234567890, "name", null,
-				new Manufacturer(1, "Manufacturer"), "description", 22.0, null);
+				new Manufacturer(1, "Manufacturer"), "description", 22.0, null, null);
 		CommandWrapper commandWrapper = new CommandWrapper(ResultDescriptor.SM_OK,
 				Serialization.serialize(catalogProduct));
 		try {

@@ -61,11 +61,12 @@ public class SQLDatabaseConnectionTest {
 		ingredients.add(new Ingredient(123, "milk"));
 		HashSet<Location> locations = new HashSet<Location>();
 		locations.add(new Location(1, 1, PlaceInMarket.STORE));
-
+		//TODO: noam - check the imageUrl addition
+		String milkImage = "https://chef.tnuva.co.il/files/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/7/2/7290000042442.jpg"; 
 		try {
 			assertEquals(sqlConnection.getProductFromCatalog(null, 1234567890),
 					new Gson().toJson((new CatalogProduct(1234567890L, "Milk 3%", ingredients,
-							new Manufacturer(334, "Tnuva"), "", 10.0, locations))));
+							new Manufacturer(334, "Tnuva"), "", 10.0, milkImage, locations))));
 		} catch (ProductNotExistInCatalog | WorkerNotConnected | CriticalError e) {
 			e.printStackTrace();
 			fail();
