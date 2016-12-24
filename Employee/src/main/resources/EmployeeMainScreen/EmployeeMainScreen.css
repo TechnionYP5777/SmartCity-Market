@@ -1,0 +1,4 @@
+.root {
+   -fx-background-image: url("mainScreen.gif");
+   -fx-background-size: cover;
+}
