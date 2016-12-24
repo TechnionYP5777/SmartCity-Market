@@ -1,6 +1,5 @@
 package EmployeeGui;
 
-import EmployeeContracts.IWorker;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,26 +8,33 @@ import javafx.stage.Stage;
 
 public class EmployeeMainScreen extends Application {
 
-	private IWorker worker;
-	private String username;
-	private String password;
-	
+	Scene mainScreen;
+	Scene loginScreen;
+	Stage primaryStage;
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			
-			Parent root = FXMLLoader.load(getClass().getResource("/EmployeeMainScreen/EmployeeMainScreen.fxml"));
+			this.primaryStage = primaryStage;
+			Parent mainScreenRoot = FXMLLoader
+					.load(getClass().getResource("/EmployeeMainScreen/EmployeeMainScreen.fxml"));
+			Parent loginScreenRoot = FXMLLoader
+					.load(getClass().getResource("/EmployeeLoginScreen/EmployeeLoginScreen.fxml"));
 
-			Scene scene = new Scene(root, 300, 275);
-	
+			mainScreen = new Scene(mainScreenRoot);
+			loginScreen = new Scene(loginScreenRoot);
+			
+			mainScreenRoot.setOnMouseClicked(e -> {
+				primaryStage.setScene(loginScreen);
+			});
+			
 			primaryStage.setTitle("Smart Market Beta");
-			primaryStage.setScene(scene);
+			primaryStage.setScene(mainScreen);
 			primaryStage.show();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
 
 	public static void main(String[] args) {
 		launch(args);
