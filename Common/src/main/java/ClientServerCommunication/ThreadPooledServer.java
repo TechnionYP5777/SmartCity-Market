@@ -42,7 +42,6 @@ public class ThreadPooledServer implements Runnable{
 	 */
 	private void initializeServer(int serverPort, int numOfThreads, ProcessRequest r, String ipAddress) throws UnknownHostException {
         this.serverPort = serverPort;
-        this.serverSocket = null;
         this.isStopped = false;
         this.processRequest = r;
         
