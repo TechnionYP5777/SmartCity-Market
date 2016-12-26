@@ -50,7 +50,7 @@ public class CommandExecuterLogoutTest {
 	}
 	
 	@Test
-	public void logoutSenderIDDoesNotExistTest() {
+	public void logoutWorkerNotConnectedTest() {
 		int senderID = 99999999;
 		String userName = "admin";
 		String command = new CommandWrapper(senderID, CommandDescriptor.LOGOUT,

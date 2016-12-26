@@ -53,4 +53,8 @@ public class SmartCode {
 			return false;
 		return true;
 	}
+	
+	public boolean isValid() {
+		return barcode >= 0;
+	}
 }

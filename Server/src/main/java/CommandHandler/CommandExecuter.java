@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 
 import BasicCommonClasses.Login;
 import BasicCommonClasses.SmartCode;
+import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import SQLDatabase.SQLDatabaseConnection;
@@ -81,14 +82,6 @@ public class CommandExecuter {
 			return;
 		}
 		
-		if (inCommandWrapper.getSenderID() < 0) {
-			log.info("Logout command failed, senderID can't be negative");
-
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_SENDER_ID);
-			
-			return;
-		}
-		
 		//TODO Noam - add exception to SM_SENDER_ID_DOES_NOT_EXIST,  when implemented in SQL + test for it in CommandExectuerLogoutTest
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
@@ -115,6 +108,15 @@ public class CommandExecuter {
 		
 		smartCode = new Gson().fromJson(inCommandWrapper.getData(), SmartCode.class);
 		
+		if (!smartCode.isValid()) {
+			log.info("View Product From Catalog command failed, barcode can't be negative");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+			
+			return;
+		}
+		
+		//TODO Noam - add exception to SM_SENDER_ID_DOES_NOT_EXIST,  when implemented in SQL + test for it in CommandExectuerLogoutTest
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, c.getProductFromCatalog(inCommandWrapper.getSenderID(), smartCode.getBarcode()));
 			
@@ -131,7 +133,6 @@ public class CommandExecuter {
 			log.fatal("Get product from catalog command failed, critical error occured from SQL Database connection");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
-			e.printStackTrace();
 		}
 		
 		log.info("View Product From Catalog with product barcode  " + smartCode.getBarcode() + " finished");
@@ -142,6 +143,12 @@ public class CommandExecuter {
 			log.fatal("Failed to get SQL Database Connection");
 			
 			return new CommandWrapper(ResultDescriptor.SM_ERR);
+		}
+		
+		if ((inCommandWrapper.getCommandDescriptor() != CommandDescriptor.LOGIN) && (inCommandWrapper.getSenderID() < 0)) {
+			log.info("Command failed, senderID can't be negative");
+
+			return new CommandWrapper(ResultDescriptor.SM_INVALID_SENDER_ID);
 		}
 		
 		switch(inCommandWrapper.getCommandDescriptor()) {
