@@ -20,7 +20,7 @@ import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CommandExectuerLoginTest {
+public class CommandExecuterLoginTest {
 		
 	@Mock
 	private SQLDatabaseConnection sqlDatabaseConnection;
