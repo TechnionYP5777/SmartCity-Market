@@ -213,6 +213,25 @@ public class CommandExecuter {
 		}
 	}
 	
+	private void placeProductPackageOnShelvesCommand(SQLDatabaseConnection __) {
+		ProductPackage productPackage;
+		
+		log.info("Place Product Package On Shelves command called");
+		
+		productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+		
+		if (productPackage.isValid())
+			//TODO Noam - call SQL command here
+			
+			log.info("Place Product Package On Shelves with product package barcode "
+					+ productPackage.getSmartCode().getBarcode() + " and amount " + productPackage.getAmount()
+					+ " finished");
+		else {
+			log.info("Place Product Package On Shelves command failed, product package is invalid");
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+		}
+	}
+	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
 			log.fatal("Failed to get SQL Database Connection");
@@ -260,7 +279,12 @@ public class CommandExecuter {
 		case EDIT_PRODUCT_FROM_CATALOG:
 			editProductFromCatalogCommand(c);
 			
-			break;	
+			break;
+			
+		case PLACE_PRODUCT_PACKAGE_ON_SHELVES:
+			placeProductPackageOnShelvesCommand(c);
+			
+			break;
 			
 		default:
 			try {
