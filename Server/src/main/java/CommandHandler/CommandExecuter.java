@@ -177,6 +177,24 @@ public class CommandExecuter {
 		}
 	}
 	
+	private void removeProductFromCatalogCommand(SQLDatabaseConnection c) {	
+		SmartCode smartCode;
+		
+		log.info("Remove Product From Catalog command called");
+		
+		smartCode = new Gson().fromJson(inCommandWrapper.getData(), SmartCode.class);
+		
+		if (smartCode.isValid())
+			//TODO Noam - call SQL command here
+			
+			log.info("Remove Product From Catalog with product barcode " +
+					 smartCode.getBarcode() + " finished");
+		else {
+			log.info("Remove Product From Catalog command failed, barcode can't be negative");
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+		}
+	}
+	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
 			log.fatal("Failed to get SQL Database Connection");
@@ -213,6 +231,11 @@ public class CommandExecuter {
 			
 		case ADD_PRODUCT_TO_CATALOG:
 			addProductToCatalogCommand(c);
+			
+			break;
+			
+		case REMOVE_PRODUCT_FROM_CATALOG:
+			removeProductFromCatalogCommand(c);
 			
 			break;
 			
