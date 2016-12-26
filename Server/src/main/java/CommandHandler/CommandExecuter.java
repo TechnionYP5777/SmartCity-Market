@@ -38,7 +38,14 @@ public class CommandExecuter {
 		log.info("Login command called");
 		
 		login = new Gson().fromJson(inCommandWrapper.getData(), Login.class);
-				
+		
+		if (!login.isValid()) {
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+			
+			return;
+		}
+		
+		//TODO Noam - add exception to WorkerAlreadyConnected when implemented in SQL + test for it in CommandExectuerLoginTest
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 			outCommandWrapper.setSenderID((c.WorkerLogin(login.getUserName(), login.getPassword())));
@@ -52,7 +59,6 @@ public class CommandExecuter {
 			log.fatal("Login command failed, critical error occured from SQL Database connection");
 			
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
-			e.printStackTrace();
 		}
 		
 		log.info( "Login with User " + login.getUserName() + " finished");
@@ -114,6 +120,12 @@ public class CommandExecuter {
 	}
 	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
+		if (c == null) {
+			log.fatal("Failed to get SQL Database Connection");
+			
+			return new CommandWrapper(ResultDescriptor.SM_ERR);
+		}
+		
 		switch(inCommandWrapper.getCommandDescriptor()) {
 		case LOGIN:
 			loginCommand(c);

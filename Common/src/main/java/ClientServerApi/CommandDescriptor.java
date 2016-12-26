@@ -45,9 +45,7 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *			SM_SENDER_IS_ALREADY_CONNECTED,
-	 *			SM_USERNAME_DOES_NOT_EXIST,
-	 *			SM_WRONG_PASSWORD,
-	 *			SM_INVALID_PARAMETER,
+	 *			SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD,
 	 *
 	 *	 ***** NOTE *****
 	 * This command has no data from the server side.

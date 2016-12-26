@@ -1,0 +1,120 @@
+package CommandHandlerTest;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import com.google.gson.Gson;
+
+import BasicCommonClasses.Login;
+import ClientServerApi.CommandDescriptor;
+import ClientServerApi.CommandWrapper;
+import ClientServerApi.ResultDescriptor;
+import CommandHandler.CommandExecuter;
+import SQLDatabase.SQLDatabaseConnection;
+import SQLDatabase.SQLDatabaseException.AuthenticationError;
+import SQLDatabase.SQLDatabaseException.CriticalError;
+
+@RunWith(MockitoJUnitRunner.class)
+public class CommandExectuerLoginTest {
+		
+	@Mock
+	private SQLDatabaseConnection sqlDatabaseConnection;
+
+	@Test
+	public void loginSuccessfulTest() {
+		int senderID = 0;
+		Login login = new Login("admin", "admin");
+		String command = new CommandWrapper(0, CommandDescriptor.LOGIN,
+				new Gson().toJson(login, Login.class)).serialize();
+		CommandExecuter commandExecuter = new CommandExecuter(command);
+		CommandWrapper out;
+		
+		try {
+			Mockito.when(
+					sqlDatabaseConnection.WorkerLogin(login.getUserName(), login.getPassword()))
+					.thenReturn(senderID);
+		} catch (AuthenticationError e) {
+			e.printStackTrace();
+			fail();
+		} catch (CriticalError e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		out = commandExecuter.execute(sqlDatabaseConnection);
+		
+		assertEquals(senderID, out.getSenderID());
+		assertEquals(ResultDescriptor.SM_OK, out.getResultDescriptor());
+	}
+	
+	@Test
+	public void loginUsernameDoesNotExistWrongPasswordTest() {
+		Login login = new Login("unknown", "unknown");
+		String command = new CommandWrapper(0, CommandDescriptor.LOGIN,
+				new Gson().toJson(login, Login.class)).serialize();
+		CommandExecuter commandExecuter = new CommandExecuter(command);
+		CommandWrapper out;
+		
+		try {
+			Mockito.when(
+					sqlDatabaseConnection.WorkerLogin(login.getUserName(), login.getPassword()))
+			       .thenThrow(new AuthenticationError());
+		} catch (AuthenticationError e) {
+			e.printStackTrace();
+			fail();
+		} catch (CriticalError e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		out = commandExecuter.execute(sqlDatabaseConnection);
+		
+		assertEquals(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD, out.getResultDescriptor());
+	}
+	
+	@Test
+	public void loginCriticalErrorTest() {
+		Login login = new Login("unknown", "unknown");
+		String command = new CommandWrapper(0, CommandDescriptor.LOGIN,
+				new Gson().toJson(login, Login.class)).serialize();
+		CommandExecuter commandExecuter = new CommandExecuter(command);
+		CommandWrapper out;
+		
+		try {
+			Mockito.when(
+					sqlDatabaseConnection.WorkerLogin(login.getUserName(), login.getPassword()))
+			       .thenThrow(new CriticalError());
+		} catch (AuthenticationError e) {
+			e.printStackTrace();
+			fail();
+		} catch (CriticalError e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		out = commandExecuter.execute(sqlDatabaseConnection);
+		
+		assertEquals(ResultDescriptor.SM_ERR, out.getResultDescriptor());
+	}
+	
+	@Test
+	public void loginInvalidUserNameTest() {
+		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER,
+				(new CommandExecuter(new CommandWrapper(0, CommandDescriptor.LOGIN,
+						new Gson().toJson((new Login("", "admin")), Login.class)).serialize()))
+								.execute(sqlDatabaseConnection).getResultDescriptor());
+	}
+	
+	@Test
+	public void loginInvalidPasswordTest() {
+		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER,
+				(new CommandExecuter(new CommandWrapper(0, CommandDescriptor.LOGIN,
+						new Gson().toJson((new Login("admin", "")), Login.class)).serialize()))
+								.execute(sqlDatabaseConnection).getResultDescriptor());
+	}
+}

@@ -43,7 +43,7 @@ public class CommandWrapper implements Cloneable {
 	
 	//Methods:
 	// TODO change methods name
-	public String serialize(){
+	public String serialize() {
 		return Serialization.serialize(this);
 	}
 	
