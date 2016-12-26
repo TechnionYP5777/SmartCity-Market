@@ -141,4 +141,9 @@ public class CatalogProduct {
 	public boolean equals(Object ¢) {
 		return ¢ == this || (¢ != null && getClass() == ¢.getClass() && barcode == ((CatalogProduct) ¢).barcode);
 	}	
+	
+	public boolean isValid() {
+		return (barcode >= 0) && (!"".equals(name)) &&
+				(name != null) && (price > 0);
+	}
 }

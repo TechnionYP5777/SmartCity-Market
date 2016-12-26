@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
 
+import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
@@ -158,6 +159,24 @@ public class CommandExecuter {
 		}
 	}
 	
+	private void addProductToCatalogCommand(SQLDatabaseConnection __) {
+		CatalogProduct catalogProduct;
+		
+		log.info("Add Product To Catalog command called");
+		
+		catalogProduct = new Gson().fromJson(inCommandWrapper.getData(), CatalogProduct.class);
+		
+		if (catalogProduct.isValid())
+			//TODO Noam - call SQL command here
+			
+			log.info("Add Product To Catalog with product " +
+					 catalogProduct + " finished");
+		else {
+			log.info("Add Product To Catalog command failed, product is invalid");
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+		}
+	}
+	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
 			log.fatal("Failed to get SQL Database Connection");
@@ -189,6 +208,11 @@ public class CommandExecuter {
 			
 		case ADD_PRODUCT_PACKAGE_TO_WAREHOUSE:
 			addProductPackageToWarehouseCommand(c);
+			
+			break;
+			
+		case ADD_PRODUCT_TO_CATALOG:
+			addProductToCatalogCommand(c);
 			
 			break;
 			
