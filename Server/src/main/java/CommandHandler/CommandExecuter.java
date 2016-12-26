@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import com.google.gson.Gson;
 
 import BasicCommonClasses.Login;
+import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
@@ -135,7 +136,26 @@ public class CommandExecuter {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 		}
 		
-		log.info("View Product From Catalog with product barcode  " + smartCode.getBarcode() + " finished");
+		log.info("View Product From Catalog with product barcode " + smartCode.getBarcode() + " finished");
+	}
+	
+	private void addProductPackageToWarehouseCommand(SQLDatabaseConnection __) {
+		ProductPackage productPackage;
+		
+		log.info("Add Product Package To Warehouse command called");
+		
+		productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+		
+		if (productPackage.isValid())
+			//TODO Noam - call SQL command here
+			
+			log.info("Add Product Package To Warehouse with product package barcode "
+					+ productPackage.getSmartCode().getBarcode() + " and amount " + productPackage.getAmount()
+					+ " finished");
+		else {
+			log.info("Add Product Package To Warehouse command failed, product package is invalid");
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+		}
 	}
 	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
@@ -164,6 +184,11 @@ public class CommandExecuter {
 			
 		case VIEW_PRODUCT_FROM_CATALOG:
 			viewProductFromCatalogCommand(c);
+			
+			break;
+			
+		case ADD_PRODUCT_PACKAGE_TO_WAREHOUSE:
+			addProductPackageToWarehouseCommand(c);
 			
 			break;
 			

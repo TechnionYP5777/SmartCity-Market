@@ -67,4 +67,8 @@ public class ProductPackage {
 			return false;
 		return true;
 	}
+	
+	public boolean isValid() {
+		return smartCode.isValid() && amount > 0;
+	}
 }
