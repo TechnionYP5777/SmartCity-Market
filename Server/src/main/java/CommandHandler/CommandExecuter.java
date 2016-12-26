@@ -232,6 +232,25 @@ public class CommandExecuter {
 		}
 	}
 	
+	private void removeProductPackageFromStoreCommand(SQLDatabaseConnection __) {
+		ProductPackage productPackage;
+		
+		log.info("Remove Product Package From Store command called");
+		
+		productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+		
+		if (productPackage.isValid())
+			//TODO Noam - call SQL command here
+			
+			log.info("Remove Product Package From Store with product package barcode "
+					+ productPackage.getSmartCode().getBarcode() + " and amount " + productPackage.getAmount()
+					+ " finished");
+		else {
+			log.info("Remove Product Package From Store command failed, product package is invalid");
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+		}
+	}
+	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
 			log.fatal("Failed to get SQL Database Connection");
@@ -283,6 +302,11 @@ public class CommandExecuter {
 			
 		case PLACE_PRODUCT_PACKAGE_ON_SHELVES:
 			placeProductPackageOnShelvesCommand(c);
+			
+			break;
+			
+		case REMOVE_PRODUCT_PACKAGE_FROM_STORE:
+			removeProductPackageFromStoreCommand(c);
 			
 			break;
 			
