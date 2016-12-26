@@ -12,6 +12,13 @@ import com.google.inject.Injector;
 import BasicCommonClasses.CatalogProduct;
 import EmployeeContracts.IWorker;
 import EmployeeDI.WorkerDiConfigurator;
+import EmployeeDefs.AEmployeeExceptions.AuthenticationError;
+import EmployeeDefs.AEmployeeExceptions.CriticalError;
+import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
+import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
+import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
+import EmployeeDefs.AEmployeeExceptions.WorkerAlreadyConnected;
+import EmployeeDefs.AEmployeeExceptions.WorkerNotConnected;
 import EmployeeImplementations.Worker;
 
 /**
@@ -101,7 +108,12 @@ public class Main {
 	}
 
 	private static void logoutHandler(IWorker ¢) {
-		¢.logout();
+		try {
+			¢.logout();
+		} catch (InvalidParameter | UnknownSenderID | CriticalError | WorkerNotConnected e) {
+			System.out.println("Failure occured, currentlly unsupported by worker.");
+			e.printStackTrace();
+		}
 		System.out.println("Logged out successfully");
 	}
 
@@ -110,7 +122,13 @@ public class Main {
 		String barcodeString = getLineFromStdin(barcodeLen);
 		int barcode = Integer.parseInt(barcodeString);
 		System.out.println("barcode inserted is: " + barcode);
-		CatalogProduct catProd = w.viewProductFromCatalog(barcode);
+		CatalogProduct catProd = null;
+		try {
+			catProd = w.viewProductFromCatalog(barcode);
+		} catch (InvalidParameter | UnknownSenderID | CriticalError | WorkerNotConnected | ProductNotExistInCatalog e) {
+			System.out.println("Failure occured, currentlly unsupported by worker.");
+			e.printStackTrace();
+		}
 		System.out.println("Product name: " + catProd.getName());
 		System.out.println("Product price: " + catProd.getPrice());
 		System.out.println("Product description: " + catProd.getDescription());
@@ -120,7 +138,12 @@ public class Main {
 		System.out.println("Enter your username: ");
 		String userName = getLineFromStdin(userNameLen);
 		System.out.println("Enter your password: ");
-		w.login(userName, getLineFromStdin(passwordLen));
+		try {
+			w.login(userName, getLineFromStdin(passwordLen));
+		} catch (InvalidParameter | CriticalError | WorkerAlreadyConnected | AuthenticationError e) {
+			System.out.println("Failure occured, currentlly unsupported by worker.");
+			e.printStackTrace();
+		}
 		System.out.println("Logged in successfully");
 	}
 

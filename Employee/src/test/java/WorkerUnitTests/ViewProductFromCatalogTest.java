@@ -1,6 +1,6 @@
 package WorkerUnitTests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 
@@ -18,6 +18,11 @@ import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import EmployeeContracts.IWorker;
+import EmployeeDefs.AEmployeeExceptions.CriticalError;
+import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
+import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
+import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
+import EmployeeDefs.AEmployeeExceptions.WorkerNotConnected;
 import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Worker;
 import UtilsContracts.IClientRequestHandler;
@@ -38,6 +43,7 @@ public class ViewProductFromCatalogTest {
 
 	@Test
 	public void ViewProductFromCatalogSuccessfulTest() {
+		CatalogProduct testCatalogProduct = null;
 		CatalogProduct catalogProduct = new CatalogProduct(1234567890, "name", null,
 				new Manufacturer(1, "Manufacturer"), "description", 22.0, null, null);
 		CommandWrapper commandWrapper = new CommandWrapper(ResultDescriptor.SM_OK,
@@ -49,8 +55,16 @@ public class ViewProductFromCatalogTest {
 					.thenReturn(commandWrapper.serialize());
 		} catch (IOException e) {
 			e.printStackTrace();
+			fail();
 		}
-		CatalogProduct testCatalogProduct = worker.viewProductFromCatalog(1234567890);
+
+		try {
+			testCatalogProduct = worker.viewProductFromCatalog(1234567890);
+		} catch (InvalidParameter | UnknownSenderID | CriticalError | WorkerNotConnected | ProductNotExistInCatalog e) {
+			e.printStackTrace();
+			fail();
+		}
+		
 		assertEquals(testCatalogProduct.getBarcode(), 1234567890);
 		assertEquals(testCatalogProduct.getManufacturer().getId(), 1);
 		assertEquals(testCatalogProduct.getManufacturer().getName(), "Manufacturer");
@@ -59,19 +73,23 @@ public class ViewProductFromCatalogTest {
 
 	@Test
 	public void ViewProductFromCatalogproductNotFoundTest() {
-		CommandWrapper commandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST);
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
 					(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
 							Serialization.serialize(new SmartCode(1234567890, null))).serialize())))
-					.thenReturn(commandWrapper.serialize());
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
 		} catch (IOException e) {
 			e.printStackTrace();
+			fail();
 		}
+		
 		try {
 			worker.viewProductFromCatalog(1234567890);
-		} catch (RuntimeException e) {
-			assertEquals(e.getMessage(), WorkerDefs.loginCmdCatalogProductNotFound);
+		} catch (InvalidParameter | UnknownSenderID | CriticalError | WorkerNotConnected e) {
+			e.printStackTrace();
+			fail();
+		} catch (ProductNotExistInCatalog e) {
+			/* Test Passed */
 		}
 	}
 }

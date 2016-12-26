@@ -8,6 +8,17 @@ import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import EmployeeCommon.AEmployee;
 import EmployeeContracts.IWorker;
+import EmployeeDefs.AEmployeeExceptions.AmountBiggerThanAvailable;
+import EmployeeDefs.AEmployeeExceptions.AuthenticationError;
+import EmployeeDefs.AEmployeeExceptions.CriticalError;
+import EmployeeDefs.AEmployeeExceptions.InvalidCommandDescriptor;
+import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
+import EmployeeDefs.AEmployeeExceptions.ProductAlreadyExistInCatalog;
+import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
+import EmployeeDefs.AEmployeeExceptions.ProductStillForSale;
+import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
+import EmployeeDefs.AEmployeeExceptions.WorkerAlreadyConnected;
+import EmployeeDefs.AEmployeeExceptions.WorkerNotConnected;
 import EmployeeDefs.WorkerDefs;
 import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
@@ -16,6 +27,7 @@ import UtilsImplementations.Serialization;
  * Worker - This class represent the worker functionality implementation.
  * 
  * @author Shimon Azulay
+ * @author Aviad Cohen
  * @since 2016-12-17
  */
 
@@ -30,45 +42,90 @@ public class Worker extends AEmployee implements IWorker {
 	}
 
 	@Override
-	public void login(String username, String password) {
+	public void login(String username, String password) throws InvalidParameter, CriticalError, WorkerAlreadyConnected, AuthenticationError {
+		CommandWrapper commandDescriptor = null;
+		
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 
 		log.info("Creating login command wrapper with username: " + username + " and password: " + password);
+		
 		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(WorkerDefs.loginCommandSenderId,
 				CommandDescriptor.LOGIN, Serialization.serialize(new Login(username, password))).serialize()));
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
-		resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+		
+		try {
+			commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		try {
+			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | UnknownSenderID | WorkerNotConnected |
+				 ProductNotExistInCatalog | ProductAlreadyExistInCatalog |
+				 ProductStillForSale | AmountBiggerThanAvailable e) {
+			log.info("Critical bug: this command result isn't supposed to return here");
+			e.printStackTrace();
+		}
+		
 		clientId = commandDescriptor.getSenderID();
 		this.username = username;
 		this.password = password;
+		
 		log.info("Login to server succeed. Client id is: " + clientId);
+		
 		terminateCommunication();
 	}
 
 	@Override
-	public void logout() {
+	public void logout() throws InvalidParameter, UnknownSenderID,
+	CriticalError, WorkerNotConnected {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
+		
 		log.info("Creating logout command wrapper with username: " + username);
+		
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(clientId, CommandDescriptor.LOGOUT, Serialization.serialize(username)))
 						.serialize());
-		resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
+		
+		try {
+			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
+		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected |
+				 AuthenticationError | ProductNotExistInCatalog |
+			 	 ProductAlreadyExistInCatalog | ProductStillForSale |
+				 AmountBiggerThanAvailable e) {
+			log.info("Critical bug: this command result isn't supposed to return here");
+			e.printStackTrace();
+		}
+		
 		log.info("logout from server succeed.");
-		log.info("Terminating the communiction with server");
+				
 		terminateCommunication();
 	}
 
 	@Override
-	public CatalogProduct viewProductFromCatalog(int barcode) {
+	public CatalogProduct viewProductFromCatalog(int barcode) throws InvalidParameter,
+	UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
+		
 		log.info("Creating viewProductFromCatalog command wrapper with barcode: " + barcode);
+		
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(clientId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
 						Serialization.serialize(new SmartCode(barcode, null))).serialize()));
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
-		resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+		
+		try {
+			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected |
+				 AuthenticationError | ProductAlreadyExistInCatalog |
+				 ProductStillForSale | AmountBiggerThanAvailable e) {
+			log.info("Critical bug: this command result isn't supposed to return here");
+			e.printStackTrace();
+		}
+		
 		log.info("viewProductFromCatalog command succeed.");
+		
 		terminateCommunication();
+		
 		return Serialization.deserialize(commandDescriptor.getData(), CatalogProduct.class);
 	}
 

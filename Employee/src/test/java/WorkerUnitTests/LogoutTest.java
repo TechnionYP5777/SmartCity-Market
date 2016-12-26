@@ -1,6 +1,6 @@
 package WorkerUnitTests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 
@@ -15,6 +15,10 @@ import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import EmployeeContracts.IWorker;
+import EmployeeDefs.AEmployeeExceptions.CriticalError;
+import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
+import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
+import EmployeeDefs.AEmployeeExceptions.WorkerNotConnected;
 import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Worker;
 import UtilsContracts.IClientRequestHandler;
@@ -36,34 +40,44 @@ public class LogoutTest {
 
 	@Test
 	public void logoutSuccessfulTest() {
-		CommandWrapper commandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 		try {
 			Mockito.when(
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
 							CommandDescriptor.LOGOUT, Serialization.serialize(null)).serialize())))
-					.thenReturn(commandWrapper.serialize());
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
 			e.printStackTrace();
+			fail();
 		}
-		worker.logout();
+		
+		try {
+			worker.logout();
+		} catch (InvalidParameter | UnknownSenderID | CriticalError | WorkerNotConnected e) {
+			e.printStackTrace();
+			fail();
+		}
 	}
 
 
 	@Test
 	public void logoutNotConnectedTest() {
-		CommandWrapper commandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
 		try {
 			Mockito.when(
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
 							CommandDescriptor.LOGOUT, Serialization.serialize(null)).serialize())))
-					.thenReturn(commandWrapper.serialize());
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException e) {
 			e.printStackTrace();
+			fail();
 		}
+		
 		try {
 			worker.logout();
-		} catch (RuntimeException e) {
-			assertEquals(e.getMessage(), WorkerDefs.loginCmdUserNotConnected);
+		} catch (InvalidParameter | UnknownSenderID | CriticalError e) {
+			e.printStackTrace();
+			fail();
+		} catch (WorkerNotConnected e) {
+			/* Test Passed */
 		}
 	}
 }

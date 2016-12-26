@@ -16,6 +16,10 @@ import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import EmployeeContracts.IWorker;
+import EmployeeDefs.AEmployeeExceptions.AuthenticationError;
+import EmployeeDefs.AEmployeeExceptions.CriticalError;
+import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
+import EmployeeDefs.AEmployeeExceptions.WorkerAlreadyConnected;
 import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Worker;
 import UtilsContracts.IClientRequestHandler;
@@ -36,55 +40,66 @@ public class LoginTest {
 
 	@Test
 	public void loginSuccessfulTest() {
-		CommandWrapper commandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
-		commandWrapper.setSenderID(1234567890);
 		try {
 			Mockito.when(
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
 							CommandDescriptor.LOGIN, Serialization.serialize(new Login("test", "test"))).serialize())))
-					.thenReturn(commandWrapper.serialize());
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
 			e.printStackTrace();
+			fail();
 		}
-		worker.login("test", "test");
+		try {
+			worker.login("test", "test");
+		} catch (InvalidParameter | CriticalError | WorkerAlreadyConnected | AuthenticationError e) {
+			e.printStackTrace();
+			fail();
+		}
+		
 		assertEquals("test", worker.getWorkerLoginDetails().getUserName());
 		assertEquals("test", worker.getWorkerLoginDetails().getPassword());
 	}
 
-
 	@Test
 	public void loginWrongUserOrPasswordTest() {
-		CommandWrapper commandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD);
 		try {
 			Mockito.when(
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
 							CommandDescriptor.LOGIN, Serialization.serialize(new Login("test", "test"))).serialize())))
-					.thenReturn(commandWrapper.serialize());
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD).serialize());
 		} catch (IOException e) {
 			e.printStackTrace();
+			fail();
 		}
+		
 		try {
 			worker.login("test", "test");
-		} catch (RuntimeException e) {
-			assertEquals(e.getMessage(), WorkerDefs.loginCmdWrongUserOrPass);
+		} catch (InvalidParameter | CriticalError | WorkerAlreadyConnected e) {
+			e.printStackTrace();
+			fail();
+		} catch (AuthenticationError e) {
+			/* Test Passed */
 		}
 	}
 
 	@Test
 	public void loginAlreadyConnectedTest() {
-		CommandWrapper commandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_ALREADY_CONNECTED);
 		try {
 			Mockito.when(
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
 							CommandDescriptor.LOGIN, Serialization.serialize(new Login("test", "test"))).serialize())))
-					.thenReturn(commandWrapper.serialize());
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_ALREADY_CONNECTED).serialize());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		try {
 			worker.login("test", "test");
-		} catch (RuntimeException e) {
-			assertEquals(e.getMessage(), WorkerDefs.loginCmdUserAlreadyConnected);
+		} catch (InvalidParameter | CriticalError | AuthenticationError e) {
+			e.printStackTrace();
+			fail();
+		} catch (WorkerAlreadyConnected e) {
+			/* Test Passed */
 		}
 	}
 

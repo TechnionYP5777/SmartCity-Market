@@ -6,6 +6,18 @@ import java.net.UnknownHostException;
 import org.apache.log4j.Logger;
 
 import ClientServerApi.ResultDescriptor;
+import EmployeeDefs.AEmployeeExceptions;
+import EmployeeDefs.AEmployeeExceptions.AmountBiggerThanAvailable;
+import EmployeeDefs.AEmployeeExceptions.AuthenticationError;
+import EmployeeDefs.AEmployeeExceptions.CriticalError;
+import EmployeeDefs.AEmployeeExceptions.InvalidCommandDescriptor;
+import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
+import EmployeeDefs.AEmployeeExceptions.ProductAlreadyExistInCatalog;
+import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
+import EmployeeDefs.AEmployeeExceptions.ProductStillForSale;
+import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
+import EmployeeDefs.AEmployeeExceptions.WorkerAlreadyConnected;
+import EmployeeDefs.AEmployeeExceptions.WorkerNotConnected;
 import EmployeeDefs.WorkerDefs;
 import UtilsContracts.IClientRequestHandler;
 
@@ -14,6 +26,8 @@ import UtilsContracts.IClientRequestHandler;
  * worker, manager.
  * 
  * @author Shimon Azulay
+ * @author Aviad Cohen
+
  * @since 2016-12-17
  */
 
@@ -54,30 +68,77 @@ public abstract class AEmployee {
 		}
 	}
 
-	protected void resultDescriptorHandler(ResultDescriptor ¢) {
+	protected void resultDescriptorHandler(ResultDescriptor ¢) throws InvalidCommandDescriptor,
+	InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, WorkerAlreadyConnected,
+	AuthenticationError, ProductNotExistInCatalog, ProductAlreadyExistInCatalog,
+	ProductStillForSale, AmountBiggerThanAvailable {
 
 		switch (¢) {
 
 		case SM_OK:
+			log.info("Command executed successfully");
+
 			break;
-		case SM_INVALID_SENDER_ID:
-			break;
-		case SM_CATALOG_PRODUCT_DOES_NOT_EXIST:
-			throw new RuntimeException(WorkerDefs.loginCmdCatalogProductNotFound);
-		case SM_ERR:
-			break;
+			
 		case SM_INVALID_CMD_DESCRIPTOR:
-			break;
+			log.info("Command execution failed, invalid command description");
+			
+			throw new AEmployeeExceptions.InvalidCommandDescriptor();
+
 		case SM_INVALID_PARAMETER:
-			break;
-		case SM_SENDER_IS_ALREADY_CONNECTED:
-			throw new RuntimeException(WorkerDefs.loginCmdUserAlreadyConnected);
+			log.info("Command execution failed, invalid parameter");
+			
+			throw new AEmployeeExceptions.InvalidParameter();
+			
+		case SM_ERR:
+			log.info("Command execution failed, critical error");
+			
+			throw new AEmployeeExceptions.CriticalError();
+			
+		case SM_INVALID_SENDER_ID:
+			log.info("Command execution failed, invalid sender id");
+			
+			throw new AEmployeeExceptions.UnknownSenderID();
+			
 		case SM_SENDER_IS_NOT_CONNECTED:
-			throw new RuntimeException(WorkerDefs.loginCmdUserNotConnected);
+			log.info("Command execution failed, worker not connected");
+			
+			throw new AEmployeeExceptions.WorkerNotConnected();
+			
+		case SM_SENDER_IS_ALREADY_CONNECTED:
+			log.info("Command execution failed, worker already connected");
+			
+			throw new AEmployeeExceptions.WorkerAlreadyConnected();	
+			
 		case SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD:
-			throw new RuntimeException(WorkerDefs.loginCmdWrongUserOrPass);
+			log.info("Command execution failed, autentication error");
+			
+			throw new AEmployeeExceptions.AuthenticationError();
+			
+		case SM_CATALOG_PRODUCT_DOES_NOT_EXIST:
+			log.info("Command execution failed, product no exist in catalog");
+			
+			throw new AEmployeeExceptions.ProductNotExistInCatalog();
+
+		case SM_CATALOG_PRODUCT_ALREADY_EXISTS:
+			log.info("Command execution failed, product already exist in catalog");
+			
+			throw new AEmployeeExceptions.ProductAlreadyExistInCatalog();
+		
+		case SM_CATALOG_PRODUCT_STILL_FOR_SALE:
+			log.info("Command execution failed, product is still for sale");
+			
+			throw new AEmployeeExceptions.ProductStillForSale();
+			
+		case SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE:
+			log.info("Command execution failed, amount is bigger then available");
+			
+			throw new AEmployeeExceptions.AmountBiggerThanAvailable();
+			
 		default:
-			break;
+			log.info("Command execution failed, failed to parse result description");
+			
+			throw new AEmployeeExceptions.CriticalError();
 		}
 	}
 
