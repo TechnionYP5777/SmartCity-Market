@@ -40,6 +40,8 @@ public class CommandExecuter {
 		login = new Gson().fromJson(inCommandWrapper.getData(), Login.class);
 		
 		if (!login.isValid()) {
+			log.info("Login command failed, username and password can't be empty");
+
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
 			
 			return;
@@ -71,6 +73,23 @@ public class CommandExecuter {
 		
 		username = new Gson().fromJson(inCommandWrapper.getData(), String.class);
 		
+		if ("".equals(username)) {
+			log.info("Logout command failed, username can't be empty");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+			
+			return;
+		}
+		
+		if (inCommandWrapper.getSenderID() < 0) {
+			log.info("Logout command failed, senderID can't be negative");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_SENDER_ID);
+			
+			return;
+		}
+		
+		//TODO Noam - add exception to SM_SENDER_ID_DOES_NOT_EXIST,  when implemented in SQL + test for it in CommandExectuerLogoutTest
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 			c.WorkerLogout(inCommandWrapper.getSenderID(), username);
@@ -84,7 +103,6 @@ public class CommandExecuter {
 			log.fatal("Logout command failed, critical error occured from SQL Database connection");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
-			e.printStackTrace();
 		}
 		
 		log.info("Logout with User " + username + " finished");
