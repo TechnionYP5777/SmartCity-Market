@@ -35,23 +35,27 @@ public class CommandProcess implements ProcessRequest {
 		try {
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			out = new PrintWriter(clientSocket.getOutputStream(), true);
-
-			/* waiting for client command */
-			//TODO Aviad - Added timeout to for waiting time.
-			while (command == null)
+			for (long startTime = System.currentTimeMillis(); command == null
+					&& System.currentTimeMillis() - startTime < 1000;)
 				command = in.readLine();
 		} catch (IOException e1) {
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 			log.fatal("Failed to get string command");
-			
-			out.println(outCommandWrapper.serialize());
-			
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);			
+			out.println(outCommandWrapper.serialize());			
 			return;
 		}
 		
-		log.info("New command received: " + command);
-		
-		outCommandWrapper = new CommandExecuter(command).execute(new SQLDatabaseConnection());
+		if (command == null) {
+			/* Timeout failure */
+			log.fatal("Failed to get string command due to timeout");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} else {
+			log.info("New command received: " + command);
+			
+			outCommandWrapper = new CommandExecuter(command).execute(new SQLDatabaseConnection());
+		}
 		
 		out.println(outCommandWrapper.serialize());
 	}
