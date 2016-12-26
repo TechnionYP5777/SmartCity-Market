@@ -177,7 +177,7 @@ public class CommandExecuter {
 		}
 	}
 	
-	private void removeProductFromCatalogCommand(SQLDatabaseConnection c) {	
+	private void removeProductFromCatalogCommand(SQLDatabaseConnection __) {	
 		SmartCode smartCode;
 		
 		log.info("Remove Product From Catalog command called");
@@ -191,6 +191,24 @@ public class CommandExecuter {
 					 smartCode.getBarcode() + " finished");
 		else {
 			log.info("Remove Product From Catalog command failed, barcode can't be negative");
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+		}
+	}
+	
+	private void editProductFromCatalogCommand(SQLDatabaseConnection __) {
+		SmartCode smartCode;
+		
+		log.info("Edit Product From Catalog command called");
+		
+		smartCode = new Gson().fromJson(inCommandWrapper.getData(), SmartCode.class);
+		
+		if (smartCode.isValid())
+			//TODO Noam - call SQL command here
+			
+			log.info("Edit Product From Catalog with product barcode " +
+					 smartCode.getBarcode() + " finished");
+		else {
+			log.info("Edit Product From Catalog command failed, barcode can't be negative");
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
 		}
 	}
@@ -238,6 +256,11 @@ public class CommandExecuter {
 			removeProductFromCatalogCommand(c);
 			
 			break;
+			
+		case EDIT_PRODUCT_FROM_CATALOG:
+			editProductFromCatalogCommand(c);
+			
+			break;	
 			
 		default:
 			try {
