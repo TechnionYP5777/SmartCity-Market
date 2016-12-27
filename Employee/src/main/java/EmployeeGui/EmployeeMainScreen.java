@@ -1,42 +1,34 @@
 package EmployeeGui;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class EmployeeMainScreen extends Application {
+import GuiUtils.AbstractApplicationScreen;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 
-	Scene mainScreen;
-	Scene loginScreen;
-	Stage primaryStage;
+/**
+ * EmployeeMainScreen - This class is the controller for the employee main screen
+ * all action of this scene should be here.
+ * 
+ * @author Shimon Azulay
+ * @since 2016-12-26 */
+
+public class EmployeeMainScreen implements Initializable {
+
+	@FXML
+	private VBox mainScreenPane;
 
 	@Override
-	public void start(Stage primaryStage) {
-		try {
-			this.primaryStage = primaryStage;
-			Parent mainScreenRoot = FXMLLoader
-					.load(getClass().getResource("/EmployeeMainScreen/EmployeeMainScreen.fxml"));
-			Parent loginScreenRoot = FXMLLoader
-					.load(getClass().getResource("/EmployeeLoginScreen/EmployeeLoginScreen.fxml"));
-
-			mainScreen = new Scene(mainScreenRoot);
-			loginScreen = new Scene(loginScreenRoot);
-			
-			mainScreenRoot.setOnMouseClicked(e -> {
-				primaryStage.setScene(loginScreen);
-			});
-			
-			primaryStage.setTitle("Smart Market Beta");
-			primaryStage.setScene(mainScreen);
-			primaryStage.show();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void initialize(URL location, ResourceBundle resources) {
+		AbstractApplicationScreen.fadeTransition(mainScreenPane);
 	}
 
-	public static void main(String[] args) {
-		launch(args);
+	@FXML
+	public void mouseClicked(MouseEvent e) {
+		AbstractApplicationScreen.setScene("/EmployeeLoginScreen/EmployeeLoginScreen.fxml");
 	}
+
 }
