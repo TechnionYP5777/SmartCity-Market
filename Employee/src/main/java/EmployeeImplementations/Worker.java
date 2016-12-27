@@ -207,14 +207,14 @@ public class Worker extends AEmployee implements IWorker {
 	}
 	
 	@Override
-	public int viewProductPackage(ProductPackage p) throws InvalidParameter,
+	public int getProductPackageAmount(ProductPackage p) throws InvalidParameter,
 		UnknownSenderID, CriticalError, WorkerNotConnected {		
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
-		log.info("Creating viewProductPackage command wrapper with product package: " + p);
+		log.info("Creating getProductPackageAmount command wrapper with product package: " + p);
 		
 		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.VIEW_PRODUCT_PACKAGE,
+				(new CommandWrapper(clientId, CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
 						Serialization.serialize(p)).serialize()));
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
 		
@@ -227,7 +227,7 @@ public class Worker extends AEmployee implements IWorker {
 			e.printStackTrace();
 		}
 		
-		log.info("viewProductPackage command succeed.");
+		log.info("getProductPackageAmount command succeed.");
 		
 		terminateCommunication();
 		

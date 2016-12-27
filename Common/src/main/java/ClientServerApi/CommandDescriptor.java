@@ -249,7 +249,7 @@ public enum CommandDescriptor {
 	 *
 	 */
 	
-	VIEW_PRODUCT_PACKAGE,
+	GET_PRODUCT_PACKAGE_AMOUNT,
 	/**
 	 * Description: Employee view ProductPackage from warehouse or shelves.
 	 * param1: ProductPackage - The ProductPackage which will be add to warehouse.
