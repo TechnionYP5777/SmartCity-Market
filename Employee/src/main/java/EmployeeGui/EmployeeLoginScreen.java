@@ -5,6 +5,10 @@ import java.util.ResourceBundle;
 
 import EmployeeContracts.IWorker;
 import EmployeeDI.WorkerDiConfigurator;
+import EmployeeDefs.AEmployeeExceptions.AuthenticationError;
+import EmployeeDefs.AEmployeeExceptions.CriticalError;
+import EmployeeDefs.AEmployeeExceptions.EmployeeAlreadyConnected;
+import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
 import EmployeeImplementations.Worker;
 import GuiUtils.AbstractApplicationScreen;
 import UtilsImplementations.InjectionFactory;
@@ -12,6 +16,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -24,29 +31,70 @@ import javafx.scene.layout.GridPane;
 
 public class EmployeeLoginScreen implements Initializable {
 
-	private String username;
-	private String password;
-
-
+	private String username = "";
+	private String password = "";
 	@FXML
 	private GridPane loginScreenPane;
-
+	@FXML
+	private Button loginButton;
 	@FXML
 	private Button backButton;
+	@FXML
+	private RadioButton loginAsWorkerButton;
+	@FXML
+	private RadioButton loginAsManagerButton;
+	@FXML
+	private TextField userNameTextField;
+	@FXML
+	private PasswordField passwordField;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		AbstractApplicationScreen.fadeTransition(loginScreenPane);
+		userNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+			username = newValue;
+			enableLoginButtonCheck();
+		});
+
+		passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
+			password = newValue;
+			enableLoginButtonCheck();
+		});
+		enableLoginButtonCheck();
 	}
 
 	@FXML
-	private void backButtonClicked(ActionEvent e) {
+	private void backButtonPressed(ActionEvent e) {
 		AbstractApplicationScreen.setScene("/EmployeeMainScreen/EmployeeMainScreen.fxml");
 	}
 
 	@FXML
-    private void loginButtonClicked(ActionEvent e) {
-		IWorker worker = InjectionFactory.getInstance(Worker.class,new WorkerDiConfigurator());
+	private void loginButtonPressed(ActionEvent e) {
+		if (loginAsWorkerButton.isSelected()) {
+			IWorker worker = InjectionFactory.getInstance(Worker.class, new WorkerDiConfigurator());
+			try {
+				worker.login(username, password);
+			} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected | AuthenticationError e1) {
+
+			}
+			// TODO move to Worker screen
+		} else {
+			// TODO add manager
+		}
+
 	}
 
+	private void enableLoginButtonCheck() {
+		loginButton.setDisable(username.isEmpty() || password.isEmpty());
+	}
+
+	@FXML
+	private void loginAsWorkerPressed(ActionEvent e) {
+		loginAsManagerButton.setSelected(false);
+	}
+
+	@FXML
+	private void loginAsManagerPressed(ActionEvent e) {
+		loginAsWorkerButton.setSelected(false);
+	}
 }
