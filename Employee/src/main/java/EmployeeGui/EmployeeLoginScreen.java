@@ -9,8 +9,10 @@ import EmployeeDefs.AEmployeeExceptions.AuthenticationError;
 import EmployeeDefs.AEmployeeExceptions.CriticalError;
 import EmployeeDefs.AEmployeeExceptions.EmployeeAlreadyConnected;
 import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
+import EmployeeDefs.EmployeeGuiDefs;
 import EmployeeImplementations.Worker;
 import GuiUtils.AbstractApplicationScreen;
+import GuiUtils.DialogMessagesService;
 import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -69,15 +71,23 @@ public class EmployeeLoginScreen implements Initializable {
 	}
 
 	@FXML
-	private void loginButtonPressed(ActionEvent e) {
+	private void loginButtonPressed(ActionEvent event) {
 		if (loginAsWorkerButton.isSelected()) {
 			IWorker worker = InjectionFactory.getInstance(Worker.class, new WorkerDiConfigurator());
 			try {
 				worker.login(username, password);
-			} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected | AuthenticationError e1) {
-
+			} catch (InvalidParameter e) {
+				System.out.println(e.getMessage());
+			} catch (CriticalError e) {
+				System.out.println(e.getMessage());
+			} catch (EmployeeAlreadyConnected e) {
+				DialogMessagesService.showErrorDialog(EmployeeGuiDefs.loginFailureDialogTitle, null, e.getMessage());
+			} catch (AuthenticationError e) {
+				DialogMessagesService.showErrorDialog(EmployeeGuiDefs.loginFailureDialogTitle, null, e.getMessage());
 			}
+
 			// TODO move to Worker screen
+			System.out.println("Now i am logged in! wow!");
 		} else {
 			// TODO add manager
 		}
