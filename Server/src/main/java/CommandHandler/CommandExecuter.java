@@ -14,7 +14,9 @@ import ClientServerApi.ResultDescriptor;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
+import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
+import SQLDatabase.SQLDatabaseException.WorkerAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
 
 /**
@@ -62,6 +64,14 @@ public class CommandExecuter {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD);			
 		} catch (CriticalError e) {
 			log.fatal("Login command failed, critical error occured from SQL Database connection");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (WorkerAlreadyConnected e) {
+			log.info("Login command failed, user already connected");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_ALREADY_CONNECTED);
+		} catch (NumberOfConnectionsExceeded e) {
+			log.fatal("Login command failed, too much connections (try to increase TRYS_NUMBER)");
 			
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 		}

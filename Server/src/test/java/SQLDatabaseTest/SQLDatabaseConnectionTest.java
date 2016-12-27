@@ -16,7 +16,9 @@ import BasicCommonClasses.PlaceInMarket;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
+import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
+import SQLDatabase.SQLDatabaseException.WorkerAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
 
 /**
@@ -39,13 +41,13 @@ public class SQLDatabaseConnectionTest {
 		try {
 			session = sqlConnection.WorkerLogin("admin", "admin");
 
-		} catch (AuthenticationError | CriticalError e) {
+		} catch (AuthenticationError | CriticalError | WorkerAlreadyConnected | NumberOfConnectionsExceeded e) {
 			e.printStackTrace();
 			fail();
 		}
 
 		try {
-			sqlConnection.WorkerLogout(session,"admin");
+			sqlConnection.WorkerLogout(session, "admin");
 		} catch (CriticalError | WorkerNotConnected e) {
 			e.printStackTrace();
 			fail();
@@ -61,8 +63,8 @@ public class SQLDatabaseConnectionTest {
 		ingredients.add(new Ingredient(123, "milk"));
 		HashSet<Location> locations = new HashSet<Location>();
 		locations.add(new Location(1, 1, PlaceInMarket.STORE));
-		//TODO: noam - check the imageUrl addition
-		String milkImage = "https://chef.tnuva.co.il/files/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/7/2/7290000042442.jpg"; 
+		// TODO: noam - check the imageUrl addition
+		String milkImage = "https://chef.tnuva.co.il/files/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/7/2/7290000042442.jpg";
 		try {
 			assertEquals(sqlConnection.getProductFromCatalog(null, 1234567890),
 					new Gson().toJson((new CatalogProduct(1234567890L, "Milk 3%", ingredients,
