@@ -156,8 +156,59 @@ public class Worker extends AEmployee implements IWorker {
 	}
 	
 	@Override
+	public void placeProductPackageOnShelves(ProductPackage p) throws InvalidParameter,
+		UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog,
+		AmountBiggerThanAvailable {
+		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
+		
+		log.info("Creating placeProductPackageOnShelves command wrapper with product package: " + p);
+		
+		String serverResponse = sendRequestWithRespondToServer(
+				(new CommandWrapper(clientId, CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES,
+						Serialization.serialize(p)).serialize()));
+		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		
+		try {
+			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected | AuthenticationError
+				| ProductAlreadyExistInCatalog | ProductStillForSale e) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			e.printStackTrace();
+		}
+		
+		log.info("placeProductPackageOnShelves command succeed.");
+		
+		terminateCommunication();
+	}
+	
+	@Override
+	public void removeProductPackageFromStore(ProductPackage p) throws InvalidParameter,
+		UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog,
+		AmountBiggerThanAvailable {
+		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
+		
+		log.info("Creating removeProductPackageFromStore command wrapper with product package: " + p);
+		
+		String serverResponse = sendRequestWithRespondToServer(
+				(new CommandWrapper(clientId, CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
+						Serialization.serialize(p)).serialize()));
+		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		
+		try {
+			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected | AuthenticationError
+				| ProductAlreadyExistInCatalog | ProductStillForSale e) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			e.printStackTrace();
+		}
+		
+		log.info("removeProductPackageFromStore command succeed.");
+		
+		terminateCommunication();
+	}
+	
+	@Override
 	public Login getWorkerLoginDetails() {
 		return new Login(username, password);
 	}
-
 }

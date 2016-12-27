@@ -3,6 +3,7 @@ package EmployeeContracts;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.ProductPackage;
+import EmployeeDefs.AEmployeeExceptions.AmountBiggerThanAvailable;
 import EmployeeDefs.AEmployeeExceptions.AuthenticationError;
 import EmployeeDefs.AEmployeeExceptions.CriticalError;
 import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
@@ -72,4 +73,32 @@ public interface IWorker {
 	 * @throws InvalidParameter 
 	 */
 	void addProductToWarehouse(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
+	
+	/**
+	 * worker move product package from warehouse to shelves.
+	 * 
+	 * @param ProductPackage
+	 * @return void
+	 * @throws AmountBiggerThanAvailable 
+	 * @throws ProductNotExistInCatalog 
+	 * @throws WorkerNotConnected 
+	 * @throws CriticalError 
+	 * @throws UnknownSenderID 
+	 * @throws InvalidParameter 
+	 */
+	void placeProductPackageOnShelves(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog, AmountBiggerThanAvailable;
+	
+	/**
+	 * worker remove product package from store (warehouse or shelves).
+	 * 
+	 * @param ProductPackage
+	 * @return void
+	 * @throws AmountBiggerThanAvailable 
+	 * @throws ProductNotExistInCatalog 
+	 * @throws WorkerNotConnected 
+	 * @throws CriticalError 
+	 * @throws UnknownSenderID 
+	 * @throws InvalidParameter 
+	 */
+	void removeProductPackageFromStore(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog, AmountBiggerThanAvailable;
 }
