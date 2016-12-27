@@ -9,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -20,7 +19,7 @@ import javafx.util.Duration;
  * @author Shimon Azulay
  * @since 2016-12-26 */
 
-public abstract class AbstractApplicationScreen extends Application{
+public abstract class AbstractApplicationScreen extends Application {
 	
 	protected static Stage stage;
 	
@@ -33,8 +32,7 @@ public abstract class AbstractApplicationScreen extends Application{
 			e.printStackTrace();
 			return;
 		}
-		stage.setScene(new Scene(parent, Screen.getPrimary().getVisualBounds().getWidth(),
-				Screen.getPrimary().getVisualBounds().getWidth()));
+		stage.setScene(new Scene(parent));
 	}
 	
 	

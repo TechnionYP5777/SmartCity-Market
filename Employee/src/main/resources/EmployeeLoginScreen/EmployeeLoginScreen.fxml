@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="loginScreenPane" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@EmployeeLoginScreen.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeLoginScreen">
+<GridPane fx:id="loginScreenPane" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@EmployeeLoginScreen.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeLoginScreen">
   <columnConstraints>
     <ColumnConstraints hgrow="ALWAYS" maxWidth="170.0" minWidth="10.0" prefWidth="125.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="340.0" minWidth="10.0" prefWidth="340.0" />
@@ -72,15 +72,15 @@
                <children>
                   <Label text="Password recovery?" textFill="#1009ee" underline="true">
                      <font>
-                        <Font size="8.0" />
+                        <Font size="14.0" />
                      </font>
                      <padding>
                         <Insets left="5.0" />
                      </padding>
                   </Label>
-                  <HBox alignment="TOP_RIGHT" prefHeight="94.0" prefWidth="256.0">
+                  <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="194.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Button" />
+                        <Button fx:id="loginButton" mnemonicParsing="false" text="Login" />
                      </children>
                   </HBox>
                </children>
@@ -89,12 +89,12 @@
       </VBox>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
          <children>
-            <Button mnemonicParsing="false" text="Button" />
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonClicked" text="Back" />
          </children>
       </VBox>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
          <children>
-            <Button mnemonicParsing="false" text="Button" />
+            <Button fx:id="settingsButton" mnemonicParsing="false" text="Settings" />
          </children>
       </VBox>
    </children>
