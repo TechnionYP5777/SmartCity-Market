@@ -16,6 +16,7 @@ import EmployeeDefs.AEmployeeExceptions.InvalidCommandDescriptor;
 import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
 import EmployeeDefs.AEmployeeExceptions.ProductAlreadyExistInCatalog;
 import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
+import EmployeeDefs.AEmployeeExceptions.ProductPackageDoesNotExist;
 import EmployeeDefs.AEmployeeExceptions.ProductStillForSale;
 import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
 import EmployeeDefs.AEmployeeExceptions.WorkerAlreadyConnected;
@@ -57,11 +58,12 @@ public class Worker extends AEmployee implements IWorker {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | UnknownSenderID | WorkerNotConnected |
 				 ProductNotExistInCatalog | ProductAlreadyExistInCatalog |
-				 ProductStillForSale | AmountBiggerThanAvailable e) {
+				 ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
@@ -91,7 +93,7 @@ public class Worker extends AEmployee implements IWorker {
 		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected |
 				 AuthenticationError | ProductNotExistInCatalog |
 			 	 ProductAlreadyExistInCatalog | ProductStillForSale |
-				 AmountBiggerThanAvailable e) {
+				 AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
@@ -117,7 +119,7 @@ public class Worker extends AEmployee implements IWorker {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected |
 				 AuthenticationError | ProductAlreadyExistInCatalog |
-				 ProductStillForSale | AmountBiggerThanAvailable e) {
+				 ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
@@ -144,7 +146,7 @@ public class Worker extends AEmployee implements IWorker {
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected | AuthenticationError |
-				ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable e) {
+				ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
@@ -157,7 +159,7 @@ public class Worker extends AEmployee implements IWorker {
 	@Override
 	public void placeProductPackageOnShelves(ProductPackage p) throws InvalidParameter,
 		UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog,
-		AmountBiggerThanAvailable {
+		AmountBiggerThanAvailable, ProductPackageDoesNotExist {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
 		log.info("Creating placeProductPackageOnShelves command wrapper with product package: " + p);
@@ -183,7 +185,7 @@ public class Worker extends AEmployee implements IWorker {
 	@Override
 	public void removeProductPackageFromStore(ProductPackage p) throws InvalidParameter,
 		UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog,
-		AmountBiggerThanAvailable {
+		AmountBiggerThanAvailable, ProductPackageDoesNotExist {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
 		log.info("Creating removeProductPackageFromStore command wrapper with product package: " + p);
@@ -208,7 +210,7 @@ public class Worker extends AEmployee implements IWorker {
 	
 	@Override
 	public int getProductPackageAmount(ProductPackage p) throws InvalidParameter,
-		UnknownSenderID, CriticalError, WorkerNotConnected {		
+		UnknownSenderID, CriticalError, WorkerNotConnected, ProductPackageDoesNotExist {		
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
 		log.info("Creating getProductPackageAmount command wrapper with product package: " + p);

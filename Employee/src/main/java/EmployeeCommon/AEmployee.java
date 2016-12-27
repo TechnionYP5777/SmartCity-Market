@@ -14,6 +14,7 @@ import EmployeeDefs.AEmployeeExceptions.InvalidCommandDescriptor;
 import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
 import EmployeeDefs.AEmployeeExceptions.ProductAlreadyExistInCatalog;
 import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
+import EmployeeDefs.AEmployeeExceptions.ProductPackageDoesNotExist;
 import EmployeeDefs.AEmployeeExceptions.ProductStillForSale;
 import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
 import EmployeeDefs.AEmployeeExceptions.WorkerAlreadyConnected;
@@ -71,7 +72,7 @@ public abstract class AEmployee {
 	protected void resultDescriptorHandler(ResultDescriptor ¢) throws InvalidCommandDescriptor,
 	InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, WorkerAlreadyConnected,
 	AuthenticationError, ProductNotExistInCatalog, ProductAlreadyExistInCatalog,
-	ProductStillForSale, AmountBiggerThanAvailable {
+	ProductStillForSale, AmountBiggerThanAvailable, ProductPackageDoesNotExist {
 
 		switch (¢) {
 
@@ -134,6 +135,11 @@ public abstract class AEmployee {
 			log.info("Command execution failed, amount is bigger then available");
 			
 			throw new AEmployeeExceptions.AmountBiggerThanAvailable();
+			
+		case SM_PRODUCT_PACKAGE_DOES_NOT_EXIST:
+			log.info("Command execution failed, product package does not exist");
+			
+			throw new AEmployeeExceptions.ProductPackageDoesNotExist();
 			
 		default:
 			log.info("Command execution failed, failed to parse result description");

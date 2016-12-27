@@ -109,4 +109,13 @@ public class AEmployeeExceptions extends Exception {
 
 		private static final long serialVersionUID = -6977996976396033467L;
 	}
+	
+	/**
+	 * Thrown when product package does not exist.
+	 *
+	 */
+	public static class ProductPackageDoesNotExist extends AEmployeeExceptions {
+
+		private static final long serialVersionUID = -1086760036316621806L;
+	}
 }

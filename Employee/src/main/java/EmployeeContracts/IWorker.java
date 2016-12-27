@@ -8,6 +8,7 @@ import EmployeeDefs.AEmployeeExceptions.AuthenticationError;
 import EmployeeDefs.AEmployeeExceptions.CriticalError;
 import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
 import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
+import EmployeeDefs.AEmployeeExceptions.ProductPackageDoesNotExist;
 import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
 import EmployeeDefs.AEmployeeExceptions.WorkerAlreadyConnected;
 import EmployeeDefs.AEmployeeExceptions.WorkerNotConnected;
@@ -85,8 +86,9 @@ public interface IWorker {
 	 * @throws CriticalError 
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
+	 * @throws ProductPackageDoesNotExist 
 	 */
-	void placeProductPackageOnShelves(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog, AmountBiggerThanAvailable;
+	void placeProductPackageOnShelves(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog, AmountBiggerThanAvailable, ProductPackageDoesNotExist;
 	
 	/**
 	 * worker remove product package from store (warehouse or shelves).
@@ -99,8 +101,9 @@ public interface IWorker {
 	 * @throws CriticalError 
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
+	 * @throws ProductPackageDoesNotExist 
 	 */
-	void removeProductPackageFromStore(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog, AmountBiggerThanAvailable;
+	void removeProductPackageFromStore(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog, AmountBiggerThanAvailable, ProductPackageDoesNotExist;
 	
 	/**
 	 * worker get amount of ProductPackage from store (warehouse or shelves).
@@ -111,6 +114,7 @@ public interface IWorker {
 	 * @throws CriticalError 
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
+	 * @throws ProductPackageDoesNotExist 
 	 */
-	int getProductPackageAmount(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected;
+	int getProductPackageAmount(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, ProductPackageDoesNotExist;
 }
