@@ -3,10 +3,10 @@ language: java
 jdk:
  - oraclejdk8
  
- addons:
-  apt:
-    packages:
-      - oracle-java8-installer
+addons:
+ apt:
+  packages:
+   - oracle-java8-installer
 
 # blocklist: add here branches you don't want build using Travis
 branches:
