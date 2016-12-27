@@ -16,6 +16,7 @@ import EmployeeDefs.AEmployeeExceptions.WorkerNotConnected;
 /** IWorker - This interface represent the Worker client functionality.
  * 
  * @author Shimon Azulay
+ * @author Aviad Cohen
  * @since 2016-12-17 */
 
 public interface IWorker {
