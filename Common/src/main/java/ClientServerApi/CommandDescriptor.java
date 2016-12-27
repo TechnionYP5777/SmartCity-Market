@@ -248,4 +248,21 @@ public enum CommandDescriptor {
 	 *			SM_GROCERY_LIST_IS_EMPTY,
 	 *
 	 */
+	
+	VIEW_PRODUCT_PACKAGE,
+	/**
+	 * Description: Employee view ProductPackage from warehouse or shelves.
+	 * param1: ProductPackage - The ProductPackage which will be add to warehouse.
+	 * retval: Amount.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *			SM_SENDER_ID_DOES_NOT_EXIST,
+	 *			SM_PRODUCT_PACKAGE_DOES_NOT_EXIST,
+	 *
+	 */
 }

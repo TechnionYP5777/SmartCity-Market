@@ -33,8 +33,7 @@ import UtilsImplementations.Serialization;
  */
 
 public class Worker extends AEmployee implements IWorker {
-
-
+	
 	@Inject
 	public Worker(IClientRequestHandler clientRequestHandler) {
 
@@ -205,6 +204,34 @@ public class Worker extends AEmployee implements IWorker {
 		log.info("removeProductPackageFromStore command succeed.");
 		
 		terminateCommunication();
+	}
+	
+	@Override
+	public int viewProductPackage(ProductPackage p) throws InvalidParameter,
+		UnknownSenderID, CriticalError, WorkerNotConnected {		
+		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
+		
+		log.info("Creating viewProductPackage command wrapper with product package: " + p);
+		
+		String serverResponse = sendRequestWithRespondToServer(
+				(new CommandWrapper(clientId, CommandDescriptor.VIEW_PRODUCT_PACKAGE,
+						Serialization.serialize(p)).serialize()));
+		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		
+		try {
+			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected | AuthenticationError |
+				 ProductNotExistInCatalog | ProductAlreadyExistInCatalog |
+				 ProductStillForSale | AmountBiggerThanAvailable e) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			e.printStackTrace();
+		}
+		
+		log.info("viewProductPackage command succeed.");
+		
+		terminateCommunication();
+		
+		return Serialization.deserialize(commandDescriptor.getData(), Integer.class);
 	}
 	
 	@Override

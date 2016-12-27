@@ -101,4 +101,16 @@ public interface IWorker {
 	 * @throws InvalidParameter 
 	 */
 	void removeProductPackageFromStore(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog, AmountBiggerThanAvailable;
+	
+	/**
+	 * worker view ProductPackage from store (warehouse or shelves).
+	 * 
+	 * @param ProductPackage
+	 * @return Amount 
+	 * @throws WorkerNotConnected 
+	 * @throws CriticalError 
+	 * @throws UnknownSenderID 
+	 * @throws InvalidParameter 
+	 */
+	int viewProductPackage(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected;
 }
