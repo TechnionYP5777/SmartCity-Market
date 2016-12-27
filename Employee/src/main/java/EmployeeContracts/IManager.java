@@ -7,7 +7,7 @@ import EmployeeDefs.AEmployeeExceptions.ProductAlreadyExistInCatalog;
 import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeExceptions.ProductStillForSale;
 import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
-import EmployeeDefs.AEmployeeExceptions.WorkerNotConnected;
+import EmployeeDefs.AEmployeeExceptions.EmployeeNotConnected;
 
 /** IManager - This interface represent the manager functionality which is a worker.
  * 
@@ -22,12 +22,12 @@ public interface IManager extends IWorker {
 	 * @param ProductPackage
 	 * @return void
 	 * @throws ProductNotExistInCatalog 
-	 * @throws WorkerNotConnected 
+	 * @throws EmployeeNotConnected 
 	 * @throws CriticalError 
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
 	 */
-	void addProductToCatalog(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
+	void addProductToCatalog(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog;
 	
 	/**
 	 * Manager removes product to catalog.
@@ -36,12 +36,12 @@ public interface IManager extends IWorker {
 	 * @return amount 
 	 * @throws ProductStillForSale 
 	 * @throws ProductAlreadyExistInCatalog 
-	 * @throws WorkerNotConnected 
+	 * @throws EmployeeNotConnected 
 	 * @throws CriticalError 
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
 	 */
-	void removeProductFromCatalog(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog, ProductStillForSale;
+	void removeProductFromCatalog(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog, ProductStillForSale;
 	
 	/**
 	 * Manager edits product to catalog.
@@ -50,10 +50,10 @@ public interface IManager extends IWorker {
 	 * @return amount 
 	 * @throws ProductAlreadyExistInCatalog 
 	 * @throws ProductNotExistInCatalog 
-	 * @throws WorkerNotConnected 
+	 * @throws EmployeeNotConnected 
 	 * @throws CriticalError 
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
 	 */
-	void editProductFromCatalog(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog, ProductAlreadyExistInCatalog;
+	void editProductFromCatalog(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ProductAlreadyExistInCatalog;
 }

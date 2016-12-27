@@ -19,7 +19,7 @@ import EmployeeContracts.IWorker;
 import EmployeeDefs.AEmployeeExceptions.AuthenticationError;
 import EmployeeDefs.AEmployeeExceptions.CriticalError;
 import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
-import EmployeeDefs.AEmployeeExceptions.WorkerAlreadyConnected;
+import EmployeeDefs.AEmployeeExceptions.EmployeeAlreadyConnected;
 import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Worker;
 import UtilsContracts.IClientRequestHandler;
@@ -51,7 +51,7 @@ public class LoginTest {
 		}
 		try {
 			worker.login("test", "test");
-		} catch (InvalidParameter | CriticalError | WorkerAlreadyConnected | AuthenticationError e) {
+		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected | AuthenticationError e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -74,7 +74,7 @@ public class LoginTest {
 		
 		try {
 			worker.login("test", "test");
-		} catch (InvalidParameter | CriticalError | WorkerAlreadyConnected e) {
+		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected e) {
 			e.printStackTrace();
 			fail();
 		} catch (AuthenticationError e) {
@@ -98,7 +98,7 @@ public class LoginTest {
 		} catch (InvalidParameter | CriticalError | AuthenticationError e) {
 			e.printStackTrace();
 			fail();
-		} catch (WorkerAlreadyConnected e) {
+		} catch (EmployeeAlreadyConnected e) {
 			/* Test Passed */
 		}
 	}

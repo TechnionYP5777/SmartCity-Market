@@ -18,7 +18,7 @@ import EmployeeContracts.IWorker;
 import EmployeeDefs.AEmployeeExceptions.CriticalError;
 import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
 import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
-import EmployeeDefs.AEmployeeExceptions.WorkerNotConnected;
+import EmployeeDefs.AEmployeeExceptions.EmployeeNotConnected;
 import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Worker;
 import UtilsContracts.IClientRequestHandler;
@@ -52,7 +52,7 @@ public class LogoutTest {
 		
 		try {
 			worker.logout();
-		} catch (InvalidParameter | UnknownSenderID | CriticalError | WorkerNotConnected e) {
+		} catch (InvalidParameter | UnknownSenderID | CriticalError | EmployeeNotConnected e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -76,7 +76,7 @@ public class LogoutTest {
 		} catch (InvalidParameter | UnknownSenderID | CriticalError e) {
 			e.printStackTrace();
 			fail();
-		} catch (WorkerNotConnected e) {
+		} catch (EmployeeNotConnected e) {
 			/* Test Passed */
 		}
 	}

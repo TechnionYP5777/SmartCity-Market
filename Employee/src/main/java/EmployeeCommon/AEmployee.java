@@ -17,8 +17,8 @@ import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeExceptions.ProductPackageDoesNotExist;
 import EmployeeDefs.AEmployeeExceptions.ProductStillForSale;
 import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
-import EmployeeDefs.AEmployeeExceptions.WorkerAlreadyConnected;
-import EmployeeDefs.AEmployeeExceptions.WorkerNotConnected;
+import EmployeeDefs.AEmployeeExceptions.EmployeeAlreadyConnected;
+import EmployeeDefs.AEmployeeExceptions.EmployeeNotConnected;
 import EmployeeDefs.WorkerDefs;
 import UtilsContracts.IClientRequestHandler;
 
@@ -70,7 +70,7 @@ public abstract class AEmployee {
 	}
 
 	protected void resultDescriptorHandler(ResultDescriptor ¢) throws InvalidCommandDescriptor,
-	InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, WorkerAlreadyConnected,
+	InvalidParameter, UnknownSenderID, CriticalError, EmployeeNotConnected, EmployeeAlreadyConnected,
 	AuthenticationError, ProductNotExistInCatalog, ProductAlreadyExistInCatalog,
 	ProductStillForSale, AmountBiggerThanAvailable, ProductPackageDoesNotExist {
 
@@ -104,12 +104,12 @@ public abstract class AEmployee {
 		case SM_SENDER_IS_NOT_CONNECTED:
 			log.info("Command execution failed, worker not connected");
 			
-			throw new AEmployeeExceptions.WorkerNotConnected();
+			throw new AEmployeeExceptions.EmployeeNotConnected();
 			
 		case SM_SENDER_IS_ALREADY_CONNECTED:
 			log.info("Command execution failed, worker already connected");
 			
-			throw new AEmployeeExceptions.WorkerAlreadyConnected();	
+			throw new AEmployeeExceptions.EmployeeAlreadyConnected();	
 			
 		case SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD:
 			log.info("Command execution failed, autentication error");

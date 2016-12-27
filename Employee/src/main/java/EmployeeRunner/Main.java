@@ -17,8 +17,8 @@ import EmployeeDefs.AEmployeeExceptions.CriticalError;
 import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
 import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
-import EmployeeDefs.AEmployeeExceptions.WorkerAlreadyConnected;
-import EmployeeDefs.AEmployeeExceptions.WorkerNotConnected;
+import EmployeeDefs.AEmployeeExceptions.EmployeeAlreadyConnected;
+import EmployeeDefs.AEmployeeExceptions.EmployeeNotConnected;
 import EmployeeImplementations.Worker;
 
 /**
@@ -110,7 +110,7 @@ public class Main {
 	private static void logoutHandler(IWorker ¢) {
 		try {
 			¢.logout();
-		} catch (InvalidParameter | UnknownSenderID | CriticalError | WorkerNotConnected e) {
+		} catch (InvalidParameter | UnknownSenderID | CriticalError | EmployeeNotConnected e) {
 			System.out.println("Failure occured, currentlly unsupported by worker.");
 			e.printStackTrace();
 		}
@@ -125,7 +125,7 @@ public class Main {
 		CatalogProduct catProd = null;
 		try {
 			catProd = w.viewProductFromCatalog(barcode);
-		} catch (InvalidParameter | UnknownSenderID | CriticalError | WorkerNotConnected | ProductNotExistInCatalog e) {
+		} catch (InvalidParameter | UnknownSenderID | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog e) {
 			System.out.println("Failure occured, currentlly unsupported by worker.");
 			e.printStackTrace();
 		}
@@ -140,7 +140,7 @@ public class Main {
 		System.out.println("Enter your password: ");
 		try {
 			w.login(userName, getLineFromStdin(passwordLen));
-		} catch (InvalidParameter | CriticalError | WorkerAlreadyConnected | AuthenticationError e) {
+		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected | AuthenticationError e) {
 			System.out.println("Failure occured, currentlly unsupported by worker.");
 			e.printStackTrace();
 		}

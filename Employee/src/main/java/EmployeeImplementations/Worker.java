@@ -19,8 +19,8 @@ import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeExceptions.ProductPackageDoesNotExist;
 import EmployeeDefs.AEmployeeExceptions.ProductStillForSale;
 import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
-import EmployeeDefs.AEmployeeExceptions.WorkerAlreadyConnected;
-import EmployeeDefs.AEmployeeExceptions.WorkerNotConnected;
+import EmployeeDefs.AEmployeeExceptions.EmployeeAlreadyConnected;
+import EmployeeDefs.AEmployeeExceptions.EmployeeNotConnected;
 import EmployeeDefs.WorkerDefs;
 import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
@@ -43,7 +43,7 @@ public class Worker extends AEmployee implements IWorker {
 	}
 
 	@Override
-	public void login(String username, String password) throws InvalidParameter, CriticalError, WorkerAlreadyConnected, AuthenticationError {
+	public void login(String username, String password) throws InvalidParameter, CriticalError, EmployeeAlreadyConnected, AuthenticationError {
 		CommandWrapper commandDescriptor = null;
 		
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
@@ -61,7 +61,7 @@ public class Worker extends AEmployee implements IWorker {
 		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | UnknownSenderID | WorkerNotConnected |
+		} catch (InvalidCommandDescriptor | UnknownSenderID | EmployeeNotConnected |
 				 ProductNotExistInCatalog | ProductAlreadyExistInCatalog |
 				 ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
@@ -79,7 +79,7 @@ public class Worker extends AEmployee implements IWorker {
 
 	@Override
 	public void logout() throws InvalidParameter, UnknownSenderID,
-	CriticalError, WorkerNotConnected {
+	CriticalError, EmployeeNotConnected {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
 		log.info("Creating logout command wrapper with username: " + username);
@@ -90,7 +90,7 @@ public class Worker extends AEmployee implements IWorker {
 		
 		try {
 			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
-		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected |
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected |
 				 AuthenticationError | ProductNotExistInCatalog |
 			 	 ProductAlreadyExistInCatalog | ProductStillForSale |
 				 AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
@@ -105,7 +105,7 @@ public class Worker extends AEmployee implements IWorker {
 
 	@Override
 	public CatalogProduct viewProductFromCatalog(int barcode) throws InvalidParameter,
-	UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
+	UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
 		log.info("Creating viewProductFromCatalog command wrapper with barcode: " + barcode);
@@ -117,7 +117,7 @@ public class Worker extends AEmployee implements IWorker {
 		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected |
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected |
 				 AuthenticationError | ProductAlreadyExistInCatalog |
 				 ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
@@ -133,7 +133,7 @@ public class Worker extends AEmployee implements IWorker {
 
 	@Override
 	public void addProductToWarehouse(ProductPackage p) throws InvalidParameter,
-		UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
+		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
 		log.info("Creating addProductToWarehouse command wrapper with product package: " + p);
@@ -145,7 +145,7 @@ public class Worker extends AEmployee implements IWorker {
 		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected | AuthenticationError |
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError |
 				ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
@@ -158,7 +158,7 @@ public class Worker extends AEmployee implements IWorker {
 	
 	@Override
 	public void placeProductPackageOnShelves(ProductPackage p) throws InvalidParameter,
-		UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog,
+		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
 		AmountBiggerThanAvailable, ProductPackageDoesNotExist {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
@@ -171,7 +171,7 @@ public class Worker extends AEmployee implements IWorker {
 		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected | AuthenticationError
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
 				| ProductAlreadyExistInCatalog | ProductStillForSale e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
@@ -184,7 +184,7 @@ public class Worker extends AEmployee implements IWorker {
 	
 	@Override
 	public void removeProductPackageFromStore(ProductPackage p) throws InvalidParameter,
-		UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog,
+		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
 		AmountBiggerThanAvailable, ProductPackageDoesNotExist {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
@@ -197,7 +197,7 @@ public class Worker extends AEmployee implements IWorker {
 		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected | AuthenticationError
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
 				| ProductAlreadyExistInCatalog | ProductStillForSale e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
@@ -210,7 +210,7 @@ public class Worker extends AEmployee implements IWorker {
 	
 	@Override
 	public int getProductPackageAmount(ProductPackage p) throws InvalidParameter,
-		UnknownSenderID, CriticalError, WorkerNotConnected, ProductPackageDoesNotExist {		
+		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductPackageDoesNotExist {		
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
 		log.info("Creating getProductPackageAmount command wrapper with product package: " + p);
@@ -222,7 +222,7 @@ public class Worker extends AEmployee implements IWorker {
 		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected | AuthenticationError |
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError |
 				 ProductNotExistInCatalog | ProductAlreadyExistInCatalog |
 				 ProductStillForSale | AmountBiggerThanAvailable e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");

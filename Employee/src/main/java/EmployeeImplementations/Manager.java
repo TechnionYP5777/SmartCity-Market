@@ -15,8 +15,8 @@ import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeExceptions.ProductPackageDoesNotExist;
 import EmployeeDefs.AEmployeeExceptions.ProductStillForSale;
 import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
-import EmployeeDefs.AEmployeeExceptions.WorkerAlreadyConnected;
-import EmployeeDefs.AEmployeeExceptions.WorkerNotConnected;
+import EmployeeDefs.AEmployeeExceptions.EmployeeAlreadyConnected;
+import EmployeeDefs.AEmployeeExceptions.EmployeeNotConnected;
 import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
 
@@ -35,7 +35,7 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public void addProductToCatalog(ProductPackage p) throws InvalidParameter,
-		UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
+		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
 		log.info("Creating addProductToCatalog command wrapper with product package: " + p);
@@ -47,7 +47,7 @@ public class Manager extends Worker implements IManager {
 		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected | AuthenticationError | ProductAlreadyExistInCatalog
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductAlreadyExistInCatalog
 				| ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
@@ -60,7 +60,7 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public void removeProductFromCatalog(ProductPackage p) throws InvalidParameter,
-		UnknownSenderID, CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog, ProductStillForSale {
+		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog, ProductStillForSale {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
 		log.info("Creating removeProductFromCatalog command wrapper with product package: " + p);
@@ -72,7 +72,7 @@ public class Manager extends Worker implements IManager {
 		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected | AuthenticationError | ProductNotExistInCatalog | 
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductNotExistInCatalog | 
 				 AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
@@ -85,7 +85,7 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public void editProductFromCatalog(ProductPackage p) throws InvalidParameter,
-		UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog,
+		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
 		ProductAlreadyExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
@@ -98,7 +98,7 @@ public class Manager extends Worker implements IManager {
 		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected | AuthenticationError |
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError |
 				 ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();

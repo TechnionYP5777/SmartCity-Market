@@ -51,7 +51,7 @@ public class AEmployeeExceptions extends Exception {
 	 * Thrown when worker try to do operation before connecting
 	 *
 	 */
-	public static class WorkerNotConnected extends AEmployeeExceptions {
+	public static class EmployeeNotConnected extends AEmployeeExceptions {
 
 		private static final long serialVersionUID = 736110846693773042L;	
 	}
@@ -60,7 +60,7 @@ public class AEmployeeExceptions extends Exception {
 	 * Thrown when worker try to connect twice
 	 * 
 	 */
-	public static class WorkerAlreadyConnected extends AEmployeeExceptions {
+	public static class EmployeeAlreadyConnected extends AEmployeeExceptions {
 
 		private static final long serialVersionUID = -4880371025977064054L;
 	}
