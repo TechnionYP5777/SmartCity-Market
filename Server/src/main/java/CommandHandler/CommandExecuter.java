@@ -251,6 +251,24 @@ public class CommandExecuter {
 		}
 	}
 	
+	private void getProductPackageAmount(SQLDatabaseConnection __) {
+		ProductPackage productPackage;
+		
+		log.info("Get Product Package Amount command called");
+		
+		productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+		
+		if (productPackage.isValid())
+			//TODO Noam - call SQL command here
+			
+			//TODO Noam - add amount to the log print
+			log.info("Get Product Package Amount returned with amount " + " finished");
+		else {
+			log.info("Remove Product Package From Store command failed, product package is invalid");
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+		}
+	}
+	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
 			log.fatal("Failed to get SQL Database Connection");
@@ -307,6 +325,11 @@ public class CommandExecuter {
 			
 		case REMOVE_PRODUCT_PACKAGE_FROM_STORE:
 			removeProductPackageFromStoreCommand(c);
+			
+			break;
+			
+		case GET_PRODUCT_PACKAGE_AMOUNT:
+			getProductPackageAmount(c);
 			
 			break;
 			
