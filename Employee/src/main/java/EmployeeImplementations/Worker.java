@@ -3,6 +3,7 @@ package EmployeeImplementations;
 import com.google.inject.Inject;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
+import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
@@ -62,7 +63,7 @@ public class Worker extends AEmployee implements IWorker {
 		} catch (InvalidCommandDescriptor | UnknownSenderID | WorkerNotConnected |
 				 ProductNotExistInCatalog | ProductAlreadyExistInCatalog |
 				 ProductStillForSale | AmountBiggerThanAvailable e) {
-			log.info("Critical bug: this command result isn't supposed to return here");
+			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
 		
@@ -92,7 +93,7 @@ public class Worker extends AEmployee implements IWorker {
 				 AuthenticationError | ProductNotExistInCatalog |
 			 	 ProductAlreadyExistInCatalog | ProductStillForSale |
 				 AmountBiggerThanAvailable e) {
-			log.info("Critical bug: this command result isn't supposed to return here");
+			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
 		
@@ -118,7 +119,7 @@ public class Worker extends AEmployee implements IWorker {
 		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected |
 				 AuthenticationError | ProductAlreadyExistInCatalog |
 				 ProductStillForSale | AmountBiggerThanAvailable e) {
-			log.info("Critical bug: this command result isn't supposed to return here");
+			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
 		
@@ -129,6 +130,31 @@ public class Worker extends AEmployee implements IWorker {
 		return Serialization.deserialize(commandDescriptor.getData(), CatalogProduct.class);
 	}
 
+	@Override
+	public void addProductToWarehouse(ProductPackage p) throws InvalidParameter,
+		UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
+		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
+		
+		log.info("Creating addProductToWarehouse command wrapper with product package: " + p);
+		
+		String serverResponse = sendRequestWithRespondToServer(
+				(new CommandWrapper(clientId, CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
+						Serialization.serialize(p)).serialize()));
+		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		
+		try {
+			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | WorkerAlreadyConnected | AuthenticationError |
+				ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable e) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			e.printStackTrace();
+		}
+		
+		log.info("addProductToWarehouse command succeed.");
+		
+		terminateCommunication();
+	}
+	
 	@Override
 	public Login getWorkerLoginDetails() {
 		return new Login(username, password);

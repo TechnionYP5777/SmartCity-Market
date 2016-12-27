@@ -2,6 +2,7 @@ package EmployeeContracts;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
+import BasicCommonClasses.ProductPackage;
 import EmployeeDefs.AEmployeeExceptions.AuthenticationError;
 import EmployeeDefs.AEmployeeExceptions.CriticalError;
 import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
@@ -25,6 +26,7 @@ public interface IWorker {
 	
 	/**
 	 * login method use for the worker to login to the server.
+	 * 
 	 * @param username - worker username
 	 * @param password - worker password
 	 * @throws AuthenticationError 
@@ -36,6 +38,8 @@ public interface IWorker {
 	
 	/**
 	 * logout method use for the worker to logout from the server.
+	 * 
+	 * @return void
 	 * @throws WorkerNotConnected 
 	 * @throws CriticalError 
 	 * @throws UnknownSenderID 
@@ -45,8 +49,9 @@ public interface IWorker {
 	
 	/**
 	 * gets catalog product by barcode
+	 * 
 	 * @param barcode
-	 * @return
+	 * @return CatalogProduct
 	 * @throws ProductNotExistInCatalog 
 	 * @throws WorkerNotConnected 
 	 * @throws CriticalError 
@@ -55,4 +60,16 @@ public interface IWorker {
 	 */
 	CatalogProduct viewProductFromCatalog(int barcode) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
 
+	/**
+	 * worker add product package to warehouse.
+	 * 
+	 * @param ProductPackage
+	 * @return void
+	 * @throws ProductNotExistInCatalog 
+	 * @throws WorkerNotConnected 
+	 * @throws CriticalError 
+	 * @throws UnknownSenderID 
+	 * @throws InvalidParameter 
+	 */
+	void addProductToWarehouse(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
 }
