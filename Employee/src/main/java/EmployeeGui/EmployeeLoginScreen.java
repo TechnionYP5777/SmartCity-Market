@@ -87,9 +87,10 @@ public class EmployeeLoginScreen implements Initializable {
 				DialogMessagesService.showErrorDialog(EmployeeGuiDefs.loginFailureDialogTitle, null,
 						EmployeeGuiDefs.wrongUserNamePasswordFailureMessage);
 			} 
-
-			// TODO move to Worker screen
-			DialogMessagesService.showInfoDialog("Logged in!", null, "The user logged in! Wow!");
+			
+			// DialogMessagesService.showInfoDialog("Logged in!", null, "The user logged in! Wow!");
+			AbstractApplicationScreen.setScene("/WorkerMenuScreen/WorkerMenuScreen.fxml");
+			
 		} else {
 			// TODO add manager
 		}
