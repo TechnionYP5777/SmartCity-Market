@@ -81,13 +81,15 @@ public class EmployeeLoginScreen implements Initializable {
 			} catch (CriticalError e) {
 				System.out.println(e.getMessage());
 			} catch (EmployeeAlreadyConnected e) {
-				DialogMessagesService.showErrorDialog(EmployeeGuiDefs.loginFailureDialogTitle, null, e.getMessage());
+				DialogMessagesService.showErrorDialog(EmployeeGuiDefs.loginFailureDialogTitle, null,
+						EmployeeGuiDefs.userAlreadyConnectedFailureMessage);
 			} catch (AuthenticationError e) {
-				DialogMessagesService.showErrorDialog(EmployeeGuiDefs.loginFailureDialogTitle, null, e.getMessage());
-			}
+				DialogMessagesService.showErrorDialog(EmployeeGuiDefs.loginFailureDialogTitle, null,
+						EmployeeGuiDefs.wrongUserNamePasswordFailureMessage);
+			} 
 
 			// TODO move to Worker screen
-			System.out.println("Now i am logged in! wow!");
+			DialogMessagesService.showInfoDialog("Logged in!", null, "The user logged in! Wow!");
 		} else {
 			// TODO add manager
 		}
