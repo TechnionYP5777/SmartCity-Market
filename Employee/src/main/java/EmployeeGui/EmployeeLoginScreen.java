@@ -77,20 +77,20 @@ public class EmployeeLoginScreen implements Initializable {
 			try {
 				worker.login(username, password);
 			} catch (InvalidParameter e) {
-				System.out.println(e.getMessage());
+				// TODO
 			} catch (CriticalError e) {
-				System.out.println(e.getMessage());
+				// TODO
 			} catch (EmployeeAlreadyConnected e) {
 				DialogMessagesService.showErrorDialog(EmployeeGuiDefs.loginFailureDialogTitle, null,
 						EmployeeGuiDefs.userAlreadyConnectedFailureMessage);
+				return;
 			} catch (AuthenticationError e) {
 				DialogMessagesService.showErrorDialog(EmployeeGuiDefs.loginFailureDialogTitle, null,
 						EmployeeGuiDefs.wrongUserNamePasswordFailureMessage);
-			} 
-			
-			// DialogMessagesService.showInfoDialog("Logged in!", null, "The user logged in! Wow!");
+				return;
+			}
 			AbstractApplicationScreen.setScene("/WorkerMenuScreen/WorkerMenuScreen.fxml");
-			
+
 		} else {
 			// TODO add manager
 		}

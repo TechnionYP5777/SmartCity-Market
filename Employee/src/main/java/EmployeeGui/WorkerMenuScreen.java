@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import GuiUtils.AbstractApplicationScreen;
+import GuiUtils.StackPaneService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,6 +18,7 @@ import javafx.scene.layout.VBox;
  * available for worker.
  * 
  * @author idan atias
+ * @author Shimon Azulay
  * @since 2016-12-27
  */
 
@@ -34,6 +36,9 @@ public class WorkerMenuScreen implements Initializable {
 	@FXML
 	private VBox viewCatalogProductPane;
 
+	@FXML
+	private VBox addProductPackagePane;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
@@ -42,13 +47,12 @@ public class WorkerMenuScreen implements Initializable {
 
 	@FXML
 	private void viewCatalogProductButtonPressed(ActionEvent e) {
-		stackPane.getChildren();
-
+		StackPaneService.bringToFront(stackPane, viewCatalogProductPane.getId());
 	}
 
 	@FXML
 	private void addProductPackageButtonPressed(ActionEvent e) {
-
+		StackPaneService.bringToFront(stackPane, addProductPackagePane.getId());
 	}
 
 }

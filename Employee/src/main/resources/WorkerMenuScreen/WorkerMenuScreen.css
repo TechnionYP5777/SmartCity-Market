@@ -1,5 +1,5 @@
-.root {
-   -fx-background-image: url("WorkerMenuScreenImage1.jpg");
+#stackPane {
+   -fx-background-image: url("WorkerMenuScreenImage.jpg");
    -fx-background-size: cover;
 }
 
