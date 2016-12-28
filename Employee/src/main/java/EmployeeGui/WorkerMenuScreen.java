@@ -4,10 +4,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import GuiUtils.AbstractApplicationScreen;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 /**
  * WorkerMenuScreen - Controller for menu screen which holds the operations
@@ -25,9 +28,26 @@ public class WorkerMenuScreen implements Initializable {
 	@FXML
 	private Button viewCatalogProductButton;
 
+	@FXML
+	private StackPane stackPane;
+
+	@FXML
+	private VBox viewCatalogProductPane;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
+
+	}
+
+	@FXML
+	private void viewCatalogProductButtonPressed(ActionEvent e) {
+		stackPane.getChildren();
+
+	}
+
+	@FXML
+	private void addProductPackageButtonPressed(ActionEvent e) {
 
 	}
 
