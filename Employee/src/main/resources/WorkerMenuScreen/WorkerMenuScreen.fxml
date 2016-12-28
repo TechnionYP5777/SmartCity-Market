@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:id="workerMenuScreenPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@WorkerMenuScreen.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.WorkerMenuScreen">
+<GridPane fx:id="workerMenuScreenPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@WorkerMenuScreen.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.WorkerMenuScreen">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" percentWidth="20.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="106.0" prefWidth="100.0" />
@@ -29,6 +29,7 @@
                   <Button fx:id="viewCatalogProductButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#viewCatalogProductButtonPressed" prefWidth="223.0" text="View catalog product" />
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addProductPackageButtonPressed" prefWidth="223.0" text="Add product package" />
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Remove product package" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" />
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -61,10 +62,10 @@
                   <Separator prefWidth="200.0" />
                   <VBox alignment="CENTER" fillWidth="false" spacing="10.0">
                      <children>
-                        <TextField maxWidth="278.0" minWidth="278.0" promptText="Type Product Barcode..." />
+                        <TextField fx:id="barcodeTextField" maxWidth="278.0" minWidth="278.0" promptText="Type Product Barcode..." />
                         <HBox alignment="TOP_RIGHT" minWidth="278.0" prefWidth="278.0">
                            <children>
-                              <Button alignment="CENTER_RIGHT" mnemonicParsing="false" text="Send" />
+                              <Button fx:id="searchBarcode" alignment="CENTER_RIGHT" mnemonicParsing="false" text="Search Barcode" />
                            </children>
                         </HBox>
                      </children>
