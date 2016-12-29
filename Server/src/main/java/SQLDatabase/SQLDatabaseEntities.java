@@ -143,7 +143,7 @@ class SQLDatabaseEntities {
 		static DbTable table;
 
 		static DbColumn barcodeCol;
-		static DbColumn locationIDCol;
+		static DbColumn placeInStoreCol;
 		static DbColumn expirationDateCol;
 		static DbColumn amountCol;
 	}
@@ -307,12 +307,12 @@ class SQLDatabaseEntities {
 				TYPE_INTEGER, null);
 		ProductsPackagesTable.expirationDateCol = ProductsPackagesTable.table
 				.addColumn(PRODUCTS_PACKAGES_TABLE.ATTR_EXPIRATION_DATE, TYPE_DATE, null);
-		ProductsPackagesTable.locationIDCol = ProductsPackagesTable.table
-				.addColumn(PRODUCTS_PACKAGES_TABLE.ATTR_LOCATION_ID, TYPE_ID, null);
+		ProductsPackagesTable.placeInStoreCol = ProductsPackagesTable.table
+				.addColumn(PRODUCTS_PACKAGES_TABLE.ATTR_PLACE_IN_STORE, TYPE_TEXT, null);
 		// set primary key
 		ProductsPackagesTable.table.primaryKey(ProductsPackagesTable.table.getName(),
 				ProductsPackagesTable.barcodeCol.getName(), ProductsPackagesTable.expirationDateCol.getName(),
-				ProductsPackagesTable.locationIDCol.getName());
+				ProductsPackagesTable.placeInStoreCol.getName());
 
 		/*
 		 * initialize the GroceriesLists Table

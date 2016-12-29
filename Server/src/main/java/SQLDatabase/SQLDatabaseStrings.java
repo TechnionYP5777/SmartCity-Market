@@ -102,9 +102,13 @@ public class SQLDatabaseStrings {
 
 		// table attributes
 		public static final String ATTR_BARCODE = PRODUCTS_CATALOG_TABLE.ATTR_BARCODE;
-		public static final String ATTR_LOCATION_ID = LOCATIONS_TABLE.ATTR_LOCATION_ID;
+		public static final String ATTR_PLACE_IN_STORE = LOCATIONS_TABLE.ATTR_PLACE_IN_STORE;
 		public static final String ATTR_EXPIRATION_DATE = "ExpirationDate";
 		public static final String ATTR_AMOUNT = "Amount";
+		
+		// table values
+		public static final String VALUE_PLACE_WAREHOUSE = LOCATIONS_TABLE.VALUE_PLACE_WAREHOUSE;
+		public static final String VALUE_PLACE_STORE = LOCATIONS_TABLE.VALUE_PLACE_STORE;
 	}
 
 	/*
