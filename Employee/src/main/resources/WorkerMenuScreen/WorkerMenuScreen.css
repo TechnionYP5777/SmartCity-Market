@@ -1,6 +1,10 @@
-#stackPane {
+.root {
    -fx-background-image: url("WorkerMenuScreenImage.jpg");
    -fx-background-size: cover;
+}
+
+.transparent {
+	-fx-background-color: transparent;
 }
 
 .green {

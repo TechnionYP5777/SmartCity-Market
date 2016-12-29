@@ -24,7 +24,7 @@
    <children>
       <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="ALWAYS" nodeOrientation="RIGHT_TO_LEFT" vbarPolicy="ALWAYS">
          <content>
-            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="109.0" prefWidth="384.0" spacing="10.0" styleClass="dark-blue" stylesheets="@WorkerMenuScreen.css">
+            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="109.0" prefWidth="384.0" spacing="10.0" stylesheets="@WorkerMenuScreen.css">
                <children>
                   <Button fx:id="viewCatalogProductButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#viewCatalogProductButtonPressed" prefWidth="223.0" text="View catalog product" />
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addProductPackageButtonPressed" prefWidth="223.0" text="Add product package" />
@@ -65,7 +65,7 @@
                         <TextField fx:id="barcodeTextField" maxWidth="278.0" minWidth="278.0" promptText="Type Product Barcode..." />
                         <HBox alignment="TOP_RIGHT" minWidth="278.0" prefWidth="278.0">
                            <children>
-                              <Button fx:id="searchBarcode" alignment="CENTER_RIGHT" mnemonicParsing="false" text="Search Barcode" />
+                              <Button fx:id="searchBarcode" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#searchBarcodePressed" text="Search Barcode" />
                            </children>
                         </HBox>
                      </children>
