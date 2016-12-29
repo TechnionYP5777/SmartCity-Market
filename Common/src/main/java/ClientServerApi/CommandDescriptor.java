@@ -37,7 +37,7 @@ public enum CommandDescriptor {
 	/**
 	 * Description: Client login command to get in the system and receive unique sender id from server.
 	 * param1: Login.
-	 * retval: int senderId (in senderId field).
+	 * retval: CLIENT_TYPE.
 	 *
 	 * result_codes:
 	 * 		success:
@@ -48,7 +48,7 @@ public enum CommandDescriptor {
 	 *			SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD,
 	 *
 	 *	 ***** NOTE *****
-	 * This command has no data from the server side.
+	 * The sender ID returns in senderId field.
 	 */
 
 	LOGOUT,

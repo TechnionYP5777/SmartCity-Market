@@ -3,6 +3,7 @@ package EmployeeContracts;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.ProductPackage;
+import CommonDefs.CLIENT_TYPE;
 import EmployeeDefs.AEmployeeExceptions.AmountBiggerThanAvailable;
 import EmployeeDefs.AEmployeeExceptions.AuthenticationError;
 import EmployeeDefs.AEmployeeExceptions.CriticalError;
@@ -32,12 +33,13 @@ public interface IWorker {
 	 * 
 	 * @param username - worker username
 	 * @param password - worker password
+	 * @return CLIENT_TYPE - the client type
 	 * @throws AuthenticationError 
 	 * @throws EmployeeAlreadyConnected 
 	 * @throws CriticalError 
 	 * @throws InvalidParameter 
 	 */
-	void login(String username, String password) throws InvalidParameter, CriticalError, EmployeeAlreadyConnected, AuthenticationError;
+	CLIENT_TYPE login(String username, String password) throws InvalidParameter, CriticalError, EmployeeAlreadyConnected, AuthenticationError;
 	
 	/**
 	 * logout method use for the worker to logout from the server.

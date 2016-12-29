@@ -4,30 +4,30 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="loginScreenPane" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@EmployeeLoginScreen.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeLoginScreen">
-  <columnConstraints>
-    <ColumnConstraints hgrow="ALWAYS" maxWidth="170.0" minWidth="10.0" prefWidth="125.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="340.0" minWidth="10.0" prefWidth="340.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0" prefWidth="123.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints maxHeight="102.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="280.0" minHeight="10.0" prefHeight="274.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="127.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES" />
-  </rowConstraints>
+<GridPane fx:id="loginScreenPane" fx:controller="EmployeeGui.EmployeeLoginScreen" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@EmployeeLoginScreen.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <columnConstraints>
+      <ColumnConstraints hgrow="ALWAYS" maxWidth="170.0" minWidth="10.0" percentWidth="100.0" prefWidth="125.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="340.0" minWidth="10.0" percentWidth="100.0" prefWidth="340.0" />
+      <ColumnConstraints hgrow="ALWAYS" maxWidth="194.0" minWidth="10.0" percentWidth="100.0" prefWidth="123.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints maxHeight="102.0" minHeight="10.0" percentHeight="100.0" prefHeight="56.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="280.0" minHeight="10.0" percentHeight="100.0" prefHeight="274.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="127.0" minHeight="10.0" percentHeight="100.0" prefHeight="57.0" vgrow="SOMETIMES" />
+   </rowConstraints>
    <children>
-      <VBox alignment="CENTER" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
-            <VBox prefHeight="82.0" prefWidth="340.0">
+            <VBox>
                <children>
                   <Label text="Welcome!" textFill="#fffdfd">
                      <font>
@@ -55,12 +55,12 @@
                   <Insets bottom="10.0" />
                </padding>
             </Separator>
-            <TextField promptText="User Name">
+            <TextField fx:id="userNameTextField" promptText="User Name">
                <font>
                   <Font name="Lucida Bright Regular" size="13.0" />
                </font>
             </TextField>
-            <PasswordField promptText="  Password">
+            <PasswordField fx:id="passwordField" promptText="  Password">
                <padding>
                   <Insets top="10.0" />
                </padding>
@@ -68,34 +68,49 @@
                   <Font name="Lucida Bright Regular" size="13.0" />
                </font>
             </PasswordField>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <GridPane prefHeight="103.0" prefWidth="640.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
                <children>
-                  <Label text="Password recovery?" textFill="#1009ee" underline="true">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                  </Label>
-                  <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="194.0">
+                  <VBox spacing="5.0">
                      <children>
-                        <Button fx:id="loginButton" mnemonicParsing="false" text="Login" />
+                        <Label text="Password recovery?" textFill="#1009ee" underline="true">
+                           <font>
+                              <Font name="Lucida Bright Regular" size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
+                        <RadioButton fx:id="loginAsWorkerButton" mnemonicParsing="false" onAction="#loginAsWorkerPressed" selected="true" text="Login as worker" textFill="#fcf9f7" />
+                        <RadioButton fx:id="loginAsManagerButton" mnemonicParsing="false" onAction="#loginAsManagerPressed" text="Login as manager" textFill="WHITE" />
                      </children>
-                  </HBox>
+                  </VBox>
+                  <Button fx:id="loginButton" mnemonicParsing="false" onAction="#loginButtonPressed" text="Login" GridPane.columnIndex="1" />
                </children>
-            </HBox>
+            </GridPane>
          </children>
       </VBox>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+      <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonClicked" text="Back" />
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonPressed" text="Back" />
          </children>
+         <padding>
+            <Insets left="30.0" top="30.0" />
+         </padding>
       </VBox>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+      <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
          <children>
             <Button fx:id="settingsButton" mnemonicParsing="false" text="Settings" />
          </children>
+         <padding>
+            <Insets bottom="30.0" right="30.0" />
+         </padding>
       </VBox>
    </children>
 </GridPane>

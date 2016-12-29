@@ -56,7 +56,8 @@ public class CommandExecuter {
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 			outCommandWrapper.setSenderID((c.WorkerLogin(login.getUserName(), login.getPassword())));
-			
+			//TODO Noam please add here:  outCommandWrapper.setData(CLIENT_TYPE.serialize());
+			//TODO Noam add information to the print (which type logged in)
 			log.info("Login command succeded with sender ID " + outCommandWrapper.getSenderID());
 		} catch (AuthenticationError e) {
 			log.info("Login command failed, username dosen't exist or wrong password received");

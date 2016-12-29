@@ -7,6 +7,7 @@ import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
+import CommonDefs.CLIENT_TYPE;
 import EmployeeCommon.AEmployee;
 import EmployeeContracts.IWorker;
 import EmployeeDefs.AEmployeeExceptions.AmountBiggerThanAvailable;
@@ -43,7 +44,7 @@ public class Worker extends AEmployee implements IWorker {
 	}
 
 	@Override
-	public void login(String username, String password) throws InvalidParameter, CriticalError, EmployeeAlreadyConnected, AuthenticationError {
+	public CLIENT_TYPE login(String username, String password) throws InvalidParameter, CriticalError, EmployeeAlreadyConnected, AuthenticationError {
 		CommandWrapper commandDescriptor = null;
 		
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
@@ -72,9 +73,11 @@ public class Worker extends AEmployee implements IWorker {
 		this.username = username;
 		this.password = password;
 		
-		log.info("Login to server succeed. Client id is: " + clientId);
+		log.info("Login to server as " + commandDescriptor.getData() + " succeed. Client id is: " + clientId);
 		
 		terminateCommunication();
+		
+		return CLIENT_TYPE.deserialize(commandDescriptor.getData());
 	}
 
 	@Override
