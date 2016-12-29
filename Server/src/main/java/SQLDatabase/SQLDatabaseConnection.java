@@ -6,22 +6,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.Random;
 
-import com.google.gson.Gson;
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
 import com.healthmarketscience.sqlbuilder.CreateTableQuery;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
 import com.healthmarketscience.sqlbuilder.UnaryCondition;
 import com.healthmarketscience.sqlbuilder.UpdateQuery;
 import com.healthmarketscience.sqlbuilder.ValidationException;
-
-import BasicCommonClasses.CatalogProduct;
-import BasicCommonClasses.Ingredient;
-import BasicCommonClasses.Location;
-import BasicCommonClasses.Manufacturer;
-import BasicCommonClasses.PlaceInMarket;
 
 import SQLDatabase.SQLDatabaseEntities;
 import SQLDatabase.SQLDatabaseEntities.CartsListTable;
@@ -42,6 +34,7 @@ import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.WorkerAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
 import static SQLDatabase.SQLQueryGenerator.generateSelectQuery1Table;
+import static SQLDatabase.SQLQueryGenerator.generateSelectLeftJoinWithQuery2Tables;
 import static SQLDatabase.SQLQueryGenerator.generateUpdateQuery;
 
 /**
@@ -169,7 +162,7 @@ public class SQLDatabaseConnection {
 	 * @return the number of rows
 	 */
 
-	private int getResultSetRowCount(ResultSet s) {
+	private static int getResultSetRowCount(ResultSet s) {
 		if (s == null)
 			return 0;
 		try {
@@ -191,10 +184,10 @@ public class SQLDatabaseConnection {
 	 * return if there any result in ResultsSet
 	 * 
 	 * @param ¢
-	 * @return true - if there are rows in the ResultsSet, false otherwise.
+	 * @return false - if there are rows in the ResultsSet, true otherwise.
 	 * @throws CriticalError
 	 */
-	private boolean isResultSetRowsExist(ResultSet ¢) throws CriticalError {
+	private static boolean isResultSetEmpty(ResultSet ¢) throws CriticalError {
 		boolean $;
 		try {
 			$ = ¢.first();
@@ -204,7 +197,7 @@ public class SQLDatabaseConnection {
 			e.printStackTrace();
 			throw new CriticalError();
 		}
-		return $;
+		return !$;
 	}
 
 	private int generateSessionID(boolean forWorker) throws CriticalError, NumberOfConnectionsExceeded {
@@ -243,7 +236,7 @@ public class SQLDatabaseConnection {
 				throw new CriticalError();
 			}
 
-			if (!isResultSetRowsExist(result))
+			if (isResultSetEmpty(result))
 				return $;
 		}
 
@@ -280,7 +273,7 @@ public class SQLDatabaseConnection {
 	private boolean isSessionEstablished(Integer sessionID) throws CriticalError {
 		try {
 			return (sessionID == null)
-					|| isResultSetRowsExist(getParameterizedQuery(generateSelectQuery1Table(WorkersTable.table,
+					|| !isResultSetEmpty(getParameterizedQuery(generateSelectQuery1Table(WorkersTable.table,
 							BinaryCondition.equalTo(WorkersTable.sessionIDCol, PARAM_MARK)), sessionID).executeQuery());
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -306,7 +299,7 @@ public class SQLDatabaseConnection {
 			result = getParameterizedQuery(generateSelectQuery1Table(WorkersTable.table,
 					BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK)), username).executeQuery();
 
-			if (!isResultSetRowsExist(result))
+			if (isResultSetEmpty(result))
 				return false;
 
 			result.first();
@@ -351,6 +344,57 @@ public class SQLDatabaseConnection {
 
 		return $;
 
+	}
+
+	/**
+	 * create parameterized read-only query for execution. usually used by
+	 * SELECT queries.
+	 * 
+	 * @param query
+	 *            - the query with parameter marks
+	 * @param parameters
+	 *            - the parameters to insert into the marks
+	 * @return PreparedStatement of the parameterized query.
+	 * @throws CriticalError
+	 */
+	private PreparedStatement getParameterizedReadQuery(String query, Object... parameters) throws CriticalError {
+
+		query = query.replace(QUATED_PARAM_MARK, SQL_PARAM);
+
+		PreparedStatement $;
+		try {
+			$ = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		}
+
+		for (int ¢ = 0; ¢ < parameters.length; ++¢)
+			try {
+				$.setObject(¢ + 1, parameters[¢]);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new CriticalError();
+			}
+
+		return $;
+
+	}
+
+	/**
+	 * close opened resources.
+	 * 
+	 * @param resources
+	 *            - list of resources to close.
+	 */
+	void closeResources(AutoCloseable... resources) {
+		for (AutoCloseable resource : resources)
+			if (resource != null)
+				try {
+					resource.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 	}
 
 	/*
@@ -454,31 +498,63 @@ public class SQLDatabaseConnection {
 
 		validateSessionEstablished(sessionID);
 
-		String query = new SelectQuery().addAllTableColumns(ProductsCatalogTable.table)
-				.addCondition(BinaryCondition.equalTo(ProductsCatalogTable.barcodeCol, PARAM_MARK)).validate() + "";
+		String prodctsIngredientsQuery = generateSelectLeftJoinWithQuery2Tables(ProductsCatalogIngredientsTable.table,
+				IngredientsTable.table, IngredientsTable.ingredientIDCol, ProductsCatalogIngredientsTable.barcodeCol,
+				BinaryCondition.equalTo(ProductsCatalogIngredientsTable.barcodeCol, PARAM_MARK));
 
-		PreparedStatement statement = getParameterizedQuery(query, Long.valueOf(barcode));
+		String prodctsLocationsQuery = generateSelectLeftJoinWithQuery2Tables(ProductsCatalogLocationsTable.table,
+				LocationsTable.table, LocationsTable.locationIDCol, ProductsCatalogLocationsTable.barcodeCol,
+				BinaryCondition.equalTo(ProductsCatalogLocationsTable.barcodeCol, PARAM_MARK));
 
-		ResultSet result;
+		String prodctsTableQuery = generateSelectLeftJoinWithQuery2Tables(ProductsCatalogTable.table,
+				ManufacturerTable.table, ManufacturerTable.manufacturerIDCol, ProductsCatalogTable.barcodeCol,
+				BinaryCondition.equalTo(ProductsCatalogTable.barcodeCol, PARAM_MARK));
+
+		PreparedStatement productStatement = getParameterizedReadQuery(prodctsTableQuery, Long.valueOf(barcode));
+		PreparedStatement productIngredientsStatement = getParameterizedReadQuery(prodctsIngredientsQuery,
+				Long.valueOf(barcode));
+		PreparedStatement productLocationsStatement = getParameterizedReadQuery(prodctsLocationsQuery,
+				Long.valueOf(barcode));
+
+		ResultSet productResult = null;
+		ResultSet ingredientResult = null;
+		ResultSet locationsResult = null;
+
 		try {
-			result = statement.executeQuery();
+			// START transaction
+			connection.setAutoCommit(false);
+			productResult = productStatement.executeQuery();
+			ingredientResult = productIngredientsStatement.executeQuery();
+			locationsResult = productLocationsStatement.executeQuery();
+
+			// END transaction
+			connection.commit();
+			connection.setAutoCommit(true);
+			// if no result - throw exception
+			if (isResultSetEmpty(productResult))
+				throw new SQLDatabaseException.ProductNotExistInCatalog();
+
+			productResult.next();
+			ingredientResult.next();
+			locationsResult.next();
+			return SQLJsonGenerator.ProductToJson(productResult, ingredientResult, locationsResult);
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new CriticalError();
+		} finally {
+			closeResources(productResult, ingredientResult, locationsResult);
 		}
 
-		// if no result - throw exception
-		if (!isResultSetRowsExist(result))
-			throw new SQLDatabaseException.ProductNotExistInCatalog();
+	}
 
-		HashSet<Ingredient> ingredients = new HashSet<Ingredient>();
-		ingredients.add(new Ingredient(123, "milk"));
-		HashSet<Location> locations = new HashSet<Location>();
-		locations.add(new Location(1, 1, PlaceInMarket.STORE));
-		return new Gson().toJson(
-				(new CatalogProduct(1234567890L, "Milk 3%", ingredients, new Manufacturer(334, "Tnuva"), "", 10.0,
-						"https://chef.tnuva.co.il/files/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/7/2/7290000042442.jpg",
-						locations)));
+	public void close() throws CriticalError {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLDatabaseException.CriticalError();
+		}
 	}
 
 }

@@ -12,7 +12,6 @@ import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
 import BasicCommonClasses.Manufacturer;
-import BasicCommonClasses.PlaceInMarket;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
@@ -60,15 +59,15 @@ public class SQLDatabaseConnectionTest {
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 
 		HashSet<Ingredient> ingredients = new HashSet<Ingredient>();
-		ingredients.add(new Ingredient(123, "milk"));
+		ingredients.add(new Ingredient(1, "חלב"));
 		HashSet<Location> locations = new HashSet<Location>();
-		locations.add(new Location(1, 1, PlaceInMarket.STORE));
+		// locations.add(new Location(1, 1, PlaceInMarket.STORE));
 		// TODO: noam - check the imageUrl addition
-		String milkImage = "https://chef.tnuva.co.il/files/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/7/2/7290000042442.jpg";
+		String milkImage = "";
 		try {
 			assertEquals(sqlConnection.getProductFromCatalog(null, 1234567890),
-					new Gson().toJson((new CatalogProduct(1234567890L, "Milk 3%", ingredients,
-							new Manufacturer(334, "Tnuva"), "", 10.0, milkImage, locations))));
+					new Gson().toJson((new CatalogProduct(1234567890L, "חלב", ingredients, new Manufacturer(1, "תנובה"),
+							"", 10.5, milkImage, locations))));
 		} catch (ProductNotExistInCatalog | WorkerNotConnected | CriticalError e) {
 			e.printStackTrace();
 			fail();
