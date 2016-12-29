@@ -1,26 +1,34 @@
 package EmployeeGui;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.Location;
+import BasicCommonClasses.PlaceInMarket;
+import BasicCommonClasses.ProductPackage;
+import BasicCommonClasses.SmartCode;
 import EmployeeContracts.IWorker;
+import EmployeeDefs.AEmployeeExceptions.AmountBiggerThanAvailable;
 import EmployeeDefs.AEmployeeExceptions.CriticalError;
 import EmployeeDefs.AEmployeeExceptions.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
 import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
+import EmployeeDefs.AEmployeeExceptions.ProductPackageDoesNotExist;
 import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
 import EmployeeDefs.EmployeeGuiDefs;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
-import GuiUtils.StackPaneService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -34,28 +42,47 @@ import javafx.scene.layout.VBox;
 
 public class WorkerMenuScreen implements Initializable {
 
+	// Main screen panes
 	@FXML
 	GridPane workerMenuScreenPane;
+
+	// view catalog product controls
+	@FXML
+	VBox viewCatalogProductPane;
 
 	@FXML
 	Button viewCatalogProductButton;
 
 	@FXML
-	StackPane stackPane;
-
-	@FXML
 	TextField barcodeTextField;
-
-	String barcode = "";
 
 	@FXML
 	Button searchBarcode;
 
-	@FXML
-	VBox viewCatalogProductPane;
-
+	// Add product package controls
 	@FXML
 	VBox addProductPackagePane;
+
+	@FXML
+	TextField editPackagesBarcodeTextField;
+
+	@FXML
+	Button runTheOperationButton;
+
+	@FXML
+	Spinner<Integer> editPackagesAmountSpinner;
+
+	@FXML
+	DatePicker editPackagesDatePicker;
+
+	@FXML
+	RadioButton addPakageToWarhouseRadioButton;
+
+	@FXML
+	RadioButton addPackageToShelvesRadioButton;
+
+	@FXML
+	RadioButton removePackageFromStoreRadioButton;
 
 	IWorker worker;
 
@@ -63,31 +90,27 @@ public class WorkerMenuScreen implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			barcode = newValue;
-			enableLoginButtonCheck();
+			enableSearchBarcodeButtonCheck();
 		});
-
+		editPackagesBarcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+			enableRunTheOperationButton();
+		});
+		editPackagesDatePicker.setValue(LocalDate.now());
 	}
 
-	private void enableLoginButtonCheck() {
-		searchBarcode.setDisable(barcode.isEmpty());
+	private void enableSearchBarcodeButtonCheck() {
+		searchBarcode.setDisable(barcodeTextField.getText().isEmpty());
 	}
 
-	@FXML
-	private void viewCatalogProductButtonPressed(ActionEvent e) {
-		StackPaneService.bringToFront(stackPane, viewCatalogProductPane.getId());
-	}
-
-	@FXML
-	private void addProductPackageButtonPressed(ActionEvent e) {
-		StackPaneService.bringToFront(stackPane, addProductPackagePane.getId());
+	private void enableRunTheOperationButton() {
+		runTheOperationButton.setDisable(editPackagesBarcodeTextField.getText().isEmpty());
 	}
 
 	@FXML
 	private void searchBarcodePressed(ActionEvent event) {
 		CatalogProduct catalogProduct = null;
 		try {
-			catalogProduct = worker.viewProductFromCatalog(Integer.parseInt(barcode));
+			catalogProduct = worker.viewProductFromCatalog(Integer.parseInt(barcodeTextField.getText()));
 		} catch (NumberFormatException e) {
 			// TODO
 			e.printStackTrace();
@@ -115,6 +138,117 @@ public class WorkerMenuScreen implements Initializable {
 				"Barcode: " + catalogProduct.getBarcode() + "\n" + "Manufacturer: "
 						+ catalogProduct.getManufacturer().getName() + "\n" + "Price: " + catalogProduct.getPrice());
 
+	}
+
+	@FXML
+	private void addPakageToWarhouseRadioButtonPressed(ActionEvent event) {
+
+		addPakageToWarhouseRadioButton.setSelected(true);
+
+		addPackageToShelvesRadioButton.setSelected(false);
+
+		removePackageFromStoreRadioButton.setSelected(false);
+	}
+
+	@FXML
+	private void addPackageToShelvesRadioButtonPressed(ActionEvent event) {
+
+		addPakageToWarhouseRadioButton.setSelected(false);
+
+		addPackageToShelvesRadioButton.setSelected(true);
+
+		removePackageFromStoreRadioButton.setSelected(false);
+	}
+
+	@FXML
+	private void removePackageFromStoreRadioButtonPressed(ActionEvent event) {
+
+		addPakageToWarhouseRadioButton.setSelected(false);
+
+		addPackageToShelvesRadioButton.setSelected(false);
+
+		removePackageFromStoreRadioButton.setSelected(true);
+	}
+
+	@FXML
+	private void runTheOperationButtonPressed(ActionEvent event) {
+
+		SmartCode smartcode = new SmartCode(Long.parseLong(editPackagesBarcodeTextField.getText()),
+				editPackagesDatePicker.getValue(), "java.time");
+
+		try {
+
+			if (addPakageToWarhouseRadioButton.isSelected()) {
+
+				// TODO location x y
+				ProductPackage productPackage = new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
+						new Location(0, 0, PlaceInMarket.WAREHOUSE));
+
+				worker.addProductToWarehouse(productPackage);
+
+			} else if (addPackageToShelvesRadioButton.isSelected()) {
+
+				// TODO location x y
+				ProductPackage productPackage = new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
+						new Location(0, 0, PlaceInMarket.STORE));
+
+				worker.placeProductPackageOnShelves(productPackage);
+
+			} else {
+
+				// TODO location is store or warehouse and what about x y ?
+				ProductPackage productPackage = new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
+						new Location(0, 0, PlaceInMarket.STORE));
+
+				worker.removeProductPackageFromStore(productPackage);
+			}
+
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidParameter e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnknownSenderID e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CriticalError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (EmployeeNotConnected e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ProductNotExistInCatalog e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AmountBiggerThanAvailable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ProductPackageDoesNotExist e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@FXML
+	private void logoutButtonPressed(ActionEvent event) {
+		try {
+			worker.logout();
+		} catch (InvalidParameter e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnknownSenderID e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CriticalError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (EmployeeNotConnected e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		AbstractApplicationScreen.setScene("/EmployeeMainScreen/EmployeeLoginScreen.fxml");
 	}
 
 }

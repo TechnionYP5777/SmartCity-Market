@@ -1,81 +1,155 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <GridPane fx:id="workerMenuScreenPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@WorkerMenuScreen.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.WorkerMenuScreen">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" percentWidth="20.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="106.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" percentWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints minHeight="10.0" percentHeight="100.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="ALWAYS" nodeOrientation="RIGHT_TO_LEFT" vbarPolicy="ALWAYS">
-         <content>
-            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="109.0" prefWidth="384.0" spacing="10.0" stylesheets="@WorkerMenuScreen.css">
-               <children>
-                  <Button fx:id="viewCatalogProductButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#viewCatalogProductButtonPressed" prefWidth="223.0" text="View catalog product" />
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addProductPackageButtonPressed" prefWidth="223.0" text="Add product package" />
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Remove product package" />
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Button" />
-               </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </VBox>
-         </content>
-      </ScrollPane>
-      <StackPane fx:id="stackPane" prefHeight="800.0" prefWidth="678.0" GridPane.columnIndex="1">
-         <children>
-            <VBox fx:id="addProductPackagePane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" visible="false">
-               <children>
-                  <Separator prefWidth="200.0" />
-                  <TextField promptText="Type Product Barcode..." />
-                  <HBox alignment="TOP_RIGHT">
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="View Catalog Product">
+               <content>
+                  <VBox fx:id="viewCatalogProductPane" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
                      <children>
-                        <Button alignment="CENTER_RIGHT" mnemonicParsing="false" text="Send" />
-                     </children>
-                  </HBox>
-               </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </VBox>
-            <VBox fx:id="viewCatalogProductPane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
-               <children>
-                  <Button mnemonicParsing="false" text="Scan Barcode" />
-                  <Separator prefWidth="200.0" />
-                  <VBox alignment="CENTER" fillWidth="false" spacing="10.0">
-                     <children>
-                        <TextField fx:id="barcodeTextField" maxWidth="278.0" minWidth="278.0" promptText="Type Product Barcode..." />
-                        <HBox alignment="TOP_RIGHT" minWidth="278.0" prefWidth="278.0">
+                        <HBox maxHeight="1.7976931348623157E308">
                            <children>
-                              <Button fx:id="searchBarcode" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#searchBarcodePressed" text="Search Barcode" />
+                              <Label text="View Catalog Product" textFill="WHITE">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </HBox>
+                        <Button mnemonicParsing="false" text="Scan Barcode" />
+                        <Separator prefWidth="200.0" />
+                        <VBox alignment="CENTER" fillWidth="false" spacing="10.0">
+                           <children>
+                              <TextField fx:id="barcodeTextField" maxWidth="278.0" minWidth="278.0" promptText="Type Product Barcode..." />
+                              <HBox alignment="TOP_RIGHT" minWidth="278.0" prefWidth="278.0">
+                                 <children>
+                                    <Button fx:id="searchBarcode" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#searchBarcodePressed" text="Search Barcode" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
                      </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
                   </VBox>
-               </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </VBox>
+               </content>
+          </Tab>
+          <Tab text="Edit Products Packages">
+               <content>
+                  <VBox fx:id="addProductPackagePane" alignment="TOP_CENTER" prefHeight="800.0" prefWidth="973.0" spacing="15.0">
+                     <children>
+                        <HBox maxHeight="1.7976931348623157E308">
+                           <children>
+                              <Label text="Edit Products Packages" textFill="WHITE">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <Button mnemonicParsing="false" text="Scan SmartCode" />
+                        <Separator prefWidth="200.0" />
+                        <VBox alignment="CENTER" fillWidth="false" spacing="10.0">
+                           <children>
+                              <TextField fx:id="editPackagesBarcodeTextField" maxWidth="278.0" minWidth="278.0" promptText="Type Product Barcode..." />
+                              <GridPane>
+                                 <columnConstraints>
+                                    <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" percentWidth="50.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" percentWidth="70.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints percentHeight="100.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <VBox spacing="15.0">
+                                       <children>
+                                          <Label text="Choose operation" textFill="WHITE">
+                                             <font>
+                                                <Font size="27.0" />
+                                             </font>
+                                          </Label>
+                                          <Separator />
+                                          <RadioButton fx:id="addPakageToWarhouseRadioButton" mnemonicParsing="false" onAction="#addPakageToWarhouseRadioButtonPressed" selected="true" text="Add package to warehouse" textFill="WHITE" />
+                                          <RadioButton fx:id="addPackageToShelvesRadioButton" mnemonicParsing="false" onAction="#addPackageToShelvesRadioButtonPressed" text="Add package to shelves" textFill="WHITE" />
+                                          <RadioButton fx:id="removePackageFromStoreRadioButton" mnemonicParsing="false" onAction="#removePackageFromStoreRadioButtonPressed" text="Remove package from store" textFill="WHITE" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </VBox>
+                                    <GridPane prefWidth="278.0" GridPane.columnIndex="1">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" percentHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" percentHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Label prefWidth="278.0" text="Expiration Date:" textFill="WHITE" />
+                                          <Label text="Amount:" textFill="WHITE" GridPane.rowIndex="1" />
+                                          <DatePicker fx:id="editPackagesDatePicker" prefWidth="150.0" GridPane.columnIndex="1" />
+                                          <Spinner fx:id="editPackagesAmountSpinner" editable="true" initialValue="1" max="100" min="1" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding>
+                                    </GridPane>
+                                 </children>
+                              </GridPane>
+                              <HBox alignment="TOP_RIGHT">
+                                 <children>
+                                    <Button fx:id="runTheOperationButton" mnemonicParsing="false" onAction="#runTheOperationButtonPressed" text="Run the operation" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+               </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+         <children>
+            <Button mnemonicParsing="false" onAction="#logoutButtonPressed" text="Log out" />
          </children>
-      </StackPane>
+         <opaqueInsets>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </opaqueInsets>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </HBox>
    </children>
 </GridPane>
