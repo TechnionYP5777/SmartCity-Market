@@ -38,7 +38,7 @@ public class CommandExecuterLoginTest {
 		
 		try {
 			Mockito.when(
-					sqlDatabaseConnection.WorkerLogin(login.getUserName(), login.getPassword()))
+					sqlDatabaseConnection.workerLogin(login.getUserName(), login.getPassword()))
 					.thenReturn(senderID);
 		} catch (AuthenticationError e) {
 			e.printStackTrace();
@@ -70,7 +70,7 @@ public class CommandExecuterLoginTest {
 		
 		try {
 			Mockito.when(
-					sqlDatabaseConnection.WorkerLogin(login.getUserName(), login.getPassword()))
+					sqlDatabaseConnection.workerLogin(login.getUserName(), login.getPassword()))
 			       .thenThrow(new AuthenticationError());
 		} catch (AuthenticationError e) {
 			e.printStackTrace();
@@ -101,7 +101,7 @@ public class CommandExecuterLoginTest {
 		
 		try {
 			Mockito.when(
-					sqlDatabaseConnection.WorkerLogin(login.getUserName(), login.getPassword()))
+					sqlDatabaseConnection.workerLogin(login.getUserName(), login.getPassword()))
 			       .thenThrow(new CriticalError());
 		} catch (AuthenticationError e) {
 			e.printStackTrace();

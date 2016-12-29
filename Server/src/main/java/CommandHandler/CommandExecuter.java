@@ -55,7 +55,7 @@ public class CommandExecuter {
 		//TODO Noam - add exception to WorkerAlreadyConnected when implemented in SQL + test for it in CommandExectuerLoginTest
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
-			outCommandWrapper.setSenderID((c.WorkerLogin(login.getUserName(), login.getPassword())));
+			outCommandWrapper.setSenderID((c.workerLogin(login.getUserName(), login.getPassword())));
 			//TODO Noam please add here:  outCommandWrapper.setData(CLIENT_TYPE.serialize());
 			//TODO Noam add information to the print (which type logged in)
 			log.info("Login command succeded with sender ID " + outCommandWrapper.getSenderID());
@@ -98,7 +98,7 @@ public class CommandExecuter {
 		//TODO Noam - add exception to SM_SENDER_ID_DOES_NOT_EXIST,  when implemented in SQL + test for it in CommandExectuerLogoutTest
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
-			c.WorkerLogout(inCommandWrapper.getSenderID(), username);
+			c.workerLogout(inCommandWrapper.getSenderID(), username);
 			
 			log.info("Logout command succeded with sender ID " + inCommandWrapper.getSenderID());
 		} catch (WorkerNotConnected e) {

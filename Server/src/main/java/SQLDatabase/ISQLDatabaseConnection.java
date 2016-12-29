@@ -16,48 +16,47 @@ import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
 
 public interface ISQLDatabaseConnection {
 
-	int WorkerLogin(String username, String password)
+	int workerLogin(String username, String password)
 			throws AuthenticationError, WorkerAlreadyConnected, CriticalError, NumberOfConnectionsExceeded;
 
-	void WorkerLogout(Integer sessionID, String username) throws WorkerNotConnected, CriticalError;
+	void workerLogout(Integer sessionID, String username) throws WorkerNotConnected, CriticalError;
 
 	String getProductFromCatalog(Integer sessionID, long barcode)
 			throws ProductNotExistInCatalog, WorkerNotConnected, CriticalError;
 
-	void AddProductPackageToWarehouse(Integer sessionID, ProductPackage p)
-			throws CriticalError, WorkerNotConnected;
+	void addProductPackageToWarehouse(Integer sessionID, ProductPackage p) throws CriticalError, WorkerNotConnected;
 
-	void RemoveProductPackageToWarehouse(Integer sessionID, ProductPackage p) throws CriticalError,
+	void removeProductPackageFromWarehouse(Integer sessionID, ProductPackage p) throws CriticalError,
 			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
 
-	void AddProductToCatalog(Integer sessionID, CatalogProduct productToAdd)
+	void addProductToCatalog(Integer sessionID, CatalogProduct productToAdd)
 			throws CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog;
 
-	void RemoveProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
+	void removeProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, ProductStillForSale;
 
-	void HardRemoveProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
+	void hardRemoveProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
 
-	void UpdateProductInCatalog(Integer sessionID, Long productBarcode, CatalogProduct productToUpdate)
+	void updateProductInCatalog(Integer sessionID, Long productBarcode, CatalogProduct productToUpdate)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
 
-	void AddProductToGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError, CartNotConnected,
+	void addProductToGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError, CartNotConnected,
 			ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
 
-	void RemoveProductFromGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError,
+	void removeProductFromGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError,
 			CartNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
 
-	void PlaceProductPackageOnShelves(Integer sessionID, ProductPackage productToBuy) throws CriticalError,
+	void placeProductPackageOnShelves(Integer sessionID, ProductPackage productToBuy) throws CriticalError,
 			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
 
-	void RemoveProductPackageFromShelves(Integer sessionID, ProductPackage productToBuy) throws CriticalError,
+	void removeProductPackageFromShelves(Integer sessionID, ProductPackage productToBuy) throws CriticalError,
 			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
 
-	int GetProductPackageAmonutOnShelves(Integer sessionID, ProductPackage productToBuy)
+	int getProductPackageAmonutOnShelves(Integer sessionID, ProductPackage productToBuy)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
 
-	int GetProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage productToBuy)
+	int getProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage productToBuy)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
 
 	void cartCheckout(Integer cartID) throws CriticalError, CartNotConnected;

@@ -38,7 +38,7 @@ public class SQLDatabaseConnectionTest {
 
 		int session = 0;
 		try {
-			session = sqlConnection.WorkerLogin("admin", "admin");
+			session = sqlConnection.workerLogin("admin", "admin");
 
 		} catch (AuthenticationError | CriticalError | WorkerAlreadyConnected | NumberOfConnectionsExceeded e) {
 			e.printStackTrace();
@@ -46,7 +46,7 @@ public class SQLDatabaseConnectionTest {
 		}
 
 		try {
-			sqlConnection.WorkerLogout(session, "admin");
+			sqlConnection.workerLogout(session, "admin");
 		} catch (CriticalError | WorkerNotConnected e) {
 			e.printStackTrace();
 			fail();
