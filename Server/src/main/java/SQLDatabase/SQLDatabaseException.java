@@ -30,6 +30,48 @@ public class SQLDatabaseException extends Exception {
 	public static class ProductNotExistInCatalog extends SQLDatabaseException {
 		private static final long serialVersionUID = 3092110065622921929L;
 	}
+	
+	/**
+	 * Thrown when product already exists in catalog
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class ProductAlreadyExistInCatalog extends SQLDatabaseException {
+		private static final long serialVersionUID = 3092110065622921929L;
+	}
+	
+	/**
+	 * Thrown when try to remove product forom catalog and it is still
+	 * sold in store or warehouse
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class ProductStillForSale extends SQLDatabaseException {
+		private static final long serialVersionUID = 3092110065622921929L;
+	}
+	
+	/**
+	 * Thrown when try to do operation on non-existed cart.
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class ProductPackageNotExist extends SQLDatabaseException {
+		private static final long serialVersionUID = 3092110065622921929L;
+	}
+	
+	/**
+	 * Thrown when try to do operation that changing ProductPackage amount
+	 * and there is not enough amount for the operation 
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class ProductPackageAmountNotMatch extends SQLDatabaseException {
+		private static final long serialVersionUID = 3092110065622921929L;
+	}
 
 	/**
 	 * Thrown when worker not exist in database or password don't match
@@ -58,6 +100,26 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class WorkerAlreadyConnected extends SQLDatabaseException {
+		private static final long serialVersionUID = 1L;
+	}
+	
+	/**
+	 * Thrown when cart try to do operation before connecting
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class CartNotConnected extends SQLDatabaseException {
+		private static final long serialVersionUID = -4096975136661332560L;
+	}
+
+	/**
+	 * Thrown when cart try to connect twice
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class CartAlreadyConnected extends SQLDatabaseException {
 		private static final long serialVersionUID = 1L;
 	}
 	

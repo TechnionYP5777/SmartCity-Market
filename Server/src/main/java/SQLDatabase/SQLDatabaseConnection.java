@@ -15,6 +15,8 @@ import com.healthmarketscience.sqlbuilder.UnaryCondition;
 import com.healthmarketscience.sqlbuilder.UpdateQuery;
 import com.healthmarketscience.sqlbuilder.ValidationException;
 
+import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.ProductPackage;
 import SQLDatabase.SQLDatabaseEntities;
 import SQLDatabase.SQLDatabaseEntities.CartsListTable;
 import SQLDatabase.SQLDatabaseEntities.GroceriesListsHistoryTable;
@@ -28,9 +30,14 @@ import SQLDatabase.SQLDatabaseEntities.ProductsCatalogTable;
 import SQLDatabase.SQLDatabaseEntities.ProductsPackagesTable;
 import SQLDatabase.SQLDatabaseEntities.WorkersTable;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
+import SQLDatabase.SQLDatabaseException.CartNotConnected;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
+import SQLDatabase.SQLDatabaseException.ProductAlreadyExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
+import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
+import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
+import SQLDatabase.SQLDatabaseException.ProductStillForSale;
 import SQLDatabase.SQLDatabaseException.WorkerAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
 import static SQLDatabase.SQLQueryGenerator.generateSelectQuery1Table;
@@ -44,7 +51,7 @@ import static SQLDatabase.SQLQueryGenerator.generateUpdateQuery;
  * @since 2016-12-14
  * 
  */
-public class SQLDatabaseConnection {
+public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	/*
 	 * Database parameters
@@ -405,6 +412,13 @@ public class SQLDatabaseConnection {
 	 * ####################################################################
 	 */
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see SQLDatabase.ISQLDatabaseConnection#WorkerLogin(java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
 	public int WorkerLogin(String username, String password)
 			throws AuthenticationError, WorkerAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
 		String query = generateSelectQuery1Table(WorkersTable.table,
@@ -452,6 +466,13 @@ public class SQLDatabaseConnection {
 		return $;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see SQLDatabase.ISQLDatabaseConnection#WorkerLogout(java.lang.Integer,
+	 * java.lang.String)
+	 */
+	@Override
 	public void WorkerLogout(Integer sessionID, String username) throws WorkerNotConnected, CriticalError {
 
 		validateSessionEstablished(sessionID);
@@ -493,6 +514,13 @@ public class SQLDatabaseConnection {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see SQLDatabase.ISQLDatabaseConnection#getProductFromCatalog(java.lang.
+	 * Integer, long)
+	 */
+	@Override
 	public String getProductFromCatalog(Integer sessionID, long barcode)
 			throws ProductNotExistInCatalog, WorkerNotConnected, CriticalError {
 
@@ -548,6 +576,173 @@ public class SQLDatabaseConnection {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * SQLDatabase.ISQLDatabaseConnection#AddProductPackageToWarehouse(java.lang
+	 * .Integer, BasicCommonClasses.ProductPackage)
+	 */
+	@Override
+	public void AddProductPackageToWarehouse(Integer sessionID, ProductPackage p)
+			throws CriticalError, WorkerNotConnected {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * SQLDatabase.ISQLDatabaseConnection#RemoveProductPackageToWarehouse(java.
+	 * lang.Integer, BasicCommonClasses.ProductPackage)
+	 */
+	@Override
+	public void RemoveProductPackageToWarehouse(Integer sessionID, ProductPackage p) throws CriticalError,
+			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * SQLDatabase.ISQLDatabaseConnection#AddProductToCatalog(java.lang.Integer,
+	 * BasicCommonClasses.CatalogProduct)
+	 */
+	@Override
+	public void AddProductToCatalog(Integer sessionID, CatalogProduct productToAdd)
+			throws CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * SQLDatabase.ISQLDatabaseConnection#RemoveProductFromCatalog(java.lang.
+	 * Integer, BasicCommonClasses.CatalogProduct)
+	 */
+	@Override
+	public void RemoveProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
+			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, ProductStillForSale {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * SQLDatabase.ISQLDatabaseConnection#HardRemoveProductFromCatalog(java.lang
+	 * .Integer, BasicCommonClasses.CatalogProduct)
+	 */
+	@Override
+	public void HardRemoveProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
+			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see SQLDatabase.ISQLDatabaseConnection#UpdateProductInCatalog(java.lang.
+	 * Integer, java.lang.Long, BasicCommonClasses.CatalogProduct)
+	 */
+	@Override
+	public void UpdateProductInCatalog(Integer sessionID, Long productBarcode, CatalogProduct productToUpdate)
+			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * SQLDatabase.ISQLDatabaseConnection#AddProductToGroceryList(java.lang.
+	 * Integer, BasicCommonClasses.ProductPackage)
+	 */
+	@Override
+	public void AddProductToGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError,
+			CartNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * SQLDatabase.ISQLDatabaseConnection#RemoveProductFromGroceryList(java.lang
+	 * .Integer, BasicCommonClasses.ProductPackage)
+	 */
+	@Override
+	public void RemoveProductFromGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError,
+			CartNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * SQLDatabase.ISQLDatabaseConnection#PlaceProductPackageOnShelves(java.lang
+	 * .Integer, BasicCommonClasses.ProductPackage)
+	 */
+	@Override
+	public void PlaceProductPackageOnShelves(Integer sessionID, ProductPackage productToBuy) throws CriticalError,
+			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * SQLDatabase.ISQLDatabaseConnection#RemoveProductPackageFromShelves(java.
+	 * lang.Integer, BasicCommonClasses.ProductPackage)
+	 */
+	@Override
+	public void RemoveProductPackageFromShelves(Integer sessionID, ProductPackage productToBuy) throws CriticalError,
+			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * SQLDatabase.ISQLDatabaseConnection#GetProductPackageAmonutOnShelves(java.
+	 * lang.Integer, BasicCommonClasses.ProductPackage)
+	 */
+	@Override
+	public int GetProductPackageAmonutOnShelves(Integer sessionID, ProductPackage productToBuy)
+			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
+
+		return sessionID;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * SQLDatabase.ISQLDatabaseConnection#GetProductPackageAmonutInWarehouse(
+	 * java.lang.Integer, BasicCommonClasses.ProductPackage)
+	 */
+	@Override
+	public int GetProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage productToBuy)
+			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
+
+		return sessionID;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see SQLDatabase.ISQLDatabaseConnection#cartCheckout(java.lang.Integer)
+	 */
+	@Override
+	public void cartCheckout(Integer cartID) throws CriticalError, CartNotConnected {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see SQLDatabase.ISQLDatabaseConnection#close()
+	 */
+	@Override
 	public void close() throws CriticalError {
 		try {
 			connection.close();
