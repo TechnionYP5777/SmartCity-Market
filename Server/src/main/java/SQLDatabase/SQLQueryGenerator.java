@@ -1,6 +1,7 @@
 package SQLDatabase;
 
 import com.healthmarketscience.sqlbuilder.Condition;
+import com.healthmarketscience.sqlbuilder.DeleteQuery;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
 import com.healthmarketscience.sqlbuilder.UpdateQuery;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
@@ -101,6 +102,25 @@ class SQLQueryGenerator {
 			$.addCondition(cs[¢]);
 
 		return $;
+
+	}
+	
+	/**
+	 * Generate string of delete query
+	 * 
+	 * @param tabel
+	 *            The table to select
+	 * @param cs
+	 *            Set of conditions
+	 * @return string of select query.
+	 */
+	public static String generateDeleteQuery(DbTable tabel, Condition... cs) {
+		DeleteQuery $ = new DeleteQuery(WorkersTable.table);
+
+		for (int ¢ = 0; ¢ < cs.length; ++¢)
+			$.addCondition(cs[¢]);
+
+		return $.validate() + "";
 
 	}
 
