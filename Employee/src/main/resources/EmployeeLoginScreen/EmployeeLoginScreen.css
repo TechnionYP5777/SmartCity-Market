@@ -1,5 +1,5 @@
 .root {
-   -fx-background-image: url("login.gif");
+   -fx-background-image: url("loginScreenBackground.gif");
    -fx-background-size: cover;
 }
 

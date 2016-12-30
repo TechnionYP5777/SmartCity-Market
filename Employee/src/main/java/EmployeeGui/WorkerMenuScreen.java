@@ -9,6 +9,7 @@ import BasicCommonClasses.Location;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
+import EmployeeCommon.TempWorkerPassingData;
 import EmployeeContracts.IWorker;
 import EmployeeDefs.AEmployeeExceptions.AmountBiggerThanAvailable;
 import EmployeeDefs.AEmployeeExceptions.CriticalError;
@@ -59,7 +60,7 @@ public class WorkerMenuScreen implements Initializable {
 	@FXML
 	Button searchBarcode;
 
-	// Add product package controls
+	// edit product package controls
 	@FXML
 	VBox addProductPackagePane;
 
@@ -96,6 +97,7 @@ public class WorkerMenuScreen implements Initializable {
 			enableRunTheOperationButton();
 		});
 		editPackagesDatePicker.setValue(LocalDate.now());
+		worker = TempWorkerPassingData.worker;
 	}
 
 	private void enableSearchBarcodeButtonCheck() {

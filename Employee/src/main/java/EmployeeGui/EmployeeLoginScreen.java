@@ -3,6 +3,7 @@ package EmployeeGui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import EmployeeCommon.TempWorkerPassingData;
 import EmployeeContracts.IWorker;
 import EmployeeDI.WorkerDiConfigurator;
 import EmployeeDefs.AEmployeeExceptions.AuthenticationError;
@@ -63,6 +64,7 @@ public class EmployeeLoginScreen implements Initializable {
 			enableLoginButtonCheck();
 		});
 		enableLoginButtonCheck();
+		TempWorkerPassingData.worker = null;
 	}
 
 	@FXML
@@ -89,6 +91,7 @@ public class EmployeeLoginScreen implements Initializable {
 						EmployeeGuiDefs.wrongUserNamePasswordFailureMessage);
 				return;
 			}
+			TempWorkerPassingData.worker = worker;
 			AbstractApplicationScreen.setScene("/WorkerMenuScreen/WorkerMenuScreen.fxml");
 
 		} else {
