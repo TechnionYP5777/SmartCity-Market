@@ -11,16 +11,9 @@ import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import EmployeeCommon.TempWorkerPassingData;
 import EmployeeContracts.IWorker;
-import EmployeeDefs.AEmployeeException.AmountBiggerThanAvailable;
-import EmployeeDefs.AEmployeeException.CriticalError;
-import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
-import EmployeeDefs.AEmployeeException.InvalidParameter;
-import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
-import EmployeeDefs.AEmployeeException.ProductPackageDoesNotExist;
-import EmployeeDefs.AEmployeeException.UnknownSenderID;
-import EmployeeDefs.EmployeeGuiDefs;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
+import SMExceptions.SMException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -113,24 +106,9 @@ public class WorkerMenuScreen implements Initializable {
 		CatalogProduct catalogProduct = null;
 		try {
 			catalogProduct = worker.viewProductFromCatalog(Integer.parseInt(barcodeTextField.getText()));
-		} catch (NumberFormatException e) {
-			// TODO
+		} catch (SMException e){
+			EmployeeGuiExeptionHandler.handle(e);
 			e.printStackTrace();
-		} catch (InvalidParameter e) {
-			// TODO
-			e.printStackTrace();
-		} catch (UnknownSenderID e) {
-			// TODO
-			e.printStackTrace();
-		} catch (CriticalError e) {
-			// TODO
-			e.printStackTrace();
-		} catch (EmployeeNotConnected e) {
-			// TODO
-			e.printStackTrace();
-		} catch (ProductNotExistInCatalog e) {
-			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.viewProductFailed, null,
-					EmployeeGuiDefs.productNotExistsInCatalog);
 		}
 		if (catalogProduct == null) {
 			return;
@@ -205,29 +183,8 @@ public class WorkerMenuScreen implements Initializable {
 				worker.removeProductPackageFromStore(productPackage);
 			}
 
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidParameter e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnknownSenderID e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CriticalError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (EmployeeNotConnected e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ProductNotExistInCatalog e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (AmountBiggerThanAvailable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ProductPackageDoesNotExist e) {
-			// TODO Auto-generated catch block
+		} catch (SMException e){
+			EmployeeGuiExeptionHandler.handle(e);
 			e.printStackTrace();
 		}
 	}
@@ -236,20 +193,11 @@ public class WorkerMenuScreen implements Initializable {
 	private void logoutButtonPressed(ActionEvent event) {
 		try {
 			worker.logout();
-		} catch (InvalidParameter e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnknownSenderID e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CriticalError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (EmployeeNotConnected e) {
-			// TODO Auto-generated catch block
+		} catch (SMException e){
+			EmployeeGuiExeptionHandler.handle(e);
 			e.printStackTrace();
 		}
-		
+
 		AbstractApplicationScreen.setScene("/EmployeeMainScreen/EmployeeLoginScreen.fxml");
 	}
 

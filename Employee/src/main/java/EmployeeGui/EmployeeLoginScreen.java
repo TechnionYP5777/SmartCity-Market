@@ -6,14 +6,9 @@ import java.util.ResourceBundle;
 import EmployeeCommon.TempWorkerPassingData;
 import EmployeeContracts.IWorker;
 import EmployeeDI.WorkerDiConfigurator;
-import EmployeeDefs.AEmployeeException.AuthenticationError;
-import EmployeeDefs.AEmployeeException.CriticalError;
-import EmployeeDefs.AEmployeeException.EmployeeAlreadyConnected;
-import EmployeeDefs.AEmployeeException.InvalidParameter;
-import EmployeeDefs.EmployeeGuiDefs;
 import EmployeeImplementations.Worker;
 import GuiUtils.AbstractApplicationScreen;
-import GuiUtils.DialogMessagesService;
+import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -78,17 +73,8 @@ public class EmployeeLoginScreen implements Initializable {
 			IWorker worker = InjectionFactory.getInstance(Worker.class, new WorkerDiConfigurator());
 			try {
 				worker.login(username, password);
-			} catch (InvalidParameter e) {
-				// TODO
-			} catch (CriticalError e) {
-				// TODO
-			} catch (EmployeeAlreadyConnected e) {
-				DialogMessagesService.showErrorDialog(EmployeeGuiDefs.loginFailureDialogTitle, null,
-						EmployeeGuiDefs.userAlreadyConnectedFailureMessage);
-				return;
-			} catch (AuthenticationError e) {
-				DialogMessagesService.showErrorDialog(EmployeeGuiDefs.loginFailureDialogTitle, null,
-						EmployeeGuiDefs.wrongUserNamePasswordFailureMessage);
+			} catch (SMException e){
+				EmployeeGuiExeptionHandler.handle(e);
 				return;
 			}
 			TempWorkerPassingData.worker = worker;

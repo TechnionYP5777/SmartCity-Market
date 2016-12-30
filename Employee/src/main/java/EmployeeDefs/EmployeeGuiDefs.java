@@ -14,7 +14,7 @@ public class EmployeeGuiDefs {
 //	final public static String userAlreadyConnectedFailureMessage = "The user is already connected.";
 	//TODO : (by idan to shimon) i think this case is for critical error, what do you say?
 	
-	final public static String wrongUserNamePasswordFailureMsg = "Wrong userName or password.";
+	final public static String wrongUserNamePasswordFailureMsg = "Wrong user name or password.";
 		
 	final public static String productNotExistsInCatalogMsg = "Could not find this product.";
 	
@@ -26,6 +26,6 @@ public class EmployeeGuiDefs {
 	
 	final public static String productPackageDoesNotExistMsg = "There is no such product package!";
 	
-	final public static String criticalErrorMsg = "Something went really wrong. Please contact SmartMarket support at smart.market.cs@gmail.com";
+	final public static String criticalErrorMsg = "Please contact SmartMarket support at smart.market.cs@gmail.com";
 
 }
