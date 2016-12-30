@@ -1,13 +1,13 @@
 package EmployeeContracts;
 
 import BasicCommonClasses.ProductPackage;
-import EmployeeDefs.AEmployeeExceptions.CriticalError;
-import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
-import EmployeeDefs.AEmployeeExceptions.ProductAlreadyExistInCatalog;
-import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
-import EmployeeDefs.AEmployeeExceptions.ProductStillForSale;
-import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
-import EmployeeDefs.AEmployeeExceptions.EmployeeNotConnected;
+import EmployeeDefs.AEmployeeException.CriticalError;
+import EmployeeDefs.AEmployeeException.InvalidParameter;
+import EmployeeDefs.AEmployeeException.ProductAlreadyExistInCatalog;
+import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
+import EmployeeDefs.AEmployeeException.ProductStillForSale;
+import EmployeeDefs.AEmployeeException.UnknownSenderID;
+import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 
 /** IManager - This interface represent the manager functionality which is a worker.
  * 

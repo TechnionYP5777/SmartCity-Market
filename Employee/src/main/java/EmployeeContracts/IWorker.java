@@ -4,15 +4,15 @@ import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.ProductPackage;
 import CommonDefs.CLIENT_TYPE;
-import EmployeeDefs.AEmployeeExceptions.AmountBiggerThanAvailable;
-import EmployeeDefs.AEmployeeExceptions.AuthenticationError;
-import EmployeeDefs.AEmployeeExceptions.CriticalError;
-import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
-import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
-import EmployeeDefs.AEmployeeExceptions.ProductPackageDoesNotExist;
-import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
-import EmployeeDefs.AEmployeeExceptions.EmployeeAlreadyConnected;
-import EmployeeDefs.AEmployeeExceptions.EmployeeNotConnected;
+import EmployeeDefs.AEmployeeException.AmountBiggerThanAvailable;
+import EmployeeDefs.AEmployeeException.AuthenticationError;
+import EmployeeDefs.AEmployeeException.CriticalError;
+import EmployeeDefs.AEmployeeException.InvalidParameter;
+import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
+import EmployeeDefs.AEmployeeException.ProductPackageDoesNotExist;
+import EmployeeDefs.AEmployeeException.UnknownSenderID;
+import EmployeeDefs.AEmployeeException.EmployeeAlreadyConnected;
+import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 
 /** IWorker - This interface represent the Worker client functionality.
  * 

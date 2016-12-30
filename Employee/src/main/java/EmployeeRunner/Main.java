@@ -12,13 +12,13 @@ import com.google.inject.Injector;
 import BasicCommonClasses.CatalogProduct;
 import EmployeeContracts.IWorker;
 import EmployeeDI.WorkerDiConfigurator;
-import EmployeeDefs.AEmployeeExceptions.AuthenticationError;
-import EmployeeDefs.AEmployeeExceptions.CriticalError;
-import EmployeeDefs.AEmployeeExceptions.InvalidParameter;
-import EmployeeDefs.AEmployeeExceptions.ProductNotExistInCatalog;
-import EmployeeDefs.AEmployeeExceptions.UnknownSenderID;
-import EmployeeDefs.AEmployeeExceptions.EmployeeAlreadyConnected;
-import EmployeeDefs.AEmployeeExceptions.EmployeeNotConnected;
+import EmployeeDefs.AEmployeeException.AuthenticationError;
+import EmployeeDefs.AEmployeeException.CriticalError;
+import EmployeeDefs.AEmployeeException.InvalidParameter;
+import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
+import EmployeeDefs.AEmployeeException.UnknownSenderID;
+import EmployeeDefs.AEmployeeException.EmployeeAlreadyConnected;
+import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeImplementations.Worker;
 
 /**
