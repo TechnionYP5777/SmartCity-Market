@@ -1,12 +1,14 @@
 package EmployeeDefs;
 
+import SMExceptions.SMException;
+
 /**
  * This class define all the Exceptions {@link AEmployee} could throw.
  * 
  * @author Aviad Cohen
  * @since 2016-12-26
  */
-public class AEmployeeException extends Exception {
+public class AEmployeeException extends SMException {
 
 	private static final long serialVersionUID = 8663454971017928972L;
 
