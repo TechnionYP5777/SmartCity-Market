@@ -988,7 +988,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * Integer, java.lang.Long, BasicCommonClasses.CatalogProduct)
 	 */
 	@Override
-	public void updateProductInCatalog(Integer sessionID, Long productBarcode, CatalogProduct productToUpdate)
+	public void editProductInCatalog(Integer sessionID, Long productBarcode, CatalogProduct productToUpdate)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
 	}
 
@@ -1124,6 +1124,27 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			e.printStackTrace();
 			throw new SQLDatabaseException.CriticalError();
 		}
+	}
+
+	@Override
+	public int addManufacturer(Integer sessionID, String manufacturerName)
+			throws CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void removeManufacturer(Integer sessionID, int manufacturerID)
+			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, ProductStillForSale {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void editManufacturer(Integer sessionID, int manufacturerID, String newManufacturerName)
+			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
