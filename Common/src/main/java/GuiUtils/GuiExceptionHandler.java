@@ -1,5 +1,6 @@
 package GuiUtils;
 
+import SMExceptions.NotImplementedError;
 import SMExceptions.SMException;
 
 /**
@@ -12,5 +13,7 @@ import SMExceptions.SMException;
 
 public abstract class GuiExceptionHandler {
 
-	public abstract void handle(SMException e);
+	static public void handle(SMException e) throws NotImplementedError{
+		throw new NotImplementedError();
+	}
 }
