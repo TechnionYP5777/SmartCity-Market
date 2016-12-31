@@ -6,6 +6,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
 import SQLDatabase.SQLDatabaseStrings.CARTS_LIST_TABLE;
+import SQLDatabase.SQLDatabaseStrings.FREE_IDS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.GROCERIES_LISTS_HISTORY_TABLE;
 import SQLDatabase.SQLDatabaseStrings.GROCERIES_LISTS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.INGREDIENTS_TABLE;
@@ -210,6 +211,20 @@ class SQLDatabaseEntities {
 		static DbColumn isLoggedInCol;
 		static DbColumn sessionIDCol;
 	}
+	
+	/**
+	 * This class contains all the free id's in all the table
+	 * (when removing row - the id will go here) 
+	 * 
+	 * @author noam
+	 *
+	 */
+	static class FreeIDsTable {
+		static DbTable table;
+
+		static DbColumn IDCol;
+		static DbColumn fromTableNameCol;
+	}
 
 	/**
 	 * the method is called in the first run of the program. the method assigns
@@ -369,6 +384,14 @@ class SQLDatabaseEntities {
 				null);
 		WorkersTable.workerPrivilegesCol = WorkersTable.table.addColumn(WORKERS_TABLE.ATTR_WORKER_PRIVILEGES,
 				TYPE_INTEGER, null);
+		
+		/*
+		 * initialize the Free IDs Table
+		 */
+		FreeIDsTable.table = databaseSchema.addTable(FREE_IDS_TABLE.FREE_IDS_TABLE);
+		FreeIDsTable.IDCol = FreeIDsTable.table.addColumn(FREE_IDS_TABLE.ATTR_ID, TYPE_ID, null);
+		FreeIDsTable.fromTableNameCol = FreeIDsTable.table.addColumn(FREE_IDS_TABLE.ATTR_FROM_TABLE_NAME, TYPE_TEXT,
+				null);
 
 	}
 

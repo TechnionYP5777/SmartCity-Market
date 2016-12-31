@@ -23,6 +23,7 @@ import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.ProductPackage;
 import SQLDatabase.SQLDatabaseEntities;
 import SQLDatabase.SQLDatabaseEntities.CartsListTable;
+import SQLDatabase.SQLDatabaseEntities.FreeIDsTable;
 import SQLDatabase.SQLDatabaseEntities.GroceriesListsHistoryTable;
 import SQLDatabase.SQLDatabaseEntities.GroceriesListsTable;
 import SQLDatabase.SQLDatabaseEntities.IngredientsTable;
@@ -157,6 +158,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			createTableString = new CreateTableQuery(CartsListTable.table, true).validate() + "";
 			statement.executeUpdate(createTableString);
 			createTableString = new CreateTableQuery(WorkersTable.table, true).validate() + "";
+			statement.executeUpdate(createTableString);
+			createTableString = new CreateTableQuery(FreeIDsTable.table, true).validate() + "";
 			statement.executeUpdate(createTableString);
 
 		} catch (SQLException e) {

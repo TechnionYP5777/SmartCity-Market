@@ -171,5 +171,17 @@ public class SQLDatabaseStrings {
 		public static final Integer VALUE_PRIVILEGE_MANAGER = 1;
 		public static final Integer VALUE_PRIVILEGE_WORKER = 4;
 	}
+	
+	/*
+	 * FREE IDs TABLE
+	 */
+	public static class FREE_IDS_TABLE {
+		// table name
+		public static final String FREE_IDS_TABLE = "FreeIDsTable";
+
+		// table attributes
+		public static final String ATTR_ID = "ID";
+		public static final String ATTR_FROM_TABLE_NAME = "FromTableName";
+	}
 
 }
