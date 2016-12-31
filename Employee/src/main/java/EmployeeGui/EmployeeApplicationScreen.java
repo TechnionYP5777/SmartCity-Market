@@ -1,5 +1,7 @@
 package EmployeeGui;
 
+import org.apache.log4j.PropertyConfigurator;
+
 import GuiUtils.AbstractApplicationScreen;
 import javafx.stage.Stage;
 
@@ -27,6 +29,9 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 	}
 
 	public static void main(String[] args) {
+		/* Setting log properties */
+		PropertyConfigurator.configure("../log4j.properties");
+		
 		launch(args);
 	}
 
