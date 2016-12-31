@@ -16,8 +16,11 @@ import com.healthmarketscience.sqlbuilder.SelectQuery;
 import com.healthmarketscience.sqlbuilder.UnaryCondition;
 import com.healthmarketscience.sqlbuilder.UpdateQuery;
 import com.healthmarketscience.sqlbuilder.ValidationException;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.ProductPackage;
 import SQLDatabase.SQLDatabaseEntities;
 import SQLDatabase.SQLDatabaseEntities.CartsListTable;
@@ -542,7 +545,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 	
 	private int getAmountForStore(ProductPackage p, String placeCol) 
-			throws CriticalError, ProductPackageNotExist{
+			throws CriticalError{
 		String selectQuery = generateSelectQuery1Table(ProductsPackagesTable.table,
 				BinaryCondition.equalTo(ProductsPackagesTable.barcodeCol, PARAM_MARK),
 				BinaryCondition.equalTo(ProductsPackagesTable.placeInStoreCol, PARAM_MARK),
@@ -696,11 +699,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			}
 	}
 	
-	private boolean isProductExistInCatalog(long barcode) throws CriticalError{
-		String prodctsTableQuery = generateSelectQuery1Table(ProductsCatalogTable.table,
-				BinaryCondition.equalTo(ProductsCatalogTable.barcodeCol, PARAM_MARK));
+	private boolean isSuchRowExist(DbTable t, DbColumn column, Object value) 
+			throws CriticalError{
+		String prodctsTableQuery = generateSelectQuery1Table(t,
+				BinaryCondition.equalTo(column, PARAM_MARK));
 
-		PreparedStatement productStatement = getParameterizedReadQuery(prodctsTableQuery, Long.valueOf(barcode));
+		PreparedStatement productStatement = getParameterizedReadQuery(prodctsTableQuery, value);
 
 		ResultSet productResult = null;
 		try {
@@ -714,6 +718,18 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		
 		//if somehow we got here - bad and throw exception
 		throw new CriticalError();
+	}
+	
+	private boolean isProductExistInCatalog(Long barcode) 
+			throws CriticalError{
+		return isSuchRowExist(ProductsCatalogTable.table,
+				ProductsCatalogTable.barcodeCol, barcode);
+	}
+	
+	private boolean isManufacturerExist(Integer manufacturerID) 
+			throws CriticalError{
+		return isSuchRowExist(ManufacturerTable.table,
+				ManufacturerTable.manufacturerIDCol, manufacturerID);
 	}
 
 	/**
@@ -917,11 +933,24 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			ProductPackageAmountNotMatch, ProductPackageNotExist {
 		validateSessionEstablished(sessionID);
 		
-		if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
-			throw new ProductNotExistInCatalog();
 		
-		moveProductPackage(sessionID, null, LOCATIONS_TYPES.WAREHOUSE, 
-				p, p.getAmount());
+		try {
+			// START transaction
+			connection.setAutoCommit(false);
+			if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
+				throw new ProductNotExistInCatalog();
+			
+			moveProductPackage(sessionID, null, LOCATIONS_TYPES.WAREHOUSE, 
+					p, p.getAmount());
+			
+			// END transaction
+			connection.commit();
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		}
+
 		
 	}
 
@@ -938,11 +967,21 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		
 		validateSessionEstablished(sessionID);
 		
-		if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
-			throw new ProductNotExistInCatalog();
-		
-		moveProductPackage(sessionID, LOCATIONS_TYPES.WAREHOUSE, null, 
-				p, p.getAmount());
+		try {
+			// START transaction
+			connection.setAutoCommit(false);
+			if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
+				throw new ProductNotExistInCatalog();
+			
+			moveProductPackage(sessionID, LOCATIONS_TYPES.WAREHOUSE, null, 
+					p, p.getAmount());
+			// END transaction
+			connection.commit();
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		}
 	}
 
 	/*
@@ -1003,13 +1042,21 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public void addProductToGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError,
 			CartNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
 		
-		//validateSessionEstablished(cartID);
-		
-		if (!isProductExistInCatalog(productToBuy.getSmartCode().getBarcode()))
-			throw new ProductNotExistInCatalog();
-		
-		moveProductPackage(cartID, LOCATIONS_TYPES.STORE, LOCATIONS_TYPES.CART, 
-				productToBuy, productToBuy.getAmount());
+		try {
+			// START transaction
+			connection.setAutoCommit(false);
+			if (!isProductExistInCatalog(productToBuy.getSmartCode().getBarcode()))
+				throw new ProductNotExistInCatalog();
+			
+			moveProductPackage(cartID, LOCATIONS_TYPES.STORE, LOCATIONS_TYPES.CART, 
+					productToBuy, productToBuy.getAmount());
+			// END transaction
+			connection.commit();
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		}
 
 	}
 
@@ -1024,13 +1071,21 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public void removeProductFromGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError,
 			CartNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
 
-		//validateSessionEstablished(cartID);
-		
-		if (!isProductExistInCatalog(productToBuy.getSmartCode().getBarcode()))
-			throw new ProductNotExistInCatalog();
-		
-		moveProductPackage(cartID, LOCATIONS_TYPES.CART, LOCATIONS_TYPES.STORE, 
-				productToBuy, productToBuy.getAmount());
+		try {
+			// START transaction
+			connection.setAutoCommit(false);		
+			if (!isProductExistInCatalog(productToBuy.getSmartCode().getBarcode()))
+				throw new ProductNotExistInCatalog();
+			
+			moveProductPackage(cartID, LOCATIONS_TYPES.CART, LOCATIONS_TYPES.STORE, 
+					productToBuy, productToBuy.getAmount());
+			// END transaction
+			connection.commit();
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		}
 	}
 
 	/*
@@ -1046,11 +1101,21 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		validateSessionEstablished(sessionID);
 		
-		if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
-			throw new ProductNotExistInCatalog();
-		
-		moveProductPackage(sessionID, LOCATIONS_TYPES.WAREHOUSE, LOCATIONS_TYPES.STORE, 
-				p, p.getAmount());
+		try {
+			// START transaction
+			connection.setAutoCommit(false);
+			if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
+				throw new ProductNotExistInCatalog();
+			
+			moveProductPackage(sessionID, LOCATIONS_TYPES.WAREHOUSE, LOCATIONS_TYPES.STORE, 
+					p, p.getAmount());
+			// END transaction
+			connection.commit();
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		}
 	}
 
 	/*
@@ -1065,12 +1130,21 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
 
 		validateSessionEstablished(sessionID);
-		
-		if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
-			throw new ProductNotExistInCatalog();
-		
-		moveProductPackage(sessionID, LOCATIONS_TYPES.STORE, null, 
+		try {
+			// START transaction
+			connection.setAutoCommit(false);
+			if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
+				throw new ProductNotExistInCatalog();
+			
+			moveProductPackage(sessionID, LOCATIONS_TYPES.STORE, null, 
 				p, p.getAmount());
+			// END transaction
+			connection.commit();
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		}
 	}
 
 	/*
@@ -1081,10 +1155,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * lang.Integer, BasicCommonClasses.ProductPackage)
 	 */
 	@Override
-	public int getProductPackageAmonutOnShelves(Integer sessionID, ProductPackage productToBuy)
+	public int getProductPackageAmonutOnShelves(Integer sessionID, ProductPackage product)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
 
-		return sessionID;
+		validateSessionEstablished(sessionID);
+
+		return getAmountForStore(product, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
 	}
 
 	/*
@@ -1095,10 +1171,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * java.lang.Integer, BasicCommonClasses.ProductPackage)
 	 */
 	@Override
-	public int getProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage productToBuy)
+	public int getProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage product)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
 
-		return sessionID;
+		validateSessionEstablished(sessionID);
+
+		return getAmountForStore(product, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
 	}
 
 	/*
