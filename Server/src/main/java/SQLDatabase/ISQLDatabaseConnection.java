@@ -1,10 +1,13 @@
 package SQLDatabase;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.ProductPackage;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CartNotConnected;
 import SQLDatabase.SQLDatabaseException.CriticalError;
+import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
+import SQLDatabase.SQLDatabaseException.ManufacturerStillUsed;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductAlreadyExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
@@ -43,13 +46,13 @@ public interface ISQLDatabaseConnection {
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
 	
 	int addManufacturer(Integer sessionID, String manufacturerName)
-			throws CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog;
+			throws CriticalError, WorkerNotConnected;
 
-	void removeManufacturer(Integer sessionID, int manufacturerID)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, ProductStillForSale;
+	void removeManufacturer(Integer sessionID, Manufacturer m)
+			throws CriticalError, WorkerNotConnected,  ManufacturerNotExist, ManufacturerStillUsed;
 
-	void editManufacturer(Integer sessionID, int manufacturerID, String newManufacturerName)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
+	void editManufacturer(Integer sessionID, Manufacturer newManufacturer)
+			throws CriticalError, WorkerNotConnected, ManufacturerNotExist;
 
 	void addProductToGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError, CartNotConnected,
 			ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
@@ -72,5 +75,7 @@ public interface ISQLDatabaseConnection {
 	void cartCheckout(Integer cartID) throws CriticalError, CartNotConnected;
 
 	void close() throws CriticalError;
+
+	
 
 }

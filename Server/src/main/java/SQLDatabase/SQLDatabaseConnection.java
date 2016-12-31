@@ -10,6 +10,7 @@ import java.util.Random;
 
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
 import com.healthmarketscience.sqlbuilder.CreateTableQuery;
+import com.healthmarketscience.sqlbuilder.FunctionCall;
 import com.healthmarketscience.sqlbuilder.InsertQuery;
 import com.healthmarketscience.sqlbuilder.JdbcEscape;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
@@ -20,6 +21,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.ProductPackage;
 import SQLDatabase.SQLDatabaseEntities;
 import SQLDatabase.SQLDatabaseEntities.CartsListTable;
@@ -40,6 +42,8 @@ import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductAlreadyExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
+import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
+import SQLDatabase.SQLDatabaseException.ManufacturerStillUsed;
 import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
@@ -281,6 +285,99 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		throw new NumberOfConnectionsExceeded();
 
 	}
+	
+	/**
+	 * Allocate new ID for new row.
+	 * 
+	 * @param t The table you want to insert new row in it
+	 * @param c The ID column of that table
+	 * @return
+	 * @throws CriticalError 
+	 */
+	private int allocateIDToTable(DbTable t, DbColumn c) 
+			throws CriticalError{
+		
+		//search for free id
+		String selectId = generateSelectQuery1Table(FreeIDsTable.table,
+				BinaryCondition.equalTo(FreeIDsTable.fromTableNameCol, PARAM_MARK));
+		
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		ResultSet maxIDResult = null;
+		try {
+			statement = getParameterizedReadQuery(selectId,
+					t.getName());
+			
+			result = statement.executeQuery();
+			int retID;
+			
+			if (!isResultSetEmpty(result)){
+				//return id from free_ids_table
+				result.first();
+				retID = result.getInt(FreeIDsTable.IDCol.getColumnNameSQL());
+				
+				//delete that id		    
+				getParameterizedQuery(
+					generateDeleteQuery(FreeIDsTable.table,
+							BinaryCondition.equalTo(FreeIDsTable.fromTableNameCol, PARAM_MARK),
+							BinaryCondition.equalTo(FreeIDsTable.IDCol, PARAM_MARK)),
+					t.getName(), retID).executeUpdate();	
+			} else {
+				//find max id and return the next number
+				String maxIDQuery = new SelectQuery()
+						.addCustomColumns(FunctionCall.max().addColumnParams(c))
+						.validate() + "";
+				
+				maxIDResult = getParameterizedReadQuery(maxIDQuery,
+						t.getName()).executeQuery();
+				
+				//if the table is empty - return 1
+				if (isResultSetEmpty(result))
+					retID = 1;
+				else {
+					maxIDResult.first();
+					retID = maxIDResult.getInt(1) + 1;
+				}
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		} finally {
+			closeResources(statement, result, maxIDResult);
+		}
+		
+		return 0;
+		
+	}
+	
+	/**
+	 * Free ID when removing row.
+	 * 
+	 * @param t The table you want to remove row from it.
+	 * @param col The ID column of that table
+	 * @return
+	 * @throws CriticalError 
+	 */
+	private void freeIDOfTable(DbTable t, Integer idToFree) 
+			throws CriticalError{
+		String insertQuery = new InsertQuery(FreeIDsTable.table)
+	      .addColumn(FreeIDsTable.fromTableNameCol, PARAM_MARK)
+	      .addColumn(FreeIDsTable.IDCol, PARAM_MARK)
+	      .validate() + "";	    
+	    
+		PreparedStatement statement = getParameterizedQuery(insertQuery, t.getName(), idToFree);
+
+		try {
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		} finally {
+			closeResources(statement);
+		}
+
+	}
 
 	/**
 	 * Validate if the worker login the system
@@ -333,7 +430,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		if (username == null)
 			return true;
 
-		ResultSet result;
+		ResultSet result = null;
 		try {
 			result = getParameterizedQuery(generateSelectQuery1Table(WorkersTable.table,
 					BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK)), username).executeQuery();
@@ -347,6 +444,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new CriticalError();
+		} finally {
+			closeResources(result);
 		}
 
 	}
@@ -1208,23 +1307,108 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	@Override
 	public int addManufacturer(Integer sessionID, String manufacturerName)
-			throws CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog {
-		// TODO Auto-generated method stub
-		return 0;
+			throws CriticalError, WorkerNotConnected {
+		
+		validateSessionEstablished(sessionID);
+		
+		int $;
+		try {
+			// START transaction
+			connection.setAutoCommit(false);
+			$ = allocateIDToTable(ManufacturerTable.table, 
+					ManufacturerTable.manufacturerIDCol);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		}
+		
+		
+		String insertQuery = new InsertQuery(ManufacturerTable.table)
+	    	      .addColumn(ManufacturerTable.manufacturerIDCol, PARAM_MARK)
+	    	      .addColumn(ManufacturerTable.manufacturerNameCol, PARAM_MARK)
+	    	      .validate() + "";
+	    
+	    insertQuery.hashCode();
+		    
+		try {
+			getParameterizedQuery(insertQuery, $, manufacturerName).executeUpdate();
+			
+			//END transaction
+			connection.commit();
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			//if the creation failed - free the id
+			freeIDOfTable(ManufacturerTable.table, $);
+		}
+		
+		return $;
 	}
 
 	@Override
-	public void removeManufacturer(Integer sessionID, int manufacturerID)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, ProductStillForSale {
-		// TODO Auto-generated method stub
+	public void removeManufacturer(Integer sessionID, Manufacturer m)
+			throws CriticalError, WorkerNotConnected, 
+			ManufacturerNotExist, ManufacturerStillUsed {
+		validateSessionEstablished(sessionID);
+		
+		try {
+			// START transaction
+			connection.setAutoCommit(false);
+			if (!isManufacturerExist((int) m.getId()))
+				throw new ManufacturerNotExist();
+			
+			//if the manufacturer still used in catalog - throw exception
+			if (isSuchRowExist(ProductsCatalogTable.table, 
+					ProductsCatalogTable.manufacturerIDCol, (Long) m.getId()))
+				throw new ManufacturerStillUsed();
+			
+		    //delete manufacturer
+			getParameterizedQuery(generateDeleteQuery(ManufacturerTable.table,
+				BinaryCondition.equalTo(ManufacturerTable.manufacturerIDCol, PARAM_MARK)),
+				m.getId()).executeUpdate();
+			
+			freeIDOfTable(ManufacturerTable.table, (int) m.getId());
+			
+			//END transaction
+			connection.commit();
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
 		
 	}
 
 	@Override
-	public void editManufacturer(Integer sessionID, int manufacturerID, String newManufacturerName)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
-		// TODO Auto-generated method stub
+	public void editManufacturer(Integer sessionID, Manufacturer newManufacturer)
+			throws CriticalError, WorkerNotConnected, ManufacturerNotExist {
+		validateSessionEstablished(sessionID);
+		
+		try {
+			// START transaction
+			connection.setAutoCommit(false);
+			if (!isManufacturerExist((int) newManufacturer.getId()))
+				throw new ManufacturerNotExist();
+			
+			
+		    //update manufacturer
+			UpdateQuery updateQuery = generateUpdateQuery(ManufacturerTable.table,
+					BinaryCondition.equalTo(ManufacturerTable.manufacturerIDCol, PARAM_MARK));
+			
+			
+			updateQuery.addSetClause(ManufacturerTable.manufacturerNameCol, 
+					PARAM_MARK).validate();
+
+			getParameterizedQuery(updateQuery + "", 
+					newManufacturer.getId(),newManufacturer.getName()).executeUpdate();
+			
+			//END transaction
+			connection.commit();
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
+
 
 }

@@ -72,6 +72,26 @@ public class SQLDatabaseException extends Exception {
 	public static class ProductPackageAmountNotMatch extends SQLDatabaseException {
 		private static final long serialVersionUID = 3092110065622921929L;
 	}
+	
+	/**
+	 * Thrown when try to do operation on non-existed manufacturer.
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class ManufacturerNotExist extends SQLDatabaseException {
+		private static final long serialVersionUID = 3092110065622921929L;
+	}
+	
+	/**
+	 * Thrown when try to remove manufacturer that still used in the system
+	 *  
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class ManufacturerStillUsed extends SQLDatabaseException {
+		private static final long serialVersionUID = 3092110065622921929L;
+	}
 
 	/**
 	 * Thrown when worker not exist in database or password don't match
