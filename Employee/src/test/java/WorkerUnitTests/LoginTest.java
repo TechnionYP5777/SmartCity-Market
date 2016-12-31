@@ -15,6 +15,7 @@ import BasicCommonClasses.Login;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
+import CommonDefs.CLIENT_TYPE;
 import EmployeeContracts.IWorker;
 import EmployeeDefs.AEmployeeException.AuthenticationError;
 import EmployeeDefs.AEmployeeException.CriticalError;
@@ -29,6 +30,7 @@ import UtilsImplementations.Serialization;
 public class LoginTest {
 
 	private IWorker worker;
+	private  CLIENT_TYPE clType;
 
 	@Mock
 	private IClientRequestHandler clientRequestHandler;
@@ -44,20 +46,20 @@ public class LoginTest {
 			Mockito.when(
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
 							CommandDescriptor.LOGIN, Serialization.serialize(new Login("test", "test"))).serialize())))
-					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, CLIENT_TYPE.WORKER.serialize()).serialize());
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail();
 		}
 		try {
-			worker.login("test", "test");
+			clType = worker.login("test", "test");
 		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected | AuthenticationError e) {
 			e.printStackTrace();
 			fail();
 		}
-		
 		assertEquals("test", worker.getWorkerLoginDetails().getUserName());
 		assertEquals("test", worker.getWorkerLoginDetails().getPassword());
+		assertEquals(clType, CLIENT_TYPE.WORKER);
 	}
 
 	@Test

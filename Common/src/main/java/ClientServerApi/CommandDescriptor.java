@@ -33,6 +33,7 @@ public enum CommandDescriptor {
 
 	/******************************************** Connection **********************************************/
 
+	//TODO: Aviad + Lior: Decide what the server returns in data in case of failure
 	LOGIN,
 	/**
 	 * Description: Client login command to get in the system and receive unique sender id from server.

@@ -41,6 +41,7 @@ public class Worker extends AEmployee implements IWorker {
 		this.clientRequestHandler = clientRequestHandler;
 	}
 
+	//TODO: Aviad + Lior: Decide what the server returns in data in case of failure
 	@Override
 	public CLIENT_TYPE login(String username, String password) throws InvalidParameter, CriticalError, EmployeeAlreadyConnected, AuthenticationError {
 		CommandWrapper commandDescriptor = null;
