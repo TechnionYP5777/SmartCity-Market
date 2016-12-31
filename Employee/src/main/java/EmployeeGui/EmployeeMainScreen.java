@@ -22,12 +22,12 @@ public class EmployeeMainScreen implements Initializable {
 	private VBox mainScreenPane;
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(mainScreenPane);
 	}
 
 	@FXML
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent __) {
 		AbstractApplicationScreen.setScene("/EmployeeLoginScreen/EmployeeLoginScreen.fxml");
 	}
 

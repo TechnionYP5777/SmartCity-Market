@@ -7,41 +7,27 @@ import GuiUtils.GuiExceptionHandler;
 import SMExceptions.SMException;
 
 public class EmployeeGuiExeptionHandler extends GuiExceptionHandler {
-	static public void handle(SMException e) {
-		//TODO - get each content of an "if block" to external handler
-		// for example - authenticationErrorHandler should replace the first "if" block
-		// this for enabling more than just showing a dialog
-		
-		if (e instanceof AuthenticationError) {
+	public static void handle(SMException ¢) {
+		if (¢ instanceof AuthenticationError)
 			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.loginFailureDialogTitle, null,
 					EmployeeGuiDefs.wrongUserNamePasswordFailureMsg);
-
-		} else if (e instanceof ProductNotExistInCatalog) {
+		else if (¢ instanceof ProductNotExistInCatalog)
 			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.productOperationFailureTitle, null,
 					EmployeeGuiDefs.productNotExistsInCatalogMsg);
-
-		} else if (e instanceof ProductAlreadyExistInCatalog){
+		else if (¢ instanceof ProductAlreadyExistInCatalog)
 			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.productOperationFailureTitle, null,
 					EmployeeGuiDefs.productAlreadyExistsInCatalogMsg);
-
-		} else if (e instanceof ProductStillForSale){
+		else if (¢ instanceof ProductStillForSale)
 			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.productOperationFailureTitle, null,
 					EmployeeGuiDefs.productStillForSaleMsg);
-		
-		} else if (e instanceof AmountBiggerThanAvailable){
+		else if (¢ instanceof AmountBiggerThanAvailable)
 			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.productOperationFailureTitle, null,
 					EmployeeGuiDefs.productCapacityIsNotEnoughMsg);
-		
-		} else if (e instanceof ProductPackageDoesNotExist){
-			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.productOperationFailureTitle, null,
-					EmployeeGuiDefs.productPackageDoesNotExistMsg);
-		
-		} else {
-			//Critical Errors
-			//CriticalError, InvalidCommandDescriptor, InvalidParameter, UnknownSenderID
-			//EmployeeNotConnected, EmployeeAlreadyConnected
+		else if (!(¢ instanceof ProductPackageDoesNotExist))
 			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.criticalErrorTitle, null,
 					EmployeeGuiDefs.criticalErrorMsg);
-		}
+		else
+			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.productOperationFailureTitle, null,
+					EmployeeGuiDefs.productPackageDoesNotExistMsg);
 	}
 }

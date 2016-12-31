@@ -13,7 +13,7 @@ import SMExceptions.SMException;
 
 public abstract class GuiExceptionHandler {
 
-	static public void handle(SMException e) throws NotImplementedError{
+	public static void handle(SMException __) throws NotImplementedError {
 		throw new NotImplementedError();
 	}
 }

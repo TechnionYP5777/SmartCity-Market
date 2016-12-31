@@ -47,7 +47,7 @@ public class EmployeeLoginScreen implements Initializable {
 	private PasswordField passwordField;
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(loginScreenPane);
 		userNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			username = newValue;
@@ -63,26 +63,23 @@ public class EmployeeLoginScreen implements Initializable {
 	}
 
 	@FXML
-	private void backButtonPressed(ActionEvent e) {
+	private void backButtonPressed(ActionEvent __) {
 		AbstractApplicationScreen.setScene("/EmployeeMainScreen/EmployeeMainScreen.fxml");
 	}
 
 	@FXML
-	private void loginButtonPressed(ActionEvent event) {
-		if (loginAsWorkerButton.isSelected()) {
-			IWorker worker = InjectionFactory.getInstance(Worker.class, new WorkerDiConfigurator());
-			try {
-				worker.login(username, password);
-			} catch (SMException e){
-				EmployeeGuiExeptionHandler.handle(e);
-				return;
-			}
-			TempWorkerPassingData.worker = worker;
-			AbstractApplicationScreen.setScene("/WorkerMenuScreen/WorkerMenuScreen.fxml");
-
-		} else {
-			// TODO add manager
+	private void loginButtonPressed(ActionEvent __) {
+		if (!loginAsWorkerButton.isSelected())
+			return;
+		IWorker worker = InjectionFactory.getInstance(Worker.class, new WorkerDiConfigurator());
+		try {
+			worker.login(username, password);
+		} catch (SMException e) {
+			EmployeeGuiExeptionHandler.handle(e);
+			return;
 		}
+		TempWorkerPassingData.worker = worker;
+		AbstractApplicationScreen.setScene("/WorkerMenuScreen/WorkerMenuScreen.fxml");
 
 	}
 
@@ -91,12 +88,12 @@ public class EmployeeLoginScreen implements Initializable {
 	}
 
 	@FXML
-	private void loginAsWorkerPressed(ActionEvent e) {
+	private void loginAsWorkerPressed(ActionEvent __) {
 		loginAsManagerButton.setSelected(false);
 	}
 
 	@FXML
-	private void loginAsManagerPressed(ActionEvent e) {
+	private void loginAsManagerPressed(ActionEvent __) {
 		loginAsWorkerButton.setSelected(false);
 	}
 }

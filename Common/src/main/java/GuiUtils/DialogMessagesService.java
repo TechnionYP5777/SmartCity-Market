@@ -14,20 +14,20 @@ import javafx.scene.control.Alert.AlertType;
  */
 public class DialogMessagesService {
 
-	static public void showInfoDialog(String title, String header, String content) {
+	public static void showInfoDialog(String title, String header, String content) {
 		alertCreator(AlertType.INFORMATION, title, header, content);
 	}
 
-	static public void showErrorDialog(String title, String header, String content) {
+	public static void showErrorDialog(String title, String header, String content) {
 		alertCreator(AlertType.ERROR, title, header, content);
 	}
 
-	static public void showConfirmationDialog(String title, String header, String content) {
+	public static void showConfirmationDialog(String title, String header, String content) {
 		alertCreator(AlertType.CONFIRMATION, title, header, content);
 	}
 
-	static private void alertCreator(AlertType alertType, String title, String header, String content) {
-		Alert alert = new Alert(alertType);
+	private static void alertCreator(AlertType t, String title, String header, String content) {
+		Alert alert = new Alert(t);
 		alert.setTitle(title);
 		alert.setHeaderText(header);
 		alert.setContentText(content);

@@ -20,7 +20,6 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
 import BasicCommonClasses.CatalogProduct;
-import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.ProductPackage;
 import SQLDatabase.SQLDatabaseEntities;
 import SQLDatabase.SQLDatabaseEntities.CartsListTable;
@@ -699,10 +698,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			}
 	}
 	
-	private boolean isSuchRowExist(DbTable t, DbColumn column, Object value) 
+	private boolean isSuchRowExist(DbTable t, DbColumn c, Object value) 
 			throws CriticalError{
 		String prodctsTableQuery = generateSelectQuery1Table(t,
-				BinaryCondition.equalTo(column, PARAM_MARK));
+				BinaryCondition.equalTo(c, PARAM_MARK));
 
 		PreparedStatement productStatement = getParameterizedReadQuery(prodctsTableQuery, value);
 
@@ -1155,12 +1154,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * lang.Integer, BasicCommonClasses.ProductPackage)
 	 */
 	@Override
-	public int getProductPackageAmonutOnShelves(Integer sessionID, ProductPackage product)
+	public int getProductPackageAmonutOnShelves(Integer sessionID, ProductPackage p)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
 
 		validateSessionEstablished(sessionID);
 
-		return getAmountForStore(product, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
+		return getAmountForStore(p, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
 	}
 
 	/*
@@ -1171,12 +1170,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * java.lang.Integer, BasicCommonClasses.ProductPackage)
 	 */
 	@Override
-	public int getProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage product)
+	public int getProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage p)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
 
 		validateSessionEstablished(sessionID);
 
-		return getAmountForStore(product, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
+		return getAmountForStore(p, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
 	}
 
 	/*

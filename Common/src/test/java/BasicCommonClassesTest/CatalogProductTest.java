@@ -2,7 +2,6 @@ package BasicCommonClassesTest;
 
 import static org.junit.Assert.fail;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 
@@ -25,7 +24,7 @@ public class CatalogProductTest {
 		String bambaIm = "https://www.osem.co.il/tm-content/uploads/2015/01/Bamba_classic_80g3.png3-308x308.png";
 		//just an example of use:
 		try {
-			BufferedImage im = ImageIO.read(new URL(bambaIm));
+			ImageIO.read(new URL(bambaIm));
 		} catch (IOException e) {
 			
 		}

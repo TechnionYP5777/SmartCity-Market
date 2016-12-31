@@ -81,7 +81,7 @@ public class WorkerMenuScreen implements Initializable {
 	IWorker worker;
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			enableSearchBarcodeButtonCheck();
@@ -102,7 +102,7 @@ public class WorkerMenuScreen implements Initializable {
 	}
 
 	@FXML
-	private void searchBarcodePressed(ActionEvent event) {
+	private void searchBarcodePressed(ActionEvent __) {
 		CatalogProduct catalogProduct = null;
 		try {
 			catalogProduct = worker.viewProductFromCatalog(Integer.parseInt(barcodeTextField.getText()));
@@ -110,18 +110,17 @@ public class WorkerMenuScreen implements Initializable {
 			EmployeeGuiExeptionHandler.handle(e);
 			e.printStackTrace();
 		}
-		if (catalogProduct == null) {
-			return;
-		}
-		DialogMessagesService.showInfoDialog(catalogProduct.getName(),
-				"Description: " + catalogProduct.getDescription(),
-				"Barcode: " + catalogProduct.getBarcode() + "\n" + "Manufacturer: "
-						+ catalogProduct.getManufacturer().getName() + "\n" + "Price: " + catalogProduct.getPrice());
+		if (catalogProduct != null)
+			DialogMessagesService.showInfoDialog(catalogProduct.getName(),
+					"Description: " + catalogProduct.getDescription(),
+					"Barcode: " + catalogProduct.getBarcode() + "\n" + "Manufacturer: "
+							+ catalogProduct.getManufacturer().getName() + "\n" + "Price: "
+							+ catalogProduct.getPrice());
 
 	}
 
 	@FXML
-	private void addPakageToWarhouseRadioButtonPressed(ActionEvent event) {
+	private void addPakageToWarhouseRadioButtonPressed(ActionEvent __) {
 
 		addPakageToWarhouseRadioButton.setSelected(true);
 
@@ -131,7 +130,7 @@ public class WorkerMenuScreen implements Initializable {
 	}
 
 	@FXML
-	private void addPackageToShelvesRadioButtonPressed(ActionEvent event) {
+	private void addPackageToShelvesRadioButtonPressed(ActionEvent __) {
 
 		addPakageToWarhouseRadioButton.setSelected(false);
 
@@ -141,7 +140,7 @@ public class WorkerMenuScreen implements Initializable {
 	}
 
 	@FXML
-	private void removePackageFromStoreRadioButtonPressed(ActionEvent event) {
+	private void removePackageFromStoreRadioButtonPressed(ActionEvent __) {
 
 		addPakageToWarhouseRadioButton.setSelected(false);
 
@@ -151,36 +150,23 @@ public class WorkerMenuScreen implements Initializable {
 	}
 
 	@FXML
-	private void runTheOperationButtonPressed(ActionEvent event) {
+	private void runTheOperationButtonPressed(ActionEvent __) {
 
 		SmartCode smartcode = new SmartCode(Long.parseLong(editPackagesBarcodeTextField.getText()),
 				editPackagesDatePicker.getValue(), "java.time");
 
 		try {
 
-			if (addPakageToWarhouseRadioButton.isSelected()) {
-
-				// TODO location x y
-				ProductPackage productPackage = new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
-						new Location(0, 0, PlaceInMarket.WAREHOUSE));
-
-				worker.addProductToWarehouse(productPackage);
-
-			} else if (addPackageToShelvesRadioButton.isSelected()) {
-
-				// TODO location x y
+			if (addPakageToWarhouseRadioButton.isSelected())
+				worker.addProductToWarehouse((new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
+						new Location(0, 0, PlaceInMarket.WAREHOUSE))));
+			else {
 				ProductPackage productPackage = new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
 						new Location(0, 0, PlaceInMarket.STORE));
-
-				worker.placeProductPackageOnShelves(productPackage);
-
-			} else {
-
-				// TODO location is store or warehouse and what about x y ?
-				ProductPackage productPackage = new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
-						new Location(0, 0, PlaceInMarket.STORE));
-
-				worker.removeProductPackageFromStore(productPackage);
+				if (addPackageToShelvesRadioButton.isSelected())
+					worker.placeProductPackageOnShelves(productPackage);
+				else
+					worker.removeProductPackageFromStore(productPackage);
 			}
 
 		} catch (SMException e){
@@ -190,7 +176,7 @@ public class WorkerMenuScreen implements Initializable {
 	}
 	
 	@FXML
-	private void logoutButtonPressed(ActionEvent event) {
+	private void logoutButtonPressed(ActionEvent __) {
 		try {
 			worker.logout();
 		} catch (SMException e){

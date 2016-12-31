@@ -36,8 +36,8 @@ public abstract class AbstractApplicationScreen extends Application {
 	}
 	
 	
-	public static void fadeTransition(Node e){
-        FadeTransition x=new FadeTransition(new Duration(2000),e);
+	public static void fadeTransition(Node n){
+        FadeTransition x=new FadeTransition(new Duration(2000),n);
         x.setFromValue(0);
         x.setToValue(100);
         x.setCycleCount(1);
