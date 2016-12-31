@@ -1,6 +1,7 @@
 package EmployeeCommon;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
@@ -57,10 +58,15 @@ public abstract class AEmployee {
 			clientRequestHandler.finishRequest();
 	}
 
-	protected String sendRequestWithRespondToServer(String request) {
+	protected String sendRequestWithRespondToServer(String request) throws SocketTimeoutException {
 		log.info("Sending command to server");
 		try {
-			return this.clientRequestHandler.sendRequestWithRespond(request);
+			return this.clientRequestHandler.sendRequestWithRespond(request); 
+		} catch (java.net.SocketTimeoutException e) {
+			e.printStackTrace();
+			log.fatal("Sending logout command to server encounter sever fault : " + e.getMessage());
+			terminateCommunication();
+			throw new java.net.SocketTimeoutException(e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
 			log.fatal("Sending logout command to server encounter sever fault : " + e.getMessage());

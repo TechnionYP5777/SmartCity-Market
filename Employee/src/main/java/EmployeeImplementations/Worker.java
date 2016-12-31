@@ -1,5 +1,7 @@
 package EmployeeImplementations;
 
+import java.net.SocketTimeoutException;
+
 import com.google.inject.Inject;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
@@ -47,9 +49,18 @@ public class Worker extends AEmployee implements IWorker {
 		CommandWrapper $ = null;
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating login command wrapper with username: " + username + " and password: " + password);
-		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(WorkerDefs.loginCommandSenderId,
-				CommandDescriptor.LOGIN, Serialization.serialize(new Login(username, password))).serialize()));
-		terminateCommunication();		
+		String serverResponse = null;
+		try {
+			serverResponse = sendRequestWithRespondToServer((new CommandWrapper(WorkerDefs.loginCommandSenderId,
+					CommandDescriptor.LOGIN, Serialization.serialize(new Login(username, password))).serialize()));
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			
+			throw new CriticalError();
+		}
+		
+		terminateCommunication();	
+		
 		try {
 			$ = CommandWrapper.deserialize(serverResponse);
 		} catch (Exception e1) {
@@ -75,10 +86,19 @@ public class Worker extends AEmployee implements IWorker {
 	CriticalError, EmployeeNotConnected {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating logout command wrapper with username: " + username);
-		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.LOGOUT, Serialization.serialize(username)))
-						.serialize());
+		String serverResponse;
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(clientId, CommandDescriptor.LOGOUT, Serialization.serialize(username)))
+							.serialize());
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			
+			throw new CriticalError();
+		}
+		
 		terminateCommunication();
+		
 		try {
 			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected |
@@ -96,9 +116,16 @@ public class Worker extends AEmployee implements IWorker {
 	UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating viewProductFromCatalog command wrapper with barcode: " + barcode);
-		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
-						Serialization.serialize(new SmartCode(barcode, null))).serialize()));
+		String serverResponse;
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(clientId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(new SmartCode(barcode, null))).serialize()));
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			
+			throw new CriticalError();
+		}
 		terminateCommunication();
 		CommandWrapper $ = CommandWrapper.deserialize(serverResponse);
 		try {
@@ -118,9 +145,16 @@ public class Worker extends AEmployee implements IWorker {
 		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating addProductToWarehouse command wrapper with product package: " + p);
-		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
-						Serialization.serialize(p)).serialize()));
+		String serverResponse;
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(clientId, CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
+							Serialization.serialize(p)).serialize()));
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			
+			throw new CriticalError();
+		}
 		terminateCommunication();
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
 		try {
@@ -139,9 +173,16 @@ public class Worker extends AEmployee implements IWorker {
 		AmountBiggerThanAvailable, ProductPackageDoesNotExist {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating placeProductPackageOnShelves command wrapper with product package: " + p);
-		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES,
-						Serialization.serialize(p)).serialize()));
+		String serverResponse;
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(clientId, CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES,
+							Serialization.serialize(p)).serialize()));
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			
+			throw new CriticalError();
+		}
 		terminateCommunication();
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
 		try {
@@ -160,9 +201,16 @@ public class Worker extends AEmployee implements IWorker {
 		AmountBiggerThanAvailable, ProductPackageDoesNotExist {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating removeProductPackageFromStore command wrapper with product package: " + p);
-		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
-						Serialization.serialize(p)).serialize()));
+		String serverResponse;
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(clientId, CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
+							Serialization.serialize(p)).serialize()));
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			
+			throw new CriticalError();
+		}
 		terminateCommunication();
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
 		try {
@@ -180,10 +228,16 @@ public class Worker extends AEmployee implements IWorker {
 		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductPackageDoesNotExist {		
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating getProductPackageAmount command wrapper with product package: " + p);
-		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
-						Serialization.serialize(p)).serialize()));
-		terminateCommunication();
+		String serverResponse;
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(clientId, CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
+							Serialization.serialize(p)).serialize()));
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			
+			throw new CriticalError();
+		}
 		terminateCommunication();
 		CommandWrapper $ = CommandWrapper.deserialize(serverResponse);
 		try {
