@@ -45,15 +45,15 @@ public class LogoutTest {
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
 							CommandDescriptor.LOGOUT, Serialization.serialize(null)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ¢) {
+			¢.printStackTrace();
 			fail();
 		}
 		
 		try {
 			worker.logout();
-		} catch (InvalidParameter | UnknownSenderID | CriticalError | EmployeeNotConnected e) {
-			e.printStackTrace();
+		} catch (InvalidParameter | UnknownSenderID | CriticalError | EmployeeNotConnected ¢) {
+			¢.printStackTrace();
 			fail();
 		}
 	}
@@ -66,18 +66,20 @@ public class LogoutTest {
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
 							CommandDescriptor.LOGOUT, Serialization.serialize(null)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ¢) {
+			¢.printStackTrace();
 			fail();
 		}
 		
 		try {
 			worker.logout();
-		} catch (InvalidParameter | UnknownSenderID | CriticalError e) {
-			e.printStackTrace();
+		} catch (InvalidParameter | UnknownSenderID | CriticalError ¢) {
+			¢.printStackTrace();
 			fail();
 		} catch (EmployeeNotConnected e) {
 			/* Test Passed */
 		}
 	}
+	
+	//TODO: lior: add tests for the other failures possibilities when its done
 }

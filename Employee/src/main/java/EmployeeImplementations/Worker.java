@@ -44,30 +44,30 @@ public class Worker extends AEmployee implements IWorker {
 	//TODO: Aviad + Lior: Decide what the server returns in data in case of failure
 	@Override
 	public CLIENT_TYPE login(String username, String password) throws InvalidParameter, CriticalError, EmployeeAlreadyConnected, AuthenticationError {
-		CommandWrapper commandDescriptor = null;
+		CommandWrapper $ = null;
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating login command wrapper with username: " + username + " and password: " + password);
 		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(WorkerDefs.loginCommandSenderId,
 				CommandDescriptor.LOGIN, Serialization.serialize(new Login(username, password))).serialize()));
 		terminateCommunication();		
 		try {
-			commandDescriptor = CommandWrapper.deserialize(serverResponse);
+			$ = CommandWrapper.deserialize(serverResponse);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 		try {
-			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | UnknownSenderID | EmployeeNotConnected |
 				 ProductNotExistInCatalog | ProductAlreadyExistInCatalog |
-				 ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
+				 ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			e.printStackTrace();
+			¢.printStackTrace();
 		}
-		clientId = commandDescriptor.getSenderID();
+		clientId = $.getSenderID();
 		this.username = username;
 		this.password = password;
-		log.info("Login to server as " + commandDescriptor.getData() + " succeed. Client id is: " + clientId);
-		return CLIENT_TYPE.deserialize(commandDescriptor.getData());
+		log.info("Login to server as " + $.getData() + " succeed. Client id is: " + clientId);
+		return CLIENT_TYPE.deserialize($.getData());
 	}
 
 	@Override
@@ -84,9 +84,9 @@ public class Worker extends AEmployee implements IWorker {
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected |
 				 AuthenticationError | ProductNotExistInCatalog |
 			 	 ProductAlreadyExistInCatalog | ProductStillForSale |
-				 AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
+				 AmountBiggerThanAvailable | ProductPackageDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			e.printStackTrace();
+			¢.printStackTrace();
 		}
 		log.info("logout from server succeed.");
 	}
@@ -100,17 +100,17 @@ public class Worker extends AEmployee implements IWorker {
 				(new CommandWrapper(clientId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
 						Serialization.serialize(new SmartCode(barcode, null))).serialize()));
 		terminateCommunication();
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper $ = CommandWrapper.deserialize(serverResponse);
 		try {
-			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected |
 				 AuthenticationError | ProductAlreadyExistInCatalog |
-				 ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
+				 ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			e.printStackTrace();
+			¢.printStackTrace();
 		}
 		log.info("viewProductFromCatalog command succeed.");
-		return Serialization.deserialize(commandDescriptor.getData(), CatalogProduct.class);
+		return Serialization.deserialize($.getData(), CatalogProduct.class);
 	}
 
 	@Override
@@ -126,9 +126,9 @@ public class Worker extends AEmployee implements IWorker {
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError |
-				ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
+				ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			e.printStackTrace();
+			¢.printStackTrace();
 		}
 		log.info("addProductToWarehouse command succeed.");
 	}
@@ -147,9 +147,9 @@ public class Worker extends AEmployee implements IWorker {
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
-				| ProductAlreadyExistInCatalog | ProductStillForSale e) {
+				| ProductAlreadyExistInCatalog | ProductStillForSale ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			e.printStackTrace();
+			¢.printStackTrace();
 		}
 		log.info("placeProductPackageOnShelves command succeed.");
 	}
@@ -168,9 +168,9 @@ public class Worker extends AEmployee implements IWorker {
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
-				| ProductAlreadyExistInCatalog | ProductStillForSale e) {
+				| ProductAlreadyExistInCatalog | ProductStillForSale ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			e.printStackTrace();
+			¢.printStackTrace();
 		}
 		log.info("removeProductPackageFromStore command succeed.");
 	}
@@ -185,17 +185,17 @@ public class Worker extends AEmployee implements IWorker {
 						Serialization.serialize(p)).serialize()));
 		terminateCommunication();
 		terminateCommunication();
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper $ = CommandWrapper.deserialize(serverResponse);
 		try {
-			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError |
 				 ProductNotExistInCatalog | ProductAlreadyExistInCatalog |
-				 ProductStillForSale | AmountBiggerThanAvailable e) {
+				 ProductStillForSale | AmountBiggerThanAvailable ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			e.printStackTrace();
+			¢.printStackTrace();
 		}
 		log.info("getProductPackageAmount command succeed.");
-		return Serialization.deserialize(commandDescriptor.getData(), Integer.class);
+		return Serialization.deserialize($.getData(), Integer.class);
 	}
 	
 	@Override
