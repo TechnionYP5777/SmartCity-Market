@@ -1,5 +1,7 @@
 package EmployeeImplementations;
 
+import java.net.SocketTimeoutException;
+
 import BasicCommonClasses.ProductPackage;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
@@ -40,9 +42,16 @@ public class Manager extends Worker implements IManager {
 		
 		log.info("Creating addProductToCatalog command wrapper with product package: " + p);
 		
-		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
-						Serialization.serialize(p))).serialize());
+		String serverResponse;
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(clientId, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
+							Serialization.serialize(p))).serialize());
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			
+			throw new CriticalError();
+		}
 		terminateCommunication();
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
 		
@@ -63,9 +72,16 @@ public class Manager extends Worker implements IManager {
 		
 		log.info("Creating removeProductFromCatalog command wrapper with product package: " + p);
 		
-		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
-						Serialization.serialize(p))).serialize());
+		String serverResponse;
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(clientId, CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(p))).serialize());
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			
+			throw new CriticalError();
+		}
 		terminateCommunication();
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
 		
@@ -88,9 +104,16 @@ public class Manager extends Worker implements IManager {
 		
 		log.info("Creating editProductFromCatalog command wrapper with product package: " + p);
 		
-		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
-						Serialization.serialize(p))).serialize());
+		String serverResponse;
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(clientId, CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(p))).serialize());
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			
+			throw new CriticalError();
+		}
 		terminateCommunication();
 
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
