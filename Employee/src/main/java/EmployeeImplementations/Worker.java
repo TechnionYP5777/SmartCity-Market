@@ -38,28 +38,22 @@ public class Worker extends AEmployee implements IWorker {
 	
 	@Inject
 	public Worker(IClientRequestHandler clientRequestHandler) {
-
 		this.clientRequestHandler = clientRequestHandler;
-
 	}
 
 	@Override
 	public CLIENT_TYPE login(String username, String password) throws InvalidParameter, CriticalError, EmployeeAlreadyConnected, AuthenticationError {
 		CommandWrapper commandDescriptor = null;
-		
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
-
 		log.info("Creating login command wrapper with username: " + username + " and password: " + password);
-		
 		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(WorkerDefs.loginCommandSenderId,
 				CommandDescriptor.LOGIN, Serialization.serialize(new Login(username, password))).serialize()));
-		
+		terminateCommunication();		
 		try {
 			commandDescriptor = CommandWrapper.deserialize(serverResponse);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | UnknownSenderID | EmployeeNotConnected |
@@ -68,15 +62,10 @@ public class Worker extends AEmployee implements IWorker {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
-		
 		clientId = commandDescriptor.getSenderID();
 		this.username = username;
 		this.password = password;
-		
 		log.info("Login to server as " + commandDescriptor.getData() + " succeed. Client id is: " + clientId);
-		
-		terminateCommunication();
-		
 		return CLIENT_TYPE.deserialize(commandDescriptor.getData());
 	}
 
@@ -84,13 +73,11 @@ public class Worker extends AEmployee implements IWorker {
 	public void logout() throws InvalidParameter, UnknownSenderID,
 	CriticalError, EmployeeNotConnected {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
-		
 		log.info("Creating logout command wrapper with username: " + username);
-		
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(clientId, CommandDescriptor.LOGOUT, Serialization.serialize(username)))
 						.serialize());
-		
+		terminateCommunication();
 		try {
 			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected |
@@ -100,24 +87,19 @@ public class Worker extends AEmployee implements IWorker {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
-		
 		log.info("logout from server succeed.");
-				
-		terminateCommunication();
 	}
 
 	@Override
 	public CatalogProduct viewProductFromCatalog(int barcode) throws InvalidParameter,
 	UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
-		
 		log.info("Creating viewProductFromCatalog command wrapper with barcode: " + barcode);
-		
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(clientId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
 						Serialization.serialize(new SmartCode(barcode, null))).serialize()));
+		terminateCommunication();
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
-		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected |
@@ -126,11 +108,7 @@ public class Worker extends AEmployee implements IWorker {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
-		
 		log.info("viewProductFromCatalog command succeed.");
-		
-		terminateCommunication();
-		
 		return Serialization.deserialize(commandDescriptor.getData(), CatalogProduct.class);
 	}
 
@@ -138,14 +116,12 @@ public class Worker extends AEmployee implements IWorker {
 	public void addProductToWarehouse(ProductPackage p) throws InvalidParameter,
 		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
-		
 		log.info("Creating addProductToWarehouse command wrapper with product package: " + p);
-		
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(clientId, CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
 						Serialization.serialize(p)).serialize()));
+		terminateCommunication();
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
-		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError |
@@ -153,10 +129,7 @@ public class Worker extends AEmployee implements IWorker {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
-		
 		log.info("addProductToWarehouse command succeed.");
-		
-		terminateCommunication();
 	}
 	
 	@Override
@@ -164,14 +137,12 @@ public class Worker extends AEmployee implements IWorker {
 		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
 		AmountBiggerThanAvailable, ProductPackageDoesNotExist {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
-		
 		log.info("Creating placeProductPackageOnShelves command wrapper with product package: " + p);
-		
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(clientId, CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES,
 						Serialization.serialize(p)).serialize()));
+		terminateCommunication();
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
-		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
@@ -179,10 +150,7 @@ public class Worker extends AEmployee implements IWorker {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
-		
 		log.info("placeProductPackageOnShelves command succeed.");
-		
-		terminateCommunication();
 	}
 	
 	@Override
@@ -190,14 +158,12 @@ public class Worker extends AEmployee implements IWorker {
 		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
 		AmountBiggerThanAvailable, ProductPackageDoesNotExist {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
-		
 		log.info("Creating removeProductPackageFromStore command wrapper with product package: " + p);
-		
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(clientId, CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
 						Serialization.serialize(p)).serialize()));
+		terminateCommunication();
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
-		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
@@ -205,24 +171,20 @@ public class Worker extends AEmployee implements IWorker {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
-		
 		log.info("removeProductPackageFromStore command succeed.");
-		
-		terminateCommunication();
 	}
 	
 	@Override
 	public int getProductPackageAmount(ProductPackage p) throws InvalidParameter,
 		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductPackageDoesNotExist {		
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
-		
 		log.info("Creating getProductPackageAmount command wrapper with product package: " + p);
-		
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(clientId, CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
 						Serialization.serialize(p)).serialize()));
+		terminateCommunication();
+		terminateCommunication();
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
-		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError |
@@ -231,11 +193,7 @@ public class Worker extends AEmployee implements IWorker {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
-		
 		log.info("getProductPackageAmount command succeed.");
-		
-		terminateCommunication();
-		
 		return Serialization.deserialize(commandDescriptor.getData(), Integer.class);
 	}
 	

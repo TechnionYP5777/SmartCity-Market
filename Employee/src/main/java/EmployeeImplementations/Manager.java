@@ -43,6 +43,7 @@ public class Manager extends Worker implements IManager {
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(clientId, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
 						Serialization.serialize(p))).serialize());
+		terminateCommunication();
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
 		
 		try {
@@ -52,10 +53,7 @@ public class Manager extends Worker implements IManager {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
-		
 		log.info("addProductToCatalog command succeed.");
-		
-		terminateCommunication();
 	}
 
 	@Override
@@ -68,6 +66,7 @@ public class Manager extends Worker implements IManager {
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(clientId, CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
 						Serialization.serialize(p))).serialize());
+		terminateCommunication();
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
 		
 		try {
@@ -79,8 +78,6 @@ public class Manager extends Worker implements IManager {
 		}
 		
 		log.info("removeProductFromCatalog command succeed.");
-		
-		terminateCommunication();
 	}
 
 	@Override
@@ -94,6 +91,8 @@ public class Manager extends Worker implements IManager {
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(clientId, CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
 						Serialization.serialize(p))).serialize());
+		terminateCommunication();
+
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
 		
 		try {
@@ -105,7 +104,5 @@ public class Manager extends Worker implements IManager {
 		}
 		
 		log.info("editProductFromCatalog command succeed.");
-		
-		terminateCommunication();		
 	}
 }
