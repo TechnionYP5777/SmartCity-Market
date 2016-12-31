@@ -108,7 +108,6 @@ public class WorkerMenuScreen implements Initializable {
 			catalogProduct = worker.viewProductFromCatalog(Integer.parseInt(barcodeTextField.getText()));
 		} catch (SMException e){
 			EmployeeGuiExeptionHandler.handle(e);
-			e.printStackTrace();
 		}
 		if (catalogProduct != null)
 			DialogMessagesService.showInfoDialog(catalogProduct.getName(),
@@ -171,7 +170,6 @@ public class WorkerMenuScreen implements Initializable {
 
 		} catch (SMException e){
 			EmployeeGuiExeptionHandler.handle(e);
-			e.printStackTrace();
 		}
 	}
 	
@@ -181,7 +179,6 @@ public class WorkerMenuScreen implements Initializable {
 			worker.logout();
 		} catch (SMException e){
 			EmployeeGuiExeptionHandler.handle(e);
-			e.printStackTrace();
 		}
 
 		AbstractApplicationScreen.setScene("/EmployeeMainScreen/EmployeeLoginScreen.fxml");
