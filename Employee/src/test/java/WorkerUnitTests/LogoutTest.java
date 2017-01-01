@@ -58,7 +58,6 @@ public class LogoutTest {
 		}
 	}
 
-
 	@Test
 	public void logoutNotConnectedTest() {
 		try {
