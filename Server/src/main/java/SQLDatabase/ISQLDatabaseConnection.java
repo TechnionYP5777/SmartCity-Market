@@ -3,6 +3,7 @@ package SQLDatabase;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.ProductPackage;
+import BasicCommonClasses.SmartCode;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CartNotConnected;
 import SQLDatabase.SQLDatabaseException.CriticalError;
@@ -38,7 +39,7 @@ public interface ISQLDatabaseConnection {
 			throws CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog, IngredientNotExist,
 			ManufacturerNotExist;
 
-	void removeProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
+	void removeProductFromCatalog(Integer sessionID, SmartCode productToRemove)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, ProductStillForSale;
 
 	void hardRemoveProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)

@@ -31,6 +31,7 @@ import BasicCommonClasses.Location;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
+import BasicCommonClasses.SmartCode;
 import SQLDatabase.SQLDatabaseEntities;
 import SQLDatabase.SQLDatabaseEntities.CartsListTable;
 import SQLDatabase.SQLDatabaseEntities.FreeIDsTable;
@@ -700,7 +701,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	}
 
-	private void removeCatalogProduct(CatalogProduct p) throws CriticalError, SQLException {
+	private void removeCatalogProduct(SmartCode p) throws CriticalError, SQLException {
 
 		// remove all ingredients of product
 		PreparedStatement statement = getParameterizedQuery(
@@ -1185,7 +1186,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			if (isProductExistInCatalog(productToAdd.getBarcode()))
 				throw new ProductAlreadyExistInCatalog();
-			
+
 			// check if manufacturer exist
 			if (isManufacturerExist((int) productToAdd.getManufacturer().getId()))
 				throw new ManufacturerNotExist();
@@ -1215,7 +1216,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * Integer, BasicCommonClasses.CatalogProduct)
 	 */
 	@Override
-	public void removeProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
+	public void removeProductFromCatalog(Integer sessionID, SmartCode productToRemove)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, ProductStillForSale {
 
 		validateSessionEstablished(sessionID);

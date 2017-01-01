@@ -19,6 +19,7 @@ import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductAlreadyExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
+import SQLDatabase.SQLDatabaseException.ProductStillForSale;
 import SQLDatabase.SQLDatabaseException.WorkerAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
 
@@ -282,7 +283,7 @@ public class CommandExecuter {
 		}
 	}
 
-	private void removeProductFromCatalogCommand(SQLDatabaseConnection __) {
+	private void removeProductFromCatalogCommand(SQLDatabaseConnection c) {
 		SmartCode smartCode = null;
 
 		log.info("Remove Product From Catalog command called");
@@ -297,13 +298,36 @@ public class CommandExecuter {
 			return;
 		}
 
-		if (smartCode.isValid())
-			// TODO Noam - call SQL command here
-
-			log.info("Remove Product From Catalog with product barcode " + smartCode.getBarcode() + " finished");
-		else {
+		if (!smartCode.isValid()){
 			log.info("Remove Product From Catalog command failed, barcode can't be negative");
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+			
+		} else {
+			try {
+				c.removeProductFromCatalog(inCommandWrapper.getSenderID(), smartCode);
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
+				
+			} catch (CriticalError e) {
+				log.fatal(
+						"Remove Product From Catalog command failed, critical error occured from SQL Database connection");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			} catch (WorkerNotConnected e) {
+				log.info("Remove Product From Catalog command failed, username dosen't login to the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+			} catch (ProductNotExistInCatalog e) {
+				log.info("Remove Product From Catalog command failed, product dosen't exist in the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST);
+			} catch (ProductStillForSale e) {
+				log.info("Remove Product From Catalog command failed, product still for sale");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_STILL_FOR_SALE);
+			}
+			
+			
+			log.info("Remove Product From Catalog with product barcode " + smartCode.getBarcode() + " finished");
 		}
 	}
 
