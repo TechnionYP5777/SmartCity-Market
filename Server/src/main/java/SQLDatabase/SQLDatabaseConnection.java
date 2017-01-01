@@ -10,6 +10,8 @@ import java.util.Random;
 
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
 import com.healthmarketscience.sqlbuilder.CreateTableQuery;
+import com.healthmarketscience.sqlbuilder.CustomCondition;
+import com.healthmarketscience.sqlbuilder.DeleteQuery;
 import com.healthmarketscience.sqlbuilder.FunctionCall;
 import com.healthmarketscience.sqlbuilder.InsertQuery;
 import com.healthmarketscience.sqlbuilder.JdbcEscape;
@@ -21,7 +23,10 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.Ingredient;
+import BasicCommonClasses.Location;
 import BasicCommonClasses.Manufacturer;
+import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import SQLDatabase.SQLDatabaseEntities;
 import SQLDatabase.SQLDatabaseEntities.CartsListTable;
@@ -44,11 +49,13 @@ import SQLDatabase.SQLDatabaseException.ProductAlreadyExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
 import SQLDatabase.SQLDatabaseException.ManufacturerStillUsed;
+import SQLDatabase.SQLDatabaseException.IngredientNotExist;
 import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
 import SQLDatabase.SQLDatabaseException.WorkerAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
+import SQLDatabase.SQLDatabaseStrings.LOCATIONS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.PRODUCTS_PACKAGES_TABLE;
 
 import static SQLDatabase.SQLQueryGenerator.generateSelectQuery1Table;
@@ -645,6 +652,128 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		}
 	}
 	
+	private void addCatalogProduct(CatalogProduct p) throws CriticalError, SQLException{
+		
+		//add all ingredients of product
+		for (Ingredient ¢ : p.getIngredients()){
+   			String insertToProductQuery = new InsertQuery(ProductsCatalogIngredientsTable.table)
+		    	      .addColumn(ProductsCatalogIngredientsTable.barcodeCol, PARAM_MARK)
+		    	      .addColumn(ProductsCatalogIngredientsTable.ingredientIDCol, PARAM_MARK)
+		    	      .validate() + "";
+			
+   			insertToProductQuery.hashCode();
+   			
+			PreparedStatement statement = getParameterizedQuery(
+					insertToProductQuery,
+					p.getBarcode(), ¢.getId());
+
+			statement.executeUpdate();
+			
+			closeResources(statement);
+			
+		}
+		
+		//add all locations of product
+		for (Location ¢ : p.getLocations()){
+			int newID = allocateIDToTable(LocationsTable.table,
+					LocationsTable.locationIDCol);
+			String insertLocationQuery = new InsertQuery(LocationsTable.table)
+		    	      .addColumn(LocationsTable.locationIDCol, PARAM_MARK)
+		    	      .addColumn(LocationsTable.placeInStoreCol, PARAM_MARK)
+		    	      .addColumn(LocationsTable.pointXCol, PARAM_MARK)
+		    	      .addColumn(LocationsTable.pointYCol, PARAM_MARK)
+		    	      .validate() + "";
+		    
+			insertLocationQuery.hashCode();	    
+		    
+			PreparedStatement insertLocationStatement = getParameterizedQuery(
+					insertLocationQuery,
+					newID, 
+					¢.getPlaceInMarket().equals(PlaceInMarket.STORE) ? 
+						LOCATIONS_TABLE.VALUE_PLACE_STORE : LOCATIONS_TABLE.VALUE_PLACE_WAREHOUSE,
+					¢.getX(), ¢.getY());
+			
+			String insertToProductQuery = new InsertQuery(ProductsCatalogLocationsTable.table)
+		    	      .addColumn(ProductsCatalogLocationsTable.barcodeCol, PARAM_MARK)
+		    	      .addColumn(ProductsCatalogLocationsTable.locationIDCol, PARAM_MARK)
+		    	      .validate() + "";
+			
+			PreparedStatement statement = getParameterizedQuery(
+					insertToProductQuery,
+					p.getBarcode(),newID);
+			
+			insertLocationStatement.executeUpdate();
+			statement.executeUpdate();	
+			
+			closeResources(insertLocationStatement);
+			closeResources(statement);
+		}
+		
+		//add the product itself
+		String insertQuery = new InsertQuery(ProductsCatalogTable.table)
+	    	      .addColumn(ProductsCatalogTable.barcodeCol, PARAM_MARK)
+	    	      .addColumn(ProductsCatalogTable.manufacturerIDCol, PARAM_MARK)
+	    	      .addColumn(ProductsCatalogTable.productDescriptionCol, PARAM_MARK)
+	    	      .addColumn(ProductsCatalogTable.productNameCol, PARAM_MARK)
+	    	      .addColumn(ProductsCatalogTable.productPictureCol, PARAM_MARK)
+	    	      .addColumn(ProductsCatalogTable.productPriceCol, PARAM_MARK)
+	    	      .validate() + "";
+		
+		PreparedStatement statement = getParameterizedQuery(
+				insertQuery, p.getBarcode(), p.getManufacturer().getId(),
+				p.getDescription(), p.getName(), p.getImageUrl(), p.getPrice());
+		
+		statement.executeUpdate();
+		
+		closeResources(statement);
+		
+	}
+	
+	private void removeCatalogProduct(CatalogProduct p) 
+			throws CriticalError, SQLException{
+		
+		//remove all ingredients of product
+ 		PreparedStatement statement = getParameterizedQuery(generateDeleteQuery(ProductsCatalogIngredientsTable.table,
+				BinaryCondition.equalTo(ProductsCatalogIngredientsTable.barcodeCol, PARAM_MARK)),
+				p.getBarcode());
+		statement.executeUpdate();
+		closeResources(statement);
+		
+		//remove all locations of product
+		String selectAllLocationsQuery = new SelectQuery()
+				.addColumns(ProductsCatalogLocationsTable.locationIDCol)
+				.addCondition(BinaryCondition.equalTo(ProductsCatalogLocationsTable.barcodeCol, PARAM_MARK))
+				.validate() + "";
+		String deleteLocationsQuery = new DeleteQuery(LocationsTable.table)
+				.addCondition(new CustomCondition(
+						LocationsTable.locationIDCol.getColumnNameSQL() + 
+						" IN (" + selectAllLocationsQuery+ " ) "))
+				.validate() + "";
+		
+		PreparedStatement LocationsStatement = getParameterizedQuery(
+				deleteLocationsQuery,
+				p.getBarcode());
+		LocationsStatement.executeUpdate();
+		closeResources(LocationsStatement);
+		
+		//remove barcode form ProductsLocations Table
+		PreparedStatement productLocationsStatement = getParameterizedQuery(
+				generateDeleteQuery(ProductsCatalogLocationsTable.table,
+				BinaryCondition.equalTo(ProductsCatalogLocationsTable.barcodeCol, PARAM_MARK)),
+				p.getBarcode());
+		productLocationsStatement.executeUpdate();
+		closeResources(productLocationsStatement);
+		
+		//remove product itself
+		PreparedStatement productStatement = getParameterizedQuery(
+				generateDeleteQuery(ProductsCatalogTable.table,
+				BinaryCondition.equalTo(ProductsCatalogTable.barcodeCol, PARAM_MARK)),
+				p.getBarcode());
+		productStatement.executeUpdate();
+		closeResources(productStatement);
+		
+	}
+	
 	private int getAmountForStore(ProductPackage p, String placeCol) 
 			throws CriticalError{
 		String selectQuery = generateSelectQuery1Table(ProductsPackagesTable.table,
@@ -831,6 +960,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			throws CriticalError{
 		return isSuchRowExist(ManufacturerTable.table,
 				ManufacturerTable.manufacturerIDCol, manufacturerID);
+	}
+	
+	private boolean isIngredientExist(Integer ingredientID) 
+			throws CriticalError{
+		return isSuchRowExist(IngredientsTable.table,
+				IngredientsTable.ingredientIDCol, ingredientID);
 	}
 
 	/**
@@ -1094,7 +1229,34 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void addProductToCatalog(Integer sessionID, CatalogProduct productToAdd)
-			throws CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog {
+			throws CriticalError, WorkerNotConnected, 
+			ProductAlreadyExistInCatalog, IngredientNotExist {
+		
+		validateSessionEstablished(sessionID);
+		
+		try {
+			// START transaction
+			connection.setAutoCommit(false);
+			//TODO add savepoint
+			
+			if (isProductExistInCatalog(productToAdd.getBarcode()))
+				throw new ProductAlreadyExistInCatalog();
+			
+			//check if all ingredients exists
+			for (Ingredient ¢ : productToAdd.getIngredients())
+				if (!isIngredientExist((int) ¢.getId()))
+					throw new IngredientNotExist();
+			
+			addCatalogProduct(productToAdd);
+			
+			// END transaction
+			connection.commit();
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {
+			//TODO rollback
+			e.printStackTrace();
+			throw new CriticalError();
+		}
 	}
 
 	/*
@@ -1107,6 +1269,29 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void removeProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, ProductStillForSale {
+		
+		validateSessionEstablished(sessionID);
+		
+		try {
+			// START transaction
+			connection.setAutoCommit(false);
+			//TODO add savepoint
+			
+			if (!isProductExistInCatalog(productToRemove.getBarcode()))
+				throw new ProductNotExistInCatalog();
+			
+			//TODO check if the product is in the system
+			removeCatalogProduct(productToRemove);
+			
+			// END transaction
+			connection.commit();
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {
+			//TODO rollback
+			e.printStackTrace();
+			throw new CriticalError();
+		}
+		
 	}
 
 	/*

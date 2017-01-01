@@ -6,6 +6,7 @@ import BasicCommonClasses.ProductPackage;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CartNotConnected;
 import SQLDatabase.SQLDatabaseException.CriticalError;
+import SQLDatabase.SQLDatabaseException.IngredientNotExist;
 import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
 import SQLDatabase.SQLDatabaseException.ManufacturerStillUsed;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
@@ -34,7 +35,7 @@ public interface ISQLDatabaseConnection {
 			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
 
 	void addProductToCatalog(Integer sessionID, CatalogProduct productToAdd)
-			throws CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog;
+			throws CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog, IngredientNotExist;
 
 	void removeProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, ProductStillForSale;
