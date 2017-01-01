@@ -33,7 +33,6 @@ public enum CommandDescriptor {
 
 	/******************************************** Connection **********************************************/
 
-	//TODO: Aviad + Lior: Decide what the server returns in data in case of failure
 	LOGIN,
 	/**
 	 * Description: Client login command to get in the system and receive unique sender id from server.
@@ -84,7 +83,6 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *			SM_SENDER_ID_DOES_NOT_EXIST,
 	 *			SM_CATALOG_PRODUCT_DOES_NOT_EXIST,
 	 *
 	 */
@@ -101,7 +99,6 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *			SM_SENDER_ID_DOES_NOT_EXIST,
 	 *			SM_CATALOG_PRODUCT_DOES_NOT_EXIST,
 	 *
 	 */
@@ -118,7 +115,6 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *			SM_SENDER_ID_DOES_NOT_EXIST,
 	 *			SM_CATALOG_PRODUCT_ALREADY_EXISTS,
 	 *
 	 */
@@ -135,7 +131,6 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *			SM_SENDER_ID_DOES_NOT_EXIST,
 	 *			SM_CATALOG_PRODUCT_DOES_NOT_EXIST,
 	 *			SM_CATALOG_PRODUCT_STILL_FOR_SALE,
 	 *
@@ -153,7 +148,6 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *			SM_SENDER_ID_DOES_NOT_EXIST,
 	 *			SM_PRODUCT_PACKAGE_DOES_NOT_EXIST,
 	 *			SM_PRODUCT_PACKAGE_NOT_ENOUGH_AMOUNT,
 	 *
@@ -171,7 +165,6 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *			SM_SENDER_ID_DOES_NOT_EXIST,
 	 *			SM_PRODUCT_PACKAGE_DOES_NOT_EXIST,
 	 *			SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE,
 	 *
@@ -180,7 +173,7 @@ public enum CommandDescriptor {
 	EDIT_PRODUCT_FROM_CATALOG,
 	/**
 	 * Description: Manager edit product from the catalog.
-	 * param1: SmartCode - Smartcode with barcode and null on expertionDate.
+	 * param1: CatalogProduct - the new CatalogProduct content to be updated. 
 	 * retval: void.
 	 *
 	 * result_codes:
@@ -189,7 +182,6 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *			SM_SENDER_ID_DOES_NOT_EXIST,
 	 *			SM_CATALOG_PRODUCT_DOES_NOT_EXIST,
 	 *
 	 */
@@ -207,7 +199,6 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *			SM_SENDER_ID_DOES_NOT_EXIST,
 	 *			SM_PRODUCT_PACKAGE_DOES_NOT_EXIST,
 	 *			SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE,
 	 *
@@ -226,7 +217,6 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *			SM_SENDER_ID_DOES_NOT_EXIST,
 	 *			SM_PRODUCT_PACKAGE_DOES_NOT_EXIST,
 	 *			SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE,
 	 *
@@ -244,7 +234,6 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *			SM_SENDER_ID_DOES_NOT_EXIST,
 	 *			SM_GROCERY_LIST_IS_EMPTY,
 	 *
 	 */
@@ -261,7 +250,6 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *			SM_SENDER_ID_DOES_NOT_EXIST,
 	 *			SM_PRODUCT_PACKAGE_DOES_NOT_EXIST,
 	 *
 	 */

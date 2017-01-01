@@ -333,12 +333,12 @@ public class CommandExecuter {
 	}
 
 	private void editProductFromCatalogCommand(SQLDatabaseConnection c) {
-		SmartCode smartCode = null;
+		CatalogProduct catalogProduct = null;
 
 		log.info("Edit Product From Catalog command called");
 
 		try {
-			smartCode = new Gson().fromJson(inCommandWrapper.getData(), SmartCode.class);
+			catalogProduct = new Gson().fromJson(inCommandWrapper.getData(), CatalogProduct.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for Edit Product From Catalog command");
 
@@ -347,17 +347,40 @@ public class CommandExecuter {
 			return;
 		}
 
-		if (!smartCode.isValid()) {
+		if (!catalogProduct.isValid()) {
 			log.info("Edit Product From Catalog command failed, barcode can't be negative");
+			
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
-
 		} else {
-			// TODO Aviad - how can i update product with smartcode??
-			// c.editProductInCatalog(inCommandWrapper.getSenderID(),
-			// smartCode);
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
+			try {
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
+				
+				c.editProductInCatalog(inCommandWrapper.getSenderID(), catalogProduct);
+			} catch (CriticalError e) {
+				log.fatal("Edit Product From Catalog command failed, critical error occured from SQL Database connection");
 
-			log.info("Edit Product From Catalog with product barcode " + smartCode.getBarcode() + " finished");
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			} catch (ClientNotConnected e) {
+				log.info("Edit Product From Catalog command failed, username dosen't login to the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+			} catch (ProductNotExistInCatalog e) {
+				log.info("Edit Product From Catalog command failed, product dosen't exist in the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST);
+			} catch (IngredientNotExist e) {
+				log.info(
+						"Edit Product From Catalog command failed, ingredient in the product dosen't exist in the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+			} catch (ManufacturerNotExist e) {
+				log.info(
+						"Edit Product From Catalog command failed, manufacturer in the product dosen't exist in the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+			}
+			
+			log.info("Edit Product From Catalog with product " + catalogProduct + " finished");
 		}
 	}
 
