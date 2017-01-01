@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
+import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandDescriptor;
@@ -19,6 +20,8 @@ import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductAlreadyExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
+import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
+import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
 import SQLDatabase.SQLDatabaseException.WorkerAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
@@ -247,18 +250,17 @@ public class CommandExecuter {
 			return;
 		}
 
-		if (!catalogProduct.isValid()){
-			
+		if (!catalogProduct.isValid()) {
+
 			log.info("Add Product To Catalog command failed, product is invalid");
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
-			
+
 		} else {
 			try {
 				c.addProductToCatalog(inCommandWrapper.getSenderID(), catalogProduct);
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 			} catch (CriticalError e) {
-				log.fatal(
-						"Add Product To Catalog command failed, critical error occured from SQL Database connection");
+				log.fatal("Add Product To Catalog command failed, critical error occured from SQL Database connection");
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 			} catch (WorkerNotConnected e) {
@@ -270,15 +272,17 @@ public class CommandExecuter {
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_ALREADY_EXISTS);
 			} catch (IngredientNotExist e) {
-				log.info("Add Product To Catalog command failed, ingredient in the product dosen't exist in the system");
-				
+				log.info(
+						"Add Product To Catalog command failed, ingredient in the product dosen't exist in the system");
+
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
 			} catch (ManufacturerNotExist e) {
-				log.info("Add Product To Catalog command failed, manufacturer in the product dosen't exist in the system");
-				
+				log.info(
+						"Add Product To Catalog command failed, manufacturer in the product dosen't exist in the system");
+
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
 			}
-			
+
 			log.info("Add Product To Catalog with product " + catalogProduct + " finished");
 		}
 	}
@@ -298,15 +302,15 @@ public class CommandExecuter {
 			return;
 		}
 
-		if (!smartCode.isValid()){
+		if (!smartCode.isValid()) {
 			log.info("Remove Product From Catalog command failed, barcode can't be negative");
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
-			
+
 		} else {
 			try {
 				c.removeProductFromCatalog(inCommandWrapper.getSenderID(), smartCode);
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
-				
+
 			} catch (CriticalError e) {
 				log.fatal(
 						"Remove Product From Catalog command failed, critical error occured from SQL Database connection");
@@ -325,13 +329,12 @@ public class CommandExecuter {
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_STILL_FOR_SALE);
 			}
-			
-			
+
 			log.info("Remove Product From Catalog with product barcode " + smartCode.getBarcode() + " finished");
 		}
 	}
 
-	private void editProductFromCatalogCommand(SQLDatabaseConnection __) {
+	private void editProductFromCatalogCommand(SQLDatabaseConnection c) {
 		SmartCode smartCode = null;
 
 		log.info("Edit Product From Catalog command called");
@@ -346,17 +349,21 @@ public class CommandExecuter {
 			return;
 		}
 
-		if (smartCode.isValid())
-			// TODO Noam - call SQL command here
-
-			log.info("Edit Product From Catalog with product barcode " + smartCode.getBarcode() + " finished");
-		else {
+		if (!smartCode.isValid()) {
 			log.info("Edit Product From Catalog command failed, barcode can't be negative");
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+
+		} else {
+			// TODO Aviad - how can i update product with smartcode??
+			// c.editProductInCatalog(inCommandWrapper.getSenderID(),
+			// smartCode);
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
+
+			log.info("Edit Product From Catalog with product barcode " + smartCode.getBarcode() + " finished");
 		}
 	}
 
-	private void placeProductPackageOnShelvesCommand(SQLDatabaseConnection __) {
+	private void placeProductPackageOnShelvesCommand(SQLDatabaseConnection c) {
 		ProductPackage productPackage = null;
 
 		log.info("Place Product Package On Shelves command called");
@@ -371,19 +378,46 @@ public class CommandExecuter {
 			return;
 		}
 
-		if (productPackage.isValid())
-			// TODO Noam - call SQL command here
+		if (!productPackage.isValid()) {
+			log.info("Place Product Package On Shelves command failed, product package is invalid");
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+
+		} else {
+
+			try {
+				c.placeProductPackageOnShelves(inCommandWrapper.getSenderID(), productPackage);
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
+			} catch (CriticalError e) {
+				log.fatal(
+						"Place Product Package On Shelves command failed, critical error occured from SQL Database connection");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			} catch (WorkerNotConnected e) {
+				log.info("Place Product Package On Shelves command failed, username dosen't login to the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+			} catch (ProductNotExistInCatalog e) {
+				log.info("Place Product Package On Shelves command failed, product dosen't exist in the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST);
+			} catch (ProductPackageAmountNotMatch e) {
+				log.info("Place Product Package On Shelves command failed, try to place more than available");
+
+				outCommandWrapper = new CommandWrapper(
+						ResultDescriptor.SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE);
+			} catch (ProductPackageNotExist e) {
+				log.info("Place Product Package On Shelves command failed, package dosen't exist in the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_DOES_NOT_EXIST);
+			}
 
 			log.info("Place Product Package On Shelves with product package barcode "
 					+ productPackage.getSmartCode().getBarcode() + " and amount " + productPackage.getAmount()
 					+ " finished");
-		else {
-			log.info("Place Product Package On Shelves command failed, product package is invalid");
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
 		}
 	}
 
-	private void removeProductPackageFromStoreCommand(SQLDatabaseConnection __) {
+	private void removeProductPackageFromStoreCommand(SQLDatabaseConnection c) {
 		ProductPackage productPackage = null;
 
 		log.info("Remove Product Package From Store command called");
@@ -398,15 +432,47 @@ public class CommandExecuter {
 			return;
 		}
 
-		if (productPackage.isValid())
-			// TODO Noam - call SQL command here
+		if (!productPackage.isValid()) {
+			log.info("Remove Product Package From Store command failed, product package is invalid");
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+
+		} else {
+
+			try {
+				if (productPackage.getLocation().equals(PlaceInMarket.STORE))
+					c.removeProductPackageFromShelves(inCommandWrapper.getSenderID(), productPackage);
+				else
+					c.removeProductPackageFromWarehouse(inCommandWrapper.getSenderID(), productPackage);
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
+			} catch (CriticalError e) {
+				log.fatal(
+						"Remove Product Package From Store command failed, critical error occured from SQL Database connection");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			} catch (WorkerNotConnected e) {
+				log.info("Remove Product Package From Store command failed, username dosen't login to the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+			} catch (ProductNotExistInCatalog e) {
+				log.info("Remove Product Package From Store command failed, product dosen't exist in the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST);
+			} catch (ProductPackageAmountNotMatch e) {
+				log.info("Remove Product Package From Store command failed, try to place more than available");
+
+				outCommandWrapper = new CommandWrapper(
+						ResultDescriptor.SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE);
+			} catch (ProductPackageNotExist e) {
+				log.info("Remove Product Package From Store command failed, package dosen't exist in the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_DOES_NOT_EXIST);
+			}
 
 			log.info("Remove Product Package From Store with product package barcode "
 					+ productPackage.getSmartCode().getBarcode() + " and amount " + productPackage.getAmount()
 					+ " finished");
-		else {
-			log.info("Remove Product Package From Store command failed, product package is invalid");
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+
 		}
 	}
 
