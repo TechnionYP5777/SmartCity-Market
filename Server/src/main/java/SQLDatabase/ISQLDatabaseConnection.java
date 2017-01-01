@@ -35,7 +35,8 @@ public interface ISQLDatabaseConnection {
 			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
 
 	void addProductToCatalog(Integer sessionID, CatalogProduct productToAdd)
-			throws CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog, IngredientNotExist;
+			throws CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog, IngredientNotExist,
+			ManufacturerNotExist;
 
 	void removeProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, ProductStillForSale;

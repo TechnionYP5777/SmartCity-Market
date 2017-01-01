@@ -14,7 +14,10 @@ import ClientServerApi.ResultDescriptor;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
+import SQLDatabase.SQLDatabaseException.IngredientNotExist;
+import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
+import SQLDatabase.SQLDatabaseException.ProductAlreadyExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.WorkerAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
@@ -228,7 +231,7 @@ public class CommandExecuter {
 		}
 	}
 
-	private void addProductToCatalogCommand(SQLDatabaseConnection __) {
+	private void addProductToCatalogCommand(SQLDatabaseConnection c) {
 		CatalogProduct catalogProduct = null;
 
 		log.info("Add Product To Catalog command called");
@@ -243,13 +246,39 @@ public class CommandExecuter {
 			return;
 		}
 
-		if (catalogProduct.isValid())
-			// TODO Noam - call SQL command here
-
-			log.info("Add Product To Catalog with product " + catalogProduct + " finished");
-		else {
+		if (!catalogProduct.isValid()){
+			
 			log.info("Add Product To Catalog command failed, product is invalid");
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+			
+		} else {
+			try {
+				c.addProductToCatalog(inCommandWrapper.getSenderID(), catalogProduct);
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
+			} catch (CriticalError e) {
+				log.fatal(
+						"Add Product To Catalog command failed, critical error occured from SQL Database connection");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			} catch (WorkerNotConnected e) {
+				log.info("Add Product To Catalog command failed, username dosen't login to the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+			} catch (ProductAlreadyExistInCatalog e) {
+				log.info("Add Product To Catalog command failed, product already exist in the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_ALREADY_EXISTS);
+			} catch (IngredientNotExist e) {
+				log.info("Add Product To Catalog command failed, ingredient in the product dosen't exist in the system");
+				
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+			} catch (ManufacturerNotExist e) {
+				log.info("Add Product To Catalog command failed, manufacturer in the product dosen't exist in the system");
+				
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+			}
+			
+			log.info("Add Product To Catalog with product " + catalogProduct + " finished");
 		}
 	}
 

@@ -1173,8 +1173,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * BasicCommonClasses.CatalogProduct)
 	 */
 	@Override
-	public void addProductToCatalog(Integer sessionID, CatalogProduct productToAdd)
-			throws CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog, IngredientNotExist {
+	public void addProductToCatalog(Integer sessionID, CatalogProduct productToAdd) throws CriticalError,
+			WorkerNotConnected, ProductAlreadyExistInCatalog, IngredientNotExist, ManufacturerNotExist {
 
 		validateSessionEstablished(sessionID);
 
@@ -1185,6 +1185,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			if (isProductExistInCatalog(productToAdd.getBarcode()))
 				throw new ProductAlreadyExistInCatalog();
+			
+			// check if manufacturer exist
+			if (isManufacturerExist((int) productToAdd.getManufacturer().getId()))
+				throw new ManufacturerNotExist();
 
 			// check if all ingredients exists
 			for (Ingredient ¢ : productToAdd.getIngredients())
