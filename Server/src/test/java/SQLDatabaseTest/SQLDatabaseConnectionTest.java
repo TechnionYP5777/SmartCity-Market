@@ -54,6 +54,29 @@ public class SQLDatabaseConnectionTest {
 	}
 
 	@Test
+	public void testLogoutAll() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		int session = 0;
+		try {
+			session = sqlConnection.workerLogin("admin", "admin");
+			sqlConnection.logoutAllUsers();
+			session = sqlConnection.workerLogin("admin", "admin");
+		} catch (AuthenticationError | CriticalError | WorkerAlreadyConnected | NumberOfConnectionsExceeded e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.workerLogout(session, "admin");
+		} catch (CriticalError | WorkerNotConnected e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
 	public void testSimpleGetProductFromCatalog() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();

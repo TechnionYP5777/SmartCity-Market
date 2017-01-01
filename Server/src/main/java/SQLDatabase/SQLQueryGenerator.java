@@ -115,7 +115,7 @@ class SQLQueryGenerator {
 	 * @return string of select query.
 	 */
 	public static String generateDeleteQuery(DbTable tabel, Condition... cs) {
-		DeleteQuery $ = new DeleteQuery(WorkersTable.table);
+		DeleteQuery $ = new DeleteQuery(tabel);
 
 		for (int ¢ = 0; ¢ < cs.length; ++¢)
 			$.addCondition(cs[¢]);
