@@ -38,11 +38,19 @@ public class CommandExecuter {
 	}
 	
 	private void loginCommand(SQLDatabaseConnection c) {		
-		Login login;
+		Login login = null;
 		
 		log.info("Login command called");
 		
-		login = new Gson().fromJson(inCommandWrapper.getData(), Login.class);
+		try {
+			login = new Gson().fromJson(inCommandWrapper.getData(), Login.class);	
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for login command");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			
+			return;
+		}
 		
 		if (!login.isValid()) {
 			log.info("Login command failed, username and password can't be empty");
@@ -85,7 +93,15 @@ public class CommandExecuter {
 		
 		log.info("Logout command called");
 		
-		username = new Gson().fromJson(inCommandWrapper.getData(), String.class);
+		try {
+			username = new Gson().fromJson(inCommandWrapper.getData(), String.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for logout command");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			
+			return;
+		}
 		
 		if ("".equals(username)) {
 			log.info("Logout command failed, username can't be empty");
@@ -115,11 +131,19 @@ public class CommandExecuter {
 	}
 	
 	private void viewProductFromCatalogCommand(SQLDatabaseConnection c) {
-		SmartCode smartCode;
+		SmartCode smartCode = null;
 		
 		log.info("View Product From Catalog command called");
 		
-		smartCode = new Gson().fromJson(inCommandWrapper.getData(), SmartCode.class);
+		try {
+			smartCode = new Gson().fromJson(inCommandWrapper.getData(), SmartCode.class);			
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for View Product From Catalog command");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			
+			return;
+		}
 		
 		if (!smartCode.isValid()) {
 			log.info("View Product From Catalog command failed, barcode can't be negative");
@@ -152,11 +176,19 @@ public class CommandExecuter {
 	}
 	
 	private void addProductPackageToWarehouseCommand(SQLDatabaseConnection __) {
-		ProductPackage productPackage;
+		ProductPackage productPackage = null;
 		
 		log.info("Add Product Package To Warehouse command called");
 		
-		productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+		try {
+			productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Add Product Package To Warehouse command");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			
+			return;
+		}
 		
 		if (productPackage.isValid())
 			//TODO Noam - call SQL command here
@@ -171,11 +203,19 @@ public class CommandExecuter {
 	}
 	
 	private void addProductToCatalogCommand(SQLDatabaseConnection __) {
-		CatalogProduct catalogProduct;
+		CatalogProduct catalogProduct = null;
 		
 		log.info("Add Product To Catalog command called");
 		
-		catalogProduct = new Gson().fromJson(inCommandWrapper.getData(), CatalogProduct.class);
+		try {
+			catalogProduct = new Gson().fromJson(inCommandWrapper.getData(), CatalogProduct.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Add Product To Catalog command");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			
+			return;
+		}
 		
 		if (catalogProduct.isValid())
 			//TODO Noam - call SQL command here
@@ -189,11 +229,19 @@ public class CommandExecuter {
 	}
 	
 	private void removeProductFromCatalogCommand(SQLDatabaseConnection __) {	
-		SmartCode smartCode;
+		SmartCode smartCode = null;
 		
 		log.info("Remove Product From Catalog command called");
 		
-		smartCode = new Gson().fromJson(inCommandWrapper.getData(), SmartCode.class);
+		try {
+			smartCode = new Gson().fromJson(inCommandWrapper.getData(), SmartCode.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Remove Product From Catalog command");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			
+			return;
+		}
 		
 		if (smartCode.isValid())
 			//TODO Noam - call SQL command here
@@ -207,11 +255,19 @@ public class CommandExecuter {
 	}
 	
 	private void editProductFromCatalogCommand(SQLDatabaseConnection __) {
-		SmartCode smartCode;
+		SmartCode smartCode = null;
 		
 		log.info("Edit Product From Catalog command called");
 		
-		smartCode = new Gson().fromJson(inCommandWrapper.getData(), SmartCode.class);
+		try {
+			smartCode = new Gson().fromJson(inCommandWrapper.getData(), SmartCode.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Edit Product From Catalog command");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			
+			return;
+		}
 		
 		if (smartCode.isValid())
 			//TODO Noam - call SQL command here
@@ -225,11 +281,19 @@ public class CommandExecuter {
 	}
 	
 	private void placeProductPackageOnShelvesCommand(SQLDatabaseConnection __) {
-		ProductPackage productPackage;
+		ProductPackage productPackage = null;
 		
 		log.info("Place Product Package On Shelves command called");
 		
-		productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+		try {
+			productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Place Product Package On Shelves command");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			
+			return;
+		}
 		
 		if (productPackage.isValid())
 			//TODO Noam - call SQL command here
@@ -244,11 +308,19 @@ public class CommandExecuter {
 	}
 	
 	private void removeProductPackageFromStoreCommand(SQLDatabaseConnection __) {
-		ProductPackage productPackage;
+		ProductPackage productPackage = null;
 		
 		log.info("Remove Product Package From Store command called");
 		
-		productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+		try {
+			productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Remove Product Package From Store command");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			
+			return;
+		}
 		
 		if (productPackage.isValid())
 			//TODO Noam - call SQL command here
@@ -263,11 +335,19 @@ public class CommandExecuter {
 	}
 	
 	private void getProductPackageAmount(SQLDatabaseConnection __) {
-		ProductPackage productPackage;
+		ProductPackage productPackage = null;
 		
 		log.info("Get Product Package Amount command called");
 		
-		productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+		try {
+			productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Get Product Package Amount command");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			
+			return;
+		}
 		
 		if (productPackage.isValid())
 			//TODO Noam - call SQL command here

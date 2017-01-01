@@ -88,32 +88,32 @@ public abstract class AEmployee {
 			break;
 			
 		case SM_INVALID_CMD_DESCRIPTOR:
-			log.info("Command execution failed, invalid command description");
+			log.fatal("Command execution failed, invalid command description");
 			
 			throw new AEmployeeException.InvalidCommandDescriptor();
 
 		case SM_INVALID_PARAMETER:
-			log.info("Command execution failed, invalid parameter");
+			log.fatal("Command execution failed, invalid parameter");
 			
 			throw new AEmployeeException.InvalidParameter();
 			
 		case SM_ERR:
-			log.info("Command execution failed, critical error");
+			log.fatal("Command execution failed, critical error");
 			
 			throw new AEmployeeException.CriticalError();
 			
 		case SM_INVALID_SENDER_ID:
-			log.info("Command execution failed, invalid sender id");
+			log.fatal("Command execution failed, invalid sender id");
 			
 			throw new AEmployeeException.UnknownSenderID();
 			
 		case SM_SENDER_IS_NOT_CONNECTED:
-			log.info("Command execution failed, worker not connected");
+			log.fatal("Command execution failed, worker not connected");
 			
 			throw new AEmployeeException.EmployeeNotConnected();
 			
 		case SM_SENDER_IS_ALREADY_CONNECTED:
-			log.info("Command execution failed, worker already connected");
+			log.fatal("Command execution failed, worker already connected");
 			
 			throw new AEmployeeException.EmployeeAlreadyConnected();	
 			
@@ -143,12 +143,12 @@ public abstract class AEmployee {
 			throw new AEmployeeException.AmountBiggerThanAvailable();
 			
 		case SM_PRODUCT_PACKAGE_DOES_NOT_EXIST:
-			log.info("Command execution failed, product package does not exist");
+			log.fatal("Command execution failed, product package does not exist");
 			
 			throw new AEmployeeException.ProductPackageDoesNotExist();
 			
 		default:
-			log.info("Command execution failed, failed to parse result description");
+			log.fatal("Command execution failed, failed to parse result description");
 			
 			throw new AEmployeeException.CriticalError();
 		}
