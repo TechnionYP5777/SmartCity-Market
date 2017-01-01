@@ -94,4 +94,26 @@ public class ViewProductFromCatalogTest {
 			/* Test Passed */
 		}
 	}
+	
+	@Test
+	public void ViewProductFromCatalogproductSenderIsNotConnectedTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(new SmartCode(1234567890, null))).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		try {
+			worker.viewProductFromCatalog(1234567890);
+		} catch (InvalidParameter | UnknownSenderID | CriticalError | ProductNotExistInCatalog e) {
+			e.printStackTrace();
+			fail();
+		} catch (EmployeeNotConnected e) {
+			/* Test Passed */
+		}
+	}
 }
