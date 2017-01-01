@@ -91,6 +91,8 @@ public class WorkerMenuScreen implements Initializable {
 		});
 		editPackagesDatePicker.setValue(LocalDate.now());
 		worker = TempWorkerPassingData.worker;
+		enableSearchBarcodeButtonCheck();
+		enableRunTheOperationButton();
 	}
 
 	private void enableSearchBarcodeButtonCheck() {
