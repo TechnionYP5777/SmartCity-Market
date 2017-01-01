@@ -19,8 +19,8 @@ import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
-import SQLDatabase.SQLDatabaseException.WorkerAlreadyConnected;
-import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
+import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
+import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 
 /**
  * @author Noam Yefet
@@ -47,14 +47,14 @@ public class SQLDatabaseConnectionTest {
 		try {
 			session = sqlConnection.workerLogin("admin", "admin");
 
-		} catch (AuthenticationError | CriticalError | WorkerAlreadyConnected | NumberOfConnectionsExceeded e) {
+		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
 			e.printStackTrace();
 			fail();
 		}
 
 		try {
 			sqlConnection.workerLogout(session, "admin");
-		} catch (CriticalError | WorkerNotConnected e) {
+		} catch (CriticalError | ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -70,14 +70,14 @@ public class SQLDatabaseConnectionTest {
 			session = sqlConnection.workerLogin("admin", "admin");
 			sqlConnection.logoutAllUsers();
 			session = sqlConnection.workerLogin("admin", "admin");
-		} catch (AuthenticationError | CriticalError | WorkerAlreadyConnected | NumberOfConnectionsExceeded e) {
+		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
 			e.printStackTrace();
 			fail();
 		}
 
 		try {
 			sqlConnection.workerLogout(session, "admin");
-		} catch (CriticalError | WorkerNotConnected e) {
+		} catch (CriticalError | ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -98,7 +98,7 @@ public class SQLDatabaseConnectionTest {
 			assertEquals(sqlConnection.getProductFromCatalog(null, 1234567890),
 					new Gson().toJson((new CatalogProduct(1234567890L, "חלב", ingredients, new Manufacturer(1, "תנובה"),
 							"", 10.5, milkImage, locations))));
-		} catch (ProductNotExistInCatalog | WorkerNotConnected | CriticalError e) {
+		} catch (ProductNotExistInCatalog | ClientNotConnected | CriticalError e) {
 			e.printStackTrace();
 			fail();
 		}

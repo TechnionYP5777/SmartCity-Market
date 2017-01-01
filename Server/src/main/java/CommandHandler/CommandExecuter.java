@@ -23,8 +23,8 @@ import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
-import SQLDatabase.SQLDatabaseException.WorkerAlreadyConnected;
-import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
+import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
+import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 
 /**
  * CommandExecuter - This structure will execute the given command the clients.
@@ -85,7 +85,7 @@ public class CommandExecuter {
 			log.fatal("Login command failed, critical error occured from SQL Database connection");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
-		} catch (WorkerAlreadyConnected e) {
+		} catch (ClientAlreadyConnected e) {
 			log.info("Login command failed, user already connected");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_ALREADY_CONNECTED);
@@ -129,7 +129,7 @@ public class CommandExecuter {
 			c.workerLogout(inCommandWrapper.getSenderID(), username);
 
 			log.info("Logout command succeded with sender ID " + inCommandWrapper.getSenderID());
-		} catch (WorkerNotConnected e) {
+		} catch (ClientNotConnected e) {
 			log.info("Logout command failed, username dosen't login to the system");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
@@ -177,7 +177,7 @@ public class CommandExecuter {
 			log.info("Get product from catalog command failed, product dosen't exist in the system");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST);
-		} catch (WorkerNotConnected e) {
+		} catch (ClientNotConnected e) {
 			log.info("Get product from catalog command failed, username dosen't login to the system");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
@@ -219,7 +219,7 @@ public class CommandExecuter {
 						"Add Product Package To Warehouse command failed, critical error occured from SQL Database connection");
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
-			} catch (WorkerNotConnected e) {
+			} catch (ClientNotConnected e) {
 				log.info("Add Product Package To Warehouse command failed, username dosen't login to the system");
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
@@ -263,7 +263,7 @@ public class CommandExecuter {
 				log.fatal("Add Product To Catalog command failed, critical error occured from SQL Database connection");
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
-			} catch (WorkerNotConnected e) {
+			} catch (ClientNotConnected e) {
 				log.info("Add Product To Catalog command failed, username dosen't login to the system");
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
@@ -316,7 +316,7 @@ public class CommandExecuter {
 						"Remove Product From Catalog command failed, critical error occured from SQL Database connection");
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
-			} catch (WorkerNotConnected e) {
+			} catch (ClientNotConnected e) {
 				log.info("Remove Product From Catalog command failed, username dosen't login to the system");
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
@@ -392,7 +392,7 @@ public class CommandExecuter {
 						"Place Product Package On Shelves command failed, critical error occured from SQL Database connection");
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
-			} catch (WorkerNotConnected e) {
+			} catch (ClientNotConnected e) {
 				log.info("Place Product Package On Shelves command failed, username dosen't login to the system");
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
@@ -450,7 +450,7 @@ public class CommandExecuter {
 						"Remove Product Package From Store command failed, critical error occured from SQL Database connection");
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
-			} catch (WorkerNotConnected e) {
+			} catch (ClientNotConnected e) {
 				log.info("Remove Product Package From Store command failed, username dosen't login to the system");
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
@@ -509,7 +509,7 @@ public class CommandExecuter {
 						"Get Product Package Amount command failed, critical error occured from SQL Database connection");
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
-			} catch (WorkerNotConnected e) {
+			} catch (ClientNotConnected e) {
 				log.info("Get Product Package Amount command failed, username dosen't login to the system");
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);

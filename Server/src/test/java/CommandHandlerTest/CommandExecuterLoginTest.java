@@ -21,7 +21,7 @@ import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
-import SQLDatabase.SQLDatabaseException.WorkerAlreadyConnected;
+import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommandExecuterLoginTest {
@@ -53,7 +53,7 @@ public class CommandExecuterLoginTest {
 		} catch (CriticalError e) {
 			e.printStackTrace();
 			fail();
-		} catch (WorkerAlreadyConnected e) {
+		} catch (ClientAlreadyConnected e) {
 			e.printStackTrace();
 			fail();
 		} catch (NumberOfConnectionsExceeded e) {
@@ -85,7 +85,7 @@ public class CommandExecuterLoginTest {
 		} catch (CriticalError e) {
 			e.printStackTrace();
 			fail();
-		} catch (WorkerAlreadyConnected e) {
+		} catch (ClientAlreadyConnected e) {
 			e.printStackTrace();
 			fail();
 		} catch (NumberOfConnectionsExceeded e) {
@@ -116,7 +116,7 @@ public class CommandExecuterLoginTest {
 		} catch (CriticalError e) {
 			e.printStackTrace();
 			fail();
-		} catch (WorkerAlreadyConnected e) {
+		} catch (ClientAlreadyConnected e) {
 			e.printStackTrace();
 			fail();
 		} catch (NumberOfConnectionsExceeded e) {

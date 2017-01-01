@@ -47,7 +47,6 @@ import SQLDatabase.SQLDatabaseEntities.ProductsCatalogTable;
 import SQLDatabase.SQLDatabaseEntities.ProductsPackagesTable;
 import SQLDatabase.SQLDatabaseEntities.WorkersTable;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
-import SQLDatabase.SQLDatabaseException.CartNotConnected;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductAlreadyExistInCatalog;
@@ -58,8 +57,8 @@ import SQLDatabase.SQLDatabaseException.IngredientNotExist;
 import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
-import SQLDatabase.SQLDatabaseException.WorkerAlreadyConnected;
-import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
+import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
+import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 import SQLDatabase.SQLDatabaseStrings.LOCATIONS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.PRODUCTS_PACKAGES_TABLE;
 
@@ -387,13 +386,13 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * 
 	 * @param sessionID
 	 *            - sessionID of the worker
-	 * @throws WorkerNotConnected
+	 * @throws ClientNotConnected
 	 * @throws CriticalError
 	 */
-	private void validateSessionEstablished(Integer sessionID) throws WorkerNotConnected, CriticalError {
+	private void validateSessionEstablished(Integer sessionID) throws ClientNotConnected, CriticalError {
 		try {
 			if (!isSessionEstablished(sessionID))
-				throw new SQLDatabaseException.WorkerNotConnected();
+				throw new SQLDatabaseException.ClientNotConnected();
 		} catch (ValidationException e) {
 			e.printStackTrace();
 			throw new CriticalError();
@@ -949,7 +948,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public int workerLogin(String username, String password)
-			throws AuthenticationError, WorkerAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
+			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
 		String query = generateSelectQuery1Table(WorkersTable.table,
 				BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK),
 				BinaryCondition.equalTo(WorkersTable.workerPasswordCol, PARAM_MARK));
@@ -970,7 +969,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		// check if worker already connected
 		if (isSessionEstablished(username))
-			throw new SQLDatabaseException.WorkerAlreadyConnected();
+			throw new SQLDatabaseException.ClientAlreadyConnected();
 
 		/*
 		 * EVERYTHING OK - initiate new session to worker
@@ -1002,7 +1001,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * java.lang.String)
 	 */
 	@Override
-	public void workerLogout(Integer sessionID, String username) throws WorkerNotConnected, CriticalError {
+	public void workerLogout(Integer sessionID, String username) throws ClientNotConnected, CriticalError {
 
 		validateSessionEstablished(sessionID);
 
@@ -1051,7 +1050,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public String getProductFromCatalog(Integer sessionID, long barcode)
-			throws ProductNotExistInCatalog, WorkerNotConnected, CriticalError {
+			throws ProductNotExistInCatalog, ClientNotConnected, CriticalError {
 
 		validateSessionEstablished(sessionID);
 
@@ -1114,7 +1113,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void addProductPackageToWarehouse(Integer sessionID, ProductPackage p)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
+			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog {
 		validateSessionEstablished(sessionID);
 
 		try {
@@ -1147,7 +1146,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void removeProductPackageFromWarehouse(Integer sessionID, ProductPackage p) throws CriticalError,
-			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
+			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
 
 		validateSessionEstablished(sessionID);
 
@@ -1176,7 +1175,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void addProductToCatalog(Integer sessionID, CatalogProduct productToAdd) throws CriticalError,
-			WorkerNotConnected, ProductAlreadyExistInCatalog, IngredientNotExist, ManufacturerNotExist {
+			ClientNotConnected, ProductAlreadyExistInCatalog, IngredientNotExist, ManufacturerNotExist {
 
 		validateSessionEstablished(sessionID);
 
@@ -1218,7 +1217,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void removeProductFromCatalog(Integer sessionID, SmartCode productToRemove)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, ProductStillForSale {
+			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog, ProductStillForSale {
 
 		validateSessionEstablished(sessionID);
 
@@ -1254,7 +1253,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void hardRemoveProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
+			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog {
 	}
 
 	/*
@@ -1265,7 +1264,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void editProductInCatalog(Integer sessionID, CatalogProduct productToUpdate) throws CriticalError,
-			WorkerNotConnected, ProductNotExistInCatalog, IngredientNotExist, ManufacturerNotExist {
+			ClientNotConnected, ProductNotExistInCatalog, IngredientNotExist, ManufacturerNotExist {
 		validateSessionEstablished(sessionID);
 
 		try {
@@ -1308,7 +1307,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void addProductToGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError,
-			CartNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
+			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
 
 		try {
 			// START transaction
@@ -1337,7 +1336,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void removeProductFromGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError,
-			CartNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
+			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
 
 		try {
 			// START transaction
@@ -1365,7 +1364,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void placeProductPackageOnShelves(Integer sessionID, ProductPackage p) throws CriticalError,
-			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
+			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
 
 		validateSessionEstablished(sessionID);
 
@@ -1394,7 +1393,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void removeProductPackageFromShelves(Integer sessionID, ProductPackage p) throws CriticalError,
-			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
+			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
 
 		validateSessionEstablished(sessionID);
 		try {
@@ -1422,7 +1421,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public String getProductPackageAmonutOnShelves(Integer sessionID, ProductPackage p)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
+			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog {
 
 		validateSessionEstablished(sessionID);
 
@@ -1438,7 +1437,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public String getProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage p)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
+			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog {
 
 		validateSessionEstablished(sessionID);
 
@@ -1451,7 +1450,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * @see SQLDatabase.ISQLDatabaseConnection#cartCheckout(java.lang.Integer)
 	 */
 	@Override
-	public void cartCheckout(Integer cartID) throws CriticalError, CartNotConnected {
+	public void cartCheckout(Integer cartID) throws CriticalError, ClientNotConnected {
 
 	}
 
@@ -1471,7 +1470,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 
 	@Override
-	public String addManufacturer(Integer sessionID, String manufacturerName) throws CriticalError, WorkerNotConnected {
+	public String addManufacturer(Integer sessionID, String manufacturerName) throws CriticalError, ClientNotConnected {
 
 		validateSessionEstablished(sessionID);
 
@@ -1508,7 +1507,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	@Override
 	public void removeManufacturer(Integer sessionID, Manufacturer m)
-			throws CriticalError, WorkerNotConnected, ManufacturerNotExist, ManufacturerStillUsed {
+			throws CriticalError, ClientNotConnected, ManufacturerNotExist, ManufacturerStillUsed {
 		validateSessionEstablished(sessionID);
 
 		try {
@@ -1539,7 +1538,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	@Override
 	public void editManufacturer(Integer sessionID, Manufacturer newManufacturer)
-			throws CriticalError, WorkerNotConnected, ManufacturerNotExist {
+			throws CriticalError, ClientNotConnected, ManufacturerNotExist {
 		validateSessionEstablished(sessionID);
 
 		try {

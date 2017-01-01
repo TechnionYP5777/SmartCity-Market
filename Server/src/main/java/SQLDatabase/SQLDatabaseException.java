@@ -114,42 +114,22 @@ public class SQLDatabaseException extends Exception {
 	}
 
 	/**
-	 * Thrown when worker try to do operation before connecting
+	 * Thrown when try to do operation before connecting
 	 * 
 	 * @author Noam Yefet
 	 *
 	 */
-	public static class WorkerNotConnected extends SQLDatabaseException {
+	public static class ClientNotConnected extends SQLDatabaseException {
 		private static final long serialVersionUID = -4096975136661332560L;
 	}
 
 	/**
-	 * Thrown when worker try to connect twice
+	 * Thrown when try to connect twice
 	 * 
 	 * @author Noam Yefet
 	 *
 	 */
-	public static class WorkerAlreadyConnected extends SQLDatabaseException {
-		private static final long serialVersionUID = 1L;
-	}
-	
-	/**
-	 * Thrown when cart try to do operation before connecting
-	 * 
-	 * @author Noam Yefet
-	 *
-	 */
-	public static class CartNotConnected extends SQLDatabaseException {
-		private static final long serialVersionUID = -4096975136661332560L;
-	}
-
-	/**
-	 * Thrown when cart try to connect twice
-	 * 
-	 * @author Noam Yefet
-	 *
-	 */
-	public static class CartAlreadyConnected extends SQLDatabaseException {
+	public static class ClientAlreadyConnected extends SQLDatabaseException {
 		private static final long serialVersionUID = 1L;
 	}
 	

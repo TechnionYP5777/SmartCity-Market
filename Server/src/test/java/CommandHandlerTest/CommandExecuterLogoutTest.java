@@ -19,7 +19,7 @@ import ClientServerApi.ResultDescriptor;
 import CommandHandler.CommandExecuter;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException.CriticalError;
-import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
+import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommandExecuterLogoutTest {
@@ -43,7 +43,7 @@ public class CommandExecuterLogoutTest {
 		
 		try {
 			Mockito.doNothing().when(sqlDatabaseConnection).workerLogout(senderID, userName);
-		} catch (WorkerNotConnected e) {
+		} catch (ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
 		} catch (CriticalError e) {
@@ -66,12 +66,12 @@ public class CommandExecuterLogoutTest {
 		CommandWrapper out;
 		
 		try {
-			Mockito.doThrow(new WorkerNotConnected()).when(sqlDatabaseConnection)
+			Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection)
 					.workerLogout(senderID, userName);
 		} catch (CriticalError e) {
 			e.printStackTrace();
 			fail();
-		} catch (WorkerNotConnected e) {
+		} catch (ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -96,7 +96,7 @@ public class CommandExecuterLogoutTest {
 		} catch (CriticalError e) {
 			e.printStackTrace();
 			fail();
-		} catch (WorkerNotConnected e) {
+		} catch (ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
 		}

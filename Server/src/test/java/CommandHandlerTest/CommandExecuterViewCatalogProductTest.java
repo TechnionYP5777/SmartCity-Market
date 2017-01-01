@@ -21,7 +21,7 @@ import CommandHandler.CommandExecuter;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
-import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
+import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommandExecuterViewCatalogProductTest {
@@ -53,7 +53,7 @@ public class CommandExecuterViewCatalogProductTest {
 		} catch (ProductNotExistInCatalog e) {
 			e.printStackTrace();
 			fail();
-		} catch (WorkerNotConnected e) {
+		} catch (ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -82,7 +82,7 @@ public class CommandExecuterViewCatalogProductTest {
 		} catch (ProductNotExistInCatalog e) {
 			e.printStackTrace();
 			fail();
-		} catch (WorkerNotConnected e) {
+		} catch (ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -120,11 +120,11 @@ public class CommandExecuterViewCatalogProductTest {
 		try {
 			Mockito.when(
 					sqlDatabaseConnection.getProductFromCatalog(senderID, smartCode.getBarcode()))
-					.thenThrow(new WorkerNotConnected());
+					.thenThrow(new ClientNotConnected());
 		} catch (CriticalError e) {
 			e.printStackTrace();
 			fail();
-		} catch (WorkerNotConnected e) {
+		} catch (ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog e) {
@@ -153,7 +153,7 @@ public class CommandExecuterViewCatalogProductTest {
 		} catch (CriticalError e) {
 			e.printStackTrace();
 			fail();
-		} catch (WorkerNotConnected e) {
+		} catch (ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog e) {

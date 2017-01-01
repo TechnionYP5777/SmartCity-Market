@@ -5,7 +5,6 @@ import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
-import SQLDatabase.SQLDatabaseException.CartNotConnected;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.IngredientNotExist;
 import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
@@ -16,64 +15,64 @@ import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
-import SQLDatabase.SQLDatabaseException.WorkerAlreadyConnected;
-import SQLDatabase.SQLDatabaseException.WorkerNotConnected;
+import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
+import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 
 public interface ISQLDatabaseConnection {
 
 	int workerLogin(String username, String password)
-			throws AuthenticationError, WorkerAlreadyConnected, CriticalError, NumberOfConnectionsExceeded;
+			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded;
 
-	void workerLogout(Integer sessionID, String username) throws WorkerNotConnected, CriticalError;
+	void workerLogout(Integer sessionID, String username) throws ClientNotConnected, CriticalError;
 
 	String getProductFromCatalog(Integer sessionID, long barcode)
-			throws ProductNotExistInCatalog, WorkerNotConnected, CriticalError;
+			throws ProductNotExistInCatalog, ClientNotConnected, CriticalError;
 
 	void addProductPackageToWarehouse(Integer sessionID, ProductPackage p)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
+			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog;
 
 	void removeProductPackageFromWarehouse(Integer sessionID, ProductPackage p) throws CriticalError,
-			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
+			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
 
-	void addProductToCatalog(Integer sessionID, CatalogProduct productToAdd) throws CriticalError, WorkerNotConnected,
+	void addProductToCatalog(Integer sessionID, CatalogProduct productToAdd) throws CriticalError, ClientNotConnected,
 			ProductAlreadyExistInCatalog, IngredientNotExist, ManufacturerNotExist;
 
 	void removeProductFromCatalog(Integer sessionID, SmartCode productToRemove)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, ProductStillForSale;
+			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog, ProductStillForSale;
 
 	void hardRemoveProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
+			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog;
 
 	void editProductInCatalog(Integer sessionID, CatalogProduct productToUpdate) throws CriticalError,
-			WorkerNotConnected, ProductNotExistInCatalog, IngredientNotExist, ManufacturerNotExist;
+			ClientNotConnected, ProductNotExistInCatalog, IngredientNotExist, ManufacturerNotExist;
 
-	String addManufacturer(Integer sessionID, String manufacturerName) throws CriticalError, WorkerNotConnected;
+	String addManufacturer(Integer sessionID, String manufacturerName) throws CriticalError, ClientNotConnected;
 
 	void removeManufacturer(Integer sessionID, Manufacturer m)
-			throws CriticalError, WorkerNotConnected, ManufacturerNotExist, ManufacturerStillUsed;
+			throws CriticalError, ClientNotConnected, ManufacturerNotExist, ManufacturerStillUsed;
 
 	void editManufacturer(Integer sessionID, Manufacturer newManufacturer)
-			throws CriticalError, WorkerNotConnected, ManufacturerNotExist;
+			throws CriticalError, ClientNotConnected, ManufacturerNotExist;
 
-	void addProductToGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError, CartNotConnected,
+	void addProductToGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError, ClientNotConnected,
 			ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
 
 	void removeProductFromGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError,
-			CartNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
+			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
 
 	void placeProductPackageOnShelves(Integer sessionID, ProductPackage productToBuy) throws CriticalError,
-			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
+			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
 
 	void removeProductPackageFromShelves(Integer sessionID, ProductPackage productToBuy) throws CriticalError,
-			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
+			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
 
 	String getProductPackageAmonutOnShelves(Integer sessionID, ProductPackage productToBuy)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
+			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog;
 
 	String getProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage productToBuy)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
+			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog;
 
-	void cartCheckout(Integer cartID) throws CriticalError, CartNotConnected;
+	void cartCheckout(Integer cartID) throws CriticalError, ClientNotConnected;
 
 	void close() throws CriticalError;
 
