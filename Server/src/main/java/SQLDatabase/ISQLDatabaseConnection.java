@@ -45,8 +45,9 @@ public interface ISQLDatabaseConnection {
 	void hardRemoveProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
 
-	void editProductInCatalog(Integer sessionID, Long productBarcode, CatalogProduct productToUpdate)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
+	void editProductInCatalog(Integer sessionID, CatalogProduct productToUpdate)
+			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, IngredientNotExist,
+			ManufacturerNotExist;
 
 	int addManufacturer(Integer sessionID, String manufacturerName) throws CriticalError, WorkerNotConnected;
 

@@ -1230,6 +1230,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				throw new ProductNotExistInCatalog();
 
 			// TODO check if the product is in the system
+
 			removeCatalogProduct(productToRemove);
 
 			// END transaction
@@ -1262,8 +1263,39 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * Integer, java.lang.Long, BasicCommonClasses.CatalogProduct)
 	 */
 	@Override
-	public void editProductInCatalog(Integer sessionID, Long productBarcode, CatalogProduct productToUpdate)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
+	public void editProductInCatalog(Integer sessionID, CatalogProduct productToUpdate) throws CriticalError,
+			WorkerNotConnected, ProductNotExistInCatalog, IngredientNotExist, ManufacturerNotExist {
+		validateSessionEstablished(sessionID);
+
+		try {
+			// START transaction
+			connection.setAutoCommit(false);
+			// TODO add savepoint
+
+			if (!isProductExistInCatalog(productToUpdate.getBarcode()))
+				throw new ProductNotExistInCatalog();
+
+			// check if manufacturer exist
+			if (isManufacturerExist((int) productToUpdate.getManufacturer().getId()))
+				throw new ManufacturerNotExist();
+
+			// check if all ingredients exists
+			for (Ingredient ¢ : productToUpdate.getIngredients())
+				if (!isIngredientExist((int) ¢.getId()))
+					throw new IngredientNotExist();
+
+			// do update = remove product and adds it again
+			removeCatalogProduct(new SmartCode(productToUpdate.getBarcode(), null));
+			addCatalogProduct(productToUpdate);
+
+			// END transaction
+			connection.commit();
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {
+			// TODO rollback
+			e.printStackTrace();
+			throw new CriticalError();
+		}
 	}
 
 	/*
