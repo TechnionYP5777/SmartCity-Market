@@ -16,7 +16,6 @@ import EmployeeDefs.AEmployeeException.ProductAlreadyExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductPackageDoesNotExist;
 import EmployeeDefs.AEmployeeException.ProductStillForSale;
-import EmployeeDefs.AEmployeeException.UnknownSenderID;
 import EmployeeDefs.AEmployeeException.EmployeeAlreadyConnected;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import UtilsContracts.IClientRequestHandler;
@@ -37,7 +36,7 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public void addProductToCatalog(ProductPackage p) throws InvalidParameter,
-		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
+		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
 		log.info("Creating addProductToCatalog command wrapper with product package: " + p);
@@ -67,7 +66,7 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public void removeProductFromCatalog(ProductPackage p) throws InvalidParameter,
-		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog, ProductStillForSale {
+		CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog, ProductStillForSale {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
 		log.info("Creating removeProductFromCatalog command wrapper with product package: " + p);
@@ -98,7 +97,7 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public void editProductFromCatalog(ProductPackage p) throws InvalidParameter,
-		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
+		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
 		ProductAlreadyExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		

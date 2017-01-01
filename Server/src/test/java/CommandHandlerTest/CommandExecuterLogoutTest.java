@@ -107,14 +107,6 @@ public class CommandExecuterLogoutTest {
 	}
 	
 	@Test
-	public void logoutInvalidsenderIDTest() {
-		assertEquals(ResultDescriptor.SM_INVALID_SENDER_ID,
-				(new CommandExecuter(new CommandWrapper(-1, CommandDescriptor.LOGOUT,
-						new Gson().toJson("admin", String.class)).serialize()))
-								.execute(sqlDatabaseConnection).getResultDescriptor());
-	}
-	
-	@Test
 	public void logoutInvalidUserNameTest() {
 		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER,
 				(new CommandExecuter(new CommandWrapper(0, CommandDescriptor.LOGOUT,

@@ -6,7 +6,6 @@ import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ProductAlreadyExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductStillForSale;
-import EmployeeDefs.AEmployeeException.UnknownSenderID;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 
 /** IManager - This interface represent the manager functionality which is a worker.
@@ -27,7 +26,7 @@ public interface IManager extends IWorker {
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
 	 */
-	void addProductToCatalog(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog;
+	void addProductToCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog;
 	
 	/**
 	 * Manager removes product to catalog.
@@ -41,7 +40,7 @@ public interface IManager extends IWorker {
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
 	 */
-	void removeProductFromCatalog(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog, ProductStillForSale;
+	void removeProductFromCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog, ProductStillForSale;
 	
 	/**
 	 * Manager edits product to catalog.
@@ -55,5 +54,5 @@ public interface IManager extends IWorker {
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
 	 */
-	void editProductFromCatalog(ProductPackage p) throws InvalidParameter, UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ProductAlreadyExistInCatalog;
+	void editProductFromCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ProductAlreadyExistInCatalog;
 }

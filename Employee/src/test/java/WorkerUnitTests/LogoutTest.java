@@ -18,7 +18,6 @@ import ClientServerApi.ResultDescriptor;
 import EmployeeContracts.IWorker;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
-import EmployeeDefs.AEmployeeException.UnknownSenderID;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Worker;
@@ -55,7 +54,7 @@ public class LogoutTest {
 		
 		try {
 			worker.logout();
-		} catch (InvalidParameter | UnknownSenderID | CriticalError | EmployeeNotConnected ¢) {
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected ¢) {
 			¢.printStackTrace();
 			fail();
 		}
@@ -75,32 +74,10 @@ public class LogoutTest {
 		
 		try {
 			worker.logout();
-		} catch (InvalidParameter | UnknownSenderID | CriticalError ¢) {
+		} catch (InvalidParameter | CriticalError ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (EmployeeNotConnected e) {
-			/* Test Passed */
-		}
-	}
-	
-	@Test
-	public void logoutInvalidSenderIdTest() {
-		try {
-			Mockito.when(
-					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
-							CommandDescriptor.LOGOUT, Serialization.serialize(null)).serialize())))
-					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_SENDER_ID).serialize());
-		} catch (IOException ¢) {
-			¢.printStackTrace();
-			fail();
-		}
-		
-		try {
-			worker.logout();
-		} catch (InvalidParameter | EmployeeNotConnected | CriticalError ¢) {
-			¢.printStackTrace();
-			fail();
-		} catch (UnknownSenderID e) {
 			/* Test Passed */
 		}
 	}

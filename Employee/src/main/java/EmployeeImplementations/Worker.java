@@ -21,7 +21,6 @@ import EmployeeDefs.AEmployeeException.ProductAlreadyExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductPackageDoesNotExist;
 import EmployeeDefs.AEmployeeException.ProductStillForSale;
-import EmployeeDefs.AEmployeeException.UnknownSenderID;
 import EmployeeDefs.AEmployeeException.EmployeeAlreadyConnected;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.WorkerDefs;
@@ -68,7 +67,7 @@ public class Worker extends AEmployee implements IWorker {
 		}
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | UnknownSenderID | EmployeeNotConnected |
+		} catch (InvalidCommandDescriptor | EmployeeNotConnected |
 				 ProductNotExistInCatalog | ProductAlreadyExistInCatalog |
 				 ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
@@ -82,8 +81,7 @@ public class Worker extends AEmployee implements IWorker {
 	}
 
 	@Override
-	public void logout() throws InvalidParameter, UnknownSenderID,
-	CriticalError, EmployeeNotConnected {
+	public void logout() throws InvalidParameter, CriticalError, EmployeeNotConnected {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating logout command wrapper with username: " + username);
 		String serverResponse;
@@ -113,7 +111,7 @@ public class Worker extends AEmployee implements IWorker {
 
 	@Override
 	public CatalogProduct viewProductFromCatalog(int barcode) throws InvalidParameter,
-	UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
+		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating viewProductFromCatalog command wrapper with barcode: " + barcode);
 		String serverResponse;
@@ -142,7 +140,7 @@ public class Worker extends AEmployee implements IWorker {
 
 	@Override
 	public void addProductToWarehouse(ProductPackage p) throws InvalidParameter,
-		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
+		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating addProductToWarehouse command wrapper with product package: " + p);
 		String serverResponse;
@@ -169,7 +167,7 @@ public class Worker extends AEmployee implements IWorker {
 	
 	@Override
 	public void placeProductPackageOnShelves(ProductPackage p) throws InvalidParameter,
-		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
+		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
 		AmountBiggerThanAvailable, ProductPackageDoesNotExist {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating placeProductPackageOnShelves command wrapper with product package: " + p);
@@ -197,7 +195,7 @@ public class Worker extends AEmployee implements IWorker {
 	
 	@Override
 	public void removeProductPackageFromStore(ProductPackage p) throws InvalidParameter,
-		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
+		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
 		AmountBiggerThanAvailable, ProductPackageDoesNotExist {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating removeProductPackageFromStore command wrapper with product package: " + p);
@@ -225,7 +223,7 @@ public class Worker extends AEmployee implements IWorker {
 	
 	@Override
 	public int getProductPackageAmount(ProductPackage p) throws InvalidParameter,
-		UnknownSenderID, CriticalError, EmployeeNotConnected, ProductPackageDoesNotExist {		
+		CriticalError, EmployeeNotConnected, ProductPackageDoesNotExist {		
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating getProductPackageAmount command wrapper with product package: " + p);
 		String serverResponse;

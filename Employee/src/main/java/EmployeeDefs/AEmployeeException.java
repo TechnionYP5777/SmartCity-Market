@@ -39,15 +39,6 @@ public class AEmployeeException extends SMException {
 
 		private static final long serialVersionUID = -1281316098307233162L;
 	}
-
-	/**
-	 * Thrown when unexpected sender ID is not recognized by the database.
-	 *
-	 */
-	public static class UnknownSenderID extends AEmployeeException {
-
-		private static final long serialVersionUID = -2842898860811837903L;
-	}
 	
 	/**
 	 * Thrown when worker try to do operation before connecting

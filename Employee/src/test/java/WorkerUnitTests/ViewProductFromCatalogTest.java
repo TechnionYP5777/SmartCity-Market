@@ -22,7 +22,6 @@ import EmployeeContracts.IWorker;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
-import EmployeeDefs.AEmployeeException.UnknownSenderID;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Worker;
@@ -63,7 +62,7 @@ public class ViewProductFromCatalogTest {
 
 		try {
 			testCatalogProduct = worker.viewProductFromCatalog(1234567890);
-		} catch (InvalidParameter | UnknownSenderID | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog e) {
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -88,7 +87,7 @@ public class ViewProductFromCatalogTest {
 		
 		try {
 			worker.viewProductFromCatalog(1234567890);
-		} catch (InvalidParameter | UnknownSenderID | CriticalError | EmployeeNotConnected e) {
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected e) {
 			e.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog e) {

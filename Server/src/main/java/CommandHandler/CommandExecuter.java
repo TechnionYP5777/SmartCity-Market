@@ -534,7 +534,7 @@ public class CommandExecuter {
 				&& (inCommandWrapper.getSenderID() < 0)) {
 			log.info("Command failed, senderID can't be negative");
 
-			return new CommandWrapper(ResultDescriptor.SM_INVALID_SENDER_ID);
+			return new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
 		}
 
 		switch (inCommandWrapper.getCommandDescriptor()) {

@@ -57,16 +57,6 @@ public enum ResultDescriptor {
 	 */
 
 	/****************************************** Login/Logout failures **************************************/
-
-	SM_INVALID_SENDER_ID,
-	/**
-	 * The command request has invalid sender id (Does not exist in the server database).
-	 * 
-	 * How to fix:
-	 * 
-	 * 1. Report critical error (Check for a bug when see such message).
-	 *
-	 */
 	
 	SM_SENDER_IS_NOT_CONNECTED,
 	/**

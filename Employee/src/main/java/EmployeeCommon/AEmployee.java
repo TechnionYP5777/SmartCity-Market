@@ -17,7 +17,6 @@ import EmployeeDefs.AEmployeeException.ProductAlreadyExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductPackageDoesNotExist;
 import EmployeeDefs.AEmployeeException.ProductStillForSale;
-import EmployeeDefs.AEmployeeException.UnknownSenderID;
 import EmployeeDefs.AEmployeeException.EmployeeAlreadyConnected;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.WorkerDefs;
@@ -76,7 +75,7 @@ public abstract class AEmployee {
 	}
 
 	protected void resultDescriptorHandler(ResultDescriptor ¢) throws InvalidCommandDescriptor,
-	InvalidParameter, UnknownSenderID, CriticalError, EmployeeNotConnected, EmployeeAlreadyConnected,
+	InvalidParameter, CriticalError, EmployeeNotConnected, EmployeeAlreadyConnected,
 	AuthenticationError, ProductNotExistInCatalog, ProductAlreadyExistInCatalog,
 	ProductStillForSale, AmountBiggerThanAvailable, ProductPackageDoesNotExist {
 
@@ -101,11 +100,6 @@ public abstract class AEmployee {
 			log.fatal("Command execution failed, critical error");
 			
 			throw new AEmployeeException.CriticalError();
-			
-		case SM_INVALID_SENDER_ID:
-			log.fatal("Command execution failed, invalid sender id");
-			
-			throw new AEmployeeException.UnknownSenderID();
 			
 		case SM_SENDER_IS_NOT_CONNECTED:
 			log.fatal("Command execution failed, worker not connected");

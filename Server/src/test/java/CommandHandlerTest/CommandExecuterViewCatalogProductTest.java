@@ -93,14 +93,6 @@ public class CommandExecuterViewCatalogProductTest {
 	}
 	
 	@Test
-	public void viewCatalogProductInvalidsenderIDTest() {
-		assertEquals(ResultDescriptor.SM_INVALID_SENDER_ID,
-				(new CommandExecuter(new CommandWrapper(-1, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
-						new Gson().toJson(new SmartCode(222, null), SmartCode.class)).serialize()))
-								.execute(sqlDatabaseConnection).getResultDescriptor());
-	}
-	
-	@Test
 	public void viewCatalogProductInvalidUserNameTest() {
 		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER,
 				(new CommandExecuter(new CommandWrapper(0, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
