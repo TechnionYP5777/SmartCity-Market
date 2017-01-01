@@ -125,9 +125,6 @@ public class CommandExecuter {
 			return;
 		}
 
-		// TODO Noam - add exception to SM_SENDER_ID_DOES_NOT_EXIST, when
-		// implemented in SQL + test for it in CommandExectuerLogoutTest
-		// TODO Aviad - did you mean: SM_SENDER_IS_NOT_CONNECTED?
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 			c.workerLogout(inCommandWrapper.getSenderID(), username);
@@ -169,9 +166,6 @@ public class CommandExecuter {
 			return;
 		}
 
-		// TODO Noam - add exception to SM_SENDER_ID_DOES_NOT_EXIST, when
-		// implemented in SQL + test for it in CommandExectuerLogoutTest
-		// TODO Aviad - did you mean: SM_SENDER_IS_NOT_CONNECTED?
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK,
 					c.getProductFromCatalog(inCommandWrapper.getSenderID(), smartCode.getBarcode()));
