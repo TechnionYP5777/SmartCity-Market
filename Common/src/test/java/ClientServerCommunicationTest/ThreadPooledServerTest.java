@@ -9,6 +9,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.Before;
 import org.junit.Test;
 
 import ClientServerCommunication.ClientRequestHandler;
@@ -78,6 +80,11 @@ public class ThreadPooledServerTest {
 			
 			clientRequestManager.finishRequest();			
 		}
+	}
+	
+	@Before
+	public void setup() {
+		PropertyConfigurator.configure("../log4j.properties");
 	}
 	
 	@Test public void ServerWorkerRunnableHelloWorldLocalTest () {

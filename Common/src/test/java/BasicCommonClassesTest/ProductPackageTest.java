@@ -4,6 +4,8 @@ import static org.junit.Assert.fail;
 
 import java.time.LocalDate;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.Before;
 import org.junit.Test;
 
 import BasicCommonClasses.Location;
@@ -13,6 +15,12 @@ import BasicCommonClasses.SmartCode;
 /**@author Lior Ben Ami
  * @since 2016-12-11 */
 public class ProductPackageTest {
+	
+	@Before
+	public void setup() {
+		PropertyConfigurator.configure("../log4j.properties");
+	}
+	
 	@Test public void ProductPackageTestMethod() {
 		LocalDate ld = LocalDate.of(2016,12,11);
 		SmartCode sc = new SmartCode(123, ld);

@@ -7,6 +7,8 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.Before;
 import org.junit.Test;
 
 import BasicCommonClasses.Location;
@@ -19,6 +21,12 @@ import BasicCommonClasses.Manufacturer;;
 /**@author Lior Ben Ami
  * @since 2016-12-11 */
 public class CatalogProductTest {
+	
+	@Before
+	public void setup() {
+		PropertyConfigurator.configure("../log4j.properties");
+	}
+	
 	@Test public void CatalogProductTestMethod() {
 		Manufacturer man = new Manufacturer(11,"Osem");
 		String bambaIm = "https://www.osem.co.il/tm-content/uploads/2015/01/Bamba_classic_80g3.png3-308x308.png";

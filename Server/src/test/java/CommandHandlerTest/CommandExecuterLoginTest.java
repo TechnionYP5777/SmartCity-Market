@@ -2,6 +2,8 @@ package CommandHandlerTest;
 
 import static org.junit.Assert.*;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -27,6 +29,11 @@ public class CommandExecuterLoginTest {
 	@Mock
 	private SQLDatabaseConnection sqlDatabaseConnection;
 
+	@Before
+	public void setup() {
+		PropertyConfigurator.configure("../log4j.properties");
+	}
+	
 	@Test
 	public void loginSuccessfulTest() {
 		int senderID = 0;

@@ -3,6 +3,8 @@ package CommandHandlerTest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -24,6 +26,11 @@ public class CommandExecuterLogoutTest {
 
 	@Mock
 	private SQLDatabaseConnection sqlDatabaseConnection;
+	
+	@Before
+	public void setup() {
+		PropertyConfigurator.configure("../log4j.properties");
+	}
 	
 	@Test
 	public void logoutSuccessfulTest() {

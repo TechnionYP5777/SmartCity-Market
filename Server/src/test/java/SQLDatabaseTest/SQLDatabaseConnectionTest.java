@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.HashSet;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.google.gson.Gson;
@@ -31,6 +33,11 @@ public class SQLDatabaseConnectionTest {
 		new SQLDatabaseConnection().hashCode();
 	}
 
+	@Before
+	public void setup() {
+		PropertyConfigurator.configure("../log4j.properties");
+	}
+	
 	@Test
 	public void testWorkerConnection() {
 

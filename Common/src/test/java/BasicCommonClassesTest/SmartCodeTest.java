@@ -1,5 +1,7 @@
 package BasicCommonClassesTest;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -9,6 +11,12 @@ import BasicCommonClasses.SmartCode;;
 /**@author Lior Ben Ami
  * @since 2016-12-11 */
 public class SmartCodeTest {
+	
+	@Before
+	public void setup() {
+		PropertyConfigurator.configure("../log4j.properties");
+	}
+	
 	@Test public void SmartCodeTestMethod() {
 		LocalDate ld = LocalDate.of(2016,12,11);
 		SmartCode sc = new SmartCode(123, ld);

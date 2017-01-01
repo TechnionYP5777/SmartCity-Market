@@ -1,6 +1,9 @@
 package BasicCommonClassesTest;
 
 import static org.junit.Assert.fail;
+
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.Before;
 import org.junit.Test;
 import org.joda.time.LocalDate;
 
@@ -10,6 +13,12 @@ import BasicCommonClasses.CartProduct;
 /**@author Lior Ben Ami
  * @since 2016-12-11 */
 public class CartProductTest {
+	
+	@Before
+	public void setup() {
+		PropertyConfigurator.configure("../log4j.properties");
+	}
+	
 	@Test public void CartProductTestMethod() {
 		Manufacturer man = new Manufacturer(11,"Osem");
 		String bambaIm = "https://www.osem.co.il/tm-content/uploads/2015/01/Bamba_classic_80g3.png3-308x308.png";

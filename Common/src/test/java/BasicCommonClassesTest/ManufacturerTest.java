@@ -1,12 +1,21 @@
 package BasicCommonClassesTest;
 
 import static org.junit.Assert.fail;
+
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.Before;
 import org.junit.Test;
 
 import BasicCommonClasses.Manufacturer;;;
 /**@author Lior Ben Ami
  * @since 2016-12-11 */
 public class ManufacturerTest {
+	
+	@Before
+	public void setup() {
+		PropertyConfigurator.configure("../log4j.properties");
+	}
+	
 	@Test public void ManufacturerTestMethod() {
 		Manufacturer ing = new Manufacturer(1,"Milk");
 

@@ -2,6 +2,8 @@ package BasicCommonClassesTest;
 
 import static org.junit.Assert.fail;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.Before;
 import org.junit.Test;
 
 import BasicCommonClasses.Ingredient;
@@ -9,6 +11,12 @@ import BasicCommonClasses.Ingredient;
 /**@author Lior Ben Ami
  * @since 2016-12-11 */
 public class IngredientTest {
+	
+	@Before
+	public void setup() {
+		PropertyConfigurator.configure("../log4j.properties");
+	}
+	
 	@Test public void IngredientTestMethod() {
 		Ingredient man = new Ingredient(1,"Telma");
 

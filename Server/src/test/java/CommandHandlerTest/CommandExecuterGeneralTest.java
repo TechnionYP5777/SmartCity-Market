@@ -2,6 +2,8 @@ package CommandHandlerTest;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.google.gson.Gson;
@@ -14,6 +16,11 @@ import CommandHandler.CommandExecuter;
 
 public class CommandExecuterGeneralTest {
 
+	@Before
+	public void setup() {
+		PropertyConfigurator.configure("../log4j.properties");
+	}
+	
 	@Test
 	public void sqlDatabaseConnectionNullTest() {
 		assertEquals(ResultDescriptor.SM_ERR,

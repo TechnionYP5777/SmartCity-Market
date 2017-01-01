@@ -3,6 +3,8 @@ package BasicCommonClassesTest;
 
 import static org.junit.Assert.fail;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.Before;
 import org.junit.Test;
 
 import BasicCommonClasses.Location;
@@ -11,6 +13,12 @@ import BasicCommonClasses.PlaceInMarket;;
  * @since 2016-12-11 */
 
 public class LocationTest {
+	
+	@Before
+	public void setup() {
+		PropertyConfigurator.configure("../log4j.properties");
+	}
+	
 	@Test public void LocationTestMethod() {
 		Location lo = new Location(1,1,PlaceInMarket.WAREHOUSE);
 		if (lo.getX() != 1 || lo.getY() != 1 || lo.getPlaceInMarket() != PlaceInMarket.WAREHOUSE)

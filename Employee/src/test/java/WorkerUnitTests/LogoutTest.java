@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +36,8 @@ public class LogoutTest {
 
 	@Before
 	public void setup() {
+		PropertyConfigurator.configure("../log4j.properties");
+
 		worker = new Worker(clientRequestHandler);
 	}
 
