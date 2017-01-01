@@ -80,5 +80,25 @@ public class LogoutTest {
 		}
 	}
 	
-	//TODO: lior: add tests for the other failures possibilities when its done
+	@Test
+	public void logoutInvalidSenderIdTest() {
+		try {
+			Mockito.when(
+					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.LOGOUT, Serialization.serialize(null)).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_SENDER_ID).serialize());
+		} catch (IOException ¢) {
+			¢.printStackTrace();
+			fail();
+		}
+		
+		try {
+			worker.logout();
+		} catch (InvalidParameter | EmployeeNotConnected | CriticalError ¢) {
+			¢.printStackTrace();
+			fail();
+		} catch (UnknownSenderID e) {
+			/* Test Passed */
+		}
+	}
 }

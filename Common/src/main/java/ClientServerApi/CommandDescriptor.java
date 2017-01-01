@@ -65,7 +65,6 @@ public enum CommandDescriptor {
 	 * 		failure:
 	 * 			SM_INVALID_SENDER_ID,
 	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *			SM_SENDER_ID_DOES_NOT_EXIST,
 	 *
 	 *	 ***** NOTE *****
 	 * This command has no data from the server side.
