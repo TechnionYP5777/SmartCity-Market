@@ -28,8 +28,8 @@ public interface ISQLDatabaseConnection {
 	String getProductFromCatalog(Integer sessionID, long barcode)
 			throws ProductNotExistInCatalog, WorkerNotConnected, CriticalError;
 
-	void addProductPackageToWarehouse(Integer sessionID, ProductPackage p) throws CriticalError, WorkerNotConnected,
-			ProductNotExistInCatalog, CartNotConnected, ProductPackageAmountNotMatch, ProductPackageNotExist;
+	void addProductPackageToWarehouse(Integer sessionID, ProductPackage p)
+			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
 
 	void removeProductPackageFromWarehouse(Integer sessionID, ProductPackage p) throws CriticalError,
 			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;

@@ -545,9 +545,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				String deleteQuery = generateDeleteQuery(ProductsPackagesTable.table,
 						BinaryCondition.equalTo(ProductsPackagesTable.barcodeCol, PARAM_MARK),
 						BinaryCondition.equalTo(ProductsPackagesTable.placeInStoreCol, PARAM_MARK),
-						BinaryCondition.equalTo(ProductsPackagesTable.expirationDateCol, 
-								JdbcEscape.date(Date.from(p.getSmartCode().getExpirationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()))));
-			    
+						BinaryCondition.equalTo(ProductsPackagesTable.expirationDateCol,
+								JdbcEscape.date(Date.from(p.getSmartCode().getExpirationDate()
+										.atStartOfDay(ZoneId.systemDefault()).toInstant()))));
+
 				deleteQuery.hashCode();
 
 				statement = getParameterizedQuery(deleteQuery, p.getSmartCode().getBarcode(), placeCol);
@@ -556,8 +557,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				UpdateQuery updateQuery = generateUpdateQuery(ProductsPackagesTable.table,
 						BinaryCondition.equalTo(ProductsPackagesTable.barcodeCol, PARAM_MARK),
 						BinaryCondition.equalTo(ProductsPackagesTable.placeInStoreCol, PARAM_MARK),
-						BinaryCondition.equalTo(ProductsPackagesTable.expirationDateCol, 
-								JdbcEscape.date(Date.from(p.getSmartCode().getExpirationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()))));
+						BinaryCondition.equalTo(ProductsPackagesTable.expirationDateCol,
+								JdbcEscape.date(Date.from(p.getSmartCode().getExpirationDate()
+										.atStartOfDay(ZoneId.systemDefault()).toInstant()))));
 
 				updateQuery.addSetClause(ProductsPackagesTable.amountCol, newAmount).validate();
 
@@ -601,9 +603,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				String deleteQuery = generateDeleteQuery(GroceriesListsTable.table,
 						BinaryCondition.equalTo(GroceriesListsTable.barcodeCol, PARAM_MARK),
 						BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK),
-						BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol, 
-								JdbcEscape.date(Date.from(p.getSmartCode().getExpirationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()))));
-			    
+						BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol,
+								JdbcEscape.date(Date.from(p.getSmartCode().getExpirationDate()
+										.atStartOfDay(ZoneId.systemDefault()).toInstant()))));
+
 				deleteQuery.hashCode();
 
 				statement = getParameterizedQuery(deleteQuery, p.getSmartCode().getBarcode(), listID);
@@ -612,8 +615,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				UpdateQuery updateQuery = generateUpdateQuery(GroceriesListsTable.table,
 						BinaryCondition.equalTo(GroceriesListsTable.barcodeCol, PARAM_MARK),
 						BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK),
-						BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol, 
-								JdbcEscape.date(Date.from(p.getSmartCode().getExpirationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()))));
+						BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol,
+								JdbcEscape.date(Date.from(p.getSmartCode().getExpirationDate()
+										.atStartOfDay(ZoneId.systemDefault()).toInstant()))));
 
 				updateQuery.addSetClause(ProductsPackagesTable.amountCol, newAmount).validate();
 
@@ -739,8 +743,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		String selectQuery = generateSelectQuery1Table(ProductsPackagesTable.table,
 				BinaryCondition.equalTo(ProductsPackagesTable.barcodeCol, PARAM_MARK),
 				BinaryCondition.equalTo(ProductsPackagesTable.placeInStoreCol, PARAM_MARK),
-				BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol, 
-						JdbcEscape.date(Date.from(p.getSmartCode().getExpirationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()))));
+				BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol, JdbcEscape.date(Date
+						.from(p.getSmartCode().getExpirationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()))));
 
 		PreparedStatement statement = getParameterizedReadQuery(selectQuery, p.getSmartCode().getBarcode(), placeCol);
 
@@ -769,8 +773,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		String selectQuery = generateSelectQuery1Table(GroceriesListsTable.table,
 				BinaryCondition.equalTo(GroceriesListsTable.barcodeCol, PARAM_MARK),
 				BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK),
-				BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol, 
-						JdbcEscape.date(Date.from(p.getSmartCode().getExpirationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()))));
+				BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol, JdbcEscape.date(Date
+						.from(p.getSmartCode().getExpirationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()))));
 
 		PreparedStatement statement = getParameterizedReadQuery(selectQuery, p.getSmartCode().getBarcode(), listID);
 
@@ -1107,8 +1111,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * .Integer, BasicCommonClasses.ProductPackage)
 	 */
 	@Override
-	public void addProductPackageToWarehouse(Integer sessionID, ProductPackage p) throws CriticalError,
-			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
+	public void addProductPackageToWarehouse(Integer sessionID, ProductPackage p)
+			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
 		validateSessionEstablished(sessionID);
 
 		try {
@@ -1123,6 +1127,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			connection.commit();
 			connection.setAutoCommit(true);
 		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		} catch (ProductPackageAmountNotMatch | ProductPackageNotExist e) {
 			e.printStackTrace();
 			throw new CriticalError();
 		}
