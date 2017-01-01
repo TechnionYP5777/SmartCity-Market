@@ -23,6 +23,8 @@ public interface ISQLDatabaseConnection {
 	int workerLogin(String username, String password)
 			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded;
 
+	String getClientType(Integer sessionID) throws ClientNotConnected, CriticalError;
+	
 	void workerLogout(Integer sessionID, String username) throws ClientNotConnected, CriticalError;
 
 	String getProductFromCatalog(Integer sessionID, long barcode)

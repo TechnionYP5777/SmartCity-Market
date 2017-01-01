@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
+
 import com.google.gson.Gson;
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
 import com.healthmarketscience.sqlbuilder.CreateTableQuery;
@@ -33,6 +35,7 @@ import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
+import CommonDefs.CLIENT_TYPE;
 import SQLDatabase.SQLDatabaseEntities;
 import SQLDatabase.SQLDatabaseEntities.CartsListTable;
 import SQLDatabase.SQLDatabaseEntities.FreeIDsTable;
@@ -61,6 +64,7 @@ import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 import SQLDatabase.SQLDatabaseStrings.LOCATIONS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.PRODUCTS_PACKAGES_TABLE;
+import SQLDatabase.SQLDatabaseStrings.WORKERS_TABLE;
 
 import static SQLDatabase.SQLQueryGenerator.generateSelectQuery1Table;
 import static SQLDatabase.SQLQueryGenerator.generateSelectLeftJoinWithQuery2Tables;
@@ -76,6 +80,8 @@ import static SQLDatabase.SQLQueryGenerator.generateDeleteQuery;
  */
 public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
+	static Logger log = Logger.getLogger(SQLDatabaseConnection.class.getName());
+	
 	private enum LOCATIONS_TYPES {
 		WAREHOUSE, STORE, CART
 	}
@@ -993,6 +999,36 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		return $;
 	}
+	
+	@Override
+	public String getClientType(Integer sessionID) throws ClientNotConnected, CriticalError {
+		validateSessionEstablished(sessionID);
+		
+		String query = generateSelectQuery1Table(WorkersTable.table,
+				BinaryCondition.equalTo(WorkersTable.sessionIDCol, PARAM_MARK));
+
+		PreparedStatement statement = getParameterizedReadQuery(query, sessionID);
+		
+		log.debug("execute query: " + statement);
+		
+		ResultSet result = null;
+		try {
+			result = statement.executeQuery();
+			result.first();
+			
+			int clientType = result.getInt(WorkersTable.workerPrivilegesCol.getColumnNameSQL());
+			log.debug("worker type code from SQL: " + clientType);
+			
+			return new Gson().toJson(clientType != WORKERS_TABLE.VALUE_PRIVILEGE_MANAGER ? CLIENT_TYPE.WORKER : CLIENT_TYPE.MANAGER);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		} finally {
+			closeResources(statement, result);
+		}
+		
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -1598,5 +1634,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		}
 
 	}
+
+
 
 }

@@ -67,16 +67,20 @@ public class CommandExecuter {
 			return;
 		}
 
-		// TODO Noam - add exception to WorkerAlreadyConnected when implemented
-		// in SQL + test for it in CommandExectuerLoginTest
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 			outCommandWrapper.setSenderID((c.workerLogin(login.getUserName(), login.getPassword())));
 
-			// TODO Noam please add here:
-			// outCommandWrapper.setData(CLIENT_TYPE.serialize());
-			// TODO Noam add information to the print (which type logged in)
-			log.info("Login command succeded with sender ID " + outCommandWrapper.getSenderID());
+			try {
+				outCommandWrapper.setData(c.getClientType(outCommandWrapper.getSenderID()));
+			} catch (ClientNotConnected e) {
+				e.printStackTrace();
+				
+				log.fatal("Client is not connected for sender ID " + outCommandWrapper.getSenderID());
+			}
+			
+			log.info("Login command succeded with sender ID " +
+					outCommandWrapper.getSenderID() + " with client type " + outCommandWrapper.getData());
 		} catch (AuthenticationError e) {
 			log.info("Login command failed, username dosen't exist or wrong password received");
 
