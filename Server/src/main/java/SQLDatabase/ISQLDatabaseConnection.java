@@ -28,8 +28,8 @@ public interface ISQLDatabaseConnection {
 	String getProductFromCatalog(Integer sessionID, long barcode)
 			throws ProductNotExistInCatalog, WorkerNotConnected, CriticalError;
 
-	void addProductPackageToWarehouse(Integer sessionID, ProductPackage p) 
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, CartNotConnected, ProductPackageAmountNotMatch, ProductPackageNotExist;
+	void addProductPackageToWarehouse(Integer sessionID, ProductPackage p) throws CriticalError, WorkerNotConnected,
+			ProductNotExistInCatalog, CartNotConnected, ProductPackageAmountNotMatch, ProductPackageNotExist;
 
 	void removeProductPackageFromWarehouse(Integer sessionID, ProductPackage p) throws CriticalError,
 			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
@@ -45,12 +45,11 @@ public interface ISQLDatabaseConnection {
 
 	void editProductInCatalog(Integer sessionID, Long productBarcode, CatalogProduct productToUpdate)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
-	
-	int addManufacturer(Integer sessionID, String manufacturerName)
-			throws CriticalError, WorkerNotConnected;
+
+	int addManufacturer(Integer sessionID, String manufacturerName) throws CriticalError, WorkerNotConnected;
 
 	void removeManufacturer(Integer sessionID, Manufacturer m)
-			throws CriticalError, WorkerNotConnected,  ManufacturerNotExist, ManufacturerStillUsed;
+			throws CriticalError, WorkerNotConnected, ManufacturerNotExist, ManufacturerStillUsed;
 
 	void editManufacturer(Integer sessionID, Manufacturer newManufacturer)
 			throws CriticalError, WorkerNotConnected, ManufacturerNotExist;
@@ -77,6 +76,6 @@ public interface ISQLDatabaseConnection {
 
 	void close() throws CriticalError;
 
-	
+	void logoutAllUsers() throws CriticalError;
 
 }

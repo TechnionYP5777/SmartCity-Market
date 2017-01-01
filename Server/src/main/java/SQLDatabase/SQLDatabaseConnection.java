@@ -16,6 +16,7 @@ import com.healthmarketscience.sqlbuilder.FunctionCall;
 import com.healthmarketscience.sqlbuilder.InsertQuery;
 import com.healthmarketscience.sqlbuilder.JdbcEscape;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
+import com.healthmarketscience.sqlbuilder.SqlObject;
 import com.healthmarketscience.sqlbuilder.UnaryCondition;
 import com.healthmarketscience.sqlbuilder.UpdateQuery;
 import com.healthmarketscience.sqlbuilder.ValidationException;
@@ -72,11 +73,10 @@ import static SQLDatabase.SQLQueryGenerator.generateDeleteQuery;
  */
 public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
-	
-	private enum LOCATIONS_TYPES{
+	private enum LOCATIONS_TYPES {
 		WAREHOUSE, STORE, CART
 	}
-	
+
 	/*
 	 * Database parameters
 	 */
@@ -94,10 +94,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	/**
 	 * IMPORTANT: this parameter (SESSION_IDS_BEGIN) determines the number of
-	 * cart in the system. the number divides the range of ints between the
-	 * cart and the workers:
-	 * number 0 - (SESSION_IDS_BEGIN-1) => FOR THE CARTS
-	 * number SESSION_IDS_BEGIN - (MAX_INT) => FOR THE WORKER
+	 * cart in the system. the number divides the range of ints between the cart
+	 * and the workers: number 0 - (SESSION_IDS_BEGIN-1) => FOR THE CARTS number
+	 * SESSION_IDS_BEGIN - (MAX_INT) => FOR THE WORKER
 	 * 
 	 * I did this because its make authentication more simple (the session id
 	 * determine the client type
@@ -201,9 +200,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 
 	/**
-	 * return the number of rows in specific ResultSet
-	 * the cursor of the given reultset will point the beforeFirst row after 
-	 * that method
+	 * return the number of rows in specific ResultSet the cursor of the given
+	 * reultset will point the beforeFirst row after that method
 	 * 
 	 * @param s
 	 * @return the number of rows
@@ -228,9 +226,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 
 	/**
-	 * return if there any result in ResultsSet
-	 * the cursor of the given reultset will point the beforeFirst row after 
-	 * that method 
+	 * return if there any result in ResultsSet the cursor of the given reultset
+	 * will point the beforeFirst row after that method
 	 * 
 	 * @param ¢
 	 * @return false - if there are rows in the ResultsSet, true otherwise.
@@ -292,60 +289,56 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		throw new NumberOfConnectionsExceeded();
 
 	}
-	
+
 	/**
 	 * Allocate new ID for new row.
 	 * 
-	 * @param t The table you want to insert new row in it
-	 * @param c The ID column of that table
+	 * @param t
+	 *            The table you want to insert new row in it
+	 * @param c
+	 *            The ID column of that table
 	 * @return
-	 * @throws CriticalError 
+	 * @throws CriticalError
 	 */
-	private int allocateIDToTable(DbTable t, DbColumn c) 
-			throws CriticalError{
-		
-		//search for free id
+	private int allocateIDToTable(DbTable t, DbColumn c) throws CriticalError {
+
+		// search for free id
 		String selectId = generateSelectQuery1Table(FreeIDsTable.table,
 				BinaryCondition.equalTo(FreeIDsTable.fromTableNameCol, PARAM_MARK));
-		
+
 		PreparedStatement statement = null;
 		ResultSet result = null;
 		ResultSet maxIDResult = null;
 		try {
-			statement = getParameterizedReadQuery(selectId,
-					t.getName());
-			
+			statement = getParameterizedReadQuery(selectId, t.getName());
+
 			result = statement.executeQuery();
 			int retID;
-			
-			if (!isResultSetEmpty(result)){
-				//return id from free_ids_table
+
+			if (!isResultSetEmpty(result)) {
+				// return id from free_ids_table
 				result.first();
 				retID = result.getInt(FreeIDsTable.IDCol.getColumnNameSQL());
-				
-				//delete that id		    
-				getParameterizedQuery(
-					generateDeleteQuery(FreeIDsTable.table,
-							BinaryCondition.equalTo(FreeIDsTable.fromTableNameCol, PARAM_MARK),
-							BinaryCondition.equalTo(FreeIDsTable.IDCol, PARAM_MARK)),
-					t.getName(), retID).executeUpdate();	
+
+				// delete that id
+				getParameterizedQuery(generateDeleteQuery(FreeIDsTable.table,
+						BinaryCondition.equalTo(FreeIDsTable.fromTableNameCol, PARAM_MARK),
+						BinaryCondition.equalTo(FreeIDsTable.IDCol, PARAM_MARK)), t.getName(), retID).executeUpdate();
 			} else {
-				//find max id and return the next number
-				String maxIDQuery = new SelectQuery()
-						.addCustomColumns(FunctionCall.max().addColumnParams(c))
-						.validate() + "";
-				
-				maxIDResult = getParameterizedReadQuery(maxIDQuery,
-						t.getName()).executeQuery();
-				
-				//if the table is empty - return 1
+				// find max id and return the next number
+				String maxIDQuery = new SelectQuery().addCustomColumns(FunctionCall.max().addColumnParams(c)).validate()
+						+ "";
+
+				maxIDResult = getParameterizedReadQuery(maxIDQuery, t.getName()).executeQuery();
+
+				// if the table is empty - return 1
 				if (isResultSetEmpty(result))
 					retID = 1;
 				else {
 					maxIDResult.first();
 					retID = maxIDResult.getInt(1) + 1;
 				}
-				
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -353,26 +346,25 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		} finally {
 			closeResources(statement, result, maxIDResult);
 		}
-		
+
 		return 0;
-		
+
 	}
-	
+
 	/**
 	 * Free ID when removing row.
 	 * 
-	 * @param t The table you want to remove row from it.
-	 * @param col The ID column of that table
+	 * @param t
+	 *            The table you want to remove row from it.
+	 * @param col
+	 *            The ID column of that table
 	 * @return
-	 * @throws CriticalError 
+	 * @throws CriticalError
 	 */
-	private void freeIDOfTable(DbTable t, Integer idToFree) 
-			throws CriticalError{
-		String insertQuery = new InsertQuery(FreeIDsTable.table)
-	      .addColumn(FreeIDsTable.fromTableNameCol, PARAM_MARK)
-	      .addColumn(FreeIDsTable.IDCol, PARAM_MARK)
-	      .validate() + "";	    
-	    
+	private void freeIDOfTable(DbTable t, Integer idToFree) throws CriticalError {
+		String insertQuery = new InsertQuery(FreeIDsTable.table).addColumn(FreeIDsTable.fromTableNameCol, PARAM_MARK)
+				.addColumn(FreeIDsTable.IDCol, PARAM_MARK).validate() + "";
+
 		PreparedStatement statement = getParameterizedQuery(insertQuery, t.getName(), idToFree);
 
 		try {
@@ -525,61 +517,53 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		return $;
 
 	}
-	
-	private void setNewAmountForStore(ProductPackage p, String placeCol, 
-			int oldAmount, int newAmount) 
-			throws ProductPackageAmountNotMatch, CriticalError{
-		
-		//case: not enough amount
+
+	private void setNewAmountForStore(ProductPackage p, String placeCol, int oldAmount, int newAmount)
+			throws ProductPackageAmountNotMatch, CriticalError {
+
+		// case: not enough amount
 		if (newAmount < 0)
 			throw new ProductPackageAmountNotMatch();
 		PreparedStatement statement = null;
 		try {
-			//case: add new row
-			if (oldAmount == 0){
-			    String insertQuery = new InsertQuery(ProductsPackagesTable.table)
-			    	      .addColumn(ProductsPackagesTable.barcodeCol, PARAM_MARK)
-			    	      .addColumn(ProductsPackagesTable.expirationDateCol, PARAM_MARK)
-			    	      .addColumn(ProductsPackagesTable.placeInStoreCol, PARAM_MARK)
-			    	      .addColumn(ProductsPackagesTable.amountCol, PARAM_MARK)
-			    	      .validate() + "";
-			    
-			    insertQuery.hashCode();
-			    
-			    
-				statement = getParameterizedQuery(insertQuery,
-						p.getSmartCode().getBarcode(),
-						p.getSmartCode().getExpirationDate(), 
-						placeCol, newAmount);
-			    
-			} else if (newAmount == 0){ //case: remove row
+			// case: add new row
+			if (oldAmount == 0) {
+				String insertQuery = new InsertQuery(ProductsPackagesTable.table)
+						.addColumn(ProductsPackagesTable.barcodeCol, PARAM_MARK)
+						.addColumn(ProductsPackagesTable.expirationDateCol, PARAM_MARK)
+						.addColumn(ProductsPackagesTable.placeInStoreCol, PARAM_MARK)
+						.addColumn(ProductsPackagesTable.amountCol, PARAM_MARK).validate() + "";
+
+				insertQuery.hashCode();
+
+				statement = getParameterizedQuery(insertQuery, p.getSmartCode().getBarcode(),
+						p.getSmartCode().getExpirationDate(), placeCol, newAmount);
+
+			} else if (newAmount == 0) { // case: remove row
 				String deleteQuery = generateDeleteQuery(ProductsPackagesTable.table,
 						BinaryCondition.equalTo(ProductsPackagesTable.barcodeCol, PARAM_MARK),
 						BinaryCondition.equalTo(ProductsPackagesTable.placeInStoreCol, PARAM_MARK),
-						BinaryCondition.equalTo(ProductsPackagesTable.expirationDateCol, 
+						BinaryCondition.equalTo(ProductsPackagesTable.expirationDateCol,
 								JdbcEscape.date(p.getSmartCode().getExpirationDate().toDate())));
-			    
+
 				deleteQuery.hashCode();
-			    
-				statement = getParameterizedQuery(deleteQuery,
-						p.getSmartCode().getBarcode(),	placeCol);
-				
-				
-			} else { //case: update amount to new value
-			    UpdateQuery updateQuery = generateUpdateQuery(ProductsPackagesTable.table,
+
+				statement = getParameterizedQuery(deleteQuery, p.getSmartCode().getBarcode(), placeCol);
+
+			} else { // case: update amount to new value
+				UpdateQuery updateQuery = generateUpdateQuery(ProductsPackagesTable.table,
 						BinaryCondition.equalTo(ProductsPackagesTable.barcodeCol, PARAM_MARK),
 						BinaryCondition.equalTo(ProductsPackagesTable.placeInStoreCol, PARAM_MARK),
-						BinaryCondition.equalTo(ProductsPackagesTable.expirationDateCol, 
+						BinaryCondition.equalTo(ProductsPackagesTable.expirationDateCol,
 								JdbcEscape.date(p.getSmartCode().getExpirationDate().toDate())));
 
 				updateQuery.addSetClause(ProductsPackagesTable.amountCol, newAmount).validate();
 
-				statement = getParameterizedQuery(updateQuery + "", 
-						p.getSmartCode().getBarcode(),	placeCol);
+				statement = getParameterizedQuery(updateQuery + "", p.getSmartCode().getBarcode(), placeCol);
 			}
-			
+
 			statement.executeUpdate();
-		
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -588,61 +572,54 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			closeResources(statement);
 		}
 	}
-	
-	private void setNewAmountForCart(ProductPackage p, Integer listID, 
-			int oldAmount, int newAmount) 
-			throws ProductPackageAmountNotMatch, CriticalError{
-		
-		//case: not enough amount
+
+	private void setNewAmountForCart(ProductPackage p, Integer listID, int oldAmount, int newAmount)
+			throws ProductPackageAmountNotMatch, CriticalError {
+
+		// case: not enough amount
 		if (newAmount < 0)
 			throw new ProductPackageAmountNotMatch();
-		
+
 		PreparedStatement statement = null;
 		try {
-			//case: add new row
-			if (oldAmount == 0){
-			    String insertQuery = new InsertQuery(GroceriesListsTable.table)
-			    	      .addColumn(GroceriesListsTable.barcodeCol, PARAM_MARK)
-			    	      .addColumn(GroceriesListsTable.expirationDateCol, PARAM_MARK)
-			    	      .addColumn(GroceriesListsTable.listIDCol, PARAM_MARK)
-			    	      .addColumn(GroceriesListsTable.amountCol, PARAM_MARK)
-			    	      .validate() + "";
-			    
-			    insertQuery.hashCode();
-			    
-				statement = getParameterizedQuery(insertQuery,
-						p.getSmartCode().getBarcode(),
-						p.getSmartCode().getExpirationDate(), 
-						listID, newAmount);
-			    
-			} else if (newAmount == 0){ //case: remove row
+			// case: add new row
+			if (oldAmount == 0) {
+				String insertQuery = new InsertQuery(GroceriesListsTable.table)
+						.addColumn(GroceriesListsTable.barcodeCol, PARAM_MARK)
+						.addColumn(GroceriesListsTable.expirationDateCol, PARAM_MARK)
+						.addColumn(GroceriesListsTable.listIDCol, PARAM_MARK)
+						.addColumn(GroceriesListsTable.amountCol, PARAM_MARK).validate() + "";
+
+				insertQuery.hashCode();
+
+				statement = getParameterizedQuery(insertQuery, p.getSmartCode().getBarcode(),
+						p.getSmartCode().getExpirationDate(), listID, newAmount);
+
+			} else if (newAmount == 0) { // case: remove row
 				String deleteQuery = generateDeleteQuery(GroceriesListsTable.table,
 						BinaryCondition.equalTo(GroceriesListsTable.barcodeCol, PARAM_MARK),
 						BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK),
-						BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol, 
+						BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol,
 								JdbcEscape.date(p.getSmartCode().getExpirationDate().toDate())));
-			    
+
 				deleteQuery.hashCode();
-			    
-				statement = getParameterizedQuery(deleteQuery,
-						p.getSmartCode().getBarcode(),	listID);
-				
-				
-			} else { //case: update amount to new value
-			    UpdateQuery updateQuery = generateUpdateQuery(GroceriesListsTable.table,
+
+				statement = getParameterizedQuery(deleteQuery, p.getSmartCode().getBarcode(), listID);
+
+			} else { // case: update amount to new value
+				UpdateQuery updateQuery = generateUpdateQuery(GroceriesListsTable.table,
 						BinaryCondition.equalTo(GroceriesListsTable.barcodeCol, PARAM_MARK),
 						BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK),
-						BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol, 
+						BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol,
 								JdbcEscape.date(p.getSmartCode().getExpirationDate().toDate())));
 
 				updateQuery.addSetClause(ProductsPackagesTable.amountCol, newAmount).validate();
 
-				statement = getParameterizedQuery(updateQuery + "", 
-						p.getSmartCode().getBarcode(),	listID);
+				statement = getParameterizedQuery(updateQuery + "", p.getSmartCode().getBarcode(), listID);
 			}
-			
+
 			statement.executeUpdate();
-		
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -651,288 +628,258 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			closeResources(statement);
 		}
 	}
-	
-	private void addCatalogProduct(CatalogProduct p) throws CriticalError, SQLException{
-		
-		//add all ingredients of product
-		for (Ingredient ¢ : p.getIngredients()){
-   			String insertToProductQuery = new InsertQuery(ProductsCatalogIngredientsTable.table)
-		    	      .addColumn(ProductsCatalogIngredientsTable.barcodeCol, PARAM_MARK)
-		    	      .addColumn(ProductsCatalogIngredientsTable.ingredientIDCol, PARAM_MARK)
-		    	      .validate() + "";
-			
-   			insertToProductQuery.hashCode();
-   			
-			PreparedStatement statement = getParameterizedQuery(
-					insertToProductQuery,
-					p.getBarcode(), ¢.getId());
+
+	private void addCatalogProduct(CatalogProduct p) throws CriticalError, SQLException {
+
+		// add all ingredients of product
+		for (Ingredient ¢ : p.getIngredients()) {
+			String insertToProductQuery = new InsertQuery(ProductsCatalogIngredientsTable.table)
+					.addColumn(ProductsCatalogIngredientsTable.barcodeCol, PARAM_MARK)
+					.addColumn(ProductsCatalogIngredientsTable.ingredientIDCol, PARAM_MARK).validate() + "";
+
+			insertToProductQuery.hashCode();
+
+			PreparedStatement statement = getParameterizedQuery(insertToProductQuery, p.getBarcode(), ¢.getId());
 
 			statement.executeUpdate();
-			
+
 			closeResources(statement);
-			
+
 		}
-		
-		//add all locations of product
-		for (Location ¢ : p.getLocations()){
-			int newID = allocateIDToTable(LocationsTable.table,
-					LocationsTable.locationIDCol);
+
+		// add all locations of product
+		for (Location ¢ : p.getLocations()) {
+			int newID = allocateIDToTable(LocationsTable.table, LocationsTable.locationIDCol);
 			String insertLocationQuery = new InsertQuery(LocationsTable.table)
-		    	      .addColumn(LocationsTable.locationIDCol, PARAM_MARK)
-		    	      .addColumn(LocationsTable.placeInStoreCol, PARAM_MARK)
-		    	      .addColumn(LocationsTable.pointXCol, PARAM_MARK)
-		    	      .addColumn(LocationsTable.pointYCol, PARAM_MARK)
-		    	      .validate() + "";
-		    
-			insertLocationQuery.hashCode();	    
-		    
+					.addColumn(LocationsTable.locationIDCol, PARAM_MARK)
+					.addColumn(LocationsTable.placeInStoreCol, PARAM_MARK)
+					.addColumn(LocationsTable.pointXCol, PARAM_MARK).addColumn(LocationsTable.pointYCol, PARAM_MARK)
+					.validate() + "";
+
+			insertLocationQuery.hashCode();
+
 			PreparedStatement insertLocationStatement = getParameterizedQuery(
-					insertLocationQuery,
-					newID, 
-					¢.getPlaceInMarket().equals(PlaceInMarket.STORE) ? 
-						LOCATIONS_TABLE.VALUE_PLACE_STORE : LOCATIONS_TABLE.VALUE_PLACE_WAREHOUSE,
+					insertLocationQuery, newID, ¢.getPlaceInMarket().equals(PlaceInMarket.STORE)
+							? LOCATIONS_TABLE.VALUE_PLACE_STORE : LOCATIONS_TABLE.VALUE_PLACE_WAREHOUSE,
 					¢.getX(), ¢.getY());
-			
+
 			String insertToProductQuery = new InsertQuery(ProductsCatalogLocationsTable.table)
-		    	      .addColumn(ProductsCatalogLocationsTable.barcodeCol, PARAM_MARK)
-		    	      .addColumn(ProductsCatalogLocationsTable.locationIDCol, PARAM_MARK)
-		    	      .validate() + "";
-			
-			PreparedStatement statement = getParameterizedQuery(
-					insertToProductQuery,
-					p.getBarcode(),newID);
-			
+					.addColumn(ProductsCatalogLocationsTable.barcodeCol, PARAM_MARK)
+					.addColumn(ProductsCatalogLocationsTable.locationIDCol, PARAM_MARK).validate() + "";
+
+			PreparedStatement statement = getParameterizedQuery(insertToProductQuery, p.getBarcode(), newID);
+
 			insertLocationStatement.executeUpdate();
-			statement.executeUpdate();	
-			
+			statement.executeUpdate();
+
 			closeResources(insertLocationStatement);
 			closeResources(statement);
 		}
-		
-		//add the product itself
+
+		// add the product itself
 		String insertQuery = new InsertQuery(ProductsCatalogTable.table)
-	    	      .addColumn(ProductsCatalogTable.barcodeCol, PARAM_MARK)
-	    	      .addColumn(ProductsCatalogTable.manufacturerIDCol, PARAM_MARK)
-	    	      .addColumn(ProductsCatalogTable.productDescriptionCol, PARAM_MARK)
-	    	      .addColumn(ProductsCatalogTable.productNameCol, PARAM_MARK)
-	    	      .addColumn(ProductsCatalogTable.productPictureCol, PARAM_MARK)
-	    	      .addColumn(ProductsCatalogTable.productPriceCol, PARAM_MARK)
-	    	      .validate() + "";
-		
-		PreparedStatement statement = getParameterizedQuery(
-				insertQuery, p.getBarcode(), p.getManufacturer().getId(),
+				.addColumn(ProductsCatalogTable.barcodeCol, PARAM_MARK)
+				.addColumn(ProductsCatalogTable.manufacturerIDCol, PARAM_MARK)
+				.addColumn(ProductsCatalogTable.productDescriptionCol, PARAM_MARK)
+				.addColumn(ProductsCatalogTable.productNameCol, PARAM_MARK)
+				.addColumn(ProductsCatalogTable.productPictureCol, PARAM_MARK)
+				.addColumn(ProductsCatalogTable.productPriceCol, PARAM_MARK).validate() + "";
+
+		PreparedStatement statement = getParameterizedQuery(insertQuery, p.getBarcode(), p.getManufacturer().getId(),
 				p.getDescription(), p.getName(), p.getImageUrl(), p.getPrice());
-		
+
 		statement.executeUpdate();
-		
+
 		closeResources(statement);
-		
+
 	}
-	
-	private void removeCatalogProduct(CatalogProduct p) 
-			throws CriticalError, SQLException{
-		
-		//remove all ingredients of product
- 		PreparedStatement statement = getParameterizedQuery(generateDeleteQuery(ProductsCatalogIngredientsTable.table,
-				BinaryCondition.equalTo(ProductsCatalogIngredientsTable.barcodeCol, PARAM_MARK)),
+
+	private void removeCatalogProduct(CatalogProduct p) throws CriticalError, SQLException {
+
+		// remove all ingredients of product
+		PreparedStatement statement = getParameterizedQuery(
+				generateDeleteQuery(ProductsCatalogIngredientsTable.table,
+						BinaryCondition.equalTo(ProductsCatalogIngredientsTable.barcodeCol, PARAM_MARK)),
 				p.getBarcode());
 		statement.executeUpdate();
 		closeResources(statement);
-		
-		//remove all locations of product
-		String selectAllLocationsQuery = new SelectQuery()
-				.addColumns(ProductsCatalogLocationsTable.locationIDCol)
-				.addCondition(BinaryCondition.equalTo(ProductsCatalogLocationsTable.barcodeCol, PARAM_MARK))
-				.validate() + "";
+
+		// remove all locations of product
+		String selectAllLocationsQuery = new SelectQuery().addColumns(ProductsCatalogLocationsTable.locationIDCol)
+				.addCondition(BinaryCondition.equalTo(ProductsCatalogLocationsTable.barcodeCol, PARAM_MARK)).validate()
+				+ "";
 		String deleteLocationsQuery = new DeleteQuery(LocationsTable.table)
 				.addCondition(new CustomCondition(
-						LocationsTable.locationIDCol.getColumnNameSQL() + 
-						" IN (" + selectAllLocationsQuery+ " ) "))
+						LocationsTable.locationIDCol.getColumnNameSQL() + " IN (" + selectAllLocationsQuery + " ) "))
 				.validate() + "";
-		
-		PreparedStatement LocationsStatement = getParameterizedQuery(
-				deleteLocationsQuery,
-				p.getBarcode());
+
+		PreparedStatement LocationsStatement = getParameterizedQuery(deleteLocationsQuery, p.getBarcode());
 		LocationsStatement.executeUpdate();
 		closeResources(LocationsStatement);
-		
-		//remove barcode form ProductsLocations Table
+
+		// remove barcode form ProductsLocations Table
 		PreparedStatement productLocationsStatement = getParameterizedQuery(
 				generateDeleteQuery(ProductsCatalogLocationsTable.table,
-				BinaryCondition.equalTo(ProductsCatalogLocationsTable.barcodeCol, PARAM_MARK)),
+						BinaryCondition.equalTo(ProductsCatalogLocationsTable.barcodeCol, PARAM_MARK)),
 				p.getBarcode());
 		productLocationsStatement.executeUpdate();
 		closeResources(productLocationsStatement);
-		
-		//remove product itself
-		PreparedStatement productStatement = getParameterizedQuery(
-				generateDeleteQuery(ProductsCatalogTable.table,
-				BinaryCondition.equalTo(ProductsCatalogTable.barcodeCol, PARAM_MARK)),
-				p.getBarcode());
+
+		// remove product itself
+		PreparedStatement productStatement = getParameterizedQuery(generateDeleteQuery(ProductsCatalogTable.table,
+				BinaryCondition.equalTo(ProductsCatalogTable.barcodeCol, PARAM_MARK)), p.getBarcode());
 		productStatement.executeUpdate();
 		closeResources(productStatement);
-		
+
 	}
-	
-	private int getAmountForStore(ProductPackage p, String placeCol) 
-			throws CriticalError{
+
+	private int getAmountForStore(ProductPackage p, String placeCol) throws CriticalError {
 		String selectQuery = generateSelectQuery1Table(ProductsPackagesTable.table,
 				BinaryCondition.equalTo(ProductsPackagesTable.barcodeCol, PARAM_MARK),
 				BinaryCondition.equalTo(ProductsPackagesTable.placeInStoreCol, PARAM_MARK),
-				BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol, 
+				BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol,
 						JdbcEscape.date(p.getSmartCode().getExpirationDate().toDate())));
 
-		PreparedStatement statement = getParameterizedReadQuery(selectQuery,
-				p.getSmartCode().getBarcode(),	placeCol);
-		
+		PreparedStatement statement = getParameterizedReadQuery(selectQuery, p.getSmartCode().getBarcode(), placeCol);
+
 		ResultSet result = null;
 		try {
 			result = statement.executeQuery();
-			
+
 			if (isResultSetEmpty(result))
 				return 0;
-			
+
 			result.first();
-			
+
 			return result.getInt(ProductsPackagesTable.amountCol.getColumnNameSQL());
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement, result);
 		}
-		
+
 	}
-	
-	private int getAmountForCart(ProductPackage p, Integer listID) 
-			throws CriticalError, ProductPackageNotExist{
-		
+
+	private int getAmountForCart(ProductPackage p, Integer listID) throws CriticalError, ProductPackageNotExist {
+
 		String selectQuery = generateSelectQuery1Table(GroceriesListsTable.table,
 				BinaryCondition.equalTo(GroceriesListsTable.barcodeCol, PARAM_MARK),
 				BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK),
-				BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol, 
+				BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol,
 						JdbcEscape.date(p.getSmartCode().getExpirationDate().toDate())));
-	    
-	    
-		PreparedStatement statement = getParameterizedReadQuery(selectQuery,
-				p.getSmartCode().getBarcode(),	listID);
-		
+
+		PreparedStatement statement = getParameterizedReadQuery(selectQuery, p.getSmartCode().getBarcode(), listID);
+
 		ResultSet result = null;
 		try {
 			result = statement.executeQuery();
-			
+
 			if (isResultSetEmpty(result))
 				return 0;
-			
+
 			result.first();
-			
+
 			return result.getInt(GroceriesListsTable.amountCol.getColumnNameSQL());
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement, result);
 		}
-		
+
 	}
-	
+
 	/**
 	 * 
 	 * assuming cart already connected
+	 * 
 	 * @param cartId
 	 * @return
 	 * @throws CriticalError
 	 */
-	private int getCartListId(int cartId) 
-			throws CriticalError{
-		
+	private int getCartListId(int cartId) throws CriticalError {
+
 		String selectQuery = generateSelectQuery1Table(CartsListTable.table,
 				BinaryCondition.equalTo(CartsListTable.cartIDCol, PARAM_MARK));
-	    
-	    
+
 		PreparedStatement statement = getParameterizedReadQuery(selectQuery, cartId);
-		
+
 		ResultSet result = null;
-		
+
 		try {
 			result = statement.executeQuery();
-			
+
 			result.first();
 			return result.getInt(CartsListTable.listIDCol.getColumnNameSQL());
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement, result);
 		}
-		
+
 	}
-	
-	private void moveProductPackage(int sessionId, LOCATIONS_TYPES from,LOCATIONS_TYPES to
-			, ProductPackage packageToMove, int amount) 
-					throws CriticalError, ProductPackageAmountNotMatch, ProductPackageNotExist{
-		if (from!= null)
+
+	private void moveProductPackage(int sessionId, LOCATIONS_TYPES from, LOCATIONS_TYPES to,
+			ProductPackage packageToMove, int amount)
+			throws CriticalError, ProductPackageAmountNotMatch, ProductPackageNotExist {
+		if (from != null)
 			switch (from) {
-	            case CART: {
-	            	int listID = getCartListId(sessionId);
-	            	int currentAmount = getAmountForCart(packageToMove, listID);
-	            	if (currentAmount == 0)
-	            		throw new ProductPackageNotExist();
-	            	setNewAmountForCart(packageToMove, listID, currentAmount, currentAmount - amount);
-	            	break;
-	            }
-	            case WAREHOUSE: {
-	            	int currentAmount = getAmountForStore(packageToMove, 
-	            			PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
-	            	if (currentAmount == 0)
-	            		throw new ProductPackageNotExist();
-	            	setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE,
-	            			currentAmount, currentAmount - amount);
-	            	break;
-	            }
-	            case STORE:{
-	            	int currentAmount = getAmountForStore(packageToMove, 
-	            			PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
-	            	if (currentAmount == 0)
-	            		throw new ProductPackageNotExist();
-	            	setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE,
-	            			currentAmount, currentAmount - amount);
-	            	break;
-	            }
+			case CART: {
+				int listID = getCartListId(sessionId);
+				int currentAmount = getAmountForCart(packageToMove, listID);
+				if (currentAmount == 0)
+					throw new ProductPackageNotExist();
+				setNewAmountForCart(packageToMove, listID, currentAmount, currentAmount - amount);
+				break;
 			}
-		
+			case WAREHOUSE: {
+				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
+				if (currentAmount == 0)
+					throw new ProductPackageNotExist();
+				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE, currentAmount,
+						currentAmount - amount);
+				break;
+			}
+			case STORE: {
+				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
+				if (currentAmount == 0)
+					throw new ProductPackageNotExist();
+				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE, currentAmount,
+						currentAmount - amount);
+				break;
+			}
+			}
+
 		if (to != null)
 			switch (from) {
-	            case CART: {
-	            	int listID = getCartListId(sessionId);
-	            	int currentAmount = getAmountForCart(packageToMove, listID);
-	            	setNewAmountForCart(packageToMove, listID, currentAmount, currentAmount + amount);
-	            	break;
-	            }
-	            case WAREHOUSE: {
-	            	int currentAmount = getAmountForStore(packageToMove, 
-	            			PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
-	            	setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE,
-	            			currentAmount, currentAmount + amount);
-	            	break;
-	            }
-	            case STORE:{
-	            	int currentAmount = getAmountForStore(packageToMove, 
-	            			PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
-	            	setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE,
-	            			currentAmount, currentAmount + amount);
-	            	break;
-	            }
+			case CART: {
+				int listID = getCartListId(sessionId);
+				int currentAmount = getAmountForCart(packageToMove, listID);
+				setNewAmountForCart(packageToMove, listID, currentAmount, currentAmount + amount);
+				break;
+			}
+			case WAREHOUSE: {
+				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
+				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE, currentAmount,
+						currentAmount + amount);
+				break;
+			}
+			case STORE: {
+				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
+				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE, currentAmount,
+						currentAmount + amount);
+				break;
+			}
 			}
 	}
-	
-	private boolean isSuchRowExist(DbTable t, DbColumn c, Object value) 
-			throws CriticalError{
-		String prodctsTableQuery = generateSelectQuery1Table(t,
-				BinaryCondition.equalTo(c, PARAM_MARK));
+
+	private boolean isSuchRowExist(DbTable t, DbColumn c, Object value) throws CriticalError {
+		String prodctsTableQuery = generateSelectQuery1Table(t, BinaryCondition.equalTo(c, PARAM_MARK));
 
 		PreparedStatement productStatement = getParameterizedReadQuery(prodctsTableQuery, value);
 
@@ -945,27 +892,21 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		} finally {
 			closeResources(productStatement, productResult);
 		}
-		
-		//if somehow we got here - bad and throw exception
+
+		// if somehow we got here - bad and throw exception
 		throw new CriticalError();
 	}
-	
-	private boolean isProductExistInCatalog(Long barcode) 
-			throws CriticalError{
-		return isSuchRowExist(ProductsCatalogTable.table,
-				ProductsCatalogTable.barcodeCol, barcode);
+
+	private boolean isProductExistInCatalog(Long barcode) throws CriticalError {
+		return isSuchRowExist(ProductsCatalogTable.table, ProductsCatalogTable.barcodeCol, barcode);
 	}
-	
-	private boolean isManufacturerExist(Integer manufacturerID) 
-			throws CriticalError{
-		return isSuchRowExist(ManufacturerTable.table,
-				ManufacturerTable.manufacturerIDCol, manufacturerID);
+
+	private boolean isManufacturerExist(Integer manufacturerID) throws CriticalError {
+		return isSuchRowExist(ManufacturerTable.table, ManufacturerTable.manufacturerIDCol, manufacturerID);
 	}
-	
-	private boolean isIngredientExist(Integer ingredientID) 
-			throws CriticalError{
-		return isSuchRowExist(IngredientsTable.table,
-				IngredientsTable.ingredientIDCol, ingredientID);
+
+	private boolean isIngredientExist(Integer ingredientID) throws CriticalError {
+		return isSuchRowExist(IngredientsTable.table, IngredientsTable.ingredientIDCol, ingredientID);
 	}
 
 	/**
@@ -1164,21 +1105,18 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * .Integer, BasicCommonClasses.ProductPackage)
 	 */
 	@Override
-	public void addProductPackageToWarehouse(Integer sessionID, ProductPackage p)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, 
-			ProductPackageAmountNotMatch, ProductPackageNotExist {
+	public void addProductPackageToWarehouse(Integer sessionID, ProductPackage p) throws CriticalError,
+			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
 		validateSessionEstablished(sessionID);
-		
-		
+
 		try {
 			// START transaction
 			connection.setAutoCommit(false);
 			if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
 				throw new ProductNotExistInCatalog();
-			
-			moveProductPackage(sessionID, null, LOCATIONS_TYPES.WAREHOUSE, 
-					p, p.getAmount());
-			
+
+			moveProductPackage(sessionID, null, LOCATIONS_TYPES.WAREHOUSE, p, p.getAmount());
+
 			// END transaction
 			connection.commit();
 			connection.setAutoCommit(true);
@@ -1187,7 +1125,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			throw new CriticalError();
 		}
 
-		
 	}
 
 	/*
@@ -1200,17 +1137,16 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void removeProductPackageFromWarehouse(Integer sessionID, ProductPackage p) throws CriticalError,
 			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
-		
+
 		validateSessionEstablished(sessionID);
-		
+
 		try {
 			// START transaction
 			connection.setAutoCommit(false);
 			if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
 				throw new ProductNotExistInCatalog();
-			
-			moveProductPackage(sessionID, LOCATIONS_TYPES.WAREHOUSE, null, 
-					p, p.getAmount());
+
+			moveProductPackage(sessionID, LOCATIONS_TYPES.WAREHOUSE, null, p, p.getAmount());
 			// END transaction
 			connection.commit();
 			connection.setAutoCommit(true);
@@ -1229,31 +1165,30 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void addProductToCatalog(Integer sessionID, CatalogProduct productToAdd)
-			throws CriticalError, WorkerNotConnected, 
-			ProductAlreadyExistInCatalog, IngredientNotExist {
-		
+			throws CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog, IngredientNotExist {
+
 		validateSessionEstablished(sessionID);
-		
+
 		try {
 			// START transaction
 			connection.setAutoCommit(false);
-			//TODO add savepoint
-			
+			// TODO add savepoint
+
 			if (isProductExistInCatalog(productToAdd.getBarcode()))
 				throw new ProductAlreadyExistInCatalog();
-			
-			//check if all ingredients exists
+
+			// check if all ingredients exists
 			for (Ingredient ¢ : productToAdd.getIngredients())
 				if (!isIngredientExist((int) ¢.getId()))
 					throw new IngredientNotExist();
-			
+
 			addCatalogProduct(productToAdd);
-			
+
 			// END transaction
 			connection.commit();
 			connection.setAutoCommit(true);
 		} catch (SQLException e) {
-			//TODO rollback
+			// TODO rollback
 			e.printStackTrace();
 			throw new CriticalError();
 		}
@@ -1269,29 +1204,29 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void removeProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, ProductStillForSale {
-		
+
 		validateSessionEstablished(sessionID);
-		
+
 		try {
 			// START transaction
 			connection.setAutoCommit(false);
-			//TODO add savepoint
-			
+			// TODO add savepoint
+
 			if (!isProductExistInCatalog(productToRemove.getBarcode()))
 				throw new ProductNotExistInCatalog();
-			
-			//TODO check if the product is in the system
+
+			// TODO check if the product is in the system
 			removeCatalogProduct(productToRemove);
-			
+
 			// END transaction
 			connection.commit();
 			connection.setAutoCommit(true);
 		} catch (SQLException e) {
-			//TODO rollback
+			// TODO rollback
 			e.printStackTrace();
 			throw new CriticalError();
 		}
-		
+
 	}
 
 	/*
@@ -1327,15 +1262,15 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void addProductToGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError,
 			CartNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
-		
+
 		try {
 			// START transaction
 			connection.setAutoCommit(false);
 			if (!isProductExistInCatalog(productToBuy.getSmartCode().getBarcode()))
 				throw new ProductNotExistInCatalog();
-			
-			moveProductPackage(cartID, LOCATIONS_TYPES.STORE, LOCATIONS_TYPES.CART, 
-					productToBuy, productToBuy.getAmount());
+
+			moveProductPackage(cartID, LOCATIONS_TYPES.STORE, LOCATIONS_TYPES.CART, productToBuy,
+					productToBuy.getAmount());
 			// END transaction
 			connection.commit();
 			connection.setAutoCommit(true);
@@ -1359,12 +1294,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		try {
 			// START transaction
-			connection.setAutoCommit(false);		
+			connection.setAutoCommit(false);
 			if (!isProductExistInCatalog(productToBuy.getSmartCode().getBarcode()))
 				throw new ProductNotExistInCatalog();
-			
-			moveProductPackage(cartID, LOCATIONS_TYPES.CART, LOCATIONS_TYPES.STORE, 
-					productToBuy, productToBuy.getAmount());
+
+			moveProductPackage(cartID, LOCATIONS_TYPES.CART, LOCATIONS_TYPES.STORE, productToBuy,
+					productToBuy.getAmount());
 			// END transaction
 			connection.commit();
 			connection.setAutoCommit(true);
@@ -1386,15 +1321,14 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
 
 		validateSessionEstablished(sessionID);
-		
+
 		try {
 			// START transaction
 			connection.setAutoCommit(false);
 			if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
 				throw new ProductNotExistInCatalog();
-			
-			moveProductPackage(sessionID, LOCATIONS_TYPES.WAREHOUSE, LOCATIONS_TYPES.STORE, 
-					p, p.getAmount());
+
+			moveProductPackage(sessionID, LOCATIONS_TYPES.WAREHOUSE, LOCATIONS_TYPES.STORE, p, p.getAmount());
 			// END transaction
 			connection.commit();
 			connection.setAutoCommit(true);
@@ -1421,9 +1355,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			connection.setAutoCommit(false);
 			if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
 				throw new ProductNotExistInCatalog();
-			
-			moveProductPackage(sessionID, LOCATIONS_TYPES.STORE, null, 
-				p, p.getAmount());
+
+			moveProductPackage(sessionID, LOCATIONS_TYPES.STORE, null, p, p.getAmount());
 			// END transaction
 			connection.commit();
 			connection.setAutoCommit(true);
@@ -1491,109 +1424,133 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 
 	@Override
-	public int addManufacturer(Integer sessionID, String manufacturerName)
-			throws CriticalError, WorkerNotConnected {
-		
+	public int addManufacturer(Integer sessionID, String manufacturerName) throws CriticalError, WorkerNotConnected {
+
 		validateSessionEstablished(sessionID);
-		
+
 		int $;
 		try {
 			// START transaction
 			connection.setAutoCommit(false);
-			$ = allocateIDToTable(ManufacturerTable.table, 
-					ManufacturerTable.manufacturerIDCol);
+			$ = allocateIDToTable(ManufacturerTable.table, ManufacturerTable.manufacturerIDCol);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new CriticalError();
 		}
-		
-		
+
 		String insertQuery = new InsertQuery(ManufacturerTable.table)
-	    	      .addColumn(ManufacturerTable.manufacturerIDCol, PARAM_MARK)
-	    	      .addColumn(ManufacturerTable.manufacturerNameCol, PARAM_MARK)
-	    	      .validate() + "";
-	    
-	    insertQuery.hashCode();
-		    
+				.addColumn(ManufacturerTable.manufacturerIDCol, PARAM_MARK)
+				.addColumn(ManufacturerTable.manufacturerNameCol, PARAM_MARK).validate() + "";
+
+		insertQuery.hashCode();
+
 		try {
 			getParameterizedQuery(insertQuery, $, manufacturerName).executeUpdate();
-			
-			//END transaction
+
+			// END transaction
 			connection.commit();
 			connection.setAutoCommit(true);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			//if the creation failed - free the id
+			// if the creation failed - free the id
 			freeIDOfTable(ManufacturerTable.table, $);
 		}
-		
+
 		return $;
 	}
 
 	@Override
 	public void removeManufacturer(Integer sessionID, Manufacturer m)
-			throws CriticalError, WorkerNotConnected, 
-			ManufacturerNotExist, ManufacturerStillUsed {
+			throws CriticalError, WorkerNotConnected, ManufacturerNotExist, ManufacturerStillUsed {
 		validateSessionEstablished(sessionID);
-		
+
 		try {
 			// START transaction
 			connection.setAutoCommit(false);
 			if (!isManufacturerExist((int) m.getId()))
 				throw new ManufacturerNotExist();
-			
-			//if the manufacturer still used in catalog - throw exception
-			if (isSuchRowExist(ProductsCatalogTable.table, 
-					ProductsCatalogTable.manufacturerIDCol, (Long) m.getId()))
+
+			// if the manufacturer still used in catalog - throw exception
+			if (isSuchRowExist(ProductsCatalogTable.table, ProductsCatalogTable.manufacturerIDCol, (Long) m.getId()))
 				throw new ManufacturerStillUsed();
-			
-		    //delete manufacturer
+
+			// delete manufacturer
 			getParameterizedQuery(generateDeleteQuery(ManufacturerTable.table,
-				BinaryCondition.equalTo(ManufacturerTable.manufacturerIDCol, PARAM_MARK)),
-				m.getId()).executeUpdate();
-			
+					BinaryCondition.equalTo(ManufacturerTable.manufacturerIDCol, PARAM_MARK)), m.getId())
+							.executeUpdate();
+
 			freeIDOfTable(ManufacturerTable.table, (int) m.getId());
-			
-			//END transaction
+
+			// END transaction
 			connection.commit();
 			connection.setAutoCommit(true);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
-		
+		}
+
 	}
 
 	@Override
 	public void editManufacturer(Integer sessionID, Manufacturer newManufacturer)
 			throws CriticalError, WorkerNotConnected, ManufacturerNotExist {
 		validateSessionEstablished(sessionID);
-		
+
 		try {
 			// START transaction
 			connection.setAutoCommit(false);
 			if (!isManufacturerExist((int) newManufacturer.getId()))
 				throw new ManufacturerNotExist();
-			
-			
-		    //update manufacturer
+
+			// update manufacturer
 			UpdateQuery updateQuery = generateUpdateQuery(ManufacturerTable.table,
 					BinaryCondition.equalTo(ManufacturerTable.manufacturerIDCol, PARAM_MARK));
-			
-			
-			updateQuery.addSetClause(ManufacturerTable.manufacturerNameCol, 
-					PARAM_MARK).validate();
 
-			getParameterizedQuery(updateQuery + "", 
-					newManufacturer.getId(),newManufacturer.getName()).executeUpdate();
-			
-			//END transaction
+			updateQuery.addSetClause(ManufacturerTable.manufacturerNameCol, PARAM_MARK).validate();
+
+			getParameterizedQuery(updateQuery + "", newManufacturer.getId(), newManufacturer.getName()).executeUpdate();
+
+			// END transaction
 			connection.commit();
 			connection.setAutoCommit(true);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
+	@Override
+	public void logoutAllUsers() throws CriticalError {
+		PreparedStatement statement = getParameterizedQuery(generateDeleteQuery(CartsListTable.table));
+		try {
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		} finally {
+			closeResources(statement);
+		}
+
+		statement = getParameterizedQuery(generateDeleteQuery(GroceriesListsTable.table));
+		try {
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		} finally {
+			closeResources(statement);
+		}
+
+		statement = getParameterizedQuery(new UpdateQuery(WorkersTable.table)
+				.addSetClause(WorkersTable.sessionIDCol, SqlObject.NULL_VALUE).validate() + "");
+		try {
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		} finally {
+			closeResources(statement);
+		}
+
+	}
 
 }

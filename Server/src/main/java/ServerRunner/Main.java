@@ -4,6 +4,8 @@ import java.net.UnknownHostException;
 
 import ClientServerCommunication.ThreadPooledServer;
 import CommandHandler.CommandProcess;
+import SQLDatabase.SQLDatabaseConnection;
+import SQLDatabase.SQLDatabaseException.CriticalError;
 
 import org.apache.commons.cli.*;
 import org.apache.log4j.Level;
@@ -88,9 +90,11 @@ public class Main {
 		if (!parseArguments(args))
 			return;
 		
+		
 		/* Setting log properties */
 		PropertyConfigurator.configure("../log4j.properties");
 		log.setLevel(verbosity);
+		
 		
 		CommandProcess commandProcess = new CommandProcess();
 		ThreadPooledServer server = null;
@@ -102,6 +106,19 @@ public class Main {
 			log.fatal("Server IP address leads to unknown host, server won't start.");
 			return;
 		}
+		
+		SQLDatabaseConnection connection = new SQLDatabaseConnection();
+		
+		log.info("Disconnect from all clients");
+		try {
+			connection.logoutAllUsers();
+			connection.close();
+		} catch (CriticalError e1) {
+			e1.printStackTrace();
+			log.fatal("Disconnect failed");
+			return;
+		}
+			
 		
 		log.info("Starting Server.");
 		new Thread(server).start();
