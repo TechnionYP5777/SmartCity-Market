@@ -181,7 +181,7 @@ public class WorkerMenuScreen implements Initializable {
 			EmployeeGuiExeptionHandler.handle(e);
 		}
 
-		AbstractApplicationScreen.setScene("/EmployeeMainScreen/EmployeeLoginScreen.fxml");
+		AbstractApplicationScreen.setScene("/EmployeeLoginScreen/EmployeeLoginScreen.fxml");
 	}
 
 }
