@@ -55,15 +55,15 @@ public class ViewProductFromCatalogTest {
 					(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
 							Serialization.serialize(new SmartCode(1234567890, null))).serialize())))
 					.thenReturn(commandWrapper.serialize());
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ¢) {
+			¢.printStackTrace();
 			fail();
 		}
 
 		try {
 			testCatalogProduct = worker.viewProductFromCatalog(1234567890);
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog e) {
-			e.printStackTrace();
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog ¢) {
+			¢.printStackTrace();
 			fail();
 		}
 		
@@ -80,15 +80,15 @@ public class ViewProductFromCatalogTest {
 					(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
 							Serialization.serialize(new SmartCode(1234567890, null))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ¢) {
+			¢.printStackTrace();
 			fail();
 		}
 		
 		try {
 			worker.viewProductFromCatalog(1234567890);
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected e) {
-			e.printStackTrace();
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected ¢) {
+			¢.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog e) {
 			/* Test Passed */
@@ -102,15 +102,15 @@ public class ViewProductFromCatalogTest {
 					(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
 							Serialization.serialize(new SmartCode(1234567890, null))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ¢) {
+			¢.printStackTrace();
 			fail();
 		}
 		
 		try {
 			worker.viewProductFromCatalog(1234567890);
-		} catch (InvalidParameter  | CriticalError | ProductNotExistInCatalog e) {
-			e.printStackTrace();
+		} catch (InvalidParameter  | CriticalError | ProductNotExistInCatalog ¢) {
+			¢.printStackTrace();
 			fail();
 		} catch (EmployeeNotConnected e) {
 			/* Test Passed */
