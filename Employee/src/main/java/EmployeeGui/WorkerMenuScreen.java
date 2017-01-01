@@ -152,7 +152,7 @@ public class WorkerMenuScreen implements Initializable {
 	private void runTheOperationButtonPressed(ActionEvent __) {
 
 		SmartCode smartcode = new SmartCode(Long.parseLong(editPackagesBarcodeTextField.getText()),
-				editPackagesDatePicker.getValue(), "java.time");
+				editPackagesDatePicker.getValue());
 
 		try {
 

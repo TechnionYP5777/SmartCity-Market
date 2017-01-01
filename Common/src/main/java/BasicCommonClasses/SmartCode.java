@@ -1,6 +1,6 @@
 package BasicCommonClasses;
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 /**
  * SmartCode - basic class represent the SmartCode product: A combination of
@@ -16,11 +16,6 @@ public class SmartCode {
 	public SmartCode(long barcode, LocalDate expirationDate) {
 		this.barcode = barcode;
 		this.expirationDate = expirationDate;
-	}
-
-	public SmartCode(long barcode, java.time.LocalDate expirationDate, String justToSolveAmbiguity) {
-		this(barcode, new LocalDate(expirationDate.getYear(), expirationDate.getMonthValue(),
-				expirationDate.getDayOfMonth()));
 	}
 
 	public void setBarcode(long newBarCode) {

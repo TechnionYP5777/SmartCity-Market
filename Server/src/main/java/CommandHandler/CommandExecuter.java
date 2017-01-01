@@ -185,6 +185,8 @@ public class CommandExecuter {
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for Add Product Package To Warehouse command");
 			
+			e.printStackTrace();
+			
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 			
 			return;
