@@ -109,7 +109,7 @@ public class ViewProductFromCatalogTest {
 		
 		try {
 			worker.viewProductFromCatalog(1234567890);
-		} catch (InvalidParameter | UnknownSenderID | CriticalError | ProductNotExistInCatalog e) {
+		} catch (InvalidParameter  | CriticalError | ProductNotExistInCatalog e) {
 			e.printStackTrace();
 			fail();
 		} catch (EmployeeNotConnected e) {
