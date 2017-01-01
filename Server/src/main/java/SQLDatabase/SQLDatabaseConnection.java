@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Random;
 
+import com.google.gson.Gson;
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
 import com.healthmarketscience.sqlbuilder.CreateTableQuery;
 import com.healthmarketscience.sqlbuilder.CustomCondition;
@@ -1420,12 +1421,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * lang.Integer, BasicCommonClasses.ProductPackage)
 	 */
 	@Override
-	public int getProductPackageAmonutOnShelves(Integer sessionID, ProductPackage p)
+	public String getProductPackageAmonutOnShelves(Integer sessionID, ProductPackage p)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
 
 		validateSessionEstablished(sessionID);
 
-		return getAmountForStore(p, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
+		return new Gson().toJson(getAmountForStore(p, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE));
 	}
 
 	/*
@@ -1436,12 +1437,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * java.lang.Integer, BasicCommonClasses.ProductPackage)
 	 */
 	@Override
-	public int getProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage p)
+	public String getProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage p)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog {
 
 		validateSessionEstablished(sessionID);
 
-		return getAmountForStore(p, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
+		return new Gson().toJson(getAmountForStore(p, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE));
 	}
 
 	/*
@@ -1470,7 +1471,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 
 	@Override
-	public int addManufacturer(Integer sessionID, String manufacturerName) throws CriticalError, WorkerNotConnected {
+	public String addManufacturer(Integer sessionID, String manufacturerName) throws CriticalError, WorkerNotConnected {
 
 		validateSessionEstablished(sessionID);
 
@@ -1502,7 +1503,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			freeIDOfTable(ManufacturerTable.table, $);
 		}
 
-		return $;
+		return new Gson().toJson($);
 	}
 
 	@Override

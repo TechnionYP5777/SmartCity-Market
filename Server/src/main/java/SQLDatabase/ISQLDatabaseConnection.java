@@ -35,9 +35,8 @@ public interface ISQLDatabaseConnection {
 	void removeProductPackageFromWarehouse(Integer sessionID, ProductPackage p) throws CriticalError,
 			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
 
-	void addProductToCatalog(Integer sessionID, CatalogProduct productToAdd)
-			throws CriticalError, WorkerNotConnected, ProductAlreadyExistInCatalog, IngredientNotExist,
-			ManufacturerNotExist;
+	void addProductToCatalog(Integer sessionID, CatalogProduct productToAdd) throws CriticalError, WorkerNotConnected,
+			ProductAlreadyExistInCatalog, IngredientNotExist, ManufacturerNotExist;
 
 	void removeProductFromCatalog(Integer sessionID, SmartCode productToRemove)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, ProductStillForSale;
@@ -45,11 +44,10 @@ public interface ISQLDatabaseConnection {
 	void hardRemoveProductFromCatalog(Integer sessionID, CatalogProduct productToRemove)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
 
-	void editProductInCatalog(Integer sessionID, CatalogProduct productToUpdate)
-			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog, IngredientNotExist,
-			ManufacturerNotExist;
+	void editProductInCatalog(Integer sessionID, CatalogProduct productToUpdate) throws CriticalError,
+			WorkerNotConnected, ProductNotExistInCatalog, IngredientNotExist, ManufacturerNotExist;
 
-	int addManufacturer(Integer sessionID, String manufacturerName) throws CriticalError, WorkerNotConnected;
+	String addManufacturer(Integer sessionID, String manufacturerName) throws CriticalError, WorkerNotConnected;
 
 	void removeManufacturer(Integer sessionID, Manufacturer m)
 			throws CriticalError, WorkerNotConnected, ManufacturerNotExist, ManufacturerStillUsed;
@@ -69,10 +67,10 @@ public interface ISQLDatabaseConnection {
 	void removeProductPackageFromShelves(Integer sessionID, ProductPackage productToBuy) throws CriticalError,
 			WorkerNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;
 
-	int getProductPackageAmonutOnShelves(Integer sessionID, ProductPackage productToBuy)
+	String getProductPackageAmonutOnShelves(Integer sessionID, ProductPackage productToBuy)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
 
-	int getProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage productToBuy)
+	String getProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage productToBuy)
 			throws CriticalError, WorkerNotConnected, ProductNotExistInCatalog;
 
 	void cartCheckout(Integer cartID) throws CriticalError, CartNotConnected;

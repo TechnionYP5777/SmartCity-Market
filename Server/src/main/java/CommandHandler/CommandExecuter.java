@@ -476,7 +476,7 @@ public class CommandExecuter {
 		}
 	}
 
-	private void getProductPackageAmount(SQLDatabaseConnection __) {
+	private void getProductPackageAmount(SQLDatabaseConnection c) {
 		ProductPackage productPackage = null;
 
 		log.info("Get Product Package Amount command called");
@@ -491,14 +491,35 @@ public class CommandExecuter {
 			return;
 		}
 
-		if (productPackage.isValid())
-			// TODO Noam - call SQL command here
+		if (!productPackage.isValid()) {
+			log.info("Get Product Package Amount command failed, product package is invalid");
 
-			// TODO Noam - add amount to the log print
-			log.info("Get Product Package Amount returned with amount " + " finished");
-		else {
-			log.info("Remove Product Package From Store command failed, product package is invalid");
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+		} else {
+			String amount = "";
+
+			try {
+				amount = productPackage.getLocation().equals(PlaceInMarket.STORE)
+						? c.getProductPackageAmonutOnShelves(inCommandWrapper.getSenderID(), productPackage)
+						: c.getProductPackageAmonutInWarehouse(inCommandWrapper.getSenderID(), productPackage);
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, amount);
+			} catch (CriticalError e) {
+				log.fatal(
+						"Get Product Package Amount command failed, critical error occured from SQL Database connection");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			} catch (WorkerNotConnected e) {
+				log.info("Get Product Package Amount command failed, username dosen't login to the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+			} catch (ProductNotExistInCatalog e) {
+				log.info("Get Product Package Amount command failed, product dosen't exist in the system");
+
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST);
+			}
+
+			log.info("Get Product Package Amount returned with amount " + amount + " finished");
 		}
 	}
 
