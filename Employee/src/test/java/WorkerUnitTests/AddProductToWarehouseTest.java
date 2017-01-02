@@ -11,9 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Location;
-import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
@@ -30,8 +28,6 @@ import EmployeeImplementations.Worker;
 import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
 
-
-
 /**
  * @author Lior Ben Ami
  * @since 2016-01-02 */
@@ -47,6 +43,7 @@ public class AddProductToWarehouseTest {
 		PropertyConfigurator.configure("../log4j.properties");
 		worker = new Worker(clientRequestHandler);
 	}
+	
 	static ProductPackage pp = new ProductPackage(new SmartCode(111,LocalDate.now()), 
 			5, new Location(1,1,PlaceInMarket.WAREHOUSE));
 	@Test
