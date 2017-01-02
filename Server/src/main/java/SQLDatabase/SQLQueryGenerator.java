@@ -96,7 +96,7 @@ class SQLQueryGenerator {
 	 * @return string of select query.
 	 */
 	public static UpdateQuery generateUpdateQuery(DbTable tabel, Condition... cs) {
-		UpdateQuery $ = new UpdateQuery(WorkersTable.table);
+		UpdateQuery $ = new UpdateQuery(tabel);
 
 		for (int ¢ = 0; ¢ < cs.length; ++¢)
 			$.addCondition(cs[¢]);
