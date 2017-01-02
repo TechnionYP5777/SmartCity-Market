@@ -1239,7 +1239,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				throw new ProductAlreadyExistInCatalog();
 
 			// check if manufacturer exist
-			if (isManufacturerExist((int) productToAdd.getManufacturer().getId()))
+			if (!isManufacturerExist((int) productToAdd.getManufacturer().getId()))
 				throw new ManufacturerNotExist();
 
 			// check if all ingredients exists
