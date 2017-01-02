@@ -2,7 +2,6 @@ package SQLDatabaseTest;
 
 import static org.junit.Assert.*;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 
 import org.apache.log4j.PropertyConfigurator;
@@ -20,10 +19,7 @@ import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
-import SQLDatabase.SQLDatabaseException.IngredientNotExist;
-import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
-import SQLDatabase.SQLDatabaseException.ProductAlreadyExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
