@@ -1,7 +1,9 @@
 package SQLDatabase;
 
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -458,6 +460,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	}
 
+	private String dateToString(LocalDate ¢) {
+		return ¢.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+	}
 	/**
 	 * get parameterized query for execution.
 	 * 
@@ -539,14 +544,19 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			if (oldAmount == 0) {
 				String insertQuery = new InsertQuery(ProductsPackagesTable.table)
 						.addColumn(ProductsPackagesTable.barcodeCol, PARAM_MARK)
-						.addColumn(ProductsPackagesTable.expirationDateCol, PARAM_MARK)
+						.addColumn(ProductsPackagesTable.expirationDateCol, dateToString(p.getSmartCode().getExpirationDate()))
 						.addColumn(ProductsPackagesTable.placeInStoreCol, PARAM_MARK)
 						.addColumn(ProductsPackagesTable.amountCol, PARAM_MARK).validate() + "";
 
 				insertQuery.hashCode();
 
+				
+				log.info("set amount to package: " + p.getSmartCode().getBarcode() + ", " + dateToString(p.getSmartCode().getExpirationDate()) + ", " + placeCol);
+
+
+				
 				statement = getParameterizedQuery(insertQuery, p.getSmartCode().getBarcode(),
-						p.getSmartCode().getExpirationDate(), placeCol, newAmount);
+						placeCol, newAmount);
 
 			} else if (newAmount == 0) { // case: remove row
 				String deleteQuery = generateDeleteQuery(ProductsPackagesTable.table,
@@ -573,6 +583,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				statement = getParameterizedQuery(updateQuery + "", p.getSmartCode().getBarcode(), placeCol);
 			}
 
+			log.info("setNewAmountForStore : run query: " + statement);
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
@@ -750,11 +761,13 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		String selectQuery = generateSelectQuery1Table(ProductsPackagesTable.table,
 				BinaryCondition.equalTo(ProductsPackagesTable.barcodeCol, PARAM_MARK),
 				BinaryCondition.equalTo(ProductsPackagesTable.placeInStoreCol, PARAM_MARK),
-				BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol, JdbcEscape.date(Date
+				BinaryCondition.equalTo(ProductsPackagesTable.expirationDateCol, JdbcEscape.date(Date
 						.from(p.getSmartCode().getExpirationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()))));
 
 		PreparedStatement statement = getParameterizedReadQuery(selectQuery, p.getSmartCode().getBarcode(), placeCol);
 
+		log.info("getAmountForStore: execute query: " + statement);
+		
 		ResultSet result = null;
 		try {
 			result = statement.executeQuery();
@@ -783,6 +796,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol, JdbcEscape.date(Date
 						.from(p.getSmartCode().getExpirationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()))));
 
+		log.info("execute query: " + selectQuery);
+		
 		PreparedStatement statement = getParameterizedReadQuery(selectQuery, p.getSmartCode().getBarcode(), listID);
 
 		ResultSet result = null;
@@ -869,7 +884,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			}
 
 		if (to != null)
-			switch (from) {
+			switch (to) {
 			case CART: {
 				int listID = getCartListId(sessionId);
 				int currentAmount = getAmountForCart(packageToMove, listID);
