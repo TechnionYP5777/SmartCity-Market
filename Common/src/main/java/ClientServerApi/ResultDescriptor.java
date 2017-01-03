@@ -97,16 +97,6 @@ public enum ResultDescriptor {
 	 */
 	SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD,
 	
-	/**
-	 * The cart is not connected to the system but tried to execute command still.
-	 * 
-	 * How to fix:
-	 * 
-	 * 1. Report critical error (Check for a bug when see such message).
-	 * 
-	 */
-	SM_CART_IS_NOT_CONNECTED,
-	
 	/********************************** Shared failures for employee & cart ********************************/
 	
 	/**

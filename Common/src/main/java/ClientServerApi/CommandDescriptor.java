@@ -93,7 +93,7 @@ public enum CommandDescriptor {
 	 * 			SM_OK,
 	 * 
  	 * 		failure:
-	 *			SM_CART_IS_NOT_CONNECTED
+	 *			SM_SENDER_IS_NOT_CONNECTED
 	 *	 ***** NOTE *****
 	 * The sender ID returns in senderId field.
 	 */
@@ -246,7 +246,7 @@ public enum CommandDescriptor {
 	 * 			SM_OK
 	 * 		
 	 * 		failure:
-	 *			SM_CART_IS_NOT_CONNECTED
+	 *			SM_SENDER_IS_NOT_CONNECTED
 	 *
 	 */
 	LOAD_GROCERY_LIST,
@@ -261,7 +261,7 @@ public enum CommandDescriptor {
 	 * 			SM_OK,
 	 * 		
 	 * 		failure:
-	 *			SM_CART_IS_NOT_CONNECTED,
+	 *			SM_SENDER_IS_NOT_CONNECTED,
 	 *			SM_PRODUCT_PACKAGE_DOES_NOT_EXIST,
 	 *			SM_PRODUCT_PACKAGE_NOT_ENOUGH_AMOUNT,
 	 *
@@ -278,7 +278,7 @@ public enum CommandDescriptor {
 	 * 			SM_OK,
 	 * 		
 	 * 		failure:
-	 *			SM_CART_IS_NOT_CONNECTED,
+	 *			SM_SENDER_IS_NOT_CONNECTED,
 	 *			SM_PRODUCT_PACKAGE_DOES_NOT_EXIST,
 	 *			SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE,
 	 *
@@ -295,7 +295,7 @@ public enum CommandDescriptor {
 	 * 			SM_OK,
 	 * 		
 	 * 		failure:
-	 *			SM_CART_IS_NOT_CONNECTED,
+	 *			SM_SENDER_IS_NOT_CONNECTED,
 	 *			SM_GROCERY_LIST_IS_EMPTY,
 	 *
 	 */
