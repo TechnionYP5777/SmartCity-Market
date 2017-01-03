@@ -36,7 +36,7 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public void addProductToCatalog(ProductPackage p) throws InvalidParameter,
-		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
+		CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
 		log.info("Creating addProductToCatalog command wrapper with product package: " + p);
@@ -56,8 +56,8 @@ public class Manager extends Worker implements IManager {
 		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductAlreadyExistInCatalog
-				| ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale | 
+				AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductNotExistInCatalog e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}
@@ -66,11 +66,10 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public void removeProductFromCatalog(ProductPackage p) throws InvalidParameter,
-		CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog, ProductStillForSale {
+		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ProductStillForSale {
+		
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
-		
 		log.info("Creating removeProductFromCatalog command wrapper with product package: " + p);
-		
 		String serverResponse;
 		try {
 			serverResponse = sendRequestWithRespondToServer(
@@ -87,7 +86,7 @@ public class Manager extends Worker implements IManager {
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductNotExistInCatalog | 
-				 AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
+				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			e.printStackTrace();
 		}

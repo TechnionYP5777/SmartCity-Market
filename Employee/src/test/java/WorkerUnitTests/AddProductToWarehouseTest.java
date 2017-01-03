@@ -1,4 +1,5 @@
-package WorkerUnitTests;import static org.junit.Assert.*;
+package WorkerUnitTests;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.time.LocalDate;

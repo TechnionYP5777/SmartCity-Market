@@ -20,13 +20,13 @@ public interface IManager extends IWorker {
 	 * 
 	 * @param ProductPackage
 	 * @return void
-	 * @throws ProductNotExistInCatalog 
 	 * @throws EmployeeNotConnected 
 	 * @throws CriticalError 
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
+	 * @throws ProductAlreadyExistInCatalog 
 	 */
-	void addProductToCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog;
+	void addProductToCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog;
 	
 	/**
 	 * Manager removes product to catalog.
@@ -34,13 +34,13 @@ public interface IManager extends IWorker {
 	 * @param ProductPackage
 	 * @return amount 
 	 * @throws ProductStillForSale 
-	 * @throws ProductAlreadyExistInCatalog 
+ 	 * @throws ProductNotExistInCatalog 
 	 * @throws EmployeeNotConnected 
 	 * @throws CriticalError 
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
 	 */
-	void removeProductFromCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog, ProductStillForSale;
+	void removeProductFromCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductStillForSale, ProductNotExistInCatalog;
 	
 	/**
 	 * Manager edits product to catalog.
