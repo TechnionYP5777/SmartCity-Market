@@ -36,17 +36,17 @@ public interface ICart {
 	/**
 	 * addPtoductToCart - Adds product to the cart
 	 * 
-	 *  @param smartCode
+	 *  @param c
 	 */
-	void addPtoductToCart(SmartCode smartCode);
+	void addPtoductToCart(SmartCode c);
 	
 	/**
 	 * returnProductToShelf - Adds product to the cart
 	 * 
-	 *  @param smartCode
+	 *  @param c
 	 *  @throws ProductNotInCart
 	 */
-	void returnProductToShelf(SmartCode smartCode) /*throws ProductNotInCart*/;
+	void returnProductToShelf(SmartCode c) /*throws ProductNotInCart*/;
 	
 	/**
 	 * getTotalSum - returns the total sum of the shopping

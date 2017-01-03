@@ -10,29 +10,29 @@ import BasicCommonClasses.SmartCode;
 public class GroceryList {
 	HashMap<SmartCode, CartProduct> groceryList;
 
-	public void addProduct(SmartCode smartCode, CatalogProduct catalogProduct) /*throws InvalidParameters*/ {
-		if (smartCode.getBarcode() != catalogProduct.getBarcode()) 
+	public void addProduct(SmartCode c, CatalogProduct p) /*throws InvalidParameters*/ {
+		if (c.getBarcode() != p.getBarcode()) 
 			/*throw InvalidParameters*/
 		if (groceryList == null)
 			groceryList = new HashMap<SmartCode, CartProduct>();
-		CartProduct cp = groceryList.get(smartCode);
+		CartProduct cp = groceryList.get(c);
 		if (cp == null) {
-			cp = new CartProduct(catalogProduct, smartCode.getExpirationDate(), 0);
+			cp = new CartProduct(p, c.getExpirationDate(), 0);
 		}
 		cp.incrementAmount();
-		groceryList.put(smartCode, cp);
+		groceryList.put(c, cp);
 	}
 	
-	public void removeOneProduct(SmartCode smartCode) /*throws ProductNotInList*/{
-		CartProduct cp = groceryList.get(smartCode);
+	public void removeOneProduct(SmartCode c) /*throws ProductNotInList*/{
+		CartProduct cp = groceryList.get(c);
 		if (cp == null)
 			/*throw new ProductNotInList()*/;
 		//remove last product of its type
 		int amount = cp.getAmount() -1;
 		if (cp.getAmount() == 0)
-			groceryList.remove(smartCode);
+			groceryList.remove(c);
 		cp.setAmount(amount);
-		groceryList.put(smartCode, cp);
+		groceryList.put(c, cp);
 	}
 	
 	public double getTotalSum() {

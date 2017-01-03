@@ -32,7 +32,7 @@ public class Cart {
 		
 	}
 	
-	public void addPtoductToCart(SmartCode smartCode) {
+	public void addPtoductToCart(SmartCode c) {
 		
 	}
 	
