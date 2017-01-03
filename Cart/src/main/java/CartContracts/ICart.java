@@ -53,4 +53,10 @@ public interface ICart {
 	 * @return double
 	 */
 	double getTotalSum(); 
+	
+	/**
+	 * checkOutGroceryList - returns the finale total sum of the shopping and initialize grocery list
+	 * @return
+	 */
+	double checkOutGroceryList();
 }

@@ -5,7 +5,7 @@ import static org.junit.Assert.fail;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
 import org.junit.Test;
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Manufacturer;
@@ -23,7 +23,7 @@ public class CartProductTest {
 		Manufacturer man = new Manufacturer(11,"Osem");
 		String bambaIm = "https://www.osem.co.il/tm-content/uploads/2015/01/Bamba_classic_80g3.png3-308x308.png";
 		CatalogProduct catp = new CatalogProduct(11, "Bamba", null, man, "", 12, bambaIm, null);
-		LocalDate ld = new LocalDate(2016,12,11);
+		LocalDate ld =  LocalDate.of(2016,12,11);
 		CartProduct crp = new CartProduct(catp, ld, 0);
 		if (!catp.equals(crp.getCatalogProduct()) || !ld.equals(crp.getExpirationDate()) ||
 				crp.getAmount() != 0)

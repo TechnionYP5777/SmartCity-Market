@@ -1,27 +1,26 @@
 package ClientServerApi;
 
+/**
+ * These our result descriptors returned by the server. Add here more if
+ * needed. keep the convention!
+ * 
+ * @author idan atias
+ * @author shimon azulay
+ * @author Aviad Cohen
+ * @author Lior Ben Ami
+ */
 public enum ResultDescriptor {
-	/**
-	 * These our result descriptors returned by the server. Add here more if
-	 * needed. keep the convention!
-	 * 
-	 * @author idan atias
-	 * @author shimon azulay
-	 * @author Aviad Cohen
-	 */
 
 /************************************************ Success ***************************************************/
-	
-	SM_OK,
 	/**
 	 * The command request accepted by the server and was executed successfully.
 	 */
+	SM_OK,
 
 /************************************************ Failures **************************************************/
 
 	/**************************************** General Failures **********************************************/
 	
-	SM_INVALID_CMD_DESCRIPTOR,
 	/**
 	 * The command request denied due to unsupported command by the server.
 	 * 
@@ -31,8 +30,8 @@ public enum ResultDescriptor {
 	 * 	2. Try to send the command again (maybe the command failed due to network errors).
 	 * 
 	 */
+	SM_INVALID_CMD_DESCRIPTOR,
 
-	SM_INVALID_PARAMETER,
 	/**
 	 * The command request has invalid parameter.
 	 * The format of one of the parameters is illegal.
@@ -44,8 +43,8 @@ public enum ResultDescriptor {
 	 *     isn't supposed to be sent to the server.
 	 * 
 	 */
+	SM_INVALID_PARAMETER,
 	
-	SM_ERR,
 	/**
 	 * The command request failed due to general error (might be due to server initial failure).
 	 * 
@@ -55,10 +54,10 @@ public enum ResultDescriptor {
 	 * 2. Try to send the message again (maybe the command failed due to network errors).
 	 *
 	 */
+	SM_ERR,
 
 	/****************************************** Login/Logout failures **************************************/
 	
-	SM_SENDER_IS_NOT_CONNECTED,
 	/**
 	 * The sender is not connected to the system but tried to execute command still.
 	 * 
@@ -68,8 +67,8 @@ public enum ResultDescriptor {
 	 * 2. Ask the user to login again.
 	 * 
 	 */
+	SM_SENDER_IS_NOT_CONNECTED,
 	
-	SM_SENDER_IS_ALREADY_CONNECTED,
 	/**
 	 * The sender tried to login to the server although he is already connected.
 	 * 
@@ -83,8 +82,8 @@ public enum ResultDescriptor {
 	 * 2. Ask the user to logout and login again.
 	 * 
 	 */
+	SM_SENDER_IS_ALREADY_CONNECTED,
 	
-	SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD,
 	/**
 	 * The sender tried to connect to the server with unknown username or with wrong password.
 	 * 
@@ -96,10 +95,20 @@ public enum ResultDescriptor {
 	 * 1. Ask the user to login again with another username/password.
 	 * 
 	 */
+	SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD,
+	
+	/**
+	 * The cart is not connected to the system but tried to execute command still.
+	 * 
+	 * How to fix:
+	 * 
+	 * 1. Report critical error (Check for a bug when see such message).
+	 * 
+	 */
+	SM_CART_IS_NOT_CONNECTED,
 	
 	/********************************** Shared failures for employee & cart ********************************/
 	
-	SM_CATALOG_PRODUCT_DOES_NOT_EXIST,
 	/**
 	 * The sender tried to get invalid product.
 	 * 
@@ -109,10 +118,10 @@ public enum ResultDescriptor {
 	 * 2. Otherwise - report critical error (Check for a bug when see such message).
 	 * 
 	 */
+	SM_CATALOG_PRODUCT_DOES_NOT_EXIST,
 	
 	/************************************** Employee failures only *****************************************/
 	
-	SM_CATALOG_PRODUCT_ALREADY_EXISTS,
 	/**
 	 * The sender tried to add catalog product with existing barcode.
 	 * 
@@ -125,8 +134,8 @@ public enum ResultDescriptor {
 	 * 		d. Abort operation.
 	 * 
 	 */
+	SM_CATALOG_PRODUCT_ALREADY_EXISTS,
 	
-	SM_CATALOG_PRODUCT_STILL_FOR_SALE,
 	/**
 	 * The manager tried to remove catalog product which still available for sale.
 	 * 
@@ -137,8 +146,8 @@ public enum ResultDescriptor {
 	 * 		c. Abort operation.
 	 * 
 	 */
+	SM_CATALOG_PRODUCT_STILL_FOR_SALE,
 	
-	SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE,
 	/**
 	 * The amount from the selected package is not available.
 	 * 
@@ -148,10 +157,10 @@ public enum ResultDescriptor {
 	 * 		b. Abort operation.
 	 * 
 	 */
+	SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE,
 
 	/***************************************** Cart failures only ******************************************/
 	
-	SM_PRODUCT_PACKAGE_DOES_NOT_EXIST,
 	/**
 	 * The cart tried to add product package to grocery list which dosen't exist.
 	 * 
@@ -162,8 +171,8 @@ public enum ResultDescriptor {
 	 * 		b. Abort operation.
 	 * 
 	 */
+	SM_PRODUCT_PACKAGE_DOES_NOT_EXIST,
 	
-	SM_GROCERY_LIST_IS_EMPTY,
 	/**
 	 * The cart tried to checkout an empty grocery list.
 	 * 
@@ -173,4 +182,6 @@ public enum ResultDescriptor {
 	 * 2. Tell the cart that the given grocery list is empty and can't be checked-out.
 	 * 
 	 */
+	SM_GROCERY_LIST_IS_EMPTY,
+	
 }

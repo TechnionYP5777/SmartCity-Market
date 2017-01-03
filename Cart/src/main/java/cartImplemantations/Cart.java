@@ -1,9 +1,5 @@
 package cartImplemantations;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.SmartCode;
 
 /**
@@ -11,13 +7,13 @@ import BasicCommonClasses.SmartCode;
  */
 public class Cart {
 	int id = -1;
-	HashMap<SmartCode, CartProduct> groceryList;
+	GroceryList groceryList = new GroceryList();
 	
 	public int getId() {
 		return id;
 	}
 
-	public HashMap<SmartCode, CartProduct> getGroceryList() {
+	public GroceryList getGroceryList() {
 		return groceryList;
 	}
 
@@ -40,24 +36,22 @@ public class Cart {
 		
 	}
 	
-	public void returnProductToShelf(SmartCode smartCode) /*throws ProductNotInCart*/{
-		CartProduct cp = groceryList.get(smartCode);
-		if (cp == null)
-			/*throw new ProductNotInCart()*/;
-		//remove last product of its type
-		int amount = cp.getAmount() -1;
-		if (cp.getAmount() == 0)
-			groceryList.remove(smartCode);
-		cp.setAmount(amount);
-		groceryList.put(smartCode, cp);
+	public void returnProductToShelf(SmartCode ¢) /*throws ProductNotInCart*/{
+		if (groceryList == null) 
+			/*throw ProductNotInCart*/
+		groceryList.removeOneProduct(¢);
+		
 		//TODO: update server;
 	}
 	
 	public double getTotalSum() {
-		if (groceryList == null) return 0;
-		double $ = 0;
-		for (Map.Entry<SmartCode, CartProduct> ¢: groceryList.entrySet())
-			$ += ¢.getValue().getCatalogProduct().getPrice();
+		return groceryList == null ? 0 : groceryList.getTotalSum();
+	}
+	
+	public double checkOutGroceryList() {
+		//TODO: update server;
+		double $ = this.getTotalSum();
+		groceryList = null;
 		return $;
 	}
 }

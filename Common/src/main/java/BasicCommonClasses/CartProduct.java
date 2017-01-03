@@ -4,7 +4,7 @@ package BasicCommonClasses;
  * @since 
  */
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 /** CartProduct - The product from the Cart (/costumer) perspective. 
  * @param amount - The number of items of the same product in the cart.
@@ -47,6 +47,17 @@ public class CartProduct {
 		this.amount = amount;
 	}
 
+	public void incrementAmount() {
+		amount++;
+	}
+	
+	/**
+	 * decrease amount by one. if it zero do nothing
+	 */
+	public void decreaseAmount() {
+		if (amount >0)
+			amount--;
+	}
 	@Override
 	public int hashCode() {
 		return 31 * (((catalogProduct == null) ? 0 : catalogProduct.hashCode()) + 31)
