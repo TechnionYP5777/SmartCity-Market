@@ -57,9 +57,9 @@ public class Manager extends Worker implements IManager {
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale | 
-				AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductNotExistInCatalog e) {
+				AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductNotExistInCatalog ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			e.printStackTrace();
+			¢.printStackTrace();
 		}
 		log.info("addProductToCatalog command succeed.");
 	}
@@ -86,9 +86,9 @@ public class Manager extends Worker implements IManager {
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductNotExistInCatalog | 
-				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog e) {
+				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			e.printStackTrace();
+			¢.printStackTrace();
 		}
 		
 		log.info("removeProductFromCatalog command succeed.");
@@ -96,12 +96,10 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public void editProductFromCatalog(ProductPackage p) throws InvalidParameter,
-		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
-		ProductAlreadyExistInCatalog {
+		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
 		log.info("Creating editProductFromCatalog command wrapper with product package: " + p);
-		
 		String serverResponse;
 		try {
 			serverResponse = sendRequestWithRespondToServer(
@@ -119,9 +117,9 @@ public class Manager extends Worker implements IManager {
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError |
-				 ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
+				 ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			e.printStackTrace();
+			¢.printStackTrace();
 		}
 		
 		log.info("editProductFromCatalog command succeed.");

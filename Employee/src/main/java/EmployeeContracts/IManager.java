@@ -54,5 +54,5 @@ public interface IManager extends IWorker {
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
 	 */
-	void editProductFromCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ProductAlreadyExistInCatalog;
+	void editProductFromCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog;
 }

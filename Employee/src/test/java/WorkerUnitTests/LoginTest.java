@@ -50,14 +50,14 @@ public class LoginTest {
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
 							CommandDescriptor.LOGIN, Serialization.serialize(new Login("test", "test"))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, CLIENT_TYPE.WORKER.serialize()).serialize());
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ¢) {
+			¢.printStackTrace();
 			fail();
 		}
 		try {
 			clType = worker.login("test", "test");
-		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected | AuthenticationError e) {
-			e.printStackTrace();
+		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected | AuthenticationError ¢) {
+			¢.printStackTrace();
 			fail();
 		}
 		assertEquals("test", worker.getWorkerLoginDetails().getUserName());
@@ -72,15 +72,15 @@ public class LoginTest {
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
 							CommandDescriptor.LOGIN, Serialization.serialize(new Login("test", "test"))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD).serialize());
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ¢) {
+			¢.printStackTrace();
 			fail();
 		}
 		
 		try {
 			worker.login("test", "test");
-		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected e) {
-			e.printStackTrace();
+		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected ¢) {
+			¢.printStackTrace();
 			fail();
 		} catch (AuthenticationError e) {
 			/* Test Passed */
@@ -94,14 +94,14 @@ public class LoginTest {
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
 							CommandDescriptor.LOGIN, Serialization.serialize(new Login("test", "test"))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_ALREADY_CONNECTED).serialize());
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ¢) {
+			¢.printStackTrace();
 		}
 		
 		try {
 			worker.login("test", "test");
-		} catch (InvalidParameter | CriticalError | AuthenticationError e) {
-			e.printStackTrace();
+		} catch (InvalidParameter | CriticalError | AuthenticationError ¢) {
+			¢.printStackTrace();
 			fail();
 		} catch (EmployeeAlreadyConnected e) {
 			/* Test Passed */
