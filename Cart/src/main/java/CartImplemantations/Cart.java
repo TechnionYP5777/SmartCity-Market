@@ -1,12 +1,13 @@
-package cartImplemantations;
+package CartImplemantations;
 
 import BasicCommonClasses.SmartCode;
-
+import CartContracts.ICart;
+import CartContracts.ACartExceptions.ProductNotInCart;
 /**
  * Cart class represents shopping cart in the SmartMarket. 
  */
-public class Cart {
-	int id = -1;
+public class Cart extends ACart implements ICart {
+
 	GroceryList groceryList = new GroceryList();
 	
 	public int getId() {
@@ -36,9 +37,9 @@ public class Cart {
 		
 	}
 	
-	public void returnProductToShelf(SmartCode ¢) /*throws ProductNotInCart*/{
+	public void returnProductToShelf(SmartCode ¢) throws ProductNotInCart {
 		if (groceryList == null) 
-			/*throw ProductNotInCart*/
+			throw new ProductNotInCart();
 		groceryList.removeOneProduct(¢);
 		
 		//TODO: update server;

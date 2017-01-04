@@ -1,10 +1,15 @@
 package CartContracts;
 
-import java.util.HashMap;
-
-import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.SmartCode;
+import CartContracts.ACartExceptions.ProductNotInCart;
+import CartImplemantations.GroceryList;
 
+/**
+ * ACart - This interface is the contract for Cart Type.
+ *
+ * @author Lior Ben Ami
+ * @since 2017-01-04
+ */
 public interface ICart {
 	/**
 	 * getId - returns the cart's id
@@ -16,7 +21,7 @@ public interface ICart {
 	 * getGroceryList - returns the current grocery list.
 	 * @return HashMap<SmartCode, CartProduct> 
 	 */
-	HashMap<SmartCode, CartProduct> getGroceryList();
+	GroceryList getGroceryList();
 	
 	/**
 	 * login - the cart login to the server and gets it's own id;
@@ -46,7 +51,7 @@ public interface ICart {
 	 *  @param c
 	 *  @throws ProductNotInCart
 	 */
-	void returnProductToShelf(SmartCode c) /*throws ProductNotInCart*/;
+	void returnProductToShelf(SmartCode c) throws ProductNotInCart;
 	
 	/**
 	 * getTotalSum - returns the total sum of the shopping
