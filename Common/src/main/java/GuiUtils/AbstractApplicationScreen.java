@@ -5,6 +5,8 @@ import java.io.IOException;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -21,7 +23,9 @@ import javafx.util.Duration;
 
 public abstract class AbstractApplicationScreen extends Application {
 	
-	protected static Stage stage;
+	public static Stage stage;
+	public static double stageHieght = GuiDefs.stageHeight;
+	public static double stageWidth = GuiDefs.stageWidth;
 	
 	public static void setScene(String sceneName) {
 		Parent parent;
@@ -32,10 +36,27 @@ public abstract class AbstractApplicationScreen extends Application {
 			e.printStackTrace();
 			return;
 		}
-		stage.setScene(new Scene(parent));
-	}
-	
-	
+		Scene scene = new Scene(parent);
+		stage.setScene(scene);
+
+		// setting up stage props
+		stage.setHeight(stageHieght);
+		stage.setWidth(stageWidth);
+
+		// setting up stage(=window) size listeners
+		scene.widthProperty().addListener(new ChangeListener<Number>() {
+		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+		    	stage.setWidth(stageWidth);
+		    }
+		});
+		scene.heightProperty().addListener(new ChangeListener<Number>() {
+		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+		    	stage.setHeight(stageHieght);
+		    }
+		});
+}
+
+
 	public static void fadeTransition(Node n){
         FadeTransition x=new FadeTransition(new Duration(2000),n);
         x.setFromValue(0);
