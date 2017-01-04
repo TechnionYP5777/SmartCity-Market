@@ -1,6 +1,8 @@
 package CartContracts;
 
 import BasicCommonClasses.SmartCode;
+import CartContracts.ACartExceptions.CartNotConnected;
+import CartContracts.ACartExceptions.CriticalError;
 import CartContracts.ACartExceptions.ProductNotInCart;
 import CartImplemantations.GroceryList;
 
@@ -25,18 +27,23 @@ public interface ICart {
 	
 	/**
 	 * login - the cart login to the server and gets it's own id;
+	 * @throws CriticalError 
 	 */
-	void login();
+	void login() throws CriticalError;
 	
 	/**
 	 * logout - the cart logout from  the server. To use in the end of the shopping.
+	 * @throws CartNotConnected 
+	 * @throws CriticalError 
 	 */
-	void logout();
+	void logout() throws CartNotConnected, CriticalError;
 	
 	/**
 	 * resume - saves the data of the cart from the server (to use in case of collapse)
+	 * @throws CriticalError 
+	 * @throws CartNotConnected 
 	 */
-	void resume();
+	void resume(int _id) throws CriticalError, CartNotConnected;
 	
 	/**
 	 * addPtoductToCart - Adds product to the cart
