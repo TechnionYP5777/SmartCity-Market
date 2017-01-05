@@ -9,6 +9,7 @@ import CartContracts.ACartExceptions.ProductNotInCart;
 import CartContracts.ACartExceptions.ProductPackageDoesNotExist;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
+import CommonDefs.GroceryListExceptions.ProductNotInList;
 import CartContracts.ACartExceptions.AmountBiggerThanAvailable;
 import CartContracts.ACartExceptions.CartNotConnected;
 import CartContracts.ACartExceptions.CriticalError;
@@ -131,7 +132,11 @@ public class Cart extends ACart implements ICart {
 	public void returnProductToShelf(SmartCode ¢) throws ProductNotInCart {
 		if (groceryList == null) 
 			throw new ProductNotInCart();
-		groceryList.removeOneProduct(¢);
+		try {
+			groceryList.removeOneProduct(¢);
+		} catch (ProductNotInList e) {
+			throw new ProductNotInCart();
+		}
 		
 		//TODO: update server;
 	}

@@ -3,26 +3,32 @@ package BasicCommonClasses;
 import java.util.HashMap;
 import java.util.Map;
 
+import CommonDefs.GroceryListExceptions.InvalidParameter;
+import CommonDefs.GroceryListExceptions.ProductNotInList;
+
+/**
+ * GroceryList class - represent the container of the CartProducts that added to the cart.
+ * 
+ * @author Lior Ben Ami
+ * @since 2017-01-04
+ */
 public class GroceryList {
 	HashMap<SmartCode, CartProduct> groceryList;
 
-	public void addProduct(SmartCode c, CatalogProduct p) /*throws InvalidParameters*/ {
+	public void addProduct(SmartCode c, CatalogProduct p) throws InvalidParameter {
 		if (c.getBarcode() != p.getBarcode()) 
-			/*throw InvalidParameters*/
+			throw new InvalidParameter();
 		if (groceryList == null)
 			groceryList = new HashMap<SmartCode, CartProduct>();
-		CartProduct cp = groceryList.get(c);
-		if (cp == null) {
-			cp = new CartProduct(p, c.getExpirationDate(), 0);
-		}
+		CartProduct cp = groceryList.get(c) != null ? groceryList.get(c) : new CartProduct(p, c.getExpirationDate(), 0);
 		cp.incrementAmount();
 		groceryList.put(c, cp);
 	}
 	
-	public void removeOneProduct(SmartCode c) /*throws ProductNotInList*/{
+	public void removeOneProduct(SmartCode c) throws ProductNotInList {
 		CartProduct cp = groceryList.get(c);
 		if (cp == null)
-			/*throw new ProductNotInList()*/;
+			throw new ProductNotInList();
 		//remove last product of its type
 		int amount = cp.getAmount() -1;
 		if (cp.getAmount() == 0)
