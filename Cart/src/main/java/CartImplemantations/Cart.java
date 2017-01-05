@@ -1,4 +1,4 @@
-package CartImplemantations;
+ package CartImplemantations;
 
 import java.net.SocketTimeoutException;
 
@@ -16,7 +16,10 @@ import CartContracts.ACartExceptions.InvalidCommandDescriptor;
 import CartContracts.ACartExceptions.InvalidParameter;
 import UtilsImplementations.Serialization;
 /**
- * Cart class represents shopping cart in the SmartMarket. 
+ * Cart class represents shopping cart in the SmartMarket.
+ * 
+ * @author Lior Ben Ami
+ * @since 2017-01-02
  */
 public class Cart extends ACart implements ICart {
 
@@ -88,11 +91,6 @@ public class Cart extends ACart implements ICart {
 		log.info("logout from server succeed.");
 	}
 	
-	/**
-	 * saves the data of the cart from the server (to use in case of collapse)
-	 * @throws CriticalError 
-	 * @throws CartNotConnected 
-	 */
 	public void resume(int _id) throws CriticalError, CartNotConnected {
 		CommandWrapper $ = null;
 		establishCommunication(CartDefs.port, CartDefs.host, CartDefs.timeout);
