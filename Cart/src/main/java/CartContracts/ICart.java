@@ -1,10 +1,10 @@
 package CartContracts;
 
+import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.SmartCode;
 import CartContracts.ACartExceptions.CartNotConnected;
 import CartContracts.ACartExceptions.CriticalError;
 import CartContracts.ACartExceptions.ProductNotInCart;
-import CartImplemantations.GroceryList;
 
 /**
  * ACart - This interface is the contract for Cart Type.

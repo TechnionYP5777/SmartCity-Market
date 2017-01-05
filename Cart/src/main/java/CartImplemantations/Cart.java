@@ -2,6 +2,7 @@
 
 import java.net.SocketTimeoutException;
 
+import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.SmartCode;
 import CartContracts.ICart;
 import CartContracts.ACartExceptions.ProductNotInCart;

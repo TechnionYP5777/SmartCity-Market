@@ -1,11 +1,7 @@
-package CartImplemantations;
+package BasicCommonClasses;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import BasicCommonClasses.CartProduct;
-import BasicCommonClasses.CatalogProduct;
-import BasicCommonClasses.SmartCode;
 
 public class GroceryList {
 	HashMap<SmartCode, CartProduct> groceryList;
