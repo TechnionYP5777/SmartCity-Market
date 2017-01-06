@@ -15,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
@@ -37,10 +36,6 @@ public class EmployeeLoginScreen implements Initializable {
 	private Button loginButton;
 	@FXML
 	private Button backButton;
-	@FXML
-	private RadioButton loginAsWorkerButton;
-	@FXML
-	private RadioButton loginAsManagerButton;
 	@FXML
 	private TextField userNameTextField;
 	@FXML
@@ -69,8 +64,6 @@ public class EmployeeLoginScreen implements Initializable {
 
 	@FXML
 	private void loginButtonPressed(ActionEvent __) {
-		if (!loginAsWorkerButton.isSelected())
-			return;
 		IWorker worker = InjectionFactory.getInstance(Worker.class, new WorkerDiConfigurator());
 		try {
 			worker.login(username, password);
@@ -85,15 +78,5 @@ public class EmployeeLoginScreen implements Initializable {
 
 	private void enableLoginButtonCheck() {
 		loginButton.setDisable(username.isEmpty() || password.isEmpty());
-	}
-
-	@FXML
-	private void loginAsWorkerPressed(ActionEvent __) {
-		loginAsManagerButton.setSelected(false);
-	}
-
-	@FXML
-	private void loginAsManagerPressed(ActionEvent __) {
-		loginAsWorkerButton.setSelected(false);
 	}
 }
