@@ -3,6 +3,7 @@ package BasicCommonClasses;
 import java.util.HashMap;
 import java.util.Map;
 
+import CommonDefs.GroceryListExceptions.AmountIsBiggerThanAvailable;
 import CommonDefs.GroceryListExceptions.InvalidParameter;
 import CommonDefs.GroceryListExceptions.ProductNotInList;
 
@@ -15,26 +16,29 @@ import CommonDefs.GroceryListExceptions.ProductNotInList;
 public class GroceryList {
 	HashMap<SmartCode, CartProduct> groceryList;
 
-	public void addProduct(SmartCode c, CatalogProduct p) throws InvalidParameter {
+	public void addProduct(SmartCode c, CatalogProduct p, int amount) throws InvalidParameter {
 		if (c.getBarcode() != p.getBarcode()) 
 			throw new InvalidParameter();
 		if (groceryList == null)
 			groceryList = new HashMap<SmartCode, CartProduct>();
 		CartProduct cp = groceryList.get(c) != null ? groceryList.get(c) : new CartProduct(p, c.getExpirationDate(), 0);
-		cp.incrementAmount();
+		cp.incrementAmount(amount);
 		groceryList.put(c, cp);
 	}
 	
-	public void removeOneProduct(SmartCode c) throws ProductNotInList {
+	public void removeProduct(SmartCode c, int amount) throws ProductNotInList, AmountIsBiggerThanAvailable {
 		CartProduct cp = groceryList.get(c);
 		if (cp == null)
 			throw new ProductNotInList();
-		//remove last product of its type
-		int amount = cp.getAmount() -1;
-		if (cp.getAmount() == 0)
+		int newAmount = cp.getAmount() - amount;
+		if (newAmount < 0)
+			throw new AmountIsBiggerThanAvailable();
+		if (newAmount == 0)
 			groceryList.remove(c);
-		cp.setAmount(amount);
-		groceryList.put(c, cp);
+		else {
+			cp.setAmount(newAmount);
+			groceryList.put(c, cp);
+		}
 	}
 	
 	public double getTotalSum() {
