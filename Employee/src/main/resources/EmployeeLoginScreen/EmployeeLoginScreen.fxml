@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="loginScreenPane" fx:controller="EmployeeGui.EmployeeLoginScreen" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@EmployeeLoginScreen.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="loginScreenPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@EmployeeLoginScreen.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeLoginScreen">
    <columnConstraints>
       <ColumnConstraints hgrow="ALWAYS" maxWidth="170.0" minWidth="10.0" percentWidth="100.0" prefWidth="125.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="340.0" minWidth="10.0" percentWidth="100.0" prefWidth="340.0" />
@@ -25,9 +25,9 @@
       <RowConstraints maxHeight="127.0" minHeight="10.0" percentHeight="100.0" prefHeight="57.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <VBox alignment="CENTER" blendMode="MULTIPLY" spacing="10.0" styleClass="dark-blue" stylesheets="@../WorkerMenuScreen/WorkerMenuScreen.css" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
-            <VBox>
+            <VBox styleClass="dark-blue" stylesheets="@../WorkerMenuScreen/WorkerMenuScreen.css">
                <children>
                   <Label text="Welcome!" textFill="#fffdfd">
                      <font>
@@ -79,7 +79,7 @@
                <children>
                   <VBox spacing="5.0">
                      <children>
-                        <Label text="Password recovery?" textFill="#1009ee" underline="true">
+                        <Label text="I forgot my password" textFill="#1009ee" underline="true">
                            <font>
                               <Font name="Lucida Bright Regular" size="14.0" />
                            </font>
@@ -87,8 +87,6 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <RadioButton fx:id="loginAsWorkerButton" mnemonicParsing="false" onAction="#loginAsWorkerPressed" selected="true" text="Login as worker" textFill="#fcf9f7" />
-                        <RadioButton fx:id="loginAsManagerButton" mnemonicParsing="false" onAction="#loginAsManagerPressed" text="Login as manager" textFill="WHITE" />
                      </children>
                   </VBox>
                   <Button fx:id="loginButton" mnemonicParsing="false" onAction="#loginButtonPressed" text="Login" GridPane.columnIndex="1" />
