@@ -238,6 +238,7 @@ public enum CommandDescriptor {
 	
 	/**
 	 * Description: Cart load it's own grocery list from the server.
+	 * param1: int cartId
 	 * retval: GroceryList.
 	 *
 	 * result_codes:

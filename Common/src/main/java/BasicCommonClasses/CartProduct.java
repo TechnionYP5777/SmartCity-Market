@@ -47,10 +47,17 @@ public class CartProduct {
 		this.amount = amount;
 	}
 
-	public void incrementAmount(int ¢) {
-		amount += ¢;
+	public void incrementAmount() {
+		amount++;
 	}
 	
+	/**
+	 * decrease amount by one. if it zero do nothing
+	 */
+	public void decreaseAmount() {
+		if (amount >0)
+			amount--;
+	}
 	@Override
 	public int hashCode() {
 		return 31 * (((catalogProduct == null) ? 0 : catalogProduct.hashCode()) + 31)

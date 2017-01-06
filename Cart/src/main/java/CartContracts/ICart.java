@@ -46,21 +46,19 @@ public interface ICart {
 	void resume(int _id) throws CriticalError, CartNotConnected;
 	
 	/**
-	 * addPtoductToCart - Adds product with amount to the cart
+	 * addPtoductToCart - Adds product to the cart
 	 * 
 	 *  @param c
-	 * @throws CriticalError 
-	 * @throws CartNotConnected 
 	 */
-	void addPtoductToCart(SmartCode c, int amount) throws CriticalError, CartNotConnected;
+	void addPtoductToCart(SmartCode c);
 	
 	/**
-	 * returnProductToShelf - removes product with amount from the cart
+	 * returnProductToShelf - Adds product to the cart
 	 * 
 	 *  @param c
 	 *  @throws ProductNotInCart
 	 */
-	void returnProductToShelf(SmartCode c, int amount) throws ProductNotInCart;
+	void returnProductToShelf(SmartCode c) throws ProductNotInCart;
 	
 	/**
 	 * getTotalSum - returns the total sum of the shopping
