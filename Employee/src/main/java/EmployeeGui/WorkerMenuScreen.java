@@ -11,6 +11,7 @@ import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import EmployeeCommon.TempWorkerPassingData;
 import EmployeeContracts.IWorker;
+import EmployeeDefs.AEmployeeException;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
 import SMExceptions.SMException;
@@ -24,6 +25,7 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
  * WorkerMenuScreen - Controller for menu screen which holds the operations
@@ -78,6 +80,8 @@ public class WorkerMenuScreen implements Initializable {
 	@FXML
 	RadioButton removePackageFromStoreRadioButton;
 
+	Stage primeStage = EmployeeApplicationScreen.stage;
+
 	IWorker worker;
 
 	@Override
@@ -93,6 +97,19 @@ public class WorkerMenuScreen implements Initializable {
 		worker = TempWorkerPassingData.worker;
 		enableSearchBarcodeButtonCheck();
 		enableRunTheOperationButton();
+
+		//defining behavior when stage/window is closed.
+		primeStage.setOnCloseRequest(event -> {
+			try {
+				worker.logout();
+			} catch (SMException e){
+				if (e instanceof AEmployeeException.EmployeeNotConnected){
+					//if this is the case, we probably got logged out before. Thus, ignoring...
+					return;
+				}
+				EmployeeGuiExeptionHandler.handle(e);
+			}
+		});
 	}
 
 	private void enableSearchBarcodeButtonCheck() {
@@ -185,5 +202,4 @@ public class WorkerMenuScreen implements Initializable {
 
 		AbstractApplicationScreen.setScene("/EmployeeLoginScreen/EmployeeLoginScreen.fxml");
 	}
-
 }
