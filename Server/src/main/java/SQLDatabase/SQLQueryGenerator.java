@@ -8,8 +8,6 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbJoin;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
-import SQLDatabase.SQLDatabaseEntities.WorkersTable;
-
 /**
  * @author Noam Yefet
  */

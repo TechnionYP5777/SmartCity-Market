@@ -45,12 +45,12 @@ public abstract class AbstractApplicationScreen extends Application {
 
 		// setting up stage(=window) size listeners
 		scene.widthProperty().addListener(new ChangeListener<Number>() {
-		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+		    @Override public void changed(ObservableValue<? extends Number> __, Number oldSceneWidth, Number newSceneWidth) {
 		    	stage.setWidth(stageWidth);
 		    }
 		});
 		scene.heightProperty().addListener(new ChangeListener<Number>() {
-		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+		    @Override public void changed(ObservableValue<? extends Number> __, Number oldSceneHeight, Number newSceneHeight) {
 		    	stage.setHeight(stageHieght);
 		    }
 		});

@@ -103,10 +103,8 @@ public class WorkerMenuScreen implements Initializable {
 			try {
 				worker.logout();
 			} catch (SMException e){
-				if (e instanceof AEmployeeException.EmployeeNotConnected){
-					//if this is the case, we probably got logged out before. Thus, ignoring...
+				if (e instanceof AEmployeeException.EmployeeNotConnected)
 					return;
-				}
 				EmployeeGuiExeptionHandler.handle(e);
 			}
 		});

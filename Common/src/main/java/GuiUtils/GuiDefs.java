@@ -9,6 +9,6 @@ package GuiUtils;
  *
  */
 public abstract class GuiDefs {
-	static public double stageHeight = 1000;
-	static public double stageWidth = 1000;
+	public static double stageHeight = 1000;
+	public static double stageWidth = 1000;
 }
