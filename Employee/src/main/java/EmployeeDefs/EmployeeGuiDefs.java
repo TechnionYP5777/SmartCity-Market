@@ -8,6 +8,8 @@ public class EmployeeGuiDefs {
 	
 	public static final String criticalErrorTitle = "INTERNAL ERROR!";
 	
+	public static final String scanFailureDialogTitle = "Scan failue!";
+	
 	//GUI dialog messages
 	
 //	final public static String userAlreadyConnectedFailureMessage = "The user is already connected.";

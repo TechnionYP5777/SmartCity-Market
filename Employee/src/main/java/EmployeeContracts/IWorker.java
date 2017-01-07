@@ -62,7 +62,7 @@ public interface IWorker {
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
 	 */
-	CatalogProduct viewProductFromCatalog(int barcode) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog;
+	CatalogProduct viewProductFromCatalog(long barcode) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog;
 
 	/**
 	 * worker add product package to warehouse.

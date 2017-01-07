@@ -109,7 +109,7 @@ public class Worker extends AEmployee implements IWorker {
 	}
 
 	@Override
-	public CatalogProduct viewProductFromCatalog(int barcode) throws InvalidParameter,
+	public CatalogProduct viewProductFromCatalog(long barcode) throws InvalidParameter,
 		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating viewProductFromCatalog command wrapper with barcode: " + barcode);

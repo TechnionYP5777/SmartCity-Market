@@ -1,5 +1,6 @@
 package EmployeeGui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -12,9 +13,11 @@ import BasicCommonClasses.SmartCode;
 import EmployeeCommon.TempWorkerPassingData;
 import EmployeeContracts.IWorker;
 import EmployeeDefs.AEmployeeException;
+import EmployeeDefs.EmployeeGuiDefs;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
 import SMExceptions.SMException;
+import UtilsImplementations.BarcodeScanner;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -119,10 +122,37 @@ public class WorkerMenuScreen implements Initializable {
 	}
 
 	@FXML
+	private void scanBarcodePressed(ActionEvent __) {
+		CatalogProduct catalogProduct = null;
+		String barcode = null;
+		
+		try {
+			//TODO Shimon - add Waiting for scanner dialog
+			barcode = new BarcodeScanner().getBarcodeFromScanner();
+		} catch (IOException e1) {
+			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.scanFailureDialogTitle, null,
+					EmployeeGuiDefs.criticalErrorMsg);
+		}
+		
+		try {
+			catalogProduct = worker.viewProductFromCatalog(Long.parseLong(barcode));
+		} catch (SMException e){
+			EmployeeGuiExeptionHandler.handle(e);
+		}
+		if (catalogProduct != null)
+			DialogMessagesService.showInfoDialog(catalogProduct.getName(),
+					"Description: " + catalogProduct.getDescription(),
+					"Barcode: " + catalogProduct.getBarcode() + "\n" + "Manufacturer: "
+							+ catalogProduct.getManufacturer().getName() + "\n" + "Price: "
+							+ catalogProduct.getPrice());
+
+	}
+	
+	@FXML
 	private void searchBarcodePressed(ActionEvent __) {
 		CatalogProduct catalogProduct = null;
 		try {
-			catalogProduct = worker.viewProductFromCatalog(Integer.parseInt(barcodeTextField.getText()));
+			catalogProduct = worker.viewProductFromCatalog(Long.parseLong(barcodeTextField.getText()));
 		} catch (SMException e){
 			EmployeeGuiExeptionHandler.handle(e);
 		}

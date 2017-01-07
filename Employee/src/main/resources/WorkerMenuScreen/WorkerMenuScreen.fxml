@@ -41,7 +41,7 @@
                               </Label>
                            </children>
                         </HBox>
-                        <Button mnemonicParsing="false" text="Scan SmartCode" />
+                        <Button mnemonicParsing="false" onAction="#scanBarcodePressed" text="Scan SmartCode" />
                         <Separator prefWidth="200.0" />
                         <VBox alignment="CENTER" fillWidth="false" spacing="10.0">
                            <children>
