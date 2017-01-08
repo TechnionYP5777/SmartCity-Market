@@ -1,4 +1,8 @@
 # SmartMarket
+[![Build Status](https://travis-ci.org/TechnionYP5777/SmartCity-Market.png)](https://travis-ci.org/TechnionYP5777/SmartCity-Market)
+
+[![codecov](https://codecov.io/gh/TechnionYP5777/SmartCity-Market/branch/master/graph/badge.svg)](https://codecov.io/gh/TechnionYP5777/SmartCity-Market)
+
 
 @Authors: Aviad Cohen, Noam Yefet, Shimon Azulay, Idan Atias, Lior Ben Ami.
 
