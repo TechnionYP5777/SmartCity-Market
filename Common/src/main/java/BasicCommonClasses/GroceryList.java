@@ -1,6 +1,7 @@
 package BasicCommonClasses;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import CommonDefs.GroceryListExceptions.AmountIsBiggerThanAvailable;
@@ -14,38 +15,33 @@ import CommonDefs.GroceryListExceptions.ProductNotInList;
  * @since 2017-01-04
  */
 public class GroceryList {
-	HashMap<SmartCode, CartProduct> groceryList;
+	HashMap<SmartCode, ProductPackage> groceryList;
 
-	public void addProduct(SmartCode c, CatalogProduct p, int amount) throws InvalidParameter {
-		if (c.getBarcode() != p.getBarcode()) 
-			throw new InvalidParameter();
+	public void addProduct(ProductPackage p) throws InvalidParameter {
 		if (groceryList == null)
-			groceryList = new HashMap<SmartCode, CartProduct>();
-		CartProduct cp = groceryList.get(c) != null ? groceryList.get(c) : new CartProduct(p, c.getExpirationDate(), 0);
-		cp.incrementAmount(amount);
-		groceryList.put(c, cp);
+			groceryList = new HashMap<SmartCode, ProductPackage>();
+		ProductPackage pp = groceryList.get(p.getSmartCode());
+		if (pp != null) 
+			pp.incrementAmount(p.getAmount());
+		groceryList.put(pp.getSmartCode(), pp);
 	}
 	
-	public void removeProduct(SmartCode c, int amount) throws ProductNotInList, AmountIsBiggerThanAvailable {
-		CartProduct cp = groceryList.get(c);
-		if (cp == null)
+	public void removeProduct(ProductPackage p) throws ProductNotInList, AmountIsBiggerThanAvailable {
+		ProductPackage pp = groceryList.get(p.getSmartCode());
+		if (pp == null)
 			throw new ProductNotInList();
-		int newAmount = cp.getAmount() - amount;
+		int newAmount = pp.getAmount() - p.getAmount();
 		if (newAmount < 0)
 			throw new AmountIsBiggerThanAvailable();
 		if (newAmount == 0)
-			groceryList.remove(c);
+			groceryList.remove(pp.getSmartCode());
 		else {
-			cp.setAmount(newAmount);
-			groceryList.put(c, cp);
+			pp.setAmount(newAmount);
+			groceryList.put(pp.getSmartCode(), pp);
 		}
 	}
 	
-	public double getTotalSum() {
-		if (groceryList == null) return 0;
-		double $ = 0;
-		for (Map.Entry<SmartCode, CartProduct> ¢: groceryList.entrySet())
-			$ += ¢.getValue().getCatalogProduct().getPrice();
-		return $;
+	public HashMap<SmartCode, ProductPackage> getList() {
+		return groceryList;
 	}
 }

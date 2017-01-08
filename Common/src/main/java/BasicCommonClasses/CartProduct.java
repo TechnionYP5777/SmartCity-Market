@@ -51,6 +51,9 @@ public class CartProduct {
 		amount += ¢;
 	}
 	
+	public void decreaseAmount(int ¢) {
+		amount = amount - ¢ <= 0 ? 0 : amount - ¢;
+	}
 	@Override
 	public int hashCode() {
 		return 31 * (((catalogProduct == null) ? 0 : catalogProduct.hashCode()) + 31)

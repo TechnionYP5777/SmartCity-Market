@@ -2,6 +2,7 @@ package CartContracts;
 
 import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.SmartCode;
+import CartContracts.ACartExceptions.AmountBiggerThanAvailable;
 import CartContracts.ACartExceptions.CartNotConnected;
 import CartContracts.ACartExceptions.CriticalError;
 import CartContracts.ACartExceptions.ProductNotInCart;
@@ -59,8 +60,9 @@ public interface ICart {
 	 * 
 	 *  @param c
 	 *  @throws ProductNotInCart
+	 * @throws AmountBiggerThanAvailable 
 	 */
-	void returnProductToShelf(SmartCode c, int amount) throws ProductNotInCart;
+	void returnProductToShelf(SmartCode c, int amount) throws ProductNotInCart, AmountBiggerThanAvailable;
 	
 	/**
 	 * getTotalSum - returns the total sum of the shopping

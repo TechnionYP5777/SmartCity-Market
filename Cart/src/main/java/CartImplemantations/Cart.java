@@ -158,7 +158,7 @@ public class Cart extends ACart implements ICart {
 		CatalogProduct catalogProduct = Serialization.deserialize(commandWrapper.getData(), CatalogProduct.class);
 		//add product to the cart
 		try {
-			groceryList.addProduct(c, catalogProduct, amount);
+			groceryList.addProduct(new ProductPackage(c, amount, null));
 		} catch (CommonDefs.GroceryListExceptions.InvalidParameter ¢) {
 			log.error("Critical bug: the given product isn't fit its smartcode");
 			¢.printStackTrace();
@@ -185,32 +185,29 @@ public class Cart extends ACart implements ICart {
 				ProductNotInCart | AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | 
 				GroceryListIsEmpty ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			try {
-				groceryList.addProduct(c, catalogProduct, amount);
-			} catch (CommonDefs.GroceryListExceptions.InvalidParameter e) {
-				e.printStackTrace();
-			}
 			¢.printStackTrace();
 		}
 		log.info("addProductToGroceryList command succeed.");
 	}
 	
-	public void returnProductToShelf(SmartCode c, int amount) throws ProductNotInCart {
+	public void returnProductToShelf(SmartCode c, int amount) throws ProductNotInCart, AmountBiggerThanAvailable {
 		if (groceryList == null) 
 			throw new ProductNotInCart();
 		try {
-			groceryList.removeProduct(c, amount);
+			groceryList.removeProduct(new ProductPackage(c, amount, null));
 		} catch (ProductNotInList ¢) {
 			throw new ProductNotInCart();
-		} catch (AmountIsBiggerThanAvailable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (AmountIsBiggerThanAvailable ¢) {
+			throw new AmountBiggerThanAvailable();
 		}
+		
+		//TODO: Proceed;
 		
 	}
 	
 	public double getTotalSum() {
-		return groceryList == null ? 0 : groceryList.getTotalSum();
+		return 0;
+		//TODO: implement
 	}
 	
 	public double checkOutGroceryList() {

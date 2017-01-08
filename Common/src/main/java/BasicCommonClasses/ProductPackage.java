@@ -40,6 +40,14 @@ public class ProductPackage {
 		this.location = ¢;
 	}
 
+	public void incrementAmount(int ¢) {
+		amount += ¢;
+	}
+	
+	public void decreaseOneAmount() {
+		amount = amount <= 0 ? 0 : amount - 1;
+	}
+	
 	@Override
 	public int hashCode() {
 		return 31 * (31 * (amount + 31) + ((location == null) ? 0 : location.hashCode()))
