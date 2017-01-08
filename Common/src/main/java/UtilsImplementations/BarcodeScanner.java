@@ -1,5 +1,12 @@
 package UtilsImplementations;
 
+/**
+ * EmployeeMainScreen - This class is the controller for the employee main screen
+ * all action of this scene should be here.
+ * 
+ * @author Aviad Cohen
+ * @since 2017-01-06 */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
