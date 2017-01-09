@@ -2,6 +2,10 @@ package EmployeeDefs;
 
 public class EmployeeGuiDefs {
 	
+	public static final String smartCodePrompt = "Type Or Scan Product SmartCode...";
+	
+	public static final String barcodeCodePrompt = "Type Or Scan Product Barcode...";
+	
 	public static final String loginFailureDialogTitle = "Login failue!";
 
 	public static final String productOperationFailureTitle = "Product operation failue!";

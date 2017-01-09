@@ -22,12 +22,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -45,26 +46,30 @@ public class WorkerMenuScreen implements Initializable {
 	@FXML
 	GridPane workerMenuScreenPane;
 
-	// view catalog product controls
-	@FXML
-	VBox viewCatalogProductPane;
-
-	@FXML
-	Button viewCatalogProductButton;
-
 	@FXML
 	TextField barcodeTextField;
+	
+	@FXML
+	Button showMoreDetailsButton;
+	
+	@FXML
+	Label productNameValLabel;
+	
+	@FXML
+	Label expirationDateValLabel;
+	
+	@FXML
+	Label amoutInStoreValLabel;
+	
+	@FXML
+	Label AmountInWarehouseValLabel;
 
 	@FXML
-	Button searchBarcode;
-
-	// edit product package controls
+	Label expirationDateLabel;
+	
 	@FXML
-	VBox addProductPackagePane;
-
-	@FXML
-	TextField editPackagesBarcodeTextField;
-
+	CheckBox printTheSmartCodeCheckBox;
+	
 	@FXML
 	Button runTheOperationButton;
 
@@ -72,16 +77,22 @@ public class WorkerMenuScreen implements Initializable {
 	Spinner<Integer> editPackagesAmountSpinner;
 
 	@FXML
-	DatePicker editPackagesDatePicker;
+	DatePicker datePicker;
 
 	@FXML
-	RadioButton addPakageToWarhouseRadioButton;
-
+	RadioButton printSmartCodeRadioButton;
+	
 	@FXML
-	RadioButton addPackageToShelvesRadioButton;
+	RadioButton addPackageToStoreRadioButton;
 
 	@FXML
 	RadioButton removePackageFromStoreRadioButton;
+	
+	@FXML
+	RadioButton removePackageFromWarhouseRadioButton;
+	
+	@FXML
+	RadioButton addPakageToWarhouseRadioButton;
 
 	Stage primeStage = EmployeeApplicationScreen.stage;
 
@@ -91,15 +102,13 @@ public class WorkerMenuScreen implements Initializable {
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			enableSearchBarcodeButtonCheck();
-		});
-		editPackagesBarcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			enableRunTheOperationButton();
 		});
-		editPackagesDatePicker.setValue(LocalDate.now());
+		datePicker.setValue(LocalDate.now());
 		worker = TempWorkerPassingData.worker;
-		enableSearchBarcodeButtonCheck();
+		
 		enableRunTheOperationButton();
+		addPackageToWarehouseButtonPressedCheck();
 
 		//defining behavior when stage/window is closed.
 		primeStage.setOnCloseRequest(event -> {
@@ -113,12 +122,8 @@ public class WorkerMenuScreen implements Initializable {
 		});
 	}
 
-	private void enableSearchBarcodeButtonCheck() {
-		searchBarcode.setDisable(barcodeTextField.getText().isEmpty());
-	}
-
 	private void enableRunTheOperationButton() {
-		runTheOperationButton.setDisable(editPackagesBarcodeTextField.getText().isEmpty());
+		runTheOperationButton.setDisable(barcodeTextField.getText().isEmpty());
 	}
 
 	@FXML
@@ -164,42 +169,61 @@ public class WorkerMenuScreen implements Initializable {
 							+ catalogProduct.getPrice());
 
 	}
-
+	
+	
 	@FXML
-	private void addPakageToWarhouseRadioButtonPressed(ActionEvent __) {
-
-		addPakageToWarhouseRadioButton.setSelected(true);
-
-		addPackageToShelvesRadioButton.setSelected(false);
-
-		removePackageFromStoreRadioButton.setSelected(false);
+	private void radioButtonHandling(ActionEvent __) {
+		
+	printSmartCodeRadioButton.setSelected(printSmartCodeRadioButton.isSelected());
+	addPackageToStoreRadioButton.setSelected(printSmartCodeRadioButton.isSelected());
+	removePackageFromStoreRadioButton.setSelected(removePackageFromStoreRadioButton.isSelected());
+	removePackageFromWarhouseRadioButton.setSelected(removePackageFromWarhouseRadioButton.isSelected());		
+	addPakageToWarhouseRadioButton.setSelected(addPakageToWarhouseRadioButton.isSelected());
+	addPackageToWarehouseButtonPressedCheck();
 	}
-
-	@FXML
-	private void addPackageToShelvesRadioButtonPressed(ActionEvent __) {
-
-		addPakageToWarhouseRadioButton.setSelected(false);
-
-		addPackageToShelvesRadioButton.setSelected(true);
-
-		removePackageFromStoreRadioButton.setSelected(false);
-	}
-
-	@FXML
-	private void removePackageFromStoreRadioButtonPressed(ActionEvent __) {
-
-		addPakageToWarhouseRadioButton.setSelected(false);
-
-		addPackageToShelvesRadioButton.setSelected(false);
-
-		removePackageFromStoreRadioButton.setSelected(true);
-	}
+	
+//	@FXML
+//	private void printSmartCodeRadioButtonPressed(ActionEvent __) {
+//		
+//		
+//	}
+//
+//	@FXML
+//	private void addPakageToWarhouseRadioButtonPressed(ActionEvent __) {
+//
+//		addPakageToWarhouseRadioButton.setSelected(true);
+//
+//		addPackageToStoreRadioButton.setSelected(false);
+//
+//		removePackageFromStoreRadioButton.setSelected(false);
+//		
+//	}
+//
+//	@FXML
+//	private void addPackageToShelvesRadioButtonPressed(ActionEvent __) {
+//
+//		addPakageToWarhouseRadioButton.setSelected(false);
+//
+//		addPackageToStoreRadioButton.setSelected(true);
+//
+//		removePackageFromStoreRadioButton.setSelected(false);
+//	}
+//
+//	@FXML
+//	private void removePackageFromStoreRadioButtonPressed(ActionEvent __) {
+//
+//		addPakageToWarhouseRadioButton.setSelected(false);
+//
+//		addPackageToStoreRadioButton.setSelected(false);
+//
+//		removePackageFromStoreRadioButton.setSelected(true);
+//	}
 
 	@FXML
 	private void runTheOperationButtonPressed(ActionEvent __) {
 
-		SmartCode smartcode = new SmartCode(Long.parseLong(editPackagesBarcodeTextField.getText()),
-				editPackagesDatePicker.getValue());
+		SmartCode smartcode = new SmartCode(Long.parseLong(barcodeTextField.getText()),
+				datePicker.getValue());
 
 		try {
 
@@ -209,7 +233,7 @@ public class WorkerMenuScreen implements Initializable {
 			else {
 				ProductPackage productPackage = new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
 						new Location(0, 0, PlaceInMarket.STORE));
-				if (addPackageToShelvesRadioButton.isSelected())
+				if (addPackageToStoreRadioButton.isSelected())
 					worker.placeProductPackageOnShelves(productPackage);
 				else
 					worker.removeProductPackageFromStore(productPackage);
@@ -230,4 +254,28 @@ public class WorkerMenuScreen implements Initializable {
 
 		AbstractApplicationScreen.setScene("/EmployeeLoginScreen/EmployeeLoginScreen.fxml");
 	}
+	
+	@FXML
+	private void showMoreDetailsButtonPressed(ActionEvent __) {
+		
+	}
+	
+	// Enable Disable Show more info, date picker. Change prompt text
+	
+	private void addPackageToWarehouseButtonPressedCheck() {
+		if (addPakageToWarhouseRadioButton.isSelected()) {
+			barcodeTextField.setPromptText(EmployeeGuiDefs.barcodeCodePrompt);
+			disableAddPackageToWarehouseButtonParameters(true);
+		} else {
+			barcodeTextField.setPromptText(EmployeeGuiDefs.smartCodePrompt);
+			disableAddPackageToWarehouseButtonParameters(false);
+		}
+	}
+	
+	private void disableAddPackageToWarehouseButtonParameters(boolean disable) {
+		datePicker.setDisable(disable);
+		printTheSmartCodeCheckBox.setDisable(disable);
+		
+	}
+
 }
