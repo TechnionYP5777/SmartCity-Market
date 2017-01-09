@@ -48,8 +48,9 @@ public enum CommandDescriptor {
 	 *			SM_SENDER_IS_ALREADY_CONNECTED,
 	 *			SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD,
 	 *
-	 *	 ***** NOTE *****
-	 * The sender ID returns in senderId field.
+	 *	 ***** NOTES *****
+	 * 	1. The sender ID returns in senderId field.
+	 *  2. Cart use username & password (use cart on both).
 	 */
 	LOGIN,
 
@@ -65,11 +66,13 @@ public enum CommandDescriptor {
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED
 	 *
-	 *	 ***** NOTE *****
-	 * This command has no data from the server side.
+	 *	 ***** NOTES *****
+	 * 	 1. This command has no data from the server side.
+	 * 	 2. On Cart, the senderId will be the identification for logout and will ABORT the current GroceryList.
 	 */
 	LOGOUT,
 
+	//TODO Lior - remove CART_LOGIN, CART_LOGOUT (see issue #200).
 	/**
 	 * Description: Cart client login command to get in the system and receive unique cart id from server.
 	 * retval: int cartId.

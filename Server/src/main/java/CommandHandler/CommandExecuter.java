@@ -126,6 +126,7 @@ public class CommandExecuter {
 		}
 
 		try {
+			//TODO Noam - Please change workerLogout to logout and allow to cart to logout as cart  
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 			c.workerLogout(inCommandWrapper.getSenderID(), username);
 
