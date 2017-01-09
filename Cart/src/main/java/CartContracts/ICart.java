@@ -10,7 +10,7 @@ import CartContracts.ACartExceptions.CriticalError;
 import CartContracts.ACartExceptions.ProductNotInCart;
 
 /**
- * ACart - This interface is the contract for Cart Type.
+ * ICart - This interface is the contract for Cart Type.
  *
  * @author Lior Ben Ami
  * @since 2017-01-04
@@ -43,6 +43,7 @@ public interface ICart {
 	
 	/**
 	 * resume - saves the data of the cart from the server (to use in case of collapse)
+	 * @param int _id
 	 * @throws CriticalError 
 	 * @throws CartNotConnected 
 	 */
@@ -51,7 +52,8 @@ public interface ICart {
 	/**
 	 * addPtoductToCart - Adds product with amount to the cart
 	 * 
-	 *  @param c
+	 * @param SmartCode c
+	 * @param int amount
 	 * @throws CriticalError 
 	 * @throws CartNotConnected 
 	 */
@@ -60,9 +62,9 @@ public interface ICart {
 	/**
 	 * returnProductToShelf - removes product with amount from the cart
 	 * 
-	 *  @param SmartCode c 
-	 *  @param  int amount
-	 *  @throws ProductNotInCart
+	 * @param SmartCode c 
+	 * @param  int amount
+	 * @throws ProductNotInCart
 	 * @throws AmountBiggerThanAvailable 
 	 * @throws CriticalError 
 	 * @throws CartNotConnected 
@@ -77,7 +79,7 @@ public interface ICart {
 	
 	/**
 	 * checkOutGroceryList - returns the finale total sum of the shopping and initialize grocery list
-	 * @return
+	 * @return double
 	 * @throws CriticalError 
 	 * @throws CartNotConnected 
 	 */

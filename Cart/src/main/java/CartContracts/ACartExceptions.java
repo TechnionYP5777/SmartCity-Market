@@ -34,24 +34,17 @@ public class ACartExceptions extends SMException {
 	}
 	
 	/**
-	 * Thrown when worker try to do operation before connecting
+	 * Thrown when cart try to do operation before connecting
 	 */
 	public static class CartNotConnected extends ACartExceptions {
 		private static final long serialVersionUID = 4708231565561825649L;
 	}
 
 	/**
-	 * Thrown when worker try to connect twice
+	 * Thrown when try to remove product that isn't in the cart.
 	 */
 	public static class ProductNotInCart extends ACartExceptions {
 		private static final long serialVersionUID = -2078563581704067033L;
-	}
-	
-	/**
-	 * Thrown when worker not exist in database or password don't match
-	 */
-	public static class AuthenticationError extends ACartExceptions {
-		private static final long serialVersionUID = -1202631123044106836L;
 	}
 
 	/**
