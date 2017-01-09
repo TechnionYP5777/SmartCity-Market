@@ -13,16 +13,17 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 
-import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.Location;
+import BasicCommonClasses.PlaceInMarket;
+import BasicCommonClasses.ProductPackage;
+import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import CommandHandler.CommandExecuter;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException.CriticalError;
-import SQLDatabase.SQLDatabaseException.IngredientNotExist;
-import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
-import SQLDatabase.SQLDatabaseException.ProductAlreadyExistInCatalog;
+import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -37,17 +38,17 @@ public class CommandExectuerAddProductPackageToWarehouseTest {
 	}
 	
 	@Test
-	public void addCatalogProductSuccessfulTest() {
+	public void addProductPackageToWarehouseSuccessfulTest() {
 		int senderID = 1;
-		CatalogProduct catalogProduct = new CatalogProduct(0, "Shoko", null, null, null, 1.5, null, null);
-		String command = new CommandWrapper(senderID, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
-				new Gson().toJson(catalogProduct, CatalogProduct.class)).serialize();
+		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));
+		String command = new CommandWrapper(senderID, CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
+				new Gson().toJson(productPackage, ProductPackage.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
 		
 		try {
-			Mockito.doNothing().when(sqlDatabaseConnection).addProductToCatalog(senderID, catalogProduct);
-		} catch (ProductAlreadyExistInCatalog | IngredientNotExist | ManufacturerNotExist | CriticalError | ClientNotConnected e) {
+			Mockito.doNothing().when(sqlDatabaseConnection).addProductPackageToWarehouse(senderID, productPackage);
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -58,107 +59,17 @@ public class CommandExectuerAddProductPackageToWarehouseTest {
 	}
 	
 	@Test
-	public void addCatalogProductInvalidParamTest() {
+	public void addProductPackageToWarehouseCriticalErrorTest() {
 		int senderID = 1;
-		CatalogProduct catalogProduct = new CatalogProduct(0, "Shoko", null, null, null, -1, null, null);
-		String command = new CommandWrapper(senderID, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
-				new Gson().toJson(catalogProduct, CatalogProduct.class)).serialize();
+		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));
+		String command = new CommandWrapper(senderID, CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
+				new Gson().toJson(productPackage, ProductPackage.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
 		
 		try {
-			Mockito.doNothing().when(sqlDatabaseConnection).addProductToCatalog(senderID, catalogProduct);
-		} catch (ProductAlreadyExistInCatalog | IngredientNotExist | ManufacturerNotExist | CriticalError | ClientNotConnected e) {
-			e.printStackTrace();
-			fail();
-		}
-		
-		out = commandExecuter.execute(sqlDatabaseConnection);
-		
-		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER, out.getResultDescriptor());
-	}
-	
-	@Test
-	public void addCatalogProductProductAlreadyExistInCatalogTest() {
-		int senderID = 1;
-		CatalogProduct catalogProduct = new CatalogProduct(0, "Shoko", null, null, null, 4, null, null);
-		String command = new CommandWrapper(senderID, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
-				new Gson().toJson(catalogProduct, CatalogProduct.class)).serialize();
-		CommandExecuter commandExecuter = new CommandExecuter(command);
-		CommandWrapper out;
-		
-		try {
-			Mockito.doThrow(new ProductAlreadyExistInCatalog()).when(sqlDatabaseConnection).addProductToCatalog(senderID, catalogProduct);
-		} catch (IngredientNotExist | ManufacturerNotExist | CriticalError | ClientNotConnected e) {
-			e.printStackTrace();
-			fail();
-		} catch (ProductAlreadyExistInCatalog __) {
-			/* Success */
-		}
-		
-		out = commandExecuter.execute(sqlDatabaseConnection);
-		
-		assertEquals(ResultDescriptor.SM_CATALOG_PRODUCT_ALREADY_EXISTS, out.getResultDescriptor());
-	}
-	
-	@Test
-	public void addCatalogProductIngredientNotExistTest() {
-		int senderID = 1;
-		CatalogProduct catalogProduct = new CatalogProduct(0, "Shoko", null, null, null, 4, null, null);
-		String command = new CommandWrapper(senderID, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
-				new Gson().toJson(catalogProduct, CatalogProduct.class)).serialize();
-		CommandExecuter commandExecuter = new CommandExecuter(command);
-		CommandWrapper out;
-		
-		try {
-			Mockito.doThrow(new IngredientNotExist()).when(sqlDatabaseConnection).addProductToCatalog(senderID, catalogProduct);
-		} catch (ProductAlreadyExistInCatalog | ManufacturerNotExist | CriticalError | ClientNotConnected e) {
-			e.printStackTrace();
-			fail();
-		} catch (IngredientNotExist __) {
-			/* Success */
-		}
-		
-		out = commandExecuter.execute(sqlDatabaseConnection);
-		
-		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER, out.getResultDescriptor());
-	}
-	
-	@Test
-	public void addCatalogProductManufacturerNotExistTest() {
-		int senderID = 1;
-		CatalogProduct catalogProduct = new CatalogProduct(0, "Shoko", null, null, null, 4, null, null);
-		String command = new CommandWrapper(senderID, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
-				new Gson().toJson(catalogProduct, CatalogProduct.class)).serialize();
-		CommandExecuter commandExecuter = new CommandExecuter(command);
-		CommandWrapper out;
-		
-		try {
-			Mockito.doThrow(new ManufacturerNotExist()).when(sqlDatabaseConnection).addProductToCatalog(senderID, catalogProduct);
-		} catch (ProductAlreadyExistInCatalog | IngredientNotExist | CriticalError | ClientNotConnected e) {
-			e.printStackTrace();
-			fail();
-		} catch (ManufacturerNotExist __) {
-			/* Success */
-		}
-		
-		out = commandExecuter.execute(sqlDatabaseConnection);
-		
-		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER, out.getResultDescriptor());
-	}
-	
-	@Test
-	public void addCatalogProductCriticalErrorTest() {
-		int senderID = 1;
-		CatalogProduct catalogProduct = new CatalogProduct(0, "Shoko", null, null, null, 4, null, null);
-		String command = new CommandWrapper(senderID, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
-				new Gson().toJson(catalogProduct, CatalogProduct.class)).serialize();
-		CommandExecuter commandExecuter = new CommandExecuter(command);
-		CommandWrapper out;
-		
-		try {
-			Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection).addProductToCatalog(senderID, catalogProduct);
-		} catch (ProductAlreadyExistInCatalog | IngredientNotExist | ManufacturerNotExist | ClientNotConnected e) {
+			Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection).addProductPackageToWarehouse(senderID, productPackage);
+		} catch (ClientNotConnected | ProductNotExistInCatalog e) {
 			e.printStackTrace();
 			fail();
 		} catch (CriticalError __) {
@@ -171,17 +82,17 @@ public class CommandExectuerAddProductPackageToWarehouseTest {
 	}
 	
 	@Test
-	public void addCatalogProductClientNotConnectedTest() {
+	public void addProductPackageToWarehouseClientNotConnectedTest() {
 		int senderID = 1;
-		CatalogProduct catalogProduct = new CatalogProduct(0, "Shoko", null, null, null, 4, null, null);
-		String command = new CommandWrapper(senderID, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
-				new Gson().toJson(catalogProduct, CatalogProduct.class)).serialize();
+		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));
+		String command = new CommandWrapper(senderID, CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
+				new Gson().toJson(productPackage, ProductPackage.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
 		
 		try {
-			Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection).addProductToCatalog(senderID, catalogProduct);
-		} catch (ProductAlreadyExistInCatalog | IngredientNotExist | ManufacturerNotExist | CriticalError e) {
+			Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection).addProductPackageToWarehouse(senderID, productPackage);
+		} catch (CriticalError | ProductNotExistInCatalog e) {
 			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected __) {
@@ -191,5 +102,28 @@ public class CommandExectuerAddProductPackageToWarehouseTest {
 		out = commandExecuter.execute(sqlDatabaseConnection);
 		
 		assertEquals(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED, out.getResultDescriptor());
+	}
+	
+	@Test
+	public void addProductPackageToWarehouseProductNotExistInCatalogTest() {
+		int senderID = 1;
+		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));
+		String command = new CommandWrapper(senderID, CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
+				new Gson().toJson(productPackage, ProductPackage.class)).serialize();
+		CommandExecuter commandExecuter = new CommandExecuter(command);
+		CommandWrapper out;
+		
+		try {
+			Mockito.doThrow(new ProductNotExistInCatalog()).when(sqlDatabaseConnection).addProductPackageToWarehouse(senderID, productPackage);
+		} catch (CriticalError | ClientNotConnected e) {
+			e.printStackTrace();
+			fail();
+		} catch (ProductNotExistInCatalog __) {
+			/* Success */
+		}
+		
+		out = commandExecuter.execute(sqlDatabaseConnection);
+		
+		assertEquals(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST, out.getResultDescriptor());
 	}
 }
