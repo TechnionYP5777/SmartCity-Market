@@ -545,6 +545,60 @@ public class CommandExecuter {
 		}
 	}
 
+	private void addProductToGroceryList(SQLDatabaseConnection __) {
+		ProductPackage productPackage = null;
+
+		log.info("Add Product To Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Add Product To Grocery List command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+		
+		log.info("Trying to add product package " + productPackage + " to grocery list");
+		
+		if (productPackage.isValid())
+			//TODO Noam, call SQL function here, add {} to if statement here (Spartinizer removes them)
+			log.info("Add Product To Grocery List with product package " + productPackage + " finished");
+		else {
+			log.info("Add Product To Grocery List command failed, product package is invalid");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+		}
+	}
+	
+	private void removeProductFromGroceryList(SQLDatabaseConnection __) {
+		ProductPackage productPackage = null;
+
+		log.info("Remove Product From Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Remove Product From Grocery List command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+		
+		log.info("Trying to remove product package " + productPackage + " from grocery list");
+		
+		if (productPackage.isValid())
+			//TODO Noam, call SQL function here, add {} to if statement here (Spartinizer removes them)
+			log.info("Remove Product From Grocery List with product package " + productPackage + " finished");
+		else {
+			log.info("Remove Product From Grocery List command failed, product package is invalid");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+		}
+	}
+	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
 			log.fatal("Failed to get SQL Database Connection");
@@ -607,6 +661,16 @@ public class CommandExecuter {
 
 		case GET_PRODUCT_PACKAGE_AMOUNT:
 			getProductPackageAmount(c);
+
+			break;
+			
+		case ADD_PRODUCT_TO_GROCERY_LIST:
+			addProductToGroceryList(c);
+
+			break;
+			
+		case REMOVE_PRODUCT_FROM_GROCERY_LIST:
+			removeProductFromGroceryList(c);
 
 			break;
 

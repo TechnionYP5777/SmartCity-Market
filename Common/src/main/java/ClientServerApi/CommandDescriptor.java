@@ -120,6 +120,8 @@ public enum CommandDescriptor {
 	 */
 	VIEW_PRODUCT_FROM_CATALOG,
 	
+	/********************************** Employee commands **********************************/
+	
 	/**
 	 * Description: Employee add new ProductPackage to warehouse.
 	 * param1: ProductPackage - The ProductPackage which will be add to warehouse.
@@ -266,6 +268,7 @@ public enum CommandDescriptor {
 	 *			SM_SENDER_IS_NOT_CONNECTED,
 	 *			SM_PRODUCT_PACKAGE_DOES_NOT_EXIST,
 	 *			SM_PRODUCT_PACKAGE_NOT_ENOUGH_AMOUNT,
+	 *			SM_INVALID_PARAMETER,
 	 *
 	 */
 	ADD_PRODUCT_TO_GROCERY_LIST,
@@ -283,6 +286,7 @@ public enum CommandDescriptor {
 	 *			SM_SENDER_IS_NOT_CONNECTED,
 	 *			SM_PRODUCT_PACKAGE_DOES_NOT_EXIST,
 	 *			SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE,
+	 *			SM_INVALID_PARAMETER,
 	 *
 	 */
 	REMOVE_PRODUCT_FROM_GROCERY_LIST,
