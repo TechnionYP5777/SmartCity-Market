@@ -1,11 +1,8 @@
 package BasicCommonClasses;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 
 import CommonDefs.GroceryListExceptions.AmountIsBiggerThanAvailable;
-import CommonDefs.GroceryListExceptions.InvalidParameter;
 import CommonDefs.GroceryListExceptions.ProductNotInList;
 
 /**
@@ -17,7 +14,7 @@ import CommonDefs.GroceryListExceptions.ProductNotInList;
 public class GroceryList {
 	HashMap<SmartCode, ProductPackage> groceryList;
 
-	public void addProduct(ProductPackage p) throws InvalidParameter {
+	public void addProduct(ProductPackage p) {
 		if (groceryList == null)
 			groceryList = new HashMap<SmartCode, ProductPackage>();
 		ProductPackage pp = groceryList.get(p.getSmartCode());

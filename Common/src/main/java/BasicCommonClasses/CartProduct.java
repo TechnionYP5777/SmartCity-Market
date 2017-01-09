@@ -1,8 +1,4 @@
 package BasicCommonClasses;
-/**
- * @author Lior Ben Ami
- * @since 
- */
 
 import java.time.LocalDate;
 

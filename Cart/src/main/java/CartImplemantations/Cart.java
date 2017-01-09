@@ -1,7 +1,9 @@
  package CartImplemantations;
 
 import java.net.SocketTimeoutException;
+import java.util.HashMap;
 
+import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.ProductPackage;
@@ -29,13 +31,64 @@ import UtilsImplementations.Serialization;
 public class Cart extends ACart implements ICart {
 
 	GroceryList groceryList = new GroceryList();
+	/**
+	 * inner cache, same data as the groceryList, but use CartProduct. 
+	 */
+	HashMap<SmartCode, CartProduct> cartProductCache = new HashMap<SmartCode, CartProduct>();
+	double totalSum;
+	
+	private void loadCartProductCache() throws CriticalError, CartNotConnected {
+		for (HashMap.Entry<SmartCode, ProductPackage> entry : groceryList.getList().entrySet()) {
+			ProductPackage productPackage = entry.getValue();
+			cartProductCache.put(productPackage.getSmartCode(), (new CartProduct(cartViewCatalogProduct(entry.getKey()),
+					productPackage.getSmartCode().getExpirationDate(), productPackage.getAmount())));
+		}
+	}
+
+	private CatalogProduct cartViewCatalogProduct(SmartCode c) throws CriticalError, CartNotConnected {
+		establishCommunication(CartDefs.port, CartDefs.host, CartDefs.timeout);
+		//first: getting the product from the server
+		log.info("Creating viewProductFromCatalog (in order to addPtoductToCart) command wrapper to cart with id: " + id);
+		String serverResponse;
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(id, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
+						Serialization.serialize(c)).serialize()));
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			throw new CriticalError();
+		}
+		terminateCommunication();
+		CommandWrapper $ = CommandWrapper.deserialize(serverResponse);
+		try {
+			resultDescriptorHandler($.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | InvalidParameter| CriticalError |
+				ProductNotInCart | AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | 
+				GroceryListIsEmpty ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			¢.printStackTrace();
+			throw new CriticalError();
+		}
+		log.info("viewProductFromCatalog command succeed.");
+		return Serialization.deserialize($.getData(), CatalogProduct.class);
+	}
+	
+	private void addProductToCache(SmartCode c, int amount, CatalogProduct p) {
+		CartProduct cp = cartProductCache.get(c);
+		if (cp != null) 
+			cp.incrementAmount(amount);
+		else
+			cp = new CartProduct(p, c.getExpirationDate(), amount);
+		cartProductCache.put(c, cp);
+		totalSum += amount * p.getPrice();
+	}
 	
 	public int getId() {
 		return id;
 	}
 
-	public GroceryList getGroceryList() {
-		return groceryList;
+	public HashMap<SmartCode, CartProduct> getCartProductCache() {
+		return cartProductCache;
 	}
 
 	public void login() throws CriticalError {
@@ -125,59 +178,25 @@ public class Cart extends ACart implements ICart {
 		}
 		id = _id;
 		groceryList = Serialization.deserialize($.getData(), GroceryList.class);
+		loadCartProductCache();
 		log.info("load grocery list from server succeed.");
 	}
 	
 	public void addPtoductToCart(SmartCode c, int amount) throws CriticalError, CartNotConnected {
+		CatalogProduct catalogProduct = cartViewCatalogProduct(c);
 		establishCommunication(CartDefs.port, CartDefs.host, CartDefs.timeout);
-		//first: getting the product from the server
 		log.info("Creating viewProductFromCatalog (in order to addPtoductToCart) command wrapper to cart with id: " + id);
 		String serverResponse;
-		try {
-			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(id, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
-						Serialization.serialize(c)).serialize()));
-		} catch (SocketTimeoutException e) {
-			log.fatal("Critical bug: failed to get respond from server");
-			
-			throw new CriticalError();
-		}
-		
-		terminateCommunication();
-		
-		CommandWrapper commandWrapper = CommandWrapper.deserialize(serverResponse);
-		try {
-			resultDescriptorHandler(commandWrapper.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | InvalidParameter| CriticalError |
-				ProductNotInCart | AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | 
-				GroceryListIsEmpty ¢) {
-			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
-		}
-		log.info("viewProductFromCatalog command succeed.");
-		CatalogProduct catalogProduct = Serialization.deserialize(commandWrapper.getData(), CatalogProduct.class);
-		//add product to the cart
-		try {
-			groceryList.addProduct(new ProductPackage(c, amount, null));
-		} catch (CommonDefs.GroceryListExceptions.InvalidParameter ¢) {
-			log.error("Critical bug: the given product isn't fit its smartcode");
-			¢.printStackTrace();
-		}
-		establishCommunication(CartDefs.port, CartDefs.host, CartDefs.timeout);
-		//add the product to the cart - server
-		log.info("Creating viewProductFromCatalog (in order to addPtoductToCart) command wrapper to cart with id: " + id);
+		CommandWrapper commandWrapper = null;
 		try {
 			serverResponse = sendRequestWithRespondToServer(
 					(new CommandWrapper(id, CommandDescriptor.ADD_PRODUCT_TO_GROCERY_LIST,
 							Serialization.serialize(new ProductPackage(c, amount, null))).serialize()));
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
-			
 			throw new CriticalError();
 		}
-		
 		terminateCommunication();
-		
 		commandWrapper = CommandWrapper.deserialize(serverResponse);
 		try {
 			resultDescriptorHandler(commandWrapper.getResultDescriptor());
@@ -188,9 +207,37 @@ public class Cart extends ACart implements ICart {
 			¢.printStackTrace();
 		}
 		log.info("addProductToGroceryList command succeed.");
+		groceryList.addProduct(new ProductPackage(c, amount, null));
+		addProductToCache(c, amount, catalogProduct);
 	}
 	
-	public void returnProductToShelf(SmartCode c, int amount) throws ProductNotInCart, AmountBiggerThanAvailable {
+	
+
+	public void returnProductToShelf(SmartCode c, int amount) throws ProductNotInCart, AmountBiggerThanAvailable, CriticalError, CartNotConnected {
+		establishCommunication(CartDefs.port, CartDefs.host, CartDefs.timeout);
+		log.info("Creating REMOVE_PRODUCT_FROM_GROCERY_LIST command wrapper to cart with id: " + id);
+		String serverResponse;
+		CommandWrapper commandWrapper = null;
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(id, CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST,
+							Serialization.serialize(new ProductPackage(c, amount, null))).serialize()));
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			throw new CriticalError();
+		}
+		terminateCommunication();
+		commandWrapper = CommandWrapper.deserialize(serverResponse);
+		try {
+			resultDescriptorHandler(commandWrapper.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | InvalidParameter| CriticalError |
+				 AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | 
+				GroceryListIsEmpty ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			¢.printStackTrace();
+		}
+		log.info("REMOVE_PRODUCT_FROM_GROCERY_LIST command succeed.");
+		//update cart data: groceryList, cartProductCache, totalSum
 		if (groceryList == null) 
 			throw new ProductNotInCart();
 		try {
@@ -200,20 +247,44 @@ public class Cart extends ACart implements ICart {
 		} catch (AmountIsBiggerThanAvailable ¢) {
 			throw new AmountBiggerThanAvailable();
 		}
-		
-		//TODO: Proceed;
-		
+		CartProduct cp =  cartProductCache.get(c);
+		cp.decreaseAmount(amount);
+		cartProductCache.put(c, cp);
+		totalSum -= amount * cp.getCatalogProduct().getPrice();
 	}
 	
 	public double getTotalSum() {
-		return 0;
-		//TODO: implement
+		return totalSum;
 	}
 	
-	public double checkOutGroceryList() {
-		//TODO: update server;
-		double $ = this.getTotalSum();
-		groceryList = null;
+	public double checkOutGroceryList() throws CriticalError, CartNotConnected {
+		establishCommunication(CartDefs.port, CartDefs.host, CartDefs.timeout);
+		log.info("Creating CHECKOUT_GROCERY_LIST command wrapper to cart with id: " + id);
+		String serverResponse;
+		CommandWrapper commandWrapper = null;
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(id, CommandDescriptor.CHECKOUT_GROCERY_LIST)).serialize());
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			throw new CriticalError();
+		}
+		terminateCommunication();
+		commandWrapper = CommandWrapper.deserialize(serverResponse);
+		try {
+			resultDescriptorHandler(commandWrapper.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | InvalidParameter| CriticalError |
+				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductNotInCart | 
+				GroceryListIsEmpty ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			¢.printStackTrace();
+		}
+		log.info("CHECKOUT_GROCERY_LIST command succeed.");
+		//update cart data: groceryList, cartProductCache, totalSum
+		groceryList = new GroceryList();
+		cartProductCache = new HashMap<SmartCode, CartProduct>();
+		double $ = totalSum;
+		totalSum = 0;
 		return $;
 	}
 

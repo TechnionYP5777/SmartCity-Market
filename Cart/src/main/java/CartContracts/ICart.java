@@ -1,6 +1,8 @@
 package CartContracts;
 
-import BasicCommonClasses.GroceryList;
+import java.util.HashMap;
+
+import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.SmartCode;
 import CartContracts.ACartExceptions.AmountBiggerThanAvailable;
 import CartContracts.ACartExceptions.CartNotConnected;
@@ -21,10 +23,10 @@ public interface ICart {
 	int getId();
 
 	/**
-	 * getGroceryList - returns the current grocery list.
+	 * getCartProductCache - returns the current CartProduct Cache.
 	 * @return HashMap<SmartCode, CartProduct> 
 	 */
-	GroceryList getGroceryList();
+	HashMap<SmartCode, CartProduct> getCartProductCache();
 	
 	/**
 	 * login - the cart login to the server and gets it's own id;
@@ -58,11 +60,14 @@ public interface ICart {
 	/**
 	 * returnProductToShelf - removes product with amount from the cart
 	 * 
-	 *  @param c
+	 *  @param SmartCode c 
+	 *  @param  int amount
 	 *  @throws ProductNotInCart
 	 * @throws AmountBiggerThanAvailable 
+	 * @throws CriticalError 
+	 * @throws CartNotConnected 
 	 */
-	void returnProductToShelf(SmartCode c, int amount) throws ProductNotInCart, AmountBiggerThanAvailable;
+	void returnProductToShelf(SmartCode c, int amount) throws ProductNotInCart, AmountBiggerThanAvailable, CriticalError, CartNotConnected;
 	
 	/**
 	 * getTotalSum - returns the total sum of the shopping
@@ -73,6 +78,8 @@ public interface ICart {
 	/**
 	 * checkOutGroceryList - returns the finale total sum of the shopping and initialize grocery list
 	 * @return
+	 * @throws CriticalError 
+	 * @throws CartNotConnected 
 	 */
-	double checkOutGroceryList();
+	double checkOutGroceryList() throws CriticalError, CartNotConnected;
 }
