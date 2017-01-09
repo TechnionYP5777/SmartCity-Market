@@ -34,6 +34,13 @@ public class ACartExceptions extends SMException {
 	}
 	
 	/**
+	 * Thrown when try to login with wrong user id or password.
+	 */
+	public static class AuthenticationError extends ACartExceptions {
+		private static final long serialVersionUID = -7277405499939708291L;
+	}
+	
+	/**
 	 * Thrown when cart try to do operation before connecting
 	 */
 	public static class CartNotConnected extends ACartExceptions {
@@ -68,4 +75,6 @@ public class ACartExceptions extends SMException {
 	public static class GroceryListIsEmpty extends ACartExceptions {
 		private static final long serialVersionUID = 977822169247328736L;
 	}
+	
+	
 }

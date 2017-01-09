@@ -5,6 +5,7 @@ import java.util.HashMap;
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.SmartCode;
 import CartContracts.ACartExceptions.AmountBiggerThanAvailable;
+import CartContracts.ACartExceptions.AuthenticationError;
 import CartContracts.ACartExceptions.CartNotConnected;
 import CartContracts.ACartExceptions.CriticalError;
 import CartContracts.ACartExceptions.ProductNotInCart;
@@ -31,8 +32,9 @@ public interface ICart {
 	/**
 	 * login - the cart login to the server and gets it's own id;
 	 * @throws CriticalError 
+	 * @throws AuthenticationError
 	 */
-	void login() throws CriticalError;
+	void login(String username, String password) throws CriticalError, AuthenticationError;
 	
 	/**
 	 * logout - the cart logout from  the server. To use in the end of the shopping.

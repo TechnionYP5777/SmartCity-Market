@@ -71,36 +71,6 @@ public enum CommandDescriptor {
 	 * 	 2. On Cart, the senderId will be the identification for logout and will ABORT the current GroceryList.
 	 */
 	LOGOUT,
-
-	//TODO Lior - remove CART_LOGIN, CART_LOGOUT (see issue #200).
-	/**
-	 * Description: Cart client login command to get in the system and receive unique cart id from server.
-	 * retval: int cartId.
-	 *
-	 * result_codes:
-	 * 		success:
-	 * 			SM_OK,
-	 * 		
-	 *	 ***** NOTE *****
-	 * The sender ID returns in senderId field.
-	 */
-	CART_LOGIN,
-	
-	/**
-	 * Description: Cart client logout command to get in the system and receive unique cart id from server.
-	 * param1: int cartId
-	 * retval: void
-	 *
-	 * result_codes:
-	 * 		success:
-	 * 			SM_OK,
-	 * 
- 	 * 		failure:
-	 *			SM_SENDER_IS_NOT_CONNECTED
-	 *	 ***** NOTE *****
-	 * The sender ID returns in senderId field.
-	 */
-	CART_LOGOUT,
 	
 	/********************************** Shared employee & cart commands **********************************/
 	

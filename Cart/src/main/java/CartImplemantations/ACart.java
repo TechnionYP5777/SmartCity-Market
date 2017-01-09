@@ -10,6 +10,7 @@ import CartContracts.ACartExceptions.CartNotConnected;
 import CartContracts.ACartExceptions.CriticalError;
 import CartContracts.ACartExceptions.InvalidCommandDescriptor;
 import CartContracts.ACartExceptions.InvalidParameter;
+import CartContracts.ACartExceptions.AuthenticationError;
 import CartContracts.ACartExceptions.ProductNotInCart;
 import CartContracts.ACartExceptions.ProductPackageDoesNotExist;
 import CartContracts.ACartExceptions.GroceryListIsEmpty;
@@ -27,6 +28,8 @@ public abstract class ACart {
 
 	protected static Logger log = Logger.getLogger(ACart.class.getName());
 	protected int id = CartDefs.loginCommandSenderId;
+	protected String username;
+	protected String password;
 
 	protected IClientRequestHandler clientRequestHandler;
 
@@ -65,7 +68,7 @@ public abstract class ACart {
 
 	protected void resultDescriptorHandler(ResultDescriptor ¢) throws InvalidCommandDescriptor,
 		InvalidParameter, CriticalError, CartNotConnected, ProductNotInCart, AmountBiggerThanAvailable,
-		ProductPackageDoesNotExist, GroceryListIsEmpty {
+		ProductPackageDoesNotExist, GroceryListIsEmpty, AuthenticationError {
 
 		switch (¢) {
 
@@ -88,9 +91,14 @@ public abstract class ACart {
 			log.fatal("Command execution failed, critical error");
 			
 			throw new CriticalError();
+		
+		case SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD:
+			log.fatal("Command execution failed, autentication error");
 			
+			throw new AuthenticationError();
+
 		case SM_SENDER_IS_NOT_CONNECTED:
-			log.fatal("Command execution failed, worker not connected");
+			log.fatal("Command execution failed, cart not connected");
 			
 			throw new CartNotConnected();
 
