@@ -545,6 +545,13 @@ public class CommandExecuter {
 		}
 	}
 
+	private void loadGroceryList(SQLDatabaseConnection __) {
+		log.info("Load Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+				
+		//TODO Noam, call SQL function here.
+	}
+	
 	private void addProductToGroceryList(SQLDatabaseConnection __) {
 		ProductPackage productPackage = null;
 
@@ -597,6 +604,13 @@ public class CommandExecuter {
 			
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
 		}
+	}
+	
+	private void checkoutGroceryList(SQLDatabaseConnection __) {
+		log.info("Checkout Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+				
+		//TODO Noam, call SQL function here.
 	}
 	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
@@ -664,6 +678,11 @@ public class CommandExecuter {
 
 			break;
 			
+		case LOAD_GROCERY_LIST:
+			loadGroceryList(c);
+
+			break;
+			
 		case ADD_PRODUCT_TO_GROCERY_LIST:
 			addProductToGroceryList(c);
 
@@ -671,6 +690,11 @@ public class CommandExecuter {
 			
 		case REMOVE_PRODUCT_FROM_GROCERY_LIST:
 			removeProductFromGroceryList(c);
+
+			break;
+			
+		case CHECKOUT_GROCERY_LIST:
+			checkoutGroceryList(c);
 
 			break;
 
