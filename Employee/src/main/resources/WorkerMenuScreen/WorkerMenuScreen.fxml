@@ -57,7 +57,7 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </VBox>
-                        <HBox alignment="BOTTOM_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1">
+                        <HBox fx:id="addPackageToWarehouseParametersPane" alignment="BOTTOM_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1">
                            <children>
                               <Label fx:id="expirationDateLabel" text="Expiration Date:" textFill="WHITE" />
                               <DatePicker fx:id="datePicker" />
@@ -72,7 +72,7 @@
                </children>
             </VBox>
             <Separator prefWidth="200.0" />
-            <GridPane>
+            <GridPane fx:id="quickProductDetailsPane">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" percentWidth="15.0" />
                 <ColumnConstraints hgrow="SOMETIMES" percentWidth="100.0" />

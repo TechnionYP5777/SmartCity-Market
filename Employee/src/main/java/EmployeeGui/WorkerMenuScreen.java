@@ -3,6 +3,7 @@ package EmployeeGui;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import BasicCommonClasses.CatalogProduct;
@@ -16,6 +17,7 @@ import EmployeeDefs.AEmployeeException;
 import EmployeeDefs.EmployeeGuiDefs;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
+import GuiUtils.RadioButtonEnabler;
 import SMExceptions.SMException;
 import UtilsImplementations.BarcodeScanner;
 import javafx.event.ActionEvent;
@@ -29,6 +31,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /**
@@ -45,31 +48,37 @@ public class WorkerMenuScreen implements Initializable {
 	// Main screen panes
 	@FXML
 	GridPane workerMenuScreenPane;
+	
+	@FXML
+	GridPane quickProductDetailsPane;
+	
+	@FXML
+	HBox addPackageToWarehouseParametersPane;
 
 	@FXML
 	TextField barcodeTextField;
-	
+
 	@FXML
 	Button showMoreDetailsButton;
-	
+
 	@FXML
 	Label productNameValLabel;
-	
+
 	@FXML
 	Label expirationDateValLabel;
-	
+
 	@FXML
 	Label amoutInStoreValLabel;
-	
+
 	@FXML
 	Label AmountInWarehouseValLabel;
 
 	@FXML
 	Label expirationDateLabel;
-	
+
 	@FXML
 	CheckBox printTheSmartCodeCheckBox;
-	
+
 	@FXML
 	Button runTheOperationButton;
 
@@ -81,18 +90,20 @@ public class WorkerMenuScreen implements Initializable {
 
 	@FXML
 	RadioButton printSmartCodeRadioButton;
-	
+
 	@FXML
 	RadioButton addPackageToStoreRadioButton;
 
 	@FXML
 	RadioButton removePackageFromStoreRadioButton;
-	
+
 	@FXML
 	RadioButton removePackageFromWarhouseRadioButton;
-	
+
 	@FXML
 	RadioButton addPakageToWarhouseRadioButton;
+
+	RadioButtonEnabler radioButtonContainer = new RadioButtonEnabler();
 
 	Stage primeStage = EmployeeApplicationScreen.stage;
 
@@ -120,6 +131,12 @@ public class WorkerMenuScreen implements Initializable {
 				EmployeeGuiExeptionHandler.handle(e);
 			}
 		});
+		
+		RadioButton[] radioButtonsArray = { printSmartCodeRadioButton, addPackageToStoreRadioButton, 
+				removePackageFromStoreRadioButton, removePackageFromWarhouseRadioButton, addPakageToWarhouseRadioButton };
+		
+		radioButtonContainer.addRadioButtons((Arrays.asList(radioButtonsArray)));
+		
 	}
 
 	private void enableRunTheOperationButton() {
@@ -130,18 +147,18 @@ public class WorkerMenuScreen implements Initializable {
 	private void scanBarcodePressed(ActionEvent __) {
 		CatalogProduct catalogProduct = null;
 		String barcode = null;
-		
+
 		try {
-			//TODO Shimon - add Waiting for scanner dialog
+			// TODO Shimon - add Waiting for scanner dialog
 			barcode = new BarcodeScanner().getBarcodeFromScanner();
 		} catch (IOException e1) {
 			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.scanFailureDialogTitle, null,
 					EmployeeGuiDefs.criticalErrorMsg);
 		}
-		
+
 		try {
 			catalogProduct = worker.viewProductFromCatalog(Long.parseLong(barcode));
-		} catch (SMException e){
+		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 		}
 		if (catalogProduct != null)
@@ -152,13 +169,13 @@ public class WorkerMenuScreen implements Initializable {
 							+ catalogProduct.getPrice());
 
 	}
-	
+
 	@FXML
 	private void searchBarcodePressed(ActionEvent __) {
 		CatalogProduct catalogProduct = null;
 		try {
 			catalogProduct = worker.viewProductFromCatalog(Long.parseLong(barcodeTextField.getText()));
-		} catch (SMException e){
+		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 		}
 		if (catalogProduct != null)
@@ -169,61 +186,54 @@ public class WorkerMenuScreen implements Initializable {
 							+ catalogProduct.getPrice());
 
 	}
-	
-	
+
 	@FXML
-	private void radioButtonHandling(ActionEvent __) {
-		
-	printSmartCodeRadioButton.setSelected(printSmartCodeRadioButton.isSelected());
-	addPackageToStoreRadioButton.setSelected(printSmartCodeRadioButton.isSelected());
-	removePackageFromStoreRadioButton.setSelected(removePackageFromStoreRadioButton.isSelected());
-	removePackageFromWarhouseRadioButton.setSelected(removePackageFromWarhouseRadioButton.isSelected());		
-	addPakageToWarhouseRadioButton.setSelected(addPakageToWarhouseRadioButton.isSelected());
-	addPackageToWarehouseButtonPressedCheck();
+	private void radioButtonHandling(ActionEvent event) {
+		radioButtonContainer.selectRadioButton((RadioButton) event.getSource());
+		addPackageToWarehouseButtonPressedCheck();
 	}
-	
-//	@FXML
-//	private void printSmartCodeRadioButtonPressed(ActionEvent __) {
-//		
-//		
-//	}
-//
-//	@FXML
-//	private void addPakageToWarhouseRadioButtonPressed(ActionEvent __) {
-//
-//		addPakageToWarhouseRadioButton.setSelected(true);
-//
-//		addPackageToStoreRadioButton.setSelected(false);
-//
-//		removePackageFromStoreRadioButton.setSelected(false);
-//		
-//	}
-//
-//	@FXML
-//	private void addPackageToShelvesRadioButtonPressed(ActionEvent __) {
-//
-//		addPakageToWarhouseRadioButton.setSelected(false);
-//
-//		addPackageToStoreRadioButton.setSelected(true);
-//
-//		removePackageFromStoreRadioButton.setSelected(false);
-//	}
-//
-//	@FXML
-//	private void removePackageFromStoreRadioButtonPressed(ActionEvent __) {
-//
-//		addPakageToWarhouseRadioButton.setSelected(false);
-//
-//		addPackageToStoreRadioButton.setSelected(false);
-//
-//		removePackageFromStoreRadioButton.setSelected(true);
-//	}
+
+	// @FXML
+	// private void printSmartCodeRadioButtonPressed(ActionEvent __) {
+	//
+	//
+	// }
+	//
+	// @FXML
+	// private void addPakageToWarhouseRadioButtonPressed(ActionEvent __) {
+	//
+	// addPakageToWarhouseRadioButton.setSelected(true);
+	//
+	// addPackageToStoreRadioButton.setSelected(false);
+	//
+	// removePackageFromStoreRadioButton.setSelected(false);
+	//
+	// }
+	//
+	// @FXML
+	// private void addPackageToShelvesRadioButtonPressed(ActionEvent __) {
+	//
+	// addPakageToWarhouseRadioButton.setSelected(false);
+	//
+	// addPackageToStoreRadioButton.setSelected(true);
+	//
+	// removePackageFromStoreRadioButton.setSelected(false);
+	// }
+	//
+	// @FXML
+	// private void removePackageFromStoreRadioButtonPressed(ActionEvent __) {
+	//
+	// addPakageToWarhouseRadioButton.setSelected(false);
+	//
+	// addPackageToStoreRadioButton.setSelected(false);
+	//
+	// removePackageFromStoreRadioButton.setSelected(true);
+	// }
 
 	@FXML
 	private void runTheOperationButtonPressed(ActionEvent __) {
 
-		SmartCode smartcode = new SmartCode(Long.parseLong(barcodeTextField.getText()),
-				datePicker.getValue());
+		SmartCode smartcode = new SmartCode(Long.parseLong(barcodeTextField.getText()), datePicker.getValue());
 
 		try {
 
@@ -239,43 +249,43 @@ public class WorkerMenuScreen implements Initializable {
 					worker.removeProductPackageFromStore(productPackage);
 			}
 
-		} catch (SMException e){
+		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 		}
 	}
-	
+
 	@FXML
 	private void logoutButtonPressed(ActionEvent __) {
 		try {
 			worker.logout();
-		} catch (SMException e){
+		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 		}
 
 		AbstractApplicationScreen.setScene("/EmployeeLoginScreen/EmployeeLoginScreen.fxml");
 	}
-	
+
 	@FXML
 	private void showMoreDetailsButtonPressed(ActionEvent __) {
-		
+
 	}
-	
+
 	// Enable Disable Show more info, date picker. Change prompt text
-	
+
 	private void addPackageToWarehouseButtonPressedCheck() {
 		if (addPakageToWarhouseRadioButton.isSelected()) {
 			barcodeTextField.setPromptText(EmployeeGuiDefs.barcodeCodePrompt);
-			disableAddPackageToWarehouseButtonParameters(true);
+			disableAddPackageToWarehouseButtonParameters(false);
 		} else {
 			barcodeTextField.setPromptText(EmployeeGuiDefs.smartCodePrompt);
-			disableAddPackageToWarehouseButtonParameters(false);
+			disableAddPackageToWarehouseButtonParameters(true);
 		}
 	}
-	
+
 	private void disableAddPackageToWarehouseButtonParameters(boolean disable) {
-		datePicker.setDisable(disable);
-		printTheSmartCodeCheckBox.setDisable(disable);
-		
+		addPackageToWarehouseParametersPane.setDisable(disable);
+		quickProductDetailsPane.setDisable(!disable);
+
 	}
 
 }
