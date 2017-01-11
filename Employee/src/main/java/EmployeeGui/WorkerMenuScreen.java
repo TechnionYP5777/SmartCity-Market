@@ -30,6 +30,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -114,11 +115,17 @@ public class WorkerMenuScreen implements Initializable {
 
 	CatalogProduct catalogProduct;
 
+	int amountInStore = -1;
+
+	int amountInWarehouse = -1;
+
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			addProductParametersToQuickView("N/A", "N/A", "N/A", "N/A", "N/A");
+			amountInStore = -1;
+			amountInWarehouse = -1;
 			enableRunTheOperationButton();
 
 		});
@@ -163,16 +170,30 @@ public class WorkerMenuScreen implements Initializable {
 	}
 
 	private void enableRunTheOperationButton() {
-		// TODO check by amount
 		if (addPakageToWarhouseRadioButton.isSelected()) {
 			runTheOperationButton.setDisable(barcodeTextField.getText().equals(""));
+			runTheOperationButton.setTooltip(
+					barcodeTextField.getText().equals("") ? new Tooltip(EmployeeGuiDefs.typeBarcode) : new Tooltip(""));
 		} else {
-			runTheOperationButton.setDisable(smartCodeValLabel.getText().equals("N/A"));
 			showMoreDetailsButton.setDisable(smartCodeValLabel.getText().equals("N/A"));
+			if (removePackageFromStoreRadioButton.isSelected()) {
+				runTheOperationButton.setDisable(amountInStore < editPackagesAmountSpinner.getValue());
+				runTheOperationButton.setTooltip(new Tooltip(EmployeeGuiDefs.notEnoughAmountInStore));
+				return;
+			} else if (removePackageFromWarhouseRadioButton.isSelected()) {
+				runTheOperationButton.setDisable(amountInWarehouse < editPackagesAmountSpinner.getValue());
+				runTheOperationButton.setTooltip(new Tooltip(EmployeeGuiDefs.notEnoughAmountInWarehouse));
+				return;
+			} else if (addPackageToStoreRadioButton.isSelected()) {
+				runTheOperationButton.setDisable(amountInWarehouse < editPackagesAmountSpinner.getValue());
+				runTheOperationButton.setTooltip(new Tooltip(EmployeeGuiDefs.notEnoughAmountInStore));
+				return;
+			}
+			runTheOperationButton.setDisable(smartCodeValLabel.getText().equals("N/A"));
+			runTheOperationButton.setTooltip(
+					new Tooltip(smartCodeValLabel.getText().equals("N/A") ? EmployeeGuiDefs.typeSmartCode : ""));
 		}
 	}
-	
-	
 
 	@FXML
 	private void scanBarcodePressed(ActionEvent __) {
@@ -206,13 +227,25 @@ public class WorkerMenuScreen implements Initializable {
 			catalogProduct = null;
 			try {
 				catalogProduct = worker.viewProductFromCatalog(Long.parseLong(barcodeTextField.getText()));
+
+				// TODO parse the expiration date from the smart code
+				SmartCode smartcode = new SmartCode(Long.parseLong(barcodeTextField.getText()), LocalDate.now());
+
+				amountInStore = worker.getProductPackageAmount(
+						new ProductPackage(smartcode, 0, new Location(0, 0, PlaceInMarket.STORE)));
+
+				amountInWarehouse = worker.getProductPackageAmount(
+						new ProductPackage(smartcode, 0, new Location(0, 0, PlaceInMarket.WAREHOUSE)));
+
 			} catch (SMException e) {
 				EmployeeGuiExeptionHandler.handle(e);
+				return;
 			}
 
 			if (catalogProduct != null) {
-				addProductParametersToQuickView(barcodeTextField.getText(), catalogProduct.getName(), "N/A", "N/A",
-						"N/A");
+				// TODO parse the expiration date
+				addProductParametersToQuickView(barcodeTextField.getText(), catalogProduct.getName(), "N/A",
+						Integer.toString(amountInStore), Integer.toString(amountInWarehouse));
 			}
 			runTheOperationButton.setDisable(false);
 		}
@@ -224,43 +257,6 @@ public class WorkerMenuScreen implements Initializable {
 		addPackageToWarehouseButtonPressedCheck();
 		enableRunTheOperationButton();
 	}
-
-	// @FXML
-	// private void printSmartCodeRadioButtonPressed(ActionEvent __) {
-	//
-	//
-	// }
-	//
-	// @FXML
-	// private void addPakageToWarhouseRadioButtonPressed(ActionEvent __) {
-	//
-	// addPakageToWarhouseRadioButton.setSelected(true);
-	//
-	// addPackageToStoreRadioButton.setSelected(false);
-	//
-	// removePackageFromStoreRadioButton.setSelected(false);
-	//
-	// }
-	//
-	// @FXML
-	// private void addPackageToShelvesRadioButtonPressed(ActionEvent __) {
-	//
-	// addPakageToWarhouseRadioButton.setSelected(false);
-	//
-	// addPackageToStoreRadioButton.setSelected(true);
-	//
-	// removePackageFromStoreRadioButton.setSelected(false);
-	// }
-	//
-	// @FXML
-	// private void removePackageFromStoreRadioButtonPressed(ActionEvent __) {
-	//
-	// addPakageToWarhouseRadioButton.setSelected(false);
-	//
-	// addPackageToStoreRadioButton.setSelected(false);
-	//
-	// removePackageFromStoreRadioButton.setSelected(true);
-	// }
 
 	@FXML
 	private void runTheOperationButtonPressed(ActionEvent __) {

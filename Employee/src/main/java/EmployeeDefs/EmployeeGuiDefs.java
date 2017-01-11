@@ -6,6 +6,14 @@ public class EmployeeGuiDefs {
 	
 	public static final String barcodeCodePrompt = "Type Or Scan Product Barcode...";
 	
+	public static final String notEnoughAmountInStore = "There is not enough amount in store";
+	
+	public static final String typeBarcode = "Insert valid barcode and press Enter key";
+	
+	public static final String typeSmartCode = "Insert valid smartCode and press Enter key";
+	
+	public static final String notEnoughAmountInWarehouse = "There is not enough amount in warehouse";
+	
 	public static final String loginFailureDialogTitle = "Login failue!";
 
 	public static final String productOperationFailureTitle = "Product operation failue!";
