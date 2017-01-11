@@ -48,10 +48,10 @@ public class WorkerMenuScreen implements Initializable {
 	// Main screen panes
 	@FXML
 	GridPane workerMenuScreenPane;
-	
+
 	@FXML
 	GridPane quickProductDetailsPane;
-	
+
 	@FXML
 	HBox addPackageToWarehouseParametersPane;
 
@@ -60,6 +60,9 @@ public class WorkerMenuScreen implements Initializable {
 
 	@FXML
 	Button showMoreDetailsButton;
+
+	@FXML
+	Label smartCodeValLabel;
 
 	@FXML
 	Label productNameValLabel;
@@ -109,45 +112,72 @@ public class WorkerMenuScreen implements Initializable {
 
 	IWorker worker;
 
+	CatalogProduct catalogProduct;
+
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+			addProductParametersToQuickView("N/A", "N/A", "N/A", "N/A", "N/A");
 			enableRunTheOperationButton();
+
 		});
 		datePicker.setValue(LocalDate.now());
 		worker = TempWorkerPassingData.worker;
-		
+
 		enableRunTheOperationButton();
 		addPackageToWarehouseButtonPressedCheck();
 
-		//defining behavior when stage/window is closed.
+		// defining behavior when stage/window is closed.
 		primeStage.setOnCloseRequest(event -> {
 			try {
 				worker.logout();
-			} catch (SMException e){
+			} catch (SMException e) {
 				if (e instanceof AEmployeeException.EmployeeNotConnected)
 					return;
 				EmployeeGuiExeptionHandler.handle(e);
 			}
 		});
-		
-		RadioButton[] radioButtonsArray = { printSmartCodeRadioButton, addPackageToStoreRadioButton, 
-				removePackageFromStoreRadioButton, removePackageFromWarhouseRadioButton, addPakageToWarhouseRadioButton };
-		
+
+		RadioButton[] radioButtonsArray = { printSmartCodeRadioButton, addPackageToStoreRadioButton,
+				removePackageFromStoreRadioButton, removePackageFromWarhouseRadioButton,
+				addPakageToWarhouseRadioButton };
+
 		radioButtonContainer.addRadioButtons((Arrays.asList(radioButtonsArray)));
-		
+
+	}
+
+	private void addProductParametersToQuickView(String productName, String productBarcode,
+			String productExpirationDate, String amountInStore, String amountInWarehouse) {
+		smartCodeValLabel.setText(productBarcode);
+
+		productNameValLabel.setText(productName);
+
+		// TODO should get expiration date from the smart code
+		expirationDateValLabel.setText(productExpirationDate);
+
+		// TODO get amounts from server
+		amoutInStoreValLabel.setText(amountInStore);
+		AmountInWarehouseValLabel.setText(amountInWarehouse);
+
 	}
 
 	private void enableRunTheOperationButton() {
-		runTheOperationButton.setDisable(barcodeTextField.getText().isEmpty());
+		// TODO check by amount
+		if (addPakageToWarhouseRadioButton.isSelected()) {
+			runTheOperationButton.setDisable(barcodeTextField.getText().equals(""));
+		} else {
+			runTheOperationButton.setDisable(smartCodeValLabel.getText().equals("N/A"));
+			showMoreDetailsButton.setDisable(smartCodeValLabel.getText().equals("N/A"));
+		}
 	}
+	
+	
 
 	@FXML
 	private void scanBarcodePressed(ActionEvent __) {
 		CatalogProduct catalogProduct = null;
 		String barcode = null;
-
 		try {
 			// TODO Shimon - add Waiting for scanner dialog
 			barcode = new BarcodeScanner().getBarcodeFromScanner();
@@ -172,25 +202,27 @@ public class WorkerMenuScreen implements Initializable {
 
 	@FXML
 	private void searchBarcodePressed(ActionEvent __) {
-		CatalogProduct catalogProduct = null;
-		try {
-			catalogProduct = worker.viewProductFromCatalog(Long.parseLong(barcodeTextField.getText()));
-		} catch (SMException e) {
-			EmployeeGuiExeptionHandler.handle(e);
-		}
-		if (catalogProduct != null)
-			DialogMessagesService.showInfoDialog(catalogProduct.getName(),
-					"Description: " + catalogProduct.getDescription(),
-					"Barcode: " + catalogProduct.getBarcode() + "\n" + "Manufacturer: "
-							+ catalogProduct.getManufacturer().getName() + "\n" + "Price: "
-							+ catalogProduct.getPrice());
+		if (!addPakageToWarhouseRadioButton.isSelected()) {
+			catalogProduct = null;
+			try {
+				catalogProduct = worker.viewProductFromCatalog(Long.parseLong(barcodeTextField.getText()));
+			} catch (SMException e) {
+				EmployeeGuiExeptionHandler.handle(e);
+			}
 
+			if (catalogProduct != null) {
+				addProductParametersToQuickView(barcodeTextField.getText(), catalogProduct.getName(), "N/A", "N/A",
+						"N/A");
+			}
+			runTheOperationButton.setDisable(false);
+		}
 	}
 
 	@FXML
 	private void radioButtonHandling(ActionEvent event) {
 		radioButtonContainer.selectRadioButton((RadioButton) event.getSource());
 		addPackageToWarehouseButtonPressedCheck();
+		enableRunTheOperationButton();
 	}
 
 	// @FXML
@@ -240,15 +272,18 @@ public class WorkerMenuScreen implements Initializable {
 			if (addPakageToWarhouseRadioButton.isSelected())
 				worker.addProductToWarehouse((new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
 						new Location(0, 0, PlaceInMarket.WAREHOUSE))));
-			else {
-				ProductPackage productPackage = new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
-						new Location(0, 0, PlaceInMarket.STORE));
-				if (addPackageToStoreRadioButton.isSelected())
-					worker.placeProductPackageOnShelves(productPackage);
-				else
-					worker.removeProductPackageFromStore(productPackage);
+			else if (addPackageToStoreRadioButton.isSelected()) {
+				worker.placeProductPackageOnShelves(new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
+						new Location(0, 0, PlaceInMarket.STORE)));
+			} else if (removePackageFromStoreRadioButton.isSelected()) {
+				worker.removeProductPackageFromStore(new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
+						new Location(0, 0, PlaceInMarket.STORE)));
+			} else if (removePackageFromWarhouseRadioButton.isSelected()) {
+				worker.removeProductPackageFromStore(new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
+						new Location(0, 0, PlaceInMarket.WAREHOUSE)));
+			} else {
+				// TODO print the smart code
 			}
-
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 		}
@@ -267,11 +302,16 @@ public class WorkerMenuScreen implements Initializable {
 
 	@FXML
 	private void showMoreDetailsButtonPressed(ActionEvent __) {
+		if (catalogProduct != null)
+			DialogMessagesService.showInfoDialog(catalogProduct.getName(),
+					"Description: " + catalogProduct.getDescription(),
+					"Barcode: " + catalogProduct.getBarcode() + "\n" + "Manufacturer: "
+							+ catalogProduct.getManufacturer().getName() + "\n" + "Price: "
+							+ catalogProduct.getPrice());
 
 	}
 
 	// Enable Disable Show more info, date picker. Change prompt text
-
 	private void addPackageToWarehouseButtonPressedCheck() {
 		if (addPakageToWarhouseRadioButton.isSelected()) {
 			barcodeTextField.setPromptText(EmployeeGuiDefs.barcodeCodePrompt);

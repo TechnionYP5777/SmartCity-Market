@@ -29,7 +29,7 @@
          <children>
             <VBox alignment="CENTER" spacing="10.0">
                <children>
-                  <TextField fx:id="barcodeTextField" maxWidth="278.0" minWidth="233.0" prefHeight="23.0" prefWidth="233.0" promptText="Type Or Scan Product SmartCode..." />
+                  <TextField fx:id="barcodeTextField" maxWidth="278.0" minWidth="233.0" onAction="#searchBarcodePressed" prefHeight="23.0" prefWidth="233.0" promptText="Type Or Scan Product SmartCode..." />
                   <GridPane>
                      <columnConstraints>
                         <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" />
@@ -78,6 +78,7 @@
                 <ColumnConstraints hgrow="SOMETIMES" percentWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -85,7 +86,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <HBox alignment="CENTER_LEFT">
+                  <HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
                      <children>
                         <Label text="Product Name:" textFill="WHITE" />
                      </children>
@@ -93,7 +94,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
+                  <HBox alignment="CENTER_LEFT" GridPane.rowIndex="2">
                      <children>
                         <Label text="Expiration Date:" textFill="WHITE" />
                      </children>
@@ -101,7 +102,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" GridPane.rowIndex="2">
+                  <HBox alignment="CENTER_LEFT" GridPane.rowIndex="3">
                      <children>
                         <Label text="Amount In Store:" textFill="WHITE" />
                      </children>
@@ -109,7 +110,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" GridPane.rowIndex="3">
+                  <HBox alignment="CENTER_LEFT" GridPane.rowIndex="4">
                      <children>
                         <Label text="Amount In Warehouse:" textFill="WHITE" />
                      </children>
@@ -117,17 +118,9 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
-                     <children>
-                        <Label fx:id="productNameValLabel" text="Label" textFill="WHITE" />
-                     </children>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </HBox>
                   <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
-                        <Label fx:id="expirationDateValLabel" text="Label" textFill="WHITE" />
+                        <Label fx:id="productNameValLabel" text="N/A" textFill="WHITE" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -135,7 +128,7 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <children>
-                        <Label fx:id="amoutInStoreValLabel" text="Label" textFill="WHITE" />
+                        <Label fx:id="expirationDateValLabel" text="N/A" textFill="WHITE" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -143,13 +136,37 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <children>
-                        <Label fx:id="AmountInWarehouseValLabel" text="Label" textFill="WHITE" />
+                        <Label fx:id="amoutInStoreValLabel" text="N/A" textFill="WHITE" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </HBox>
-                  <Button fx:id="showMoreDetailsButton" mnemonicParsing="false" onAction="#showMoreDetailsButtonPressed" prefHeight="23.0" prefWidth="162.0" text="Show more details" GridPane.rowIndex="4" />
+                  <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                     <children>
+                        <Label fx:id="AmountInWarehouseValLabel" text="N/A" textFill="WHITE" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <Button fx:id="showMoreDetailsButton" mnemonicParsing="false" onAction="#showMoreDetailsButtonPressed" prefHeight="23.0" prefWidth="162.0" text="Show more details" GridPane.rowIndex="5" />
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label text="SmartCode:" textFill="WHITE" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
+                     <children>
+                        <Label fx:id="smartCodeValLabel" text="N/A" textFill="WHITE" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
                </children>
             </GridPane>
             <Separator prefWidth="200.0" />
