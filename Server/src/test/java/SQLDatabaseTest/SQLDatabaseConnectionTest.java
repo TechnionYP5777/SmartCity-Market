@@ -35,7 +35,7 @@ import SQLDatabase.SQLDatabaseException.ClientNotConnected;
  */
 public class SQLDatabaseConnectionTest {
 
-	final long barcodeDebug = 1234567890;
+	final long barcodeDebug = 423324;
 	final LocalDate date112000 = LocalDate.of(2000, 1, 1);
 	final LocalDate date232015 = LocalDate.of(2015, 3, 2);
 	final Location locationWarehouse = new Location(0, 0, PlaceInMarket.WAREHOUSE);
