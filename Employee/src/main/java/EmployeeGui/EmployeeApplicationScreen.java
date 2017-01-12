@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 
 public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 
+	public static boolean isEmployeeLoggedIn = false;
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
