@@ -2,6 +2,7 @@ package SQLDatabaseTest;
 
 import static org.junit.Assert.*;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 
 import org.apache.log4j.PropertyConfigurator;
@@ -14,6 +15,8 @@ import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
 import BasicCommonClasses.Manufacturer;
+import BasicCommonClasses.PlaceInMarket;
+import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException;
@@ -21,6 +24,8 @@ import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
+import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
+import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 
@@ -30,6 +35,12 @@ import SQLDatabase.SQLDatabaseException.ClientNotConnected;
  */
 public class SQLDatabaseConnectionTest {
 
+	final long barcodeDebug = 1234567890;
+	final LocalDate date112000 = LocalDate.of(2000, 1, 1);
+	final LocalDate date232015 = LocalDate.of(2015, 3, 2);
+	final Location locationWarehouse = new Location(0, 0, PlaceInMarket.WAREHOUSE);
+	final Location locationStore = new Location(0, 0, PlaceInMarket.STORE);
+
 	@Test
 	public void testInitialize() {
 		new SQLDatabaseConnection().hashCode();
@@ -38,8 +49,9 @@ public class SQLDatabaseConnectionTest {
 	@Before
 	public void setup() {
 		PropertyConfigurator.configure("../log4j.properties");
+
 	}
-	
+
 	@Test
 	public void testWorkerConnection() {
 
@@ -105,7 +117,7 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		}
 	}
-	
+
 	@Test
 	public void testSimpleGetProductFromCatalog2() {
 
@@ -113,22 +125,21 @@ public class SQLDatabaseConnectionTest {
 		final int manufaturerID = 2;
 		final String manufaturerName = "מאפיות ברמן";
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		
+
 		CatalogProduct product = null;
-		
+
 		try {
-			product = new Gson().fromJson(sqlConnection.getProductFromCatalog(null, barcodeNum),
-					CatalogProduct.class);
+			product = new Gson().fromJson(sqlConnection.getProductFromCatalog(null, barcodeNum), CatalogProduct.class);
 		} catch (ProductNotExistInCatalog | ClientNotConnected | CriticalError e) {
 			e.printStackTrace();
 			fail();
 		}
-		
-		assertEquals(product.getBarcode(),barcodeNum);
+
+		assertEquals(product.getBarcode(), barcodeNum);
 		assertEquals(product.getManufacturer().getId(), manufaturerID);
 		assertEquals(product.getManufacturer().getName(), manufaturerName);
 	}
-	
+
 	@Test
 	public void testSimpleAddRemoveProductFromCatalog() {
 
@@ -137,25 +148,23 @@ public class SQLDatabaseConnectionTest {
 		HashSet<Ingredient> ingredients = new HashSet<Ingredient>();
 		HashSet<Location> locations = new HashSet<Location>();
 
-		CatalogProduct newProduct = new CatalogProduct(123L,
-				"name", ingredients, new Manufacturer(1, "תנובה")
-				, "", 20, "", locations);
-		try{
+		CatalogProduct newProduct = new CatalogProduct(123L, "name", ingredients, new Manufacturer(1, "תנובה"), "", 20,
+				"", locations);
+		try {
 			sqlConnection.addProductToCatalog(null, newProduct);
 			assertEquals(sqlConnection.getProductFromCatalog(null, newProduct.getBarcode()),
 					new Gson().toJson(newProduct));
-			sqlConnection.removeProductFromCatalog(null, 
-					new SmartCode(newProduct.getBarcode(), null));
+			sqlConnection.removeProductFromCatalog(null, new SmartCode(newProduct.getBarcode(), null));
 		} catch (SQLDatabaseException e) {
 			e.printStackTrace();
 			fail();
 		}
-		
+
 		try {
 			sqlConnection.getProductFromCatalog(null, newProduct.getBarcode());
 			fail();
 		} catch (ProductNotExistInCatalog e) {
-			
+
 		} catch (ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
@@ -163,7 +172,28 @@ public class SQLDatabaseConnectionTest {
 			e.printStackTrace();
 			fail();
 		}
-		
+
+	}
+
+	@Test
+	public void testSimpleAddRemovePakage() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		ProductPackage productPackage = new ProductPackage(new SmartCode(barcodeDebug, date112000), 5,
+				locationWarehouse);
+
+		try {
+			sqlConnection.addProductPackageToWarehouse(null, productPackage);
+			assertEquals("5", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			sqlConnection.removeProductPackageFromWarehouse(null, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
+				| ProductPackageNotExist e) {
+			e.printStackTrace();
+			fail();
+		}
+
 	}
 
 }

@@ -852,12 +852,16 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	}
 
-	private void moveProductPackage(int sessionId, LOCATIONS_TYPES from, LOCATIONS_TYPES to,
+	private void moveProductPackage(Integer sessionId, LOCATIONS_TYPES from, LOCATIONS_TYPES to,
 			ProductPackage packageToMove, int amount)
 			throws CriticalError, ProductPackageAmountNotMatch, ProductPackageNotExist {
 		if (from != null)
 			switch (from) {
 			case CART: {
+				if (sessionId == null){
+					log.fatal("moveProductPackage: you trying to move product from cart without sessionID. ABORT.");
+					return;
+				}
 				int listID = getCartListId(sessionId);
 				int currentAmount = getAmountForCart(packageToMove, listID);
 				if (currentAmount == 0)
@@ -886,6 +890,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		if (to != null)
 			switch (to) {
 			case CART: {
+				if (sessionId == null){
+					log.fatal("moveProductPackage: you trying to move product to cart without sessionID. ABORT.");
+					return;
+				}
 				int listID = getCartListId(sessionId);
 				int currentAmount = getAmountForCart(packageToMove, listID);
 				setNewAmountForCart(packageToMove, listID, currentAmount, currentAmount + amount);

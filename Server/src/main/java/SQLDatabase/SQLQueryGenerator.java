@@ -102,7 +102,7 @@ class SQLQueryGenerator {
 		return $;
 
 	}
-	
+
 	/**
 	 * Generate string of delete query
 	 * 
