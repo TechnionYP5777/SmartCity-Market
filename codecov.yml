@@ -6,6 +6,9 @@ coverage:
   precision: 2
   round: down
   range: "30...100"
+  status:
+    project: off
+    patch: off
 
   ignore: 
    - Employee/src/main/java/EmployeeGui/
