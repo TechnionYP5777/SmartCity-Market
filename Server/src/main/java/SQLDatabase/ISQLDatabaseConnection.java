@@ -26,6 +26,10 @@ public interface ISQLDatabaseConnection {
 	String getClientType(Integer sessionID) throws ClientNotConnected, CriticalError;
 	
 	void workerLogout(Integer sessionID, String username) throws ClientNotConnected, CriticalError;
+	
+	boolean isClientLoggedIn(Integer sessionID) throws CriticalError;
+	
+	boolean isWorkerLoggedIn(String username) throws CriticalError;
 
 	String getProductFromCatalog(Integer sessionID, long barcode)
 			throws ProductNotExistInCatalog, ClientNotConnected, CriticalError;
@@ -75,6 +79,8 @@ public interface ISQLDatabaseConnection {
 			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog;
 
 	void cartCheckout(Integer cartID) throws CriticalError, ClientNotConnected;
+	
+	String cartRestoreGroceryList(Integer cartID, boolean reconnect) throws CriticalError, ClientNotConnected;
 
 	void close() throws CriticalError;
 

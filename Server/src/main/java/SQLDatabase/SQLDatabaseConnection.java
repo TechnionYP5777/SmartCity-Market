@@ -1658,6 +1658,24 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	}
 
+	@Override
+	public boolean isClientLoggedIn(Integer sessionID) throws CriticalError {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isWorkerLoggedIn(String username) throws CriticalError {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String cartRestoreGroceryList(Integer cartID, boolean reconnect) throws CriticalError, ClientNotConnected {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 }
