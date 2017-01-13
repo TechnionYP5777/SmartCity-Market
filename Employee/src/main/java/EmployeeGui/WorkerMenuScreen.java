@@ -1,10 +1,11 @@
 package EmployeeGui;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+
+import com.google.common.eventbus.Subscribe;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Location;
@@ -19,7 +20,11 @@ import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
 import GuiUtils.RadioButtonEnabler;
 import SMExceptions.SMException;
-import UtilsImplementations.BarcodeScanner;
+import UtilsContracts.BarcodeEventHandlerDiConfigurator;
+import UtilsContracts.BarcodeScanEvent;
+import UtilsContracts.IBarcodeEventHandler;
+import UtilsImplementations.BarcodeEventHandler;
+import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -114,6 +119,8 @@ public class WorkerMenuScreen implements Initializable {
 	IWorker worker;
 
 	CatalogProduct catalogProduct;
+	
+	IBarcodeEventHandler barcodeEventHandler;
 
 	int amountInStore = -1;
 
@@ -122,6 +129,10 @@ public class WorkerMenuScreen implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
+		barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class,
+				new BarcodeEventHandlerDiConfigurator());
+		// TODO enable this after solve singleton
+		//barcodeEventHandler.register(this);
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			addProductParametersToQuickView("N/A", "N/A", "N/A", "N/A", "N/A");
 			amountInStore = -1;
@@ -198,32 +209,6 @@ public class WorkerMenuScreen implements Initializable {
 	}
 
 	@FXML
-	private void scanBarcodePressed(ActionEvent __) {
-		CatalogProduct catalogProduct = null;
-		String barcode = null;
-		try {
-			// TODO Shimon - add Waiting for scanner dialog
-			barcode = new BarcodeScanner().getBarcodeFromScanner();
-		} catch (IOException e1) {
-			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.scanFailureDialogTitle, null,
-					EmployeeGuiDefs.criticalErrorMsg);
-		}
-
-		try {
-			catalogProduct = worker.viewProductFromCatalog(Long.parseLong(barcode));
-		} catch (SMException e) {
-			EmployeeGuiExeptionHandler.handle(e);
-		}
-		if (catalogProduct != null)
-			DialogMessagesService.showInfoDialog(catalogProduct.getName(),
-					"Description: " + catalogProduct.getDescription(),
-					"Barcode: " + catalogProduct.getBarcode() + "\n" + "Manufacturer: "
-							+ catalogProduct.getManufacturer().getName() + "\n" + "Price: "
-							+ catalogProduct.getPrice());
-
-	}
-
-	@FXML
 	private void searchBarcodePressed(ActionEvent __) {
 		if (!addPakageToWarhouseRadioButton.isSelected()) {
 			catalogProduct = null;
@@ -295,7 +280,8 @@ public class WorkerMenuScreen implements Initializable {
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 		}
-
+		// TODO enable this after solve singleton
+		// barcodeEventHandler.unregister(this);
 		AbstractApplicationScreen.setScene("/EmployeeLoginScreen/EmployeeLoginScreen.fxml");
 	}
 
@@ -325,6 +311,16 @@ public class WorkerMenuScreen implements Initializable {
 		addPackageToWarehouseParametersPane.setDisable(disable);
 		quickProductDetailsPane.setDisable(!disable);
 
+	}
+	
+	@Subscribe
+	public void barcodeScanned(BarcodeScanEvent event) {
+		
+		if (/* it is smartcode */ true) {
+			barcodeTextField.setText(event.getBarcode());
+			enableRunTheOperationButton();
+			searchBarcodePressed(null);
+		}
 	}
 
 }
