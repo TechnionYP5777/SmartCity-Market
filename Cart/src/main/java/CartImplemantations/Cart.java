@@ -14,7 +14,6 @@ import CartContracts.ACartExceptions.ProductNotInCart;
 import CartContracts.ACartExceptions.ProductPackageDoesNotExist;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
-import CommonDefs.CLIENT_TYPE;
 import CommonDefs.GroceryListExceptions.AmountIsBiggerThanAvailable;
 import CommonDefs.GroceryListExceptions.ProductNotInList;
 import CartContracts.ACartExceptions.AmountBiggerThanAvailable;
@@ -216,8 +215,6 @@ public class Cart extends ACart implements ICart {
 		addProductToCache(c, amount, catalogProduct);
 	}
 	
-	
-
 	public void returnProductToShelf(SmartCode c, int amount) throws ProductNotInCart, AmountBiggerThanAvailable, CriticalError, CartNotConnected {
 		establishCommunication(CartDefs.port, CartDefs.host, CartDefs.timeout);
 		log.info("Creating REMOVE_PRODUCT_FROM_GROCERY_LIST command wrapper to cart with id: " + id);
@@ -292,5 +289,4 @@ public class Cart extends ACart implements ICart {
 		totalSum = 0;
 		return $;
 	}
-
 }
