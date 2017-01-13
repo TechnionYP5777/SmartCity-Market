@@ -6,10 +6,9 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ScrollBar?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -53,7 +52,7 @@
                               <RadioButton fx:id="addPackageToStoreRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Add package to store" textFill="WHITE" />
                               <RadioButton fx:id="removePackageFromStoreRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Remove package from store" textFill="WHITE" />
                               <RadioButton fx:id="removePackageFromWarhouseRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Remove package from warehouse" textFill="WHITE" />
-                              <RadioButton fx:id="addPakageToWarhouseRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" selected="true" text="Add package from warehouse" textFill="WHITE" />
+                              <RadioButton fx:id="addPakageToWarhouseRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" selected="true" text="Add package to warehouse" textFill="WHITE" />
                            </children>
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -230,17 +229,17 @@
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label text="Logger" textFill="WHITE" />
+                        <VBox prefHeight="92.0" prefWidth="629.0">
+                           <children>
+                              <Label text="Recent Activity" textFill="WHITE" />
+                              <TextArea fx:id="successLogArea" prefHeight="231.0" prefWidth="948.0" />
+                           </children>
+                        </VBox>
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </HBox>
-                  <ScrollPane prefHeight="200.0" prefWidth="200.0">
-                     <content>
-                        <ScrollBar orientation="VERTICAL" />
-                     </content>
-                  </ScrollPane>
                </children>
             </VBox>
          </children>

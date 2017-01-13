@@ -1,8 +1,10 @@
 package EmployeeGui;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import com.google.common.eventbus.Subscribe;
@@ -25,6 +27,9 @@ import UtilsContracts.BarcodeScanEvent;
 import UtilsContracts.IBarcodeEventHandler;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
+//import UtilsImplementations.BarcodeScanner;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -34,6 +39,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
@@ -67,6 +73,9 @@ public class WorkerMenuScreen implements Initializable {
 	@FXML
 	Button showMoreDetailsButton;
 
+	@FXML
+	TextArea successLogArea;
+	
 	@FXML
 	Label smartCodeValLabel;
 
@@ -159,12 +168,26 @@ public class WorkerMenuScreen implements Initializable {
 			}
 		});
 
+		//setting success log listener
+		successLogArea.textProperty().addListener(new ChangeListener<Object>(){
+		    @Override
+			public void changed(ObservableValue<?> observable, Object oldValue,
+		            Object newValue) {
+		    	successLogArea.setScrollTop(Double.MAX_VALUE); //this will scroll to the bottom
+		    }
+		});
+
 		RadioButton[] radioButtonsArray = { printSmartCodeRadioButton, addPackageToStoreRadioButton,
 				removePackageFromStoreRadioButton, removePackageFromWarhouseRadioButton,
 				addPakageToWarhouseRadioButton };
 
 		radioButtonContainer.addRadioButtons((Arrays.asList(radioButtonsArray)));
 
+	}
+	
+	private void printToSuccessLog(String msg) {
+		String timeStamp = new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss").format(new Date());
+		successLogArea.appendText(timeStamp + " :: " + msg + "\n");
 	}
 
 	private void addProductParametersToQuickView(String productName, String productBarcode,
@@ -249,21 +272,67 @@ public class WorkerMenuScreen implements Initializable {
 	private void runTheOperationButtonPressed(ActionEvent __) {
 
 		SmartCode smartcode = new SmartCode(Long.parseLong(barcodeTextField.getText()), datePicker.getValue());
+		/*TODO - find what's wrong with using getValue on the spinner. it keeps throwing exception about not
+		 * being able to case int to doulbe (or the opposite)
+		 */
+
+		//int amountVal = editPackagesAmountSpinner.getValue();
+		int amountVal = 1;
 
 		try {
-
-			if (addPakageToWarhouseRadioButton.isSelected())
-				worker.addProductToWarehouse((new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
-						new Location(0, 0, PlaceInMarket.WAREHOUSE))));
-			else if (addPackageToStoreRadioButton.isSelected()) {
-				worker.placeProductPackageOnShelves(new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
-						new Location(0, 0, PlaceInMarket.STORE)));
+			if (addPakageToWarhouseRadioButton.isSelected()){
+				
+				//init
+				Location loc = new Location(0, 0, PlaceInMarket.WAREHOUSE);
+				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
+				
+				//exec
+				worker.addProductToWarehouse(pp);
+				
+				//log
+				String successLogMsg = "Added (" + amountVal + ") ";
+				successLogMsg += "product packages (" + pp.toString() + ") to warehouse";
+				printToSuccessLog(successLogMsg);
+			
+			} else if (addPackageToStoreRadioButton.isSelected()) {
+				
+				//init
+				Location loc = new Location(0, 0, PlaceInMarket.STORE);
+				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
+				
+				//exec
+				worker.placeProductPackageOnShelves(pp);
+				
+				//log
+				String successLogMsg = "Added (" + amountVal + ") ";
+				successLogMsg += "product packages (" + pp.toString() + ") to store";
+				printToSuccessLog(successLogMsg);
+			
 			} else if (removePackageFromStoreRadioButton.isSelected()) {
-				worker.removeProductPackageFromStore(new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
-						new Location(0, 0, PlaceInMarket.STORE)));
+				
+				//init
+				Location loc = new Location(0, 0, PlaceInMarket.STORE);
+				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
+				
+				//exec
+				worker.removeProductPackageFromStore(pp);
+				
+				//log
+				String successLogMsg = "Removed (" + amountVal + ") ";
+				successLogMsg += "product packages (" + pp.toString() + ") from store";
+				printToSuccessLog(successLogMsg);
+			
 			} else if (removePackageFromWarhouseRadioButton.isSelected()) {
-				worker.removeProductPackageFromStore(new ProductPackage(smartcode, editPackagesAmountSpinner.getValue(),
-						new Location(0, 0, PlaceInMarket.WAREHOUSE)));
+				Location loc = new Location(0, 0, PlaceInMarket.WAREHOUSE);
+				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
+				
+				//exec
+				worker.removeProductPackageFromStore(pp);
+				
+				//log
+				String successLogMsg = "Removed (" + amountVal + ") ";
+				successLogMsg += "product packages (" + pp.toString() + ") from warehouse";
+				printToSuccessLog(successLogMsg);
 			} else {
 				// TODO print the smart code
 			}

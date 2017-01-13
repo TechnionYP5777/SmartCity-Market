@@ -79,4 +79,11 @@ public class ProductPackage {
 	public boolean isValid() {
 		return smartCode.isValid() && amount > 0;
 	}
+	
+	@Override
+	public String toString(){
+		//TODO - Lior, plz impelemt this method so we can use it in GUI. Thanks!
+		return "prodcut package info in ONE SHORT LINE";
+		
+	}
 }
