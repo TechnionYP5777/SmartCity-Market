@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import CartContracts.ICart;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.GridPane;
@@ -39,6 +40,16 @@ public class CartMainScreen implements Initializable {
 				//todo: continue from here
 			}
 		});
+	}
+	
+	@FXML
+	public void removeProductButtonPressed(ActionEvent __) {
+		
+	}
+
+	@FXML
+	public void addProductButtonPressed(ActionEvent __) {
+		
 	}
 	
 }
