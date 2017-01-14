@@ -24,7 +24,6 @@ import com.healthmarketscience.sqlbuilder.InsertQuery;
 import com.healthmarketscience.sqlbuilder.JdbcEscape;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
 import com.healthmarketscience.sqlbuilder.SqlObject;
-import com.healthmarketscience.sqlbuilder.UnaryCondition;
 import com.healthmarketscience.sqlbuilder.UpdateQuery;
 import com.healthmarketscience.sqlbuilder.ValidationException;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
@@ -83,7 +82,7 @@ import static SQLDatabase.SQLQueryGenerator.generateDeleteQuery;
 public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	static Logger log = Logger.getLogger(SQLDatabaseConnection.class.getName());
-	
+
 	private enum LOCATIONS_TYPES {
 		WAREHOUSE, STORE, CART
 	}
@@ -104,17 +103,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	private static final String SQL_PARAM = "?";
 
 	/**
-	 * IMPORTANT: this parameter (SESSION_IDS_BEGIN) determines the number of
-	 * cart in the system. the number divides the range of ints between the cart
-	 * and the workers: number 0 - (SESSION_IDS_BEGIN-1) => FOR THE CARTS number
-	 * SESSION_IDS_BEGIN - (MAX_INT) => FOR THE WORKER
-	 * 
-	 * I did this because its make authentication more simple (the session id
-	 * determine the client type
-	 * 
-	 * BUT I will change it
+	 * Define how many times to do random sessionID generation (and check if
+	 * already such sessionID exist) before giving up
 	 */
-	private static final Integer SESSION_IDS_BEGIN = 10000;
 	private static final Integer TRYS_NUMBER = 1000;
 
 	private Connection connection;
@@ -217,7 +208,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * @param s
 	 * @return the number of rows
 	 */
-
 	private static int getResultSetRowCount(ResultSet s) {
 		if (s == null)
 			return 0;
@@ -257,43 +247,27 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		return !$;
 	}
 
-	private int generateSessionID(boolean forWorker) throws CriticalError, NumberOfConnectionsExceeded {
+	/**
+	 * Generate session id (for any client: worker, cart,..)
+	 * 
+	 * @return New session id (that not used before)
+	 * @throws CriticalError
+	 * @throws NumberOfConnectionsExceeded
+	 */
+	private int generateSessionID() throws CriticalError, NumberOfConnectionsExceeded {
 
 		int minVal, maxVal;
 		int $;
 
-		if (!forWorker) {
-			minVal = 1;
-			maxVal = SESSION_IDS_BEGIN - 1;
-		} else {
-			minVal = SESSION_IDS_BEGIN;
-			maxVal = Integer.MAX_VALUE;
-		}
+		minVal = 1;
+		maxVal = Integer.MAX_VALUE;
 
 		// trying to find available random session id.
-		for (int i = 0; i < TRYS_NUMBER; ++i) {
+		for (int ¢ = 0; ¢ < TRYS_NUMBER; ++¢) {
 			// generate number between mivVal to maxVal (include)
 			$ = new Random().nextInt(maxVal - minVal) + minVal;
 
-			String query = (forWorker
-					? new SelectQuery().addAllTableColumns(WorkersTable.table)
-							.addCondition(BinaryCondition.equalTo(WorkersTable.sessionIDCol, PARAM_MARK))
-					: new SelectQuery().addAllTableColumns(CartsListTable.table)
-							.addCondition(BinaryCondition.equalTo(CartsListTable.cartIDCol, PARAM_MARK))
-							.addCondition(UnaryCondition.isNotNull(CartsListTable.listIDCol))).validate()
-					+ "";
-
-			PreparedStatement statement = getParameterizedQuery(query, $);
-			ResultSet result;
-
-			try {
-				result = statement.executeQuery();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				throw new CriticalError();
-			}
-
-			if (isResultSetEmpty(result))
+			if (!isSessionEstablished($))
 				return $;
 		}
 
@@ -302,7 +276,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 
 	/**
-	 * Allocate new ID for new row.
+	 * Allocate new ID for new row. (NOTE: used for manufaturerID, ingredientID
+	 * and LocationID)
 	 * 
 	 * @param t
 	 *            The table you want to insert new row in it
@@ -340,7 +315,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				String maxIDQuery = new SelectQuery().addCustomColumns(FunctionCall.max().addColumnParams(c)).validate()
 						+ "";
 
-				maxIDResult = getParameterizedReadQuery(maxIDQuery, t.getName()).executeQuery();
+				maxIDResult = getParameterizedReadQuery(maxIDQuery).executeQuery();
 
 				// if the table is empty - return 1
 				if (isResultSetEmpty(result))
@@ -363,7 +338,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 
 	/**
-	 * Free ID when removing row.
+	 * Free ID when removing row. (NOTE: used for manufaturerID, ingredientID
+	 * and LocationID)
 	 * 
 	 * @param t
 	 *            The table you want to remove row from it.
@@ -408,23 +384,66 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 
 	/**
+	 * Get the client type by session id. if no such session - return null
+	 * 
+	 * @param sessionID
+	 * @return
+	 * @throws CriticalError
+	 */
+	private CLIENT_TYPE getClientTypeBySessionID(Integer sessionID) throws CriticalError {
+
+		if (sessionID == null)
+			return null;
+
+		String query = generateSelectQuery1Table(WorkersTable.table,
+				BinaryCondition.equalTo(WorkersTable.sessionIDCol, PARAM_MARK));
+
+		PreparedStatement statement = getParameterizedReadQuery(query, sessionID);
+
+		ResultSet result = null;
+		try {
+			log.debug("getClientTypeBySessionID: check if client is worker/manager by execute query: " + statement);
+			result = statement.executeQuery();
+
+			// CASE: worker/manager
+			if (!isResultSetEmpty(result)) {
+
+				result.first();
+
+				int clientType = result.getInt(WorkersTable.workerPrivilegesCol.getColumnNameSQL());
+				log.debug("getClientTypeBySessionID: worker found! worker type code from SQL: " + clientType);
+
+				return clientType != WORKERS_TABLE.VALUE_PRIVILEGE_MANAGER ? CLIENT_TYPE.WORKER : CLIENT_TYPE.MANAGER;
+			}
+
+			// CASE: cart
+			if (isSuchRowExist(CartsListTable.table, CartsListTable.cartIDCol, sessionID)) {
+				log.debug("getClientTypeBySessionID: cart found!");
+				return CLIENT_TYPE.CART;
+			}
+
+			// CASE: none
+			log.debug("getClientTypeBySessionID: no such id!");
+			return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		} finally {
+			closeResources(statement, result);
+		}
+
+	}
+
+	/**
 	 * Check if the worker or cart logged in the system
 	 * 
 	 * @param sessionID
-	 *            sessionID of the worker
+	 *            sessionID of the worker/cart
 	 * @return true - if connected
 	 * @throws CriticalError
 	 */
 	private boolean isSessionEstablished(Integer sessionID) throws CriticalError {
-
-		try {
-			return (sessionID == null)
-					|| !isResultSetEmpty(getParameterizedQuery(generateSelectQuery1Table(WorkersTable.table,
-							BinaryCondition.equalTo(WorkersTable.sessionIDCol, PARAM_MARK)), sessionID).executeQuery());
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new CriticalError();
-		}
+		return (sessionID == null) || (getClientTypeBySessionID(sessionID) != null);
 	}
 
 	/**
@@ -463,6 +482,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	private String dateToString(LocalDate ¢) {
 		return ¢.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 	}
+
 	/**
 	 * get parameterized query for execution.
 	 * 
@@ -532,6 +552,142 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	}
 
+	/**
+	 * login method for worker/manager
+	 * 
+	 * @param username
+	 * @param password
+	 * @return new sessionID for connection
+	 * @throws AuthenticationError
+	 * @throws ClientAlreadyConnected
+	 * @throws CriticalError
+	 * @throws NumberOfConnectionsExceeded
+	 */
+	private int loginAsWorker(String username, String password)
+			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
+		String query = generateSelectQuery1Table(WorkersTable.table,
+				BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK),
+				BinaryCondition.equalTo(WorkersTable.workerPasswordCol, PARAM_MARK));
+
+		PreparedStatement statement = getParameterizedQuery(query, username, password);
+
+		ResultSet result = null;
+		try {
+			result = statement.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			closeResources(statement, result);
+			throw new CriticalError();
+		}
+
+		// check if no results or more than one - throw exception user not exist
+		if (getResultSetRowCount(result) != 1)
+			throw new SQLDatabaseException.AuthenticationError();
+
+		// check if worker already connected
+		if (isSessionEstablished(username))
+			throw new SQLDatabaseException.ClientAlreadyConnected();
+
+		/*
+		 * EVERYTHING OK - initiate new session to worker
+		 */
+		int $ = generateSessionID();
+
+		UpdateQuery updateQuery = generateUpdateQuery(WorkersTable.table,
+				BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK),
+				BinaryCondition.equalTo(WorkersTable.workerPasswordCol, PARAM_MARK));
+
+		updateQuery.addSetClause(WorkersTable.sessionIDCol, $).validate();
+
+		statement = getParameterizedQuery(updateQuery + "", username, password);
+
+		try {
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			closeResources(statement);
+			e.printStackTrace();
+			throw new CriticalError();
+		}
+
+		closeResources(statement, result);
+		return $;
+	}
+
+	/**
+	 * Create new user for cart and allocate new list for it
+	 * 
+	 * @return new sessionID for connection
+	 * @throws CriticalError
+	 * @throws NumberOfConnectionsExceeded
+	 */
+	private int loginAsCart()
+			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
+
+		/*
+		 * initiate new session and new grocery list to cart
+		 */
+		int $ = generateSessionID();
+
+		// find max list id from grocery list table and history list table
+		String maxListIDQuery = new SelectQuery()
+				.addCustomColumns(FunctionCall.max().addColumnParams(CartsListTable.listIDCol)).validate() + "";
+		String maxHistoryListIDQuery = new SelectQuery()
+				.addCustomColumns(FunctionCall.max().addColumnParams(GroceriesListsHistoryTable.listIDCol)).validate()
+				+ "";
+
+		ResultSet maxListIDResult = null;
+		ResultSet maxHistoryListIDResult = null;
+		try {
+			maxListIDResult = getParameterizedReadQuery(maxListIDQuery).executeQuery();
+			maxHistoryListIDResult = getParameterizedReadQuery(maxHistoryListIDQuery).executeQuery();
+
+			int maxListID = 0;
+			int maxHistoryListID = 0;
+
+			// get the max id from tables (if exist)
+			if (!isResultSetEmpty(maxListIDResult)) {
+				maxListIDResult.first();
+				maxListID = maxListIDResult.getInt(1);
+			}
+			if (!isResultSetEmpty(maxHistoryListIDResult)) {
+				maxHistoryListIDResult.first();
+				maxHistoryListID = maxHistoryListIDResult.getInt(1);
+			}
+
+			maxListID = Math.max(maxListID, maxHistoryListID) + 1;
+
+			// adding new cart connection to table
+			String insertQuery = new InsertQuery(CartsListTable.table).addColumn(CartsListTable.cartIDCol, PARAM_MARK)
+					.addColumn(CartsListTable.listIDCol, PARAM_MARK).validate() + "";
+			insertQuery.hashCode();
+
+			log.info("loginAsCart: run query: " + insertQuery);
+			getParameterizedQuery(insertQuery, $, maxListID).executeUpdate();
+
+			return $;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		} finally {
+			closeResources(maxHistoryListIDResult, maxListIDResult);
+		}
+	}
+
+	/**
+	 * Change amount of product package. according to parameters, the method
+	 * create/remove/update the relevant row
+	 * 
+	 * @param p
+	 *            - product pacakge to update
+	 * @param placeCol
+	 *            - location's column name of the pacakage (can be
+	 *            PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE or
+	 *            PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE)
+	 * @param oldAmount
+	 * @param newAmount
+	 * @throws ProductPackageAmountNotMatch
+	 * @throws CriticalError
+	 */
 	private void setNewAmountForStore(ProductPackage p, String placeCol, int oldAmount, int newAmount)
 			throws ProductPackageAmountNotMatch, CriticalError {
 
@@ -544,19 +700,17 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			if (oldAmount == 0) {
 				String insertQuery = new InsertQuery(ProductsPackagesTable.table)
 						.addColumn(ProductsPackagesTable.barcodeCol, PARAM_MARK)
-						.addColumn(ProductsPackagesTable.expirationDateCol, dateToString(p.getSmartCode().getExpirationDate()))
+						.addColumn(ProductsPackagesTable.expirationDateCol,
+								dateToString(p.getSmartCode().getExpirationDate()))
 						.addColumn(ProductsPackagesTable.placeInStoreCol, PARAM_MARK)
 						.addColumn(ProductsPackagesTable.amountCol, PARAM_MARK).validate() + "";
 
 				insertQuery.hashCode();
 
-				
-				log.info("set amount to package: " + p.getSmartCode().getBarcode() + ", " + dateToString(p.getSmartCode().getExpirationDate()) + ", " + placeCol);
+				log.info("setNewAmountForStore: create new row amount to package: " + p.getSmartCode().getBarcode()
+						+ ", " + dateToString(p.getSmartCode().getExpirationDate()) + ", " + placeCol);
 
-
-				
-				statement = getParameterizedQuery(insertQuery, p.getSmartCode().getBarcode(),
-						placeCol, newAmount);
+				statement = getParameterizedQuery(insertQuery, p.getSmartCode().getBarcode(), placeCol, newAmount);
 
 			} else if (newAmount == 0) { // case: remove row
 				String deleteQuery = generateDeleteQuery(ProductsPackagesTable.table,
@@ -567,6 +721,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 										.atStartOfDay(ZoneId.systemDefault()).toInstant()))));
 
 				deleteQuery.hashCode();
+
+				log.info("setNewAmountForStore: remove row to package: " + p.getSmartCode().getBarcode() + ", "
+						+ dateToString(p.getSmartCode().getExpirationDate()) + ", " + placeCol);
 
 				statement = getParameterizedQuery(deleteQuery, p.getSmartCode().getBarcode(), placeCol);
 
@@ -580,6 +737,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 				updateQuery.addSetClause(ProductsPackagesTable.amountCol, newAmount).validate();
 
+				log.info("setNewAmountForStore: update row ofof package: " + p.getSmartCode().getBarcode() + ", "
+						+ dateToString(p.getSmartCode().getExpirationDate()) + ", " + placeCol);
+
 				statement = getParameterizedQuery(updateQuery + "", p.getSmartCode().getBarcode(), placeCol);
 			}
 
@@ -587,7 +747,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
@@ -595,6 +754,19 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		}
 	}
 
+	/**
+	 * Change amount of product package in cart. according to parameters, the
+	 * method create/remove/update the relevant row
+	 * 
+	 * @param p
+	 *            - product pacakge to update
+	 * @param listID
+	 *            - id of the grocery list to update
+	 * @param oldAmount
+	 * @param newAmount
+	 * @throws ProductPackageAmountNotMatch
+	 * @throws CriticalError
+	 */
 	private void setNewAmountForCart(ProductPackage p, Integer listID, int oldAmount, int newAmount)
 			throws ProductPackageAmountNotMatch, CriticalError {
 
@@ -653,6 +825,14 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		}
 	}
 
+	/**
+	 * Add product to the SQL database
+	 * 
+	 * @param p
+	 *            New product to add
+	 * @throws CriticalError
+	 * @throws SQLException
+	 */
 	private void addCatalogProduct(CatalogProduct p) throws CriticalError, SQLException {
 
 		// add all ingredients of product
@@ -718,6 +898,16 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	}
 
+	/**
+	 * Remove product from the SQL database (erase all associate entries in
+	 * tables: Product catalog, Ingredients, Locations NOTE: other traces of the
+	 * product will not be removed
+	 * 
+	 * @param p
+	 *            - product to remove (only the barcode is used)
+	 * @throws CriticalError
+	 * @throws SQLException
+	 */
 	private void removeCatalogProduct(SmartCode p) throws CriticalError, SQLException {
 
 		// remove all ingredients of product
@@ -757,6 +947,18 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	}
 
+	/**
+	 * Get amount of relevant package in store
+	 * 
+	 * @param p
+	 *            - product package
+	 * @param placeCol
+	 *            - location's column name of the pacakage (can be
+	 *            PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE or
+	 *            PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE)
+	 * @return
+	 * @throws CriticalError
+	 */
 	private int getAmountForStore(ProductPackage p, String placeCol) throws CriticalError {
 		String selectQuery = generateSelectQuery1Table(ProductsPackagesTable.table,
 				BinaryCondition.equalTo(ProductsPackagesTable.barcodeCol, PARAM_MARK),
@@ -767,7 +969,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		PreparedStatement statement = getParameterizedReadQuery(selectQuery, p.getSmartCode().getBarcode(), placeCol);
 
 		log.info("getAmountForStore: execute query: " + statement);
-		
+
 		ResultSet result = null;
 		try {
 			result = statement.executeQuery();
@@ -788,6 +990,17 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	}
 
+	/**
+	 * Get amount of relevant package in cart
+	 * 
+	 * @param p
+	 *            - product package
+	 * @param listID
+	 *            - id of the grocery list the package is in
+	 * @return
+	 * @throws CriticalError
+	 * @throws ProductPackageNotExist
+	 */
 	private int getAmountForCart(ProductPackage p, Integer listID) throws CriticalError, ProductPackageNotExist {
 
 		String selectQuery = generateSelectQuery1Table(GroceriesListsTable.table,
@@ -797,7 +1010,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 						.from(p.getSmartCode().getExpirationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()))));
 
 		log.info("execute query: " + selectQuery);
-		
+
 		PreparedStatement statement = getParameterizedReadQuery(selectQuery, p.getSmartCode().getBarcode(), listID);
 
 		ResultSet result = null;
@@ -821,8 +1034,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 
 	/**
-	 * 
-	 * assuming cart already connected
+	 * Get grocery list is associate with cart NOTE: the method assuming cart
+	 * already connected
 	 * 
 	 * @param cartId
 	 * @return
@@ -852,13 +1065,30 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	}
 
+	/**
+	 * Move product package form anywhere to anywhere
+	 * 
+	 * @param sessionId
+	 * @param from
+	 *            Take product package from LOCATIONS_TYPES
+	 * @param to
+	 *            And put it in LOCATIONS_TYPES
+	 * @param packageToMove
+	 *            Product Package to move (the method using only barcode and
+	 *            exp. date)
+	 * @param amount
+	 *            Amount to transfer
+	 * @throws CriticalError
+	 * @throws ProductPackageAmountNotMatch
+	 * @throws ProductPackageNotExist
+	 */
 	private void moveProductPackage(Integer sessionId, LOCATIONS_TYPES from, LOCATIONS_TYPES to,
 			ProductPackage packageToMove, int amount)
 			throws CriticalError, ProductPackageAmountNotMatch, ProductPackageNotExist {
 		if (from != null)
 			switch (from) {
 			case CART: {
-				if (sessionId == null){
+				if (sessionId == null) {
 					log.fatal("moveProductPackage: you trying to move product from cart without sessionID. ABORT.");
 					return;
 				}
@@ -890,7 +1120,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		if (to != null)
 			switch (to) {
 			case CART: {
-				if (sessionId == null){
+				if (sessionId == null) {
 					log.fatal("moveProductPackage: you trying to move product to cart without sessionID. ABORT.");
 					return;
 				}
@@ -914,6 +1144,15 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			}
 	}
 
+	/**
+	 * Determine if Object value found in table t at column c
+	 * 
+	 * @param t
+	 * @param c
+	 * @param value
+	 * @return
+	 * @throws CriticalError
+	 */
 	private boolean isSuchRowExist(DbTable t, DbColumn c, Object value) throws CriticalError {
 		String prodctsTableQuery = generateSelectQuery1Table(t, BinaryCondition.equalTo(c, PARAM_MARK));
 
@@ -951,7 +1190,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * @param resources
 	 *            - list of resources to close.
 	 */
-	void closeResources(AutoCloseable... resources) {
+	private void closeResources(AutoCloseable... resources) {
 		for (AutoCloseable resource : resources)
 			if (resource != null)
 				try {
@@ -959,6 +1198,68 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+	}
+
+	/*
+	 * 
+	 * Wrapping method for transaction operations. (I use it only to eliminate
+	 * the ugly "try.. catch.." clause)
+	 * 
+	 */
+	/**
+	 * Start transaction
+	 * 
+	 * @param resources
+	 *            - list of resources to close.
+	 */
+	private void connectionStartTransaction() {
+		try {
+			connection.setAutoCommit(false);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * End transaction
+	 * 
+	 * @param resources
+	 *            - list of resources to close.
+	 */
+	private void connectionEndTransaction() {
+		try {
+			connection.setAutoCommit(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Commit transaction
+	 * 
+	 * @param resources
+	 *            - list of resources to close.
+	 */
+	private void connectionCommitTransaction() {
+		try {
+			connection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Rollback transaction
+	 * 
+	 * @param resources
+	 *            - list of resources to close.
+	 */
+	private void connectionRollbackTransaction() {
+		try {
+			connection.rollback();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/*
@@ -978,79 +1279,56 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public int workerLogin(String username, String password)
 			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
-		String query = generateSelectQuery1Table(WorkersTable.table,
-				BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK),
-				BinaryCondition.equalTo(WorkersTable.workerPasswordCol, PARAM_MARK));
-
-		PreparedStatement statement = getParameterizedQuery(query, username, password);
-
-		ResultSet result;
-		try {
-			result = statement.executeQuery();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new CriticalError();
-		}
-
-		// check if no results or more than one - throw exception user not exist
-		if (getResultSetRowCount(result) != 1)
-			throw new SQLDatabaseException.AuthenticationError();
-
-		// check if worker already connected
-		if (isSessionEstablished(username))
-			throw new SQLDatabaseException.ClientAlreadyConnected();
-
-		/*
-		 * EVERYTHING OK - initiate new session to worker
-		 */
-		int $ = generateSessionID(true);
-
-		UpdateQuery updateQuery = generateUpdateQuery(WorkersTable.table,
-				BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK),
-				BinaryCondition.equalTo(WorkersTable.workerPasswordCol, PARAM_MARK));
-
-		updateQuery.addSetClause(WorkersTable.sessionIDCol, $).validate();
-
-		statement = getParameterizedQuery(updateQuery + "", username, password);
 
 		try {
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new CriticalError();
-		}
+			// START transaction
+			connectionStartTransaction();
 
-		return $;
+			int $ = "Cart".equals(username) ? loginAsCart() : loginAsWorker(username, password);
+
+			// END transaction
+			connectionCommitTransaction();
+
+			return $;
+
+		} catch (CriticalError e) {
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
+		}
 	}
-	
+
 	@Override
 	public String getClientType(Integer sessionID) throws ClientNotConnected, CriticalError {
 		validateSessionEstablished(sessionID);
-		
+
 		String query = generateSelectQuery1Table(WorkersTable.table,
 				BinaryCondition.equalTo(WorkersTable.sessionIDCol, PARAM_MARK));
 
 		PreparedStatement statement = getParameterizedReadQuery(query, sessionID);
-		
+
 		log.debug("execute query: " + statement);
-		
+
 		ResultSet result = null;
 		try {
 			result = statement.executeQuery();
 			result.first();
-			
+
 			int clientType = result.getInt(WorkersTable.workerPrivilegesCol.getColumnNameSQL());
 			log.debug("worker type code from SQL: " + clientType);
-			
-			return new Gson().toJson(clientType != WORKERS_TABLE.VALUE_PRIVILEGE_MANAGER ? CLIENT_TYPE.WORKER : CLIENT_TYPE.MANAGER);
-			
+
+			return new Gson().toJson(
+					clientType != WORKERS_TABLE.VALUE_PRIVILEGE_MANAGER ? CLIENT_TYPE.WORKER : CLIENT_TYPE.MANAGER);
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement, result);
 		}
-		
+
 	}
 
 	/*
@@ -1576,7 +1854,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				throw new ManufacturerNotExist();
 
 			// if the manufacturer still used in catalog - throw exception
-			if (isSuchRowExist(ProductsCatalogTable.table, ProductsCatalogTable.manufacturerIDCol, (Long) m.getId()))
+			if (isSuchRowExist(ProductsCatalogTable.table, ProductsCatalogTable.manufacturerIDCol, m.getId()))
 				throw new ManufacturerStillUsed();
 
 			// delete manufacturer
@@ -1660,22 +1938,20 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	@Override
 	public boolean isClientLoggedIn(Integer sessionID) throws CriticalError {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
 	@Override
 	public boolean isWorkerLoggedIn(String username) throws CriticalError {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
 	@Override
 	public String cartRestoreGroceryList(Integer cartID, boolean reconnect) throws CriticalError, ClientNotConnected {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
-
-
 
 }
