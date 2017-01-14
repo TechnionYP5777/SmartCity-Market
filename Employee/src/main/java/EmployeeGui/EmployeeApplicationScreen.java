@@ -6,6 +6,12 @@ import GuiUtils.AbstractApplicationScreen;
 import UtilsContracts.BarcodeEventHandlerDiConfigurator;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
 /**
@@ -23,11 +29,13 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+
+
 			stage = primaryStage;
 			barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class,
 					new BarcodeEventHandlerDiConfigurator());
-//			barcodeEventHandler.initializeHandler();
-//			barcodeEventHandler.startListening();
+			// barcodeEventHandler.initializeHandler();
+			// barcodeEventHandler.startListening();			
 			setScene("/EmployeeMainScreen/EmployeeMainScreen.fxml");
 			stage.setTitle("Smart Market Beta");
 			stage.setMaximized(true);

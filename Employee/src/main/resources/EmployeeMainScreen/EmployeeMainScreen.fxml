@@ -3,23 +3,30 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="mainScreenPane" alignment="CENTER" onMouseClicked="#mouseClicked" spacing="20.0" stylesheets="@EmployeeMainScreen.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeMainScreen">
+
+<StackPane fx:id="mainScreenPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeMainScreen">
    <children>
-      <Label text="Smart Market" textFill="WHITE">
-         <font>
-            <Font name="KacstArt" size="54.0" />
-         </font></Label>
-      <Separator prefWidth="200.0" />
-      <Label text="Press Any Key" textFill="#fffefe">
-         <font>
-            <Font name="KacstArt" size="17.0" />
-         </font>
-      </Label>
+      <VBox fx:id="vbox" alignment="CENTER" onMouseClicked="#mouseClicked" spacing="20.0" stylesheets="@EmployeeMainScreen.css">
+         <children>
+            <Label text="Smart Market" textFill="WHITE">
+               <font>
+                  <Font name="KacstArt" size="54.0" />
+               </font>
+            </Label>
+            <Separator prefWidth="200.0" />
+            <Label text="Press Any Key" textFill="#fffefe">
+               <font>
+                  <Font name="KacstArt" size="17.0" />
+               </font>
+            </Label>
+         </children>
+         <padding>
+            <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+         </padding>
+      </VBox>
    </children>
-   <padding>
-      <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-   </padding>
-</VBox>
+</StackPane>
