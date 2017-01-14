@@ -26,8 +26,8 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 			stage = primaryStage;
 			barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class,
 					new BarcodeEventHandlerDiConfigurator());
-			barcodeEventHandler.initializeHandler();
-			barcodeEventHandler.startListening();
+//			barcodeEventHandler.initializeHandler();
+//			barcodeEventHandler.startListening();
 			setScene("/EmployeeMainScreen/EmployeeMainScreen.fxml");
 			stage.setTitle("Smart Market Beta");
 			stage.setMaximized(true);
