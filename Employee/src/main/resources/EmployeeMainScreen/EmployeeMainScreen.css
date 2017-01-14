@@ -2,3 +2,11 @@
    -fx-background-image: url("mainScreen.gif");
    -fx-background-size: cover;
 }
+
+.label {
+    -fx-font-family: "serif";
+    -fx-text-fill: midnightblue;
+    -fx-opacity: 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+    -fx-font-weight: bold;
+}
