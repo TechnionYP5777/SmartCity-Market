@@ -16,12 +16,19 @@
 	-fx-background-size: cover;
     -fx-background-color: transparent;
 }
+#backButton:hover {
+	-fx-effect: dropshadow(three-pass-box , azure , 50, 0.5 , 0 , 0);
+}
     
 
 #settingsButton {
 	-fx-background-image: url("setting.png");
 	-fx-background-size: cover;
     -fx-background-color: transparent
+}
+
+#settingsButton:hover {
+	-fx-effect: dropshadow(three-pass-box , azure   , 50, 0.7 , 0 , 0);
 }
 
 #WelcomeLbl {
@@ -51,33 +58,33 @@
 
 
 #loginButton {
--fx-font-size: 20px;
--fx-font-family: "serif";
--fx-base: #00a7d4;
--fx-background: cornsilk;
--fx-focus-color: #0093FF;
--fx-control-inner-background: cornsilk;
--fx-text-base-color: #FFFFFF;
--fx-background-color:#00a7d4;
--fx-inner-border: linear-gradient(to bottom, derive(-fx-color,73.6%) 0%, derive(-fx-color,29.200000000000003%) 100%);
--fx-body-color: linear-gradient( to bottom, derive(-fx-color, 34.0%) 0%, derive(-fx-color, -18.0%) 100%);
--fx-background-insets: 0px;
--fx-background-radius: 0px;
--fx-padding: 0.166667em 0.833333em 0.25em 0.833333em; /* 2 10 3 10 */
--fx-text-fill: -fx-text-base-color;
--fx-alignment: CENTER;
--fx-content-display: LEFT;
+	-fx-font-size: 20px;
+	-fx-font-family: "serif";
+	-fx-base: #00a7d4;
+	-fx-background: cornsilk;
+	-fx-focus-color: #0093FF;
+	-fx-control-inner-background: cornsilk;
+	-fx-text-base-color: #FFFFFF;
+	-fx-background-color:#00a7d4;
+	-fx-inner-border: linear-gradient(to bottom, derive(-fx-color,73.6%) 0%, derive(-fx-color,29.200000000000003%) 100%);
+	-fx-body-color: linear-gradient( to bottom, derive(-fx-color, 34.0%) 0%, derive(-fx-color, -18.0%) 100%);
+	-fx-background-insets: 0px;
+	-fx-background-radius: 0px;
+	-fx-padding: 0.166667em 0.833333em 0.25em 0.833333em; /* 2 10 3 10 */
+	-fx-text-fill: -fx-text-base-color;
+	-fx-alignment: CENTER;
+	-fx-content-display: LEFT;
 }
 
 #loginButton:focused {
--fx-color:#00a7d4;
--fx-background-color:#ED9C28, #00a7d4;
--fx-background-insets: -1.4, 0, 1, 2;
--fx-background-radius: 0;
+	-fx-color:#00a7d4;
+	-fx-background-color:#ED9C28, #00a7d4;
+	-fx-background-insets: -1.4, 0, 1, 2;
+	-fx-background-radius: 0;
 }
 
 #loginButton:hover {
--fx-focus-color: #FF0000;
--fx-background-color: #ED9C28, #0187ab;
+	-fx-focus-color: #FF0000;
+	-fx-background-color: #ED9C28, #0187ab;
 }
 

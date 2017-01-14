@@ -93,6 +93,9 @@
                      </light>
                   </Lighting>
                </effect>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
             </PasswordField>
             <GridPane>
               <columnConstraints>
