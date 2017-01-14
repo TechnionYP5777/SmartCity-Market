@@ -1,37 +1,70 @@
 .root {
-   -fx-background-image: url("loginScreenBackground.gif");
+   -fx-background-image: url("background1.jpg");
    -fx-background-size: cover;
 }
 
-#backButton {
-    -fx-background-color: 
-        #c3c4c4,
-        linear-gradient(#d6d6d6 50%, white 100%),
-        radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
-    -fx-background-radius: 30;
-    -fx-background-insets: 0,1,1;
-    -fx-text-fill: black;
+.label {
+    -fx-font-family: "serif";
+    -fx-text-fill: midnightblue;
+    -fx-opacity: 1;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+    -fx-font-weight: bold;
 }
 
-#settingsButton {
-    -fx-background-color: 
-        #c3c4c4,
-        linear-gradient(#d6d6d6 50%, white 100%),
-        radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
-    -fx-background-radius: 30;
-    -fx-background-insets: 0,1,1;
-    -fx-text-fill: black;
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+#WelcomeLbl {
+	-fx-font-size: 130;
 }
 
-#loginButton {
-    -fx-background-color: 
-        #c3c4c4,
-        linear-gradient(#d6d6d6 50%, white 100%),
-        radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
-    -fx-background-radius: 30;
-    -fx-background-insets: 0,1,1;
-    -fx-text-fill: black;
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+#pleaseLoginLbl {
+ 	-fx-font-size: 30;
+ 	-fx-text-fill: indigo;
 }
+
+#forgotPassLbl {
+	-fx-font-size: 20;
+}
+
+#userNameTextField {
+	-fx-font-size: 20;
+	-fx-prompt-text-fill: darkcyan;
+	-fx-font-weight: bold;
+}
+
+#passwordField {
+	-fx-font-size: 20;
+	-fx-prompt-text-fill: darkcyan;
+	-fx-font-weight: bold;
+}
+
+
+.button {
+-fx-font-size: 30px;
+-fx-font-family: "serif";
+-fx-base: #00a7d4;
+-fx-background: cornsilk;
+-fx-focus-color: #0093FF;
+-fx-control-inner-background: cornsilk;
+-fx-text-base-color: #FFFFFF;
+-fx-background-color:#00a7d4;
+-fx-inner-border: linear-gradient(to bottom, derive(-fx-color,73.6%) 0%, derive(-fx-color,29.200000000000003%) 100%);
+-fx-body-color: linear-gradient( to bottom, derive(-fx-color, 34.0%) 0%, derive(-fx-color, -18.0%) 100%);
+-fx-background-insets: 0px;
+-fx-background-radius: 0px;
+-fx-padding: 0.166667em 0.833333em 0.25em 0.833333em; /* 2 10 3 10 */
+-fx-text-fill: -fx-text-base-color;
+-fx-alignment: CENTER;
+-fx-content-display: LEFT;
+}
+
+.button:focused {
+-fx-color:#00a7d4;
+-fx-background-color:#ED9C28, #00a7d4;
+-fx-background-insets: -1.4, 0, 1, 2;
+-fx-background-radius: 0;
+}
+
+.button:hover {
+-fx-focus-color: #FF0000;
+-fx-background-color: #ED9C28, #0187ab;
+}
+
