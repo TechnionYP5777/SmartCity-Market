@@ -30,7 +30,7 @@ public class SQLDatabaseException extends Exception {
 	public static class ProductNotExistInCatalog extends SQLDatabaseException {
 		private static final long serialVersionUID = 3092110065622921929L;
 	}
-	
+
 	/**
 	 * Thrown when product already exists in catalog
 	 * 
@@ -40,10 +40,10 @@ public class SQLDatabaseException extends Exception {
 	public static class ProductAlreadyExistInCatalog extends SQLDatabaseException {
 		private static final long serialVersionUID = 3092110065622921929L;
 	}
-	
+
 	/**
-	 * Thrown when try to remove product forom catalog and it is still
-	 * sold in store or warehouse
+	 * Thrown when try to remove product forom catalog and it is still sold in
+	 * store or warehouse
 	 * 
 	 * @author Noam Yefet
 	 *
@@ -51,7 +51,7 @@ public class SQLDatabaseException extends Exception {
 	public static class ProductStillForSale extends SQLDatabaseException {
 		private static final long serialVersionUID = 3092110065622921929L;
 	}
-	
+
 	/**
 	 * Thrown when try to do operation on non-existed cart.
 	 * 
@@ -61,10 +61,10 @@ public class SQLDatabaseException extends Exception {
 	public static class ProductPackageNotExist extends SQLDatabaseException {
 		private static final long serialVersionUID = 3092110065622921929L;
 	}
-	
+
 	/**
-	 * Thrown when try to do operation that changing ProductPackage amount
-	 * and there is not enough amount for the operation 
+	 * Thrown when try to do operation that changing ProductPackage amount and
+	 * there is not enough amount for the operation
 	 * 
 	 * @author Noam Yefet
 	 *
@@ -72,7 +72,7 @@ public class SQLDatabaseException extends Exception {
 	public static class ProductPackageAmountNotMatch extends SQLDatabaseException {
 		private static final long serialVersionUID = 3092110065622921929L;
 	}
-	
+
 	/**
 	 * Thrown when try to do operation on non-existed manufacturer.
 	 * 
@@ -82,17 +82,17 @@ public class SQLDatabaseException extends Exception {
 	public static class ManufacturerNotExist extends SQLDatabaseException {
 		private static final long serialVersionUID = 3092110065622921929L;
 	}
-	
+
 	/**
 	 * Thrown when try to remove manufacturer that still used in the system
-	 *  
+	 * 
 	 * @author Noam Yefet
 	 *
 	 */
 	public static class ManufacturerStillUsed extends SQLDatabaseException {
 		private static final long serialVersionUID = 3092110065622921929L;
 	}
-	
+
 	/**
 	 * Thrown when try to do operation on non-existed ingredient.
 	 * 
@@ -132,7 +132,17 @@ public class SQLDatabaseException extends Exception {
 	public static class ClientAlreadyConnected extends SQLDatabaseException {
 		private static final long serialVersionUID = 1L;
 	}
-	
+
+	/**
+	 * Thrown when try to restore non-existed grocery list
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class NoGroceryListToRestore extends SQLDatabaseException {
+		private static final long serialVersionUID = 1L;
+	}
+
 	/**
 	 * Thrown when no connection available
 	 * 

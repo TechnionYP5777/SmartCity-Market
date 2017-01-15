@@ -2,16 +2,21 @@ package SQLDatabase;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.HashSet;
 
 import com.google.gson.Gson;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
+import BasicCommonClasses.ProductPackage;
+import BasicCommonClasses.SmartCode;
+import SQLDatabase.SQLDatabaseEntities.GroceriesListsTable;
 import SQLDatabase.SQLDatabaseEntities.IngredientsTable;
 import SQLDatabase.SQLDatabaseEntities.LocationsTable;
 import SQLDatabase.SQLDatabaseEntities.ManufacturerTable;
@@ -23,6 +28,17 @@ import SQLDatabase.SQLDatabaseStrings.LOCATIONS_TABLE;
 
 class SQLJsonGenerator {
 
+	/**
+	 * Get string from Resultset. This method make sure we always get string
+	 * (and not null)
+	 * 
+	 * @param s
+	 *            Resultset to get from
+	 * @param c
+	 *            specified column to fetch
+	 * @return
+	 * @throws CriticalError
+	 */
 	private static String getStringFromResultset(ResultSet s, DbColumn c) throws CriticalError {
 
 		String result;
@@ -176,5 +192,50 @@ class SQLJsonGenerator {
 		}
 
 		return $;
+	}
+
+	/**
+	 * convert grocery list from ResultSet to Json representation of grocery
+	 * list
+	 * 
+	 * @param groceryList
+	 *            - ResultSet of the groceryList. the ResultSet need to point to
+	 *            the groceryList to convert (and assuming all the rows of given
+	 *            groceryList are grouped together). at returning, this object
+	 *            will point the next row after the last row of the pointed
+	 *            groceryList returning.
+	 * @return Json representation of the grocery list
+	 * @throws CriticalError
+	 */
+	static String GroceryListToJson(ResultSet groceryList) throws CriticalError {
+		GroceryList $ = new GroceryList();
+
+		try {
+			if (groceryList.getRow() != 0) {
+				int groceryListID = groceryList.getInt(GroceriesListsTable.listIDCol.getColumnNameSQL());
+
+				// adding all product packages
+				while (!groceryList.isAfterLast()
+						&& groceryListID == groceryList.getInt(GroceriesListsTable.listIDCol.getColumnNameSQL())) {
+
+					// extracting the product packages
+					long barcode = groceryList.getLong(GroceriesListsTable.barcodeCol.getColumnNameSQL());
+					int amount = groceryList.getInt(GroceriesListsTable.amountCol.getColumnNameSQL());
+					LocalDate expirationDate = groceryList
+							.getDate(GroceriesListsTable.expirationDateCol.getColumnNameSQL()).toLocalDate();
+
+					// adding the ingredient to set
+					$.addProduct(new ProductPackage(new SmartCode(barcode, expirationDate), amount, null));
+
+					groceryList.next();
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLDatabaseException.CriticalError();
+		}
+
+		return new Gson().toJson($);
+
 	}
 }

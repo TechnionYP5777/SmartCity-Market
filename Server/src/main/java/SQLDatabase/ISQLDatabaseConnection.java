@@ -9,6 +9,7 @@ import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.IngredientNotExist;
 import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
 import SQLDatabase.SQLDatabaseException.ManufacturerStillUsed;
+import SQLDatabase.SQLDatabaseException.NoGroceryListToRestore;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductAlreadyExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
@@ -24,11 +25,11 @@ public interface ISQLDatabaseConnection {
 			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded;
 
 	String getClientType(Integer sessionID) throws ClientNotConnected, CriticalError;
-	
+
 	void workerLogout(Integer sessionID, String username) throws ClientNotConnected, CriticalError;
-	
+
 	boolean isClientLoggedIn(Integer sessionID) throws CriticalError;
-	
+
 	boolean isWorkerLoggedIn(String username) throws CriticalError;
 
 	String getProductFromCatalog(Integer sessionID, long barcode)
@@ -79,8 +80,8 @@ public interface ISQLDatabaseConnection {
 			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog;
 
 	void cartCheckout(Integer cartID) throws CriticalError, ClientNotConnected;
-	
-	String cartRestoreGroceryList(Integer cartID, boolean reconnect) throws CriticalError, ClientNotConnected;
+
+	String cartRestoreGroceryList(Integer cartID) throws CriticalError, NoGroceryListToRestore;
 
 	void close() throws CriticalError;
 

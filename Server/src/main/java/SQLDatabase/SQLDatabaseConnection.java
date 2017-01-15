@@ -63,6 +63,7 @@ import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
+import SQLDatabase.SQLDatabaseException.NoGroceryListToRestore;
 import SQLDatabase.SQLDatabaseStrings.LOCATIONS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.PRODUCTS_PACKAGES_TABLE;
 import SQLDatabase.SQLDatabaseStrings.WORKERS_TABLE;
@@ -1949,9 +1950,33 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 
 	@Override
-	public String cartRestoreGroceryList(Integer cartID, boolean reconnect) throws CriticalError, ClientNotConnected {
+	public String cartRestoreGroceryList(Integer cartID) throws CriticalError, NoGroceryListToRestore {
+		if (getClientTypeBySessionID(cartID) != CLIENT_TYPE.CART)
+			throw new NoGroceryListToRestore();
+		
+		int listID = getCartListId(cartID);
 
+		PreparedStatement statement = getParameterizedReadQuery(
+				generateSelectQuery1Table(GroceriesListsTable.table,
+				BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK)), listID);
+		
+		log.debug("cartRestoreGroceryList: run query: " + statement);
+		
+		ResultSet result = null;
+		try {
+			result = statement.executeQuery();
+			result.first();
+			return SQLJsonGenerator.GroceryListToJson(result);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeResources(result);
+		}
+		
 		return null;
+		
+		
+		
 	}
 
 }
