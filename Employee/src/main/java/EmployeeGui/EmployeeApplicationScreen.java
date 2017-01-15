@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 
 public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 
-	public static boolean isEmployeeLoggedIn = false;
+	public static boolean isEmployeeLoggedIn;
 	BarcodeEventHandler barcodeEventHandler;
 
 	@Override

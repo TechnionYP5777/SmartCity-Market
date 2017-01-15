@@ -15,18 +15,18 @@ public class RadioButtonEnabler {
 
 	ArrayList<RadioButton> radioButtonContainer = new ArrayList<>();
 
-	public void addRadioButton(RadioButton radioButton) {
-		radioButtonContainer.add(radioButton);
+	public void addRadioButton(RadioButton ¢) {
+		radioButtonContainer.add(¢);
 	}
 	
-	public void addRadioButtons(List<RadioButton> radiobuttons) {
-		radioButtonContainer.addAll(radiobuttons);
+	public void addRadioButtons(List<RadioButton> ¢) {
+		radioButtonContainer.addAll(¢);
 	}
 
-	public void selectRadioButton(RadioButton button) {
+	public void selectRadioButton(RadioButton b) {
 		
 		radioButtonContainer.forEach(btn -> {
-			btn.setSelected(btn.getText().equals(button.getText()));			
+			btn.setSelected(btn.getText().equals(b.getText()));			
 		});
 		
 	}

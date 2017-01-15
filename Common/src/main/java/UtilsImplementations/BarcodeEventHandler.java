@@ -31,7 +31,7 @@ public class BarcodeEventHandler implements IBarcodeEventHandler {
 	
 	private ServerSocket scannerSocket;
 	
-	private boolean stopListening = false;
+	private boolean stopListening;
 		
 	public void initializeHandler() throws IOException  {
 		this.scannerSocket = new ServerSocket(BARCODE_SCANNER_DEFAULT_PORT, backlog);
@@ -45,17 +45,15 @@ public class BarcodeEventHandler implements IBarcodeEventHandler {
 	public class BarcodeListener implements Runnable {
 
         public void run() {
-        	String barcode = "";
-        	while (!stopListening) {     		
-    			try {
-    				Thread.sleep(5000);
-					barcode = new BufferedReader(new InputStreamReader(scannerSocket.accept().getInputStream())).readLine();
+        	for (String barcode = ""; !stopListening;)
+				try {
+					Thread.sleep(5000);
+					barcode = new BufferedReader(new InputStreamReader(scannerSocket.accept().getInputStream()))
+							.readLine();
 					eventBus.post(new BarcodeScanEvent(barcode));
 				} catch (IOException | InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}   			
-    		}
+				}
       
         }
 	}

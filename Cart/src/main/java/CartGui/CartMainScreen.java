@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 
 import CartContracts.ICart;
 import GuiUtils.AbstractApplicationScreen;
-import SMExceptions.SMException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

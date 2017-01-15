@@ -211,25 +211,18 @@ class SQLJsonGenerator {
 		GroceryList $ = new GroceryList();
 
 		try {
-			if (groceryList.getRow() != 0) {
-				int groceryListID = groceryList.getInt(GroceriesListsTable.listIDCol.getColumnNameSQL());
-
-				// adding all product packages
-				while (!groceryList.isAfterLast()
-						&& groceryListID == groceryList.getInt(GroceriesListsTable.listIDCol.getColumnNameSQL())) {
-
-					// extracting the product packages
+			if (groceryList.getRow() != 0)
+				for (int groceryListID = groceryList
+						.getInt(GroceriesListsTable.listIDCol.getColumnNameSQL()); !groceryList.isAfterLast()
+								&& groceryListID == groceryList
+										.getInt(GroceriesListsTable.listIDCol.getColumnNameSQL());) {
 					long barcode = groceryList.getLong(GroceriesListsTable.barcodeCol.getColumnNameSQL());
 					int amount = groceryList.getInt(GroceriesListsTable.amountCol.getColumnNameSQL());
 					LocalDate expirationDate = groceryList
 							.getDate(GroceriesListsTable.expirationDateCol.getColumnNameSQL()).toLocalDate();
-
-					// adding the ingredient to set
 					$.addProduct(new ProductPackage(new SmartCode(barcode, expirationDate), amount, null));
-
 					groceryList.next();
 				}
-			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new SQLDatabaseException.CriticalError();
