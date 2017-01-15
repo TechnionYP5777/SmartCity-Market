@@ -421,7 +421,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		ResultSet result = null;
 		try {
-			log.debug("getClientTypeBySessionID: check if client is worker/manager by execute query: " + statement);
+			log.debug("getClientTypeBySessionID: check if client is worker/manager \nby execute query: " + statement);
 			result = statement.executeQuery();
 
 			// CASE: worker/manager
@@ -2037,7 +2037,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		PreparedStatement statement = getParameterizedReadQuery(generateSelectQuery1Table(GroceriesListsTable.table,
 				BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK)), listID);
 
-		log.debug("cartRestoreGroceryList: run query: " + statement);
+		log.debug("cartRestoreGroceryList: restoring grocery list.\nrun query: " + statement);
 
 		ResultSet result = null;
 		try {
