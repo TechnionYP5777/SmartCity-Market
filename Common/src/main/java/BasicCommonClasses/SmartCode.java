@@ -33,6 +33,11 @@ public class SmartCode {
 	public LocalDate getExpirationDate() {
 		return expirationDate;
 	}
+	
+	@Override
+	public String toString() {
+		return "barcode: " + barcode + ", exp: " + expirationDate;
+	}
 
 	@Override
 	public int hashCode() {

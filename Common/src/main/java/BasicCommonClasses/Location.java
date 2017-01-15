@@ -40,6 +40,10 @@ public class Location {
 	}
 
 	@Override
+	public String toString() {
+		return "(x,y)=" + "(" + x + "," + y + ")" + ", in " + placeInMarket;
+	}
+	@Override
 	public int hashCode() {
 		return 31 * (x + 31 * (y + 31)) + ((placeInMarket == null) ? 0 : placeInMarket.hashCode());
 	}

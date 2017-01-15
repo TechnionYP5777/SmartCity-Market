@@ -49,6 +49,11 @@ public class ProductPackage {
 	}
 	
 	@Override
+	public String toString(){
+		return "SmartCode: " + "[" + smartCode.toString() + "]" + ", amount: " + amount + ", location: " + "[" + location +"]";
+	}
+
+	@Override
 	public int hashCode() {
 		return 31 * (31 * (amount + 31) + ((location == null) ? 0 : location.hashCode()))
 				+ ((smartCode == null) ? 0 : smartCode.hashCode());
@@ -78,12 +83,5 @@ public class ProductPackage {
 	
 	public boolean isValid() {
 		return smartCode.isValid() && amount > 0;
-	}
-	
-	@Override
-	public String toString(){
-		//TODO - Lior, plz impelemt this method so we can use it in GUI. Thanks!
-		return "prodcut package info in ONE SHORT LINE";
-		
 	}
 }

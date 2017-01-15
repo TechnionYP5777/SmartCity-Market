@@ -5,9 +5,13 @@ import java.util.ResourceBundle;
 
 import CartContracts.ICart;
 import GuiUtils.AbstractApplicationScreen;
+import SMExceptions.SMException;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -19,12 +23,23 @@ import javafx.stage.Stage;
  */
 public class CartMainScreen implements Initializable {
 
+	Stage primeStage = CartApplicationScreen.stage;
+	ICart cart;
+	
 	// Main screen panes
 	@FXML
 	GridPane cartMainScreenPain;
-
-	Stage primeStage = CartApplicationScreen.stage;
-	ICart cart;
+	
+	@FXML
+	ListView productsListView;
+	
+	@FXML 
+	Button addProductButton;
+	
+	@FXML 
+	Button removeProductButton;
+	
+	//ObservableList<ProductCell> productsObservableList;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
@@ -41,6 +56,7 @@ public class CartMainScreen implements Initializable {
 				//todo: continue from here
 			}
 		});*/
+		
 	}
 	
 	@FXML
