@@ -6,14 +6,10 @@ import java.util.ResourceBundle;
 import GuiUtils.AbstractApplicationScreen;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.effect.BoxBlur;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
+
 
 /**
  * EmployeeMainScreen - This class is the controller for the employee main screen
@@ -33,14 +29,14 @@ public class EmployeeMainScreen implements Initializable {
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(mainScreenPane);
 
-        MediaPlayer player = new MediaPlayer( new Media(getClass().getResource("/EmployeeMainScreen/store.mp4").toExternalForm()));
-        MediaView mediaView = new MediaView(player);
-        mediaView.setFitWidth(1600); mediaView.setFitHeight(900);
-        mediaView.setPreserveRatio(false);
-        mainScreenPane.getChildren().add(mediaView);
-        player.setMute(true);;
-        player.setCycleCount(MediaPlayer.INDEFINITE);   
-        player.play();
+//        MediaPlayer player = new MediaPlayer( new Media(getClass().getResource("/EmployeeMainScreen/store.mp4").toExternalForm()));
+//        MediaView mediaView = new MediaView(player);
+//        mediaView.setFitWidth(1600); mediaView.setFitHeight(900);
+//        mediaView.setPreserveRatio(false);
+//        mainScreenPane.getChildren().add(mediaView);
+//        player.setMute(true);;
+//        player.setCycleCount(MediaPlayer.INDEFINITE);   
+//        player.play();
         
         vbox.toFront();
 	}

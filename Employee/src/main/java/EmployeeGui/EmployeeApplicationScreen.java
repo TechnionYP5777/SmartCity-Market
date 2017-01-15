@@ -6,12 +6,6 @@ import GuiUtils.AbstractApplicationScreen;
 import UtilsContracts.BarcodeEventHandlerDiConfigurator;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
 /**
