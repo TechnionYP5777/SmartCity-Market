@@ -17,6 +17,7 @@ import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.IngredientNotExist;
 import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
+import SQLDatabase.SQLDatabaseException.NoGroceryListToRestore;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductAlreadyExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
@@ -545,14 +546,25 @@ public class CommandExecuter {
 		}
 	}
 
-	private void loadGroceryList(SQLDatabaseConnection __) {
+	private void loadGroceryList(SQLDatabaseConnection c) {
 		log.info("Load Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
 
-				
-		//TODO Noam, call SQL function here.
+		try {
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, c.cartRestoreGroceryList(inCommandWrapper.getSenderID()));
+		} catch (CriticalError e) {
+			log.fatal("Load Grocery List command failed, critical error occured from SQL Database connection");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (NoGroceryListToRestore e) {
+			log.info("Load Grocery List command failed, no grocery list for senderID " + inCommandWrapper.getSenderID() + " to restore");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		}
+		
+		log.info("Load Grocery List from serderID " + inCommandWrapper.getSenderID() + " command finished");
 	}
 	
-	private void addProductToGroceryList(SQLDatabaseConnection __) {
+	private void addProductToGroceryList(SQLDatabaseConnection c) {
 		ProductPackage productPackage = null;
 
 		log.info("Add Product To Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
@@ -569,17 +581,43 @@ public class CommandExecuter {
 		
 		log.info("Trying to add product package " + productPackage + " to grocery list");
 		
-		if (productPackage.isValid())
-			//TODO Noam, call SQL function here, add {} to if statement here (Spartinizer removes them)
-			log.info("Add Product To Grocery List with product package " + productPackage + " finished");
-		else {
+		if (!productPackage.isValid()) {
 			log.info("Add Product To Grocery List command failed, product package is invalid");
 			
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
-		}
+		} else
+			try {
+				c.addProductToGroceryList(inCommandWrapper.getSenderID(), productPackage);
+				
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
+		} catch (CriticalError e) {
+				log.fatal(
+						"Add Product To Grocery List command failed, critical error occured from SQL Database connection");
+				
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			} catch (ClientNotConnected e) {
+				log.info("Add Product To Grocery List command failed, client is not connected");
+				
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+			} catch (ProductNotExistInCatalog e) {
+				log.info("Add Product To Grocery List command failed, product is not exist in catalog");
+				
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST);
+			} catch (ProductPackageAmountNotMatch e) {
+				log.info("Add Product To Grocery List command failed, product package amount does not match");
+				
+				outCommandWrapper = new CommandWrapper(
+						ResultDescriptor.SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE);
+			} catch (ProductPackageNotExist e) {
+				log.info("Add Product To Grocery List command failed, product package does not exist");
+				
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_DOES_NOT_EXIST);
+			}
+		
+		log.info("Add Product To Grocery List with product package " + productPackage + " finished");
 	}
 	
-	private void removeProductFromGroceryList(SQLDatabaseConnection __) {
+	private void removeProductFromGroceryList(SQLDatabaseConnection c) {
 		ProductPackage productPackage = null;
 
 		log.info("Remove Product From Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
@@ -596,21 +634,61 @@ public class CommandExecuter {
 		
 		log.info("Trying to remove product package " + productPackage + " from grocery list");
 		
-		if (productPackage.isValid())
-			//TODO Noam, call SQL function here, add {} to if statement here (Spartinizer removes them)
-			log.info("Remove Product From Grocery List with product package " + productPackage + " finished");
-		else {
+		if (!productPackage.isValid()) {
 			log.info("Remove Product From Grocery List command failed, product package is invalid");
 			
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
-		}
+		} else
+			try {
+				c.removeProductFromGroceryList(inCommandWrapper.getSenderID(), productPackage);
+				
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
+			} catch (CriticalError e) {
+				log.fatal(
+						"Remove Product From Grocery List command failed, critical error occured from SQL Database connection");
+				
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			} catch (ClientNotConnected e) {
+				log.info("Remove Product From Grocery List command failed, client is not connected");
+				
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+			} catch (ProductNotExistInCatalog e) {
+				log.info("Remove Product From Grocery List command failed, product is not exist in catalog");
+				
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST);
+			} catch (ProductPackageAmountNotMatch e) {
+				log.info("Remove Product From Grocery List command failed, product package amount does not match");
+				
+				outCommandWrapper = new CommandWrapper(
+						ResultDescriptor.SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE);
+			} catch (ProductPackageNotExist e) {
+				log.info("Remove Product From Grocery List command failed, product package does not exist");
+				
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_DOES_NOT_EXIST);
+			}
+		
+		log.info("Remove Product From Grocery List with product package " + productPackage + " finished");
 	}
 	
-	private void checkoutGroceryList(SQLDatabaseConnection __) {
+	private void checkoutGroceryList(SQLDatabaseConnection c) {
 		log.info("Checkout Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
 
-				
-		//TODO Noam, call SQL function here.
+		try {
+			c.cartCheckout(inCommandWrapper.getSenderID());
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
+		} catch (CriticalError e) {
+			log.fatal(
+					"Checkout Grocery List command failed, critical error occured from SQL Database connection");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientNotConnected e) {
+			log.info("Checkout Grocery List command failed, client is not connected");
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		}
+
+		log.info("Checkout Grocery List from serderID " + inCommandWrapper.getSenderID() + " finished");
 	}
 	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
