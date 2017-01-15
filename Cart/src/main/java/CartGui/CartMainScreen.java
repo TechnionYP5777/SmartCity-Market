@@ -25,21 +25,23 @@ public class CartMainScreen implements Initializable {
 	GridPane cartMainScreenPain;
 
 	Stage primeStage = CartApplicationScreen.stage;
-	
 	ICart cart;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
+		
 		AbstractApplicationScreen.fadeTransition(cartMainScreenPain);
 		//defining behavior when stage/window is closed.
 		cart = TempCartPassingData.cart;
-		primeStage.setOnCloseRequest(event -> {
+				
+		//todo: add this:
+		/*primeStage.setOnCloseRequest(event -> {
 			try {
 				cart.logout();
 			} catch (SMException e){
 				//todo: continue from here
 			}
-		});
+		});*/
 	}
 	
 	@FXML
