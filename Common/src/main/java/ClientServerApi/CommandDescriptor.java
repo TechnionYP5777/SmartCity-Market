@@ -72,6 +72,21 @@ public enum CommandDescriptor {
 	 */
 	LOGOUT,
 	
+	/**
+	 * Description: Return true iff the senderID is connected.
+	 * param1: void.
+	 * retval: bool.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *
+	 *	 ***** NOTES *****
+	 */
+	IS_LOGGED_IN,
+	
 	/********************************** Shared employee & cart commands **********************************/
 	
 	/**

@@ -129,6 +129,7 @@ public class CommandExecuter {
 		try {
 			//TODO Noam - Please change workerLogout to logout and allow to cart to logout as cart  
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
+			
 			c.workerLogout(inCommandWrapper.getSenderID(), username);
 
 			log.info("Logout command succeded with sender ID " + inCommandWrapper.getSenderID());
@@ -145,6 +146,20 @@ public class CommandExecuter {
 		log.info("Logout with User " + username + " finished");
 	}
 
+	private void isLoggedInCommand(SQLDatabaseConnection c) {
+		log.info("Is logged in command called with senderID " + inCommandWrapper.getSenderID());
+
+		try {
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, new Gson().toJson(c.isClientLoggedIn(inCommandWrapper.getSenderID()), Boolean.class));
+		} catch (CriticalError e) {
+			log.fatal("Is logged in command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		}
+
+		log.info("Is logged in command finished");
+	}
+	
 	private void viewProductFromCatalogCommand(SQLDatabaseConnection c) {
 		SmartCode smartCode = null;
 
@@ -251,10 +266,9 @@ public class CommandExecuter {
 		}
 
 		if (!catalogProduct.isValid()) {
-
 			log.info("Add Product To Catalog command failed, product is invalid");
+			
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
-
 		} else {
 			try {
 				c.addProductToCatalog(inCommandWrapper.getSenderID(), catalogProduct);
@@ -713,6 +727,11 @@ public class CommandExecuter {
 
 		case LOGOUT:
 			logoutCommand(c);
+
+			break;
+			
+		case IS_LOGGED_IN:
+			isLoggedInCommand(c);
 
 			break;
 

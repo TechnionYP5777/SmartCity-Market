@@ -107,6 +107,42 @@ public class Worker extends AEmployee implements IWorker {
 		}
 		log.info("logout from server succeed.");
 	}
+	
+	public boolean isLoggedIn() throws CriticalError {
+		String serverResponse;
+		
+		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
+		
+		log.info("Creating is logged in command wrapper with senderID: " + clientId);
+
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(clientId, CommandDescriptor.IS_LOGGED_IN))
+							.serialize());
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			
+			throw new CriticalError();
+		}
+		
+		terminateCommunication();
+		
+		CommandWrapper commandWrapper = CommandWrapper.deserialize(serverResponse);
+		
+		try {
+			resultDescriptorHandler(commandWrapper.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | InvalidParameter | EmployeeNotConnected | EmployeeAlreadyConnected
+				| AuthenticationError | ProductNotExistInCatalog | ProductAlreadyExistInCatalog | ProductStillForSale
+				| AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			
+			e.printStackTrace();
+		}
+				
+		log.info("is logged out from server succeed");
+		
+		return Serialization.deserialize(commandWrapper.getData(), Boolean.class);
+	}
 
 	@Override
 	public CatalogProduct viewProductFromCatalog(long barcode) throws InvalidParameter,
