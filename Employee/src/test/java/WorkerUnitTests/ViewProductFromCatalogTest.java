@@ -87,6 +87,8 @@ public class ViewProductFromCatalogTest {
 		
 		try {
 			worker.viewProductFromCatalog(1234567890);
+			
+			fail();
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected ¢) {
 			¢.printStackTrace();
 			fail();
@@ -109,6 +111,8 @@ public class ViewProductFromCatalogTest {
 		
 		try {
 			worker.viewProductFromCatalog(1234567890);
+			
+			fail();
 		} catch (InvalidParameter  | CriticalError | ProductNotExistInCatalog ¢) {
 			¢.printStackTrace();
 			fail();

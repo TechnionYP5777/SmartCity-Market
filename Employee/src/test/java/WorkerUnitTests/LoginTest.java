@@ -79,6 +79,8 @@ public class LoginTest {
 		
 		try {
 			worker.login("test", "test");
+			
+			fail();
 		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected ¢) {
 			¢.printStackTrace();
 			fail();
@@ -96,10 +98,13 @@ public class LoginTest {
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_ALREADY_CONNECTED).serialize());
 		} catch (IOException ¢) {
 			¢.printStackTrace();
+			fail();
 		}
 		
 		try {
 			worker.login("test", "test");
+			
+			fail();
 		} catch (InvalidParameter | CriticalError | AuthenticationError ¢) {
 			¢.printStackTrace();
 			fail();

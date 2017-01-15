@@ -89,6 +89,8 @@ public class PlaceProductPackageOnShelvesTest {
 
 		try {
 			worker.placeProductPackageOnShelves(pp);
+			
+			fail();
 		} catch (CriticalError | EmployeeNotConnected |
 				ProductNotExistInCatalog | AmountBiggerThanAvailable |
 				ProductPackageDoesNotExist ¢) {
@@ -114,6 +116,8 @@ public class PlaceProductPackageOnShelvesTest {
 
 		try {
 			worker.placeProductPackageOnShelves(pp);
+			
+			fail();
 		} catch (CriticalError | InvalidParameter | 
 				ProductNotExistInCatalog | AmountBiggerThanAvailable |
 				ProductPackageDoesNotExist ¢) {
@@ -139,6 +143,8 @@ public class PlaceProductPackageOnShelvesTest {
 
 		try {
 			worker.placeProductPackageOnShelves(pp);
+			
+			fail();
 		} catch (CriticalError | InvalidParameter | 
 				ProductNotExistInCatalog | EmployeeNotConnected  |
 				ProductPackageDoesNotExist ¢) {
@@ -164,6 +170,8 @@ public class PlaceProductPackageOnShelvesTest {
 
 		try {
 			worker.placeProductPackageOnShelves(pp);
+			
+			fail();
 		} catch (CriticalError | InvalidParameter | 
 				AmountBiggerThanAvailable | EmployeeNotConnected  |
 				ProductPackageDoesNotExist ¢) {
@@ -189,6 +197,8 @@ public class PlaceProductPackageOnShelvesTest {
 
 		try {
 			worker.placeProductPackageOnShelves(pp);
+			
+			fail();
 		} catch (CriticalError | InvalidParameter | 
 				AmountBiggerThanAvailable | EmployeeNotConnected  |
 				ProductNotExistInCatalog ¢) {

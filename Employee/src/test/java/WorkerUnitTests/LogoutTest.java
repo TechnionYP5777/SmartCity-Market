@@ -74,6 +74,8 @@ public class LogoutTest {
 		
 		try {
 			worker.logout();
+			
+			fail();
 		} catch (InvalidParameter | CriticalError ¢) {
 			¢.printStackTrace();
 			fail();

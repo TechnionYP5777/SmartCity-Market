@@ -83,6 +83,8 @@ public class AddProductToWarehouseTest {
 
 		try {
 			worker.addProductToWarehouse(pp);
+			
+			fail();
 		} catch (CriticalError | EmployeeNotConnected | ProductNotExistInCatalog ¢) {
 			¢.printStackTrace();
 			fail();
@@ -106,6 +108,8 @@ public class AddProductToWarehouseTest {
 
 		try {
 			worker.addProductToWarehouse(pp);
+			
+			fail();
 		} catch (CriticalError | InvalidParameter | ProductNotExistInCatalog ¢) {
 			¢.printStackTrace();
 			fail();
@@ -129,6 +133,8 @@ public class AddProductToWarehouseTest {
 
 		try {
 			worker.addProductToWarehouse(pp);
+			
+			fail();
 		} catch (CriticalError | InvalidParameter | EmployeeNotConnected ¢) {
 			¢.printStackTrace();
 			fail();

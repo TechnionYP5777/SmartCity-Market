@@ -71,6 +71,7 @@ public class GetProductPackageAmountTest {
 			¢.printStackTrace();
 			fail();
 		}
+		
 		assertEquals(retAmmount, 2);
 	}
 	
@@ -89,12 +90,14 @@ public class GetProductPackageAmountTest {
 
 		try {
 			worker.getProductPackageAmount(pp);
+			
+			fail();
 		} catch (CriticalError | EmployeeNotConnected | 
 				ProductPackageDoesNotExist ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (InvalidParameter ¢) {
-			//Test success
+			/* Test success */
 		}
 	}
 	
@@ -114,12 +117,14 @@ public class GetProductPackageAmountTest {
 
 		try {
 			worker.getProductPackageAmount(pp);
+			
+			fail();
 		} catch (CriticalError | InvalidParameter | 
 				ProductPackageDoesNotExist ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (EmployeeNotConnected  ¢) {
-			//Test success
+			/* Test success */
 		}
 	}
 	
@@ -138,6 +143,8 @@ public class GetProductPackageAmountTest {
 
 		try {
 			worker.getProductPackageAmount(pp);
+			
+			fail();
 		} catch (CriticalError | InvalidParameter | 
 				EmployeeNotConnected ¢) {
 			¢.printStackTrace();
