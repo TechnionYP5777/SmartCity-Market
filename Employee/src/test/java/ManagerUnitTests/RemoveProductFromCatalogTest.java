@@ -1,5 +1,7 @@
 package ManagerUnitTests;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 import java.time.LocalDate;
 
@@ -30,7 +32,7 @@ import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
 
 /**
- * @author Lior Ben Ami
+ * @author Lior Ben Ami, Aviad Cohen
  * @since 2016-01-03 */
 @RunWith(MockitoJUnitRunner.class)
 public class RemoveProductFromCatalogTest {
@@ -48,68 +50,126 @@ public class RemoveProductFromCatalogTest {
 			5, new Location(1,1,PlaceInMarket.WAREHOUSE));
 	
 	@Test
-	public void RemoveProductFromCatalogSuccesfulTest() throws IOException, InvalidParameter, CriticalError, EmployeeNotConnected, ProductStillForSale, ProductNotExistInCatalog {
-		Mockito.when(clientRequestHandler.sendRequestWithRespond(
-				(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-						CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
-						Serialization.serialize(pp)).serialize())))
-				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
-		manager.removeProductFromCatalog(pp);
-	}
-	
-	@Test
-	public void RemoveProductFromCatalogInvalidParameterTest() throws IOException, CriticalError, EmployeeNotConnected, ProductStillForSale, ProductNotExistInCatalog {
-		Mockito.when(clientRequestHandler.sendRequestWithRespond(
-				(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-						CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
-						Serialization.serialize(pp)).serialize())))
-				.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
+	public void RemoveProductFromCatalogSuccesfulTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
+							CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(pp)).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
 		try {
 			manager.removeProductFromCatalog(pp);
-		} catch (InvalidParameter ¢) {
-			//test success
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductStillForSale
+				| ProductNotExistInCatalog e) {
+			e.printStackTrace();
+			fail();
 		}
 	}
 	
 	@Test
-	public void RemoveProductFromCatalogEmployeeNotConnectedTest() throws IOException, ProductStillForSale, CriticalError, InvalidParameter, ProductNotExistInCatalog {
-		Mockito.when(clientRequestHandler.sendRequestWithRespond(
-				(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-						CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
-						Serialization.serialize(pp)).serialize())))
-				.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
+	public void RemoveProductFromCatalogInvalidParameterTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
+							CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(pp)).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+
 		try {
 			manager.removeProductFromCatalog(pp);
-		} catch (EmployeeNotConnected ¢) {
-			//test success
+			
+			fail();
+		} catch (CriticalError | EmployeeNotConnected | ProductStillForSale
+				| ProductNotExistInCatalog e) {
+			e.printStackTrace();
+			fail();
+		} catch (InvalidParameter e) {
+			/* test success */
 		}
 	}
 	
 	@Test
-	public void RemoveProductFromCatalogProductNotExistInCatalogTest() throws IOException, ProductStillForSale, CriticalError, InvalidParameter, EmployeeNotConnected {
-		Mockito.when(clientRequestHandler.sendRequestWithRespond(
-				(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-						CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
-						Serialization.serialize(pp)).serialize())))
-				.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
+	public void RemoveProductFromCatalogEmployeeNotConnectedTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
+							CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(pp)).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+
 		try {
 			manager.removeProductFromCatalog(pp);
-		} catch (ProductNotExistInCatalog ¢) {
-			//test success
+			
+			fail();
+		} catch (InvalidParameter | CriticalError | ProductStillForSale
+				| ProductNotExistInCatalog e) {
+			e.printStackTrace();
+			fail();
+		} catch (EmployeeNotConnected e) {
+			/* test success */
 		}
 	}
 	
 	@Test
-	public void RemoveProductFromCatalogProductStillForSaleTest() throws IOException, ProductNotExistInCatalog, CriticalError, InvalidParameter, EmployeeNotConnected {
-		Mockito.when(clientRequestHandler.sendRequestWithRespond(
-				(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-						CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
-						Serialization.serialize(pp)).serialize())))
-				.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
+	public void RemoveProductFromCatalogProductNotExistInCatalogTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
+							CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(pp)).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+
 		try {
 			manager.removeProductFromCatalog(pp);
-		} catch (ProductStillForSale ¢) {
-			//test success
+			
+			fail();
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductStillForSale e) {
+			e.printStackTrace();
+			fail();
+		} catch (ProductNotExistInCatalog e) {
+			/* test success */
+		}
+	}
+	
+	@Test
+	public void RemoveProductFromCatalogProductStillForSaleTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
+							CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(pp)).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_STILL_FOR_SALE).serialize());
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		try {
+			manager.removeProductFromCatalog(pp);
+			
+			fail();
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog e) {
+			e.printStackTrace();
+			fail();
+		} catch (ProductStillForSale e) {
+			/* test success */
 		}
 	}
 }

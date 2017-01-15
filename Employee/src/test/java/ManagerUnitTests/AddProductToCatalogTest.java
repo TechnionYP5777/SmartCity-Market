@@ -31,7 +31,7 @@ import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
 
 /**
- * @author Lior Ben Ami
+ * @author Lior Ben Ami, Aviad Cohen
  * @since 2016-01-02 */
 @RunWith(MockitoJUnitRunner.class)
 public class AddProductToCatalogTest {
@@ -85,11 +85,14 @@ public class AddProductToCatalogTest {
 
 		try {
 			manager.addProductToWarehouse(pp);
+			
+			fail();
 		} catch (CriticalError | EmployeeNotConnected | ProductNotExistInCatalog ¢) {
 			¢.printStackTrace();
+			
 			fail();
 		} catch (InvalidParameter ¢) {
-			//test success
+			/* test success */
 		}
 	}
 	
@@ -103,16 +106,20 @@ public class AddProductToCatalogTest {
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException ¢) {
 			¢.printStackTrace();
+			
 			fail();
 		}
 
 		try {
 			manager.addProductToWarehouse(pp);
+			
+			fail();
 		} catch (CriticalError | InvalidParameter | ProductNotExistInCatalog ¢) {
 			¢.printStackTrace();
+			
 			fail();
 		} catch (EmployeeNotConnected ¢) {
-			//test success
+			/* test success */
 		}
 	}
 	
@@ -126,16 +133,20 @@ public class AddProductToCatalogTest {
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
 		} catch (IOException ¢) {
 			¢.printStackTrace();
+			
 			fail();
 		}
 
 		try {
 			manager.addProductToWarehouse(pp);
+			
+			fail();
 		} catch (CriticalError | InvalidParameter | EmployeeNotConnected ¢) {
 			¢.printStackTrace();
+			
 			fail();
 		} catch (ProductNotExistInCatalog ¢) {
-			//test success
+			/* test success */
 		}
 	}
 }

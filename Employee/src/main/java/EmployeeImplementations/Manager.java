@@ -85,7 +85,7 @@ public class Manager extends Worker implements IManager {
 		
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductNotExistInCatalog | 
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | 
 				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			¢.printStackTrace();
