@@ -39,10 +39,12 @@ public class Cart extends ACart implements ICart {
 	HashMap<SmartCode, CartProduct> cartProductCache = new HashMap<SmartCode, CartProduct>();
 	double totalSum;
 	
-	private void loadCartProductCache() throws CriticalError, CartNotConnected {
+	private void loadCartProductCacheAndUpdateTotalSum() throws CriticalError, CartNotConnected {
 		for (HashMap.Entry<SmartCode, ProductPackage> entry : groceryList.getList().entrySet()) {
 			ProductPackage productPackage = entry.getValue();
-			cartProductCache.put(productPackage.getSmartCode(), (new CartProduct(cartViewCatalogProduct(entry.getKey()),
+			CatalogProduct cp = cartViewCatalogProduct(entry.getKey());
+			totalSum += cp.getPrice() * productPackage.getAmount();
+			cartProductCache.put(productPackage.getSmartCode(), (new CartProduct(cp ,
 					productPackage.getSmartCode().getExpirationDate(), productPackage.getAmount())));
 		}
 	}
@@ -182,7 +184,7 @@ public class Cart extends ACart implements ICart {
 		}
 		id = _id;
 		groceryList = Serialization.deserialize($.getData(), GroceryList.class);
-		loadCartProductCache();
+		loadCartProductCacheAndUpdateTotalSum();
 		log.info("load grocery list from server succeed.");
 	}
 	
