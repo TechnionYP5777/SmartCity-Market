@@ -367,7 +367,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 
 	/**
-	 * Validate if the worker login the system
+	 * Validate if the client login the system
 	 * 
 	 * @param sessionID
 	 *            - sessionID of the worker
@@ -377,6 +377,24 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	private void validateSessionEstablished(Integer sessionID) throws ClientNotConnected, CriticalError {
 		try {
 			if (!isSessionEstablished(sessionID))
+				throw new SQLDatabaseException.ClientNotConnected();
+		} catch (ValidationException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		}
+	}
+
+	/**
+	 * Validate if the cart login the system
+	 * 
+	 * @param sessionID
+	 *            - sessionID of the worker
+	 * @throws ClientNotConnected
+	 * @throws CriticalError
+	 */
+	private void validateCartSessionEstablished(Integer cartID) throws ClientNotConnected, CriticalError {
+		try {
+			if (!isCartSessionEstablished(cartID))
 				throw new SQLDatabaseException.ClientNotConnected();
 		} catch (ValidationException e) {
 			e.printStackTrace();
@@ -448,6 +466,18 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 
 	/**
+	 * Check if cart logged in the system
+	 * 
+	 * @param sessionID
+	 *            sessionID of the worker/cart
+	 * @return true - if connected
+	 * @throws CriticalError
+	 */
+	private boolean isCartSessionEstablished(Integer cartID) throws CriticalError {
+		return (cartID != null) || (getClientTypeBySessionID(cartID) == CLIENT_TYPE.CART);
+	}
+
+	/**
 	 * Check if the worker logged in the system
 	 * 
 	 * @param username
@@ -455,7 +485,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * @return true - if connected
 	 * @throws CriticalError
 	 */
-	private boolean isSessionEstablished(String username) throws CriticalError {
+	private boolean isWorkerSessionEstablished(String username) throws CriticalError {
 
 		if (username == null)
 			return true;
@@ -586,7 +616,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			throw new SQLDatabaseException.AuthenticationError();
 
 		// check if worker already connected
-		if (isSessionEstablished(username))
+		if (isWorkerSessionEstablished(username))
 			throw new SQLDatabaseException.ClientAlreadyConnected();
 
 		/*
@@ -1789,6 +1819,54 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void cartCheckout(Integer cartID) throws CriticalError, ClientNotConnected {
+		validateCartSessionEstablished(cartID);
+
+		// START transaction
+		connectionStartTransaction();
+
+		int listID = getCartListId(cartID);
+		PreparedStatement copyStatement = null;
+		PreparedStatement deleteGroceryList = null;
+		PreparedStatement deleteCart = null;
+
+		try {
+			// moving grocery list to history
+			String copyQuery = "INSERT " + GroceriesListsHistoryTable.table.getTableNameSQL() + "( "
+					+ GroceriesListsHistoryTable.listIDCol.getColumnNameSQL() + " , "
+					+ GroceriesListsHistoryTable.barcodeCol.getColumnNameSQL() + " , "
+					+ GroceriesListsHistoryTable.expirationDateCol.getColumnNameSQL() + " , "
+					+ GroceriesListsHistoryTable.amountCol.getColumnNameSQL() + " ) "
+					+ new SelectQuery()
+							.addColumns(GroceriesListsTable.listIDCol, GroceriesListsTable.barcodeCol,
+									GroceriesListsTable.expirationDateCol, GroceriesListsTable.amountCol)
+							.addCondition(BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK))
+							.validate();
+
+			copyStatement = getParameterizedQuery(copyQuery, listID);
+			deleteGroceryList = getParameterizedQuery(generateDeleteQuery(GroceriesListsTable.table,
+					BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK)), listID);
+			deleteCart = getParameterizedQuery(generateDeleteQuery(CartsListTable.table,
+					BinaryCondition.equalTo(CartsListTable.listIDCol, PARAM_MARK)), listID);
+
+			log.debug("cartCheckout: run query: " + copyStatement);
+			copyStatement.executeUpdate();
+
+			log.debug("cartCheckout: run query: " + deleteGroceryList);
+			deleteGroceryList.executeUpdate();
+
+			log.debug("cartCheckout: run query: " + deleteCart);
+			deleteCart.executeUpdate();
+
+			// COMMIT transaction
+			connectionCommitTransaction();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
+			closeResources(copyStatement, deleteGroceryList, deleteCart);
+		}
 
 	}
 
@@ -1940,28 +2018,27 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public boolean isClientLoggedIn(Integer sessionID) throws CriticalError {
 
-		return false;
+		return isSessionEstablished(sessionID);
 	}
 
 	@Override
 	public boolean isWorkerLoggedIn(String username) throws CriticalError {
 
-		return false;
+		return isWorkerSessionEstablished(username);
 	}
 
 	@Override
 	public String cartRestoreGroceryList(Integer cartID) throws CriticalError, NoGroceryListToRestore {
-		if (getClientTypeBySessionID(cartID) != CLIENT_TYPE.CART)
+		if (!isCartSessionEstablished(cartID))
 			throw new NoGroceryListToRestore();
-		
+
 		int listID = getCartListId(cartID);
 
-		PreparedStatement statement = getParameterizedReadQuery(
-				generateSelectQuery1Table(GroceriesListsTable.table,
+		PreparedStatement statement = getParameterizedReadQuery(generateSelectQuery1Table(GroceriesListsTable.table,
 				BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK)), listID);
-		
+
 		log.debug("cartRestoreGroceryList: run query: " + statement);
-		
+
 		ResultSet result = null;
 		try {
 			result = statement.executeQuery();
@@ -1972,11 +2049,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		} finally {
 			closeResources(result);
 		}
-		
+
 		return null;
-		
-		
-		
+
 	}
 
 }
