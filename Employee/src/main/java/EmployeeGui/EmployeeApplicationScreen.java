@@ -2,6 +2,8 @@ package EmployeeGui;
 
 import org.apache.log4j.PropertyConfigurator;
 
+import com.sun.javafx.application.LauncherImpl;
+
 import GuiUtils.AbstractApplicationScreen;
 import UtilsContracts.BarcodeEventHandlerDiConfigurator;
 import UtilsImplementations.BarcodeEventHandler;
@@ -15,6 +17,7 @@ import javafx.stage.Stage;
  * @since 2016-12-26
  */
 
+@SuppressWarnings("restriction")
 public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 
 	BarcodeEventHandler barcodeEventHandler;
@@ -28,7 +31,7 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 			barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class,
 					new BarcodeEventHandlerDiConfigurator());
 			// barcodeEventHandler.initializeHandler();
-			// barcodeEventHandler.startListening();			
+			// barcodeEventHandler.startListening();	
 			setScene("/EmployeeMainScreen/EmployeeMainScreen.fxml");
 			stage.setTitle("Smart Market Beta");
 			stage.setMaximized(true);
@@ -42,6 +45,9 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 	public static void main(String[] args) {
 		/* Setting log properties */
 		PropertyConfigurator.configure("../log4j.properties");
+		
+		/* Setting preloader */
+        LauncherImpl.launchApplication(EmployeeApplicationScreen.class, EmployeeGuiPreloader.class, args);
 
 		launch(args);
 	}

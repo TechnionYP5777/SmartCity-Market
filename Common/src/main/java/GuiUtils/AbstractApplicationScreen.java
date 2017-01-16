@@ -2,9 +2,12 @@ package GuiUtils;
 
 import java.io.IOException;
 
+import com.sun.javafx.application.LauncherImpl;
+
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.application.Application;
+import javafx.application.Preloader;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
@@ -21,18 +24,39 @@ import javafx.util.Duration;
  * @author Shimon Azulay
  * @since 2016-12-26 */
 
+@SuppressWarnings("restriction")
 public abstract class AbstractApplicationScreen extends Application {
 	
 	public static Stage stage;
 	public static double stageHieght = GuiDefs.stageHeight;
 	public static double stageWidth = GuiDefs.stageWidth;
 	
+	// Just a counter to create some delay while showing preloader.
+    private static final int COUNT_LIMIT = 1000;
+
+    private static int stepCount = 1;
+
+    // Used to demonstrate step couns.
+    public static String STEP() {
+        return stepCount++ + ". ";
+    }
+	
+	@Override
+    public void init() throws Exception {
+        System.out.println(AbstractApplicationScreen.STEP() + "EmployeeApplicationScreen#init (doing some heavy lifting), thread: " + Thread.currentThread().getName());
+
+        // Perform some heavy lifting (i.e. database start, check for application updates, etc. )
+        for (int i = 0; i < COUNT_LIMIT; i++) {
+            double progress = ((double)i) / COUNT_LIMIT;
+            LauncherImpl.notifyPreloader(this, new Preloader.ProgressNotification(progress));
+        }
+    }
+	
 	public static void setScene(String sceneName) {
 		Parent parent;
 		try {
 			parent = FXMLLoader.load(AbstractApplicationScreen.class.getResource(sceneName));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return;
 		}
