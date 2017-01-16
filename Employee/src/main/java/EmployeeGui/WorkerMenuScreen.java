@@ -157,7 +157,7 @@ public class WorkerMenuScreen implements Initializable {
 		// defining behavior when stage/window is closed.
 		primeStage.setOnCloseRequest(event -> {
 			try {
-				if (EmployeeApplicationScreen.isEmployeeLoggedIn)
+				if (worker.isLoggedIn())
 					worker.logout();
 			} catch (SMException e) {
 				if (e instanceof AEmployeeException.EmployeeNotConnected)
@@ -319,7 +319,6 @@ public class WorkerMenuScreen implements Initializable {
 	private void logoutButtonPressed(ActionEvent __) {
 		try {
 			worker.logout();
-			EmployeeApplicationScreen.isEmployeeLoggedIn = false;
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 		}

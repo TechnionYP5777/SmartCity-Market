@@ -51,6 +51,8 @@ public interface IWorker {
 	 */
 	void logout() throws InvalidParameter, CriticalError, EmployeeNotConnected;
 	
+	
+	
 	/**
 	 * gets catalog product by barcode
 	 * 
@@ -119,4 +121,12 @@ public interface IWorker {
 	 * @throws ProductPackageDoesNotExist 
 	 */
 	int getProductPackageAmount(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductPackageDoesNotExist;
+	
+	/**
+	 * worker requests to know if he is logged in.
+	 * 
+	 * @return boolean 
+	 * @throws CriticalError 
+	 */
+	public boolean isLoggedIn() throws CriticalError; 
 }

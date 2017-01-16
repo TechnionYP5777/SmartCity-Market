@@ -67,7 +67,6 @@ public class EmployeeLoginScreen implements Initializable {
 		IWorker worker = InjectionFactory.getInstance(Worker.class, new WorkerDiConfigurator());
 		try {
 			worker.login(username, password);
-			EmployeeApplicationScreen.isEmployeeLoggedIn = true;
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 			return;
