@@ -6,12 +6,12 @@ import java.util.ResourceBundle;
 import CartContracts.ICart;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -28,10 +28,8 @@ public class CartMainScreen implements Initializable {
 	
 	// Main screen panes
 	@FXML
-	GridPane cartMainScreenPain;
+	GridPane cartMainScreenPane;
 	
-	@FXML
-	ListView productsListView;
 	
 	@FXML 
 	Button addProductButton;
@@ -39,24 +37,38 @@ public class CartMainScreen implements Initializable {
 	@FXML 
 	Button removeProductButton;
 	
+	@FXML
+	ListView<String> productsListView;
+	
+	@FXML
+	Button logoutButton;
+	
+	@FXML
+	Button buyButton;
+	
+	@FXML
+	TextField productsNumberTextField;
+	
+	@FXML
+	TextField totalSumTextField;
+	
 	//ObservableList<ProductCell> productsObservableList;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		
-		AbstractApplicationScreen.fadeTransition(cartMainScreenPain);
+		AbstractApplicationScreen.fadeTransition(cartMainScreenPane);
 		//defining behavior when stage/window is closed.
 		cart = TempCartPassingData.cart;
 				
-		//todo: add this:
-		/*primeStage.setOnCloseRequest(event -> {
+		
+		primeStage.setOnCloseRequest(event -> {
 			try {
 				cart.logout();
 			} catch (SMException e){
 				//todo: continue from here
 			}
-		});*/
-		
+		});
 	}
 	
 	@FXML
@@ -66,6 +78,16 @@ public class CartMainScreen implements Initializable {
 
 	@FXML
 	public void addProductButtonPressed(ActionEvent __) {
+		
+	}
+	
+	@FXML
+	public void logoutButtonPressed(ActionEvent __) {
+		
+	}
+
+	@FXML
+	public void buyButtonPressed(ActionEvent __) {
 		
 	}
 	
