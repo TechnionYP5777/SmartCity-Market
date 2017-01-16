@@ -16,7 +16,7 @@ public class CartApplicationScreen extends AbstractApplicationScreen {
 	public void start(Stage primaryStage) {
 		try {
 			stage = primaryStage;
-			setScene("/CartMainScreen/CartMainScreen.fxml");
+			setScene("/CartWelcomeScreen/CartWelcomeScreen.fxml");
 			stage.setTitle("Smart Market Beta");
 			stage.setMaximized(true);
 			stage.show();
@@ -32,5 +32,4 @@ public class CartApplicationScreen extends AbstractApplicationScreen {
 		
 		launch(args);
 	}
-
 }
