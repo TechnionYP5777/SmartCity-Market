@@ -129,4 +129,11 @@ public interface IWorker {
 	 * @throws CriticalError 
 	 */
 	public boolean isLoggedIn() throws CriticalError; 
+	
+	/**
+	 * worker wants to know if server is reachable before sending requests.
+	 * 
+	 * @return boolean 
+	 */
+	public boolean isServerReachable();
 }

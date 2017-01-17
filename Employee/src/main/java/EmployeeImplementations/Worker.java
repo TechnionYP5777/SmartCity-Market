@@ -107,7 +107,17 @@ public class Worker extends AEmployee implements IWorker {
 		}
 		log.info("logout from server succeed.");
 	}
-	
+
+	public boolean isServerReachable() {
+		try {
+			establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.shortTimeout);
+		} catch (Exception e) {
+			return false;
+		}
+		terminateCommunication();
+		return true;
+	}
+
 	public boolean isLoggedIn() throws CriticalError {
 		String serverResponse;
 		
