@@ -50,7 +50,7 @@ public enum CommandDescriptor {
 	 *
 	 *	 ***** NOTES *****
 	 * 	1. The sender ID returns in senderId field.
-	 *  2. Cart use username & password (use cart on both).
+	 *  2. Cart use username & password (use "Cart" on both).
 	 */
 	LOGIN,
 
