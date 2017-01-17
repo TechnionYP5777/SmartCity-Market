@@ -42,13 +42,17 @@ public class SmartcodeParser {
 				int month = Integer.parseInt(scannedCode.substring(2, 4));
 				int day = Integer.parseInt(scannedCode.substring(4, 6));
 
-				$.setExpirationDate(LocalDate.of(2000+year, month, day));
+				if (month > 12 || month < 1 || day > 31 || day < 1)
+					return null;
+
+				$.setExpirationDate(LocalDate.of(2000 + year, month, day));
 
 				// eats the expiration date code
 				scannedCode = scannedCode.substring(EXPIRATION_DATE_LEN);
 
 				continue;
-			} else if (scannedCode.startsWith(BARCODE_IDENTIFIER)) {
+			}
+			if (scannedCode.startsWith(BARCODE_IDENTIFIER)) {
 				// eats the field code
 				scannedCode = scannedCode.substring(BARCODE_IDENTIFIER.length());
 				// check if the expiration date already inserted or the field is
@@ -61,17 +65,17 @@ public class SmartcodeParser {
 
 				// search for the end of barcode
 				int i;
-				for (i = 0; i < scannedCode.length(); i++)
+				for (i = 0; i < scannedCode.length(); ++i)
 					if (scannedCode.charAt(i) < '0' || scannedCode.charAt(i) > '9')
 						break;
 
-				if (i > 13)
+				if (i > BARCODE_MAX_LEN)
 					return null;
 
-				//if we reached the end - fix the offset
-				$.setBarcode(Long.parseLong((i == scannedCode.length()) ?
-						scannedCode.substring(0) : scannedCode.substring(0, i - 1)));
-				
+				// if we reached the end - fix the offset
+				$.setBarcode(Long.parseLong(
+						(i == scannedCode.length()) ? scannedCode.substring(0) : scannedCode.substring(0, i - 1)));
+
 				// eats the barcode
 				scannedCode = scannedCode.substring(i);
 				continue;
@@ -96,6 +100,6 @@ public class SmartcodeParser {
 	public static SmartCode formCode(String scannedCode) {
 
 		return scannedCode.startsWith(GS1_PREFIX) ? codeToSmartcode(scannedCode)
-				: scannedCode.matches("\\d*") ? new SmartCode(Long.parseLong(scannedCode), null) : null;
+				: scannedCode.matches("\\d*") && scannedCode.length() <= 13 ? new SmartCode(Long.parseLong(scannedCode), null) : null;
 	}
 }
