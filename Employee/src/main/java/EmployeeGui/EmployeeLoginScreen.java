@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 
 import EmployeeCommon.TempWorkerPassingData;
 import EmployeeContracts.IWorker;
-import EmployeeDI.WorkerDiConfigurator;
 import EmployeeImplementations.Worker;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
@@ -64,7 +63,7 @@ public class EmployeeLoginScreen implements Initializable {
 
 	@FXML
 	private void loginButtonPressed(ActionEvent __) {
-		IWorker worker = InjectionFactory.getInstance(Worker.class, new WorkerDiConfigurator());
+		IWorker worker = InjectionFactory.getInstance(Worker.class);
 		try {
 			worker.login(username, password);
 		} catch (SMException e) {

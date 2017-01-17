@@ -5,20 +5,23 @@ import com.google.inject.AbstractModule;
 import ClientServerCommunication.ClientRequestHandler;
 import EmployeeContracts.IWorker;
 import EmployeeImplementations.Worker;
+import UtilsContracts.IBarcodeEventHandler;
 import UtilsContracts.IClientRequestHandler;
+import UtilsImplementations.BarcodeEventHandler;
 
 /**
- * WorkerDiConfigurator - This class the dependencies configurator for Worker business logic 
+ * EmployeeDiConfigurator - This class the dependencies configurator for Employee business logic 
  * 
  * @author Shimon Azulay
  * @since 2016-12-26 */ 
 
-public class WorkerDiConfigurator extends AbstractModule {
+public class EmployeeDiConfigurator extends AbstractModule {
 	
 	  @Override 
 	  protected void configure() {
 		  this.
 	    bind(IWorker.class).to(Worker.class);
 		bind(IClientRequestHandler.class).to(ClientRequestHandler.class);
+		bind(IBarcodeEventHandler.class).to(BarcodeEventHandler.class);
 	  }
 }

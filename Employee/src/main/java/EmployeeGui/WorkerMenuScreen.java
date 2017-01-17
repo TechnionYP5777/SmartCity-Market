@@ -22,12 +22,10 @@ import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
 import GuiUtils.RadioButtonEnabler;
 import SMExceptions.SMException;
-import UtilsContracts.BarcodeEventHandlerDiConfigurator;
 import UtilsContracts.BarcodeScanEvent;
 import UtilsContracts.IBarcodeEventHandler;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
-//import UtilsImplementations.BarcodeScanner;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -75,7 +73,7 @@ public class WorkerMenuScreen implements Initializable {
 
 	@FXML
 	TextArea successLogArea;
-	
+
 	@FXML
 	Label smartCodeValLabel;
 
@@ -128,7 +126,7 @@ public class WorkerMenuScreen implements Initializable {
 	IWorker worker;
 
 	CatalogProduct catalogProduct;
-	
+
 	IBarcodeEventHandler barcodeEventHandler;
 
 	int amountInStore = -1;
@@ -138,10 +136,9 @@ public class WorkerMenuScreen implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
-		barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class,
-				new BarcodeEventHandlerDiConfigurator());
+		barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
 		// TODO enable this after solve singleton
-		//barcodeEventHandler.register(this);
+		barcodeEventHandler.register(this);
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			addProductParametersToQuickView("N/A", "N/A", "N/A", "N/A", "N/A");
 			amountInWarehouse = amountInStore = -1;
@@ -166,13 +163,14 @@ public class WorkerMenuScreen implements Initializable {
 			}
 		});
 
-		//setting success log listener
-		successLogArea.textProperty().addListener(new ChangeListener<Object>(){
-		    @Override
-			public void changed(ObservableValue<?> __, Object oldValue,
-		            Object newValue) {
-		    	successLogArea.setScrollTop(Double.MAX_VALUE); //this will scroll to the bottom
-		    }
+		// setting success log listener
+		successLogArea.textProperty().addListener(new ChangeListener<Object>() {
+			@Override
+			public void changed(ObservableValue<?> __, Object oldValue, Object newValue) {
+				successLogArea.setScrollTop(Double.MAX_VALUE); // this will
+																// scroll to the
+																// bottom
+			}
 		});
 
 		radioButtonContainer.addRadioButtons((Arrays.asList((new RadioButton[] { printSmartCodeRadioButton,
@@ -180,7 +178,7 @@ public class WorkerMenuScreen implements Initializable {
 				addPakageToWarhouseRadioButton }))));
 
 	}
-	
+
 	private void printToSuccessLog(String msg) {
 		successLogArea.appendText(new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss").format(new Date()) + " :: " + msg + "\n");
 	}
@@ -203,8 +201,8 @@ public class WorkerMenuScreen implements Initializable {
 	private void enableRunTheOperationButton() {
 		if (addPakageToWarhouseRadioButton.isSelected()) {
 			runTheOperationButton.setDisable("".equals(barcodeTextField.getText()));
-			runTheOperationButton.setTooltip(
-					new Tooltip(!"".equals(barcodeTextField.getText()) ? "" : EmployeeGuiDefs.typeBarcode));
+			runTheOperationButton
+					.setTooltip(new Tooltip(!"".equals(barcodeTextField.getText()) ? "" : EmployeeGuiDefs.typeBarcode));
 		} else {
 			showMoreDetailsButton.setDisable("N/A".equals(smartCodeValLabel.getText()));
 			if (removePackageFromStoreRadioButton.isSelected()) {
@@ -261,49 +259,49 @@ public class WorkerMenuScreen implements Initializable {
 	private void runTheOperationButtonPressed(ActionEvent __) {
 
 		SmartCode smartcode = new SmartCode(Long.parseLong(barcodeTextField.getText()), datePicker.getValue());
-		/*TODO - find what's wrong with using getValue on the spinner. it keeps throwing exception about not
-		 * being able to case int to doulbe (or the opposite)
+		/*
+		 * TODO - find what's wrong with using getValue on the spinner. it keeps
+		 * throwing exception about not being able to case int to doulbe (or the
+		 * opposite)
 		 */
 
-		//int amountVal = editPackagesAmountSpinner.getValue();
+		// int amountVal = editPackagesAmountSpinner.getValue();
 		int amountVal = 1;
 
 		try {
-			if (addPakageToWarhouseRadioButton.isSelected()){
+			if (addPakageToWarhouseRadioButton.isSelected()) {
 				
-				//init
+				// init
 				Location loc = new Location(0, 0, PlaceInMarket.WAREHOUSE);
 				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
-				
-				//exec
+
+				// exec
 				worker.addProductToWarehouse(pp);
-				
-				printToSuccessLog(
-						("Added (" + amountVal + ") " + "product packages (" + pp + ") to warehouse"));
-			
+
+				printToSuccessLog(("Added (" + amountVal + ") " + "product packages (" + pp + ") to warehouse"));
+
 			} else if (addPackageToStoreRadioButton.isSelected()) {
-				
-				//init
+
+				// init
 				Location loc = new Location(0, 0, PlaceInMarket.STORE);
 				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
-				
-				//exec
+
+				// exec
 				worker.placeProductPackageOnShelves(pp);
-				
+
 				printToSuccessLog(("Added (" + amountVal + ") " + "product packages (" + pp + ") to store"));
-			
+
 			} else if (removePackageFromStoreRadioButton.isSelected()) {
-				
-				//init
+
+				// init
 				Location loc = new Location(0, 0, PlaceInMarket.STORE);
 				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
-				
-				//exec
+
+				// exec
 				worker.removeProductPackageFromStore(pp);
-				
-				printToSuccessLog(
-						("Removed (" + amountVal + ") " + "product packages (" + pp + ") from store"));
-			
+
+				printToSuccessLog(("Removed (" + amountVal + ") " + "product packages (" + pp + ") from store"));
+
 			} else if (removePackageFromWarhouseRadioButton.isSelected()) {
 				Location loc = new Location(0, 0, PlaceInMarket.WAREHOUSE);
 				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
@@ -323,7 +321,7 @@ public class WorkerMenuScreen implements Initializable {
 			EmployeeGuiExeptionHandler.handle(e);
 		}
 		// TODO enable this after solve singleton
-		// barcodeEventHandler.unregister(this);
+		barcodeEventHandler.unregister(this);
 		AbstractApplicationScreen.setScene("/EmployeeLoginScreen/EmployeeLoginScreen.fxml");
 	}
 
@@ -354,12 +352,11 @@ public class WorkerMenuScreen implements Initializable {
 		quickProductDetailsPane.setDisable(!disable);
 
 	}
-	
+
 	@Subscribe
 	public void barcodeScanned(BarcodeScanEvent ¢) {
 		barcodeTextField.setText(¢.getBarcode());
 		enableRunTheOperationButton();
 		searchBarcodePressed(null);
 	}
-
 }

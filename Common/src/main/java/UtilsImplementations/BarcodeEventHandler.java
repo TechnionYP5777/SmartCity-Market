@@ -69,9 +69,4 @@ public class BarcodeEventHandler implements IBarcodeEventHandler {
 	public void unregister(Object listener) {
 		eventBus.unregister(listener);
 	}
-	
-	// Just for testing
-	public void sendEvent() {
-		eventBus.post(new BarcodeScanEvent("1234567890"));
-	}
 }

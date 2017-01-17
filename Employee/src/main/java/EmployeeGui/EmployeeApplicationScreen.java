@@ -1,11 +1,9 @@
 package EmployeeGui;
 
 import org.apache.log4j.PropertyConfigurator;
-
 import com.sun.javafx.application.LauncherImpl;
-
+import EmployeeDI.EmployeeDiConfigurator;
 import GuiUtils.AbstractApplicationScreen;
-import UtilsContracts.BarcodeEventHandlerDiConfigurator;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
 import javafx.stage.Stage;
@@ -25,13 +23,11 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-
-
 			stage = primaryStage;
-			barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class,
-					new BarcodeEventHandlerDiConfigurator());
-			// barcodeEventHandler.initializeHandler();
-			// barcodeEventHandler.startListening();	
+			InjectionFactory.createInjector(new EmployeeDiConfigurator());
+			barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
+			barcodeEventHandler.initializeHandler();
+			barcodeEventHandler.startListening();		
 			setScene("/EmployeeMainScreen/EmployeeMainScreen.fxml");
 			stage.setTitle("Smart Market Beta");
 			stage.setMaximized(true);

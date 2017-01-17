@@ -13,8 +13,4 @@ public interface IBarcodeEventHandler {
 	void register(Object listener);
 
 	void unregister(Object listener);
-
-	// Just for testing
-	void sendEvent();
-
 }
