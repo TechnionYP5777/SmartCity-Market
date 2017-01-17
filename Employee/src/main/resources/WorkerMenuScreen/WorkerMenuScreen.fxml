@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -30,49 +31,10 @@
          <children>
             <VBox alignment="CENTER" spacing="10.0">
                <children>
-                  <TextField fx:id="barcodeTextField" maxWidth="278.0" minWidth="233.0" onAction="#searchBarcodePressed" prefHeight="23.0" prefWidth="233.0" promptText="Type Or Scan Product SmartCode..." />
-                  <GridPane>
-                     <columnConstraints>
-                        <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" />
-                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="100.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints percentHeight="100.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <children>
-                        <VBox spacing="15.0">
-                           <children>
-                              <Label text="Choose operation" textFill="WHITE">
-                                 <font>
-                                    <Font size="27.0" />
-                                 </font>
-                              </Label>
-                              <Separator />
-                              <RadioButton fx:id="printSmartCodeRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Print smart code" textFill="WHITE" />
-                              <RadioButton fx:id="addPackageToStoreRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Add package to store" textFill="WHITE" />
-                              <RadioButton fx:id="removePackageFromStoreRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Remove package from store" textFill="WHITE" />
-                              <RadioButton fx:id="removePackageFromWarhouseRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Remove package from warehouse" textFill="WHITE" />
-                              <RadioButton fx:id="addPakageToWarhouseRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" selected="true" text="Add package to warehouse" textFill="WHITE" />
-                           </children>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </VBox>
-                        <HBox fx:id="addPackageToWarehouseParametersPane" alignment="BOTTOM_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1">
-                           <children>
-                              <Label fx:id="expirationDateLabel" text="Expiration Date:" textFill="WHITE" />
-                              <DatePicker fx:id="datePicker" />
-                              <CheckBox fx:id="printTheSmartCodeCheckBox" mnemonicParsing="false" text="Print the smart code" textFill="WHITE" />
-                           </children>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </HBox>
-                     </children>
-                  </GridPane>
+                  <TextField fx:id="barcodeTextField" maxWidth="278.0" minWidth="233.0" onAction="#searchCodeButtonPressed" prefHeight="23.0" prefWidth="233.0" promptText="Type Or Scan Product SmartCode..." />
+                  <Button mnemonicParsing="false" onAction="#searchCodeButtonPressed" text="Search Code" />
                </children>
             </VBox>
-            <Separator prefWidth="200.0" />
             <GridPane fx:id="quickProductDetailsPane">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" percentWidth="15.0" />
@@ -154,7 +116,7 @@
                   <Button fx:id="showMoreDetailsButton" mnemonicParsing="false" onAction="#showMoreDetailsButtonPressed" prefHeight="23.0" prefWidth="162.0" text="Show more details" GridPane.rowIndex="5" />
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Label text="SmartCode:" textFill="WHITE" />
+                        <Label text="Barcode:" textFill="WHITE" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -170,6 +132,65 @@
                   </HBox>
                </children>
             </GridPane>
+            <Separator prefWidth="200.0" />
+            <StackPane>
+               <children>
+                  <GridPane visible="false">
+                     <columnConstraints>
+                        <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" />
+                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints percentHeight="100.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <VBox spacing="15.0">
+                           <children>
+                              <Label text="Choose operation for smartcode" textFill="WHITE">
+                                 <font>
+                                    <Font size="27.0" />
+                                 </font>
+                              </Label>
+                              <Separator />
+                              <RadioButton fx:id="printSmartCodeRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Print smart code" textFill="WHITE" />
+                              <RadioButton fx:id="addPackageToStoreRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Add package to store" textFill="WHITE" />
+                              <RadioButton fx:id="removePackageFromStoreRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Remove package from store" textFill="WHITE" />
+                              <RadioButton fx:id="removePackageFromWarhouseRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Remove package from warehouse" textFill="WHITE" />
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </VBox>
+                        <HBox fx:id="addPackageToWarehouseParametersPane" alignment="BOTTOM_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                  </GridPane>
+                  <VBox spacing="15.0">
+                     <children>
+                        <Label text="Choose operation for barcode" textFill="WHITE">
+                           <font>
+                              <Font size="27.0" />
+                           </font>
+                        </Label>
+                        <Separator />
+                        <HBox spacing="20.0">
+                           <children>
+                              <RadioButton fx:id="addPakageToWarhouseRadioButton1" mnemonicParsing="false" onAction="#radioButtonHandling" selected="true" text="Add package to warehouse" textFill="WHITE" />
+                              <Label fx:id="expirationDateLabel1" text="Expiration Date:" textFill="WHITE" />
+                              <DatePicker fx:id="datePicker1" />
+                              <CheckBox fx:id="printTheSmartCodeCheckBox1" mnemonicParsing="false" text="Print the smart code" textFill="WHITE" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </StackPane>
             <Separator prefWidth="200.0" />
             <VBox alignment="CENTER">
                <children>

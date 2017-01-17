@@ -16,6 +16,7 @@ import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import EmployeeCommon.TempWorkerPassingData;
 import EmployeeContracts.IWorker;
+import EmployeeDefs.AEmployeeException;
 import EmployeeDefs.EmployeeGuiDefs;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
@@ -154,9 +155,12 @@ public class WorkerMenuScreen implements Initializable {
 		// defining behavior when stage/window is closed.
 		primeStage.setOnCloseRequest(event -> {
 			try {
-				worker.logout();
+				if (worker.isServerReachable() && worker.isLoggedIn())
+					worker.logout();
 			} catch (SMException e) {
-				/* Failed to reach server for logout, quit anyway */
+				if (e instanceof AEmployeeException.EmployeeNotConnected)
+					return;
+				EmployeeGuiExeptionHandler.handle(e);
 			}
 		});
 
@@ -222,9 +226,9 @@ public class WorkerMenuScreen implements Initializable {
 					new Tooltip(!"N/A".equals(smartCodeValLabel.getText()) ? "" : EmployeeGuiDefs.typeSmartCode));
 		}
 	}
-
+	
 	@FXML
-	private void searchBarcodePressed(ActionEvent __) {
+	private void searchCodeButtonPressed(ActionEvent __) {
 		if (addPakageToWarhouseRadioButton.isSelected())
 			return;
 		catalogProduct = null;
@@ -354,7 +358,7 @@ public class WorkerMenuScreen implements Initializable {
 	public void barcodeScanned(BarcodeScanEvent ¢) {
 		barcodeTextField.setText(Long.toString(¢.getBarcode()));
 		enableRunTheOperationButton();
-		searchBarcodePressed(null);
+		
 	}
 	
 	@Subscribe
@@ -362,6 +366,6 @@ public class WorkerMenuScreen implements Initializable {
 		SmartCode smartcode = ¢.getSmarCode();
 		barcodeTextField.setText(Long.toString(smartcode.getBarcode()));
 		enableRunTheOperationButton();
-		searchBarcodePressed(null);
+		
 	}
 }

@@ -6,7 +6,6 @@
     -fx-font-family: "serif";
     -fx-text-fill: midnightblue;
     -fx-opacity: 1.0;
-    -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.6) , 3.0, 0.0 , 0.0 , 1.0 );
     -fx-font-weight: bold;
 }
 
@@ -15,7 +14,6 @@
 	-fx-font-family: "serif";
     -fx-text-fill: darkslateblue;
     -fx-opacity: 1.0;
-    -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.6) , 3.0, 0.0 , 0.0 , 1.0 );
     -fx-font-weight: bold;	
 }
 
@@ -30,6 +28,5 @@
 	-fx-font-family: "serif";
 	-fx-text-fill: darkslateblue;
 	-fx-opacity: 1.0;
-	-fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.6) , 3.0, 0.0 , 0.0 , 1.0 );
 	-fx-font-weight: bold;	
 }
