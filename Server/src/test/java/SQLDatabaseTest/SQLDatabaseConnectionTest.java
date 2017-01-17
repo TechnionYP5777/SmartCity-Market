@@ -18,6 +18,7 @@ import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
+import CommonDefs.CLIENT_TYPE;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
@@ -42,13 +43,12 @@ public class SQLDatabaseConnectionTest {
 	final Location locationWarehouse = new Location(0, 0, PlaceInMarket.WAREHOUSE);
 	final Location locationStore = new Location(0, 0, PlaceInMarket.STORE);
 
-	private CatalogProduct createDummyProduct(long barcode, String name, int manufacturerId,
-			String manufacturerName, double price){
-		return new CatalogProduct(barcode, name, new HashSet<Ingredient>(), 
-				new Manufacturer(manufacturerId, manufacturerName), "", price, "",
-				new HashSet<Location>());
+	private CatalogProduct createDummyProduct(long barcode, String name, int manufacturerId, String manufacturerName,
+			double price) {
+		return new CatalogProduct(barcode, name, new HashSet<Ingredient>(),
+				new Manufacturer(manufacturerId, manufacturerName), "", price, "", new HashSet<Location>());
 	}
-	
+
 	@Test
 	public void testInitialize() {
 		new SQLDatabaseConnection().hashCode();
@@ -114,7 +114,6 @@ public class SQLDatabaseConnectionTest {
 		ingredients.add(new Ingredient(1, "חלב"));
 		HashSet<Location> locations = new HashSet<Location>();
 		// locations.add(new Location(1, 1, PlaceInMarket.STORE));
-		// TODO: noam - check the imageUrl addition
 		String milkImage = "";
 		try {
 			assertEquals(sqlConnection.getProductFromCatalog(null, 1234567890),
@@ -182,7 +181,7 @@ public class SQLDatabaseConnectionTest {
 		}
 
 	}
-	
+
 	@Test
 	public void testAddRemoveProductRealBarcodeFromCatalog() {
 
@@ -191,8 +190,8 @@ public class SQLDatabaseConnectionTest {
 		HashSet<Ingredient> ingredients = new HashSet<Ingredient>();
 		HashSet<Location> locations = new HashSet<Location>();
 
-		CatalogProduct newProduct = new CatalogProduct(7290010328246L, "thini", ingredients, new Manufacturer(1, "תנובה"), "", 20,
-				"", locations);
+		CatalogProduct newProduct = new CatalogProduct(7290010328246L, "thini", ingredients,
+				new Manufacturer(1, "תנובה"), "", 20, "", locations);
 		try {
 			sqlConnection.addProductToCatalog(null, newProduct);
 			assertEquals(sqlConnection.getProductFromCatalog(null, newProduct.getBarcode()),
@@ -223,11 +222,11 @@ public class SQLDatabaseConnectionTest {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 
-		CatalogProduct newProduct = createDummyProduct(456L, "testRemoveCatalogProductStillForSell",1,
-				"תנובה", 3.0);
-		ProductPackage newPackage = new ProductPackage(new SmartCode(newProduct.getBarcode(), date232015), 5, locationWarehouse);
-		
-		//add catalog-product and add it to warehouse
+		CatalogProduct newProduct = createDummyProduct(456L, "testRemoveCatalogProductStillForSell", 1, "תנובה", 3.0);
+		ProductPackage newPackage = new ProductPackage(new SmartCode(newProduct.getBarcode(), date232015), 5,
+				locationWarehouse);
+
+		// add catalog-product and add it to warehouse
 		try {
 			sqlConnection.addProductToCatalog(null, newProduct);
 			assertEquals(sqlConnection.getProductFromCatalog(null, newProduct.getBarcode()),
@@ -238,29 +237,8 @@ public class SQLDatabaseConnectionTest {
 			e.printStackTrace();
 			fail();
 		}
-		
-		//try to remove
-		try {
-			sqlConnection.removeProductFromCatalog(null, new SmartCode(newProduct.getBarcode(), null));
-			fail();
-		} catch (ProductStillForSale e1) {
 
-		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog e1) {
-			e1.printStackTrace();
-			fail();
-		} 
-		
-		//move to shelf
-		try {
-			sqlConnection.placeProductPackageOnShelves(null, newPackage);
-			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, newPackage));
-			assertEquals("5", sqlConnection.getProductPackageAmonutOnShelves(null, newPackage));
-		} catch (SQLDatabaseException e) {
-			e.printStackTrace();
-			fail();
-		} 
-		
-		//try to remove
+		// try to remove
 		try {
 			sqlConnection.removeProductFromCatalog(null, new SmartCode(newProduct.getBarcode(), null));
 			fail();
@@ -270,8 +248,29 @@ public class SQLDatabaseConnectionTest {
 			e1.printStackTrace();
 			fail();
 		}
-		
-		//move to shelf
+
+		// move to shelf
+		try {
+			sqlConnection.placeProductPackageOnShelves(null, newPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, newPackage));
+			assertEquals("5", sqlConnection.getProductPackageAmonutOnShelves(null, newPackage));
+		} catch (SQLDatabaseException e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		// try to remove
+		try {
+			sqlConnection.removeProductFromCatalog(null, new SmartCode(newProduct.getBarcode(), null));
+			fail();
+		} catch (ProductStillForSale e1) {
+
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog e1) {
+			e1.printStackTrace();
+			fail();
+		}
+
+		// move to shelf
 		try {
 			sqlConnection.removeProductPackageFromShelves(null, newPackage);
 			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, newPackage));
@@ -280,10 +279,10 @@ public class SQLDatabaseConnectionTest {
 		} catch (SQLDatabaseException e) {
 			e.printStackTrace();
 			fail();
-		} 
+		}
 
 	}
-	
+
 	@Test
 	public void testSimpleAddRemovePakage() {
 
@@ -455,7 +454,7 @@ public class SQLDatabaseConnectionTest {
 			e.printStackTrace();
 			fail();
 		}
-		
+
 		try {
 			sqlConnection.close();
 		} catch (CriticalError e) {
@@ -555,6 +554,65 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		}
 
+	}
+
+	@Test
+	public void testCartConnection() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		int session = 0;
+		try {
+			session = sqlConnection.workerLogin("Cart", "");
+			assertTrue(sqlConnection.isClientLoggedIn(session));
+		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.workerLogout(session, "Cart");
+			assertFalse(sqlConnection.isClientLoggedIn(session));
+		} catch (CriticalError | ClientNotConnected e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void testCartClientType() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		int session = 0;
+
+		try {
+			session = sqlConnection.workerLogin("Cart", "");
+			assertTrue(sqlConnection.isClientLoggedIn(session));
+			assertEquals(new Gson().toJson(CLIENT_TYPE.CART), sqlConnection.getClientType(session));
+		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded
+				| ClientNotConnected e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.workerLogout(session, "Cart");
+			assertFalse(sqlConnection.isClientLoggedIn(session));
+		} catch (CriticalError | ClientNotConnected e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.getClientType(session);
+			fail();
+		} catch (ClientNotConnected e) {
+
+		} catch (CriticalError e) {
+			e.printStackTrace();
+			fail();
+		}
 	}
 
 }
