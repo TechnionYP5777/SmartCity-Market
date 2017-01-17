@@ -33,7 +33,7 @@ class SQLDatabaseEntities {
 	 */
 	private static final String TYPE_TEXT = "text";
 	private static final String TYPE_INTEGER = "integer";
-	private static final String TYPE_LONG = "integer";
+	private static final String TYPE_LONG = "bigint";
 	private static final String TYPE_REAL = "real";
 	private static final String TYPE_DATE = "datetime";
 	private static final String TYPE_BOOLEAN = "integer";

@@ -93,7 +93,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	private static final String DATABASE_NAME = "SQLdatabase";
 	private static final String DATABASE_PATH = "./src/main/resources/SQLDatabase/" + DATABASE_NAME;
-	private static final String DATABASE_PARAMS = ";sql.syntax_mys=true";
+	private static final String DATABASE_PARAMS = ";sql.syntax_mys=true;shutdown=true;hsqldb.write_delay=false";
 	private static final String DATABASE_PATH_PARAMS = DATABASE_PATH + DATABASE_PARAMS;
 
 	/*
@@ -738,8 +738,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 				insertQuery.hashCode();
 
-				log.info("setNewAmountForStore: create new row amount to package: " + p.getSmartCode().getBarcode()
-						+ ", " + dateToString(p.getSmartCode().getExpirationDate()) + ", " + placeCol);
+				log.info("setNewAmountForStore: create new row amount to package: " + p + ", to place: " + placeCol);
 
 				statement = getParameterizedQuery(insertQuery, p.getSmartCode().getBarcode(), placeCol, newAmount);
 
@@ -753,8 +752,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 				deleteQuery.hashCode();
 
-				log.info("setNewAmountForStore: remove row to package: " + p.getSmartCode().getBarcode() + ", "
-						+ dateToString(p.getSmartCode().getExpirationDate()) + ", " + placeCol);
+				log.info("setNewAmountForStore: remove row to package: " + p + ", from place: " + placeCol);
 
 				statement = getParameterizedQuery(deleteQuery, p.getSmartCode().getBarcode(), placeCol);
 
@@ -768,8 +766,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 				updateQuery.addSetClause(ProductsPackagesTable.amountCol, newAmount).validate();
 
-				log.info("setNewAmountForStore: update row ofof package: " + p.getSmartCode().getBarcode() + ", "
-						+ dateToString(p.getSmartCode().getExpirationDate()) + ", " + placeCol);
+				log.info("setNewAmountForStore: update row of package: " + p + ", of place: " + placeCol);
 
 				statement = getParameterizedQuery(updateQuery + "", p.getSmartCode().getBarcode(), placeCol);
 			}
@@ -1116,6 +1113,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	private void moveProductPackage(Integer sessionId, LOCATIONS_TYPES from, LOCATIONS_TYPES to,
 			ProductPackage packageToMove, int amount)
 			throws CriticalError, ProductPackageAmountNotMatch, ProductPackageNotExist {
+		log.info("moveProductPackage: want to move Amount " + amount + " of Pacakge " + packageToMove + " From: " + from + " To: " + to);
+		
 		if (from != null)
 			switch (from) {
 			case CART: {
@@ -1125,23 +1124,32 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				}
 				int listID = getCartListId(sessionId);
 				int currentAmount = getAmountForCart(packageToMove, listID);
-				if (currentAmount == 0)
+				if (currentAmount == 0){
+					log.info("moveProductPackage: nothing to take from Cart");
 					throw new ProductPackageNotExist();
+				}
+				log.info("moveProductPackage: (from) Cart have " + currentAmount + ", set to: " + (currentAmount - amount));
 				setNewAmountForCart(packageToMove, listID, currentAmount, currentAmount - amount);
 				break;
 			}
 			case WAREHOUSE: {
 				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
-				if (currentAmount == 0)
+				if (currentAmount == 0){
+					log.info("moveProductPackage: nothing to take from Warehouse");
 					throw new ProductPackageNotExist();
+				}
+				log.info("moveProductPackage: (from) Warehouse have " + currentAmount + ", set to: " + (currentAmount - amount));
 				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE, currentAmount,
 						currentAmount - amount);
 				break;
 			}
 			case STORE: {
 				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
-				if (currentAmount == 0)
+				if (currentAmount == 0){
+					log.info("moveProductPackage: nothing to take from Store");
 					throw new ProductPackageNotExist();
+				}
+				log.info("moveProductPackage: (from) Store have " + currentAmount + ", set to: " + (currentAmount - amount));
 				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE, currentAmount,
 						currentAmount - amount);
 				break;
@@ -1157,17 +1165,23 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				}
 				int listID = getCartListId(sessionId);
 				int currentAmount = getAmountForCart(packageToMove, listID);
+				
+				log.info("moveProductPackage: (to) Cart have " + currentAmount + ", set to: " + (currentAmount + amount));
 				setNewAmountForCart(packageToMove, listID, currentAmount, currentAmount + amount);
 				break;
 			}
 			case WAREHOUSE: {
 				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
+				
+				log.info("moveProductPackage: (to) Warehouse have " + currentAmount + ", set to: " + (currentAmount + amount));
 				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE, currentAmount,
 						currentAmount + amount);
 				break;
 			}
 			case STORE: {
 				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
+				
+				log.info("moveProductPackage: (to) Store have " + currentAmount + ", set to: " + (currentAmount + amount));
 				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE, currentAmount,
 						currentAmount + amount);
 				break;
@@ -1242,12 +1256,14 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * 
 	 * @param resources
 	 *            - list of resources to close.
+	 * @throws CriticalError 
 	 */
-	private void connectionStartTransaction() {
+	private void connectionStartTransaction() throws CriticalError {
 		try {
 			connection.setAutoCommit(false);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new CriticalError();
 		}
 	}
 
@@ -1256,12 +1272,14 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * 
 	 * @param resources
 	 *            - list of resources to close.
+	 * @throws CriticalError 
 	 */
-	private void connectionEndTransaction() {
+	private void connectionEndTransaction() throws CriticalError {
 		try {
 			connection.setAutoCommit(true);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new CriticalError();
 		}
 	}
 
@@ -1270,12 +1288,14 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * 
 	 * @param resources
 	 *            - list of resources to close.
+	 * @throws CriticalError 
 	 */
-	private void connectionCommitTransaction() {
+	private void connectionCommitTransaction() throws CriticalError {
 		try {
 			connection.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new CriticalError();
 		}
 	}
 
@@ -1284,12 +1304,14 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * 
 	 * @param resources
 	 *            - list of resources to close.
+	 * @throws CriticalError 
 	 */
-	private void connectionRollbackTransaction() {
+	private void connectionRollbackTransaction() throws CriticalError {
 		try {
 			connection.rollback();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new CriticalError();
 		}
 	}
 
@@ -1311,6 +1333,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public int workerLogin(String username, String password)
 			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
 
+		log.info("SQL Public workerLogin: Worker trying to connect as: " + username);
 		try {
 			// START transaction
 			connectionStartTransaction();
@@ -1319,13 +1342,14 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			// END transaction
 			connectionCommitTransaction();
-
+			
 			return $;
 
-		} catch (CriticalError e) {
+		} catch (SQLDatabaseException e) {
+			//NOTE: all exceptions flows here - for doing rollback
 			e.printStackTrace();
 			connectionRollbackTransaction();
-			throw new CriticalError();
+			throw e;
 		} finally {
 			connectionEndTransaction();
 		}
@@ -1335,6 +1359,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public String getClientType(Integer sessionID) throws ClientNotConnected, CriticalError {
 		validateSessionEstablished(sessionID);
 
+		log.info("SQL Public getClientType: Trying to get client type of: " + sessionID);
+		
 		String query = generateSelectQuery1Table(WorkersTable.table,
 				BinaryCondition.equalTo(WorkersTable.sessionIDCol, PARAM_MARK));
 
@@ -1371,6 +1397,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void workerLogout(Integer sessionID, String username) throws ClientNotConnected, CriticalError {
 
+		log.info("SQL Public workerLogout: Worker " + username + " trying to logout (SESSION: " + sessionID + " )");
+		
 		validateSessionEstablished(sessionID);
 
 		String query = generateSelectQuery1Table(WorkersTable.table,
@@ -1381,27 +1409,23 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		ResultSet result;
 		try {
+			
 			result = statement.executeQuery();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new CriticalError();
-		}
 
-		// check if no results or more than one - throw exception
-		if (getResultSetRowCount(result) != 1)
-			throw new SQLDatabaseException.CriticalError();
+			// check if no results or more than one - throw exception
+			if (getResultSetRowCount(result) != 1)
+				throw new SQLDatabaseException.CriticalError();
+	
+			/*
+			 * EVERYTHING OK - disconnect worker
+			 */
+			UpdateQuery updateQuery = generateUpdateQuery(WorkersTable.table,
+					BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK));
+	
+			updateQuery.addSetClause(WorkersTable.sessionIDCol, null).validate();
+	
+			statement = getParameterizedQuery(updateQuery + "", username);
 
-		/*
-		 * EVERYTHING OK - disconnect worker
-		 */
-		UpdateQuery updateQuery = generateUpdateQuery(WorkersTable.table,
-				BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK));
-
-		updateQuery.addSetClause(WorkersTable.sessionIDCol, null).validate();
-
-		statement = getParameterizedQuery(updateQuery + "", username);
-
-		try {
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1420,6 +1444,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public String getProductFromCatalog(Integer sessionID, long barcode)
 			throws ProductNotExistInCatalog, ClientNotConnected, CriticalError {
 
+		log.info("SQL Public getProductFromCatalog: Trying to get product: " + barcode + " (SESSION: " + sessionID + " )");
+		
 		validateSessionEstablished(sessionID);
 
 		String prodctsIngredientsQuery = generateSelectLeftJoinWithQuery2Tables(ProductsCatalogIngredientsTable.table,
@@ -1446,14 +1472,14 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		try {
 			// START transaction
-			connection.setAutoCommit(false);
+			connectionStartTransaction();
 			productResult = productStatement.executeQuery();
 			ingredientResult = productIngredientsStatement.executeQuery();
 			locationsResult = productLocationsStatement.executeQuery();
 
 			// END transaction
-			connection.commit();
-			connection.setAutoCommit(true);
+			connectionCommitTransaction();
+			
 			// if no result - throw exception
 			if (isResultSetEmpty(productResult))
 				throw new SQLDatabaseException.ProductNotExistInCatalog();
@@ -1465,8 +1491,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
+			connectionEndTransaction();
 			closeResources(productResult, ingredientResult, locationsResult);
 		}
 
@@ -1482,25 +1510,29 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void addProductPackageToWarehouse(Integer sessionID, ProductPackage p)
 			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog {
+		
+		log.info("SQL Public addProductPackageToWarehouse: with package " + p + " (SESSION: " + sessionID + " )");
+		
 		validateSessionEstablished(sessionID);
 
 		try {
 			// START transaction
-			connection.setAutoCommit(false);
+			connectionStartTransaction();
 			if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
 				throw new ProductNotExistInCatalog();
-
+				
 			moveProductPackage(sessionID, null, LOCATIONS_TYPES.WAREHOUSE, p, p.getAmount());
 
 			// END transaction
-			connection.commit();
-			connection.setAutoCommit(true);
-		} catch (SQLException e) {
+			connectionCommitTransaction();
+		} catch (CriticalError | ProductPackageAmountNotMatch | ProductPackageNotExist e) {
 			e.printStackTrace();
+			connectionRollbackTransaction();
+			/* throw CriticalError instead of: ProductPackageAmountNotMatch | ProductPackageNotExist 
+			 * because its cant happen */
 			throw new CriticalError();
-		} catch (ProductPackageAmountNotMatch | ProductPackageNotExist e) {
-			e.printStackTrace();
-			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
 		}
 
 	}
@@ -1516,21 +1548,25 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public void removeProductPackageFromWarehouse(Integer sessionID, ProductPackage p) throws CriticalError,
 			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
 
+		log.info("SQL Public removeProductPackageFromWarehouse: with package " + p + " (SESSION: " + sessionID + " )");
 		validateSessionEstablished(sessionID);
 
 		try {
 			// START transaction
-			connection.setAutoCommit(false);
+			connectionStartTransaction();
 			if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
 				throw new ProductNotExistInCatalog();
-
+			
 			moveProductPackage(sessionID, LOCATIONS_TYPES.WAREHOUSE, null, p, p.getAmount());
+			
 			// END transaction
-			connection.commit();
-			connection.setAutoCommit(true);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new CriticalError();
+			connectionCommitTransaction();
+		} catch (CriticalError | ProductPackageAmountNotMatch | ProductPackageNotExist e) {
+			//rollback transaction and throw the same error that occurred
+			connectionRollbackTransaction();
+			throw e;
+		} finally {
+			connectionEndTransaction();
 		}
 	}
 
@@ -1545,13 +1581,14 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public void addProductToCatalog(Integer sessionID, CatalogProduct productToAdd) throws CriticalError,
 			ClientNotConnected, ProductAlreadyExistInCatalog, IngredientNotExist, ManufacturerNotExist {
 
+		log.info("SQL Public addProductToCatalog: Trying to add: " + productToAdd + " (SESSION: " + sessionID + " )");
 		validateSessionEstablished(sessionID);
 
 		try {
 			// START transaction
-			connection.setAutoCommit(false);
-			// TODO add savepoint
+			connectionStartTransaction();
 
+			//READ part of transaction
 			if (isProductExistInCatalog(productToAdd.getBarcode()))
 				throw new ProductAlreadyExistInCatalog();
 
@@ -1564,15 +1601,17 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				if (!isIngredientExist((int) ¢.getId()))
 					throw new IngredientNotExist();
 
+			//WRITE part of transaction
 			addCatalogProduct(productToAdd);
 
 			// END transaction
-			connection.commit();
-			connection.setAutoCommit(true);
-		} catch (SQLException e) {
-			// TODO rollback
+			connectionCommitTransaction();
+		} catch (CriticalError | SQLException e) {
 			e.printStackTrace();
+			connectionRollbackTransaction();
 			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
 		}
 	}
 
@@ -1587,27 +1626,35 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public void removeProductFromCatalog(Integer sessionID, SmartCode productToRemove)
 			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog, ProductStillForSale {
 
+		log.info("SQL Public removeProductFromCatalog: Trying to remove: " + productToRemove.getBarcode() + " (SESSION: " + sessionID + " )");
+		
 		validateSessionEstablished(sessionID);
 
 		try {
 			// START transaction
-			connection.setAutoCommit(false);
-			// TODO add savepoint
+			connectionStartTransaction();
 
+			//READ part of transaction
 			if (!isProductExistInCatalog(productToRemove.getBarcode()))
 				throw new ProductNotExistInCatalog();
 
-			// TODO check if the product is in the system
+			// check if the product is in the system
+			if (isSuchRowExist(ProductsPackagesTable.table, ProductsPackagesTable.barcodeCol, productToRemove.getBarcode()) ||
+					isSuchRowExist(GroceriesListsTable.table, GroceriesListsTable.barcodeCol, productToRemove.getBarcode()) ||
+					isSuchRowExist(GroceriesListsHistoryTable.table, GroceriesListsHistoryTable.barcodeCol, productToRemove.getBarcode()))
+				throw new ProductStillForSale();
 
+			//WRITE part of transaction
 			removeCatalogProduct(productToRemove);
 
 			// END transaction
-			connection.commit();
-			connection.setAutoCommit(true);
-		} catch (SQLException e) {
-			// TODO rollback
+			connectionCommitTransaction();
+		} catch (CriticalError | SQLException e) {
 			e.printStackTrace();
+			connectionRollbackTransaction();
 			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
 		}
 
 	}
@@ -1633,16 +1680,18 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void editProductInCatalog(Integer sessionID, CatalogProduct productToUpdate) throws CriticalError,
 			ClientNotConnected, ProductNotExistInCatalog, IngredientNotExist, ManufacturerNotExist {
+		log.info("SQL Public editProductInCatalog: Trying to edit to: " + productToUpdate + " (SESSION: " + sessionID + " )");
+		
 		validateSessionEstablished(sessionID);
 
 		try {
 			// START transaction
-			connection.setAutoCommit(false);
-			// TODO add savepoint
+			connectionStartTransaction();
 
+			//READ part of transaction
 			if (!isProductExistInCatalog(productToUpdate.getBarcode()))
 				throw new ProductNotExistInCatalog();
-
+				
 			// check if manufacturer exist
 			if (isManufacturerExist((int) productToUpdate.getManufacturer().getId()))
 				throw new ManufacturerNotExist();
@@ -1652,17 +1701,19 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				if (!isIngredientExist((int) ¢.getId()))
 					throw new IngredientNotExist();
 
+			//WRITE part of transaction
 			// do update = remove product and adds it again
 			removeCatalogProduct(new SmartCode(productToUpdate.getBarcode(), null));
 			addCatalogProduct(productToUpdate);
 
 			// END transaction
-			connection.commit();
-			connection.setAutoCommit(true);
-		} catch (SQLException e) {
-			// TODO rollback
+			connectionCommitTransaction();
+		} catch (CriticalError | SQLException e) {
 			e.printStackTrace();
+			connectionRollbackTransaction();
 			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
 		}
 	}
 
@@ -1676,21 +1727,30 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void addProductToGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError,
 			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
-
+		log.info("SQL Public addProductToGroceryList: with parameter " + productToBuy + " (SESSION: " + cartID + " )");
+		
+		validateCartSessionEstablished(cartID);	
+		
 		try {
 			// START transaction
-			connection.setAutoCommit(false);
+			connectionStartTransaction();
+			
+			//READ part of transaction
 			if (!isProductExistInCatalog(productToBuy.getSmartCode().getBarcode()))
 				throw new ProductNotExistInCatalog();
 
+			//WRITE part of transaction
 			moveProductPackage(cartID, LOCATIONS_TYPES.STORE, LOCATIONS_TYPES.CART, productToBuy,
 					productToBuy.getAmount());
+			
 			// END transaction
-			connection.commit();
-			connection.setAutoCommit(true);
-		} catch (SQLException e) {
+			connectionCommitTransaction();
+		} catch (CriticalError | ProductPackageAmountNotMatch | ProductPackageNotExist e) {
 			e.printStackTrace();
-			throw new CriticalError();
+			connectionRollbackTransaction();
+			throw e;
+		} finally {
+			connectionEndTransaction();
 		}
 
 	}
@@ -1705,21 +1765,30 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void removeProductFromGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError,
 			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
-
+		log.info("SQL Public removeProductFromGroceryList: with parameter " + productToBuy + " (SESSION: " + cartID + " )");
+		
+		validateCartSessionEstablished(cartID);
+		
 		try {
 			// START transaction
-			connection.setAutoCommit(false);
+			connectionStartTransaction();
+			
+			//READ part of transaction
 			if (!isProductExistInCatalog(productToBuy.getSmartCode().getBarcode()))
 				throw new ProductNotExistInCatalog();
 
+			//WRITE part of transaction
 			moveProductPackage(cartID, LOCATIONS_TYPES.CART, LOCATIONS_TYPES.STORE, productToBuy,
 					productToBuy.getAmount());
+			
 			// END transaction
-			connection.commit();
-			connection.setAutoCommit(true);
-		} catch (SQLException e) {
+			connectionCommitTransaction();
+		} catch (CriticalError | ProductPackageAmountNotMatch | ProductPackageNotExist e) {
 			e.printStackTrace();
-			throw new CriticalError();
+			connectionRollbackTransaction();
+			throw e;
+		} finally {
+			connectionEndTransaction();
 		}
 	}
 
@@ -1734,21 +1803,29 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public void placeProductPackageOnShelves(Integer sessionID, ProductPackage p) throws CriticalError,
 			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
 
+		log.info("SQL Public placeProductPackageOnShelves: with parameter " + p + " (SESSION: " + sessionID + " )");
+		
 		validateSessionEstablished(sessionID);
 
 		try {
 			// START transaction
-			connection.setAutoCommit(false);
+			connectionStartTransaction();
+			
+			//READ part of transaction
 			if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
 				throw new ProductNotExistInCatalog();
 
+			//WRITE part of transaction
 			moveProductPackage(sessionID, LOCATIONS_TYPES.WAREHOUSE, LOCATIONS_TYPES.STORE, p, p.getAmount());
+			
 			// END transaction
-			connection.commit();
-			connection.setAutoCommit(true);
-		} catch (SQLException e) {
+			connectionCommitTransaction();
+		} catch (CriticalError | ProductPackageAmountNotMatch | ProductPackageNotExist e) {
 			e.printStackTrace();
-			throw new CriticalError();
+			connectionRollbackTransaction();
+			throw e;
+		} finally {
+			connectionEndTransaction();
 		}
 	}
 
@@ -1762,21 +1839,29 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void removeProductPackageFromShelves(Integer sessionID, ProductPackage p) throws CriticalError,
 			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
-
+		log.info("SQL Public removeProductPackageFromShelves: with parameter " + p + " (SESSION: " + sessionID + " )");
+		
 		validateSessionEstablished(sessionID);
+		
 		try {
 			// START transaction
-			connection.setAutoCommit(false);
+			connectionStartTransaction();
+			
+			//READ part of transaction
 			if (!isProductExistInCatalog(p.getSmartCode().getBarcode()))
 				throw new ProductNotExistInCatalog();
 
+			//WRITE part of transaction
 			moveProductPackage(sessionID, LOCATIONS_TYPES.STORE, null, p, p.getAmount());
+			
 			// END transaction
-			connection.commit();
-			connection.setAutoCommit(true);
-		} catch (SQLException e) {
+			connectionCommitTransaction();
+		} catch (CriticalError | ProductPackageAmountNotMatch | ProductPackageNotExist e) {
 			e.printStackTrace();
-			throw new CriticalError();
+			connectionRollbackTransaction();
+			throw e;
+		} finally {
+			connectionEndTransaction();
 		}
 	}
 
@@ -1790,7 +1875,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public String getProductPackageAmonutOnShelves(Integer sessionID, ProductPackage p)
 			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog {
-
+		log.info("SQL Public getProductPackageAmonutOnShelves: with parameter " + p + " (SESSION: " + sessionID + " )");
+		
 		validateSessionEstablished(sessionID);
 
 		return new Gson().toJson(getAmountForStore(p, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE));
@@ -1806,7 +1892,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public String getProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage p)
 			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog {
-
+		log.info("SQL Public getProductPackageAmonutInWarehouse: with parameter " + p + " (SESSION: " + sessionID + " )");
+		
 		validateSessionEstablished(sessionID);
 
 		return new Gson().toJson(getAmountForStore(p, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE));
@@ -1819,17 +1906,22 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void cartCheckout(Integer cartID) throws CriticalError, ClientNotConnected {
+		log.info("SQL Public cartCheckout: of cart: " + cartID + " (SESSION: " + cartID + " )");
+		
 		validateCartSessionEstablished(cartID);
 
 		// START transaction
 		connectionStartTransaction();
 
+		//READ part of transaction
 		int listID = getCartListId(cartID);
+		
+		
 		PreparedStatement copyStatement = null;
 		PreparedStatement deleteGroceryList = null;
 		PreparedStatement deleteCart = null;
-
 		try {
+			//WRITE part of transaction
 			// moving grocery list to history
 			String copyQuery = "INSERT " + GroceriesListsHistoryTable.table.getTableNameSQL() + "( "
 					+ GroceriesListsHistoryTable.listIDCol.getColumnNameSQL() + " , "
@@ -1848,13 +1940,13 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			deleteCart = getParameterizedQuery(generateDeleteQuery(CartsListTable.table,
 					BinaryCondition.equalTo(CartsListTable.listIDCol, PARAM_MARK)), listID);
 
-			log.debug("cartCheckout: run query: " + copyStatement);
+			log.debug("cartCheckout: copy groceryList " + listID + " to history.\n by run query: " + copyStatement);
 			copyStatement.executeUpdate();
 
-			log.debug("cartCheckout: run query: " + deleteGroceryList);
+			log.debug("cartCheckout: delete groceryList " + listID + ".\n by run query: " + deleteGroceryList);
 			deleteGroceryList.executeUpdate();
 
-			log.debug("cartCheckout: run query: " + deleteCart);
+			log.debug("cartCheckout: disconnect cart " + cartID +".\n by run query: " + deleteCart);
 			deleteCart.executeUpdate();
 
 			// COMMIT transaction
@@ -1877,6 +1969,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void close() throws CriticalError {
+		
+		log.info("SQL Public close.");
 		try {
 			connection.close();
 		} catch (SQLException e) {
@@ -1888,34 +1982,34 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public String addManufacturer(Integer sessionID, String manufacturerName) throws CriticalError, ClientNotConnected {
 
+		log.info("SQL Public addManufacturer: manufacturer name: " + manufacturerName + " (SESSION: " + sessionID + " )");
+		
 		validateSessionEstablished(sessionID);
 
 		int $;
+		// START transaction
+		connectionStartTransaction();
 		try {
-			// START transaction
-			connection.setAutoCommit(false);
+			//WRITE part of transaction
+			//get "fresh" id for the new manufacturer
 			$ = allocateIDToTable(ManufacturerTable.table, ManufacturerTable.manufacturerIDCol);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new CriticalError();
-		}
 
-		String insertQuery = new InsertQuery(ManufacturerTable.table)
-				.addColumn(ManufacturerTable.manufacturerIDCol, PARAM_MARK)
-				.addColumn(ManufacturerTable.manufacturerNameCol, PARAM_MARK).validate() + "";
-
-		insertQuery.hashCode();
-
-		try {
+			String insertQuery = new InsertQuery(ManufacturerTable.table)
+					.addColumn(ManufacturerTable.manufacturerIDCol, PARAM_MARK)
+					.addColumn(ManufacturerTable.manufacturerNameCol, PARAM_MARK).validate() + "";
+	
+			insertQuery.hashCode();
+			
 			getParameterizedQuery(insertQuery, $, manufacturerName).executeUpdate();
 
 			// END transaction
-			connection.commit();
-			connection.setAutoCommit(true);
-		} catch (SQLException e) {
+			connectionCommitTransaction();
+		} catch (CriticalError | SQLException e) {
 			e.printStackTrace();
-			// if the creation failed - free the id
-			freeIDOfTable(ManufacturerTable.table, $);
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
 		}
 
 		return new Gson().toJson($);
@@ -1924,11 +2018,14 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void removeManufacturer(Integer sessionID, Manufacturer m)
 			throws CriticalError, ClientNotConnected, ManufacturerNotExist, ManufacturerStillUsed {
+		log.info("SQL Public removeManufacturer: manufacturer: " + m + " (SESSION: " + sessionID + " )");
+		
 		validateSessionEstablished(sessionID);
 
+		// START transaction
+		connectionStartTransaction();
 		try {
-			// START transaction
-			connection.setAutoCommit(false);
+			//READ part of transaction
 			if (!isManufacturerExist((int) m.getId()))
 				throw new ManufacturerNotExist();
 
@@ -1936,18 +2033,23 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			if (isSuchRowExist(ProductsCatalogTable.table, ProductsCatalogTable.manufacturerIDCol, m.getId()))
 				throw new ManufacturerStillUsed();
 
+			//WRITE part of transaction
 			// delete manufacturer
 			getParameterizedQuery(generateDeleteQuery(ManufacturerTable.table,
 					BinaryCondition.equalTo(ManufacturerTable.manufacturerIDCol, PARAM_MARK)), m.getId())
 							.executeUpdate();
 
+			//sign manufacturer's id as free
 			freeIDOfTable(ManufacturerTable.table, (int) m.getId());
 
 			// END transaction
-			connection.commit();
-			connection.setAutoCommit(true);
-		} catch (SQLException e) {
+			connectionCommitTransaction();
+		} catch (CriticalError | SQLException e) {
 			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
 		}
 
 	}
@@ -1955,14 +2057,18 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void editManufacturer(Integer sessionID, Manufacturer newManufacturer)
 			throws CriticalError, ClientNotConnected, ManufacturerNotExist {
+		log.info("SQL Public editManufacturer: edit to manufacturer: " + newManufacturer + " (SESSION: " + sessionID + " )");
+		
 		validateSessionEstablished(sessionID);
 
+		// START transaction
+		connectionStartTransaction();
 		try {
-			// START transaction
-			connection.setAutoCommit(false);
+			//READ part of transaction
 			if (!isManufacturerExist((int) newManufacturer.getId()))
 				throw new ManufacturerNotExist();
 
+			//WRITE part of transaction
 			// update manufacturer
 			UpdateQuery updateQuery = generateUpdateQuery(ManufacturerTable.table,
 					BinaryCondition.equalTo(ManufacturerTable.manufacturerIDCol, PARAM_MARK));
@@ -1972,44 +2078,53 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			getParameterizedQuery(updateQuery + "", newManufacturer.getId(), newManufacturer.getName()).executeUpdate();
 
 			// END transaction
-			connection.commit();
-			connection.setAutoCommit(true);
+			connectionCommitTransaction();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
 		}
 
 	}
 
 	@Override
 	public void logoutAllUsers() throws CriticalError {
-		PreparedStatement statement = getParameterizedQuery(generateDeleteQuery(CartsListTable.table));
+		log.info("SQL Public logoutAllUsers.");
+		// START transaction
+		connectionStartTransaction();
+		
+		PreparedStatement statement = null;
 		try {
+			//WRITE part of transaction
+			//disconnect all carts
+			statement = getParameterizedQuery(generateDeleteQuery(CartsListTable.table));
+			log.debug("logoutAllUsers: logout carts.\n by using query: " + statement);
 			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new CriticalError();
-		} finally {
 			closeResources(statement);
-		}
 
-		statement = getParameterizedQuery(generateDeleteQuery(GroceriesListsTable.table));
-		try {
+			//deletes all grocery lists
+			statement = getParameterizedQuery(generateDeleteQuery(GroceriesListsTable.table));
+			log.debug("logoutAllUsers: delete grocery lists.\n by using query: " + statement);
 			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new CriticalError();
-		} finally {
 			closeResources(statement);
-		}
 
-		statement = getParameterizedQuery(new UpdateQuery(WorkersTable.table)
-				.addSetClause(WorkersTable.sessionIDCol, SqlObject.NULL_VALUE).validate() + "");
-		try {
+			//disconnect all workers
+			statement = getParameterizedQuery(new UpdateQuery(WorkersTable.table)
+					.addSetClause(WorkersTable.sessionIDCol, SqlObject.NULL_VALUE).validate() + "");
+			log.debug("logoutAllUsers: logout workers.\n by using query: " + statement);
 			statement.executeUpdate();
+			closeResources(statement);
+			
+			// END transaction
+			connectionCommitTransaction();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
+			connectionEndTransaction();
 			closeResources(statement);
 		}
 
@@ -2017,18 +2132,21 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	@Override
 	public boolean isClientLoggedIn(Integer sessionID) throws CriticalError {
-
+		log.info("SQL Public isClientLoggedIn: sessionID: " + sessionID);
 		return isSessionEstablished(sessionID);
 	}
 
 	@Override
 	public boolean isWorkerLoggedIn(String username) throws CriticalError {
-
+		log.info("SQL Public isWorkerLoggedIn: worker name: " + username);
 		return isWorkerSessionEstablished(username);
 	}
 
 	@Override
 	public String cartRestoreGroceryList(Integer cartID) throws CriticalError, NoGroceryListToRestore {
+		
+		log.info("SQL Public cartRestoreGroceryList: restore for cart: " + cartID + " (SESSION: " + cartID + " )");
+		
 		if (!isCartSessionEstablished(cartID))
 			throw new NoGroceryListToRestore();
 
