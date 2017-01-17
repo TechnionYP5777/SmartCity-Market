@@ -1,13 +1,17 @@
 package BasicCommonClasses;
 
-/** ProductPackage - represents a package of the same products. 
- * All products have the same Expiration Date and located in the same location in the market.
+/**
+ * ProductPackage - represents a package of the same products. All products have
+ * the same Expiration Date and located in the same location in the market.
+ * 
  * @author Lior Ben Ami
- * @since 2016-12-09 */
+ * @since 2016-12-09
+ */
 public class ProductPackage {
 	SmartCode smartCode;
 	int amount;
-	//TODO: discuss if the location should be under control. maybe we want the package C'tor place it in the warehouse..
+	// TODO: discuss if the location should be under control. maybe we want the
+	// package C'tor place it in the warehouse..
 	Location location;
 
 	public ProductPackage(SmartCode smartCode, int amount, Location location) {
@@ -43,11 +47,11 @@ public class ProductPackage {
 	public void incrementAmount(int ¢) {
 		amount += ¢;
 	}
-	
+
 	public void decreaseOneAmount() {
 		amount = amount <= 0 ? 0 : amount - 1;
 	}
-	
+
 	@Override
 	public String toString(){
 		return "SmartCode: " + "[" + smartCode.toString() + "]" + ", amount: " + amount + ", location: " + "[" + location +"]";
@@ -80,7 +84,7 @@ public class ProductPackage {
 			return false;
 		return true;
 	}
-	
+
 	public boolean isValid() {
 		return smartCode.isValid() && amount > 0;
 	}
