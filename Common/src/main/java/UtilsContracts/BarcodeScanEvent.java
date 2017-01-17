@@ -2,13 +2,13 @@ package UtilsContracts;
 
 public class BarcodeScanEvent {
 	
-	String barcode;
+	long barcode;
 	
-	public BarcodeScanEvent(String barcode) {
+	public BarcodeScanEvent(long barcode) {
 		this.barcode = barcode;
 	}
 	
-	public String getBarcode() {
+	public long getBarcode() {
 		return barcode;
 	}
 

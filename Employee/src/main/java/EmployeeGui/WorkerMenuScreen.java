@@ -23,6 +23,7 @@ import GuiUtils.RadioButtonEnabler;
 import SMExceptions.SMException;
 import UtilsContracts.BarcodeScanEvent;
 import UtilsContracts.IBarcodeEventHandler;
+import UtilsContracts.SmartcodeScanEvent;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
 import javafx.beans.value.ChangeListener;
@@ -351,7 +352,15 @@ public class WorkerMenuScreen implements Initializable {
 
 	@Subscribe
 	public void barcodeScanned(BarcodeScanEvent ¢) {
-		barcodeTextField.setText(¢.getBarcode());
+		barcodeTextField.setText(Long.toString(¢.getBarcode()));
+		enableRunTheOperationButton();
+		searchBarcodePressed(null);
+	}
+	
+	@Subscribe
+	public void smartcoseScanned(SmartcodeScanEvent ¢) {
+		SmartCode smartcode = ¢.getSmarCode();
+		barcodeTextField.setText(Long.toString(smartcode.getBarcode()));
 		enableRunTheOperationButton();
 		searchBarcodePressed(null);
 	}

@@ -17,8 +17,11 @@ import javax.inject.Singleton;
 
 import com.google.common.eventbus.EventBus;
 
+import BasicCommonClasses.SmartCode;
+import SmartcodeParser.SmartcodeParser;
 import UtilsContracts.BarcodeScanEvent;
 import UtilsContracts.IBarcodeEventHandler;
+import UtilsContracts.SmartcodeScanEvent;
 
 @Singleton
 public class BarcodeEventHandler implements IBarcodeEventHandler {
@@ -45,12 +48,17 @@ public class BarcodeEventHandler implements IBarcodeEventHandler {
 	public class BarcodeListener implements Runnable {
 
         public void run() {
-        	for (String barcode = ""; !stopListening;)
+        	for (String code = ""; !stopListening;)
 				try {
 					Thread.sleep(5000);
-					barcode = new BufferedReader(new InputStreamReader(scannerSocket.accept().getInputStream()))
+					code = new BufferedReader(new InputStreamReader(scannerSocket.accept().getInputStream()))
 							.readLine();
-					eventBus.post(new BarcodeScanEvent(barcode));
+					SmartCode smartcode = SmartcodeParser.formCode(code);
+					if (smartcode.getExpirationDate() == null) {
+						eventBus.post(new BarcodeScanEvent(smartcode.getBarcode()));
+					} else {
+						eventBus.post(new SmartcodeScanEvent(smartcode));
+					}
 				} catch (IOException | InterruptedException e) {
 					e.printStackTrace();
 				}
