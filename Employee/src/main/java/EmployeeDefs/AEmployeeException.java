@@ -111,4 +111,13 @@ public class AEmployeeException extends SMException {
 
 		private static final long serialVersionUID = -1086760036316621806L;
 	}
+	
+	/**
+	 * Thrown when failed to receive respond from server.
+	 *
+	 */
+	public static class ConnectionFailure extends AEmployeeException {
+
+		private static final long serialVersionUID = -7116035947026187101L;
+	}
 }

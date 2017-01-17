@@ -1,6 +1,7 @@
 package EmployeeContracts;
 
 import BasicCommonClasses.ProductPackage;
+import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ProductAlreadyExistInCatalog;
@@ -25,8 +26,9 @@ public interface IManager extends IWorker {
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
 	 * @throws ProductAlreadyExistInCatalog 
+	 * @throws ConnectionFailure 
 	 */
-	void addProductToCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog;
+	void addProductToCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog, ConnectionFailure;
 	
 	/**
 	 * Manager removes product to catalog.
@@ -39,8 +41,9 @@ public interface IManager extends IWorker {
 	 * @throws CriticalError 
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
+	 * @throws ConnectionFailure 
 	 */
-	void removeProductFromCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductStillForSale, ProductNotExistInCatalog;
+	void removeProductFromCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductStillForSale, ProductNotExistInCatalog, ConnectionFailure;
 	
 	/**
 	 * Manager edits product to catalog.
@@ -53,6 +56,7 @@ public interface IManager extends IWorker {
 	 * @throws CriticalError 
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
+	 * @throws ConnectionFailure 
 	 */
-	void editProductFromCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog;
+	void editProductFromCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ConnectionFailure;
 }

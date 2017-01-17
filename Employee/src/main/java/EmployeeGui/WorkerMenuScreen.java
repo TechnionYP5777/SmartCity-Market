@@ -16,7 +16,6 @@ import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import EmployeeCommon.TempWorkerPassingData;
 import EmployeeContracts.IWorker;
-import EmployeeDefs.AEmployeeException;
 import EmployeeDefs.EmployeeGuiDefs;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
@@ -154,12 +153,9 @@ public class WorkerMenuScreen implements Initializable {
 		// defining behavior when stage/window is closed.
 		primeStage.setOnCloseRequest(event -> {
 			try {
-				if (worker.isServerReachable() && worker.isLoggedIn())
-					worker.logout();
+				worker.logout();
 			} catch (SMException e) {
-				if (e instanceof AEmployeeException.EmployeeNotConnected)
-					return;
-				EmployeeGuiExeptionHandler.handle(e);
+				/* Failed to reach server for logout, quit anyway */
 			}
 		});
 

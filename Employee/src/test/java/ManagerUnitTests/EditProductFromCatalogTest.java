@@ -21,6 +21,7 @@ import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import EmployeeContracts.IManager;
+import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
@@ -62,7 +63,7 @@ public class EditProductFromCatalogTest {
 		
 		try {
 			manager.editProductFromCatalog(pp);
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog e) {
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -83,7 +84,7 @@ public class EditProductFromCatalogTest {
 			manager.editProductFromCatalog(pp);
 			
 			fail();
-		} catch (CriticalError | EmployeeNotConnected | ProductNotExistInCatalog e) {
+		} catch (CriticalError | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure e) {
 			e.printStackTrace();
 			fail();
 		} catch (InvalidParameter ¢) {
@@ -105,7 +106,7 @@ public class EditProductFromCatalogTest {
 		
 		try {
 			manager.editProductFromCatalog(pp);
-		} catch (InvalidParameter | CriticalError | ProductNotExistInCatalog e) {
+		} catch (InvalidParameter | CriticalError | ProductNotExistInCatalog | ConnectionFailure e) {
 			e.printStackTrace();
 			fail();
 		} catch (EmployeeNotConnected ¢) {
@@ -127,7 +128,7 @@ public class EditProductFromCatalogTest {
 		
 		try {
 			manager.editProductFromCatalog(pp);
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected e) {
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			e.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog ¢) {

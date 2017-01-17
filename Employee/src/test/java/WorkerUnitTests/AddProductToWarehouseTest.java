@@ -20,6 +20,7 @@ import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import EmployeeContracts.IWorker;
+import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
@@ -62,7 +63,7 @@ public class AddProductToWarehouseTest {
 
 		try {
 			worker.addProductToWarehouse(pp);
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog ¢) {
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		}
@@ -85,7 +86,7 @@ public class AddProductToWarehouseTest {
 			worker.addProductToWarehouse(pp);
 			
 			fail();
-		} catch (CriticalError | EmployeeNotConnected | ProductNotExistInCatalog ¢) {
+		} catch (CriticalError | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (InvalidParameter ¢) {
@@ -110,7 +111,7 @@ public class AddProductToWarehouseTest {
 			worker.addProductToWarehouse(pp);
 			
 			fail();
-		} catch (CriticalError | InvalidParameter | ProductNotExistInCatalog ¢) {
+		} catch (CriticalError | InvalidParameter | ProductNotExistInCatalog | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (EmployeeNotConnected ¢) {
@@ -135,7 +136,7 @@ public class AddProductToWarehouseTest {
 			worker.addProductToWarehouse(pp);
 			
 			fail();
-		} catch (CriticalError | InvalidParameter | EmployeeNotConnected ¢) {
+		} catch (CriticalError | InvalidParameter | EmployeeNotConnected | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog ¢) {

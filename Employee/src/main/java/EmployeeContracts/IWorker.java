@@ -6,6 +6,7 @@ import BasicCommonClasses.ProductPackage;
 import CommonDefs.CLIENT_TYPE;
 import EmployeeDefs.AEmployeeException.AmountBiggerThanAvailable;
 import EmployeeDefs.AEmployeeException.AuthenticationError;
+import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
@@ -37,8 +38,9 @@ public interface IWorker {
 	 * @throws EmployeeAlreadyConnected 
 	 * @throws CriticalError 
 	 * @throws InvalidParameter 
+	 * @throws ConnectionFailure 
 	 */
-	CLIENT_TYPE login(String username, String password) throws InvalidParameter, CriticalError, EmployeeAlreadyConnected, AuthenticationError;
+	CLIENT_TYPE login(String username, String password) throws InvalidParameter, CriticalError, EmployeeAlreadyConnected, AuthenticationError, ConnectionFailure;
 	
 	/**
 	 * logout method use for the worker to logout from the server.
@@ -48,8 +50,9 @@ public interface IWorker {
 	 * @throws CriticalError 
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
+	 * @throws ConnectionFailure 
 	 */
-	void logout() throws InvalidParameter, CriticalError, EmployeeNotConnected;
+	void logout() throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure;
 	
 	
 	
@@ -63,8 +66,9 @@ public interface IWorker {
 	 * @throws CriticalError 
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
+	 * @throws ConnectionFailure 
 	 */
-	CatalogProduct viewProductFromCatalog(long barcode) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog;
+	CatalogProduct viewProductFromCatalog(long barcode) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ConnectionFailure;
 
 	/**
 	 * worker add product package to warehouse.
@@ -76,8 +80,9 @@ public interface IWorker {
 	 * @throws CriticalError 
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
+	 * @throws ConnectionFailure 
 	 */
-	void addProductToWarehouse(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog;
+	void addProductToWarehouse(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ConnectionFailure;
 	
 	/**
 	 * worker move product package from warehouse to shelves.
@@ -91,8 +96,9 @@ public interface IWorker {
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
 	 * @throws ProductPackageDoesNotExist 
+	 * @throws ConnectionFailure 
 	 */
-	void placeProductPackageOnShelves(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, AmountBiggerThanAvailable, ProductPackageDoesNotExist;
+	void placeProductPackageOnShelves(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, AmountBiggerThanAvailable, ProductPackageDoesNotExist, ConnectionFailure;
 	
 	/**
 	 * worker remove product package from store (warehouse or shelves).
@@ -106,8 +112,9 @@ public interface IWorker {
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
 	 * @throws ProductPackageDoesNotExist 
+	 * @throws ConnectionFailure 
 	 */
-	void removeProductPackageFromStore(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, AmountBiggerThanAvailable, ProductPackageDoesNotExist;
+	void removeProductPackageFromStore(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, AmountBiggerThanAvailable, ProductPackageDoesNotExist, ConnectionFailure;
 	
 	/**
 	 * worker get amount of ProductPackage from store (warehouse or shelves).
@@ -119,16 +126,18 @@ public interface IWorker {
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
 	 * @throws ProductPackageDoesNotExist 
+	 * @throws ConnectionFailure 
 	 */
-	int getProductPackageAmount(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductPackageDoesNotExist;
+	int getProductPackageAmount(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductPackageDoesNotExist, ConnectionFailure;
 	
 	/**
 	 * worker requests to know if he is logged in.
 	 * 
 	 * @return boolean 
 	 * @throws CriticalError 
+	 * @throws ConnectionFailure 
 	 */
-	public boolean isLoggedIn() throws CriticalError; 
+	public boolean isLoggedIn() throws CriticalError, ConnectionFailure; 
 	
 	/**
 	 * worker wants to know if server is reachable before sending requests.

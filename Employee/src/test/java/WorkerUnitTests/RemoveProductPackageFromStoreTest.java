@@ -22,6 +22,7 @@ import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import EmployeeContracts.IWorker;
 import EmployeeDefs.AEmployeeException.AmountBiggerThanAvailable;
+import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
@@ -68,7 +69,7 @@ public class RemoveProductPackageFromStoreTest {
 			worker.removeProductPackageFromStore(pp);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected |
 				ProductNotExistInCatalog | AmountBiggerThanAvailable |
-				ProductPackageDoesNotExist ¢) {
+				ProductPackageDoesNotExist | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		}
@@ -93,7 +94,7 @@ public class RemoveProductPackageFromStoreTest {
 			fail();
 		} catch (CriticalError | EmployeeNotConnected |
 				ProductNotExistInCatalog | AmountBiggerThanAvailable |
-				ProductPackageDoesNotExist ¢) {
+				ProductPackageDoesNotExist | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (InvalidParameter  ¢) {
@@ -120,7 +121,7 @@ public class RemoveProductPackageFromStoreTest {
 			fail();
 		} catch (CriticalError | InvalidParameter | 
 				ProductNotExistInCatalog | AmountBiggerThanAvailable |
-				ProductPackageDoesNotExist ¢) {
+				ProductPackageDoesNotExist | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (EmployeeNotConnected ¢) {
@@ -147,7 +148,7 @@ public class RemoveProductPackageFromStoreTest {
 			fail();
 		} catch (CriticalError | InvalidParameter | 
 				ProductNotExistInCatalog | EmployeeNotConnected  |
-				ProductPackageDoesNotExist ¢) {
+				ProductPackageDoesNotExist | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch ( AmountBiggerThanAvailable ¢) {
@@ -174,7 +175,7 @@ public class RemoveProductPackageFromStoreTest {
 			fail();
 		} catch (CriticalError | InvalidParameter | 
 				AmountBiggerThanAvailable | EmployeeNotConnected  |
-				ProductPackageDoesNotExist ¢) {
+				ProductPackageDoesNotExist | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog ¢) {
@@ -201,7 +202,7 @@ public class RemoveProductPackageFromStoreTest {
 			fail();
 		} catch (CriticalError | InvalidParameter | 
 				AmountBiggerThanAvailable | EmployeeNotConnected  |
-				ProductNotExistInCatalog ¢) {
+				ProductNotExistInCatalog | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (ProductPackageDoesNotExist ¢) {

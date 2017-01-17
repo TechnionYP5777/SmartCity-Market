@@ -45,7 +45,7 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 		/* Setting preloader */
         LauncherImpl.launchApplication(EmployeeApplicationScreen.class, EmployeeGuiPreloader.class, args);
 
-		launch(args);
+        launch(args);
 	}
 
 }

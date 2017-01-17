@@ -37,6 +37,8 @@ public class EmployeeGuiDefs {
 	
 	public static final String productCapacityIsNotEnoughMsg = "There are not enough items of this product";
 	
+	public static final String connectionFailureMsg = "Failed to send respond to server";
+	
 	public static final String productPackageDoesNotExistMsg = "There is no such product package!";
 	
 	public static final String criticalErrorMsg = "Please contact SmartMarket support at smart.market.cs@gmail.com";

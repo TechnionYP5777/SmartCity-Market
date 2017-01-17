@@ -19,6 +19,7 @@ import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import EmployeeContracts.IWorker;
+import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
@@ -62,7 +63,7 @@ public class ViewProductFromCatalogTest {
 
 		try {
 			testCatalogProduct = worker.viewProductFromCatalog(1234567890);
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog ¢) {
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		}
@@ -89,7 +90,7 @@ public class ViewProductFromCatalogTest {
 			worker.viewProductFromCatalog(1234567890);
 			
 			fail();
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected ¢) {
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog e) {
@@ -113,7 +114,7 @@ public class ViewProductFromCatalogTest {
 			worker.viewProductFromCatalog(1234567890);
 			
 			fail();
-		} catch (InvalidParameter  | CriticalError | ProductNotExistInCatalog ¢) {
+		} catch (InvalidParameter  | CriticalError | ProductNotExistInCatalog | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (EmployeeNotConnected e) {

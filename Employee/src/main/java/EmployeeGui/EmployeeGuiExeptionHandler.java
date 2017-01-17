@@ -23,9 +23,13 @@ public class EmployeeGuiExeptionHandler extends GuiExceptionHandler {
 		else if (¢ instanceof AmountBiggerThanAvailable)
 			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.productOperationFailureTitle, null,
 					EmployeeGuiDefs.productCapacityIsNotEnoughMsg);
+		else if (¢ instanceof ConnectionFailure)
+			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.productOperationFailureTitle, null,
+					EmployeeGuiDefs.connectionFailureMsg);
 		else if (!(¢ instanceof ProductPackageDoesNotExist))
 			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.criticalErrorTitle, null,
 					EmployeeGuiDefs.criticalErrorMsg);
+		
 		else
 			DialogMessagesService.showErrorDialog(EmployeeGuiDefs.productOperationFailureTitle, null,
 					EmployeeGuiDefs.productPackageDoesNotExistMsg);

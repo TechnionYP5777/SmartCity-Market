@@ -16,6 +16,7 @@ import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import EmployeeContracts.IWorker;
+import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
@@ -54,7 +55,7 @@ public class LogoutTest {
 		
 		try {
 			worker.logout();
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected ¢) {
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		}
@@ -76,7 +77,7 @@ public class LogoutTest {
 			worker.logout();
 			
 			fail();
-		} catch (InvalidParameter | CriticalError ¢) {
+		} catch (InvalidParameter | CriticalError | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (EmployeeNotConnected e) {

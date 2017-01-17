@@ -22,6 +22,7 @@ import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import EmployeeContracts.IWorker;
+import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ProductPackageDoesNotExist;
@@ -67,7 +68,7 @@ public class GetProductPackageAmountTest {
 		try {
 			retAmmount = worker.getProductPackageAmount(pp);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | 
-				ProductPackageDoesNotExist ¢) {
+				ProductPackageDoesNotExist | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		}
@@ -93,7 +94,7 @@ public class GetProductPackageAmountTest {
 			
 			fail();
 		} catch (CriticalError | EmployeeNotConnected | 
-				ProductPackageDoesNotExist ¢) {
+				ProductPackageDoesNotExist | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (InvalidParameter ¢) {
@@ -120,7 +121,7 @@ public class GetProductPackageAmountTest {
 			
 			fail();
 		} catch (CriticalError | InvalidParameter | 
-				ProductPackageDoesNotExist ¢) {
+				ProductPackageDoesNotExist | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (EmployeeNotConnected  ¢) {
@@ -146,7 +147,7 @@ public class GetProductPackageAmountTest {
 			
 			fail();
 		} catch (CriticalError | InvalidParameter | 
-				EmployeeNotConnected ¢) {
+				EmployeeNotConnected | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (ProductPackageDoesNotExist ¢) {

@@ -19,6 +19,7 @@ import ClientServerApi.ResultDescriptor;
 import CommonDefs.CLIENT_TYPE;
 import EmployeeContracts.IWorker;
 import EmployeeDefs.AEmployeeException.AuthenticationError;
+import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.EmployeeAlreadyConnected;
@@ -56,7 +57,7 @@ public class LoginTest {
 		}
 		try {
 			clType = worker.login("test", "test");
-		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected | AuthenticationError ¢) {
+		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected | AuthenticationError | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		}
@@ -81,7 +82,7 @@ public class LoginTest {
 			worker.login("test", "test");
 			
 			fail();
-		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected ¢) {
+		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (AuthenticationError e) {
@@ -105,7 +106,7 @@ public class LoginTest {
 			worker.login("test", "test");
 			
 			fail();
-		} catch (InvalidParameter | CriticalError | AuthenticationError ¢) {
+		} catch (InvalidParameter | CriticalError | AuthenticationError | ConnectionFailure ¢) {
 			¢.printStackTrace();
 			fail();
 		} catch (EmployeeAlreadyConnected e) {

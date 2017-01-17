@@ -1,7 +1,5 @@
 package EmployeeImplementations;
 
-import java.net.SocketTimeoutException;
-
 import BasicCommonClasses.ProductPackage;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
@@ -9,6 +7,7 @@ import EmployeeContracts.IManager;
 import EmployeeDefs.WorkerDefs;
 import EmployeeDefs.AEmployeeException.AmountBiggerThanAvailable;
 import EmployeeDefs.AEmployeeException.AuthenticationError;
+import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidCommandDescriptor;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
@@ -36,22 +35,17 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public void addProductToCatalog(ProductPackage p) throws InvalidParameter,
-		CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog {
+		CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog, ConnectionFailure {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
 		log.info("Creating addProductToCatalog command wrapper with product package: " + p);
 		
-		String serverResponse;
-		try {
-			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(clientId, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
-							Serialization.serialize(p))).serialize());
-		} catch (SocketTimeoutException e) {
-			log.fatal("Critical bug: failed to get respond from server");
-			
-			throw new CriticalError();
-		}
+		String serverResponse = sendRequestWithRespondToServer(
+				(new CommandWrapper(clientId, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
+						Serialization.serialize(p))).serialize());
+		
 		terminateCommunication();
+		
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
 		
 		try {
@@ -66,21 +60,16 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public void removeProductFromCatalog(ProductPackage p) throws InvalidParameter,
-		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ProductStillForSale {
+		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ProductStillForSale, ConnectionFailure {
 		
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Creating removeProductFromCatalog command wrapper with product package: " + p);
-		String serverResponse;
-		try {
-			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(clientId, CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(p))).serialize());
-		} catch (SocketTimeoutException e) {
-			log.fatal("Critical bug: failed to get respond from server");
-			
-			throw new CriticalError();
-		}
+		String serverResponse = sendRequestWithRespondToServer(
+				(new CommandWrapper(clientId, CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
+						Serialization.serialize(p))).serialize());
+		
 		terminateCommunication();
+		
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
 		
 		try {
@@ -96,20 +85,14 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public void editProductFromCatalog(ProductPackage p) throws InvalidParameter,
-		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog {
+		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ConnectionFailure {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		
 		log.info("Creating editProductFromCatalog command wrapper with product package: " + p);
-		String serverResponse;
-		try {
-			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(clientId, CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(p))).serialize());
-		} catch (SocketTimeoutException e) {
-			log.fatal("Critical bug: failed to get respond from server");
-			
-			throw new CriticalError();
-		}
+		String serverResponse = sendRequestWithRespondToServer(
+				(new CommandWrapper(clientId, CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
+						Serialization.serialize(p))).serialize());
+		
 		terminateCommunication();
 
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);

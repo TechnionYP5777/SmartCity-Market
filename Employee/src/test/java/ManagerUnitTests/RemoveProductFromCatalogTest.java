@@ -21,6 +21,7 @@ import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import EmployeeContracts.IManager;
+import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
@@ -65,7 +66,7 @@ public class RemoveProductFromCatalogTest {
 		try {
 			manager.removeProductFromCatalog(pp);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductStillForSale
-				| ProductNotExistInCatalog e) {
+				| ProductNotExistInCatalog | ConnectionFailure e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -89,7 +90,7 @@ public class RemoveProductFromCatalogTest {
 			
 			fail();
 		} catch (CriticalError | EmployeeNotConnected | ProductStillForSale
-				| ProductNotExistInCatalog e) {
+				| ProductNotExistInCatalog | ConnectionFailure e) {
 			e.printStackTrace();
 			fail();
 		} catch (InvalidParameter e) {
@@ -115,7 +116,7 @@ public class RemoveProductFromCatalogTest {
 			
 			fail();
 		} catch (InvalidParameter | CriticalError | ProductStillForSale
-				| ProductNotExistInCatalog e) {
+				| ProductNotExistInCatalog | ConnectionFailure e) {
 			e.printStackTrace();
 			fail();
 		} catch (EmployeeNotConnected e) {
@@ -140,7 +141,7 @@ public class RemoveProductFromCatalogTest {
 			manager.removeProductFromCatalog(pp);
 			
 			fail();
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductStillForSale e) {
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductStillForSale | ConnectionFailure e) {
 			e.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog e) {
@@ -165,7 +166,7 @@ public class RemoveProductFromCatalogTest {
 			manager.removeProductFromCatalog(pp);
 			
 			fail();
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog e) {
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure e) {
 			e.printStackTrace();
 			fail();
 		} catch (ProductStillForSale e) {

@@ -1,7 +1,6 @@
 package EmployeeCommon;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
@@ -10,6 +9,7 @@ import ClientServerApi.ResultDescriptor;
 import EmployeeDefs.AEmployeeException;
 import EmployeeDefs.AEmployeeException.AmountBiggerThanAvailable;
 import EmployeeDefs.AEmployeeException.AuthenticationError;
+import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidCommandDescriptor;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
@@ -41,14 +41,14 @@ public abstract class AEmployee {
 	protected String username;
 	protected String password;
 
-	protected void establishCommunication(int port, String host, int timeout) {
+	protected void establishCommunication(int port, String host, int timeout) throws ConnectionFailure {
 		log.info("Establish communication with server: port: " + WorkerDefs.port + " host: " + WorkerDefs.host);
 		try {
 			clientRequestHandler.createSocket(port, host, timeout);
 		} catch (UnknownHostException | RuntimeException e) {
 			log.fatal("Creating communication with the server encounter severe fault: " + e.getMessage());
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
+
+			throw new ConnectionFailure();
 		}
 	}
 
@@ -57,20 +57,18 @@ public abstract class AEmployee {
 			clientRequestHandler.finishRequest();
 	}
 
-	protected String sendRequestWithRespondToServer(String request) throws SocketTimeoutException {
+	protected String sendRequestWithRespondToServer(String request) throws ConnectionFailure {
 		log.info("Sending command to server");
 		try {
 			return this.clientRequestHandler.sendRequestWithRespond(request); 
 		} catch (java.net.SocketTimeoutException e) {
-			e.printStackTrace();
 			log.fatal("Sending logout command to server encounter sever fault : " + e.getMessage());
 			terminateCommunication();
-			throw new java.net.SocketTimeoutException(e.getMessage());
+			throw new ConnectionFailure();
 		} catch (IOException e) {
-			e.printStackTrace();
 			log.fatal("Sending logout command to server encounter sever fault : " + e.getMessage());
 			terminateCommunication();
-			throw new RuntimeException(e.getMessage());
+			throw new ConnectionFailure();
 		}
 	}
 
