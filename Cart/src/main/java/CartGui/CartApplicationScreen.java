@@ -2,7 +2,9 @@ package CartGui;
 
 import org.apache.log4j.PropertyConfigurator;
 
+import CartDI.CartDiConfigurator;
 import GuiUtils.AbstractApplicationScreen;
+import UtilsImplementations.InjectionFactory;
 import javafx.stage.Stage;
 
 /**
@@ -16,6 +18,7 @@ public class CartApplicationScreen extends AbstractApplicationScreen {
 	public void start(Stage primaryStage) {
 		try {
 			stage = primaryStage;
+			InjectionFactory.createInjector(new CartDiConfigurator());
 			setScene("/CartWelcomeScreen/CartWelcomeScreen.fxml");
 			stage.setTitle("Smart Market Beta");
 			stage.setMaximized(true);

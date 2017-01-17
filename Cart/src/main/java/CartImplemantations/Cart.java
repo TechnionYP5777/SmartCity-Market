@@ -112,12 +112,9 @@ public class Cart extends ACart implements ICart {
 					CommandDescriptor.LOGIN, Serialization.serialize(new Login(username, password)))).serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
-			
 			throw new CriticalError();
 		}
-		
 		terminateCommunication();	
-		
 		try {
 			$ = CommandWrapper.deserialize(serverResponse);
 		} catch (Exception e1) {

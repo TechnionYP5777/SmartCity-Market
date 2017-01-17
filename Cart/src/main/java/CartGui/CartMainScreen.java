@@ -97,7 +97,7 @@ public class CartMainScreen implements Initializable {
 	
 	@FXML
 	public void removeProductButtonPressed(ActionEvent __) {
-		waitForScannerEvenet();
+		waitForScannerEvent();
 		SmartCode sc = lastScannedSmartCode;
 		smartCodeLocker.unlock();
 		//todo: continue from here
@@ -106,7 +106,7 @@ public class CartMainScreen implements Initializable {
 	
 	@FXML
 	public void addProductButtonPressed(ActionEvent __) {
-		waitForScannerEvenet();
+		waitForScannerEvent();
 		SmartCode sc = lastScannedSmartCode;
 		smartCodeLocker.unlock();
 		//todo: continue from here
@@ -143,8 +143,7 @@ public class CartMainScreen implements Initializable {
 
 	}
 	
-
-	private void waitForScannerEvenet() {
+	private void waitForScannerEvent() {
 		// TODO Auto-generated method stub
 		
 	}

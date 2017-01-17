@@ -63,7 +63,7 @@ public class CartLoginScreen implements Initializable {
 
 	@FXML
 	private void loginButtonPressed(ActionEvent __) {
-		ICart cart = InjectionFactory.getInstance(Cart.class, new CartDiConfigurator());
+		ICart cart = InjectionFactory.getInstance(Cart.class);
 		try {
 			cart.login(username, password);
 		} catch (CriticalError e) {
