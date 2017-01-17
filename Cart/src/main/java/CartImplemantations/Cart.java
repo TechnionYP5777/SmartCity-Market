@@ -122,7 +122,7 @@ public class Cart extends ACart implements ICart {
 		}
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | InvalidParameter| CriticalError | CartNotConnected |
+		} catch (InvalidCommandDescriptor | InvalidParameter | CartNotConnected |
 				ProductNotInCart | AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			¢.printStackTrace();
@@ -151,7 +151,7 @@ public class Cart extends ACart implements ICart {
 		
 		try {
 			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
-		} catch (InvalidCommandDescriptor | InvalidParameter| CriticalError |
+		} catch (InvalidCommandDescriptor | InvalidParameter |
 				ProductNotInCart | AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			¢.printStackTrace();
@@ -181,7 +181,7 @@ public class Cart extends ACart implements ICart {
 		}
 		try {
 			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
-		} catch (InvalidCommandDescriptor | InvalidParameter| CriticalError |
+		} catch (InvalidCommandDescriptor | InvalidParameter |
 				ProductNotInCart | AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			¢.printStackTrace();
@@ -210,7 +210,7 @@ public class Cart extends ACart implements ICart {
 		commandWrapper = CommandWrapper.deserialize(serverResponse);
 		try {
 			resultDescriptorHandler(commandWrapper.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | InvalidParameter| CriticalError |
+		} catch (InvalidCommandDescriptor | InvalidParameter |
 				ProductNotInCart | AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | 
 				GroceryListIsEmpty | AuthenticationError ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
@@ -238,7 +238,7 @@ public class Cart extends ACart implements ICart {
 		commandWrapper = CommandWrapper.deserialize(serverResponse);
 		try {
 			resultDescriptorHandler(commandWrapper.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | InvalidParameter| CriticalError |
+		} catch (InvalidCommandDescriptor | InvalidParameter |
 				 AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | 
 				GroceryListIsEmpty | AuthenticationError ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
@@ -281,7 +281,7 @@ public class Cart extends ACart implements ICart {
 		commandWrapper = CommandWrapper.deserialize(serverResponse);
 		try {
 			resultDescriptorHandler(commandWrapper.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | InvalidParameter| CriticalError |
+		} catch (InvalidCommandDescriptor | InvalidParameter |
 				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductNotInCart | 
 				GroceryListIsEmpty | AuthenticationError ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
