@@ -3,15 +3,18 @@ package CartGui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import CartContracts.ACartExceptions.AuthenticationError;
+import CartContracts.ACartExceptions.CriticalError;
 import CartContracts.ICart;
 import CartDI.CartDiConfigurator;
 import CartImplemantations.Cart;
 import GuiUtils.AbstractApplicationScreen;
-import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -63,12 +66,22 @@ public class CartLoginScreen implements Initializable {
 		ICart cart = InjectionFactory.getInstance(Cart.class, new CartDiConfigurator());
 		try {
 			cart.login(username, password);
-		} catch (SMException e) {
-			//todo: handler
+		} catch (CriticalError e) {
+			Alert alert = new Alert(AlertType.ERROR , "A problem had occured. Please Try again or let us know if it continues.");
+			alert.showAndWait();
+			return;
+		} catch (AuthenticationError e) {
+			Alert alert = new Alert(AlertType.ERROR , "Wrong user name or password.");
+			alert.showAndWait();
+			return;
+		}
+		catch (Exception e) {
+			Alert alert = new Alert(AlertType.ERROR , e.toString());
+			alert.showAndWait();
+			return;
 		}
 		TempCartPassingData.cart = cart;
 		AbstractApplicationScreen.setScene("/CartMainScreen/CartMainScreen.fxml");
-
 	}
 
 	private void enableLoginButtonCheck() {

@@ -3,6 +3,8 @@
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
 
+import com.google.inject.Inject;
+
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.GroceryList;
@@ -16,6 +18,7 @@ import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import CommonDefs.GroceryListExceptions.AmountIsBiggerThanAvailable;
 import CommonDefs.GroceryListExceptions.ProductNotInList;
+import UtilsContracts.IClientRequestHandler;
 import CartContracts.ACartExceptions.AmountBiggerThanAvailable;
 import CartContracts.ACartExceptions.AuthenticationError;
 import CartContracts.ACartExceptions.CartNotConnected;
@@ -31,14 +34,18 @@ import UtilsImplementations.Serialization;
  * @since 2017-01-02
  */
 public class Cart extends ACart implements ICart {
-
+	@Inject
+	public Cart(IClientRequestHandler clientRequestHandler) {
+		this.clientRequestHandler = clientRequestHandler;
+	}
+	
 	GroceryList groceryList = new GroceryList();
 	/**
 	 * inner cache, same data as the groceryList, but use CartProduct. 
 	 */
 	HashMap<SmartCode, CartProduct> cartProductCache = new HashMap<SmartCode, CartProduct>();
 	double totalSum;
-	
+
 	private void loadCartProductCacheAndUpdateTotalSum() throws CriticalError, CartNotConnected {
 		for (HashMap.Entry<SmartCode, ProductPackage> entry : groceryList.getList().entrySet()) {
 			ProductPackage productPackage = entry.getValue();
@@ -97,8 +104,8 @@ public class Cart extends ACart implements ICart {
 
 	public void login(String username, String password) throws CriticalError, AuthenticationError {
 		CommandWrapper $ = null;
-		establishCommunication(CartDefs.port, CartDefs.host, CartDefs.timeout);
 		log.info("Creating login command wrapper for cart");
+		establishCommunication(CartDefs.port, CartDefs.host, CartDefs.timeout);
 		String serverResponse = null;
 		try {
 			serverResponse = sendRequestWithRespondToServer((new CommandWrapper(CartDefs.loginCommandSenderId,
