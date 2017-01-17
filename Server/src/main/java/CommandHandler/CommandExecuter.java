@@ -70,7 +70,7 @@ public class CommandExecuter {
 
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
-			outCommandWrapper.setSenderID((c.workerLogin(login.getUserName(), login.getPassword())));
+			outCommandWrapper.setSenderID((c.login(login.getUserName(), login.getPassword())));
 
 			try {
 				outCommandWrapper.setData(c.getClientType(outCommandWrapper.getSenderID()));
@@ -127,10 +127,9 @@ public class CommandExecuter {
 		}
 
 		try {
-			//TODO Noam - Please change workerLogout to logout and allow to cart to logout as cart  
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 			
-			c.workerLogout(inCommandWrapper.getSenderID(), username);
+			c.logout(inCommandWrapper.getSenderID(), username);
 
 			log.info("Logout command succeded with sender ID " + inCommandWrapper.getSenderID());
 		} catch (ClientNotConnected e) {

@@ -67,7 +67,7 @@ public class SQLDatabaseConnectionTest {
 
 		int session = 0;
 		try {
-			session = sqlConnection.workerLogin("admin", "admin");
+			session = sqlConnection.login("admin", "admin");
 
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class SQLDatabaseConnectionTest {
 		}
 
 		try {
-			sqlConnection.workerLogout(session, "admin");
+			sqlConnection.logout(session, "admin");
 		} catch (CriticalError | ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
@@ -89,16 +89,16 @@ public class SQLDatabaseConnectionTest {
 
 		int session = 0;
 		try {
-			session = sqlConnection.workerLogin("admin", "admin");
+			session = sqlConnection.login("admin", "admin");
 			sqlConnection.logoutAllUsers();
-			session = sqlConnection.workerLogin("admin", "admin");
+			session = sqlConnection.login("admin", "admin");
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
 			e.printStackTrace();
 			fail();
 		}
 
 		try {
-			sqlConnection.workerLogout(session, "admin");
+			sqlConnection.logout(session, "admin");
 		} catch (CriticalError | ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
@@ -563,7 +563,7 @@ public class SQLDatabaseConnectionTest {
 
 		int session = 0;
 		try {
-			session = sqlConnection.workerLogin("Cart", "");
+			session = sqlConnection.login("Cart", "");
 			assertTrue(sqlConnection.isClientLoggedIn(session));
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
 			e.printStackTrace();
@@ -571,7 +571,7 @@ public class SQLDatabaseConnectionTest {
 		}
 
 		try {
-			sqlConnection.workerLogout(session, "Cart");
+			sqlConnection.logout(session, "Cart");
 			assertFalse(sqlConnection.isClientLoggedIn(session));
 		} catch (CriticalError | ClientNotConnected e) {
 			e.printStackTrace();
@@ -587,7 +587,7 @@ public class SQLDatabaseConnectionTest {
 		int session = 0;
 
 		try {
-			session = sqlConnection.workerLogin("Cart", "");
+			session = sqlConnection.login("Cart", "");
 			assertTrue(sqlConnection.isClientLoggedIn(session));
 			assertEquals(new Gson().toJson(CLIENT_TYPE.CART), sqlConnection.getClientType(session));
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded
@@ -597,7 +597,7 @@ public class SQLDatabaseConnectionTest {
 		}
 
 		try {
-			sqlConnection.workerLogout(session, "Cart");
+			sqlConnection.logout(session, "Cart");
 			assertFalse(sqlConnection.isClientLoggedIn(session));
 		} catch (CriticalError | ClientNotConnected e) {
 			e.printStackTrace();

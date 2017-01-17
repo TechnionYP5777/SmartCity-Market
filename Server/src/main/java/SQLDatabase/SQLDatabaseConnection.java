@@ -1422,7 +1422,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * java.lang.String)
 	 */
 	@Override
-	public int workerLogin(String username, String password)
+	public int login(String username, String password)
 			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
 
 		log.info("SQL Public workerLogin: Worker trying to connect as: " + username);
@@ -1464,7 +1464,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * java.lang.String)
 	 */
 	@Override
-	public void workerLogout(Integer sessionID, String username) throws ClientNotConnected, CriticalError {
+	public void logout(Integer sessionID, String username) throws ClientNotConnected, CriticalError {
 
 		log.info("SQL Public workerLogout: Client " + username + " trying to logout (SESSION: " + sessionID + " )");
 

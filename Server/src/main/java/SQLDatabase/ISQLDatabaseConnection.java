@@ -21,12 +21,12 @@ import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 
 public interface ISQLDatabaseConnection {
 
-	int workerLogin(String username, String password)
+	int login(String username, String password)
 			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded;
 
 	String getClientType(Integer sessionID) throws ClientNotConnected, CriticalError;
 
-	void workerLogout(Integer sessionID, String username) throws ClientNotConnected, CriticalError;
+	void logout(Integer sessionID, String username) throws ClientNotConnected, CriticalError;
 
 	boolean isClientLoggedIn(Integer sessionID) throws CriticalError;
 
