@@ -32,7 +32,7 @@ public abstract class AbstractApplicationScreen extends Application {
 	public static double stageWidth = GuiDefs.stageWidth;
 	
 	// Just a counter to create some delay while showing preloader.
-    private static final int COUNT_LIMIT = 1000;
+    private static final int COUNT_LIMIT = 500;
 
     private static int stepCount = 1;
 
