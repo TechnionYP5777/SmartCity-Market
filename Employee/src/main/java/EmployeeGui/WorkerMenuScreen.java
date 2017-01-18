@@ -331,15 +331,7 @@ public class WorkerMenuScreen implements Initializable {
 	private void runTheOperationButtonPressed(ActionEvent __) {
 
 		SmartCode smartcode = new SmartCode(Long.parseLong(barcodeTextField.getText()), datePicker.getValue());
-		/*
-		 * TODO - find what's wrong with using getValue on the spinner. it keeps
-		 * throwing exception about not being able to case int to doulbe (or the
-		 * opposite)
-		 */
-
-		// int amountVal = editPackagesAmountSpinner.getValue();
-		int amountVal = 1;
-
+		int amountVal = editPackagesAmountSpinner.getValue();
 		try {
 			if (addPakageToWarhouseRadioButton.isSelected()) {
 
