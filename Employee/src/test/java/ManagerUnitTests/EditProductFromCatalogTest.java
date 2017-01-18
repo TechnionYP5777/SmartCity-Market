@@ -3,7 +3,6 @@ package ManagerUnitTests;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.time.LocalDate;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
@@ -13,10 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import BasicCommonClasses.Location;
-import BasicCommonClasses.PlaceInMarket;
-import BasicCommonClasses.ProductPackage;
-import BasicCommonClasses.SmartCode;
+import BasicCommonClasses.CatalogProduct;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
@@ -46,8 +42,7 @@ public class EditProductFromCatalogTest {
 		manager = new Manager(clientRequestHandler);
 	}
 	
-	static ProductPackage pp = new ProductPackage(new SmartCode(111,LocalDate.now()), 
-			5, new Location(1,1,PlaceInMarket.WAREHOUSE));
+	static CatalogProduct catalogProduct = new CatalogProduct(0, "Shoko", null, null, null, 1.5, null, null);
 	
 	@Test
 	public void EditProductFromCatalogSuccesfulTest() {
@@ -55,14 +50,14 @@ public class EditProductFromCatalogTest {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
 					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
 							CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(pp)).serialize())))
+							Serialization.serialize(catalogProduct)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
 			fail();
 		}
 		
 		try {
-			manager.editProductFromCatalog(pp);
+			manager.editProductFromCatalog(catalogProduct);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure e) {
 			e.printStackTrace();
 			fail();
@@ -75,13 +70,13 @@ public class EditProductFromCatalogTest {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
 					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
 							CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(pp)).serialize())))
+							Serialization.serialize(catalogProduct)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException e) {
 			fail();
 		}
 		try {
-			manager.editProductFromCatalog(pp);
+			manager.editProductFromCatalog(catalogProduct);
 			
 			fail();
 		} catch (CriticalError | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure e) {
@@ -98,14 +93,14 @@ public class EditProductFromCatalogTest {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
 					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
 							CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(pp)).serialize())))
+							Serialization.serialize(catalogProduct)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException e) {
 			fail();
 		}
 		
 		try {
-			manager.editProductFromCatalog(pp);
+			manager.editProductFromCatalog(catalogProduct);
 		} catch (InvalidParameter | CriticalError | ProductNotExistInCatalog | ConnectionFailure e) {
 			e.printStackTrace();
 			fail();
@@ -120,14 +115,14 @@ public class EditProductFromCatalogTest {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
 					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
 							CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(pp)).serialize())))
+							Serialization.serialize(catalogProduct)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
 		} catch (IOException e) {
 			fail();
 		}
 		
 		try {
-			manager.editProductFromCatalog(pp);
+			manager.editProductFromCatalog(catalogProduct);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			e.printStackTrace();
 			fail();

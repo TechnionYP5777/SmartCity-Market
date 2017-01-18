@@ -1,6 +1,7 @@
 package EmployeeContracts;
 
-import BasicCommonClasses.ProductPackage;
+import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.SmartCode;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
@@ -19,7 +20,7 @@ public interface IManager extends IWorker {
 	/**
 	 * Manager adds product to catalog.
 	 * 
-	 * @param ProductPackage
+	 * @param CatalogProduct
 	 * @return void
 	 * @throws EmployeeNotConnected 
 	 * @throws CriticalError 
@@ -28,12 +29,12 @@ public interface IManager extends IWorker {
 	 * @throws ProductAlreadyExistInCatalog 
 	 * @throws ConnectionFailure 
 	 */
-	void addProductToCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog, ConnectionFailure;
+	void addProductToCatalog(CatalogProduct p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog, ConnectionFailure;
 	
 	/**
 	 * Manager removes product to catalog.
 	 * 
-	 * @param ProductPackage
+	 * @param SmartCode
 	 * @return amount 
 	 * @throws ProductStillForSale 
  	 * @throws ProductNotExistInCatalog 
@@ -43,12 +44,12 @@ public interface IManager extends IWorker {
 	 * @throws InvalidParameter 
 	 * @throws ConnectionFailure 
 	 */
-	void removeProductFromCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductStillForSale, ProductNotExistInCatalog, ConnectionFailure;
+	void removeProductFromCatalog(SmartCode c) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductStillForSale, ProductNotExistInCatalog, ConnectionFailure;
 	
 	/**
 	 * Manager edits product to catalog.
 	 * 
-	 * @param ProductPackage
+	 * @param CatalogProduct
 	 * @return amount 
 	 * @throws ProductAlreadyExistInCatalog 
 	 * @throws ProductNotExistInCatalog 
@@ -58,5 +59,5 @@ public interface IManager extends IWorker {
 	 * @throws InvalidParameter 
 	 * @throws ConnectionFailure 
 	 */
-	void editProductFromCatalog(ProductPackage p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ConnectionFailure;
+	void editProductFromCatalog(CatalogProduct p) throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ConnectionFailure;
 }

@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
+import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.SmartCode;
 import CommonDefs.CLIENT_TYPE;
 import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IManager;
@@ -65,7 +67,7 @@ public class ManageCatalogProductTab implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-				
+
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			enableRunOperation();
 		});
@@ -120,20 +122,15 @@ public class ManageCatalogProductTab implements Initializable {
 		try {
 			if (addCatalogProductRadioButton.isSelected()) {
 
-				// CatalogProduct catalogProduct = new
-				// CatalogProduct(Long.parseLong(barcodeTextField.getText()),
-				// productNameTextField.getText(), null, null,
-				// productDescriptionTextField.getText(),
-				// Double.parseDouble(productPriceTextField.getText()), null,
-				// null);
+				CatalogProduct catalogProduct = new CatalogProduct(Long.parseLong(barcodeTextField.getText()),
+						productNameTextField.getText(), null, null, productDescriptionTextField.getText(),
+						Double.parseDouble(productPriceTextField.getText()), null, null);
 
-				// TODO Change this
-				manager.addProductToCatalog(null);
+				manager.addProductToCatalog(catalogProduct);
 
 			} else if (removeCatalogProductRadioButton.isSelected()) {
 
-				// TODO Change this
-				manager.removeProductFromCatalog(null);
+				manager.removeProductFromCatalog(new SmartCode(Long.parseLong(barcodeTextField.getText()), null));
 			}
 
 		} catch (SMException e) {
