@@ -1,5 +1,7 @@
 package EmployeeImplementations;
 
+import javax.inject.Singleton;
+
 import com.google.inject.Inject;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
@@ -34,6 +36,7 @@ import UtilsImplementations.Serialization;
  * @since 2016-12-17
  */
 
+@Singleton
 public class Worker extends AEmployee implements IWorker {
 	
 	@Inject

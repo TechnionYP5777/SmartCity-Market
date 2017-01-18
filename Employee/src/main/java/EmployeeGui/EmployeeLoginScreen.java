@@ -3,9 +3,10 @@ package EmployeeGui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import EmployeeCommon.TempWorkerPassingData;
-import EmployeeContracts.IWorker;
-import EmployeeImplementations.Worker;
+import CommonDefs.CLIENT_TYPE;
+import EmployeeCommon.EmployeeScreensParameterService;
+import EmployeeContracts.IManager;
+import EmployeeImplementations.Manager;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
@@ -53,7 +54,6 @@ public class EmployeeLoginScreen implements Initializable {
 			enableLoginButtonCheck();
 		});
 		enableLoginButtonCheck();
-		TempWorkerPassingData.worker = null;
 	}
 
 	@FXML
@@ -63,14 +63,16 @@ public class EmployeeLoginScreen implements Initializable {
 
 	@FXML
 	private void loginButtonPressed(ActionEvent __) {
-		IWorker worker = InjectionFactory.getInstance(Worker.class);
+		IManager employee = InjectionFactory.getInstance(Manager.class);
+		CLIENT_TYPE employeeType = null;
 		try {
-			worker.login(username, password);
+			employeeType = employee.login(username, password);
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 			return;
 		}
-		TempWorkerPassingData.worker = worker;
+		InjectionFactory.getInstance(EmployeeScreensParameterService.class).updateClientType(employeeType);
+
 		AbstractApplicationScreen.setScene("/EmployeeMenuScreen/EmployeeMenuScreen.fxml");
 
 	}

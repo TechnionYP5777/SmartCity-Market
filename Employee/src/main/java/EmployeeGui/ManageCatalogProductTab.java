@@ -4,9 +4,12 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
+import CommonDefs.CLIENT_TYPE;
+import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IManager;
 import GuiUtils.RadioButtonEnabler;
 import SMExceptions.SMException;
+import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,6 +18,12 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
+/**
+ * ManageCatalogProductTab - This class is the controller for the Manage catalog
+ * products Tab all action of this tab should be here.
+ * 
+ * @author Shimon Azulay
+ */
 public class ManageCatalogProductTab implements Initializable {
 
 	@FXML
@@ -50,12 +59,13 @@ public class ManageCatalogProductTab implements Initializable {
 	@FXML
 	private Button runTheOperationButton;
 
-	IManager manager;
+	IManager manager = InjectionFactory.getInstance(EmployeeScreensParameterService.class).getParameter();
 
 	RadioButtonEnabler radioButtonContainerManageCatalogProduct = new RadioButtonEnabler();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+				
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			enableRunOperation();
 		});
@@ -81,13 +91,14 @@ public class ManageCatalogProductTab implements Initializable {
 
 		radioButtonContainerManageCatalogProduct.addRadioButtons(
 				(Arrays.asList((new RadioButton[] { addCatalogProductRadioButton, removeCatalogProductRadioButton }))));
-		
+
 		enableRunOperation();
 
 	}
-	
+
 	private void enableRunOperation() {
-		runTheOperationButton.setDisable(barcodeTextField.getText().isEmpty() || productNameTextField.getText().isEmpty() || productDescriptionTextField.getText().isEmpty());
+		runTheOperationButton.setDisable(barcodeTextField.getText().isEmpty()
+				|| productNameTextField.getText().isEmpty() || productDescriptionTextField.getText().isEmpty());
 	}
 
 	@FXML
@@ -109,9 +120,12 @@ public class ManageCatalogProductTab implements Initializable {
 		try {
 			if (addCatalogProductRadioButton.isSelected()) {
 
-//				CatalogProduct catalogProduct = new CatalogProduct(Long.parseLong(barcodeTextField.getText()),
-//						productNameTextField.getText(), null, null, productDescriptionTextField.getText(),
-//						Double.parseDouble(productPriceTextField.getText()), null, null);
+				// CatalogProduct catalogProduct = new
+				// CatalogProduct(Long.parseLong(barcodeTextField.getText()),
+				// productNameTextField.getText(), null, null,
+				// productDescriptionTextField.getText(),
+				// Double.parseDouble(productPriceTextField.getText()), null,
+				// null);
 
 				// TODO Change this
 				manager.addProductToCatalog(null);

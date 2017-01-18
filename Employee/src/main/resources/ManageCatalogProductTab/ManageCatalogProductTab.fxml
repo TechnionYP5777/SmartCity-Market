@@ -13,18 +13,11 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-	minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" spacing="15.0"
-	xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="EmployeeGui.ManageCatalogProductTab">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductTab">
 	<children>
 		<Label text="Choose operation:" />
-		<RadioButton fx:id="addCatalogProductRadioButton"
-			mnemonicParsing="false" onAction="#addCatalogProductRadioButtonPressed"
-			text="Add Catalog Product" />
-		<RadioButton fx:id="removeCatalogProductRadioButton"
-			mnemonicParsing="false" onAction="#removeCatalogProductRadioButtonPressed"
-			text="Remove Catalog Product" />
+		<RadioButton fx:id="addCatalogProductRadioButton" mnemonicParsing="false" onAction="#addCatalogProductRadioButtonPressed" selected="true" text="Add Catalog Product" />
+		<RadioButton fx:id="removeCatalogProductRadioButton" mnemonicParsing="false" onAction="#removeCatalogProductRadioButtonPressed" text="Remove Catalog Product" />
 		<Separator prefWidth="200.0" />
 		<GridPane>
 			<columnConstraints>
@@ -47,12 +40,11 @@
 				</HBox>
 			</children>
 		</GridPane>
-		<StackPane prefHeight="150.0" prefWidth="200.0">
+		<StackPane>
 			<children>
 				<GridPane fx:id="addCatalogProductParamPane">
 					<columnConstraints>
-						<ColumnConstraints hgrow="SOMETIMES"
-							percentWidth="15.0" />
+						<ColumnConstraints hgrow="SOMETIMES" percentWidth="15.0" />
 						<ColumnConstraints hgrow="SOMETIMES" />
 					</columnConstraints>
 					<rowConstraints>
@@ -164,10 +156,9 @@
 				</GridPane>
 			</children>
 		</StackPane>
-		<HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+		<HBox alignment="CENTER">
 			<children>
-				<Button fx:id="runTheOperationButton" mnemonicParsing="false"
-					onAction="#runTheOperationButtonPressed" text="Run The Operation" />
+				<Button fx:id="runTheOperationButton" mnemonicParsing="false" onAction="#runTheOperationButtonPressed" text="Run The Operation" />
 			</children>
 		</HBox>
 	</children>

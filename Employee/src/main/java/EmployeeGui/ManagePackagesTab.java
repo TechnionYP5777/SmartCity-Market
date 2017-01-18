@@ -12,7 +12,7 @@ import BasicCommonClasses.Location;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
-import EmployeeCommon.TempWorkerPassingData;
+import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IWorker;
 import GuiUtils.DialogMessagesService;
 import GuiUtils.RadioButtonEnabler;
@@ -36,9 +36,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class ManagePackagesTab  implements Initializable {
-	
-	
+/**
+ * ManagePackagesTab - This class is the controller for the Manage Packages Tab
+ * all action of this tab should be here.
+ * 
+ * @author Shimon Azulay
+ */
+
+public class ManagePackagesTab implements Initializable {
+
 	@FXML
 	VBox scanOrTypeCodePane;
 
@@ -62,7 +68,7 @@ public class ManagePackagesTab  implements Initializable {
 
 	@FXML
 	Button showMoreDetailsButton;
-	
+
 	@FXML
 	Label smartCodeValLabel;
 
@@ -114,21 +120,19 @@ public class ManagePackagesTab  implements Initializable {
 	RadioButtonEnabler radioButtonContainerSmarcodeOperations = new RadioButtonEnabler();
 
 	RadioButtonEnabler radioButtonContainerBarcodeOperations = new RadioButtonEnabler();
-	
+
 	CatalogProduct catalogProduct;
 
 	int amountInStore = -1;
 
 	int amountInWarehouse = -1;
-	
-	IBarcodeEventHandler barcodeEventHandler;
 
-	IWorker worker;
+	IBarcodeEventHandler barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
+
+	IWorker worker = InjectionFactory.getInstance(EmployeeScreensParameterService.class).getParameter();
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		worker = TempWorkerPassingData.worker;
-		barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
+	public void initialize(URL location, ResourceBundle resources) { 
 		barcodeEventHandler.register(this);
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			addProductParametersToQuickView("N/A", "N/A", "N/A", "N/A", "N/A");
@@ -137,18 +141,18 @@ public class ManagePackagesTab  implements Initializable {
 		});
 
 		datePicker.setValue(LocalDate.now());
-		
+
 		radioButtonContainerSmarcodeOperations.addRadioButtons(
 				(Arrays.asList((new RadioButton[] { printSmartCodeRadioButton, addPackageToStoreRadioButton,
 						removePackageFromStoreRadioButton, removePackageFromWarhouseRadioButton }))));
 
 		radioButtonContainerBarcodeOperations
 				.addRadioButtons((Arrays.asList((new RadioButton[] { addPakageToWarhouseRadioButton }))));
-		
+
 		showScanCodePane(true);
-		
+
 	}
-	
+
 	private void addProductParametersToQuickView(String productName, String productBarcode,
 			String productExpirationDate, String amountInStore, String amountInWarehouse) {
 		smartCodeValLabel.setText(productBarcode);
@@ -162,7 +166,7 @@ public class ManagePackagesTab  implements Initializable {
 		AmountInWarehouseValLabel.setText(amountInWarehouse);
 
 	}
-	
+
 	private void enableRunTheOperationButton() {
 
 		if (barcodeOperationsPane.isVisible()) {
@@ -183,8 +187,7 @@ public class ManagePackagesTab  implements Initializable {
 			}
 		}
 	}
-	
-	
+
 	private void showScanCodePane(boolean show) {
 
 		scanOrTypeCodePane.setVisible(show);
@@ -291,7 +294,8 @@ public class ManagePackagesTab  implements Initializable {
 				// exec
 				worker.addProductToWarehouse(pp);
 
-				//printToSuccessLog(("Added (" + amountVal + ") " + "product packages (" + pp + ") to warehouse"));
+				// printToSuccessLog(("Added (" + amountVal + ") " + "product
+				// packages (" + pp + ") to warehouse"));
 
 			} else if (addPackageToStoreRadioButton.isSelected()) {
 
@@ -302,7 +306,8 @@ public class ManagePackagesTab  implements Initializable {
 				// exec
 				worker.placeProductPackageOnShelves(pp);
 
-				//printToSuccessLog(("Added (" + amountVal + ") " + "product packages (" + pp + ") to store"));
+				// printToSuccessLog(("Added (" + amountVal + ") " + "product
+				// packages (" + pp + ") to store"));
 
 			} else if (removePackageFromStoreRadioButton.isSelected()) {
 
@@ -313,19 +318,20 @@ public class ManagePackagesTab  implements Initializable {
 				// exec
 				worker.removeProductPackageFromStore(pp);
 
-				//printToSuccessLog(("Removed (" + amountVal + ") " + "product packages (" + pp + ") from store"));
+				// printToSuccessLog(("Removed (" + amountVal + ") " + "product
+				// packages (" + pp + ") from store"));
 
 			} else if (removePackageFromWarhouseRadioButton.isSelected()) {
 				Location loc = new Location(0, 0, PlaceInMarket.WAREHOUSE);
 				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
 				worker.removeProductPackageFromStore(pp);
-				//printToSuccessLog(("Removed (" + amountVal + ") " + "product packages (" + pp + ") from warehouse"));
+				// printToSuccessLog(("Removed (" + amountVal + ") " + "product
+				// packages (" + pp + ") from warehouse"));
 			}
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 		}
 	}
-	
 
 	@FXML
 	private void showMoreDetailsButtonPressed(ActionEvent __) {

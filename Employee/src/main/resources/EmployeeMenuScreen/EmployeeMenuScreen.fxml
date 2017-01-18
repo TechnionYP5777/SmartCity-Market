@@ -36,15 +36,15 @@
 	<children>
 		<TabPane>
 			<tabs>
-				<Tab closable="false" text="Manage Packages">
+				<Tab fx:id="managePackagesTab" closable="false" text="Manage Packages">
 					<content>
-						<fx:include fx:id="managePackagesTab"
-							source="/ManagePackagesTab/ManagePackagesTab.fxml" />
+						<fx:include source="/ManagePackagesTab/ManagePackagesTab.fxml" />
 					</content>
 				</Tab>
-				<Tab closable="false" text="Manage Catalog Products">
+				<Tab fx:id="manageCatalogProductTab" closable="false"
+					text="Manage Catalog Products">
 					<content>
-						<fx:include fx:id="manageCatalogProductTab"
+						<fx:include
 							source="/ManageCatalogProductTab/ManageCatalogProductTab.fxml" />
 					</content>
 				</Tab>
