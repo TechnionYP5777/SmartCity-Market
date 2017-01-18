@@ -17,7 +17,6 @@ import BasicCommonClasses.SmartCode;
 import EmployeeCommon.TempWorkerPassingData;
 import EmployeeContracts.IWorker;
 import EmployeeDefs.AEmployeeException;
-import EmployeeDefs.EmployeeGuiDefs;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
 import GuiUtils.RadioButtonEnabler;
@@ -160,19 +159,7 @@ public class WorkerMenuScreen implements Initializable {
 			addProductParametersToQuickView("N/A", "N/A", "N/A", "N/A", "N/A");
 			amountInWarehouse = amountInStore = -1;
 			showScanCodePane(true);
-
 		});
-
-		// datePickerForSmartCode.valueProperty().addListener(new
-		// ChangeListener<Integer>() {
-		//
-		// @Override
-		// public void changed(ObservableValue<? extends Integer> observable,
-		// Integer oldValue, Integer newValue) {
-		// // TODO Auto-generated method stub
-		//
-		// }
-		// });
 
 		datePicker.setValue(LocalDate.now());
 
@@ -220,11 +207,10 @@ public class WorkerMenuScreen implements Initializable {
 
 		productNameValLabel.setText(productName);
 
-		// TODO should get expiration date from the smart code
 		expirationDateValLabel.setText(productExpirationDate);
 
-		// TODO get amounts from server
 		amoutInStoreValLabel.setText(amountInStore);
+
 		AmountInWarehouseValLabel.setText(amountInWarehouse);
 
 	}
@@ -233,38 +219,25 @@ public class WorkerMenuScreen implements Initializable {
 
 		if (barcodeOperationsPane.isVisible()) {
 			if (addPakageToWarhouseRadioButton.isSelected()) {
-				// runTheOperationButton.setDisable("".equals(barcodeTextField.getText()));
-				// runTheOperationButton
-				// .setTooltip(new
-				// Tooltip(!"".equals(barcodeTextField.getText()) ?
-				// "" : EmployeeGuiDefs.typeBarcode));
+
 			}
 		} else {
-			// showMoreDetailsButton.setDisable("N/A".equals(smartCodeValLabel.getText()));
+
 			if (removePackageFromStoreRadioButton.isSelected()) {
 				runTheOperationButton.setDisable(amountInStore < editPackagesAmountSpinner.getValue());
-				// runTheOperationButton.setTooltip(new
-				// Tooltip(EmployeeGuiDefs.notEnoughAmountInStore));
 
 			} else if (removePackageFromWarhouseRadioButton.isSelected()) {
 				runTheOperationButton.setDisable(amountInWarehouse < editPackagesAmountSpinner.getValue());
-				// runTheOperationButton.setTooltip(new
-				// Tooltip(EmployeeGuiDefs.notEnoughAmountInWarehouse));
 
 			} else if (addPackageToStoreRadioButton.isSelected()) {
 				runTheOperationButton.setDisable(amountInWarehouse < editPackagesAmountSpinner.getValue());
-				// runTheOperationButton.setTooltip(new
-				// Tooltip(EmployeeGuiDefs.notEnoughAmountInStore));
 
 			}
 		}
-		// runTheOperationButton.setDisable("N/A".equals(smartCodeValLabel.getText()));
-		// runTheOperationButton.setTooltip(
-		// new Tooltip(!"N/A".equals(smartCodeValLabel.getText()) ? "" :
-		// EmployeeGuiDefs.typeSmartCode));
 	}
 
 	private void showScanCodePane(boolean show) {
+
 		scanOrTypeCodePane.setVisible(show);
 		productAfterScanPane.setVisible(!show);
 		datePickerForSmartCode.setVisible(show);
@@ -287,40 +260,34 @@ public class WorkerMenuScreen implements Initializable {
 		}
 	}
 
-	private void getProductCatalog(String barcode) {
+	private void getProductCatalog(String barcode) throws SMException {
 
 		catalogProduct = null;
-		try {
-			catalogProduct = worker.viewProductFromCatalog(Long.parseLong(barcodeTextField.getText()));
-		} catch (SMException e) {
-			EmployeeGuiExeptionHandler.handle(e);
-			return;
-		}
+		catalogProduct = worker.viewProductFromCatalog(Long.parseLong(barcodeTextField.getText()));
 
 	}
 
-	private void barcodeEntered(String barcode) {
+	private void barcodeEntered(String barcode) throws SMException {
 
 		getProductCatalog(barcodeTextField.getText());
-
 		showScanCodePane(false);
 		showSmartCodeOperationsPane(false);
 
+		addProductParametersToQuickView(barcodeTextField.getText(), catalogProduct.getName(), "N/A", "N/A", "N/A");
+
 	}
 
-	private void smartcodeEntered(SmartCode smartcode) {
+	private void smartcodeEntered(SmartCode smartcode) throws SMException {
 
 		getProductCatalog(barcodeTextField.getText());
 
-		try {
-			amountInStore = worker
-					.getProductPackageAmount(new ProductPackage(smartcode, 1, new Location(0, 0, PlaceInMarket.STORE)));
-			amountInWarehouse = worker.getProductPackageAmount(
-					new ProductPackage(smartcode, 1, new Location(0, 0, PlaceInMarket.WAREHOUSE)));
-		} catch (SMException e) {
-			EmployeeGuiExeptionHandler.handle(e);
-			return;
-		}
+		int amountInStore = worker
+				.getProductPackageAmount(new ProductPackage(smartcode, 1, new Location(0, 0, PlaceInMarket.STORE)));
+		int amountInWarehouse = worker
+				.getProductPackageAmount(new ProductPackage(smartcode, 1, new Location(0, 0, PlaceInMarket.WAREHOUSE)));
+
+		this.amountInStore = amountInStore;
+		this.amountInWarehouse = amountInWarehouse;
 
 		showScanCodePane(false);
 		showSmartCodeOperationsPane(true);
@@ -333,16 +300,21 @@ public class WorkerMenuScreen implements Initializable {
 
 	@FXML
 	private void searchCodeButtonPressed(ActionEvent __) {
+		try {
+			LocalDate expirationDate = datePickerForSmartCode.getValue();
 
-		LocalDate expirationDate = datePickerForSmartCode.getValue();
+			if (expirationDate == null) {
 
-		if (expirationDate == null) {
+				barcodeEntered(barcodeTextField.getText());
 
-			barcodeEntered(barcodeTextField.getText());
+			} else {
 
-		} else {
+				smartcodeEntered(new SmartCode(Long.parseLong(barcodeTextField.getText()), expirationDate));
+			}
 
-			smartcodeEntered(new SmartCode(Long.parseLong(barcodeTextField.getText()), expirationDate));
+		} catch (SMException e) {
+			EmployeeGuiExeptionHandler.handle(e);
+			return;
 		}
 	}
 
@@ -433,17 +405,6 @@ public class WorkerMenuScreen implements Initializable {
 							+ catalogProduct.getPrice());
 
 	}
-
-	// Enable Disable Show more info, date picker. Change prompt text
-	// private void addPackageToWarehouseButtonPressedCheck() {
-	// if (!addPakageToWarhouseRadioButton.isSelected()) {
-	// barcodeTextField.setPromptText(EmployeeGuiDefs.smartCodePrompt);
-	// disableAddPackageToWarehouseButtonParameters(true);
-	// } else {
-	// barcodeTextField.setPromptText(EmployeeGuiDefs.barcodeCodePrompt);
-	// disableAddPackageToWarehouseButtonParameters(false);
-	// }
-	// }
 
 	@Subscribe
 	public void barcodeScanned(BarcodeScanEvent ¢) {
