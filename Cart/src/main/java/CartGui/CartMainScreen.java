@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.locks.Lock;
 
 import com.google.common.eventbus.Subscribe;
-
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.SmartCode;
 import CartContracts.ACartExceptions.CartNotConnected;
@@ -15,14 +14,20 @@ import CartContracts.ICart;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
 import UtilsContracts.BarcodeScanEvent;
+import UtilsContracts.IBarcodeEventHandler;
+import UtilsContracts.SmartcodeScanEvent;
+import UtilsImplementations.BarcodeEventHandler;
+import UtilsImplementations.InjectionFactory;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -70,10 +75,13 @@ public class CartMainScreen implements Initializable {
 	
 	ObservableList<CartProduct> productsObservableList;
 	
+	IBarcodeEventHandler barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
+
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(cartMainScreenPane);
-		
+		barcodeEventHandler.register(this);
+
 		productInfoPane.setDisable(false);
 		productInfoPane.setVisible(false);
 		
@@ -116,11 +124,6 @@ public class CartMainScreen implements Initializable {
 
 	}
 	
-	private void waitForScannerEvent() {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	public void removeAllItemsButtonPressed(ActionEvent __) {
 		//todo: continue from here
 	}
@@ -130,12 +133,14 @@ public class CartMainScreen implements Initializable {
 	}
 	
 	@Subscribe
-	public void barcodeScanned(BarcodeScanEvent ¢) {
-		SmartCode sc = new SmartCode(1, LocalDate.now());/* = new SmartCode(¢.getBarcode(),  ¢.getExpirationDate*)*/;
-		if (smartCodeLocker.tryLock()) {
-			lastScannedSmartCode = sc;
-		}
-		//todo: continue from here
+	public void smartcoseScanned(SmartcodeScanEvent ¢) {
+		
+		SmartCode smartcode = ¢.getSmarCode();
+//		System.out.println("scanned Smart Code: " + smartcode);
+		
+		Alert alert = new Alert(AlertType.INFORMATION , "scanned Smart Code: " + smartcode);
+		alert.showAndWait();
+		//todo: from here
 
 	}
 }
