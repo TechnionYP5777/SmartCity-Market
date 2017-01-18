@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductTab">
+	<children>
+		<Label text="Choose operation:" />
+		<RadioButton fx:id="addCatalogProductRadioButton" mnemonicParsing="false" onAction="#addCatalogProductRadioButtonPressed" text="Add Catalog Product" />
+		<RadioButton fx:id="removeCatalogProductRadioButton" mnemonicParsing="false" onAction="#removeCatalogProductRadioButtonPressed" text="Remove Catalog Product" />
+		<Separator prefWidth="200.0" />
+		<GridPane>
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES" percentWidth="15.0" />
+				<ColumnConstraints hgrow="SOMETIMES" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints vgrow="SOMETIMES" />
+			</rowConstraints>
+			<children>
+				<HBox alignment="CENTER_LEFT">
+					<children>
+						<Label text="Barcode:" />
+					</children>
+				</HBox>
+				<HBox GridPane.columnIndex="1">
+					<children>
+						<TextField fx:id="barcodeTextField" />
+					</children>
+				</HBox>
+			</children>
+		</GridPane>
+		<StackPane prefHeight="150.0" prefWidth="200.0">
+			<children>
+						<GridPane fx:id="addCatalogProductParamPane">
+							<columnConstraints>
+								<ColumnConstraints hgrow="SOMETIMES" percentWidth="15.0" />
+								<ColumnConstraints hgrow="SOMETIMES" />
+							</columnConstraints>
+							<rowConstraints>
+								<RowConstraints vgrow="SOMETIMES" />
+								<RowConstraints vgrow="SOMETIMES" />
+								<RowConstraints vgrow="SOMETIMES" />
+								<RowConstraints vgrow="SOMETIMES" />
+								<RowConstraints vgrow="SOMETIMES" />
+								<RowConstraints vgrow="SOMETIMES" />
+							</rowConstraints>
+							<children>
+								<HBox>
+									<children>
+										<Label text="Product Name:" />
+									</children>
+									<padding>
+										<Insets bottom="5.0" top="5.0" />
+									</padding>
+								</HBox>
+								<HBox GridPane.rowIndex="1">
+									<children>
+										<Label text="Product Description:" />
+									</children>
+									<padding>
+										<Insets bottom="5.0" top="5.0" />
+									</padding>
+								</HBox>
+								<HBox GridPane.rowIndex="2">
+									<children>
+										<Label text="Product manufacturer:" />
+									</children>
+									<padding>
+										<Insets bottom="5.0" top="5.0" />
+									</padding>
+								</HBox>
+								<HBox GridPane.rowIndex="3">
+									<children>
+										<Label text="Product Price:" />
+									</children>
+									<padding>
+										<Insets bottom="5.0" top="5.0" />
+									</padding>
+								</HBox>
+								<HBox GridPane.rowIndex="4">
+									<children>
+										<Label text="Product Ingredients:" />
+									</children>
+									<padding>
+										<Insets bottom="5.0" top="5.0" />
+									</padding>
+								</HBox>
+								<HBox GridPane.rowIndex="5">
+									<children>
+										<Label text="Product Location:" />
+									</children>
+									<padding>
+										<Insets bottom="5.0" top="5.0" />
+									</padding>
+								</HBox>
+								<HBox GridPane.columnIndex="1">
+									<padding>
+										<Insets bottom="5.0" />
+									</padding>
+									<children>
+										<TextField fx:id="productNameTextField" />
+									</children>
+								</HBox>
+								<HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
+									<padding>
+										<Insets bottom="5.0" top="5.0" />
+									</padding>
+									<children>
+										<TextField fx:id="productDescriptionTextField" />
+									</children>
+								</HBox>
+								<HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+									<padding>
+										<Insets bottom="5.0" top="5.0" />
+									</padding>
+									<children>
+										<TextField fx:id="productManufacturerTextField" />
+									</children>
+								</HBox>
+								<HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
+									<padding>
+										<Insets bottom="5.0" top="5.0" />
+									</padding>
+									<children>
+										<TextField fx:id="productPriceTextField" />
+									</children>
+								</HBox>
+								<HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
+									<padding>
+										<Insets bottom="5.0" top="5.0" />
+									</padding>
+									<children>
+										<TextField fx:id="productIngredientsTextField" />
+									</children>
+								</HBox>
+								<HBox GridPane.columnIndex="1" GridPane.rowIndex="5">
+									<padding>
+										<Insets bottom="5.0" top="5.0" />
+									</padding>
+									<children>
+										<TextField fx:id="productLocationTextField" />
+									</children>
+								</HBox>
+							</children>
+						</GridPane>
+			</children>
+		</StackPane>
+		<HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+			<children>
+				<Button fx:id="runTheOperationButton" mnemonicParsing="false" onAction="#runTheOperationButtonPressed" text="Run The Operation" />
+			</children>
+		</HBox>
+	</children>
+	<padding>
+		<Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+	</padding>
+</VBox>

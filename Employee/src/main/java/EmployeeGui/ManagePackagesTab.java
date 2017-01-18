@@ -1,10 +1,8 @@
 package EmployeeGui;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 import com.google.common.eventbus.Subscribe;
@@ -16,8 +14,6 @@ import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import EmployeeCommon.TempWorkerPassingData;
 import EmployeeContracts.IWorker;
-import EmployeeDefs.AEmployeeException;
-import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
 import GuiUtils.RadioButtonEnabler;
 import SMExceptions.SMException;
@@ -26,8 +22,6 @@ import UtilsContracts.IBarcodeEventHandler;
 import UtilsContracts.SmartcodeScanEvent;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,27 +31,14 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
-/**
- * WorkerMenuScreen - Controller for menu screen which holds the operations
- * available for worker.
- * 
- * @author idan atias
- * @author Shimon Azulay
- * @since 2016-12-27
- */
-
-public class WorkerMenuScreen implements Initializable {
-
-	@FXML
-	GridPane workerMenuScreenPane;
-
+public class ManagePackagesTab  implements Initializable {
+	
+	
 	@FXML
 	VBox scanOrTypeCodePane;
 
@@ -81,10 +62,7 @@ public class WorkerMenuScreen implements Initializable {
 
 	@FXML
 	Button showMoreDetailsButton;
-
-	@FXML
-	TextArea successLogArea;
-
+	
 	@FXML
 	Label smartCodeValLabel;
 
@@ -136,24 +114,21 @@ public class WorkerMenuScreen implements Initializable {
 	RadioButtonEnabler radioButtonContainerSmarcodeOperations = new RadioButtonEnabler();
 
 	RadioButtonEnabler radioButtonContainerBarcodeOperations = new RadioButtonEnabler();
-
-	Stage primeStage = EmployeeApplicationScreen.stage;
-
-	IWorker worker;
-
+	
 	CatalogProduct catalogProduct;
-
-	IBarcodeEventHandler barcodeEventHandler;
 
 	int amountInStore = -1;
 
 	int amountInWarehouse = -1;
+	
+	IBarcodeEventHandler barcodeEventHandler;
+
+	IWorker worker;
 
 	@Override
-	public void initialize(URL location, ResourceBundle __) {
-		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
+	public void initialize(URL location, ResourceBundle resources) {
+		worker = TempWorkerPassingData.worker;
 		barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
-		// TODO enable this after solve singleton
 		barcodeEventHandler.register(this);
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			addProductParametersToQuickView("N/A", "N/A", "N/A", "N/A", "N/A");
@@ -162,45 +137,18 @@ public class WorkerMenuScreen implements Initializable {
 		});
 
 		datePicker.setValue(LocalDate.now());
-
-		worker = TempWorkerPassingData.worker;
-
-		// defining behavior when stage/window is closed.
-		primeStage.setOnCloseRequest(event -> {
-			try {
-				if (worker.isServerReachable() && worker.isLoggedIn())
-					worker.logout();
-			} catch (SMException e) {
-				if (e instanceof AEmployeeException.EmployeeNotConnected)
-					return;
-				EmployeeGuiExeptionHandler.handle(e);
-			}
-		});
-
-		// setting success log listener
-		successLogArea.textProperty().addListener(new ChangeListener<Object>() {
-			@Override
-			public void changed(ObservableValue<?> __, Object oldValue, Object newValue) {
-				successLogArea.setScrollTop(Double.MAX_VALUE); // this will
-																// scroll to the
-																// bottom
-			}
-		});
-
+		
 		radioButtonContainerSmarcodeOperations.addRadioButtons(
 				(Arrays.asList((new RadioButton[] { printSmartCodeRadioButton, addPackageToStoreRadioButton,
 						removePackageFromStoreRadioButton, removePackageFromWarhouseRadioButton }))));
 
 		radioButtonContainerBarcodeOperations
 				.addRadioButtons((Arrays.asList((new RadioButton[] { addPakageToWarhouseRadioButton }))));
-
+		
 		showScanCodePane(true);
+		
 	}
-
-	private void printToSuccessLog(String msg) {
-		successLogArea.appendText(new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss").format(new Date()) + " :: " + msg + "\n");
-	}
-
+	
 	private void addProductParametersToQuickView(String productName, String productBarcode,
 			String productExpirationDate, String amountInStore, String amountInWarehouse) {
 		smartCodeValLabel.setText(productBarcode);
@@ -214,7 +162,7 @@ public class WorkerMenuScreen implements Initializable {
 		AmountInWarehouseValLabel.setText(amountInWarehouse);
 
 	}
-
+	
 	private void enableRunTheOperationButton() {
 
 		if (barcodeOperationsPane.isVisible()) {
@@ -235,7 +183,8 @@ public class WorkerMenuScreen implements Initializable {
 			}
 		}
 	}
-
+	
+	
 	private void showScanCodePane(boolean show) {
 
 		scanOrTypeCodePane.setVisible(show);
@@ -342,7 +291,7 @@ public class WorkerMenuScreen implements Initializable {
 				// exec
 				worker.addProductToWarehouse(pp);
 
-				printToSuccessLog(("Added (" + amountVal + ") " + "product packages (" + pp + ") to warehouse"));
+				//printToSuccessLog(("Added (" + amountVal + ") " + "product packages (" + pp + ") to warehouse"));
 
 			} else if (addPackageToStoreRadioButton.isSelected()) {
 
@@ -353,7 +302,7 @@ public class WorkerMenuScreen implements Initializable {
 				// exec
 				worker.placeProductPackageOnShelves(pp);
 
-				printToSuccessLog(("Added (" + amountVal + ") " + "product packages (" + pp + ") to store"));
+				//printToSuccessLog(("Added (" + amountVal + ") " + "product packages (" + pp + ") to store"));
 
 			} else if (removePackageFromStoreRadioButton.isSelected()) {
 
@@ -364,30 +313,19 @@ public class WorkerMenuScreen implements Initializable {
 				// exec
 				worker.removeProductPackageFromStore(pp);
 
-				printToSuccessLog(("Removed (" + amountVal + ") " + "product packages (" + pp + ") from store"));
+				//printToSuccessLog(("Removed (" + amountVal + ") " + "product packages (" + pp + ") from store"));
 
 			} else if (removePackageFromWarhouseRadioButton.isSelected()) {
 				Location loc = new Location(0, 0, PlaceInMarket.WAREHOUSE);
 				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
 				worker.removeProductPackageFromStore(pp);
-				printToSuccessLog(("Removed (" + amountVal + ") " + "product packages (" + pp + ") from warehouse"));
+				//printToSuccessLog(("Removed (" + amountVal + ") " + "product packages (" + pp + ") from warehouse"));
 			}
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 		}
 	}
-
-	@FXML
-	private void logoutButtonPressed(ActionEvent __) {
-		try {
-			worker.logout();
-		} catch (SMException e) {
-			EmployeeGuiExeptionHandler.handle(e);
-		}
-		// TODO enable this after solve singleton
-		barcodeEventHandler.unregister(this);
-		AbstractApplicationScreen.setScene("/EmployeeLoginScreen/EmployeeLoginScreen.fxml");
-	}
+	
 
 	@FXML
 	private void showMoreDetailsButtonPressed(ActionEvent __) {
@@ -414,4 +352,5 @@ public class WorkerMenuScreen implements Initializable {
 		enableRunTheOperationButton();
 
 	}
+
 }

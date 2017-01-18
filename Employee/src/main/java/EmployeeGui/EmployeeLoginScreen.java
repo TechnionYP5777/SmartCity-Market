@@ -71,7 +71,7 @@ public class EmployeeLoginScreen implements Initializable {
 			return;
 		}
 		TempWorkerPassingData.worker = worker;
-		AbstractApplicationScreen.setScene("/WorkerMenuScreen/WorkerMenuScreen.fxml");
+		AbstractApplicationScreen.setScene("/EmployeeMenuScreen/EmployeeMenuScreen.fxml");
 
 	}
 
