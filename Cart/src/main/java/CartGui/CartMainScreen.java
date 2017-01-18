@@ -36,19 +36,13 @@ import javafx.util.Callback;
 public class CartMainScreen implements Initializable {
 
 	Stage primeStage = CartApplicationScreen.stage;
+	
 	ICart cart;
 	
 	// Main screen panes
 	@FXML
 	GridPane cartMainScreenPane;
 	
-	
-	@FXML 
-	Button addProductButton;
-	
-	@FXML 
-	Button removeProductButton;
-		
 	@FXML
 	ListView<CartProduct> productsListView;
 	
@@ -64,28 +58,35 @@ public class CartMainScreen implements Initializable {
 	@FXML
 	TextField totalSumTextField;
 	
+	@FXML
+	GridPane productInfoPane;
+	
+	@FXML
+	Button removeAllItemsButton;
+	
 	SmartCode lastScannedSmartCode = null;
 	
 	Lock smartCodeLocker;
-	
 	
 	ObservableList<CartProduct> productsObservableList;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(cartMainScreenPane);
-		//defining behavior when stage/window is closed.
-		cart = TempCartPassingData.cart;
 		
-		productsObservableList.addAll(cart.getCartProductCache().values());
+		productInfoPane.setDisable(false);
+		productInfoPane.setVisible(false);
+		
+		cart = TempCartPassingData.cart;
+	//	productsObservableList.addAll(cart.getCartProductCache().values());
 		productsListView.setItems(productsObservableList);
 		productsListView.setCellFactory(new Callback<ListView<CartProduct>, ListCell<CartProduct>>() {
 		     @Override public ListCell<CartProduct> call(ListView<CartProduct> list) {
 		         return new CartProductFormatCell();
 		     }
 		 });
-		
-		
+		//defining behavior when stage/window is closed.
+
 		primeStage.setOnCloseRequest(event -> {
 			try {
 				cart.logout();
@@ -96,40 +97,7 @@ public class CartMainScreen implements Initializable {
 	}
 	
 	@FXML
-	public void removeProductButtonPressed(ActionEvent __) {
-		waitForScannerEvent();
-		SmartCode sc = lastScannedSmartCode;
-		smartCodeLocker.unlock();
-		//todo: continue from here
-
-	}
-	
-	@FXML
-	public void addProductButtonPressed(ActionEvent __) {
-		waitForScannerEvent();
-		SmartCode sc = lastScannedSmartCode;
-		smartCodeLocker.unlock();
-		//todo: continue from here
-
-	}
-	
-	@FXML
-	public void logoutButtonPressed(ActionEvent __) {
-		try {
-			cart.logout();
-		} catch (CartNotConnected e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CriticalError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//todo: continue from here
-
-	}
-
-	@FXML
-	public void buyButtonPressed(ActionEvent __) {
+	public void purchaseButtonPressed(ActionEvent __) {
 		try {
 			cart.checkOutGroceryList();
 		} catch (CriticalError e) {
@@ -140,12 +108,12 @@ public class CartMainScreen implements Initializable {
 			e.printStackTrace();
 		}
 		//todo: continue from here
-
 	}
 	
 	@FXML
 	public void cancelButtonPressed(ActionEvent __) {
-		//todo: continue from here
+		// TODO Auto-generated method stub
+
 	}
 	
 	private void waitForScannerEvent() {
@@ -153,9 +121,16 @@ public class CartMainScreen implements Initializable {
 		
 	}
 	
+	public void removeAllItemsButtonPressed(ActionEvent __) {
+		//todo: continue from here
+	}
+	
+	public void okButtonPressed(ActionEvent __) {
+		//todo: continue from here
+	}
+	
 	@Subscribe
 	public void barcodeScanned(BarcodeScanEvent ¢) {
-		
 		SmartCode sc = new SmartCode(1, LocalDate.now());/* = new SmartCode(¢.getBarcode(),  ¢.getExpirationDate*)*/;
 		if (smartCodeLocker.tryLock()) {
 			lastScannedSmartCode = sc;

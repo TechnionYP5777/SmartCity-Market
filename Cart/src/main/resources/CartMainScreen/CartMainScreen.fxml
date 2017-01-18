@@ -83,7 +83,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
       </GridPane>
-      <GridPane GridPane.rowIndex="1">
+      <GridPane fx:id="productInfoPane" GridPane.rowIndex="1">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="192.0" minWidth="10.0" prefWidth="185.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="308.0" minWidth="10.0" prefWidth="99.0" />
@@ -94,8 +94,8 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="75.0" minHeight="10.0" prefHeight="66.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="71.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="98.0" minHeight="10.0" prefHeight="98.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
@@ -190,18 +190,28 @@
                </rowConstraints>
             </GridPane>
             <TextField fx:id="productName" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <children>
+                  <Button fx:id="okButton" mnemonicParsing="false" onAction="#okButtonPressed" text="Ok" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
+               <children>
+                  <Button fx:id="removeAllItemsButton" mnemonicParsing="false" onAction="#removeAllItemsButtonPressed" text="Remove Products" />
+               </children>
+            </VBox>
          </children>
       </GridPane>
       <GridPane alignment="BASELINE_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <children>
             <VBox alignment="CENTER" prefHeight="47.0" prefWidth="79.0" GridPane.columnIndex="1">
                <children>
-                  <Button fx:id="logoutButton" alignment="CENTER" mnemonicParsing="false" onAction="#cancelButtonPressed" text="Cancel" />
+                  <Button fx:id="cancelButton" alignment="CENTER" mnemonicParsing="false" onAction="#cancelButtonPressed" text="Cancel" />
                </children>
             </VBox>
             <VBox alignment="CENTER">
                <children>
-                  <Button fx:id="buyButton" alignment="CENTER" mnemonicParsing="false" onAction="#buyButtonPressed" text="Purchase" textAlignment="CENTER" />
+                  <Button fx:id="purchaseButton" alignment="CENTER" mnemonicParsing="false" onAction="#purchaseButtonPressed" text="Purchase" textAlignment="CENTER" />
                </children>
             </VBox>
          </children>
