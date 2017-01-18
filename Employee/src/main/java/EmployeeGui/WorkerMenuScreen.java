@@ -56,7 +56,7 @@ import javafx.stage.Stage;
 public class WorkerMenuScreen implements Initializable {
 
 	@FXML
-	VBox workerMenuScreenPane;
+	GridPane workerMenuScreenPane;
 
 	@FXML
 	VBox scanOrTypeCodePane;
