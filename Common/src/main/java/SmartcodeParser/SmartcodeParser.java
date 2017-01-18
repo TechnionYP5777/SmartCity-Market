@@ -100,6 +100,7 @@ public class SmartcodeParser {
 	public static SmartCode formCode(String scannedCode) {
 
 		return scannedCode.startsWith(GS1_PREFIX) ? codeToSmartcode(scannedCode)
-				: scannedCode.matches("\\d*") && scannedCode.length() <= 13 ? new SmartCode(Long.parseLong(scannedCode), null) : null;
+				: !scannedCode.matches("\\d*") || scannedCode.length() > 13 ? null
+						: new SmartCode(Long.parseLong(scannedCode), null);
 	}
 }
