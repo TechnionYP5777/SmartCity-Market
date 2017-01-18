@@ -76,12 +76,12 @@ public class CommandExecuter {
 				outCommandWrapper.setData(c.getClientType(outCommandWrapper.getSenderID()));
 			} catch (ClientNotConnected e) {
 				e.printStackTrace();
-				
+
 				log.fatal("Client is not connected for sender ID " + outCommandWrapper.getSenderID());
 			}
-			
-			log.info("Login command succeded with sender ID " +
-					outCommandWrapper.getSenderID() + " with client type " + outCommandWrapper.getData());
+
+			log.info("Login command succeded with sender ID " + outCommandWrapper.getSenderID() + " with client type "
+					+ outCommandWrapper.getData());
 		} catch (AuthenticationError e) {
 			log.info("Login command failed, username dosen't exist or wrong password received");
 
@@ -128,7 +128,7 @@ public class CommandExecuter {
 
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
-			
+
 			c.logout(inCommandWrapper.getSenderID(), username);
 
 			log.info("Logout command succeded with sender ID " + inCommandWrapper.getSenderID());
@@ -149,7 +149,8 @@ public class CommandExecuter {
 		log.info("Is logged in command called with senderID " + inCommandWrapper.getSenderID());
 
 		try {
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, new Gson().toJson(c.isClientLoggedIn(inCommandWrapper.getSenderID()), Boolean.class));
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK,
+					new Gson().toJson(c.isClientLoggedIn(inCommandWrapper.getSenderID()), Boolean.class));
 		} catch (CriticalError e) {
 			log.fatal("Is logged in command failed, critical error occured from SQL Database connection");
 
@@ -158,7 +159,7 @@ public class CommandExecuter {
 
 		log.info("Is logged in command finished");
 	}
-	
+
 	private void viewProductFromCatalogCommand(SQLDatabaseConnection c) {
 		SmartCode smartCode = null;
 
@@ -266,7 +267,7 @@ public class CommandExecuter {
 
 		if (!catalogProduct.isValid()) {
 			log.info("Add Product To Catalog command failed, product is invalid");
-			
+
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
 		} else {
 			try {
@@ -364,15 +365,16 @@ public class CommandExecuter {
 
 		if (!catalogProduct.isValid()) {
 			log.info("Edit Product From Catalog command failed, barcode can't be negative");
-			
+
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
 		} else {
 			try {
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
-				
+
 				c.editProductInCatalog(inCommandWrapper.getSenderID(), catalogProduct);
 			} catch (CriticalError e) {
-				log.fatal("Edit Product From Catalog command failed, critical error occured from SQL Database connection");
+				log.fatal(
+						"Edit Product From Catalog command failed, critical error occured from SQL Database connection");
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 			} catch (ClientNotConnected e) {
@@ -394,7 +396,7 @@ public class CommandExecuter {
 
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
 			}
-			
+
 			log.info("Edit Product From Catalog with product " + catalogProduct + " finished");
 		}
 	}
@@ -475,7 +477,7 @@ public class CommandExecuter {
 		} else {
 
 			try {
-				if (productPackage.getLocation().equals(PlaceInMarket.STORE))
+				if (productPackage.getLocation().getPlaceInMarket().equals(PlaceInMarket.STORE))
 					c.removeProductPackageFromShelves(inCommandWrapper.getSenderID(), productPackage);
 				else
 					c.removeProductPackageFromWarehouse(inCommandWrapper.getSenderID(), productPackage);
@@ -535,7 +537,7 @@ public class CommandExecuter {
 			String amount = "";
 
 			try {
-				amount = productPackage.getLocation().equals(PlaceInMarket.STORE)
+				amount = productPackage.getLocation().getPlaceInMarket().equals(PlaceInMarket.STORE)
 						? c.getProductPackageAmonutOnShelves(inCommandWrapper.getSenderID(), productPackage)
 						: c.getProductPackageAmonutInWarehouse(inCommandWrapper.getSenderID(), productPackage);
 
@@ -563,20 +565,22 @@ public class CommandExecuter {
 		log.info("Load Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
 
 		try {
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, c.cartRestoreGroceryList(inCommandWrapper.getSenderID()));
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK,
+					c.cartRestoreGroceryList(inCommandWrapper.getSenderID()));
 		} catch (CriticalError e) {
 			log.fatal("Load Grocery List command failed, critical error occured from SQL Database connection");
-			
+
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 		} catch (NoGroceryListToRestore e) {
-			log.info("Load Grocery List command failed, no grocery list for senderID " + inCommandWrapper.getSenderID() + " to restore");
-			
+			log.info("Load Grocery List command failed, no grocery list for senderID " + inCommandWrapper.getSenderID()
+					+ " to restore");
+
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
 		}
-		
+
 		log.info("Load Grocery List from serderID " + inCommandWrapper.getSenderID() + " command finished");
 	}
-	
+
 	private void addProductToGroceryList(SQLDatabaseConnection c) {
 		ProductPackage productPackage = null;
 
@@ -591,49 +595,50 @@ public class CommandExecuter {
 
 			return;
 		}
-		
+
 		log.info("Trying to add product package " + productPackage + " to grocery list");
-		
+
 		if (!productPackage.isValid()) {
 			log.info("Add Product To Grocery List command failed, product package is invalid");
-			
+
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
 		} else
 			try {
 				c.addProductToGroceryList(inCommandWrapper.getSenderID(), productPackage);
-				
+
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
-		} catch (CriticalError e) {
+			} catch (CriticalError e) {
 				log.fatal(
 						"Add Product To Grocery List command failed, critical error occured from SQL Database connection");
-				
+
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 			} catch (ClientNotConnected e) {
 				log.info("Add Product To Grocery List command failed, client is not connected");
-				
+
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
 			} catch (ProductNotExistInCatalog e) {
 				log.info("Add Product To Grocery List command failed, product is not exist in catalog");
-				
+
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST);
 			} catch (ProductPackageAmountNotMatch e) {
 				log.info("Add Product To Grocery List command failed, product package amount does not match");
-				
+
 				outCommandWrapper = new CommandWrapper(
 						ResultDescriptor.SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE);
 			} catch (ProductPackageNotExist e) {
 				log.info("Add Product To Grocery List command failed, product package does not exist");
-				
+
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_DOES_NOT_EXIST);
 			}
-		
+
 		log.info("Add Product To Grocery List with product package " + productPackage + " finished");
 	}
-	
+
 	private void removeProductFromGroceryList(SQLDatabaseConnection c) {
 		ProductPackage productPackage = null;
 
-		log.info("Remove Product From Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
+		log.info(
+				"Remove Product From Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
 
 		try {
 			productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
@@ -644,66 +649,65 @@ public class CommandExecuter {
 
 			return;
 		}
-		
+
 		log.info("Trying to remove product package " + productPackage + " from grocery list");
-		
+
 		if (!productPackage.isValid()) {
 			log.info("Remove Product From Grocery List command failed, product package is invalid");
-			
+
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
 		} else
 			try {
 				c.removeProductFromGroceryList(inCommandWrapper.getSenderID(), productPackage);
-				
+
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 			} catch (CriticalError e) {
 				log.fatal(
 						"Remove Product From Grocery List command failed, critical error occured from SQL Database connection");
-				
+
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 			} catch (ClientNotConnected e) {
 				log.info("Remove Product From Grocery List command failed, client is not connected");
-				
+
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
 			} catch (ProductNotExistInCatalog e) {
 				log.info("Remove Product From Grocery List command failed, product is not exist in catalog");
-				
+
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST);
 			} catch (ProductPackageAmountNotMatch e) {
 				log.info("Remove Product From Grocery List command failed, product package amount does not match");
-				
+
 				outCommandWrapper = new CommandWrapper(
 						ResultDescriptor.SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE);
 			} catch (ProductPackageNotExist e) {
 				log.info("Remove Product From Grocery List command failed, product package does not exist");
-				
+
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_DOES_NOT_EXIST);
 			}
-		
+
 		log.info("Remove Product From Grocery List with product package " + productPackage + " finished");
 	}
-	
+
 	private void checkoutGroceryList(SQLDatabaseConnection c) {
 		log.info("Checkout Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
 
 		try {
 			c.cartCheckout(inCommandWrapper.getSenderID());
-			
+
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 		} catch (CriticalError e) {
-			log.fatal(
-					"Checkout Grocery List command failed, critical error occured from SQL Database connection");
-			
+			log.fatal("Checkout Grocery List command failed, critical error occured from SQL Database connection");
+
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 		} catch (ClientNotConnected e) {
 			log.info("Checkout Grocery List command failed, client is not connected");
-			
+
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
 		}
 
 		log.info("Checkout Grocery List from serderID " + inCommandWrapper.getSenderID() + " finished");
 	}
-	
+
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
 			log.fatal("Failed to get SQL Database Connection");
@@ -728,7 +732,7 @@ public class CommandExecuter {
 			logoutCommand(c);
 
 			break;
-			
+
 		case IS_LOGGED_IN:
 			isLoggedInCommand(c);
 
@@ -773,22 +777,22 @@ public class CommandExecuter {
 			getProductPackageAmount(c);
 
 			break;
-			
+
 		case LOAD_GROCERY_LIST:
 			loadGroceryList(c);
 
 			break;
-			
+
 		case ADD_PRODUCT_TO_GROCERY_LIST:
 			addProductToGroceryList(c);
 
 			break;
-			
+
 		case REMOVE_PRODUCT_FROM_GROCERY_LIST:
 			removeProductFromGroceryList(c);
 
 			break;
-			
+
 		case CHECKOUT_GROCERY_LIST:
 			checkoutGroceryList(c);
 
