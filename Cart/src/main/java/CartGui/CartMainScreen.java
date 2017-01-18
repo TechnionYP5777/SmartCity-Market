@@ -143,6 +143,11 @@ public class CartMainScreen implements Initializable {
 
 	}
 	
+	@FXML
+	public void cancelButtonPressed(ActionEvent __) {
+		//todo: continue from here
+	}
+	
 	private void waitForScannerEvent() {
 		// TODO Auto-generated method stub
 		
