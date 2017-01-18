@@ -255,8 +255,10 @@ public class WorkerMenuScreen implements Initializable {
 		barcodeOperationsPane.setVisible(!show);
 		if (show) {
 			smartcodeOperationsPane.toFront();
+			printSmartCodeRadioButton.setSelected(true);
 		} else {
 			barcodeOperationsPane.toFront();
+			addPakageToWarhouseRadioButton.setSelected(true);
 		}
 	}
 
