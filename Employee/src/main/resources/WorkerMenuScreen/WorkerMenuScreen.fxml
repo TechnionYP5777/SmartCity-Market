@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.gluonhq.charm.glisten.control.AutoCompleteTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -8,6 +9,8 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -28,216 +31,363 @@
       <RowConstraints vgrow="ALWAYS" />
    </rowConstraints>
    <children>
-      <VBox>
-         <children>
-            <VBox alignment="CENTER" spacing="10.0">
-               <children>
-                  <TextField fx:id="barcodeTextField" maxWidth="278.0" minWidth="233.0" onAction="#searchCodeButtonPressed" prefHeight="23.0" prefWidth="233.0" promptText="Type Or Scan Product SmartCode..." />
-                  <Button mnemonicParsing="false" onAction="#searchCodeButtonPressed" text="Search Code" />
-                  <DatePicker fx:id="datePickerForSmartCode" prefHeight="26.0" prefWidth="142.0" />
-               </children>
-            </VBox>
-            <StackPane>
-               <children>
-                  <VBox fx:id="productAfterScanPane" spacing="15.0">
+      <TabPane>
+         <tabs>
+            <Tab closable="false" text="Manage Catalog Products">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="15.0">
                      <children>
-                        <Label text="Product Quick View" textFill="WHITE">
-                           <font>
-                              <Font size="27.0" />
-                           </font>
-                        </Label>
+                        <Label text="Choose operation:" />
+                        <RadioButton mnemonicParsing="false" text="Add Catalog Product" />
+                        <RadioButton mnemonicParsing="false" text="Remove Catalog Product" />
                         <Separator prefWidth="200.0" />
-                        <GridPane fx:id="quickProductDetailsPane">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" percentWidth="10.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" percentWidth="90.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" />
+                              <ColumnConstraints hgrow="SOMETIMES" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints vgrow="SOMETIMES" />
+                           </rowConstraints>
                            <children>
-                              <HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
+                              <HBox>
                                  <children>
-                                    <Label text="Product Name:" textFill="WHITE" />
+                                    <Label text="Barcode:" />
                                  </children>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" GridPane.rowIndex="2">
+                              <HBox GridPane.columnIndex="1">
                                  <children>
-                                    <Label text="Expiration Date:" textFill="WHITE" />
+                                    <AutoCompleteTextField />
                                  </children>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" GridPane.rowIndex="3">
-                                 <children>
-                                    <Label text="Amount In Store:" textFill="WHITE" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" GridPane.rowIndex="4">
-                                 <children>
-                                    <Label text="Amount In Warehouse:" textFill="WHITE" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                 <children>
-                                    <Label fx:id="productNameValLabel" text="N/A" textFill="WHITE" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                 <children>
-                                    <Label fx:id="expirationDateValLabel" text="N/A" textFill="WHITE" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                                 <children>
-                                    <Label fx:id="amoutInStoreValLabel" text="N/A" textFill="WHITE" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                                 <children>
-                                    <Label fx:id="AmountInWarehouseValLabel" text="N/A" textFill="WHITE" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </HBox>
-                              <Button fx:id="showMoreDetailsButton" mnemonicParsing="false" onAction="#showMoreDetailsButtonPressed" prefHeight="23.0" prefWidth="162.0" text="Show more details" GridPane.rowIndex="5" />
-                              <HBox alignment="CENTER_LEFT">
-                                 <children>
-                                    <Label text="Barcode:" textFill="WHITE" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
-                                 <children>
-                                    <Label fx:id="smartCodeValLabel" text="N/A" textFill="WHITE" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
                               </HBox>
                            </children>
                         </GridPane>
-                        <StackPane>
+                        <StackPane prefHeight="150.0" prefWidth="200.0">
                            <children>
-                              <VBox fx:id="smartcodeOperationsPane" spacing="15.0">
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="15.0">
                                  <children>
-                                    <Label text="Choose operation for smartcode" textFill="WHITE">
-                                       <font>
-                                          <Font size="27.0" />
-                                       </font>
-                                    </Label>
-                                    <Separator />
-                                    <RadioButton fx:id="printSmartCodeRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Print smart code" textFill="WHITE" />
-                                    <RadioButton fx:id="addPackageToStoreRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Add package to store" textFill="WHITE" />
-                                    <RadioButton fx:id="removePackageFromStoreRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Remove package from store" textFill="WHITE" />
-                                    <RadioButton fx:id="removePackageFromWarhouseRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Remove package from warehouse" textFill="WHITE" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </VBox>
-                              <VBox fx:id="barcodeOperationsPane" spacing="15.0" visible="false">
-                                 <children>
-                                    <Label text="Choose operation for barcode" textFill="WHITE">
-                                       <font>
-                                          <Font size="27.0" />
-                                       </font>
-                                    </Label>
-                                    <Separator />
-                                    <HBox spacing="20.0">
+                                    <GridPane>
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" />
+                                          <ColumnConstraints hgrow="SOMETIMES" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints vgrow="SOMETIMES" />
+                                          <RowConstraints vgrow="SOMETIMES" />
+                                          <RowConstraints vgrow="SOMETIMES" />
+                                          <RowConstraints vgrow="SOMETIMES" />
+                                          <RowConstraints vgrow="SOMETIMES" />
+                                          <RowConstraints vgrow="SOMETIMES" />
+                                       </rowConstraints>
                                        <children>
-                                          <RadioButton fx:id="addPakageToWarhouseRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" selected="true" text="Add package to warehouse" textFill="WHITE" />
-                                          <Label fx:id="expirationDateLabel" text="Expiration Date:" textFill="WHITE" />
-                                          <DatePicker fx:id="datePicker" />
-                                          <CheckBox fx:id="printTheSmartCodeCheckBox" mnemonicParsing="false" text="Print the smart code" textFill="WHITE" />
+                                          <HBox>
+                                             <children>
+                                                <Label text="Product Name:" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox GridPane.rowIndex="1">
+                                             <children>
+                                                <Label text="Product Description:" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox GridPane.rowIndex="2">
+                                             <children>
+                                                <Label text="Product manufacker:" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox GridPane.rowIndex="3">
+                                             <children>
+                                                <Label text="Product Price:" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox GridPane.rowIndex="4">
+                                             <children>
+                                                <Label text="Ingridians:" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox GridPane.rowIndex="5">
+                                             <children>
+                                                <Label text="Product Location:" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                             <children>
+                                                <AutoCompleteTextField />
+                                             </children>
+                                          </HBox>
+                                          <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                             <children>
+                                                <AutoCompleteTextField />
+                                             </children>
+                                          </HBox>
+                                          <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                             <children>
+                                                <AutoCompleteTextField />
+                                             </children>
+                                          </HBox>
+                                          <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                             <children>
+                                                <AutoCompleteTextField />
+                                             </children>
+                                          </HBox>
+                                          <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                             <children>
+                                                <AutoCompleteTextField />
+                                             </children>
+                                          </HBox>
+                                          <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                             <children>
+                                                <AutoCompleteTextField />
+                                             </children>
+                                          </HBox>
                                        </children>
-                                    </HBox>
+                                    </GridPane>
                                  </children>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
                               </VBox>
                            </children>
                         </StackPane>
-                        <VBox alignment="CENTER">
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab closable="false" text="Manage Packages">
+               <content>
+                  <VBox>
+                     <children>
+                        <VBox alignment="CENTER" spacing="10.0">
                            <children>
-                              <GridPane prefWidth="278.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" />
-                                  <ColumnConstraints hgrow="SOMETIMES" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <HBox alignment="CENTER_RIGHT">
-                                       <children>
-                                          <Label text="Amount:" textFill="WHITE" />
-                                       </children>
-                                       <padding>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </padding>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
-                                       <children>
-                                          <Spinner fx:id="editPackagesAmountSpinner" editable="true" initialValue="1" max="100" min="1" prefHeight="54.0" prefWidth="18.0" styleClass="split-arrows-vertical" />
-                                       </children>
-                                       <padding>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </padding>
-                                    </HBox>
-                                 </children>
-                                 <padding>
-                                    <Insets left="10.0" right="10.0" />
-                                 </padding>
-                              </GridPane>
-                              <Button fx:id="runTheOperationButton" mnemonicParsing="false" onAction="#runTheOperationButtonPressed" text="Run the operation" />
+                              <TextField fx:id="barcodeTextField" maxWidth="278.0" minWidth="233.0" onAction="#searchCodeButtonPressed" prefHeight="23.0" prefWidth="233.0" promptText="Type Or Scan Product SmartCode..." />
+                              <Button mnemonicParsing="false" onAction="#searchCodeButtonPressed" text="Search Code" />
+                              <DatePicker fx:id="datePickerForSmartCode" prefHeight="26.0" prefWidth="142.0" />
                            </children>
                         </VBox>
+                        <StackPane>
+                           <children>
+                              <VBox fx:id="productAfterScanPane" spacing="15.0">
+                                 <children>
+                                    <Label text="Product Quick View" textFill="WHITE">
+                                       <font>
+                                          <Font size="27.0" />
+                                       </font>
+                                    </Label>
+                                    <Separator prefWidth="200.0" />
+                                    <GridPane fx:id="quickProductDetailsPane">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="10.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="90.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
+                                             <children>
+                                                <Label text="Product Name:" textFill="WHITE" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" GridPane.rowIndex="2">
+                                             <children>
+                                                <Label text="Expiration Date:" textFill="WHITE" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" GridPane.rowIndex="3">
+                                             <children>
+                                                <Label text="Amount In Store:" textFill="WHITE" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" GridPane.rowIndex="4">
+                                             <children>
+                                                <Label text="Amount In Warehouse:" textFill="WHITE" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                             <children>
+                                                <Label fx:id="productNameValLabel" text="N/A" textFill="WHITE" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                             <children>
+                                                <Label fx:id="expirationDateValLabel" text="N/A" textFill="WHITE" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                             <children>
+                                                <Label fx:id="amoutInStoreValLabel" text="N/A" textFill="WHITE" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                             <children>
+                                                <Label fx:id="AmountInWarehouseValLabel" text="N/A" textFill="WHITE" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <Button fx:id="showMoreDetailsButton" mnemonicParsing="false" onAction="#showMoreDetailsButtonPressed" prefHeight="23.0" prefWidth="162.0" text="Show more details" GridPane.rowIndex="5" />
+                                          <HBox alignment="CENTER_LEFT">
+                                             <children>
+                                                <Label text="Barcode:" textFill="WHITE" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
+                                             <children>
+                                                <Label fx:id="smartCodeValLabel" text="N/A" textFill="WHITE" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                       </children>
+                                    </GridPane>
+                                    <StackPane>
+                                       <children>
+                                          <VBox fx:id="smartcodeOperationsPane" spacing="15.0">
+                                             <children>
+                                                <Label text="Choose operation for smartcode" textFill="WHITE">
+                                                   <font>
+                                                      <Font size="27.0" />
+                                                   </font>
+                                                </Label>
+                                                <Separator />
+                                                <RadioButton fx:id="printSmartCodeRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Print smart code" textFill="WHITE" />
+                                                <RadioButton fx:id="addPackageToStoreRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Add package to store" textFill="WHITE" />
+                                                <RadioButton fx:id="removePackageFromStoreRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Remove package from store" textFill="WHITE" />
+                                                <RadioButton fx:id="removePackageFromWarhouseRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Remove package from warehouse" textFill="WHITE" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </VBox>
+                                          <VBox fx:id="barcodeOperationsPane" spacing="15.0" visible="false">
+                                             <children>
+                                                <Label text="Choose operation for barcode" textFill="WHITE">
+                                                   <font>
+                                                      <Font size="27.0" />
+                                                   </font>
+                                                </Label>
+                                                <Separator />
+                                                <HBox spacing="20.0">
+                                                   <children>
+                                                      <RadioButton fx:id="addPakageToWarhouseRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" selected="true" text="Add package to warehouse" textFill="WHITE" />
+                                                      <Label fx:id="expirationDateLabel" text="Expiration Date:" textFill="WHITE" />
+                                                      <DatePicker fx:id="datePicker" />
+                                                      <CheckBox fx:id="printTheSmartCodeCheckBox" mnemonicParsing="false" text="Print the smart code" textFill="WHITE" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </StackPane>
+                                    <VBox alignment="CENTER">
+                                       <children>
+                                          <GridPane prefWidth="278.0">
+                                            <columnConstraints>
+                                              <ColumnConstraints hgrow="SOMETIMES" />
+                                              <ColumnConstraints hgrow="SOMETIMES" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                              <RowConstraints vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                             <children>
+                                                <HBox alignment="CENTER_RIGHT">
+                                                   <children>
+                                                      <Label text="Amount:" textFill="WHITE" />
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                   </padding>
+                                                </HBox>
+                                                <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
+                                                   <children>
+                                                      <Spinner fx:id="editPackagesAmountSpinner" editable="true" initialValue="1" max="100" min="1" prefHeight="54.0" prefWidth="18.0" styleClass="split-arrows-vertical" />
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                   </padding>
+                                                </HBox>
+                                             </children>
+                                             <padding>
+                                                <Insets left="10.0" right="10.0" />
+                                             </padding>
+                                          </GridPane>
+                                          <Button fx:id="runTheOperationButton" mnemonicParsing="false" onAction="#runTheOperationButtonPressed" text="Run the operation" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox fx:id="scanOrTypeCodePane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" visible="false">
+                                 <children>
+                                    <Label text="Please Type Or Scan Barcode/SmartCode" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </StackPane>
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </VBox>
-                  <VBox fx:id="scanOrTypeCodePane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" visible="false">
-                     <children>
-                        <Label text="Please Type Or Scan Barcode/SmartCode" />
-                     </children>
-                  </VBox>
-               </children>
-            </StackPane>
-         </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-      </VBox>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
       <GridPane GridPane.rowIndex="1">
          <columnConstraints>
             <ColumnConstraints hgrow="ALWAYS" />
