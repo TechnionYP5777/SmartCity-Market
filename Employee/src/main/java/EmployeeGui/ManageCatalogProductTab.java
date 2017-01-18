@@ -1,10 +1,12 @@
 package EmployeeGui;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
-import BasicCommonClasses.ProductPackage;
 import EmployeeContracts.IManager;
+import GuiUtils.RadioButtonEnabler;
+import SMExceptions.SMException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -50,23 +52,25 @@ public class ManageCatalogProductTab implements Initializable {
 
 	IManager manager;
 
+	RadioButtonEnabler radioButtonContainerManageCatalogProduct = new RadioButtonEnabler();
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-
+			enableRunOperation();
 		});
 		productNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-
+			enableRunOperation();
 		});
 		productDescriptionTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-
+			enableRunOperation();
 		});
 		;
 		productManufacturerTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 
 		});
 		productPriceTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-
+			enableRunOperation();
 		});
 		productIngredientsTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 
@@ -75,26 +79,51 @@ public class ManageCatalogProductTab implements Initializable {
 
 		});
 
+		radioButtonContainerManageCatalogProduct.addRadioButtons(
+				(Arrays.asList((new RadioButton[] { addCatalogProductRadioButton, removeCatalogProductRadioButton }))));
+		
+		enableRunOperation();
+
+	}
+	
+	private void enableRunOperation() {
+		runTheOperationButton.setDisable(barcodeTextField.getText().isEmpty() || productNameTextField.getText().isEmpty() || productDescriptionTextField.getText().isEmpty());
 	}
 
 	@FXML
 	void addCatalogProductRadioButtonPressed(ActionEvent event) {
+		radioButtonContainerManageCatalogProduct.selectRadioButton(addCatalogProductRadioButton);
+		addCatalogProductParamPane.setVisible(true);
 
 	}
 
 	@FXML
 	void removeCatalogProductRadioButtonPressed(ActionEvent event) {
-
+		radioButtonContainerManageCatalogProduct.selectRadioButton(removeCatalogProductRadioButton);
+		addCatalogProductParamPane.setVisible(false);
 	}
 
 	@FXML
 	void runTheOperationButtonPressed(ActionEvent event) {
-		if (addCatalogProductRadioButton.isSelected()) {
-			
-//			ProductPackage productpackage = new ProductPackage(smartCode, amount, location)
-		
-		} else if (removeCatalogProductRadioButton.isSelected()) {
 
+		try {
+			if (addCatalogProductRadioButton.isSelected()) {
+
+//				CatalogProduct catalogProduct = new CatalogProduct(Long.parseLong(barcodeTextField.getText()),
+//						productNameTextField.getText(), null, null, productDescriptionTextField.getText(),
+//						Double.parseDouble(productPriceTextField.getText()), null, null);
+
+				// TODO Change this
+				manager.addProductToCatalog(null);
+
+			} else if (removeCatalogProductRadioButton.isSelected()) {
+
+				// TODO Change this
+				manager.removeProductFromCatalog(null);
+			}
+
+		} catch (SMException e) {
+			EmployeeGuiExeptionHandler.handle(e);
 		}
 	}
 
