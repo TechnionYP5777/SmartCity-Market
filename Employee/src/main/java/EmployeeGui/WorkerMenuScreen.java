@@ -275,7 +275,7 @@ public class WorkerMenuScreen implements Initializable {
 		showScanCodePane(false);
 		showSmartCodeOperationsPane(false);
 
-		addProductParametersToQuickView(barcodeTextField.getText(), catalogProduct.getName(), "N/A", "N/A", "N/A");
+		addProductParametersToQuickView(catalogProduct.getName(), barcodeTextField.getText(), "N/A", "N/A", "N/A");
 
 	}
 
@@ -294,7 +294,7 @@ public class WorkerMenuScreen implements Initializable {
 		showScanCodePane(false);
 		showSmartCodeOperationsPane(true);
 
-		addProductParametersToQuickView(barcodeTextField.getText(), catalogProduct.getName(),
+		addProductParametersToQuickView(catalogProduct.getName(), barcodeTextField.getText(),
 				smartcode.getExpirationDate().toString(), Integer.toString(amountInStore),
 				Integer.toString(amountInWarehouse));
 
