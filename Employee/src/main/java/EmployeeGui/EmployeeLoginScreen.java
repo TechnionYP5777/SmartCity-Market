@@ -63,6 +63,8 @@ public class EmployeeLoginScreen implements Initializable {
 
 	@FXML
 	private void loginButtonPressed(ActionEvent __) {
+		if (loginButton.isDisable())
+			return;
 		IManager employee = InjectionFactory.getInstance(Manager.class);
 		CLIENT_TYPE employeeType = null;
 		try {

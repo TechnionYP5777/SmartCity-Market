@@ -61,7 +61,7 @@
                   </Lighting>
                </effect>
             </Separator>
-            <TextField fx:id="userNameTextField" minHeight="40.0" prefHeight="60.0" promptText="User Name" styleClass="label">
+            <TextField fx:id="userNameTextField" minHeight="40.0" onAction="#loginButtonPressed" prefHeight="60.0" promptText="User Name" styleClass="label">
                <font>
                   <Font name="Lucida Bright Regular" size="13.0" />
                </font>
@@ -76,7 +76,7 @@
                   </Lighting>
                </effect>
             </TextField>
-            <PasswordField fx:id="passwordField" minHeight="40.0" prefHeight="60.0" promptText="  Password" styleClass="label">
+            <PasswordField fx:id="passwordField" minHeight="40.0" onAction="#loginButtonPressed" prefHeight="60.0" promptText="  Password" styleClass="label">
                <padding>
                   <Insets top="10.0" />
                </padding>

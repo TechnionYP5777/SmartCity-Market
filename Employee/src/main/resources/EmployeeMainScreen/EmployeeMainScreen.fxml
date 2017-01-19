@@ -7,10 +7,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <StackPane fx:id="mainScreenPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeMainScreen">
    <children>
-      <VBox fx:id="vbox" alignment="CENTER" onMouseClicked="#mouseClicked" spacing="20.0" stylesheets="@EmployeeMainScreen.css">
+      <VBox fx:id="vbox" alignment="CENTER" onKeyPressed="#keyClicked" onMouseClicked="#keyClicked" onTouchPressed="#keyClicked" spacing="20.0" stylesheets="@EmployeeMainScreen.css">
          <children>
             <Label text="Smart Market" textFill="WHITE">
                <font>
