@@ -150,6 +150,47 @@ public class SQLDatabaseConnectionTest {
 		assertEquals(product.getManufacturer().getId(), manufaturerID);
 		assertEquals(product.getManufacturer().getName(), manufaturerName);
 	}
+	
+	@Test
+	public void testGetProductFromCatalogAfterLogout() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		int session = 0;
+		
+		try {
+			session = sqlConnection.login("admin", "admin");
+		} catch (AuthenticationError | ClientAlreadyConnected | CriticalError | NumberOfConnectionsExceeded e1) {
+			e1.printStackTrace();
+			fail();
+		}
+		
+		try {
+			sqlConnection.getProductFromCatalog(session, 1234567890);
+		} catch (ProductNotExistInCatalog | CriticalError e) {
+			e.printStackTrace();
+			fail();
+		} catch (ClientNotConnected e) {
+			fail();
+		}
+		
+		try {
+			sqlConnection.logout(session, "admin");
+		} catch (ClientNotConnected | CriticalError e1) {
+			e1.printStackTrace();
+			fail();
+		}
+
+		
+		try {
+			sqlConnection.getProductFromCatalog(session, 1234567890);
+			fail();
+		} catch (ProductNotExistInCatalog | CriticalError e) {
+			e.printStackTrace();
+			fail();
+		} catch (ClientNotConnected e) {
+		}
+	}
 
 	@Test
 	public void testSimpleAddRemoveProductFromCatalog() {
