@@ -1,6 +1,7 @@
 package GuiUtils;
 
 
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -28,6 +29,7 @@ public class DialogMessagesService {
 	}
 
 	private static void alertCreator(AlertType t, String title, String header, String content) {
+				
 		Alert alert = new Alert(t);
 		alert.setTitle(title);
 		alert.setHeaderText(header);

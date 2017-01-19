@@ -28,8 +28,6 @@ import javafx.scene.layout.GridPane;
 
 public class EmployeeLoginScreen implements Initializable {
 
-	private String username = "";
-	private String password = "";
 	@FXML
 	private GridPane loginScreenPane;
 	@FXML
@@ -45,12 +43,10 @@ public class EmployeeLoginScreen implements Initializable {
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(loginScreenPane);
 		userNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			username = newValue;
 			enableLoginButtonCheck();
 		});
 
 		passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
-			password = newValue;
 			enableLoginButtonCheck();
 		});
 		enableLoginButtonCheck();
@@ -68,7 +64,7 @@ public class EmployeeLoginScreen implements Initializable {
 		IManager employee = InjectionFactory.getInstance(Manager.class);
 		CLIENT_TYPE employeeType = null;
 		try {
-			employeeType = employee.login(username, password);
+			employeeType = employee.login(userNameTextField.getText(), passwordField.getText());
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 			return;
@@ -80,6 +76,6 @@ public class EmployeeLoginScreen implements Initializable {
 	}
 
 	private void enableLoginButtonCheck() {
-		loginButton.setDisable(username.isEmpty() || password.isEmpty());
+		loginButton.setDisable(userNameTextField.getText().isEmpty() || passwordField.getText().isEmpty());
 	}
 }

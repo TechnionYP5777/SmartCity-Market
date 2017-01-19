@@ -132,9 +132,12 @@ public class ManagePackagesTab implements Initializable {
 	IWorker worker = InjectionFactory.getInstance(EmployeeScreensParameterService.class).getParameter();
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) { 
+	public void initialize(URL location, ResourceBundle resources) {
 		barcodeEventHandler.register(this);
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.matches("\\d*")) {
+				barcodeTextField.setText(newValue.replaceAll("[^\\d]", ""));
+			}
 			addProductParametersToQuickView("N/A", "N/A", "N/A", "N/A", "N/A");
 			amountInWarehouse = amountInStore = -1;
 			showScanCodePane(true);
