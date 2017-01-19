@@ -19,7 +19,7 @@ public class CartProductTest {
 		PropertyConfigurator.configure("../log4j.properties");
 	}
 	
-	@Test public void CartProductTestMethod() {
+	/*@Test public void CartProductTestMethod() {
 		Manufacturer man = new Manufacturer(11,"Osem");
 		String bambaIm = "https://www.osem.co.il/tm-content/uploads/2015/01/Bamba_classic_80g3.png3-308x308.png";
 		CatalogProduct catp = new CatalogProduct(11, "Bamba", null, man, "", 12, bambaIm, null);
@@ -46,6 +46,6 @@ public class CartProductTest {
 		crp2.setExpirationDate(ld2);
 		if (crp2.equals(crp))
 			fail();
-	}
+	}*/
 }
 
