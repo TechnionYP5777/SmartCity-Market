@@ -541,13 +541,14 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			throw new CriticalError();
 		}
 
-		for (int ¢ = 0; ¢ < parameters.length; ++¢)
-			try {
-				$.setObject(¢ + 1, parameters[¢]);
-			} catch (SQLException e) {
-				e.printStackTrace();
-				throw new CriticalError();
-			}
+		if (parameters != null)
+			for (int ¢ = 0; ¢ < parameters.length; ++¢)
+				try {
+					$.setObject(¢ + 1, parameters[¢]);
+				} catch (SQLException e) {
+					e.printStackTrace();
+					throw new CriticalError();
+				}
 
 		return $;
 
@@ -576,13 +577,14 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			throw new CriticalError();
 		}
 
-		for (int ¢ = 0; ¢ < parameters.length; ++¢)
-			try {
-				$.setObject(¢ + 1, parameters[¢]);
-			} catch (SQLException e) {
-				e.printStackTrace();
-				throw new CriticalError();
-			}
+		if (parameters != null)
+			for (int ¢ = 0; ¢ < parameters.length; ++¢)
+				try {
+					$.setObject(¢ + 1, parameters[¢]);
+				} catch (SQLException e) {
+					e.printStackTrace();
+					throw new CriticalError();
+				}
 
 		return $;
 
@@ -2234,6 +2236,23 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		return null;
 
+	}
+
+	@Override
+	public String getManufacturersList(Integer sessionID) throws ClientNotConnected, CriticalError {
+		validateSessionEstablished(sessionID);
+
+		try {
+			ResultSet manufacturerResultSet = getParameterizedReadQuery(
+					new SelectQuery().addAllTableColumns(ManufacturerTable.table).validate() + "", (Object[]) null)
+							.executeQuery();
+			manufacturerResultSet.first();
+
+			return SQLJsonGenerator.manufaturersListToJson(manufacturerResultSet);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		}
 	}
 
 }

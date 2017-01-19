@@ -3,6 +3,7 @@ package SQLDatabaseTest;
 import static org.junit.Assert.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import org.apache.log4j.PropertyConfigurator;
@@ -10,6 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
@@ -610,6 +614,29 @@ public class SQLDatabaseConnectionTest {
 		} catch (ClientNotConnected e) {
 
 		} catch (CriticalError e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void testGetManufacturers() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		try {
+
+			HashMap<Integer, Manufacturer> list = new HashMap<>();
+
+			Type listType = new TypeToken<HashMap<Integer, Manufacturer>>() {
+			}.getType();
+			list = new Gson().fromJson(sqlConnection.getManufacturersList(null), listType);
+
+			assertTrue(list.containsKey(1));
+			assertTrue(list.containsKey(2));
+			assertEquals(new Manufacturer(1, "תנובה"), list.get(1));
+			assertEquals(new Manufacturer(2, "מאפיות ברמן"), list.get(2));
+		} catch (CriticalError | ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
 		}

@@ -60,6 +60,8 @@ public interface ISQLDatabaseConnection {
 
 	void editManufacturer(Integer sessionID, Manufacturer newManufacturer)
 			throws CriticalError, ClientNotConnected, ManufacturerNotExist;
+	
+	String getManufacturersList(Integer sessionID) throws ClientNotConnected, CriticalError;
 
 	void addProductToGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError, ClientNotConnected,
 			ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist;

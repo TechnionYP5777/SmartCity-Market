@@ -3,6 +3,7 @@ package SQLDatabase;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import com.google.gson.Gson;
@@ -222,6 +223,38 @@ class SQLJsonGenerator {
 							.getDate(GroceriesListsTable.expirationDateCol.getColumnNameSQL()).toLocalDate();
 					$.addProduct(new ProductPackage(new SmartCode(barcode, expirationDate), amount, null));
 					groceryList.next();
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLDatabaseException.CriticalError();
+		}
+
+		return new Gson().toJson($);
+
+	}
+
+	/**
+	 * convert manufacturers list from ResultSet to Json representation of list
+	 * of manufacturers list
+	 * 
+	 * @param manufaturersList
+	 *            - ResultSet of the manufaturersList. The ResultSet should
+	 *            point the first row. At returning, this object will point the
+	 *            next row after the last row.
+	 * @return Json representation of the grocery list
+	 * @throws CriticalError
+	 */
+	static String manufaturersListToJson(ResultSet manufaturersList) throws CriticalError {
+		HashMap<Integer, Manufacturer> $ = new HashMap<>();
+
+		try {
+			if (manufaturersList.getRow() != 0)
+				while (!manufaturersList.isAfterLast()) {
+					int manufaturerID = manufaturersList.getInt(ManufacturerTable.manufacturerIDCol.getColumnNameSQL());
+					String manufaturerName = getStringFromResultset(manufaturersList,
+							ManufacturerTable.manufacturerNameCol);
+					$.put(manufaturerID, new Manufacturer(manufaturerID, manufaturerName));
+					manufaturersList.next();
 				}
 		} catch (SQLException e) {
 			e.printStackTrace();
