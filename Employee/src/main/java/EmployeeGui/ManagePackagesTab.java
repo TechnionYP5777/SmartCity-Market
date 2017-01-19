@@ -27,6 +27,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -35,6 +36,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 /**
  * ManagePackagesTab - This class is the controller for the Manage Packages Tab
@@ -143,6 +145,23 @@ public class ManagePackagesTab implements Initializable {
 			showScanCodePane(true);
 		});
 
+		final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+			@Override
+			public DateCell call(final DatePicker datePicker) {
+				return new DateCell() {
+					@Override
+					public void updateItem(LocalDate item, boolean empty) {
+						super.updateItem(item, empty);
+
+						if (item.isBefore(LocalDate.now())) {
+							setDisable(true);
+							setStyle("-fx-background-color: #EEEEEE;");
+						}
+					}
+				};
+			}
+		};
+		datePicker.setDayCellFactory(dayCellFactory);
 		datePicker.setValue(LocalDate.now());
 
 		radioButtonContainerSmarcodeOperations.addRadioButtons(
