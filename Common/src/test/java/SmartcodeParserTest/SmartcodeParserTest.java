@@ -40,5 +40,12 @@ public class SmartcodeParserTest {
 		assertEquals(7290000688077L, barcode.getBarcode());
 		
 	}
+	
+	@Test
+	public void testSmartodeEncode() {
+		assertEquals("11010011100111101011101001110011011001101100100010011001011100110011011100100101100111001011110111011001011100110000101001100011101011",
+				SmartcodeParser.smartcodeToCode(new SmartCode(123, LocalDate.of(2001, 05, 15))));
+		
+	}
 
 }
