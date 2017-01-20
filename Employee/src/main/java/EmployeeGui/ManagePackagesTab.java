@@ -36,6 +36,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -134,9 +135,9 @@ public class ManagePackagesTab implements Initializable {
 	int amountInStore = -1;
 
 	int amountInWarehouse = -1;
-	
+
 	LocalDate expirationDate;
-	
+
 	IBarcodeEventHandler barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
 
 	IWorker worker = InjectionFactory.getInstance(EmployeeScreensParameterService.class).getParameter();
@@ -148,8 +149,6 @@ public class ManagePackagesTab implements Initializable {
 			if (!newValue.matches("\\d*")) {
 				barcodeTextField.setText(newValue.replaceAll("[^\\d]", ""));
 			}
-			addProductParametersToQuickView("N/A", "N/A", "N/A", "N/A", "N/A");
-			amountInWarehouse = amountInStore = -1;
 			showScanCodePane(true);
 		});
 
@@ -188,6 +187,11 @@ public class ManagePackagesTab implements Initializable {
 
 		showScanCodePane(true);
 
+	}
+
+	@FXML
+	void mouseClikedOnBarcodeField(MouseEvent event) {
+		showScanCodePane(true);
 	}
 
 	private void addProductParametersToQuickView(String productName, String productBarcode,
@@ -238,6 +242,8 @@ public class ManagePackagesTab implements Initializable {
 
 		datePickerForSmartCode.setValue(null);
 		this.expirationDate = null;
+		addProductParametersToQuickView("N/A", "N/A", "N/A", "N/A", "N/A");
+		amountInWarehouse = amountInStore = -1;
 	}
 
 	private void showSmartCodeOperationsPane(boolean show) {
@@ -293,7 +299,8 @@ public class ManagePackagesTab implements Initializable {
 	@FXML
 	private void searchCodeButtonPressed(ActionEvent __) {
 		try {
-			LocalDate expirationDate = (this.expirationDate ==null) ? datePickerForSmartCode.getValue() : this.expirationDate;
+			LocalDate expirationDate = (this.expirationDate == null) ? datePickerForSmartCode.getValue()
+					: this.expirationDate;
 
 			if (expirationDate == null) {
 
@@ -303,9 +310,9 @@ public class ManagePackagesTab implements Initializable {
 
 				smartcodeEntered(new SmartCode(Long.parseLong(barcodeTextField.getText()), expirationDate));
 			}
-			
+
 			this.expirationDate = expirationDate;
-			
+
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 			return;
@@ -336,7 +343,7 @@ public class ManagePackagesTab implements Initializable {
 
 				// printToSuccessLog(("Added (" + amountVal + ") " + "product
 				// packages (" + pp + ") to warehouse"));
-				
+
 				searchCodeButtonPressed(null);
 
 			} else if (addPackageToStoreRadioButton.isSelected()) {
@@ -350,7 +357,7 @@ public class ManagePackagesTab implements Initializable {
 
 				// printToSuccessLog(("Added (" + amountVal + ") " + "product
 				// packages (" + pp + ") to store"));
-				
+
 				searchCodeButtonPressed(null);
 
 			} else if (removePackageFromStoreRadioButton.isSelected()) {
@@ -364,7 +371,7 @@ public class ManagePackagesTab implements Initializable {
 
 				// printToSuccessLog(("Removed (" + amountVal + ") " + "product
 				// packages (" + pp + ") from store"));
-				
+
 				searchCodeButtonPressed(null);
 
 			} else if (removePackageFromWarhouseRadioButton.isSelected()) {
@@ -373,9 +380,9 @@ public class ManagePackagesTab implements Initializable {
 				worker.removeProductPackageFromStore(pp);
 				// printToSuccessLog(("Removed (" + amountVal + ") " + "product
 				// packages (" + pp + ") from warehouse"));
-				
+
 				searchCodeButtonPressed(null);
-				
+
 			}
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
