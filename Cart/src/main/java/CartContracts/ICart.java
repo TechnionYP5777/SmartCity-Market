@@ -27,7 +27,7 @@ public interface ICart {
 	 * getCartProductCache - returns the current CartProduct Cache.
 	 * @return HashMap<SmartCode, CartProduct> 
 	 */
-	HashMap<SmartCode, CartProduct> getCartProductCache();
+	HashMap<Long, CartProduct> getCartProductCache();
 	
 	/**
 	 * login - the cart login to the server and gets it's own id;

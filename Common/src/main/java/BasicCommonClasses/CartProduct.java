@@ -1,22 +1,23 @@
 package BasicCommonClasses;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.HashSet;
+
 
 /** CartProduct - The product from the Cart (/costumer) perspective. 
- * @param amount - The number of items of the same product in the cart.
- * unique keys: only catalogProduct and expirationDate!
  * @author Lior Ben Ami
  * @since 2016-12-09 */
 public class CartProduct {
 	CatalogProduct catalogProduct;
-	LocalDate expirationDate;
-	int amount;
+	HashMap<SmartCode,ProductPackage> packages;
+	int totalAmount;
 	
-	public CartProduct(CatalogProduct catalogProduct, LocalDate expirationDate, 
-			int amount) {
+	public CartProduct(CatalogProduct catalogProduct, HashMap<SmartCode,ProductPackage> packages,
+			int totalAmount) {
 		this.catalogProduct = catalogProduct;
-		this.expirationDate = expirationDate;
-		this.amount = amount;
+		this.packages = packages != null ? packages : new HashMap<SmartCode,ProductPackage>();
+		this.totalAmount = totalAmount;
 	}
 
 	public CatalogProduct getCatalogProduct() {
@@ -27,52 +28,47 @@ public class CartProduct {
 		this.catalogProduct = ¢;
 	}
 
-	public LocalDate getExpirationDate() {
-		return expirationDate;
+	public HashMap<SmartCode,ProductPackage> getPackages() {
+		return packages;
 	}
 
-	public void setExpirationDate(LocalDate expirationDate) {
-		this.expirationDate = expirationDate;
+	public void setPackages(HashMap<SmartCode,ProductPackage> ¢) {
+		this.packages = ¢;
 	}
 
-	public int getAmount() {
-		return amount;
+	public int getTotalAmount() {
+		return totalAmount;
 	}
 
-	public void setAmount(int amount) {
-		this.amount = amount;
-	}
-
-	public void incrementAmount(int ¢) {
-		amount += ¢;
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
 	}
 	
-	public void decreaseAmount(int ¢) {
-		amount = amount - ¢ <= 0 ? 0 : amount - ¢;
+	/**
+	 * @param productPackage
+	 */
+	public void addProductPackage(ProductPackage productPackage) {
+		SmartCode sc = productPackage.getSmartCode();
+		ProductPackage inCartProductPackage = packages.get(sc);
+		if ( inCartProductPackage != null) {
+			inCartProductPackage.incrementAmount(productPackage.getAmount());
+		}
+		packages.put(sc, productPackage);
+		totalAmount += productPackage.getAmount();
 	}
-	@Override
-	public int hashCode() {
-		return 31 * (((catalogProduct == null) ? 0 : catalogProduct.hashCode()) + 31)
-				+ ((expirationDate == null) ? 0 : expirationDate.hashCode());
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (o == this)
-			return true;
-		if (o == null || getClass() != o.getClass())
+	
+	public Boolean removeProductPackage(ProductPackage productPackage) {
+		SmartCode sc = productPackage.getSmartCode();
+		ProductPackage inCartProductPackage = packages.get(sc);
+		if (inCartProductPackage == null || inCartProductPackage.getAmount() < productPackage.getAmount())
 			return false;
-		CartProduct other = (CartProduct) o;
-		if (catalogProduct == null) {
-			if (other.catalogProduct != null)
-				return false;
-		} else if (!catalogProduct.equals(other.catalogProduct))
-			return false;
-		if (expirationDate == null) {
-			if (other.expirationDate != null)
-				return false;
-		} else if (!expirationDate.equals(other.expirationDate))
-			return false;
+		int prevAmount = inCartProductPackage.getAmount();
+		inCartProductPackage.setAmount(prevAmount - productPackage.getAmount());
+		totalAmount -= productPackage.getAmount();
 		return true;
+	}
+	
+	public double getTotalSum() {
+		return totalAmount * catalogProduct.getPrice();
 	}
 }
