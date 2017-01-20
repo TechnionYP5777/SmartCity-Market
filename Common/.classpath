@@ -33,6 +33,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/sazulay3/Downloads/controlsfx-8.40.12-javadoc.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
