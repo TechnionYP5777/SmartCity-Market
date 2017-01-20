@@ -896,14 +896,15 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			if (oldAmount == 0) {
 				String insertQuery = new InsertQuery(GroceriesListsTable.table)
 						.addColumn(GroceriesListsTable.barcodeCol, PARAM_MARK)
-						.addColumn(GroceriesListsTable.expirationDateCol, PARAM_MARK)
+						.addColumn(GroceriesListsTable.expirationDateCol,
+								JdbcEscape.date(Date.from(p.getSmartCode().getExpirationDate()
+										.atStartOfDay(ZoneId.systemDefault()).toInstant())))
 						.addColumn(GroceriesListsTable.listIDCol, PARAM_MARK)
 						.addColumn(GroceriesListsTable.amountCol, PARAM_MARK).validate() + "";
 
 				insertQuery.hashCode();
 
-				statement = getParameterizedQuery(insertQuery, p.getSmartCode().getBarcode(),
-						p.getSmartCode().getExpirationDate(), listID, newAmount);
+				statement = getParameterizedQuery(insertQuery, p.getSmartCode().getBarcode(), listID, newAmount);
 
 			} else if (newAmount == 0) { // case: remove row
 				String deleteQuery = generateDeleteQuery(GroceriesListsTable.table,
@@ -925,7 +926,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 								JdbcEscape.date(Date.from(p.getSmartCode().getExpirationDate()
 										.atStartOfDay(ZoneId.systemDefault()).toInstant()))));
 
-				updateQuery.addSetClause(ProductsPackagesTable.amountCol, newAmount).validate();
+				updateQuery.addSetClause(GroceriesListsTable.amountCol, newAmount).validate();
 
 				statement = getParameterizedQuery(updateQuery + "", p.getSmartCode().getBarcode(), listID);
 			}

@@ -150,21 +150,21 @@ public class SQLDatabaseConnectionTest {
 		assertEquals(product.getManufacturer().getId(), manufaturerID);
 		assertEquals(product.getManufacturer().getName(), manufaturerName);
 	}
-	
+
 	@Test
-	public void testGetProductFromCatalogAfterLogout() {
+	public void testGetProductFromCatalogAfterLogoutWorker() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 
 		int session = 0;
-		
+
 		try {
 			session = sqlConnection.login("admin", "admin");
 		} catch (AuthenticationError | ClientAlreadyConnected | CriticalError | NumberOfConnectionsExceeded e1) {
 			e1.printStackTrace();
 			fail();
 		}
-		
+
 		try {
 			sqlConnection.getProductFromCatalog(session, 1234567890);
 		} catch (ProductNotExistInCatalog | CriticalError e) {
@@ -173,7 +173,7 @@ public class SQLDatabaseConnectionTest {
 		} catch (ClientNotConnected e) {
 			fail();
 		}
-		
+
 		try {
 			sqlConnection.logout(session, "admin");
 		} catch (ClientNotConnected | CriticalError e1) {
@@ -181,7 +181,46 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		}
 
-		
+		try {
+			sqlConnection.getProductFromCatalog(session, 1234567890);
+			fail();
+		} catch (ProductNotExistInCatalog | CriticalError e) {
+			e.printStackTrace();
+			fail();
+		} catch (ClientNotConnected e) {
+		}
+	}
+
+	@Test
+	public void testGetProductFromCatalogAfterLogoutCart() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		int session = 0;
+
+		try {
+			session = sqlConnection.login("Cart", null);
+		} catch (AuthenticationError | ClientAlreadyConnected | CriticalError | NumberOfConnectionsExceeded e1) {
+			e1.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.getProductFromCatalog(session, 1234567890);
+		} catch (ProductNotExistInCatalog | CriticalError e) {
+			e.printStackTrace();
+			fail();
+		} catch (ClientNotConnected e) {
+			fail();
+		}
+
+		try {
+			sqlConnection.logout(session, "Cart");
+		} catch (ClientNotConnected | CriticalError e1) {
+			e1.printStackTrace();
+			fail();
+		}
+
 		try {
 			sqlConnection.getProductFromCatalog(session, 1234567890);
 			fail();
@@ -678,6 +717,399 @@ public class SQLDatabaseConnectionTest {
 			assertEquals(new Manufacturer(1, "תנובה"), list.get(1));
 			assertEquals(new Manufacturer(2, "מאפיות ברמן"), list.get(2));
 		} catch (CriticalError | ClientNotConnected e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	// TODO: test manufacturers methods
+
+	@Test
+	public void testRemoveMoreThanHaveFromCart() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		ProductPackage productPackage = new ProductPackage(new SmartCode(barcodeDebug, date112000), 10,
+				locationWarehouse);
+
+		int sessionCart = 0;
+		try {
+
+			sessionCart = sqlConnection.login("Cart", "Cart");
+			sqlConnection.addProductPackageToWarehouse(null, productPackage);
+			assertEquals("10", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+
+			sqlConnection.placeProductPackageOnShelves(null, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("10", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+
+			sqlConnection.addProductToGroceryList(sessionCart, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | AuthenticationError
+				| ClientAlreadyConnected | NumberOfConnectionsExceeded | ProductPackageAmountNotMatch
+				| ProductPackageNotExist e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		productPackage.setAmount(11);
+		try {
+			sqlConnection.removeProductFromGroceryList(sessionCart, productPackage);
+			fail();
+		} catch (ProductPackageAmountNotMatch e) {
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageNotExist e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		productPackage.setAmount(10);
+		try {
+			sqlConnection.removeProductFromGroceryList(sessionCart, productPackage);
+			sqlConnection.removeProductPackageFromShelves(null, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+			sqlConnection.logout(sessionCart, "Cart");
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
+				| ProductPackageNotExist e) {
+			e.printStackTrace();
+			fail();
+		}
+
+	}
+
+	@Test
+	public void testRemoveNotExistedPakageFromCart() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		ProductPackage productPackage = new ProductPackage(new SmartCode(barcodeDebug, date112000), 10,
+				locationWarehouse);
+
+		int sessionCart = 0;
+
+		try {
+			sessionCart = sqlConnection.login("Cart", "Cart");
+		} catch (AuthenticationError | ClientAlreadyConnected | CriticalError | NumberOfConnectionsExceeded e1) {
+			e1.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.removeProductFromGroceryList(sessionCart, productPackage);
+			fail();
+		} catch (ProductPackageNotExist e) {
+
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.addProductPackageToWarehouse(null, productPackage);
+			assertEquals("10", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog e1) {
+			e1.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.removeProductFromGroceryList(sessionCart, productPackage);
+			fail();
+		} catch (ProductPackageNotExist e) {
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.placeProductPackageOnShelves(null, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("10", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
+				| ProductPackageNotExist e1) {
+			e1.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.removeProductFromGroceryList(sessionCart, productPackage);
+			fail();
+		} catch (ProductPackageNotExist e) {
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.addProductToGroceryList(sessionCart, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+
+			sqlConnection.removeProductFromGroceryList(sessionCart, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("10", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
+				| ProductPackageNotExist e1) {
+			e1.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.removeProductFromGroceryList(sessionCart, productPackage);
+			fail();
+		} catch (ProductPackageNotExist e) {
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.removeProductPackageFromShelves(null, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
+				| ProductPackageNotExist e1) {
+			e1.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.removeProductFromGroceryList(sessionCart, productPackage);
+			fail();
+		} catch (ProductPackageNotExist e) {
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.logout(sessionCart, "Cart");
+		} catch (ClientNotConnected | CriticalError e) {
+			e.printStackTrace();
+			fail();
+		}
+
+	}
+
+	@Test
+	public void testSimpleAddMoveToCartRemovePakage() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		ProductPackage productPackage = new ProductPackage(new SmartCode(barcodeDebug, date112000), 5,
+				locationWarehouse);
+
+		int cartSession = 0;
+		try {
+			cartSession = sqlConnection.login("Cart", null);
+			sqlConnection.addProductPackageToWarehouse(null, productPackage);
+			sqlConnection.placeProductPackageOnShelves(null, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("5", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+
+			sqlConnection.addProductToGroceryList(cartSession, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+
+			sqlConnection.removeProductFromGroceryList(cartSession, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("5", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+
+			sqlConnection.removeProductPackageFromShelves(null, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
+				| ProductPackageNotExist | AuthenticationError | ClientAlreadyConnected
+				| NumberOfConnectionsExceeded e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.removeProductFromGroceryList(cartSession, productPackage);
+			fail();
+		} catch (ProductPackageNotExist e) {
+
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.removeProductPackageFromShelves(null, productPackage);
+			fail();
+		} catch (ProductPackageNotExist e) {
+
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.logout(cartSession, "Cart");
+		} catch (ClientNotConnected | CriticalError e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void testMovePakageToCartAndRemoveTwice() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		ProductPackage productPackage = new ProductPackage(new SmartCode(barcodeDebug, date112000), 5,
+				locationWarehouse);
+
+		int cartSession = 0;
+		try {
+			cartSession = sqlConnection.login("Cart", null);
+
+			sqlConnection.addProductPackageToWarehouse(null, productPackage);
+			sqlConnection.addProductPackageToWarehouse(null, productPackage);
+			assertEquals("10", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+
+			sqlConnection.placeProductPackageOnShelves(null, productPackage);
+			assertEquals("5", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("5", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+			sqlConnection.placeProductPackageOnShelves(null, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("10", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+
+			sqlConnection.addProductToGroceryList(cartSession, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("5", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+
+			sqlConnection.addProductToGroceryList(cartSession, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
+				| ProductPackageNotExist | AuthenticationError | ClientAlreadyConnected
+				| NumberOfConnectionsExceeded e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.removeProductPackageFromShelves(null, productPackage);
+			fail();
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
+			e.printStackTrace();
+			fail();
+		} catch (ProductPackageNotExist e) {
+
+		}
+
+		try {
+			sqlConnection.removeProductFromGroceryList(cartSession, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("5", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+
+			sqlConnection.removeProductFromGroceryList(cartSession, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("10", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+
+			sqlConnection.removeProductPackageFromShelves(null, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("5", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+
+			sqlConnection.removeProductPackageFromShelves(null, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+
+			sqlConnection.logout(cartSession, "Cart");
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
+				| ProductPackageNotExist e) {
+			e.printStackTrace();
+			fail();
+		}
+
+	}
+
+	@Test
+	public void testSplitPackageToCartPakage() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		ProductPackage productPackage = new ProductPackage(new SmartCode(barcodeDebug, date112000), 5,
+				locationWarehouse);
+		ProductPackage productPackageCart = new ProductPackage(new SmartCode(barcodeDebug, date112000), 2,
+				locationWarehouse);
+
+		int cartSession = 0;
+
+		try {
+			cartSession = sqlConnection.login("Cart", null);
+
+			sqlConnection.addProductPackageToWarehouse(null, productPackage);
+			sqlConnection.placeProductPackageOnShelves(null, productPackage);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("5", sqlConnection.getProductPackageAmonutOnShelves(null, productPackageCart));
+
+			sqlConnection.addProductToGroceryList(cartSession, productPackageCart);
+			assertEquals(productPackage.getAmount() - productPackageCart.getAmount() + "",
+					sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
+				| ProductPackageNotExist | AuthenticationError | ClientAlreadyConnected
+				| NumberOfConnectionsExceeded e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		productPackage.setAmount(3);
+		try {
+			sqlConnection.removeProductPackageFromShelves(null, productPackage);
+			sqlConnection.removeProductFromGroceryList(cartSession, productPackageCart);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("2", sqlConnection.getProductPackageAmonutOnShelves(null, productPackageCart));
+
+			sqlConnection.removeProductPackageFromShelves(null, productPackageCart);
+			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
+			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackageCart));
+
+			sqlConnection.logout(cartSession, "Cart");
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
+			e.printStackTrace();
+			fail();
+		} catch (ProductPackageNotExist e) {
+			e.printStackTrace();
+			fail();
+		}
+
+	}
+
+	@Test
+	public void testCartCheckoutDoLogout() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		int session = 0;
+		try {
+			session = sqlConnection.login("Cart", "");
+			assertTrue(sqlConnection.isClientLoggedIn(session));
+		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.cartCheckout(session);
+			assertFalse(sqlConnection.isClientLoggedIn(session));
+		} catch (CriticalError | ClientNotConnected e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.logout(session, "Cart");
+			fail();
+		} catch (ClientNotConnected e) {
+
+		} catch (CriticalError e) {
 			e.printStackTrace();
 			fail();
 		}
