@@ -23,19 +23,6 @@ public class CartApplicationScreen extends AbstractApplicationScreen {
 
 	BarcodeEventHandler barcodeEventHandler;
 
-	public class IntCellFormat  extends ListCell<Integer>
-	{
-		@Override
-		public void updateItem(Integer item, boolean empty)
-		{
-			super.updateItem(item, empty);
-
-			this.setText("int: " + Integer.toString(item));
-			setGraphic(null);
-		}
-	}
-
-	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -51,17 +38,6 @@ public class CartApplicationScreen extends AbstractApplicationScreen {
 			stage.setMaximized(true);
 			stage.show();
 			
-			ObservableList<Integer> productsObservableList = FXCollections.<Integer>observableArrayList(new Integer(0), new Integer(1));
-			
-			ListView<Integer> cartList = new ListView<Integer>();
-
-			cartList.setItems(productsObservableList);
-			cartList.setCellFactory(new Callback<ListView<Integer>, ListCell<Integer>>() {
-			     @Override public ListCell<Integer> call(ListView<Integer> list) {
-			         return new IntCellFormat();
-			     }
-			 });
-
 		} catch (Exception ¢) {
 			¢.printStackTrace();
 		}

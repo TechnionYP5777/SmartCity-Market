@@ -82,7 +82,7 @@ public class CartMainScreen implements Initializable {
 
 	SmartCode lastScannedSmartCode = null;
 
-	Lock smartCodeLocker;
+//	Lock smartCodeLocker;
 
 	IBarcodeEventHandler barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
 
@@ -97,9 +97,20 @@ public class CartMainScreen implements Initializable {
 		cart = TempCartPassingData.cart;
 		// productsObservableList.addAll(cart.getCartProductCache().values());
 
+
+		 ObservableList<Integer> productsObservableList = FXCollections.<Integer>observableArrayList(new Integer(0), new Integer(1));
+
+		
+		productsListView = new ListView<Integer>();
+
+		productsListView.setItems(productsObservableList);
+		productsListView.setCellFactory(new Callback<ListView<Integer>, ListCell<Integer>>() {
+		     @Override public ListCell<Integer> call(ListView<Integer> list) {
+		    	 return new IntCellFormat();
+		     }
+		 });
+		
 		// defining behavior when stage/window is closed.
-
-
 		primeStage.setOnCloseRequest(event -> {
 			try {
 				cart.logout();
