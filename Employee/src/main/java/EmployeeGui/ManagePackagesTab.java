@@ -134,7 +134,9 @@ public class ManagePackagesTab implements Initializable {
 	int amountInStore = -1;
 
 	int amountInWarehouse = -1;
-
+	
+	LocalDate expirationDate;
+	
 	IBarcodeEventHandler barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
 
 	IWorker worker = InjectionFactory.getInstance(EmployeeScreensParameterService.class).getParameter();
@@ -235,6 +237,7 @@ public class ManagePackagesTab implements Initializable {
 		}
 
 		datePickerForSmartCode.setValue(null);
+		this.expirationDate = null;
 	}
 
 	private void showSmartCodeOperationsPane(boolean show) {
@@ -290,7 +293,7 @@ public class ManagePackagesTab implements Initializable {
 	@FXML
 	private void searchCodeButtonPressed(ActionEvent __) {
 		try {
-			LocalDate expirationDate = datePickerForSmartCode.getValue();
+			LocalDate expirationDate = (this.expirationDate ==null) ? datePickerForSmartCode.getValue() : this.expirationDate;
 
 			if (expirationDate == null) {
 
@@ -300,7 +303,9 @@ public class ManagePackagesTab implements Initializable {
 
 				smartcodeEntered(new SmartCode(Long.parseLong(barcodeTextField.getText()), expirationDate));
 			}
-
+			
+			this.expirationDate = expirationDate;
+			
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 			return;
@@ -331,6 +336,8 @@ public class ManagePackagesTab implements Initializable {
 
 				// printToSuccessLog(("Added (" + amountVal + ") " + "product
 				// packages (" + pp + ") to warehouse"));
+				
+				searchCodeButtonPressed(null);
 
 			} else if (addPackageToStoreRadioButton.isSelected()) {
 
@@ -343,6 +350,8 @@ public class ManagePackagesTab implements Initializable {
 
 				// printToSuccessLog(("Added (" + amountVal + ") " + "product
 				// packages (" + pp + ") to store"));
+				
+				searchCodeButtonPressed(null);
 
 			} else if (removePackageFromStoreRadioButton.isSelected()) {
 
@@ -355,6 +364,8 @@ public class ManagePackagesTab implements Initializable {
 
 				// printToSuccessLog(("Removed (" + amountVal + ") " + "product
 				// packages (" + pp + ") from store"));
+				
+				searchCodeButtonPressed(null);
 
 			} else if (removePackageFromWarhouseRadioButton.isSelected()) {
 				Location loc = new Location(0, 0, PlaceInMarket.WAREHOUSE);
@@ -362,6 +373,9 @@ public class ManagePackagesTab implements Initializable {
 				worker.removeProductPackageFromStore(pp);
 				// printToSuccessLog(("Removed (" + amountVal + ") " + "product
 				// packages (" + pp + ") from warehouse"));
+				
+				searchCodeButtonPressed(null);
+				
 			}
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
