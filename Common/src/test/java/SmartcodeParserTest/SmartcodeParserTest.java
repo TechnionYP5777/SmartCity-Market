@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import BasicCommonClasses.SmartCode;
 import SmartcodeParser.SmartcodeParser;
+import SmartcodeParser.SmartcodePrint;
 
 public class SmartcodeParserTest {
 
