@@ -24,8 +24,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
@@ -52,12 +54,6 @@ public class CartMainScreen implements Initializable {
 	ListView<CartProduct> productsListView;
 	
 	@FXML
-	Button logoutButton;
-	
-	@FXML
-	Button buyButton;
-	
-	@FXML
 	TextField productsNumberTextField;
 	
 	@FXML
@@ -65,9 +61,22 @@ public class CartMainScreen implements Initializable {
 	
 	@FXML
 	GridPane productInfoPane;
+	Button removeAllItemsButton;
+
+	@FXML
+	Label productNameLabel;
 	
 	@FXML
-	Button removeAllItemsButton;
+	Label manufacturerLabel;
+	
+	@FXML
+	Label priceLabel;
+	
+	@FXML
+	Label amountLabel;
+	
+	@FXML
+	TextArea descriptionTextArea;
 	
 	SmartCode lastScannedSmartCode = null;
 	
@@ -124,11 +133,15 @@ public class CartMainScreen implements Initializable {
 
 	}
 	
-	public void removeAllItemsButtonPressed(ActionEvent __) {
+	public void addButtonPressed(ActionEvent __) {
 		//todo: continue from here
 	}
 	
-	public void okButtonPressed(ActionEvent __) {
+	public void removeButtonPressed(ActionEvent __) {
+		//todo: continue from here
+	}
+	
+	public void removeAllButtonPressed(ActionEvent __) {
 		//todo: continue from here
 	}
 	

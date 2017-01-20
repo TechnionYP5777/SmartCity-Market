@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.control.*?>
 <?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
 <GridPane fx:id="cartMainScreenPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="457.0" prefWidth="690.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CartGui.CartMainScreen">
   <columnConstraints>
@@ -33,7 +43,7 @@
          <children>
             <VBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
                <children>
-                  <Label text="Products Number:" />
+                  <Label text="Total items in cart:" />
                </children>
             </VBox>
             <GridPane GridPane.columnIndex="2">
@@ -55,7 +65,7 @@
          <children>
             <VBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
                <children>
-                  <Label text="Total Sum:" />
+                  <Label text="Total:" />
                </children>
             </VBox>
             <GridPane GridPane.columnIndex="2">
@@ -65,7 +75,7 @@
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="55.0" minWidth="10.0" prefWidth="16.0" />
                </columnConstraints>
                <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
                   <TextField fx:id="totalSumTextField" GridPane.columnIndex="1" />
@@ -83,135 +93,16 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
       </GridPane>
-      <GridPane fx:id="productInfoPane" GridPane.rowIndex="1">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="192.0" minWidth="10.0" prefWidth="185.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="308.0" minWidth="10.0" prefWidth="99.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="308.0" minWidth="10.0" prefWidth="111.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="98.0" minHeight="10.0" prefHeight="98.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <children>
-                  <Label text="Manufacturer:" GridPane.columnIndex="1" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="2">
-               <children>
-                  <Label text="Items Number:" GridPane.columnIndex="1" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3">
-               <children>
-                  <Label text="Product Price:" GridPane.columnIndex="1" />
-               </children>
-            </HBox>
-            <GridPane GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="81.0" minWidth="10.0" prefWidth="17.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.0" minWidth="10.0" prefWidth="150.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="55.0" minWidth="10.0" prefWidth="16.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <TextArea fx:id="descriptorTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
-                     <GridPane.margin>
-                        <Insets bottom="1.0" top="1.0" />
-                     </GridPane.margin>
-                  </TextArea>
-               </children>
-            </GridPane>
-            <GridPane GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5">
-               <children>
-                  <TextArea fx:id="ingridientsTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
-                     <GridPane.margin>
-                        <Insets bottom="1.0" top="1.0" />
-                     </GridPane.margin>
-                  </TextArea>
-               </children>
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="81.0" minWidth="10.0" prefWidth="17.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.0" minWidth="10.0" prefWidth="150.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="55.0" minWidth="10.0" prefWidth="16.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-            </GridPane>
-            <GridPane GridPane.columnIndex="2" GridPane.rowIndex="1">
-               <children>
-                  <TextField fx:id="manufacturererTextField" GridPane.columnIndex="1" />
-               </children>
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="81.0" minWidth="10.0" prefWidth="17.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.0" minWidth="10.0" prefWidth="150.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="55.0" minWidth="10.0" prefWidth="16.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-            </GridPane>
-            <GridPane alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2">
-               <children>
-                  <TextField fx:id="productsNumberTextField" prefHeight="24.0" prefWidth="42.0" GridPane.columnIndex="1" />
-                  <Button fx:id="plusButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="21.0" text="+" />
-                  <Button fx:id="minusButton" alignment="CENTER_RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0" text="-" GridPane.columnIndex="2" />
-               </children>
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="81.0" minWidth="10.0" prefWidth="28.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.0" minWidth="10.0" prefWidth="56.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="55.0" minWidth="10.0" prefWidth="25.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-            </GridPane>
-            <GridPane GridPane.columnIndex="2" GridPane.rowIndex="3">
-               <children>
-                  <TextField fx:id="productPriceTextField" GridPane.columnIndex="1" />
-               </children>
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="81.0" minWidth="10.0" prefWidth="17.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.0" minWidth="10.0" prefWidth="150.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="55.0" minWidth="10.0" prefWidth="16.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-            </GridPane>
-            <TextField fx:id="productName" GridPane.columnIndex="1" GridPane.columnSpan="2" />
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
-               <children>
-                  <Button fx:id="okButton" mnemonicParsing="false" onAction="#okButtonPressed" text="Ok" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
-               <children>
-                  <Button fx:id="removeAllItemsButton" mnemonicParsing="false" onAction="#removeAllItemsButtonPressed" text="Remove Products" />
-               </children>
-            </VBox>
-         </children>
-      </GridPane>
       <GridPane alignment="BASELINE_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <children>
             <VBox alignment="CENTER" prefHeight="47.0" prefWidth="79.0" GridPane.columnIndex="1">
                <children>
-                  <Button fx:id="cancelButton" alignment="CENTER" mnemonicParsing="false" onAction="#cancelButtonPressed" text="Cancel" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#cancelButtonPressed" text="Cancel" />
                </children>
             </VBox>
             <VBox alignment="CENTER">
                <children>
-                  <Button fx:id="purchaseButton" alignment="CENTER" mnemonicParsing="false" onAction="#purchaseButtonPressed" text="Purchase" textAlignment="CENTER" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#purchaseButtonPressed" text="Proceed to checkout" textAlignment="CENTER" />
                </children>
             </VBox>
          </children>
@@ -223,6 +114,133 @@
          <rowConstraints>
             <RowConstraints vgrow="SOMETIMES" />
          </rowConstraints>
+      </GridPane>
+      <GridPane fx:id="productInfoPane" GridPane.rowIndex="1">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="238.0" minWidth="10.0" prefWidth="238.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="191.0" minWidth="10.0" prefWidth="157.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Price:">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="priceLabel" text="N/A">
+                           <HBox.margin>
+                              <Insets left="69.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Amount:">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="amountLabel" text="N/A">
+                           <HBox.margin>
+                              <Insets left="50.0" />
+                           </HBox.margin>
+                           </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Product Name:">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="productNameLabel" text="N/A">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Manufacturer:">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="manufacturerLabel" text="N/A">
+                           <HBox.margin>
+                              <Insets left="19.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="238.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="16.0" prefWidth="91.0" text="Description:">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                        <TextArea fx:id="descriptionTextArea" prefHeight="84.0" prefWidth="137.0">
+                           <HBox.margin>
+                              <Insets left="26.0" />
+                           </HBox.margin>
+                        </TextArea>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <ImageView fitHeight="123.0" fitWidth="135.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
+               <children>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonPressed" text="Add">
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeButtonPressed" text="Remove" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <Button fx:id="removeAllButton" mnemonicParsing="false" onAction="#removeAllButtonPressed" text="Remove all">
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
       </GridPane>
    </children>
 </GridPane>
