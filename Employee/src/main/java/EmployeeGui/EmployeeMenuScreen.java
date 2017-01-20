@@ -1,8 +1,6 @@
 package EmployeeGui;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 import CommonDefs.CLIENT_TYPE;
@@ -79,10 +77,6 @@ public class EmployeeMenuScreen implements Initializable {
 																// bottom
 			}
 		});
-	}
-
-	void printToSuccessLog(String msg) {
-		successLogArea.appendText(new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss").format(new Date()) + " :: " + msg + "\n");
 	}
 
 	@FXML

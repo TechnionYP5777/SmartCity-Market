@@ -1,8 +1,10 @@
 package EmployeeGui;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import com.google.common.eventbus.Subscribe;
@@ -32,6 +34,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -46,6 +49,9 @@ import javafx.util.Callback;
  */
 
 public class ManagePackagesTab implements Initializable {
+
+	@FXML
+	VBox rootPane;
 
 	@FXML
 	VBox scanOrTypeCodePane;
@@ -143,6 +149,13 @@ public class ManagePackagesTab implements Initializable {
 			addProductParametersToQuickView("N/A", "N/A", "N/A", "N/A", "N/A");
 			amountInWarehouse = amountInStore = -1;
 			showScanCodePane(true);
+		});
+
+		editPackagesAmountSpinner.valueProperty().addListener((obs, oldValue, newValue) -> {
+			if (newValue < 1) {
+				editPackagesAmountSpinner.getValueFactory().setValue(oldValue);
+			}
+			enableRunTheOperationButton();
 		});
 
 		final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
@@ -365,6 +378,12 @@ public class ManagePackagesTab implements Initializable {
 							+ catalogProduct.getPrice());
 
 	}
+
+	// void printToSuccessLog(String msg) {
+	// ((TextArea) rootPane.getParent().lookup("#successLogArea"))
+	// .appendText(new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss").format(new
+	// Date()) + " :: " + msg + "\n");
+	// }
 
 	@Subscribe
 	public void barcodeScanned(BarcodeScanEvent ¢) {
