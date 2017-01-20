@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.SmartCode;
-import CommonDefs.CLIENT_TYPE;
 import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IManager;
 import GuiUtils.RadioButtonEnabler;
@@ -69,6 +68,9 @@ public class ManageCatalogProductTab implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.matches("\\d*")) {
+				barcodeTextField.setText(newValue.replaceAll("[^\\d]", ""));
+			}
 			enableRunOperation();
 		});
 		productNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {

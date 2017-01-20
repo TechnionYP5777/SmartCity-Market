@@ -23,6 +23,7 @@ import javafx.scene.media.MediaView;
  * @since 2016-12-26
  */
 
+@SuppressWarnings("unused")
 public class EmployeeMainScreen implements Initializable {
 
 	@FXML

@@ -1,10 +1,8 @@
 package EmployeeGui;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 import com.google.common.eventbus.Subscribe;
@@ -34,7 +32,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -126,6 +123,9 @@ public class ManagePackagesTab implements Initializable {
 	@FXML
 	RadioButton addPakageToWarhouseRadioButton;
 
+	@FXML
+	Button searchCodeButton;
+
 	RadioButtonEnabler radioButtonContainerSmarcodeOperations = new RadioButtonEnabler();
 
 	RadioButtonEnabler radioButtonContainerBarcodeOperations = new RadioButtonEnabler();
@@ -150,6 +150,7 @@ public class ManagePackagesTab implements Initializable {
 				barcodeTextField.setText(newValue.replaceAll("[^\\d]", ""));
 			}
 			showScanCodePane(true);
+			searchCodeButton.setDisable(newValue.isEmpty());
 		});
 
 		editPackagesAmountSpinner.valueProperty().addListener((obs, oldValue, newValue) -> {

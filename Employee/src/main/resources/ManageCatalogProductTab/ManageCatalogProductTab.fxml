@@ -13,12 +13,12 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductTab">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductTab">
 	<children>
 		<Label text="Choose operation:" />
 		<RadioButton fx:id="addCatalogProductRadioButton" mnemonicParsing="false" onAction="#addCatalogProductRadioButtonPressed" selected="true" text="Add Catalog Product" />
 		<RadioButton fx:id="removeCatalogProductRadioButton" mnemonicParsing="false" onAction="#removeCatalogProductRadioButtonPressed" text="Remove Catalog Product" />
-		<Separator prefWidth="200.0" />
+		<Separator />
 		<GridPane>
 			<columnConstraints>
 				<ColumnConstraints hgrow="SOMETIMES" percentWidth="15.0" />
