@@ -3,12 +3,14 @@ package CartContracts;
 import java.util.HashMap;
 
 import BasicCommonClasses.CartProduct;
+import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.SmartCode;
 import CartContracts.ACartExceptions.AmountBiggerThanAvailable;
 import CartContracts.ACartExceptions.AuthenticationError;
 import CartContracts.ACartExceptions.CartNotConnected;
 import CartContracts.ACartExceptions.CriticalError;
 import CartContracts.ACartExceptions.ProductNotInCart;
+import CartContracts.ACartExceptions.ProductPackageDoesNotExist;
 
 /**
  * ICart - This interface is the contract for Cart Type.
@@ -58,8 +60,10 @@ public interface ICart {
 	 * @param int amount
 	 * @throws CriticalError 
 	 * @throws CartNotConnected 
+	 * @throws ProductPackageDoesNotExist 
+	 * @throws AmountBiggerThanAvailable 
 	 */
-	void addPtoductToCart(SmartCode c, int amount) throws CriticalError, CartNotConnected;
+	void addPtoductToCart(SmartCode c, int amount) throws CriticalError, CartNotConnected, AmountBiggerThanAvailable, ProductPackageDoesNotExist;
 	
 	/**
 	 * returnProductToShelf - removes product with amount from the cart
@@ -70,8 +74,9 @@ public interface ICart {
 	 * @throws AmountBiggerThanAvailable 
 	 * @throws CriticalError 
 	 * @throws CartNotConnected 
+	 * @throws ProductPackageDoesNotExist 
 	 */
-	void returnProductToShelf(SmartCode c, int amount) throws ProductNotInCart, AmountBiggerThanAvailable, CriticalError, CartNotConnected;
+	void returnProductToShelf(SmartCode c, int amount) throws CriticalError, CartNotConnected, ProductNotInCart, AmountBiggerThanAvailable, ProductPackageDoesNotExist;
 	
 	/**
 	 * getTotalSum - returns the total sum of the shopping
@@ -86,4 +91,19 @@ public interface ICart {
 	 * @throws CartNotConnected 
 	 */
 	double checkOutGroceryList() throws CriticalError, CartNotConnected;
+
+	CartProduct getCartProduct(SmartCode smartCode);
+
+	/**
+	 * @throws CriticalError 
+	 * @throws CartNotConnected 
+	 */
+	CatalogProduct viewCatalogProduct(SmartCode smartCode) throws CriticalError, CartNotConnected;
+	
+	/**
+	 * @throws ProductNotInCart 
+	 * @throws CriticalError 
+	 * 
+	 */
+	void removeAllItemsOfCartProduct(SmartCode smartCode) throws ProductNotInCart, CriticalError;
 }

@@ -34,6 +34,9 @@ public class CatalogProduct {
 		this.locations = locations;
 	}
 
+	public CatalogProduct() {
+	}
+
 	public long getBarcode() {
 		return barcode;
 	}
