@@ -2,9 +2,13 @@ package EmployeeGui;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.Ingredient;
+import BasicCommonClasses.Location;
+import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.SmartCode;
 import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IManager;
@@ -125,8 +129,9 @@ public class ManageCatalogProductTab implements Initializable {
 			if (addCatalogProductRadioButton.isSelected()) {
 
 				CatalogProduct catalogProduct = new CatalogProduct(Long.parseLong(barcodeTextField.getText()),
-						productNameTextField.getText(), null, null, productDescriptionTextField.getText(),
-						Double.parseDouble(productPriceTextField.getText()), null, null);
+						productNameTextField.getText(), new HashSet<Ingredient>(), new Manufacturer(1, "תנובה"),
+						productDescriptionTextField.getText(), Double.parseDouble(productPriceTextField.getText()), "",
+						new HashSet<Location>());
 
 				manager.addProductToCatalog(catalogProduct);
 

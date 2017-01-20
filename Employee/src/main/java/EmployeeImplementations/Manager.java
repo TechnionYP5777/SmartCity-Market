@@ -9,7 +9,6 @@ import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import EmployeeContracts.IManager;
-import EmployeeDefs.WorkerDefs;
 import EmployeeDefs.AEmployeeException.AmountBiggerThanAvailable;
 import EmployeeDefs.AEmployeeException.AuthenticationError;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
@@ -41,24 +40,21 @@ public class Manager extends Worker implements IManager {
 	}
 
 	@Override
-	public void addProductToCatalog(CatalogProduct p) throws InvalidParameter,
-		CriticalError, EmployeeNotConnected, ProductAlreadyExistInCatalog, ConnectionFailure {
-		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
-		
+	public void addProductToCatalog(CatalogProduct p) throws InvalidParameter, CriticalError, EmployeeNotConnected,
+			ProductAlreadyExistInCatalog, ConnectionFailure {
+
 		log.info("Creating addProductToCatalog command wrapper with product: " + p);
-		
+
 		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
-						Serialization.serialize(p))).serialize());
-		
-		terminateCommunication();
-		
+				(new CommandWrapper(clientId, CommandDescriptor.ADD_PRODUCT_TO_CATALOG, Serialization.serialize(p)))
+						.serialize());
+
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
-		
+
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale | 
-				AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductNotExistInCatalog ¢) {
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
+				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductNotExistInCatalog ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			¢.printStackTrace();
 		}
@@ -66,52 +62,45 @@ public class Manager extends Worker implements IManager {
 	}
 
 	@Override
-	public void removeProductFromCatalog(SmartCode c) throws InvalidParameter,
-		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ProductStillForSale, ConnectionFailure {
-		
-		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
+	public void removeProductFromCatalog(SmartCode c) throws InvalidParameter, CriticalError, EmployeeNotConnected,
+			ProductNotExistInCatalog, ProductStillForSale, ConnectionFailure {
+
 		log.info("Creating removeProductFromCatalog command wrapper with barcode: " + c.getBarcode());
-		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
-						Serialization.serialize(c))).serialize());
-		
-		terminateCommunication();
-		
+		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(clientId,
+				CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG, Serialization.serialize(c))).serialize());
+
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
-		
+
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | 
-				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog ¢) {
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | AmountBiggerThanAvailable
+				| ProductPackageDoesNotExist | ProductAlreadyExistInCatalog ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			¢.printStackTrace();
 		}
-		
+
 		log.info("removeProductFromCatalog command succeed.");
 	}
 
 	@Override
-	public void editProductFromCatalog(CatalogProduct p) throws InvalidParameter,
-		CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ConnectionFailure {
-		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
-		
+	public void editProductFromCatalog(CatalogProduct p)
+			throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ConnectionFailure {
+
 		log.info("Creating editProductFromCatalog command wrapper with product: " + p);
 		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
-						Serialization.serialize(p))).serialize());
-		
-		terminateCommunication();
+				(new CommandWrapper(clientId, CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG, Serialization.serialize(p)))
+						.serialize());
 
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
-		
+
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError |
-				 ProductStillForSale | AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog ¢) {
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
+				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			¢.printStackTrace();
 		}
-		
+
 		log.info("editProductFromCatalog command succeed.");
 	}
 }

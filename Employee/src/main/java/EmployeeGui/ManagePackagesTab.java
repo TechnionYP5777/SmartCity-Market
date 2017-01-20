@@ -212,9 +212,7 @@ public class ManagePackagesTab implements Initializable {
 	private void enableRunTheOperationButton() {
 
 		if (barcodeOperationsPane.isVisible()) {
-			if (addPakageToWarhouseRadioButton.isSelected()) {
-
-			}
+			runTheOperationButton.setDisable(!addPakageToWarhouseRadioButton.isSelected());
 		} else {
 
 			if (removePackageFromStoreRadioButton.isSelected()) {
@@ -226,6 +224,8 @@ public class ManagePackagesTab implements Initializable {
 			} else if (addPackageToStoreRadioButton.isSelected()) {
 				runTheOperationButton.setDisable(amountInWarehouse < editPackagesAmountSpinner.getValue());
 
+			} else if (printSmartCodeRadioButton.isSelected()) {
+				runTheOperationButton.setDisable(false);
 			}
 		}
 	}
