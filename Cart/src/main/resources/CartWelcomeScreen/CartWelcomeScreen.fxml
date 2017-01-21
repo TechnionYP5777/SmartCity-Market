@@ -1,32 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-
-<StackPane fx:id="cartWelcomeScreenPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CartGui.CartWelcomeScreen">
-   <children>
-      <VBox fx:id="vbox" alignment="CENTER" onMouseClicked="#mouseClicked" spacing="20.0">
-         <children>
-            <Label text="Smart Market" textFill="WHITE">
-               <font>
-                  <Font name="KacstArt" size="54.0" />
-               </font>
-            </Label>
-            <Separator prefWidth="200.0" />
-            <Label text="Press Any Key" textFill="#fffefe">
-               <font>
-                  <Font name="KacstArt" size="17.0" />
-               </font>
-            </Label>
-         </children>
-         <padding>
-            <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-         </padding>
-      </VBox>
-   </children>
-</StackPane>
+<StackPane fx:id="cartWelcomeScreenPane" onMouseClicked="#mouseClicked" styleClass="root" stylesheets="@CartCss.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CartGui.CartWelcomeScreen" />

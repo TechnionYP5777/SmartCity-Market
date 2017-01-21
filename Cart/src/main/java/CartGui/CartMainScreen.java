@@ -179,7 +179,7 @@ public class CartMainScreen implements Initializable {
 		ObservableList<Integer> productsObservableList = FXCollections.<Integer>observableArrayList(new Integer(0),
 				new Integer(1));
 
-		productsListView = new ListView<Integer>();
+//		productsListView = ListView<Integer>();
 
 		productsListView.setItems(productsObservableList);
 		productsListView.setCellFactory(new Callback<ListView<Integer>, ListCell<Integer>>() {

@@ -1,0 +1,36 @@
+.root {
+   -fx-background-image: url("shopping_cart.jpg");
+   -fx-background-position: center;
+   -fx-background-repeat: no-repeat;
+   -fx-background-size: auto;
+   -fx-background-color: white;
+}
+
+.label {
+    -fx-font-family: "serif";
+    -fx-text-fill: midnightblue;
+    -fx-opacity: 1.0;
+    -fx-font-weight: bold;
+}
+
+
+.radio-button { 
+	-fx-font-family: "serif";
+    -fx-text-fill: darkslateblue;
+    -fx-opacity: 1.0;
+    -fx-font-weight: bold;	
+}
+
+
+.radio-button .dot {
+  -fx-mark-highlight-color: midnightblue;
+  -fx-mark-color: midnightblue; 
+}
+
+
+.check-box { 
+	-fx-font-family: "serif";
+	-fx-text-fill: darkslateblue;
+	-fx-opacity: 1.0;
+	-fx-font-weight: bold;	
+}

@@ -28,23 +28,10 @@ public class CartWelcomeScreen implements Initializable {
 
 	@FXML
 	private StackPane cartWelcomeScreenPane;
-	@FXML
-	private VBox vbox;
 
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
-		AbstractApplicationScreen.fadeTransition(cartWelcomeScreenPane);
-
-//        MediaPlayer player = new MediaPlayer( new Media(getClass().getResource("/EmployeeMainScreen/store.mp4").toExternalForm()));
-//        MediaView mediaView = new MediaView(player);
-//        mediaView.setFitWidth(1600); mediaView.setFitHeight(900);
-//        mediaView.setPreserveRatio(false);
-//        mainScreenPane.getChildren().add(mediaView);
-//        player.setMute(true);;
-//        player.setCycleCount(MediaPlayer.INDEFINITE);   
-//        player.play();
-        
-        vbox.toFront();
+		AbstractApplicationScreen.fadeTransition(cartWelcomeScreenPane);   
 	}
 
 	@FXML
