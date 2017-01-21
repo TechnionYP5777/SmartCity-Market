@@ -132,7 +132,7 @@ public class SQLDatabaseConnectionTest {
 	@Test
 	public void testSimpleGetProductFromCatalog2() {
 
-		final long barcodeNum = 72900046;
+		final long barcodeNum = 7290004685195L;
 		final int manufaturerID = 2;
 		final String manufaturerName = "מאפיות ברמן";
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
@@ -1114,5 +1114,7 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		}
 	}
+	
+	
 
 }
