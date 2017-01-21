@@ -245,6 +245,8 @@ public class ManagePackagesTab implements Initializable {
 			} else if (printSmartCodeRadioButton.isSelected()) {
 				log.info("printSmartCodeRadioButton");
 				runTheOperationButton.setDisable(false);
+			} else {
+				runTheOperationButton.setDisable(true);
 			}
 		}
 	}
@@ -344,6 +346,11 @@ public class ManagePackagesTab implements Initializable {
 	@FXML
 	private void radioButtonHandling(ActionEvent ¢) {
 		radioButtonContainerSmarcodeOperations.selectRadioButton((RadioButton) ¢.getSource());
+		enableRunTheOperationButton();
+	}
+	
+	@FXML
+	private void radioButtonHandlingBarcode(ActionEvent ¢) {
 		radioButtonContainerBarcodeOperations.selectRadioButton((RadioButton) ¢.getSource());
 		enableRunTheOperationButton();
 	}

@@ -162,7 +162,7 @@
 										<Separator />
 										<HBox spacing="20.0">
 											<children>
-												<RadioButton fx:id="addPakageToWarhouseRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" selected="true" text="Add package to warehouse" textFill="WHITE" />
+												<RadioButton fx:id="addPakageToWarhouseRadioButton" mnemonicParsing="false" onAction="#radioButtonHandlingBarcode" selected="true" text="Add package to warehouse" textFill="WHITE" />
 												<Label fx:id="expirationDateLabel" text="Expiration Date:" textFill="WHITE" />
 												<DatePicker fx:id="datePicker" />
 												<CheckBox fx:id="printTheSmartCodeCheckBox" mnemonicParsing="false" text="Print the smart code" textFill="WHITE" />

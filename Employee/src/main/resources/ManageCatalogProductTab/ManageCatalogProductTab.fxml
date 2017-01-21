@@ -156,7 +156,7 @@
 				</GridPane>
 			</children>
 		</StackPane>
-		<HBox alignment="CENTER">
+		<HBox alignment="CENTER_LEFT">
 			<children>
 				<Button fx:id="runTheOperationButton" mnemonicParsing="false" onAction="#runTheOperationButtonPressed" text="Run The Operation" />
 			</children>

@@ -1,3 +1,8 @@
+.root {
+   -fx-background-image: url("back.jpg");
+   -fx-background-size: cover;
+   -fx-background-color: null
+}
 
 .label {
     -fx-font-family: "serif";
