@@ -7,6 +7,7 @@ import CommonDefs.CLIENT_TYPE;
 import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IWorker;
 import EmployeeDefs.AEmployeeException;
+import EmployeeImplementations.Manager;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
@@ -53,7 +54,7 @@ public class EmployeeMenuScreen implements Initializable {
 		manageCatalogProductTab.setDisable(InjectionFactory.getInstance(EmployeeScreensParameterService.class)
 				.getClientType().equals(CLIENT_TYPE.WORKER));
 
-		worker = InjectionFactory.getInstance(EmployeeScreensParameterService.class).getParameter();
+		worker = InjectionFactory.getInstance(Manager.class);
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
 
 		// defining behavior when stage/window is closed.

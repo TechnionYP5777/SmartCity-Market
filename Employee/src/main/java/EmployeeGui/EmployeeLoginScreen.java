@@ -69,7 +69,7 @@ public class EmployeeLoginScreen implements Initializable {
 			EmployeeGuiExeptionHandler.handle(e);
 			return;
 		}
-		InjectionFactory.getInstance(EmployeeScreensParameterService.class).updateClientType(employeeType);
+		InjectionFactory.getInstance(EmployeeScreensParameterService.class).setClientType(employeeType);
 
 		AbstractApplicationScreen.setScene("/EmployeeMenuScreen/EmployeeMenuScreen.fxml");
 

@@ -85,6 +85,7 @@ public class Worker extends AEmployee implements IWorker {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			¢.printStackTrace();
 		}
+		clientId = WorkerDefs.loginCommandSenderId;
 		log.info("logout from server succeed.");
 	}
 

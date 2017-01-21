@@ -12,8 +12,8 @@ import BasicCommonClasses.Location;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
-import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IWorker;
+import EmployeeImplementations.Manager;
 import GuiUtils.DialogMessagesService;
 import GuiUtils.RadioButtonEnabler;
 import SMExceptions.SMException;
@@ -140,7 +140,7 @@ public class ManagePackagesTab implements Initializable {
 
 	IBarcodeEventHandler barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
 
-	IWorker worker = InjectionFactory.getInstance(EmployeeScreensParameterService.class).getParameter();
+	IWorker worker = InjectionFactory.getInstance(Manager.class);
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

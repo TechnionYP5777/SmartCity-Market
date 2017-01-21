@@ -10,8 +10,8 @@ import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.SmartCode;
-import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IManager;
+import EmployeeImplementations.Manager;
 import GuiUtils.RadioButtonEnabler;
 import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
@@ -64,7 +64,7 @@ public class ManageCatalogProductTab implements Initializable {
 	@FXML
 	private Button runTheOperationButton;
 
-	IManager manager = InjectionFactory.getInstance(EmployeeScreensParameterService.class).getParameter();
+	IManager manager = InjectionFactory.getInstance(Manager.class);
 
 	RadioButtonEnabler radioButtonContainerManageCatalogProduct = new RadioButtonEnabler();
 
