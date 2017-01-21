@@ -19,6 +19,7 @@ import UtilsContracts.IBarcodeEventHandler;
 import UtilsContracts.SmartcodeScanEvent;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -156,8 +157,11 @@ public class CartMainScreen implements Initializable {
 	private void logoutAndExit() {
 		try {
 			cart.logout();
+			Platform.exit();
+			System.exit(0);
 		} catch (SMException e) {
-			// TODO Auto-generated catch block
+			Platform.exit();
+			System.exit(0);
 		}
 		TempCartPassingData.cart =  null;
 		AbstractApplicationScreen.setScene("/CartWelcomeScreen/CartWelcomeScreen.fxml");		

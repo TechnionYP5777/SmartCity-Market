@@ -6,6 +6,7 @@ import EmployeeDI.EmployeeDiConfigurator;
 import GuiUtils.AbstractApplicationScreen;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 /**
@@ -32,6 +33,13 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 			stage.setTitle("Smart Market Beta");
 			stage.setMaximized(true);
 			stage.show();
+			
+			stage.setOnCloseRequest(event -> 
+			{
+				Platform.exit();
+				System.exit(0);
+			}
+		);
 
 		} catch (Exception e) {
 			e.printStackTrace();

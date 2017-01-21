@@ -11,6 +11,7 @@ import EmployeeImplementations.Manager;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -61,8 +62,12 @@ public class EmployeeMenuScreen implements Initializable {
 		primeStage.setOnCloseRequest(event -> {
 			try {
 				worker.logout();
+				Platform.exit();
+				System.exit(0);
 			} catch (SMException e) {
 				EmployeeGuiExeptionHandler.handle(e);
+				Platform.exit();
+				System.exit(0);
 			}
 		});
 

@@ -7,6 +7,7 @@ import CartDI.CartDiConfigurator;
 import GuiUtils.AbstractApplicationScreen;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListCell;
@@ -37,6 +38,13 @@ public class CartApplicationScreen extends AbstractApplicationScreen {
 			stage.setTitle("Smart Market Beta");
 			stage.setMaximized(true);
 			stage.show();
+			
+			stage.setOnCloseRequest(event -> 
+				{
+					Platform.exit();
+					System.exit(0);
+				}
+			);
 			
 		} catch (Exception ¢) {
 			¢.printStackTrace();
