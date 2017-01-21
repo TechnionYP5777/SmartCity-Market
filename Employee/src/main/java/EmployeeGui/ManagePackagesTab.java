@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
 import com.google.common.eventbus.Subscribe;
 
 import BasicCommonClasses.CatalogProduct;
@@ -47,6 +49,8 @@ import javafx.util.Callback;
  */
 
 public class ManagePackagesTab implements Initializable {
+
+	static Logger log = Logger.getLogger(ManagePackagesTab.class.getName());
 
 	@FXML
 	VBox rootPane;
@@ -150,6 +154,7 @@ public class ManagePackagesTab implements Initializable {
 				barcodeTextField.setText(newValue.replaceAll("[^\\d]", ""));
 			}
 			showScanCodePane(true);
+			resetParams();
 			searchCodeButton.setDisable(newValue.isEmpty());
 		});
 
@@ -193,6 +198,7 @@ public class ManagePackagesTab implements Initializable {
 	@FXML
 	void mouseClikedOnBarcodeField(MouseEvent event) {
 		showScanCodePane(true);
+		resetParams();
 	}
 
 	private void addProductParametersToQuickView(String productName, String productBarcode,
@@ -212,19 +218,32 @@ public class ManagePackagesTab implements Initializable {
 	private void enableRunTheOperationButton() {
 
 		if (barcodeOperationsPane.isVisible()) {
+			log.info("barcode pane is visible");
+			log.info("addPakageToWarhouseRadioButton is selected: " + addPakageToWarhouseRadioButton.isSelected());
 			runTheOperationButton.setDisable(!addPakageToWarhouseRadioButton.isSelected());
 		} else {
+			log.info("barcode pane is invisible");
 
 			if (removePackageFromStoreRadioButton.isSelected()) {
+				log.info("removePackageFromStoreRadioButton");
+				log.info("amount in store: " + amountInStore + " ; amount in spinner: "
+						+ editPackagesAmountSpinner.getValue());
 				runTheOperationButton.setDisable(amountInStore < editPackagesAmountSpinner.getValue());
 
 			} else if (removePackageFromWarhouseRadioButton.isSelected()) {
+				log.info("removePackageFromWarhouseRadioButton");
+				log.info("amount in werehouse: " + amountInWarehouse + " ; amount in spinner: "
+						+ editPackagesAmountSpinner.getValue());
 				runTheOperationButton.setDisable(amountInWarehouse < editPackagesAmountSpinner.getValue());
 
 			} else if (addPackageToStoreRadioButton.isSelected()) {
+				log.info("addPackageToStoreRadioButton");
+				log.info("amount in werehouse: " + amountInWarehouse + " ; amount in spinner: "
+						+ editPackagesAmountSpinner.getValue());
 				runTheOperationButton.setDisable(amountInWarehouse < editPackagesAmountSpinner.getValue());
 
 			} else if (printSmartCodeRadioButton.isSelected()) {
+				log.info("printSmartCodeRadioButton");
 				runTheOperationButton.setDisable(false);
 			}
 		}
@@ -240,7 +259,9 @@ public class ManagePackagesTab implements Initializable {
 		} else {
 			datePickerForSmartCode.toFront();
 		}
+	}
 
+	private void resetParams() {
 		datePickerForSmartCode.setValue(null);
 		this.expirationDate = null;
 		addProductParametersToQuickView("N/A", "N/A", "N/A", "N/A", "N/A");
@@ -252,10 +273,8 @@ public class ManagePackagesTab implements Initializable {
 		barcodeOperationsPane.setVisible(!show);
 		if (show) {
 			smartcodeOperationsPane.toFront();
-			printSmartCodeRadioButton.setSelected(true);
 		} else {
 			barcodeOperationsPane.toFront();
-			addPakageToWarhouseRadioButton.setSelected(true);
 		}
 	}
 
@@ -318,6 +337,8 @@ public class ManagePackagesTab implements Initializable {
 			EmployeeGuiExeptionHandler.handle(e);
 			return;
 		}
+
+		enableRunTheOperationButton();
 	}
 
 	@FXML

@@ -143,7 +143,7 @@
 											</font>
 										</Label>
 										<Separator />
-										<RadioButton fx:id="printSmartCodeRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Print smart code" textFill="WHITE" />
+										<RadioButton fx:id="printSmartCodeRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" selected="true" text="Print smart code" textFill="WHITE" />
 										<RadioButton fx:id="addPackageToStoreRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Add package to store" textFill="WHITE" />
 										<RadioButton fx:id="removePackageFromStoreRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Remove package from store" textFill="WHITE" />
 										<RadioButton fx:id="removePackageFromWarhouseRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Remove package from warehouse" textFill="WHITE" />
