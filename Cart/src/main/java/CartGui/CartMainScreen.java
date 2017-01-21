@@ -89,6 +89,8 @@ public class CartMainScreen implements Initializable {
 	Button removeAllButton;
 
 	SmartCode scannedSmartCode = null;
+	
+	CatalogProduct catalogProduct;
 
 	// Lock smartCodeLocker;
 
@@ -100,11 +102,11 @@ public class CartMainScreen implements Initializable {
 	 * 1 - SCANNED_PRODUCT: when the pane present scanned product info and actions 
 	 * 2 - PRESSED_PRODUCT: when the pane present pressed (on the listView Cell) product info and actions
 	 */
-	private enum ProductInfoPaneVisibleMode {
+	private static enum ProductInfoPaneVisibleMode {
 		SCANNED_PRODUCT, PRESSED_PRODUCT
 	}
 
-	private void addOrRemoveScannedProduct(CatalogProduct catalogProduct, int amount) {
+	private void addOrRemoveScannedProduct(CatalogProduct catalogProduct, Integer amount) {
 		updateProductInfoPaine(catalogProduct, amount, ProductInfoPaneVisibleMode.SCANNED_PRODUCT);
 	}
 
@@ -117,20 +119,20 @@ public class CartMainScreen implements Initializable {
 		descriptionTextArea.setText(catalogProduct.getDescription());
 		switch (mode) {
 		case SCANNED_PRODUCT: {
-			removeAllButton.setDisable(false);
+			removeAllButton.setDisable(true);
 			removeAllButton.setVisible(false);
-			addButton.setDisable(true);
+			addButton.setDisable(false);
 			addButton.setVisible(true);
-			removeButton.setDisable(true);
+			removeButton.setDisable(false);
 			removeButton.setVisible(true);
 			break;
 		}
 		case PRESSED_PRODUCT: {
-			removeAllButton.setDisable(true);
+			removeAllButton.setDisable(false);
 			removeAllButton.setVisible(true);
-			addButton.setDisable(false);
+			addButton.setDisable(true);
 			addButton.setVisible(false);
-			removeButton.setDisable(false);
+			removeButton.setDisable(true);
 			removeButton.setVisible(false);
 			break;
 		}
@@ -138,9 +140,9 @@ public class CartMainScreen implements Initializable {
 		setAbilityAndVisibilityOfProductInfoPane(true);
 	}
 	
-	private void setAbilityAndVisibilityOfProductInfoPane(boolean isAbillty) {
-		productInfoPane.setDisable(isAbillty);
-		productInfoPane.setVisible(isAbillty);
+	private void setAbilityAndVisibilityOfProductInfoPane(boolean visibilty) {
+		productInfoPane.setDisable(!visibilty);
+		productInfoPane.setVisible(visibilty);
 	}
 
 	private void updateCartProductsInfo() {
@@ -203,12 +205,9 @@ public class CartMainScreen implements Initializable {
 	public void purchaseButtonPressed(ActionEvent __) {
 		try {
 			cart.checkOutGroceryList();
-		} catch (CriticalError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CartNotConnected e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (SMException e) {
+			CartGuiExceptionsHandler.handle(e);	
+			return;
 		}
 		logoutAndExit();
 	}
@@ -221,13 +220,9 @@ public class CartMainScreen implements Initializable {
 	public void addButtonPressed(ActionEvent __) {
 		try {
 			cart.addPtoductToCart(scannedSmartCode, 1);
-		} catch (CriticalError | CartNotConnected e) {
-			
-		} catch (AmountBiggerThanAvailable e) {
-			
-		} catch (ProductPackageDoesNotExist e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (SMException e) {
+			CartGuiExceptionsHandler.handle(e);	
+			return;
 		}
 		updateCartProductsInfo();
 		setAbilityAndVisibilityOfProductInfoPane(false);
@@ -236,17 +231,9 @@ public class CartMainScreen implements Initializable {
 	public void removeButtonPressed(ActionEvent __) {
 		try {
 			cart.returnProductToShelf(scannedSmartCode, 1);
-		} catch (ProductNotInCart e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		} catch (CriticalError | CartNotConnected e) {
-			
-		} catch (AmountBiggerThanAvailable e) {
-			
-		} catch (ProductPackageDoesNotExist e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (SMException e) {
+			CartGuiExceptionsHandler.handle(e);	
+			return;
 		}
 		updateCartProductsInfo();
 		setAbilityAndVisibilityOfProductInfoPane(false);
@@ -255,34 +242,36 @@ public class CartMainScreen implements Initializable {
 	public void removeAllButtonPressed(ActionEvent __) {
 		try {
 			cart.removeAllItemsOfCartProduct(scannedSmartCode);
-		} catch (ProductNotInCart e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CriticalError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (SMException e) {
+			CartGuiExceptionsHandler.handle(e);	
+			return;
 		}
+		updateCartProductsInfo();
+		setAbilityAndVisibilityOfProductInfoPane(false);
 	}
 
-	@Subscribe
-	public void smartcodeScanned(SmartcodeScanEvent ¢) {
-		SmartCode smartCode = ¢.getSmarCode();
-		scannedSmartCode = smartCode;
-		// System.out.println("scanned Smart Code: " + smartcode);
-		CatalogProduct catalogProduct = new CatalogProduct();
-		int amount;
-		CartProduct cartPtoduct = cart.getCartProduct(smartCode);
+	private void smartcodeScannedHandler() {
+		Integer amount;
+		CartProduct cartPtoduct = cart.getCartProduct(scannedSmartCode);
 		if (cartPtoduct == null) { // the product isn't in the cart
 			try {
-				catalogProduct = cart.viewCatalogProduct(smartCode);
+				catalogProduct = cart.viewCatalogProduct(scannedSmartCode);
 			} catch (SMException e) {
-				// TODO handle
+				CartGuiExceptionsHandler.handle(e);	
+				return;
 			}
 			amount = 0;
 		} else { // the product is in the cart
 			catalogProduct = cartPtoduct.getCatalogProduct();
 			amount = cartPtoduct.getTotalAmount();
 		}
-		addOrRemoveScannedProduct(catalogProduct, amount);
+		addOrRemoveScannedProduct(catalogProduct, amount);		
+	}
+	
+	@Subscribe
+	public void smartcodeScanned(SmartcodeScanEvent ¢) {
+		SmartCode smartCode = ¢.getSmarCode();
+		scannedSmartCode = smartCode;
+		smartcodeScannedHandler();
 	}
 }

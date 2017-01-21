@@ -1,6 +1,6 @@
 package EmployeeGui;
 
-import CommonDefs.GuiDefs;
+import CommonDefs.GuiCommonDefs;
 import EmployeeDefs.AEmployeeException.*;
 import GuiUtils.DialogMessagesService;
 import GuiUtils.GuiExceptionHandler;
@@ -9,29 +9,29 @@ import SMExceptions.SMException;
 public class EmployeeGuiExeptionHandler extends GuiExceptionHandler {
 	public static void handle(SMException ¢) {
 		if (¢ instanceof AuthenticationError)
-			DialogMessagesService.showErrorDialog(GuiDefs.loginFailureDialogTitle, null,
-					GuiDefs.wrongUserNamePasswordFailureMsg);
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.loginFailureDialogTitle, null,
+					GuiCommonDefs.wrongUserNamePasswordFailureMsg);
 		else if (¢ instanceof ProductNotExistInCatalog)
-			DialogMessagesService.showErrorDialog(GuiDefs.productOperationFailureTitle, null,
-					GuiDefs.productNotExistsInCatalogMsg);
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, null,
+					GuiCommonDefs.productNotExistsInCatalogMsg);
 		else if (¢ instanceof ProductAlreadyExistInCatalog)
-			DialogMessagesService.showErrorDialog(GuiDefs.productOperationFailureTitle, null,
-					GuiDefs.productAlreadyExistsInCatalogMsg);
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, null,
+					GuiCommonDefs.productAlreadyExistsInCatalogMsg);
 		else if (¢ instanceof ProductStillForSale)
-			DialogMessagesService.showErrorDialog(GuiDefs.productOperationFailureTitle, null,
-					GuiDefs.productStillForSaleMsg);
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, null,
+					GuiCommonDefs.productStillForSaleMsg);
 		else if (¢ instanceof AmountBiggerThanAvailable)
-			DialogMessagesService.showErrorDialog(GuiDefs.productOperationFailureTitle, null,
-					GuiDefs.productCapacityIsNotEnoughMsg);
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, null,
+					GuiCommonDefs.productCapacityIsNotEnoughMsg);
 		else if (¢ instanceof ConnectionFailure)
-			DialogMessagesService.showErrorDialog(GuiDefs.productOperationFailureTitle, null,
-					GuiDefs.connectionFailureMsg);
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, null,
+					GuiCommonDefs.connectionFailureMsg);
 		else if (!(¢ instanceof ProductPackageDoesNotExist))
-			DialogMessagesService.showErrorDialog(GuiDefs.criticalErrorTitle, null,
-					GuiDefs.criticalErrorMsg);
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.criticalErrorTitle, null,
+					GuiCommonDefs.criticalErrorMsg);
 		
 		else
-			DialogMessagesService.showErrorDialog(GuiDefs.productOperationFailureTitle, null,
-					GuiDefs.productPackageDoesNotExistMsg);
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, null,
+					GuiCommonDefs.productPackageDoesNotExistMsg);
 	}
 }

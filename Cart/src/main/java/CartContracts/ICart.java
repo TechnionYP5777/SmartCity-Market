@@ -9,6 +9,7 @@ import CartContracts.ACartExceptions.AmountBiggerThanAvailable;
 import CartContracts.ACartExceptions.AuthenticationError;
 import CartContracts.ACartExceptions.CartNotConnected;
 import CartContracts.ACartExceptions.CriticalError;
+import CartContracts.ACartExceptions.ProductCatalogDoesNotExist;
 import CartContracts.ACartExceptions.ProductNotInCart;
 import CartContracts.ACartExceptions.ProductPackageDoesNotExist;
 
@@ -50,8 +51,9 @@ public interface ICart {
 	 * @param int _id
 	 * @throws CriticalError 
 	 * @throws CartNotConnected 
+	 * @throws ProductCatalogDoesNotExist 
 	 */
-	void resume(int _id) throws CriticalError, CartNotConnected;
+	void resume(int _id) throws CriticalError, CartNotConnected, ProductCatalogDoesNotExist;
 	
 	/**
 	 * addPtoductToCart - Adds product with amount to the cart
@@ -62,8 +64,9 @@ public interface ICart {
 	 * @throws CartNotConnected 
 	 * @throws ProductPackageDoesNotExist 
 	 * @throws AmountBiggerThanAvailable 
+	 * @throws ProductCatalogDoesNotExist 
 	 */
-	void addPtoductToCart(SmartCode c, int amount) throws CriticalError, CartNotConnected, AmountBiggerThanAvailable, ProductPackageDoesNotExist;
+	void addPtoductToCart(SmartCode c, int amount) throws CriticalError, CartNotConnected, AmountBiggerThanAvailable, ProductPackageDoesNotExist, ProductCatalogDoesNotExist;
 	
 	/**
 	 * returnProductToShelf - removes product with amount from the cart
@@ -103,8 +106,9 @@ public interface ICart {
 	/**
 	 * @throws CriticalError 
 	 * @throws CartNotConnected 
+	 * @throws ProductCatalogDoesNotExist
 	 */
-	CatalogProduct viewCatalogProduct(SmartCode smartCode) throws CriticalError, CartNotConnected;
+	CatalogProduct viewCatalogProduct(SmartCode smartCode) throws CriticalError, CartNotConnected, ProductCatalogDoesNotExist;
 	
 	/**
 	 * @throws ProductNotInCart 

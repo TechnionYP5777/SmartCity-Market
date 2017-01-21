@@ -76,5 +76,10 @@ public class ACartExceptions extends SMException {
 		private static final long serialVersionUID = 977822169247328736L;
 	}
 	
-	
+	/**
+	 * Thrown when try to view product catalog which not exist.
+	 */
+	public static class ProductCatalogDoesNotExist extends ACartExceptions {
+		private static final long serialVersionUID = 4795491771324789368L;
+	}
 }

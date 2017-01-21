@@ -15,6 +15,7 @@ import CartContracts.ACartExceptions.ProductNotInCart;
 import CartContracts.ACartExceptions.ProductPackageDoesNotExist;
 import CartContracts.ACartExceptions.GroceryListIsEmpty;
 import CartContracts.ACartExceptions.AmountBiggerThanAvailable;
+import CartContracts.ACartExceptions.ProductCatalogDoesNotExist;
 import ClientServerApi.ResultDescriptor;
 import UtilsContracts.IClientRequestHandler;
 
@@ -68,7 +69,7 @@ public abstract class ACart {
 
 	protected void resultDescriptorHandler(ResultDescriptor ¢) throws InvalidCommandDescriptor,
 		InvalidParameter, CriticalError, CartNotConnected, ProductNotInCart, AmountBiggerThanAvailable,
-		ProductPackageDoesNotExist, GroceryListIsEmpty, AuthenticationError {
+		ProductPackageDoesNotExist, GroceryListIsEmpty, AuthenticationError, ProductCatalogDoesNotExist {
 
 		switch (¢) {
 
@@ -113,10 +114,14 @@ public abstract class ACart {
 			throw new ProductPackageDoesNotExist();
 		
 		case SM_GROCERY_LIST_IS_EMPTY:
-			log.fatal("Command execution failed, product package does not exist");
+			log.fatal("Command execution failed, grocery list is empty");
 			
 			throw new GroceryListIsEmpty();
+		
+		case SM_CATALOG_PRODUCT_DOES_NOT_EXIST:
+			log.fatal("Command execution failed, product does not exist in catalog");
 			
+			throw new ProductCatalogDoesNotExist();
 		default:
 			log.fatal("Command execution failed, failed to parse result description");
 			
