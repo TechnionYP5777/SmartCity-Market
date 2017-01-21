@@ -26,7 +26,7 @@ import UtilsContracts.SmartcodeScanEvent;
 @Singleton
 public class BarcodeEventHandler implements IBarcodeEventHandler {
 	
-	public static final Integer BARCODE_SCANNER_DEFAULT_PORT = 2345;
+	public static final Integer BARCODE_SCANNER_DEFAULT_PORT = 4000;
 	
 	private EventBus eventBus;
 	
