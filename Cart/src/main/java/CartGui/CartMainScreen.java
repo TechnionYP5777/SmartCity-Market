@@ -62,7 +62,6 @@ public class CartMainScreen implements Initializable {
 
 	@FXML
 	GridPane productInfoPane;
-	Button removeAllItemsButton;
 
 	@FXML
 	Label productNameLabel;
@@ -95,11 +94,10 @@ public class CartMainScreen implements Initializable {
 	IBarcodeEventHandler barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
 
 	/**
-	 * the productInfoPane has three visible mode: 0 - unvisible (default) 1 -
-	 * SCANNED_PRODUCT: when the pane present scanned product info and actions 2
-	 * - PRESSED_PRODUCT: when the pane present pressed (on the listView Cell)
-	 * product info and actions
-	 *
+	 * the productInfoPane has three visible mode: 
+	 * 0 - unvisible (default) 
+	 * 1 - SCANNED_PRODUCT: when the pane present scanned product info and actions 
+	 * 2 - PRESSED_PRODUCT: when the pane present pressed (on the listView Cell) product info and actions
 	 */
 	private enum ProductInfoPaneVisibleMode {
 		SCANNED_PRODUCT, PRESSED_PRODUCT
@@ -144,7 +142,13 @@ public class CartMainScreen implements Initializable {
 		productInfoPane.setVisible(isAbillty);
 	}
 
-	private void updateProductsViewList() {
+	private void updateCartProductsInfo() {
+		updateProductsList();
+		productsNumberTextField.setText(cart.getCartProductsNum().toString());
+		totalSumTextField.setText(cart.getTotalSum().toString());
+	}
+
+	private void updateProductsList() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -211,7 +215,6 @@ public class CartMainScreen implements Initializable {
 	}
 
 	public void addButtonPressed(ActionEvent __) {
-
 		try {
 			cart.addPtoductToCart(scannedSmartCode, 1);
 		} catch (CriticalError | CartNotConnected e) {
@@ -222,7 +225,7 @@ public class CartMainScreen implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		updateProductsViewList();
+		updateCartProductsInfo();
 		setAbilityAndVisibilityOfProductInfoPane(false);
 	}
 
@@ -241,7 +244,7 @@ public class CartMainScreen implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		updateProductsViewList();
+		updateCartProductsInfo();
 		setAbilityAndVisibilityOfProductInfoPane(false);
 	}
 

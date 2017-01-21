@@ -80,9 +80,15 @@ public interface ICart {
 	
 	/**
 	 * getTotalSum - returns the total sum of the shopping
-	 * @return double
+	 * @return Double
 	 */
-	double getTotalSum(); 
+	Double getTotalSum(); 
+	
+	/**
+	 * getCartProductsNum - returns the number of the CarProducts in the cart
+	 * @return Integer
+	 */
+	Integer getCartProductsNum();
 	
 	/**
 	 * checkOutGroceryList - returns the finale total sum of the shopping and initialize grocery list
