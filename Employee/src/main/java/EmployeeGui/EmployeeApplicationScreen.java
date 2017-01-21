@@ -42,10 +42,8 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 		/* Setting log properties */
 		PropertyConfigurator.configure("../log4j.properties");
 		
-		/* Setting preloader */
+		/* lunching program with preloader */
         LauncherImpl.launchApplication(EmployeeApplicationScreen.class, EmployeeGuiPreloader.class, args);
-
-        launch(args);
 	}
 
 }
