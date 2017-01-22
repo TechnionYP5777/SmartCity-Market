@@ -6,7 +6,6 @@
     -fx-font-weight: bold;
 }
 
-
 .radio-button { 
 	-fx-font-family: "serif";
     -fx-text-fill: darkslateblue;
@@ -35,8 +34,9 @@
 }
 
 #searchCodeButton:hover {
-	-fx-effect: dropshadow(three-pass-box , cornflowerblue  , 50, 0.7 , 0 , 0);
+	-fx-effect: dropshadow(three-pass-box , cornflowerblue  , 50.0, 0.7 , 0.0 , 0.0);
 }
+
 
 
 
