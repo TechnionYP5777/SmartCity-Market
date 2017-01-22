@@ -17,12 +17,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="rootPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManagePackagesTab">
+<VBox fx:id="rootPane" stylesheets="@ManagePackages.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManagePackagesTab">
 	<children>
 		<VBox alignment="CENTER" spacing="10.0">
 			<children>
-				<TextField fx:id="barcodeTextField" maxWidth="278.0" minWidth="233.0" onAction="#searchCodeButtonPressed" onMouseClicked="#mouseClikedOnBarcodeField" prefHeight="23.0" prefWidth="233.0" promptText="Type Or Scan Product SmartCode..." />
-				<Button fx:id="searchCodeButton" mnemonicParsing="false" onAction="#searchCodeButtonPressed" text="Search Code" />
+            <HBox alignment="TOP_CENTER" spacing="10.0">
+               <children>
+      				<TextField fx:id="barcodeTextField" maxWidth="278.0" minWidth="233.0" onAction="#searchCodeButtonPressed" onMouseClicked="#mouseClikedOnBarcodeField" prefHeight="23.0" prefWidth="233.0" promptText="Type Or Scan Product Code..." />
+      				<Button fx:id="searchCodeButton" mnemonicParsing="false" onAction="#searchCodeButtonPressed" prefHeight="91.0" prefWidth="85.0" />
+               </children>
+            </HBox>
 				<DatePicker fx:id="datePickerForSmartCode" prefHeight="26.0" prefWidth="142.0" />
 			</children>
 		</VBox>
