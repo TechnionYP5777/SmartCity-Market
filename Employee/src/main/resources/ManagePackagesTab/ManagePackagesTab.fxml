@@ -24,7 +24,7 @@
             <HBox alignment="TOP_CENTER" spacing="10.0">
                <children>
       				<TextField fx:id="barcodeTextField" maxWidth="278.0" minWidth="233.0" onAction="#searchCodeButtonPressed" onMouseClicked="#mouseClikedOnBarcodeField" prefHeight="23.0" prefWidth="233.0" promptText="Type Or Scan Product Code..." />
-      				<Button fx:id="searchCodeButton" mnemonicParsing="false" onAction="#searchCodeButtonPressed" prefHeight="91.0" prefWidth="85.0" />
+      				<Button fx:id="searchCodeButton" mnemonicParsing="false" onAction="#searchCodeButtonPressed" prefHeight="26.0" prefWidth="26.0" />
                </children>
             </HBox>
 				<DatePicker fx:id="datePickerForSmartCode" prefHeight="26.0" prefWidth="142.0" />

@@ -30,8 +30,8 @@
 		<ColumnConstraints hgrow="ALWAYS" />
 	</columnConstraints>
 	<rowConstraints>
-		<RowConstraints vgrow="ALWAYS" />
-		<RowConstraints vgrow="ALWAYS" />
+		<RowConstraints percentHeight="75.0" vgrow="ALWAYS" />
+		<RowConstraints percentHeight="25.0" vgrow="ALWAYS" />
 	</rowConstraints>
 	<children>
 		<TabPane>
@@ -66,8 +66,7 @@
 								<TextArea fx:id="successLogArea" />
 							</children>
 						</VBox>
-						<Button mnemonicParsing="false" onAction="#logoutButtonPressed"
-							text="Log out" />
+						<Button fx:id="logout" mnemonicParsing="false" onAction="#logoutButtonPressed" prefHeight="60.0" prefWidth="58.0" />
 					</children>
 					<padding>
 						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

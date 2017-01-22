@@ -32,3 +32,16 @@
 	-fx-opacity: 1.0;
 	-fx-font-weight: bold;	
 }
+
+#logout {
+	-fx-background-image: url("logout.png");
+	-fx-background-size: cover;
+    -fx-background-color: transparent
+}
+
+#logout:hover {
+	-fx-effect: dropshadow(three-pass-box , cornflowerblue  , 50, 0.7 , 0 , 0);
+}
+
+
+
