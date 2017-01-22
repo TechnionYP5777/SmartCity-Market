@@ -106,16 +106,13 @@ public class CartMainScreen implements Initializable {
 	}
 
 	private void addOrRemoveScannedProduct(CatalogProduct catalogProduct, Integer amount) {
+		
 		updateProductInfoPaine(catalogProduct, amount, ProductInfoPaneVisibleMode.SCANNED_PRODUCT);
 	}
 
 	private void updateProductInfoPaine(CatalogProduct catalogProduct, Integer amount,
 			ProductInfoPaneVisibleMode mode) {
-//		productNameLabel.setText(catalogProduct.getName());
-//		manufacturerLabel.setText(catalogProduct.getManufacturer().getName());
-//		priceLabel.setText(String.format("%1$.2f", catalogProduct.getPrice()));
-//		amountLabel.setText(amount.toString());
-		descriptionTextArea.setText(/*catalogProduct.getDescription()*/ "Test");
+		updateProductInfoTexts(catalogProduct, amount);
 		switch (mode) {
 		case SCANNED_PRODUCT: {
 			removeAllButton.setDisable(true);
@@ -139,6 +136,14 @@ public class CartMainScreen implements Initializable {
 		setAbilityAndVisibilityOfProductInfoPane(true);
 	}
 	
+	private void updateProductInfoTexts(CatalogProduct catalogProduct2, Integer amount) {
+		productNameLabel.setText(catalogProduct.getName());
+		manufacturerLabel.setText(catalogProduct.getManufacturer().getName());
+		priceLabel.setText(String.format("%1$.2f", catalogProduct.getPrice()));
+		amountLabel.setText(amount.toString());
+		descriptionTextArea.setText(catalogProduct.getDescription());		
+	}
+
 	private void setAbilityAndVisibilityOfProductInfoPane(boolean visibilty) {
 		productInfoPane.setDisable(!visibilty);
 		productInfoPane.setVisible(visibilty);
@@ -262,7 +267,14 @@ public class CartMainScreen implements Initializable {
 			catalogProduct = cartPtoduct.getCatalogProduct();
 			amount = cartPtoduct.getTotalAmount();
 		}
-		addOrRemoveScannedProduct(catalogProduct, amount);		
+		
+		
+		Platform.runLater(new Runnable() {	
+			@Override
+			public void run() {
+				addOrRemoveScannedProduct(catalogProduct, amount);	
+			}
+		});
 	}
 	
 	@Subscribe
