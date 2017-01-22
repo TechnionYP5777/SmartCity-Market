@@ -112,8 +112,9 @@ public class ManageCatalogProductTab implements Initializable {
 	}
 
 	private void enableRunOperation() {
-		runTheOperationButton.setDisable(barcodeTextField.getText().isEmpty()
-				|| productNameTextField.getText().isEmpty() || productDescriptionTextField.getText().isEmpty());
+		runTheOperationButton
+				.setDisable(barcodeTextField.getText().isEmpty() || (addCatalogProductRadioButton.isSelected()
+						&& (productNameTextField.getText().isEmpty() || productPriceTextField.getText().isEmpty())));
 	}
 
 	@FXML
