@@ -95,6 +95,9 @@ public class ManageCatalogProductTab implements Initializable {
 
 		});
 		productPriceTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.matches("((\\d*)|(\\d+\\.\\d*))")) {
+				productPriceTextField.setText(oldValue);
+			}
 			enableRunOperation();
 		});
 		productIngredientsTextField.textProperty().addListener((observable, oldValue, newValue) -> {
