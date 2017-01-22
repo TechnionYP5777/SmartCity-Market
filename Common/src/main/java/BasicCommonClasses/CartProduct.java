@@ -1,8 +1,6 @@
 package BasicCommonClasses;
 
-import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.HashSet;
 
 
 /** CartProduct - The product from the Cart (/costumer) perspective. 

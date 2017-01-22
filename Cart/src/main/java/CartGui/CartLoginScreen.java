@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 import CartContracts.ACartExceptions.AuthenticationError;
 import CartContracts.ACartExceptions.CriticalError;
 import CartContracts.ICart;
-import CartDI.CartDiConfigurator;
 import CartImplemantations.Cart;
 import GuiUtils.AbstractApplicationScreen;
 import UtilsImplementations.InjectionFactory;

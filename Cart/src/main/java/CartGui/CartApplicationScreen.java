@@ -2,18 +2,12 @@ package CartGui;
 
 import org.apache.log4j.PropertyConfigurator;
 
-import BasicCommonClasses.CartProduct;
 import CartDI.CartDiConfigurator;
 import GuiUtils.AbstractApplicationScreen;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 /**
  * CartApplicationScreen - This class is the stage GUI class for Cart

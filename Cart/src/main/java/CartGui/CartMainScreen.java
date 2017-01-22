@@ -10,11 +10,6 @@ import com.google.common.eventbus.Subscribe;
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.SmartCode;
-import CartContracts.ACartExceptions.AmountBiggerThanAvailable;
-import CartContracts.ACartExceptions.CartNotConnected;
-import CartContracts.ACartExceptions.CriticalError;
-import CartContracts.ACartExceptions.ProductNotInCart;
-import CartContracts.ACartExceptions.ProductPackageDoesNotExist;
 import CartContracts.ICart;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
@@ -153,14 +148,9 @@ public class CartMainScreen implements Initializable {
 	}
 
 	private void updateCartProductsInfo() {
-		updateProductsList();
+		syncListViewWithCart();
 		productsNumberTextField.setText(cart.getCartProductsNum().toString());
 		totalSumTextField.setText(cart.getTotalSum().toString());
-	}
-
-	private void updateProductsList() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	private void logoutAndExit() {
@@ -234,7 +224,6 @@ public class CartMainScreen implements Initializable {
 			CartGuiExceptionsHandler.handle(e);	
 			return;
 		}	
-		syncListViewWithCart();
 		updateCartProductsInfo();
 		setAbilityAndVisibilityOfProductInfoPane(false);
 	}
@@ -262,7 +251,6 @@ public class CartMainScreen implements Initializable {
 			CartGuiExceptionsHandler.handle(e);	
 			return;
 		}
-		syncListViewWithCart();
 		updateCartProductsInfo();
 		setAbilityAndVisibilityOfProductInfoPane(false);
 	}
@@ -282,7 +270,6 @@ public class CartMainScreen implements Initializable {
 			CartGuiExceptionsHandler.handle(e);	
 			return;
 		}
-		syncListViewWithCart();
 		updateCartProductsInfo();
 		setAbilityAndVisibilityOfProductInfoPane(false);
 	}

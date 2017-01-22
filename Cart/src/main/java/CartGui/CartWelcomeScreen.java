@@ -4,9 +4,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import CartContracts.ICart;
-import CartContracts.ACartExceptions.AuthenticationError;
-import CartContracts.ACartExceptions.CriticalError;
-import CartDI.CartDiConfigurator;
 import CartImplemantations.Cart;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
@@ -17,9 +14,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
-/**
+/** 
  * CartWelcomeScreen - This class is the controller for the cart welcome screen
  * all action of this scene should be here.
  * 

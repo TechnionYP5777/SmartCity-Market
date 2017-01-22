@@ -23,8 +23,8 @@ public class CartProductCellFormat extends ListCell<CartProduct> {
 
 		VBox vbx = new VBox(5); // spacing = 5
 		Label productName = new Label("Name: " + item.getCatalogProduct().getName());
-		Label productAmount = new Label("Amount: " + "1");
-		Label productPrice = new Label("Price: " + new Double(item.getCatalogProduct().getPrice()).toString());
+		Label productAmount = new Label("Amount: " + item.getTotalAmount());
+		Label productPrice = new Label("Price: " + new Double(item.getCatalogProduct().getPrice()).toString() + " nis");
 		Image image = new Image("http://www.toprechesh.co.il/files/products/image1_2102_2016-02-14_13-46-36.jpg");
 		ImageView productImage = new ImageView(image);
 	    vbx.getChildren().addAll(productName, productAmount, productPrice, productImage);

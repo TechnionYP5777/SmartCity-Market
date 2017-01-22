@@ -1,15 +1,5 @@
 package BasicCommonClassesTest;
 
-import static org.junit.Assert.fail;
-
-import org.apache.log4j.PropertyConfigurator;
-import org.junit.Before;
-import org.junit.Test;
-import java.time.LocalDate;
-
-import BasicCommonClasses.CatalogProduct;
-import BasicCommonClasses.Manufacturer;
-import BasicCommonClasses.CartProduct;
 /**@author Lior Ben Ami
  * @since 2016-12-11 */
 public class CartProductTest {
