@@ -1,4 +1,4 @@
-package CartGui;
+package CartGuiHelpers;
 
 import BasicCommonClasses.CartProduct;
 import javafx.geometry.Pos;

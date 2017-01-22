@@ -1,4 +1,4 @@
-package CartGui;
+package CartGuiScreens;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -10,6 +10,9 @@ import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.SmartCode;
 import CartContracts.ICart;
+import CartGuiHelpers.CartGuiExceptionsHandler;
+import CartGuiHelpers.CartProductCellFormat;
+import CartGuiHelpers.TempCartPassingData;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
 import UtilsContracts.IBarcodeEventHandler;

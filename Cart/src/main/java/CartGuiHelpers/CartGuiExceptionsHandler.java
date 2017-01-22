@@ -1,4 +1,4 @@
-package CartGui;
+package CartGuiHelpers;
 
 import CartContracts.ACartExceptions.*;
 import CommonDefs.GuiCommonDefs;

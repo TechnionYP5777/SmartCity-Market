@@ -1,10 +1,11 @@
-package CartGui;
+package CartGuiScreens;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import CartContracts.ACartExceptions.AuthenticationError;
 import CartContracts.ACartExceptions.CriticalError;
+import CartGuiHelpers.TempCartPassingData;
 import CartContracts.ICart;
 import CartImplemantations.Cart;
 import GuiUtils.AbstractApplicationScreen;

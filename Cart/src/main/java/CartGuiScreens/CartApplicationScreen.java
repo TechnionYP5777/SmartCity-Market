@@ -1,4 +1,4 @@
-package CartGui;
+package CartGuiScreens;
 
 import org.apache.log4j.PropertyConfigurator;
 
