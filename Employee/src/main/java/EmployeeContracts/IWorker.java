@@ -138,11 +138,4 @@ public interface IWorker {
 	 * @throws ConnectionFailure 
 	 */
 	public boolean isLoggedIn() throws CriticalError, ConnectionFailure; 
-	
-	/**
-	 * worker wants to know if server is reachable before sending requests.
-	 * 
-	 * @return boolean 
-	 */
-	public boolean isServerReachable();
 }
