@@ -1,6 +1,7 @@
 package CartGui;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import com.google.common.eventbus.Subscribe;
@@ -53,7 +54,7 @@ public class CartMainScreen implements Initializable {
 	GridPane cartMainScreenPane;
 
 	@FXML
-	ListView<Integer> productsListView;
+	ListView<CartProduct> productsListView;
 
 	@FXML
 	TextField productsNumberTextField;
@@ -91,6 +92,8 @@ public class CartMainScreen implements Initializable {
 	SmartCode scannedSmartCode = null;
 	
 	CatalogProduct catalogProduct;
+	
+	ObservableList<CartProduct> productsObservableList = FXCollections.<CartProduct>observableArrayList();
 
 	// Lock smartCodeLocker;
 
@@ -176,19 +179,13 @@ public class CartMainScreen implements Initializable {
 
 		
 		cart = TempCartPassingData.cart;
-		// productsObservableList.addAll(cart.getCartProductCache().values());
 
-		ObservableList<Integer> productsObservableList = FXCollections.<Integer>observableArrayList(new Integer(0),
-				new Integer(1));
-
-//		productsListView = ListView<Integer>();
-		
-//		productsListView.setStyle("-fx-control-inner-background: blue;");
+		productsListView.setEditable(true);
 		productsListView.setItems(productsObservableList);
-		productsListView.setCellFactory(new Callback<ListView<Integer>, ListCell<Integer>>() {
+		productsListView.setCellFactory(new Callback<ListView<CartProduct>, ListCell<CartProduct>>() {
 			@Override
-			public ListCell<Integer> call(ListView<Integer> list) {
-				return new IntCellFormat();
+			public ListCell<CartProduct> call(ListView<CartProduct> list) {
+				return new CartProductCellFormat();
 			}
 		});
 		// TODO Enable this:
@@ -225,6 +222,12 @@ public class CartMainScreen implements Initializable {
 			CartGuiExceptionsHandler.handle(e);	
 			return;
 		}
+		HashMap<Long, CartProduct> shoppingList = cart.getCartProductCache();
+		productsObservableList.clear();
+		shoppingList.forEach((key,value) -> {
+			productsObservableList.add(value);
+		});
+
 		updateCartProductsInfo();
 		setAbilityAndVisibilityOfProductInfoPane(false);
 	}

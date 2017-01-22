@@ -71,4 +71,8 @@ public class CartProduct {
 	public double getTotalSum() {
 		return totalAmount * catalogProduct.getPrice();
 	}
+	
+	@Override public String toString(){
+		return catalogProduct.name + "		" + catalogProduct.price;
+	}
 }

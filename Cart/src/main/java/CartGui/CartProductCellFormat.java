@@ -1,11 +1,12 @@
 package CartGui;
 
+import BasicCommonClasses.CartProduct;
 import javafx.scene.control.ListCell;
 
-public class IntCellFormat  extends ListCell<Integer>
+public class CartProductCellFormat  extends ListCell<CartProduct>
 {
   @Override
-  public void updateItem(Integer item, boolean empty)
+  public void updateItem(CartProduct item, boolean empty)
   {
     super.updateItem(item, empty);
 
@@ -14,7 +15,8 @@ public class IntCellFormat  extends ListCell<Integer>
             setText(null);
             return;
         }
-    this.setText("int: " + Integer.toString(item));
+    String cellString = item.toString();
+    this.setText(cellString);
     setGraphic(null);
   }
 }
