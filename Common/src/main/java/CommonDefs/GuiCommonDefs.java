@@ -29,19 +29,19 @@ public class GuiCommonDefs {
 	//final public static String userAlreadyConnectedFailureMessage = "The user is already connected.";
 	//TODO : (by idan to shimon) i think this case is for critical error, what do you say?
 	
-	public static final String wrongUserNamePasswordFailureMsg = "Wrong user name or password.";
+	public static final String wrongUserNamePasswordFailureMsg = "Wrong user name or password, please try again.";
 		
-	public static final String productNotExistsInCatalogMsg = "Could not find this product.";
+	public static final String productNotExistsInCatalogMsg = "Could not find this barcode in the product catalog, please check your input.";
 	
-	public static final String productAlreadyExistsInCatalogMsg = "This product is already in the catalog!";
+	public static final String productAlreadyExistsInCatalogMsg = "This Barcode is already in the catalog, please check your input.";
 	
 	public static final String productStillForSaleMsg = "This product is still for sale!";
 	
-	public static final String productCapacityIsNotEnoughMsg = "There are not enough items of this product";
+	public static final String productCapacityIsNotEnoughMsg = "There are not enough items of this product, please validate the inserted amount.";
 	
 	public static final String connectionFailureMsg = "Failed to send respond to server";
 	
-	public static final String productPackageDoesNotExistMsg = "There is no such product package!";
+	public static final String productPackageDoesNotExistMsg = "There is no such product package, please check the inserted SmartCode.";
 	
 	public static final String productNotInCartMsg = "There is no such product in the cart!";
 	
