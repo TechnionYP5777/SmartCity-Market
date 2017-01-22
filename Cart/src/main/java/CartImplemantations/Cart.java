@@ -46,7 +46,7 @@ public class Cart extends ACart implements ICart {
 	 */
 	HashMap<Long, CartProduct> cartProductCache = new HashMap<Long, CartProduct>();
 	
-	Double totalSum;
+	Double totalSum = Double.valueOf(0);
 
 	private void loadCartProductCacheAndUpdateTotalSum() throws CriticalError, CartNotConnected, ProductCatalogDoesNotExist {
 		for (HashMap.Entry<SmartCode, ProductPackage> entry : groceryList.getList().entrySet()) {
@@ -246,7 +246,7 @@ public class Cart extends ACart implements ICart {
 		return cartProductCache.size();
 	}
 	
-	public double checkOutGroceryList() throws CriticalError, CartNotConnected {
+	public Double checkOutGroceryList() throws CriticalError, CartNotConnected {
 		establishCommunication(CartDefs.port, CartDefs.host, CartDefs.timeout);
 		log.info("Creating CHECKOUT_GROCERY_LIST command wrapper to cart with id: " + id);
 		String serverResponse;
@@ -272,8 +272,8 @@ public class Cart extends ACart implements ICart {
 		//update cart data: groceryList, cartProductCache, totalSum
 		groceryList = new GroceryList();
 		cartProductCache = new HashMap<Long, CartProduct>();
-		double $ = totalSum;
-		totalSum = (double) 0;
+		Double $ = totalSum;
+		totalSum = Double.valueOf(0);
 		return $;
 	}
 

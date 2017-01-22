@@ -95,11 +95,11 @@ public interface ICart {
 	
 	/**
 	 * checkOutGroceryList - returns the finale total sum of the shopping and initialize grocery list
-	 * @return double
+	 * @return Double
 	 * @throws CriticalError 
 	 * @throws CartNotConnected 
 	 */
-	double checkOutGroceryList() throws CriticalError, CartNotConnected;
+	Double checkOutGroceryList() throws CriticalError, CartNotConnected;
 
 	CartProduct getCartProduct(SmartCode smartCode);
 

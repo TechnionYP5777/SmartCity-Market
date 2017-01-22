@@ -9,6 +9,7 @@ import CartContracts.ACartExceptions.CriticalError;
 import CartDI.CartDiConfigurator;
 import CartImplemantations.Cart;
 import GuiUtils.AbstractApplicationScreen;
+import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -39,13 +40,8 @@ public class CartWelcomeScreen implements Initializable {
 		ICart cart = InjectionFactory.getInstance(Cart.class);
 		try {
 			cart.login("Cart", "Cart");
-		} catch (CriticalError e) {
-			Alert alert = new Alert(AlertType.ERROR , "A problem had occured. Please Try again or let us know if it continues.");
-			alert.showAndWait();
-			return;
-		} catch (AuthenticationError e) {
-			Alert alert = new Alert(AlertType.ERROR , "Wrong user name or password.");
-			alert.showAndWait();
+		} catch (SMException e) {
+			CartGuiExceptionsHandler.handle(e);	
 			return;
 		}
 		catch (Exception e) {
