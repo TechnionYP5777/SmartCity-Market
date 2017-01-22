@@ -182,7 +182,8 @@ public class CartMainScreen implements Initializable {
 				new Integer(1));
 
 //		productsListView = ListView<Integer>();
-
+		
+//		productsListView.setStyle("-fx-control-inner-background: blue;");
 		productsListView.setItems(productsObservableList);
 		productsListView.setCellFactory(new Callback<ListView<Integer>, ListCell<Integer>>() {
 			@Override

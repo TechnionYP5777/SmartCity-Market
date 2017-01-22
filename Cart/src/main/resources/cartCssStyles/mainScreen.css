@@ -1,0 +1,20 @@
+.main {
+   -fx-background-color: white;
+   -fx-text-fill: midnightblue;
+   -fx-opacity: 1.0;
+   -fx-font-weight: bold;
+}
+
+.list-view .list-cell:filled:selected .label {
+    -fx-text-fill: black;
+}
+
+.list-view .list-cell:even {
+	-fx-control-background: blue;
+	-fx-text-fill: black;
+}
+
+.list-view .list-cell:odd {
+	-fx-control-background: blue;
+	-fx-text-fill: black;
+}
