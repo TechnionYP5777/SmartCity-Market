@@ -1,3 +1,7 @@
+#ChooseOperationLbl {
+	-fx-font-size: 40;
+}
+
 
 .label {
     -fx-font-family: "serif";
@@ -28,15 +32,6 @@
 	-fx-font-weight: bold;	
 }
 
-#searchCodeButton {
-	-fx-background-image: url("search.png");
-	-fx-background-size: cover;
-    -fx-background-color: transparent
-}
-
-#searchCodeButton:hover {
-	-fx-effect: dropshadow(three-pass-box , cornflowerblue  , 50, 0.7 , 0 , 0);
-}
 
 
 
