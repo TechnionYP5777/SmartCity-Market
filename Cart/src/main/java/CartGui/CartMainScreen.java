@@ -233,35 +233,56 @@ public class CartMainScreen implements Initializable {
 		} catch (SMException e) {
 			CartGuiExceptionsHandler.handle(e);	
 			return;
-		}
+		}	
+		syncListViewWithCart();
+		updateCartProductsInfo();
+		setAbilityAndVisibilityOfProductInfoPane(false);
+	}
+
+	private void syncListViewWithCart() {
 		HashMap<Long, CartProduct> shoppingList = cart.getCartProductCache();
 		productsObservableList.clear();
 		shoppingList.forEach((key,value) -> {
 			productsObservableList.add(value);
 		});
-
-		updateCartProductsInfo();
-		setAbilityAndVisibilityOfProductInfoPane(false);
 	}
 
 	public void removeButtonPressed(ActionEvent __) {
 		try {
-			cart.returnProductToShelf(scannedSmartCode, 1);
+			SmartCode sc;
+			if (DEBUG){
+				LocalDate ld = LocalDate.of(2017,4,10);
+				sc = new SmartCode(7290000066318l, ld);
+				barcodeEventHandler.publishEvent(sc);
+			} else {
+				sc = scannedSmartCode;
+			}
+			cart.returnProductToShelf(sc, 1);
 		} catch (SMException e) {
 			CartGuiExceptionsHandler.handle(e);	
 			return;
 		}
+		syncListViewWithCart();
 		updateCartProductsInfo();
 		setAbilityAndVisibilityOfProductInfoPane(false);
 	}
 
 	public void removeAllButtonPressed(ActionEvent __) {
 		try {
+			SmartCode sc;
+			if (DEBUG){
+				LocalDate ld = LocalDate.of(2017,4,10);
+				sc = new SmartCode(7290000066318l, ld);
+				barcodeEventHandler.publishEvent(sc);
+			} else {
+				sc = scannedSmartCode;
+			}
 			cart.removeAllItemsOfCartProduct(scannedSmartCode);
 		} catch (SMException e) {
 			CartGuiExceptionsHandler.handle(e);	
 			return;
 		}
+		syncListViewWithCart();
 		updateCartProductsInfo();
 		setAbilityAndVisibilityOfProductInfoPane(false);
 	}
