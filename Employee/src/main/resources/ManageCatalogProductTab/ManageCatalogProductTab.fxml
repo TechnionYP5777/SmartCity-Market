@@ -158,7 +158,7 @@
 		</StackPane>
 		<HBox alignment="CENTER_LEFT">
 			<children>
-				<Button fx:id="runTheOperationButton" mnemonicParsing="false" onAction="#runTheOperationButtonPressed" text="Run The Operation" />
+				<Button fx:id="runTheOperationButton" mnemonicParsing="false" onAction="#runTheOperationButtonPressed" styleClass="ourButton" text="Run The Operation" />
 			</children>
 		</HBox>
 	</children>

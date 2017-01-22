@@ -1,16 +1,7 @@
 .root {
    -fx-background-image: url("back.jpg");
    -fx-background-size: cover;
-   -fx-background-color: null
 }
-
-.label {
-    -fx-font-family: "serif";
-    -fx-text-fill: midnightblue;
-    -fx-opacity: 1.0;
-    -fx-font-weight: bold;
-}
-
 
 .radio-button { 
 	-fx-font-family: "serif";
@@ -19,6 +10,15 @@
     -fx-font-weight: bold;	
 }
 
+#logout {
+	-fx-background-image: url("logout.png");
+	-fx-background-size: cover;
+    -fx-background-color: transparent
+}
+
+#logout:hover {
+	-fx-effect: dropshadow(three-pass-box , cornflowerblue  , 50, 0.7 , 0 , 0);
+}
 
 .radio-button .dot {
   -fx-mark-highlight-color: midnightblue;
@@ -32,17 +32,6 @@
 	-fx-opacity: 1.0;
 	-fx-font-weight: bold;	
 }
-
-#logout {
-	-fx-background-image: url("logout.png");
-	-fx-background-size: cover;
-    -fx-background-color: transparent
-}
-
-#logout:hover {
-	-fx-effect: dropshadow(three-pass-box , cornflowerblue  , 50, 0.7 , 0 , 0);
-}
-
 
 .tab-header-area .tab-header-background {
     -fx-opacity: 0.5;
@@ -78,6 +67,7 @@
     -fx-alignment: CENTER;
     -fx-text-fill: white;
 }
+
 
 
 

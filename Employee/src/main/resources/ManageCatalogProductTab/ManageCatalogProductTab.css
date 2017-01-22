@@ -3,37 +3,9 @@
 }
 
 
-.label {
-    -fx-font-family: "serif";
-    -fx-text-fill: midnightblue;
-    -fx-opacity: 1.0;
-    -fx-font-weight: bold;
-}
 
-
-.radio-button { 
-	-fx-font-family: "serif";
-    -fx-text-fill: darkslateblue;
-    -fx-opacity: 1.0;
-    -fx-font-weight: bold;	
-}
-
-
-.radio-button .dot {
-  -fx-mark-highlight-color: midnightblue;
-  -fx-mark-color: midnightblue; 
-}
-
-
-.check-box { 
-	-fx-font-family: "serif";
-	-fx-text-fill: darkslateblue;
-	-fx-opacity: 1.0;
-	-fx-font-weight: bold;	
-}
-
-.button {
-	-fx-font-size: 15px;
+.ourButton {
+	-fx-font-size: 20px;
 	-fx-font-family: "serif";
 	-fx-base: #00a7d4;
 	-fx-background: cornsilk;
@@ -51,19 +23,23 @@
 	-fx-content-display: LEFT;
 }
 
-.button:focused {
+.ourButton:focused {
 	-fx-color:#00a7d4;
 	-fx-background-color:#ED9C28, #00a7d4;
 	-fx-background-insets: -1.4, 0, 1, 2;
 	-fx-background-radius: 0;
 }
 
-.button:hover {
+.ourButton:hover {
 	-fx-focus-color: #FF0000;
 	-fx-background-color: #ED9C28, #0187ab;
 }
 
 
-
-
+.label {
+    -fx-font-family: "serif";
+    -fx-text-fill: midnightblue;
+    -fx-opacity: 1;
+    -fx-font-weight: bold;
+}
 

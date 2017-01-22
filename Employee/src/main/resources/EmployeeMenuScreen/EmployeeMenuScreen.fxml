@@ -23,9 +23,9 @@
 
 <GridPane fx:id="workerMenuScreenPane" maxHeight="-Infinity"
 	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-	prefHeight="1080.0" prefWidth="1920.0" stylesheets="@EmployeeMenuScreen.css"
+	prefHeight="1080.0" prefWidth="1920.0" 
 	xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="EmployeeGui.EmployeeMenuScreen">
+	fx:controller="EmployeeGui.EmployeeMenuScreen" stylesheets="@EmployeeMenuScreen.css">
 	<columnConstraints>
 		<ColumnConstraints hgrow="ALWAYS" />
 	</columnConstraints>
