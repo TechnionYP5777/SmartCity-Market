@@ -19,6 +19,7 @@ import EmployeeImplementations.Manager;
 import GuiUtils.DialogMessagesService;
 import GuiUtils.RadioButtonEnabler;
 import SMExceptions.SMException;
+import SmartcodeParser.SmartcodePrint;
 import UtilsContracts.BarcodeScanEvent;
 import UtilsContracts.IBarcodeEventHandler;
 import UtilsContracts.SmartcodeScanEvent;
@@ -435,6 +436,8 @@ public class ManagePackagesTab implements Initializable {
 
 					searchCodeButtonPressed(null);
 
+				} else if (printSmartCodeRadioButton.isSelected()) {
+					new SmartcodePrint(smartcode, amountVal).print();
 				}
 			}
 
