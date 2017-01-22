@@ -164,9 +164,9 @@ public class ManagePackagesTab implements Initializable {
 			}
 			enableRunTheOperationButton();
 		});
-		
+
 		editPackagesAmountSpinner.focusedProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue!= null && !newValue) {
+			if (newValue != null && !newValue) {
 				editPackagesAmountSpinner.increment(0);
 				enableRunTheOperationButton();
 			}
@@ -197,8 +197,6 @@ public class ManagePackagesTab implements Initializable {
 
 		radioButtonContainerBarcodeOperations
 				.addRadioButtons((Arrays.asList((new RadioButton[] { addPakageToWarhouseRadioButton }))));
-
-	
 
 		showScanCodePane(true);
 
@@ -391,7 +389,7 @@ public class ManagePackagesTab implements Initializable {
 					// printToSuccessLog(("Added (" + amountVal + ") " +
 					// "product
 					// packages (" + pp + ") to warehouse"));
-
+					this.expirationDate = datePicker.getValue();
 					searchCodeButtonPressed(null);
 				}
 			} else {

@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 import CommonDefs.CLIENT_TYPE;
 import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IWorker;
-import EmployeeDefs.AEmployeeException;
 import EmployeeImplementations.Manager;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
