@@ -466,17 +466,18 @@ public class ManagePackagesTab implements Initializable {
 
 	@Subscribe
 	public void barcodeScanned(BarcodeScanEvent ¢) {
+		resetParams();
 		barcodeTextField.setText(Long.toString(¢.getBarcode()));
-		enableRunTheOperationButton();
-
+		searchCodeButtonPressed(null);
 	}
 
 	@Subscribe
 	public void smartcoseScanned(SmartcodeScanEvent ¢) {
 		SmartCode smartcode = ¢.getSmarCode();
+		resetParams();
 		barcodeTextField.setText(Long.toString(smartcode.getBarcode()));
-		enableRunTheOperationButton();
-
+		this.expirationDate = smartcode.getExpirationDate();
+		searchCodeButtonPressed(null);
 	}
 
 }

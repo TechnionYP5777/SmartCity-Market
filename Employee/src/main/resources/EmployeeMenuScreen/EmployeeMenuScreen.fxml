@@ -63,7 +63,7 @@
 						<VBox spacing="5.0">
 							<children>
 								<Label text="Recent Activity" textFill="WHITE" />
-								<TextArea fx:id="successLogArea" />
+								<TextArea fx:id="successLogArea" opacity="0.35"/>
 							</children>
 						</VBox>
 						<Button fx:id="logout" mnemonicParsing="false" onAction="#logoutButtonPressed" prefHeight="60.0" prefWidth="58.0" />

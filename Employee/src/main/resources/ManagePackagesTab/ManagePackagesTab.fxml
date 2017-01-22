@@ -9,6 +9,9 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Light.Distant?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -23,11 +26,31 @@
 			<children>
             <HBox alignment="TOP_CENTER" spacing="10.0">
                <children>
-      				<TextField fx:id="barcodeTextField" maxWidth="278.0" minWidth="233.0" onAction="#searchCodeButtonPressed" onMouseClicked="#mouseClikedOnBarcodeField" prefHeight="23.0" prefWidth="233.0" promptText="Type Or Scan Product Code..." />
+      				<TextField fx:id="barcodeTextField" maxWidth="278.0" minWidth="233.0" onAction="#searchCodeButtonPressed" onMouseClicked="#mouseClikedOnBarcodeField" opacity="0.5" prefHeight="23.0" prefWidth="233.0" promptText="Type Or Scan Product Code...">
+                     <effect>
+                        <Lighting diffuseConstant="1.29">
+                           <bumpInput>
+                              <Shadow />
+                           </bumpInput>
+                           <light>
+                              <Light.Distant />
+                           </light>
+                        </Lighting>
+                     </effect></TextField>
       				<Button fx:id="searchCodeButton" mnemonicParsing="false" onAction="#searchCodeButtonPressed" prefHeight="26.0" prefWidth="26.0" />
                </children>
             </HBox>
-				<DatePicker fx:id="datePickerForSmartCode" prefHeight="26.0" prefWidth="142.0" />
+				<DatePicker fx:id="datePickerForSmartCode" opacity="0.5" prefHeight="26.0" prefWidth="142.0">
+               <effect>
+                  <Lighting diffuseConstant="1.33">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant />
+                     </light>
+                  </Lighting>
+               </effect></DatePicker>
 			</children>
 		</VBox>
 		<StackPane>
@@ -200,7 +223,17 @@
 										</HBox>
 										<HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
 											<children>
-												<Spinner fx:id="editPackagesAmountSpinner" editable="true" initialValue="1" max="100" min="1" prefHeight="54.0" prefWidth="55.0" styleClass="split-arrows-vertical" />
+												<Spinner fx:id="editPackagesAmountSpinner" editable="true" initialValue="1" max="100" min="1" opacity="0.45" prefHeight="54.0" prefWidth="55.0" styleClass="split-arrows-vertical">
+                                       <effect>
+                                          <Lighting diffuseConstant="1.46" specularConstant="0.0" specularExponent="11.43" surfaceScale="6.86">
+                                             <bumpInput>
+                                                <Shadow />
+                                             </bumpInput>
+                                             <light>
+                                                <Light.Distant color="#d7d6e1" />
+                                             </light>
+                                          </Lighting>
+                                       </effect></Spinner>
 											</children>
 											<padding>
 												<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
