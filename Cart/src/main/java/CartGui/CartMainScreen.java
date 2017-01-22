@@ -115,11 +115,11 @@ public class CartMainScreen implements Initializable {
 
 	private void updateProductInfoPaine(CatalogProduct catalogProduct, Integer amount,
 			ProductInfoPaneVisibleMode mode) {
-		productNameLabel.setText(catalogProduct.getName());
-		manufacturerLabel.setText(catalogProduct.getManufacturer().getName());
-		priceLabel.setText(String.format("%1$.2f", catalogProduct.getPrice()));
-		amountLabel.setText(amount.toString());
-		descriptionTextArea.setText(catalogProduct.getDescription());
+//		productNameLabel.setText(catalogProduct.getName());
+//		manufacturerLabel.setText(catalogProduct.getManufacturer().getName());
+//		priceLabel.setText(String.format("%1$.2f", catalogProduct.getPrice()));
+//		amountLabel.setText(amount.toString());
+		descriptionTextArea.setText(/*catalogProduct.getDescription()*/ "Test");
 		switch (mode) {
 		case SCANNED_PRODUCT: {
 			removeAllButton.setDisable(true);

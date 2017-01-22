@@ -190,6 +190,8 @@ public class Cart extends ACart implements ICart {
 		}
 		log.info("addProductToGroceryList command succeed.");
 		ProductPackage productPackage = new ProductPackage(c, amount, null);
+//		if (groceryList == null) 
+//			groceryList = new GroceryList();
 		groceryList.addProduct(productPackage);
 		addProductToCache(productPackage, catalogProduct);
 	}

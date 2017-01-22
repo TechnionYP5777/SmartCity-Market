@@ -14,13 +14,16 @@ import CommonDefs.GroceryListExceptions.ProductNotInList;
 public class GroceryList {
 	HashMap<SmartCode, ProductPackage> groceryList;
 
-	public void addProduct(ProductPackage p) {
+	public void addProduct(ProductPackage newProductPackage) {
 		if (groceryList == null)
 			groceryList = new HashMap<SmartCode, ProductPackage>();
-		ProductPackage pp = groceryList.get(p.getSmartCode());
-		if (pp != null) 
-			pp.incrementAmount(p.getAmount());
-		groceryList.put(pp.getSmartCode(), pp);
+		ProductPackage productPackagInCart = groceryList.get(newProductPackage.getSmartCode());
+		if (productPackagInCart != null) {
+			productPackagInCart.incrementAmount(newProductPackage.getAmount());
+			groceryList.put(productPackagInCart.getSmartCode(), productPackagInCart);
+		} else {
+			groceryList.put(newProductPackage.getSmartCode(), newProductPackage);
+		}
 	}
 	
 	public void removeProduct(ProductPackage p) throws ProductNotInList, AmountIsBiggerThanAvailable {
