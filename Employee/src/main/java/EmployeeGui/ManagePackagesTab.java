@@ -25,6 +25,7 @@ import UtilsContracts.IBarcodeEventHandler;
 import UtilsContracts.SmartcodeScanEvent;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -280,6 +281,8 @@ public class ManagePackagesTab implements Initializable {
 	}
 
 	private void showSmartCodeOperationsPane(boolean show) {
+		
+		
 		smartcodeOperationsPane.setVisible(show);
 		barcodeOperationsPane.setVisible(!show);
 		if (show) {
@@ -449,6 +452,7 @@ public class ManagePackagesTab implements Initializable {
 
 	@FXML
 	private void showMoreDetailsButtonPressed(ActionEvent __) {
+
 		if (catalogProduct != null)
 			DialogMessagesService.showInfoDialog(catalogProduct.getName(),
 					"Description: " + catalogProduct.getDescription(),
@@ -466,18 +470,32 @@ public class ManagePackagesTab implements Initializable {
 
 	@Subscribe
 	public void barcodeScanned(BarcodeScanEvent ¢) {
-		resetParams();
-		barcodeTextField.setText(Long.toString(¢.getBarcode()));
-		searchCodeButtonPressed(null);
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				resetParams();
+				barcodeTextField.setText(Long.toString(¢.getBarcode()));
+				searchCodeButtonPressed(null);
+			}
+		});
+
 	}
 
 	@Subscribe
 	public void smartcoseScanned(SmartcodeScanEvent ¢) {
-		SmartCode smartcode = ¢.getSmarCode();
-		resetParams();
-		barcodeTextField.setText(Long.toString(smartcode.getBarcode()));
-		this.expirationDate = smartcode.getExpirationDate();
-		searchCodeButtonPressed(null);
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				SmartCode smartcode = ¢.getSmarCode();
+				resetParams();
+				barcodeTextField.setText(Long.toString(smartcode.getBarcode()));
+				expirationDate = smartcode.getExpirationDate();
+				searchCodeButtonPressed(null);
+			}
+		});
+		
 	}
 
 }
