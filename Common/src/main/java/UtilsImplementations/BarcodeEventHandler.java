@@ -77,4 +77,10 @@ public class BarcodeEventHandler implements IBarcodeEventHandler {
 	public void unregister(Object listener) {
 		eventBus.unregister(listener);
 	}
+
+	@Override
+	public void publishEvent(SmartCode s) {
+		eventBus.post(new SmartcodeScanEvent(s));
+		
+	}
 }
