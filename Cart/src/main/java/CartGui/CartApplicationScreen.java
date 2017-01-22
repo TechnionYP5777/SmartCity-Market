@@ -3,6 +3,7 @@ package CartGui;
 import org.apache.log4j.PropertyConfigurator;
 
 import CartDI.CartDiConfigurator;
+import CartImplemantations.CartDefs;
 import GuiUtils.AbstractApplicationScreen;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
@@ -48,6 +49,13 @@ public class CartApplicationScreen extends AbstractApplicationScreen {
 	public static void main(String[] args) {
 		/* Setting log properties */
 		PropertyConfigurator.configure("../log4j.properties");
+		
+		/* Allowing to change IP and port from command line */
+		if (args.length >= 1)
+			CartDefs.host = args[0];
+		
+		if (args.length >= 2)
+			CartDefs.port = Integer.parseInt(args[1]);
 		
 		launch(args);
 	}
