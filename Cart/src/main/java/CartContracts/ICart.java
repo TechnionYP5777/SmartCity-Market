@@ -9,6 +9,7 @@ import CartContracts.ACartExceptions.AmountBiggerThanAvailable;
 import CartContracts.ACartExceptions.AuthenticationError;
 import CartContracts.ACartExceptions.CartNotConnected;
 import CartContracts.ACartExceptions.CriticalError;
+import CartContracts.ACartExceptions.GroceryListIsEmpty;
 import CartContracts.ACartExceptions.ProductCatalogDoesNotExist;
 import CartContracts.ACartExceptions.ProductNotInCart;
 import CartContracts.ACartExceptions.ProductPackageDoesNotExist;
@@ -66,7 +67,7 @@ public interface ICart {
 	 * @throws AmountBiggerThanAvailable 
 	 * @throws ProductCatalogDoesNotExist 
 	 */
-	void addPtoductToCart(SmartCode c, int amount) throws CriticalError, CartNotConnected, AmountBiggerThanAvailable, ProductPackageDoesNotExist, ProductCatalogDoesNotExist;
+	void addProductToCart(SmartCode c, int amount) throws CriticalError, CartNotConnected, AmountBiggerThanAvailable, ProductPackageDoesNotExist, ProductCatalogDoesNotExist;
 	
 	/**
 	 * returnProductToShelf - removes product with amount from the cart
@@ -98,8 +99,9 @@ public interface ICart {
 	 * @return Double
 	 * @throws CriticalError 
 	 * @throws CartNotConnected 
+	 * @throws GroceryListIsEmpty 
 	 */
-	Double checkOutGroceryList() throws CriticalError, CartNotConnected;
+	Double checkOutGroceryList() throws CriticalError, CartNotConnected, GroceryListIsEmpty;
 
 	CartProduct getCartProduct(SmartCode smartCode);
 

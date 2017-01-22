@@ -217,7 +217,7 @@ public class CartMainScreen implements Initializable {
 
 	public void addButtonPressed(ActionEvent __) {
 		try {
-			cart.addPtoductToCart(scannedSmartCode, 1);
+			cart.addProductToCart(scannedSmartCode, 1);
 		} catch (SMException e) {
 			CartGuiExceptionsHandler.handle(e);	
 			return;
