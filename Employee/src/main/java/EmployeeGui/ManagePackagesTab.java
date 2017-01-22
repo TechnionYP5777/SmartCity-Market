@@ -159,10 +159,17 @@ public class ManagePackagesTab implements Initializable {
 		});
 
 		editPackagesAmountSpinner.valueProperty().addListener((obs, oldValue, newValue) -> {
-			if (newValue < 1) {
+			if (newValue == null || newValue < 1) {
 				editPackagesAmountSpinner.getValueFactory().setValue(oldValue);
 			}
 			enableRunTheOperationButton();
+		});
+		
+		editPackagesAmountSpinner.focusedProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue!= null && !newValue) {
+				editPackagesAmountSpinner.increment(0);
+				enableRunTheOperationButton();
+			}
 		});
 
 		final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
@@ -191,6 +198,8 @@ public class ManagePackagesTab implements Initializable {
 		radioButtonContainerBarcodeOperations
 				.addRadioButtons((Arrays.asList((new RadioButton[] { addPakageToWarhouseRadioButton }))));
 
+	
+
 		showScanCodePane(true);
 
 	}
@@ -216,7 +225,7 @@ public class ManagePackagesTab implements Initializable {
 	}
 
 	private void enableRunTheOperationButton() {
-
+		log.info("===============================enableRunTheOperationButton======================================");
 		if (barcodeOperationsPane.isVisible()) {
 			log.info("barcode pane is visible");
 			log.info("addPakageToWarhouseRadioButton is selected: " + addPakageToWarhouseRadioButton.isSelected());
@@ -249,6 +258,7 @@ public class ManagePackagesTab implements Initializable {
 				runTheOperationButton.setDisable(true);
 			}
 		}
+		log.info("===============================enableRunTheOperationButton======================================");
 	}
 
 	private void showScanCodePane(boolean show) {
@@ -298,7 +308,7 @@ public class ManagePackagesTab implements Initializable {
 	}
 
 	private void smartcodeEntered(SmartCode smartcode) throws SMException {
-
+		log.info("===============================smartcodeEntered======================================");
 		getProductCatalog(barcodeTextField.getText());
 
 		int amountInStore = worker
@@ -315,6 +325,9 @@ public class ManagePackagesTab implements Initializable {
 		addProductParametersToQuickView(catalogProduct.getName(), barcodeTextField.getText(),
 				smartcode.getExpirationDate().toString(), Integer.toString(amountInStore),
 				Integer.toString(amountInWarehouse));
+		log.info("amount in store: " + amountInStore);
+		log.info("amount in werehouse: " + amountInWarehouse);
+		log.info("===============================smartcodeEntered======================================");
 
 	}
 
@@ -348,7 +361,7 @@ public class ManagePackagesTab implements Initializable {
 		radioButtonContainerSmarcodeOperations.selectRadioButton((RadioButton) ¢.getSource());
 		enableRunTheOperationButton();
 	}
-	
+
 	@FXML
 	private void radioButtonHandlingBarcode(ActionEvent ¢) {
 		radioButtonContainerBarcodeOperations.selectRadioButton((RadioButton) ¢.getSource());
@@ -360,62 +373,77 @@ public class ManagePackagesTab implements Initializable {
 
 		SmartCode smartcode = new SmartCode(Long.parseLong(barcodeTextField.getText()), datePicker.getValue());
 		int amountVal = editPackagesAmountSpinner.getValue();
+		log.info("===============================runTheOperationButtonPressed======================================");
+		log.info("amount in spinner: " + amountVal);
+
 		try {
-			if (addPakageToWarhouseRadioButton.isSelected()) {
+			if (barcodeOperationsPane.isVisible()) {
+				log.info("barcode pane is visible");
+				if (addPakageToWarhouseRadioButton.isSelected()) {
+					log.info("addPakageToWarhouseRadioButton");
+					// init
+					Location loc = new Location(0, 0, PlaceInMarket.WAREHOUSE);
+					ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
 
-				// init
-				Location loc = new Location(0, 0, PlaceInMarket.WAREHOUSE);
-				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
+					// exec
+					worker.addProductToWarehouse(pp);
 
-				// exec
-				worker.addProductToWarehouse(pp);
+					// printToSuccessLog(("Added (" + amountVal + ") " +
+					// "product
+					// packages (" + pp + ") to warehouse"));
 
-				// printToSuccessLog(("Added (" + amountVal + ") " + "product
-				// packages (" + pp + ") to warehouse"));
+					searchCodeButtonPressed(null);
+				}
+			} else {
 
-				searchCodeButtonPressed(null);
+				if (addPackageToStoreRadioButton.isSelected()) {
+					log.info("addPackageToStoreRadioButton");
+					// init
+					Location loc = new Location(0, 0, PlaceInMarket.STORE);
+					ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
 
-			} else if (addPackageToStoreRadioButton.isSelected()) {
+					// exec
+					worker.placeProductPackageOnShelves(pp);
 
-				// init
-				Location loc = new Location(0, 0, PlaceInMarket.STORE);
-				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
+					// printToSuccessLog(("Added (" + amountVal + ") " +
+					// "product
+					// packages (" + pp + ") to store"));
 
-				// exec
-				worker.placeProductPackageOnShelves(pp);
+					searchCodeButtonPressed(null);
 
-				// printToSuccessLog(("Added (" + amountVal + ") " + "product
-				// packages (" + pp + ") to store"));
+				} else if (removePackageFromStoreRadioButton.isSelected()) {
+					log.info("removePackageFromStoreRadioButton");
+					// init
+					Location loc = new Location(0, 0, PlaceInMarket.STORE);
+					ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
 
-				searchCodeButtonPressed(null);
+					// exec
+					worker.removeProductPackageFromStore(pp);
 
-			} else if (removePackageFromStoreRadioButton.isSelected()) {
+					// printToSuccessLog(("Removed (" + amountVal + ") " +
+					// "product
+					// packages (" + pp + ") from store"));
 
-				// init
-				Location loc = new Location(0, 0, PlaceInMarket.STORE);
-				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
+					searchCodeButtonPressed(null);
 
-				// exec
-				worker.removeProductPackageFromStore(pp);
+				} else if (removePackageFromWarhouseRadioButton.isSelected()) {
+					log.info("removePackageFromWarhouseRadioButton");
+					Location loc = new Location(0, 0, PlaceInMarket.WAREHOUSE);
+					ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
+					worker.removeProductPackageFromStore(pp);
+					// printToSuccessLog(("Removed (" + amountVal + ") " +
+					// "product
+					// packages (" + pp + ") from warehouse"));
 
-				// printToSuccessLog(("Removed (" + amountVal + ") " + "product
-				// packages (" + pp + ") from store"));
+					searchCodeButtonPressed(null);
 
-				searchCodeButtonPressed(null);
-
-			} else if (removePackageFromWarhouseRadioButton.isSelected()) {
-				Location loc = new Location(0, 0, PlaceInMarket.WAREHOUSE);
-				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
-				worker.removeProductPackageFromStore(pp);
-				// printToSuccessLog(("Removed (" + amountVal + ") " + "product
-				// packages (" + pp + ") from warehouse"));
-
-				searchCodeButtonPressed(null);
-
+				}
 			}
+
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 		}
+		log.info("===============================runTheOperationButtonPressed======================================");
 	}
 
 	@FXML
