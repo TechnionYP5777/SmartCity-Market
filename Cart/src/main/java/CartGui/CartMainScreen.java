@@ -1,7 +1,6 @@
 package CartGui;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
@@ -41,8 +40,6 @@ import javafx.util.Callback;
  * @since 2017-01-11
  */
 public class CartMainScreen implements Initializable {
-
-	boolean DEBUG = true;
 	
 	Stage primeStage = CartApplicationScreen.stage;
 
@@ -211,15 +208,7 @@ public class CartMainScreen implements Initializable {
 
 	public void addButtonPressed(ActionEvent __) {
 		try {
-			SmartCode sc;
-			if (DEBUG){
-				LocalDate ld = LocalDate.of(2017,4,10);
-				sc = new SmartCode(7290000066318l, ld);
-				barcodeEventHandler.publishEvent(sc);
-			} else {
-				sc = scannedSmartCode;
-			}
-			cart.addProductToCart(sc, 1);
+			cart.addProductToCart(scannedSmartCode, 1);
 		} catch (SMException e) {
 			CartGuiExceptionsHandler.handle(e);	
 			return;
@@ -238,15 +227,7 @@ public class CartMainScreen implements Initializable {
 
 	public void removeButtonPressed(ActionEvent __) {
 		try {
-			SmartCode sc;
-			if (DEBUG){
-				LocalDate ld = LocalDate.of(2017,4,10);
-				sc = new SmartCode(7290000066318l, ld);
-				barcodeEventHandler.publishEvent(sc);
-			} else {
-				sc = scannedSmartCode;
-			}
-			cart.returnProductToShelf(sc, 1);
+			cart.returnProductToShelf(scannedSmartCode, 1);
 		} catch (SMException e) {
 			CartGuiExceptionsHandler.handle(e);	
 			return;
@@ -257,14 +238,6 @@ public class CartMainScreen implements Initializable {
 
 	public void removeAllButtonPressed(ActionEvent __) {
 		try {
-			SmartCode sc;
-			if (DEBUG){
-				LocalDate ld = LocalDate.of(2017,4,10);
-				sc = new SmartCode(7290000066318l, ld);
-				barcodeEventHandler.publishEvent(sc);
-			} else {
-				sc = scannedSmartCode;
-			}
 			cart.removeAllItemsOfCartProduct(scannedSmartCode);
 		} catch (SMException e) {
 			CartGuiExceptionsHandler.handle(e);	
