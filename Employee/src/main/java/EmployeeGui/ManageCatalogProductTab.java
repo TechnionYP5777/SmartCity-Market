@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 
+import com.google.common.eventbus.Subscribe;
+
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
@@ -14,6 +16,9 @@ import EmployeeContracts.IManager;
 import EmployeeImplementations.Manager;
 import GuiUtils.RadioButtonEnabler;
 import SMExceptions.SMException;
+import UtilsContracts.BarcodeScanEvent;
+import UtilsContracts.IBarcodeEventHandler;
+import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -66,11 +71,13 @@ public class ManageCatalogProductTab implements Initializable {
 
 	IManager manager = InjectionFactory.getInstance(Manager.class);
 
+	IBarcodeEventHandler barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
+
 	RadioButtonEnabler radioButtonContainerManageCatalogProduct = new RadioButtonEnabler();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
+		barcodeEventHandler.register(this);
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (!newValue.matches("\\d*")) {
 				barcodeTextField.setText(newValue.replaceAll("[^\\d]", ""));
@@ -143,6 +150,12 @@ public class ManageCatalogProductTab implements Initializable {
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 		}
+	}
+
+	@Subscribe
+	public void barcodeScanned(BarcodeScanEvent ¢) {
+		barcodeTextField.setText(Long.toString(¢.getBarcode()));
+
 	}
 
 }
