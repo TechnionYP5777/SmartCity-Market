@@ -1,8 +1,10 @@
 package CartGui;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+
 
 import com.google.common.eventbus.Subscribe;
 import BasicCommonClasses.CartProduct;
@@ -45,6 +47,8 @@ import javafx.util.Callback;
  */
 public class CartMainScreen implements Initializable {
 
+	boolean DEBUG = true;
+	
 	Stage primeStage = CartApplicationScreen.stage;
 
 	ICart cart;
@@ -217,7 +221,15 @@ public class CartMainScreen implements Initializable {
 
 	public void addButtonPressed(ActionEvent __) {
 		try {
-			cart.addProductToCart(scannedSmartCode, 1);
+			SmartCode sc;
+			if (DEBUG){
+				LocalDate ld = LocalDate.of(2017,4,10);
+				sc = new SmartCode(7290000066318l, ld);
+				barcodeEventHandler.publishEvent(sc);
+			} else {
+				sc = scannedSmartCode;
+			}
+			cart.addProductToCart(sc, 1);
 		} catch (SMException e) {
 			CartGuiExceptionsHandler.handle(e);	
 			return;
