@@ -24,6 +24,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -55,7 +56,7 @@ public class ManageCatalogProductTab implements Initializable {
 	private TextField productDescriptionTextField;
 
 	@FXML
-	private TextField productManufacturerTextField;
+	private ComboBox<String> productManufacturerCombo;
 
 	@FXML
 	private TextField productPriceTextField;
@@ -91,9 +92,8 @@ public class ManageCatalogProductTab implements Initializable {
 			enableRunOperation();
 		});
 		;
-		productManufacturerTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-
-		});
+		productManufacturerCombo.getItems().addAll("תנובה", "מאפיות ברמן", "עלית", "אסם", "בייגל-בייגל");
+		productManufacturerCombo.setValue("תנובה");
 		productPriceTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (!newValue.matches("((\\d*)|(\\d+\\.\\d*))")) {
 				productPriceTextField.setText(oldValue);
@@ -139,10 +139,12 @@ public class ManageCatalogProductTab implements Initializable {
 		try {
 			if (addCatalogProductRadioButton.isSelected()) {
 
+				Manufacturer manufacturer = getManufacturer();
+
 				CatalogProduct catalogProduct = new CatalogProduct(Long.parseLong(barcodeTextField.getText()),
-						productNameTextField.getText(), new HashSet<Ingredient>(), new Manufacturer(1, "תנובה"),
-						productDescriptionTextField.getText(), Double.parseDouble(productPriceTextField.getText()), "",
-						new HashSet<Location>());
+						productNameTextField.getText(), new HashSet<Ingredient>(), manufacturer,
+						productDescriptionTextField.getText().isEmpty() ? "N/A" : productDescriptionTextField.getText(),
+						Double.parseDouble(productPriceTextField.getText()), "", new HashSet<Location>());
 
 				manager.addProductToCatalog(catalogProduct);
 
@@ -154,6 +156,34 @@ public class ManageCatalogProductTab implements Initializable {
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
 		}
+	}
+
+	private Manufacturer getManufacturer() {
+		Manufacturer manufacturer = null;
+		String man = productManufacturerCombo.getValue();
+
+		switch (man) {
+		case "תנובה":
+			manufacturer = new Manufacturer(1, man);
+			break;
+
+		case "מאפיות ברמן":
+			manufacturer = new Manufacturer(2, man);
+			break;
+
+		case "עלית":
+			manufacturer = new Manufacturer(3, man);
+			break;
+
+		case "אסם":
+			manufacturer = new Manufacturer(4, man);
+			break;
+
+		case "בייגל-בייגל":
+			manufacturer = new Manufacturer(5, man);
+			break;
+		}
+		return manufacturer;
 	}
 
 	@Subscribe
