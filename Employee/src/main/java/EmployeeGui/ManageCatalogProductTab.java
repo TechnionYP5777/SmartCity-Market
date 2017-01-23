@@ -1,7 +1,9 @@
 package EmployeeGui;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 
@@ -23,11 +25,14 @@ import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 /**
  * ManageCatalogProductTab - This class is the controller for the Manage catalog
@@ -37,6 +42,9 @@ import javafx.scene.layout.GridPane;
  */
 public class ManageCatalogProductTab implements Initializable {
 
+	@FXML
+	private VBox rootPane;
+	
 	@FXML
 	private RadioButton addCatalogProductRadioButton;
 
@@ -186,6 +194,14 @@ public class ManageCatalogProductTab implements Initializable {
 		return manufacturer;
 	}
 
+	
+	// TODO add use this to show operations
+	private void printToSuccessLog(String msg) {
+		Scene scene = rootPane.getScene();
+		TextArea ta = (TextArea) scene.lookup("#successLogArea");
+		ta.appendText(new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss").format(new Date()) + " :: " + msg + "\n");
+	}
+	
 	@Subscribe
 	public void barcodeScanned(BarcodeScanEvent ¢) {
 		barcodeTextField.setText(Long.toString(¢.getBarcode()));

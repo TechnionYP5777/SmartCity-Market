@@ -1,6 +1,8 @@
 package EmployeeGui;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import CommonDefs.CLIENT_TYPE;
@@ -46,7 +48,7 @@ public class EmployeeMenuScreen implements Initializable {
 
 	@FXML
 	Tab manageCatalogProductTab;
-	
+
 	@FXML
 	Button logout;
 
@@ -64,7 +66,7 @@ public class EmployeeMenuScreen implements Initializable {
 		// defining behavior when stage/window is closed.
 		primeStage.setOnCloseRequest(event -> {
 			try {
-				if (worker.isLoggedIn()){
+				if (worker.isLoggedIn()) {
 					worker.logout();
 				}
 				Platform.exit();
@@ -87,10 +89,14 @@ public class EmployeeMenuScreen implements Initializable {
 		});
 	}
 
+	public void printToSuccessLog(String msg) {
+		successLogArea.appendText(new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss").format(new Date()) + " :: " + msg + "\n");
+	}
+
 	@FXML
 	private void logoutButtonPressed(ActionEvent __) {
 		try {
-			if (worker.isLoggedIn()){
+			if (worker.isLoggedIn()) {
 				worker.logout();
 			}
 		} catch (SMException e) {

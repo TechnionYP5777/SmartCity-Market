@@ -1,8 +1,10 @@
 package EmployeeGui;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
@@ -29,6 +31,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DateCell;
@@ -36,6 +39,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -281,8 +285,7 @@ public class ManagePackagesTab implements Initializable {
 	}
 
 	private void showSmartCodeOperationsPane(boolean show) {
-		
-		
+
 		smartcodeOperationsPane.setVisible(show);
 		barcodeOperationsPane.setVisible(!show);
 		if (show) {
@@ -390,9 +393,8 @@ public class ManagePackagesTab implements Initializable {
 					// exec
 					worker.addProductToWarehouse(pp);
 
-					// printToSuccessLog(("Added (" + amountVal + ") " +
-					// "product
-					// packages (" + pp + ") to warehouse"));
+					printToSuccessLog(("Added (" + amountVal + ") " + "product packages (" + pp + ") to warehouse"));
+
 					this.expirationDate = datePicker.getValue();
 					searchCodeButtonPressed(null);
 				}
@@ -407,9 +409,7 @@ public class ManagePackagesTab implements Initializable {
 					// exec
 					worker.placeProductPackageOnShelves(pp);
 
-					// printToSuccessLog(("Added (" + amountVal + ") " +
-					// "product
-					// packages (" + pp + ") to store"));
+					printToSuccessLog(("Added (" + amountVal + ") " + "product packages (" + pp + ") to store"));
 
 					searchCodeButtonPressed(null);
 
@@ -418,13 +418,10 @@ public class ManagePackagesTab implements Initializable {
 					// init
 					Location loc = new Location(0, 0, PlaceInMarket.STORE);
 					ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
-
 					// exec
 					worker.removeProductPackageFromStore(pp);
 
-					// printToSuccessLog(("Removed (" + amountVal + ") " +
-					// "product
-					// packages (" + pp + ") from store"));
+					 printToSuccessLog(("Removed (" + amountVal + ") " + "product packages (" + pp + ") from store"));
 
 					searchCodeButtonPressed(null);
 
@@ -433,9 +430,7 @@ public class ManagePackagesTab implements Initializable {
 					Location loc = new Location(0, 0, PlaceInMarket.WAREHOUSE);
 					ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
 					worker.removeProductPackageFromStore(pp);
-					// printToSuccessLog(("Removed (" + amountVal + ") " +
-					// "product
-					// packages (" + pp + ") from warehouse"));
+					 printToSuccessLog(("Removed (" + amountVal + ") " +  "product packages (" + pp + ") from warehouse"));
 
 					searchCodeButtonPressed(null);
 
@@ -450,6 +445,12 @@ public class ManagePackagesTab implements Initializable {
 		log.info("===============================runTheOperationButtonPressed======================================");
 	}
 
+	private void printToSuccessLog(String msg) {
+		Scene scene = rootPane.getScene();
+		TextArea ta = (TextArea) scene.lookup("#successLogArea");
+		ta.appendText(new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss").format(new Date()) + " :: " + msg + "\n");
+	}
+
 	@FXML
 	private void showMoreDetailsButtonPressed(ActionEvent __) {
 
@@ -462,16 +463,10 @@ public class ManagePackagesTab implements Initializable {
 
 	}
 
-	// void printToSuccessLog(String msg) {
-	// ((TextArea) rootPane.getParent().lookup("#successLogArea"))
-	// .appendText(new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss").format(new
-	// Date()) + " :: " + msg + "\n");
-	// }
-
 	@Subscribe
 	public void barcodeScanned(BarcodeScanEvent ¢) {
 		Platform.runLater(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				resetParams();
@@ -485,7 +480,7 @@ public class ManagePackagesTab implements Initializable {
 	@Subscribe
 	public void smartcoseScanned(SmartcodeScanEvent ¢) {
 		Platform.runLater(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				SmartCode smartcode = ¢.getSmarCode();
@@ -495,7 +490,7 @@ public class ManagePackagesTab implements Initializable {
 				searchCodeButtonPressed(null);
 			}
 		});
-		
+
 	}
 
 }
