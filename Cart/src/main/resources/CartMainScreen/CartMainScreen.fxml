@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -18,123 +13,232 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:id="cartMainScreenPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="list-cell" stylesheets="@../cartCssStyles/mainScreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CartGui.CartMainScreen">
+<GridPane fx:id="cartMainScreenPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="list-cell" stylesheets="@../cartCssStyles/mainScreen.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CartGui.CartMainScreen">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" />
-    <ColumnConstraints hgrow="SOMETIMES" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="1096.0" minWidth="754.0" prefWidth="808.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="510.0" minWidth="168.0" prefWidth="456.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints vgrow="SOMETIMES" />
     <RowConstraints vgrow="SOMETIMES" />
-      <RowConstraints vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <ListView fx:id="productsListView" prefHeight="323.0" prefWidth="295.0" styleClass="list-cell" stylesheets="@../cartCssStyles/mainScreen.css" GridPane.columnIndex="1" />
+      <ListView fx:id="productsListView" styleClass="list-cell" stylesheets="@../cartCssStyles/mainScreen.css" GridPane.columnIndex="1" />
       <VBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
          <children>
-            <Label text="Total items in cart:" />
-         </children>
-      </VBox>
-      <TextField fx:id="productsNumberTextField" GridPane.rowIndex="1" />
-      <TextField fx:id="totalSumTextField" GridPane.rowIndex="1" />
-      <VBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
-         <children>
-            <Label text="Total:" />
-         </children>
-      </VBox>
-      <GridPane fx:id="productInfoPane">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" />
-          <ColumnConstraints hgrow="SOMETIMES" />
-            <ColumnConstraints hgrow="SOMETIMES" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints vgrow="SOMETIMES" />
-          <RowConstraints vgrow="SOMETIMES" />
-          <RowConstraints vgrow="SOMETIMES" />
-            <RowConstraints vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label fx:id="amountLabel" text="N/A">
-               <HBox.margin>
-                  <Insets left="50.0" />
-               </HBox.margin>
-               </Label>
-            <Label text="Amount:">
-               <HBox.margin>
-                  <Insets left="5.0" />
-               </HBox.margin>
-            </Label>
-            <Label alignment="CENTER" contentDisplay="CENTER" text="Price:" GridPane.rowIndex="2">
-               <HBox.margin>
-                  <Insets left="5.0" />
-               </HBox.margin>
-            </Label>
-            <Label fx:id="priceLabel" text="N/A">
-               <HBox.margin>
-                  <Insets left="69.0" />
-               </HBox.margin>
-            </Label>
-            <Label fx:id="productNameLabel" text="N/A">
-               <HBox.margin>
-                  <Insets left="10.0" />
-               </HBox.margin>
-            </Label>
-            <Label alignment="CENTER" contentDisplay="CENTER" text="Product Name:">
-               <HBox.margin>
-                  <Insets left="5.0" />
-               </HBox.margin>
-            </Label>
-            <Label fx:id="manufacturerLabel" text="N/A">
-               <HBox.margin>
-                  <Insets left="19.0" />
-               </HBox.margin>
-            </Label>
-            <Label text="Manufacturer:" GridPane.rowIndex="1">
-               <HBox.margin>
-                  <Insets left="5.0" />
-               </HBox.margin>
-            </Label>
-            <TextArea fx:id="descriptionTextArea" prefHeight="84.0" prefWidth="137.0">
-               <HBox.margin>
-                  <Insets left="26.0" />
-               </HBox.margin>
-            </TextArea>
-            <ImageView fitHeight="123.0" fitWidth="135.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="20.0" />
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="80.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints vgrow="SOMETIMES" />
+                <RowConstraints vgrow="SOMETIMES" />
+              </rowConstraints>
                <children>
-                  <VBox alignment="CENTER">
+                  <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonPressed" text="Add">
-                           <VBox.margin>
-                              <Insets left="10.0" />
-                           </VBox.margin>
-                        </Button>
+                        <Label text="Total items in cart:" />
                      </children>
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                  </VBox>
-                  <VBox alignment="CENTER">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
                      <children>
-                        <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeButtonPressed" text="Remove" />
+                        <Label text="Total:" />
                      </children>
-                  </VBox>
-                  <VBox alignment="CENTER">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
                      <children>
-                        <Button fx:id="removeAllButton" mnemonicParsing="false" onAction="#removeAllButtonPressed" text="Remove all">
-                           <VBox.margin>
-                              <Insets left="10.0" />
-                           </VBox.margin>
-                        </Button>
+                        <TextField fx:id="productsNumberTextField" />
                      </children>
-                  </VBox>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <children>
+                        <TextField fx:id="totalSumTextField" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
                </children>
-            </HBox>
+            </GridPane>
          </children>
-      </GridPane>
-      <Button alignment="CENTER" mnemonicParsing="false" onAction="#purchaseButtonPressed" text="Proceed to checkout" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Button alignment="CENTER" mnemonicParsing="false" onAction="#cancelButtonPressed" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="16.0" prefWidth="91.0" text="Description:" GridPane.rowIndex="2" />
+      </VBox>
+      <VBox alignment="CENTER">
+         <children>
+            <GridPane fx:id="productInfoPane">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="20.0" />
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="30.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints percentHeight="20.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
+                     <children>
+                        <Label fx:id="amountLabel" text="N/A" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" GridPane.rowIndex="3">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                     <children>
+                        <Label text="Amount:" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" GridPane.rowIndex="2">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Price:" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <HBox.margin>
+                        <Insets left="69.0" />
+                     </HBox.margin>
+                     <children>
+                        <Label fx:id="priceLabel" text="N/A" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                     <children>
+                        <Label fx:id="productNameLabel" text="N/A" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Product Name:" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <HBox.margin>
+                        <Insets left="19.0" />
+                     </HBox.margin>
+                     <children>
+                        <Label fx:id="manufacturerLabel" text="N/A" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                     <children>
+                        <Label text="Manufacturer:" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                     <HBox.margin>
+                        <Insets left="26.0" />
+                     </HBox.margin>
+                     <children>
+                        <TextArea fx:id="descriptionTextArea" prefHeight="20.0" prefWidth="283.0" />
+                     </children>
+                  </HBox>
+                  <ImageView fitHeight="123.0" fitWidth="135.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowSpan="4" />
+                  <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                     <children>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonPressed" text="Add">
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeButtonPressed" text="Remove" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <Button fx:id="removeAllButton" mnemonicParsing="false" onAction="#removeAllButtonPressed" text="Remove all">
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" GridPane.rowIndex="4">
+                     <children>
+                        <Label contentDisplay="CENTER" prefHeight="16.0" prefWidth="91.0" text="Description:" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </GridPane>
+         </children>
+         <GridPane.margin>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </GridPane.margin>
+      </VBox>
+      <HBox alignment="BOTTOM_CENTER" spacing="60.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <children>
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#cancelButtonPressed" text="Cancel" />
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#purchaseButtonPressed" text="Proceed to checkout" textAlignment="CENTER" />
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </HBox>
    </children>
 </GridPane>
