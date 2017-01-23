@@ -277,11 +277,11 @@
       </VBox>
       <HBox alignment="BOTTOM_CENTER" prefHeight="157.0" prefWidth="483.0" spacing="60.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
-            <Button alignment="CENTER" mnemonicParsing="false" onAction="#cancelButtonPressed" text="Cancel">
+            <Button  fx:id="cancelButton" alignment="CENTER" mnemonicParsing="false" onAction="#cancelButtonPressed" prefHeight="80.0" prefWidth="80.0" >
                <font>
                   <Font size="20.0" />
                </font></Button>
-            <Button alignment="CENTER" mnemonicParsing="false" onAction="#purchaseButtonPressed" text="Proceed to checkout" textAlignment="CENTER">
+            <Button fx:id="purchaseButton" alignment="CENTER" mnemonicParsing="false" onAction="#purchaseButtonPressed" prefHeight="80.0" prefWidth="80.0" >
                <font>
                   <Font size="20.0" />
                </font></Button>

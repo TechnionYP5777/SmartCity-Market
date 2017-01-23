@@ -42,3 +42,13 @@
 	-fx-control-inner-background: cornsilk;
 	-fx-border-style: outset;
 }
+
+#cancelButton {
+	-fx-background-image: url("close-button.png");
+	-fx-background-size: cover;
+}
+
+#purchaseButton {
+	-fx-background-image: url("purchaes-button.png");
+	-fx-background-size: cover;
+}
