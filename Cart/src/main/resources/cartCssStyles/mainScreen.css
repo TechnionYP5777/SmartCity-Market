@@ -34,3 +34,11 @@
 	-fx-background-image: url("remove-from-cart-light.png");
 	-fx-background-size: cover;
 }
+
+#removeAllButton {
+	-fx-background-color: crimson;
+	-fx-text-base-color: aliceblue;
+	-fx-background: cornsilk;
+	-fx-control-inner-background: cornsilk;
+	-fx-border-style: outset;
+}

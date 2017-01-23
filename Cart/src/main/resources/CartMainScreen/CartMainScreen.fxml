@@ -245,7 +245,7 @@
                         </VBox>
                         <VBox alignment="CENTER">
                            <children>
-                              <Button fx:id="removeAllButton" mnemonicParsing="false" onAction="#removeAllButtonPressed" text="Remove all">
+                              <Button fx:id="removeAllButton" mnemonicParsing="false" onAction="#removeAllButtonPressed" text="Remove all items!">
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
