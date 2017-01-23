@@ -43,26 +43,25 @@ public class CartProduct {
 	}
 	
 	/**
-	 * @param productPackage
+	 * @param p
 	 */
-	public void addProductPackage(ProductPackage productPackage) {
-		SmartCode sc = productPackage.getSmartCode();
+	public void addProductPackage(ProductPackage p) {
+		SmartCode sc = p.getSmartCode();
 		ProductPackage inCartProductPackage = packages.get(sc);
-		if ( inCartProductPackage != null) {
-			inCartProductPackage.incrementAmount(productPackage.getAmount());
-		}
-		packages.put(sc, productPackage);
-		totalAmount += productPackage.getAmount();
+		if ( inCartProductPackage != null)
+			inCartProductPackage.incrementAmount(p.getAmount());
+		packages.put(sc, p);
+		totalAmount += p.getAmount();
 	}
 	
-	public Boolean removeProductPackage(ProductPackage productPackage) {
-		SmartCode sc = productPackage.getSmartCode();
+	public Boolean removeProductPackage(ProductPackage p) {
+		SmartCode sc = p.getSmartCode();
 		ProductPackage inCartProductPackage = packages.get(sc);
-		if (inCartProductPackage == null || inCartProductPackage.getAmount() < productPackage.getAmount())
+		if (inCartProductPackage == null || inCartProductPackage.getAmount() < p.getAmount())
 			return false;
 		int prevAmount = inCartProductPackage.getAmount();
-		inCartProductPackage.setAmount(prevAmount - productPackage.getAmount());
-		totalAmount -= productPackage.getAmount();
+		inCartProductPackage.setAmount(prevAmount - p.getAmount());
+		totalAmount -= p.getAmount();
 		return true;
 	}
 	

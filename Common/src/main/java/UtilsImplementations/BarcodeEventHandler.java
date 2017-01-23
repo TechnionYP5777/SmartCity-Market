@@ -54,11 +54,8 @@ public class BarcodeEventHandler implements IBarcodeEventHandler {
 					code = new BufferedReader(new InputStreamReader(scannerSocket.accept().getInputStream()))
 							.readLine();
 					SmartCode smartcode = SmartcodeParser.formCode(code);
-					if (smartcode.getExpirationDate() == null) {
-						eventBus.post(new BarcodeScanEvent(smartcode.getBarcode()));
-					} else {
-						eventBus.post(new SmartcodeScanEvent(smartcode));
-					}
+					eventBus.post(smartcode.getExpirationDate() != null ? new SmartcodeScanEvent(smartcode)
+							: new BarcodeScanEvent(smartcode.getBarcode()));
 				} catch (IOException | InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -79,8 +76,8 @@ public class BarcodeEventHandler implements IBarcodeEventHandler {
 	}
 
 	@Override
-	public void publishEvent(SmartCode s) {
-		eventBus.post(new SmartcodeScanEvent(s));
+	public void publishEvent(SmartCode ¢) {
+		eventBus.post(new SmartcodeScanEvent(¢));
 		
 	}
 }

@@ -31,7 +31,7 @@ public class CartProductCellFormat extends ListCell<CartProduct> {
 		//vbox
 		Label productName = new Label("Name: " + item.getCatalogProduct().getName());
 		Label productAmount = new Label("Amount: " + item.getTotalAmount());
-		Label productPrice = new Label("Price: " + new Double(item.getCatalogProduct().getPrice()).toString() + " nis");
+		Label productPrice = new Label("Price: " + Double.valueOf(item.getCatalogProduct().getPrice()) + " nis");
 	    vbx.getChildren().addAll(productName, productAmount, productPrice);
 	    vbx.setAlignment(Pos.CENTER);	    
 
@@ -44,7 +44,7 @@ public class CartProductCellFormat extends ListCell<CartProduct> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Image image = new Image(imageUrl.toString(), 100, 100, true, false);
+		Image image = new Image(imageUrl + "", 100, 100, true, false);
 		ImageView productImage = new ImageView(image);
 	    hbx.getChildren().addAll(vbx, productImage);
 

@@ -10,8 +10,8 @@ public class EmployeeScreensParameterService implements IEmployeeScreensParamete
 	private CLIENT_TYPE client;
 
 	@Override
-	public void setClientType(CLIENT_TYPE client) {
-		this.client = client;
+	public void setClientType(CLIENT_TYPE ¢) {
+		this.client = ¢;
 
 	}
 

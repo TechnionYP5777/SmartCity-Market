@@ -283,10 +283,10 @@ public class Cart extends ACart implements ICart {
 		
 		cartProduct.removeProductPackage(productPackage);
 		
-		if (cartProduct.getTotalAmount() > 0)
-			cartProductCache.put(barcode, cartProduct);
-		else 
+		if (cartProduct.getTotalAmount() <= 0)
 			cartProductCache.remove(barcode);
+		else
+			cartProductCache.put(barcode, cartProduct);
 		
 		totalSum -= amount * cartProduct.getCatalogProduct().getPrice();
 		

@@ -97,7 +97,7 @@ public class CartMainScreen implements Initializable {
 	@FXML
 	ImageView productInfoImage;
 	
-	SmartCode scannedSmartCode = null;
+	SmartCode scannedSmartCode;
 	
 	CatalogProduct catalogProduct;
 	
@@ -113,19 +113,19 @@ public class CartMainScreen implements Initializable {
 	 * 1 - SCANNED_PRODUCT: when the pane present scanned product info and actions 
 	 * 2 - PRESSED_PRODUCT: when the pane present pressed (on the listView Cell) product info and actions
 	 */
-	private static enum ProductInfoPaneVisibleMode {
+	private enum ProductInfoPaneVisibleMode {
 		SCANNED_PRODUCT, PRESSED_PRODUCT
 	}
 
-	private void addOrRemoveScannedProduct(CatalogProduct catalogProduct, Integer amount) {
+	private void addOrRemoveScannedProduct(CatalogProduct p, Integer amount) {
 		
-		updateProductInfoPaine(catalogProduct, amount, ProductInfoPaneVisibleMode.SCANNED_PRODUCT);
+		updateProductInfoPaine(p, amount, ProductInfoPaneVisibleMode.SCANNED_PRODUCT);
 	}
 
-	private void updateProductInfoPaine(CatalogProduct catalogProduct, Integer amount,
-			ProductInfoPaneVisibleMode mode) {
-		updateProductInfoTexts(catalogProduct, amount);
-		switch (mode) {
+	private void updateProductInfoPaine(CatalogProduct p, Integer amount,
+			ProductInfoPaneVisibleMode m) {
+		updateProductInfoTexts(p, amount);
+		switch (m) {
 		case SCANNED_PRODUCT: {
 			removeAllButton.setDisable(true);
 			removeAllButton.setVisible(false);
@@ -148,20 +148,19 @@ public class CartMainScreen implements Initializable {
 		setAbilityAndVisibilityOfProductInfoPane(true);
 	}
 	
-	private void updateProductInfoTexts(CatalogProduct catalogProduct, Integer amount) {
-		productNameLabel.setText(catalogProduct.getName());
-		manufacturerLabel.setText(catalogProduct.getManufacturer().getName());
-		priceLabel.setText(String.format("%1$.2f", catalogProduct.getPrice()));
-		amountLabel.setText(amount.toString());
-		descriptionTextArea.setText(catalogProduct.getDescription());	
+	private void updateProductInfoTexts(CatalogProduct p, Integer amount) {
+		productNameLabel.setText(p.getName());
+		manufacturerLabel.setText(p.getManufacturer().getName());
+		priceLabel.setText(String.format("%1$.2f", p.getPrice()));
+		amountLabel.setText((amount + ""));
+		descriptionTextArea.setText(p.getDescription());	
 		URL imageUrl = null;
 		try {
-			imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + catalogProduct.getBarcode() + ".jpg").toURI().toURL();
+			imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI().toURL();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		Image image = new Image(imageUrl.toString(), 200, 200, true, false);
-		productInfoImage.setImage(image);
+		productInfoImage.setImage((new Image(imageUrl + "", 200, 200, true, false)));
 	}
 
 	private void setAbilityAndVisibilityOfProductInfoPane(boolean visibilty) {
@@ -171,8 +170,8 @@ public class CartMainScreen implements Initializable {
 
 	private void updateCartProductsInfo() {
 		syncListViewWithCart();
-		productsNumberTextField.setText(cart.getCartProductsNum().toString());
-		totalSumTextField.setText(cart.getTotalSum().toString());
+		productsNumberTextField.setText((cart.getCartProductsNum() + ""));
+		totalSumTextField.setText((cart.getTotalSum() + ""));
 	}
 	
 	private void syncListViewWithCart() {
@@ -205,7 +204,7 @@ public class CartMainScreen implements Initializable {
 		productsListView.setItems(productsObservableList);
 		productsListView.setCellFactory(new Callback<ListView<CartProduct>, ListCell<CartProduct>>() {
 			@Override
-			public ListCell<CartProduct> call(ListView<CartProduct> list) {
+			public ListCell<CartProduct> call(ListView<CartProduct> __) {
 				return new CartProductCellFormat();
 			}
 		});
@@ -213,7 +212,7 @@ public class CartMainScreen implements Initializable {
 		productsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CartProduct>() {
 		   
 			@Override
-			public void changed(ObservableValue<? extends CartProduct> observable, CartProduct oldValue,
+			public void changed(ObservableValue<? extends CartProduct> __, CartProduct oldValue,
 					CartProduct newValue) {
 		    	updateProductInfoPaine(newValue.getCatalogProduct(), newValue.getTotalAmount(), ProductInfoPaneVisibleMode.PRESSED_PRODUCT);
 				
@@ -281,17 +280,17 @@ public class CartMainScreen implements Initializable {
 	private void smartcodeScannedHandler() {
 		Integer amount;
 		CartProduct cartPtoduct = cart.getCartProduct(scannedSmartCode);
-		if (cartPtoduct == null) { // the product isn't in the cart
+		if (cartPtoduct != null) {
+			catalogProduct = cartPtoduct.getCatalogProduct();
+			amount = cartPtoduct.getTotalAmount();
+		} else {
 			try {
 				catalogProduct = cart.viewCatalogProduct(scannedSmartCode);
 			} catch (SMException e) {
-				CartGuiExceptionsHandler.handle(e);	
+				CartGuiExceptionsHandler.handle(e);
 				return;
 			}
 			amount = 0;
-		} else { // the product is in the cart
-			catalogProduct = cartPtoduct.getCatalogProduct();
-			amount = cartPtoduct.getTotalAmount();
 		}
 		
 		

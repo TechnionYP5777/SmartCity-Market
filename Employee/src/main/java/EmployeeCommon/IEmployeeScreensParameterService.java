@@ -4,8 +4,8 @@ import CommonDefs.CLIENT_TYPE;
 
 public interface IEmployeeScreensParameterService {
 
-	void setClientType(CLIENT_TYPE client);
+	void setClientType(CLIENT_TYPE e);
 
-	public CLIENT_TYPE getClientType();
+	CLIENT_TYPE getClientType();
 
 }

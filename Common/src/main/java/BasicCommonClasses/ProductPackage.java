@@ -54,7 +54,7 @@ public class ProductPackage {
 
 	@Override
 	public String toString(){
-		return "SmartCode: " + "[" + smartCode.toString() + "]" + ", amount: " + amount + ", location: " + "[" + location +"]";
+		return "SmartCode: " + "[" + smartCode + "]" + ", amount: " + amount + ", location: " + "[" + location +"]";
 	}
 
 	@Override

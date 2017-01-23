@@ -61,30 +61,21 @@ public class EmployeeGuiPreloader extends Preloader {
 	public void handleApplicationNotification(PreloaderNotification info) {
 		// Handle application notification in this point (see
 		// EmployeeApplicationScreen#init).
-		if (info instanceof ProgressNotification) {
+		if (info instanceof ProgressNotification)
 			progress.setProgress(((ProgressNotification) info).getProgress());
-//			progress.setText(((ProgressNotification) info).getProgress() + "%");
-		}
 	}
 
 	@Override
 	public void handleStateChangeNotification(StateChangeNotification info) {
-		// Handle state change notifications.
-		StateChangeNotification.Type type = info.getType();
-		switch (type) {
+		switch (info.getType()) {
 		case BEFORE_LOAD:
-			// Called after EmployeeApplicationScreen#start is called.
 			System.out.println(EmployeeApplicationScreen.STEP() + "BEFORE_LOAD");
 			break;
 		case BEFORE_INIT:
-			// Called before EmployeeApplicationScreen#init is called.
 			System.out.println(EmployeeApplicationScreen.STEP() + "BEFORE_INIT");
 			break;
 		case BEFORE_START:
-			// Called after EmployeeApplicationScreen#init and before EmployeeApplicationScreen#start is
-			// called.
 			System.out.println(EmployeeApplicationScreen.STEP() + "BEFORE_START");
-
 			preloaderStage.hide();
 			break;
 		}

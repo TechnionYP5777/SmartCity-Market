@@ -62,9 +62,9 @@ public abstract class AEmployee {
 		establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		log.info("Sending command to server");
 		try {
-			String response = this.clientRequestHandler.sendRequestWithRespond(request);
+			String $ = this.clientRequestHandler.sendRequestWithRespond(request);
 			terminateCommunication();
-			return response;
+			return $;
 		} catch (java.net.SocketTimeoutException e) {
 			log.fatal("Sending logout command to server encounter sever fault : " + e.getMessage());
 			terminateCommunication();

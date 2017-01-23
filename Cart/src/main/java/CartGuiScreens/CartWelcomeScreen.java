@@ -43,7 +43,7 @@ public class CartWelcomeScreen implements Initializable {
 			return;
 		}
 		catch (Exception e) {
-			Alert alert = new Alert(AlertType.ERROR , e.toString());
+			Alert alert = new Alert(AlertType.ERROR , e + "");
 			alert.showAndWait();
 			return;
 		}

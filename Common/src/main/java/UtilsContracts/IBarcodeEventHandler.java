@@ -16,5 +16,5 @@ public interface IBarcodeEventHandler {
 
 	void unregister(Object listener);
 	
-	void publishEvent(SmartCode s);
+	void publishEvent(SmartCode c);
 }

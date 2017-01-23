@@ -89,12 +89,11 @@ public class SmartcodePrint implements Printable{
 //        gd.setColor(Color.BLACK);
 //        gd.drawRect(1, 1, barcodeTotalWidth + 2 * INNER_BARCODE_LEFT_RIGHT_PADDING-2, barcodeTotalHeight + 2 * INNER_BARCODE_TOP_BOTTOM_PADDING -2);
         
-        int xpos = INNER_BARCODE_LEFT_RIGHT_PADDING;
-        for(int ¢=0; ¢<SmartcodeGS1Code.length(); ++¢){
-        	gd.setColor(SmartcodeGS1Code.charAt(¢) == '1' ? Color.BLACK : Color.WHITE);
-        	gd.fillRect(xpos, INNER_BARCODE_TOP_BOTTOM_PADDING, lineWidth, barcodeHeight - textHeight);
-        	xpos += lineWidth;
-        }
+        for (int xpos = INNER_BARCODE_LEFT_RIGHT_PADDING, ¢ = 0; ¢ < SmartcodeGS1Code
+				.length(); xpos += lineWidth, ++¢) {
+			gd.setColor(SmartcodeGS1Code.charAt(¢) == '1' ? Color.BLACK : Color.WHITE);
+			gd.fillRect(xpos, INNER_BARCODE_TOP_BOTTOM_PADDING, lineWidth, barcodeHeight - textHeight);
+		}
         
         //draw the barcode label
         gd.setColor(Color.BLACK);

@@ -35,11 +35,9 @@ public class CartGuiExceptionsHandler extends GuiExceptionHandler {
 		else if (¢ instanceof GroceryListIsEmpty)
 			DialogMessagesService.showErrorDialog(GuiCommonDefs.purchaseOperationFailureTitle, null,
 					GuiCommonDefs.groceryListIseEmptyMsg);
-		else if (¢ instanceof ProductCatalogDoesNotExist)
-			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, null,
-					GuiCommonDefs.productNotLeftInStore);
 		else
 			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, null,
-					GuiCommonDefs.productPackageDoesNotExistMsg);
+					¢ instanceof ProductCatalogDoesNotExist ? GuiCommonDefs.productNotLeftInStore
+							: GuiCommonDefs.productPackageDoesNotExistMsg);
 	}
 }

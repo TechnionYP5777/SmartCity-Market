@@ -137,5 +137,5 @@ public interface IWorker {
 	 * @throws CriticalError 
 	 * @throws ConnectionFailure 
 	 */
-	public boolean isLoggedIn() throws CriticalError, ConnectionFailure; 
+	boolean isLoggedIn() throws CriticalError, ConnectionFailure; 
 }

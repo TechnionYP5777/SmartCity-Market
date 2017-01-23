@@ -20,6 +20,6 @@ public class InjectionFactory {
 	}
 
 	public static <T> T getInstance(Class<T> classType) {
-		return injector != null ? injector.getInstance(classType) : null;
+		return injector == null ? null : injector.getInstance(classType);
 	}
 }

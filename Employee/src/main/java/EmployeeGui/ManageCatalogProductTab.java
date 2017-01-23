@@ -25,7 +25,6 @@ import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
@@ -85,12 +84,11 @@ public class ManageCatalogProductTab implements Initializable {
 	RadioButtonEnabler radioButtonContainerManageCatalogProduct = new RadioButtonEnabler();
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL location, ResourceBundle __) {
 		barcodeEventHandler.register(this);
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (!newValue.matches("\\d*")) {
+			if (!newValue.matches("\\d*"))
 				barcodeTextField.setText(newValue.replaceAll("[^\\d]", ""));
-			}
 			enableRunOperation();
 		});
 		productNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -99,27 +97,20 @@ public class ManageCatalogProductTab implements Initializable {
 		productDescriptionTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			enableRunOperation();
 		});
-		;
 		productManufacturerCombo.getItems().addAll("תנובה", "מאפיות ברמן", "עלית", "אסם", "בייגל-בייגל");
 		productManufacturerCombo.setValue("תנובה");
 		productPriceTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (!newValue.matches("((\\d*)|(\\d+\\.\\d*))")) {
+			if (!newValue.matches("((\\d*)|(\\d+\\.\\d*))"))
 				productPriceTextField.setText(oldValue);
-			}
 			enableRunOperation();
 		});
 		productIngredientsTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-
 		});
 		productLocationTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-
 		});
-
 		radioButtonContainerManageCatalogProduct.addRadioButtons(
 				(Arrays.asList((new RadioButton[] { addCatalogProductRadioButton, removeCatalogProductRadioButton }))));
-
 		enableRunOperation();
-
 	}
 
 	private void enableRunOperation() {
@@ -129,37 +120,29 @@ public class ManageCatalogProductTab implements Initializable {
 	}
 
 	@FXML
-	void addCatalogProductRadioButtonPressed(ActionEvent event) {
+	void addCatalogProductRadioButtonPressed(ActionEvent __) {
 		radioButtonContainerManageCatalogProduct.selectRadioButton(addCatalogProductRadioButton);
 		addCatalogProductParamPane.setVisible(true);
 
 	}
 
 	@FXML
-	void removeCatalogProductRadioButtonPressed(ActionEvent event) {
+	void removeCatalogProductRadioButtonPressed(ActionEvent __) {
 		radioButtonContainerManageCatalogProduct.selectRadioButton(removeCatalogProductRadioButton);
 		addCatalogProductParamPane.setVisible(false);
 	}
 
 	@FXML
-	void runTheOperationButtonPressed(ActionEvent event) {
+	void runTheOperationButtonPressed(ActionEvent __) {
 
 		try {
-			if (addCatalogProductRadioButton.isSelected()) {
-
-				Manufacturer manufacturer = getManufacturer();
-
-				CatalogProduct catalogProduct = new CatalogProduct(Long.parseLong(barcodeTextField.getText()),
-						productNameTextField.getText(), new HashSet<Ingredient>(), manufacturer,
+			if (addCatalogProductRadioButton.isSelected())
+				manager.addProductToCatalog((new CatalogProduct(Long.parseLong(barcodeTextField.getText()),
+						productNameTextField.getText(), new HashSet<Ingredient>(), getManufacturer(),
 						productDescriptionTextField.getText().isEmpty() ? "N/A" : productDescriptionTextField.getText(),
-						Double.parseDouble(productPriceTextField.getText()), "", new HashSet<Location>());
-
-				manager.addProductToCatalog(catalogProduct);
-
-			} else if (removeCatalogProductRadioButton.isSelected()) {
-
+						Double.parseDouble(productPriceTextField.getText()), "", new HashSet<Location>())));
+			else if (removeCatalogProductRadioButton.isSelected())
 				manager.removeProductFromCatalog(new SmartCode(Long.parseLong(barcodeTextField.getText()), null));
-			}
 
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
@@ -167,39 +150,38 @@ public class ManageCatalogProductTab implements Initializable {
 	}
 
 	private Manufacturer getManufacturer() {
-		Manufacturer manufacturer = null;
+		Manufacturer $ = null;
 		String man = productManufacturerCombo.getValue();
 
 		switch (man) {
 		case "תנובה":
-			manufacturer = new Manufacturer(1, man);
+			$ = new Manufacturer(1, man);
 			break;
 
 		case "מאפיות ברמן":
-			manufacturer = new Manufacturer(2, man);
+			$ = new Manufacturer(2, man);
 			break;
 
 		case "עלית":
-			manufacturer = new Manufacturer(3, man);
+			$ = new Manufacturer(3, man);
 			break;
 
 		case "אסם":
-			manufacturer = new Manufacturer(4, man);
+			$ = new Manufacturer(4, man);
 			break;
 
 		case "בייגל-בייגל":
-			manufacturer = new Manufacturer(5, man);
+			$ = new Manufacturer(5, man);
 			break;
 		}
-		return manufacturer;
+		return $;
 	}
 
 	
 	// TODO add use this to show operations
 	private void printToSuccessLog(String msg) {
-		Scene scene = rootPane.getScene();
-		TextArea ta = (TextArea) scene.lookup("#successLogArea");
-		ta.appendText(new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss").format(new Date()) + " :: " + msg + "\n");
+		((TextArea) rootPane.getScene().lookup("#successLogArea"))
+				.appendText(new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss").format(new Date()) + " :: " + msg + "\n");
 	}
 	
 	@Subscribe

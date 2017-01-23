@@ -46,10 +46,8 @@ public abstract class AbstractApplicationScreen extends Application {
         System.out.println(AbstractApplicationScreen.STEP() + "EmployeeApplicationScreen#init (doing some heavy lifting), thread: " + Thread.currentThread().getName());
 
         // Perform some heavy lifting (i.e. database start, check for application updates, etc. )
-        for (int i = 0; i < COUNT_LIMIT; i++) {
-            double progress = ((double)i) / COUNT_LIMIT;
-            LauncherImpl.notifyPreloader(this, new Preloader.ProgressNotification(progress));
-        }
+        for (int ¢ = 0; ¢ < COUNT_LIMIT; ++¢)
+			LauncherImpl.notifyPreloader(this, new Preloader.ProgressNotification(((1. * ¢) / COUNT_LIMIT)));
     }
 	
 	public static void setScene(String sceneName) {

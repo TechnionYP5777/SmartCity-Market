@@ -103,19 +103,19 @@ public interface ICart {
 	 */
 	Double checkOutGroceryList() throws CriticalError, CartNotConnected, GroceryListIsEmpty;
 
-	CartProduct getCartProduct(SmartCode smartCode);
+	CartProduct getCartProduct(SmartCode c);
 
 	/**
 	 * @throws CriticalError 
 	 * @throws CartNotConnected 
 	 * @throws ProductCatalogDoesNotExist
 	 */
-	CatalogProduct viewCatalogProduct(SmartCode smartCode) throws CriticalError, CartNotConnected, ProductCatalogDoesNotExist;
+	CatalogProduct viewCatalogProduct(SmartCode c) throws CriticalError, CartNotConnected, ProductCatalogDoesNotExist;
 	
 	/**
 	 * @throws ProductNotInCart 
 	 * @throws CriticalError 
 	 * 
 	 */
-	void removeAllItemsOfCartProduct(SmartCode smartCode) throws ProductNotInCart, CriticalError;
+	void removeAllItemsOfCartProduct(SmartCode c) throws ProductNotInCart, CriticalError;
 }
