@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -99,7 +100,10 @@
                         <Insets left="50.0" />
                      </HBox.margin>
                      <children>
-                        <Label fx:id="amountLabel" text="N/A" />
+                        <Label fx:id="amountLabel" text="N/A">
+                           <font>
+                              <Font name="KacstArt" size="13.0" />
+                           </font></Label>
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -110,7 +114,10 @@
                         <Insets left="5.0" />
                      </HBox.margin>
                      <children>
-                        <Label text="Amount:" />
+                        <Label text="Amount:">
+                           <font>
+                              <Font name="KacstDecorative" size="13.0" />
+                           </font></Label>
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -132,29 +139,25 @@
                         <Insets left="69.0" />
                      </HBox.margin>
                      <children>
-                        <Label fx:id="priceLabel" text="N/A" />
+                        <Label fx:id="priceLabel" text="N/A">
+                           <font>
+                              <Font name="KacstDecorative" size="13.0" />
+                           </font>
+                       </Label>
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
+                  <HBox alignment="CENTER" GridPane.columnSpan="2">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
                      <children>
-                        <Label fx:id="productNameLabel" text="N/A" />
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT">
-                     <HBox.margin>
-                        <Insets left="5.0" />
-                     </HBox.margin>
-                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Product Name:" />
+                        <Label fx:id="productNameLabel" alignment="CENTER_RIGHT" text="N/A" textAlignment="RIGHT">
+                           <font>
+                              <Font name="KacstTitle" size="16.0" />
+                           </font></Label>
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -165,7 +168,11 @@
                         <Insets left="19.0" />
                      </HBox.margin>
                      <children>
-                        <Label fx:id="manufacturerLabel" text="N/A" />
+                        <Label fx:id="manufacturerLabel" contentDisplay="RIGHT" text="N/A" textAlignment="RIGHT">
+                        	<font>
+                              <Font name="KacstArt" size="13.0" />
+                           </font>
+                       </Label>
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -187,10 +194,16 @@
                         <Insets left="26.0" />
                      </HBox.margin>
                      <children>
-                        <TextArea fx:id="descriptionTextArea" prefHeight="20.0" prefWidth="283.0" />
+                        <TextArea fx:id="descriptionTextArea" prefHeight="20.0" prefWidth="283.0">
+                           <font>
+                              <Font name="KacstArt" size="13.0" />
+                           </font></TextArea>
                      </children>
                   </HBox>
-                  <ImageView fx:id="productInfoImage" fitHeight="204.0" fitWidth="255.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowSpan="4" />
+                  <ImageView fx:id="productInfoImage" fitHeight="230.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.rowSpan="4">
+                     <GridPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </GridPane.margin></ImageView>
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
                      <children>
                         <VBox alignment="CENTER">

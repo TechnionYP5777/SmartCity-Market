@@ -160,7 +160,7 @@ public class CartMainScreen implements Initializable {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		productInfoImage.setImage((new Image(imageUrl + "", 200, 200, true, false)));
+		productInfoImage.setImage((new Image(imageUrl + "", 290, 230, true, false)));
 	}
 
 	private void setAbilityAndVisibilityOfProductInfoPane(boolean visibilty) {
