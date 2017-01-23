@@ -22,6 +22,8 @@ import UtilsContracts.SmartcodeScanEvent;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -156,7 +158,6 @@ public class CartMainScreen implements Initializable {
 		try {
 			imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + catalogProduct.getBarcode() + ".jpg").toURI().toURL();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Image image = new Image(imageUrl.toString(), 200, 200, true, false);
@@ -191,10 +192,7 @@ public class CartMainScreen implements Initializable {
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(cartMainScreenPane);
 		barcodeEventHandler.register(this);
-
-		
 		cart = TempCartPassingData.cart;
-
 		productsListView.setEditable(true);
 		productsListView.setItems(productsObservableList);
 		productsListView.setCellFactory(new Callback<ListView<CartProduct>, ListCell<CartProduct>>() {
@@ -203,8 +201,17 @@ public class CartMainScreen implements Initializable {
 				return new CartProductCellFormat();
 			}
 		});
-		// TODO Enable this:
-		//setAbilityOfProductInfoPane(false);
+		
+		productsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CartProduct>() {
+		   
+			@Override
+			public void changed(ObservableValue<? extends CartProduct> observable, CartProduct oldValue,
+					CartProduct newValue) {
+		    	updateProductInfoPaine(newValue.getCatalogProduct(), newValue.getTotalAmount(), ProductInfoPaneVisibleMode.PRESSED_PRODUCT);
+				
+			}
+		});
+		setAbilityAndVisibilityOfProductInfoPane(false);
 		descriptionTextArea.setEditable(false);
 		productsNumberTextField.setEditable(false);
 		totalSumTextField.setEditable(false);
