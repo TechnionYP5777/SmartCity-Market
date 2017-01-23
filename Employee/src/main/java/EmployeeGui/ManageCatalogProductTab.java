@@ -142,11 +142,11 @@ public class ManageCatalogProductTab implements Initializable {
 						productDescriptionTextField.getText().isEmpty() ? "N/A" : productDescriptionTextField.getText(),
 						Double.parseDouble(productPriceTextField.getText()), "", new HashSet<Location>())));
 			
-				printToSuccessLog(("Added new product " + productNameTextField.getText() + " to catalog"));	
+				printToSuccessLog(("Added new product '" + productNameTextField.getText() + "' to catalog"));	
 			} else if (removeCatalogProductRadioButton.isSelected()) {
 				manager.removeProductFromCatalog(new SmartCode(Long.parseLong(barcodeTextField.getText()), null));
 				
-				printToSuccessLog(("Remoev product " + productNameTextField.getText() + " from catalog"));	
+				printToSuccessLog(("Remove product '" + productNameTextField.getText() + "' from catalog"));	
 			}
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
