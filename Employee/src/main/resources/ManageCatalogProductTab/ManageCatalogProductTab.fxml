@@ -36,6 +36,7 @@
 				<HBox GridPane.columnIndex="1">
 					<children>
 						<TextField fx:id="barcodeTextField" />
+                  <Label text="*" />
 					</children>
 				</HBox>
 			</children>
@@ -110,6 +111,7 @@
 							</padding>
 							<children>
 								<TextField fx:id="productNameTextField" />
+                        <Label text="*" />
 							</children>
 						</HBox>
 						<HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -134,6 +136,7 @@
 							</padding>
 							<children>
 								<TextField fx:id="productPriceTextField" />
+                        <Label text="*" />
 							</children>
 						</HBox>
 						<HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
@@ -161,6 +164,7 @@
 				<Button fx:id="runTheOperationButton" mnemonicParsing="false" onAction="#runTheOperationButtonPressed" styleClass="ourButton" text="Run The Operation" />
 			</children>
 		</HBox>
+      <Label text="* Required Field" />
 	</children>
 	<padding>
 		<Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
