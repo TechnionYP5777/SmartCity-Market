@@ -43,6 +43,8 @@ public class GuiCommonDefs {
 	
 	public static final String productPackageDoesNotExistMsg = "There is no such product package, please check the inserted SmartCode.";
 	
+	public static final String productNotLeftInStore = "There is no items of these product left in store, please check the scanned SmartCode.";
+	
 	public static final String productNotInCartMsg = "There is no such product in the cart!";
 	
 	public static final String groceryListIseEmptyMsg = "The cart is empty.";

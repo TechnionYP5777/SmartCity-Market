@@ -1,5 +1,7 @@
 package CartGuiScreens;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -31,6 +33,8 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -88,6 +92,9 @@ public class CartMainScreen implements Initializable {
 	@FXML
 	Button removeAllButton;
 
+	@FXML
+	ImageView productInfoImage;
+	
 	SmartCode scannedSmartCode = null;
 	
 	CatalogProduct catalogProduct;
@@ -139,12 +146,21 @@ public class CartMainScreen implements Initializable {
 		setAbilityAndVisibilityOfProductInfoPane(true);
 	}
 	
-	private void updateProductInfoTexts(CatalogProduct catalogProduct2, Integer amount) {
+	private void updateProductInfoTexts(CatalogProduct catalogProduct, Integer amount) {
 		productNameLabel.setText(catalogProduct.getName());
 		manufacturerLabel.setText(catalogProduct.getManufacturer().getName());
 		priceLabel.setText(String.format("%1$.2f", catalogProduct.getPrice()));
 		amountLabel.setText(amount.toString());
-		descriptionTextArea.setText(catalogProduct.getDescription());		
+		descriptionTextArea.setText(catalogProduct.getDescription());	
+		URL imageUrl = null;
+		try {
+			imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + catalogProduct.getBarcode() + ".jpg").toURI().toURL();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Image image = new Image(imageUrl.toString(), 200, 200, true, false);
+		productInfoImage.setImage(image);
 	}
 
 	private void setAbilityAndVisibilityOfProductInfoPane(boolean visibilty) {

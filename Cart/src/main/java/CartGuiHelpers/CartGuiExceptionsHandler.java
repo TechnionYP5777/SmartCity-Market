@@ -37,7 +37,7 @@ public class CartGuiExceptionsHandler extends GuiExceptionHandler {
 					GuiCommonDefs.groceryListIseEmptyMsg);
 		else if (¢ instanceof ProductCatalogDoesNotExist)
 			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, null,
-					GuiCommonDefs.productNotExistsInCatalogMsg);
+					GuiCommonDefs.productNotLeftInStore);
 		else
 			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, null,
 					GuiCommonDefs.productPackageDoesNotExistMsg);
