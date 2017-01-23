@@ -136,17 +136,21 @@ public class ManageCatalogProductTab implements Initializable {
 	void runTheOperationButtonPressed(ActionEvent __) {
 
 		try {
-			if (addCatalogProductRadioButton.isSelected())
+			if (addCatalogProductRadioButton.isSelected()) {
 				manager.addProductToCatalog((new CatalogProduct(Long.parseLong(barcodeTextField.getText()),
 						productNameTextField.getText(), new HashSet<Ingredient>(), getManufacturer(),
 						productDescriptionTextField.getText().isEmpty() ? "N/A" : productDescriptionTextField.getText(),
 						Double.parseDouble(productPriceTextField.getText()), "", new HashSet<Location>())));
-			else if (removeCatalogProductRadioButton.isSelected())
+			
+				printToSuccessLog(("Added new product " + productNameTextField.getText() + " to catalog"));	
+			} else if (removeCatalogProductRadioButton.isSelected()) {
 				manager.removeProductFromCatalog(new SmartCode(Long.parseLong(barcodeTextField.getText()), null));
-
+				
+				printToSuccessLog(("Remoev product " + productNameTextField.getText() + " from catalog"));	
+			}
 		} catch (SMException e) {
 			EmployeeGuiExeptionHandler.handle(e);
-		}
+		} 
 	}
 
 	private Manufacturer getManufacturer() {
@@ -177,8 +181,6 @@ public class ManageCatalogProductTab implements Initializable {
 		return $;
 	}
 
-	
-	// TODO add use this to show operations
 	private void printToSuccessLog(String msg) {
 		((TextArea) rootPane.getScene().lookup("#successLogArea"))
 				.appendText(new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss").format(new Date()) + " :: " + msg + "\n");
