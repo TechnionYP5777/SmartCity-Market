@@ -174,7 +174,15 @@ public class CartMainScreen implements Initializable {
 		productsNumberTextField.setText(cart.getCartProductsNum().toString());
 		totalSumTextField.setText(cart.getTotalSum().toString());
 	}
-
+	
+	private void syncListViewWithCart() {
+		HashMap<Long, CartProduct> shoppingList = cart.getCartProductCache();
+		productsObservableList.clear();
+		shoppingList.forEach((key,value) -> {
+			productsObservableList.add(value);
+		});
+	}
+	
 	private void logoutAndExit() {
 		try {
 			cart.logout();
@@ -246,14 +254,6 @@ public class CartMainScreen implements Initializable {
 		}	
 		updateCartProductsInfo();
 		setAbilityAndVisibilityOfProductInfoPane(false);
-	}
-
-	private void syncListViewWithCart() {
-		HashMap<Long, CartProduct> shoppingList = cart.getCartProductCache();
-		productsObservableList.clear();
-		shoppingList.forEach((key,value) -> {
-			productsObservableList.add(value);
-		});
 	}
 
 	public void removeButtonPressed(ActionEvent __) {

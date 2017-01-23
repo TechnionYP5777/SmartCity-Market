@@ -285,6 +285,8 @@ public class Cart extends ACart implements ICart {
 		
 		if (cartProduct.getTotalAmount() > 0)
 			cartProductCache.put(barcode, cartProduct);
+		else 
+			cartProductCache.remove(barcode);
 		
 		totalSum -= amount * cartProduct.getCatalogProduct().getPrice();
 		
