@@ -68,6 +68,15 @@
     -fx-text-fill: white;
 }
 
+#recentActivityLbl {
+	-fx-font-size: 20;
+	-fx-font-family: "serif";
+    -fx-text-fill: floralwhite;
+    -fx-opacity: 1.0;
+    -fx-font-weight: bold;	
+	
+}
+
 
 
 
