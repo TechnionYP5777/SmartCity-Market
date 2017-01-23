@@ -1,5 +1,6 @@
-.main {
-   -fx-background-color: white;
+.root {
+   -fx-background-image: url("mainScreen.jpg");
+   -fx-background-size: cover;
    -fx-text-fill: midnightblue;
    -fx-opacity: 1.0;
    -fx-font-weight: bold;
