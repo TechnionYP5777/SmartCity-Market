@@ -114,7 +114,7 @@
                      <children>
                         <Label fx:id="amountLabel" text="N/A">
                            <font>
-                              <Font size="19.0" />
+                              <Font name="KacstArt" size="19.0" />
                            </font></Label>
                      </children>
                      <padding>
@@ -128,7 +128,7 @@
                      <children>
                         <Label text="Amount:">
                            <font>
-                              <Font size="19.0" />
+                              <Font name="KacstDecorative" size="19.0" />
                            </font></Label>
                      </children>
                      <padding>
@@ -142,7 +142,7 @@
                      <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" text="Price:">
                            <font>
-                              <Font size="19.0" />
+                              <Font name="KacstDecorative" size="19.0" />
                            </font></Label>
                      </children>
                      <padding>
@@ -156,7 +156,7 @@
                      <children>
                         <Label fx:id="priceLabel" text="N/A">
                            <font>
-                              <Font size="19.0" />
+                              <Font name="KacstArt" size="19.0" />
                            </font></Label>
                      </children>
                      <padding>
@@ -170,21 +170,7 @@
                      <children>
                         <Label fx:id="productNameLabel" text="N/A">
                            <font>
-                              <Font size="19.0" />
-                           </font></Label>
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT">
-                     <HBox.margin>
-                        <Insets left="5.0" />
-                     </HBox.margin>
-                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Product Name:">
-                           <font>
-                              <Font size="19.0" />
+                              <Font name="KacstTitle" size="19.0" />
                            </font></Label>
                      </children>
                      <padding>
@@ -198,7 +184,7 @@
                      <children>
                         <Label fx:id="manufacturerLabel" text="N/A">
                            <font>
-                              <Font size="19.0" />
+                              <Font name="KacstArt" size="19.0" />
                            </font></Label>
                      </children>
                      <padding>
@@ -212,7 +198,7 @@
                      <children>
                         <Label text="Manufacturer:">
                            <font>
-                              <Font size="19.0" />
+                              <Font name="KacstDecorative" size="19.0" />
                            </font></Label>
                      </children>
                      <padding>
@@ -226,7 +212,7 @@
                      <children>
                         <TextArea fx:id="descriptionTextArea" prefHeight="20.0" prefWidth="283.0">
                            <font>
-                              <Font size="19.0" />
+                              <Font name="KacstArt" size="19.0" />
                            </font></TextArea>
                      </children>
                   </HBox>
@@ -238,13 +224,10 @@
                      <children>
                         <VBox alignment="CENTER">
                            <children>
-                              <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonPressed" text="Add">
+                              <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonPressed" prefHeight="50.0" prefWidth="50.0">
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
-                                 <font>
-                                    <Font size="19.0" />
-                                 </font>
                               </Button>
                            </children>
                            <HBox.margin>
@@ -253,10 +236,11 @@
                         </VBox>
                         <VBox alignment="CENTER">
                            <children>
-                              <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeButtonPressed" text="Remove">
-                                 <font>
-                                    <Font size="19.0" />
-                                 </font></Button>
+                              <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeButtonPressed" prefHeight="50.0" prefWidth="50.0">
+	                              <VBox.margin>
+	                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </Button>
                            </children>
                         </VBox>
                         <VBox alignment="CENTER">
@@ -277,7 +261,7 @@
                      <children>
                         <Label contentDisplay="CENTER" prefHeight="24.0" prefWidth="143.0" text="Description:">
                            <font>
-                              <Font size="19.0" />
+                              <Font name="KacstDecorative" size="19.0" />
                            </font></Label>
                      </children>
                      <padding>

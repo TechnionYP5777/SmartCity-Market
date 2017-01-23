@@ -1,6 +1,10 @@
 .root {
-   -fx-background-image: url("mainScreen.jpg");
-   -fx-background-size: cover;
+   -fx-background-image: url("shopping_cart.jpg");
+   -fx-background-color: transparent;
+   -fx-background-position: center-left;
+   -fx-background-repeat: no-repeat;
+   -fx-background-size: auto;
+   -fx-background-color: white;
    -fx-text-fill: midnightblue;
    -fx-opacity: 1.0;
    -fx-font-weight: bold;
@@ -18,4 +22,15 @@
 .list-cell:filled:hover {
     -fx-background-color: #0093ff;
     -fx-text-fill: white;
+}
+
+#addButton {
+	-fx-background-image: url("add-to-cart-light.png");
+	-fx-background-size: cover;
+
+}
+
+#removeButton {
+	-fx-background-image: url("remove-from-cart-light.png");
+	-fx-background-size: cover;
 }
