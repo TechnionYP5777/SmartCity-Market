@@ -20,6 +20,9 @@ comment: off
    - Common/src/main/java/SMExceptions
    - Common/src/main/java/GuiUtils
    - Common/src/main/java/CommonDefs
+   - Cart/src/main/java/CartGuiHelpers/
+   - Cart/src/main/java/CartGuiScreens/
+   - Server/src/main/java/ServerRunner/Main.java
 
 comment:
   layout: "header, diff, changes, sunburst, uncovered, tree"
