@@ -23,6 +23,7 @@ comment: off
    - Cart/src/main/java/CartGuiHelpers/
    - Cart/src/main/java/CartGuiScreens/
    - Server/src/main/java/ServerRunner/Main.java
+   - Server/src/main/java/SQLDatabase/SQLDatabaseStrings.java
 
 comment:
   layout: "header, diff, changes, sunburst, uncovered, tree"
