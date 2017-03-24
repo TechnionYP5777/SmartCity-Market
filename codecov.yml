@@ -4,11 +4,13 @@ codecov:
 
 coverage:
   precision: 2
-  round: down
+  round: up
   range: "30...100"
   status:
-    project: off
-    patch: off
+    project:
+      default:
+        enabled: no
+        target: auto
     changes: no
 
 # Don't post a comment on pull requests.
