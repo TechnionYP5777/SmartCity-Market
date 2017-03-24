@@ -1,7 +1,7 @@
 .root {
    -fx-background-image: url("shopping_cart.jpg");
    -fx-background-color: transparent;
-   -fx-background-position: center-left;
+   -fx-background-position: left;
    -fx-background-repeat: no-repeat;
    -fx-background-size: auto;
    -fx-background-color: white;
@@ -40,7 +40,7 @@
 	-fx-text-base-color: aliceblue;
 	-fx-background: cornsilk;
 	-fx-control-inner-background: cornsilk;
-	-fx-border-style: outset;
+	-fx-border-style: dashed;
 }
 
 #cancelButton {
