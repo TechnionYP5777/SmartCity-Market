@@ -29,7 +29,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -184,14 +187,21 @@ public class CartMainScreen implements Initializable {
 	}
 	
 	private void logoutAndExit() {
+		Alert alert = new Alert(AlertType.NONE, "Already leaving?", ButtonType.YES, ButtonType.NO);
+		
+		alert.setTitle("Cancel shopping");
+		alert.showAndWait();
+		if (alert.getResult() == ButtonType.NO)
+			return;
+		
 		try {
 			cart.logout();
 		} catch (SMException e) {
 			Platform.exit();
 			System.exit(0);
 		}
-		TempCartPassingData.cart =  null;
-		AbstractApplicationScreen.setScene("/CartWelcomeScreen/CartWelcomeScreen.fxml");		
+		TempCartPassingData.cart = null;
+		AbstractApplicationScreen.setScene("/CartWelcomeScreen/CartWelcomeScreen.fxml");
 	}
 	
 	@Override
@@ -229,6 +239,13 @@ public class CartMainScreen implements Initializable {
 
 	@FXML
 	public void purchaseButtonPressed(ActionEvent __) {
+		Alert alert = new Alert(AlertType.NONE, "Checkout grocery list?", ButtonType.YES, ButtonType.NO);
+		
+		alert.setTitle("Checkout and Payment");
+		alert.showAndWait();
+		if (alert.getResult() == ButtonType.NO)
+			return;
+		
 		try {
 			cart.checkOutGroceryList();
 		} catch (SMException e) {
