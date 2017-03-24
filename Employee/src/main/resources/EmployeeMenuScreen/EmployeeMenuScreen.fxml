@@ -34,14 +34,14 @@
 		<RowConstraints percentHeight="25.0" vgrow="ALWAYS" />
 	</rowConstraints>
 	<children>
-		<TabPane>
+		<TabPane fx:id="tabsPane">
 			<tabs>
 				<Tab fx:id="managePackagesTab" closable="false" text="Manage Packages">
 					<content>
 						<fx:include source="/ManagePackagesTab/ManagePackagesTab.fxml" />
 					</content>
 				</Tab>
-				<Tab fx:id="manageCatalogProductTab" closable="false"
+				<Tab fx:id="manageCatalogProductTab" closable="true"
 					text="Manage Catalog Products">
 					<content>
 						<fx:include

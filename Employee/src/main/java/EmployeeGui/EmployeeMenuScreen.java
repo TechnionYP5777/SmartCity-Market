@@ -20,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -44,6 +45,9 @@ public class EmployeeMenuScreen implements Initializable {
 	Stage primeStage = EmployeeApplicationScreen.stage;
 
 	@FXML
+	TabPane tabsPane;
+	
+	@FXML
 	Tab managePackagesTab;
 
 	@FXML
@@ -57,8 +61,9 @@ public class EmployeeMenuScreen implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 
-		manageCatalogProductTab.setDisable(InjectionFactory.getInstance(EmployeeScreensParameterService.class)
-				.getClientType().equals(CLIENT_TYPE.WORKER));
+		if (InjectionFactory.getInstance(EmployeeScreensParameterService.class)
+				.getClientType().equals(CLIENT_TYPE.WORKER))
+			tabsPane.getTabs().remove(manageCatalogProductTab);
 
 		worker = InjectionFactory.getInstance(Manager.class);
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
