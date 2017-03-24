@@ -46,6 +46,7 @@ import javafx.util.Callback;
  * available for cart during shopping.
  * 
  * @author Lior Ben Ami
+ * @author Aviad Cohen
  * @since 2017-01-11
  */
 public class CartMainScreen implements Initializable {
@@ -109,7 +110,7 @@ public class CartMainScreen implements Initializable {
 
 	/**
 	 * the productInfoPane has three visible mode: 
-	 * 0 - unvisible (default) 
+	 * 0 - Invisible (default) 
 	 * 1 - SCANNED_PRODUCT: when the pane present scanned product info and actions 
 	 * 2 - PRESSED_PRODUCT: when the pane present pressed (on the listView Cell) product info and actions
 	 */
@@ -185,8 +186,6 @@ public class CartMainScreen implements Initializable {
 	private void logoutAndExit() {
 		try {
 			cart.logout();
-			Platform.exit();
-			System.exit(0);
 		} catch (SMException e) {
 			Platform.exit();
 			System.exit(0);
