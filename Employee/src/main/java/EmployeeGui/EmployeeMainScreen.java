@@ -7,8 +7,7 @@ import GuiUtils.AbstractApplicationScreen;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.InputEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -45,10 +44,11 @@ public class EmployeeMainScreen implements Initializable {
 		player.setCycleCount(MediaPlayer.INDEFINITE);
 		player.play();
 		vbox.toFront();
+		vbox.setFocusTraversable(true);
 	}
 
 	@FXML
-	public void keyClicked(MouseEvent __) {
+	public void mouseOrKeyboardPressed(InputEvent __) {
 		AbstractApplicationScreen.setScene("/EmployeeLoginScreen/EmployeeLoginScreen.fxml");
 	}
 
