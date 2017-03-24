@@ -233,9 +233,10 @@ public class CartMainScreen implements Initializable {
 			cart.checkOutGroceryList();
 		} catch (SMException e) {
 			CartGuiExceptionsHandler.handle(e);	
-			return;
 		}
-		logoutAndExit();
+		
+		TempCartPassingData.cart =  null;
+		AbstractApplicationScreen.setScene("/CartWelcomeScreen/CartWelcomeScreen.fxml");
 	}
 
 	@FXML
