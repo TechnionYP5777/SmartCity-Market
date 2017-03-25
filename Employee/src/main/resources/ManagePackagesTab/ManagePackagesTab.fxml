@@ -223,7 +223,7 @@
 										</HBox>
 										<HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
 											<children>
-												<Spinner fx:id="editPackagesAmountSpinner" editable="true" initialValue="1" min="1" opacity="0.86" prefHeight="54.0" prefWidth="55.0" styleClass="split-arrows-vertical">
+												<Spinner fx:id="editPackagesAmountSpinner" editable="true" initialValue="1" min="1" max="10000" opacity="0.86" prefHeight="54.0" prefWidth="55.0" styleClass="split-arrows-vertical">
                                        <effect>
                                           <Lighting diffuseConstant="1.46" specularConstant="0.0" specularExponent="11.43" surfaceScale="6.86">
                                              <bumpInput>
