@@ -3,7 +3,7 @@ import com.google.inject.AbstractModule;
 
 import ClientServerCommunication.ClientRequestHandler;
 import CartContracts.ICart;
-import CartImplemantations.Cart;
+import CartImplementations.Cart;
 import UtilsContracts.IClientRequestHandler;
 
 /**

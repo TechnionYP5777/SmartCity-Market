@@ -3,7 +3,7 @@ package CartGuiScreens;
 import org.apache.log4j.PropertyConfigurator;
 
 import CartDI.CartDiConfigurator;
-import CartImplemantations.CartDefs;
+import CartImplementations.CartDefs;
 import GuiUtils.AbstractApplicationScreen;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;

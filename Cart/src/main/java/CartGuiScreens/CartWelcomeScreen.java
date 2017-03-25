@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 import CartContracts.ICart;
 import CartGuiHelpers.CartGuiExceptionsHandler;
 import CartGuiHelpers.TempCartPassingData;
-import CartImplemantations.Cart;
+import CartImplementations.Cart;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;

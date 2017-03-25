@@ -1,4 +1,4 @@
- package CartImplemantations;
+ package CartImplementations;
 
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
@@ -402,5 +402,4 @@ public class Cart extends ACart implements ICart {
 				throw new CriticalError();
 			}
 	}
-	
 }
