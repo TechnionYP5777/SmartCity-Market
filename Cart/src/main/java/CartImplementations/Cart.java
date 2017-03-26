@@ -47,16 +47,27 @@ public class Cart extends ACart implements ICart {
 	HashMap<Long, CartProduct> cartProductCache = new HashMap<Long, CartProduct>();
 	
 	Double totalSum = Double.valueOf(0);
+	
+	Integer totalProductsAmount = 0;
 
-	private void loadCartProductCacheAndUpdateTotalSum() throws CriticalError, CartNotConnected, 
+	private int loadCartProductsAmount() {
+		int count = 0;
+		for(HashMap.Entry<Long, CartProduct> entry : cartProductCache.entrySet()) {
+			count += entry.getValue().getTotalAmount();
+		}
+		return count;
+	}
+
+	private void loadCartProductCacheAndUpdateCartData() throws CriticalError, CartNotConnected, 
 		ProductCatalogDoesNotExist {
 		log.info("restorying grocery list from server.");
 		
 		for (HashMap.Entry<SmartCode, ProductPackage> ¢ : groceryList.getList().entrySet())
-			addProductToCache(¢.getValue(), viewCatalogProduct(¢.getKey()));
+			addProductToCacheAndUpdateCartData(¢.getValue(), viewCatalogProduct(¢.getKey()));
+		loadCartProductsAmount();
 	}
 	
-	private void addProductToCache(ProductPackage p, CatalogProduct catalogProduct) {
+	private void addProductToCacheAndUpdateCartData(ProductPackage p, CatalogProduct catalogProduct) {
 		CartProduct cartProduct = cartProductCache.get(p.getSmartCode().getBarcode());
 		
 		/* No packages from this CartProduct, adding new one */
@@ -66,7 +77,7 @@ public class Cart extends ACart implements ICart {
 		cartProduct.addProductPackage(p);
 		
 		cartProductCache.put(catalogProduct.getBarcode(), cartProduct);
-		
+		totalProductsAmount += p.getAmount();
 		totalSum += p.getAmount() * catalogProduct.getPrice();
 	}
 	
@@ -187,7 +198,7 @@ public class Cart extends ACart implements ICart {
 		}
 		
 		/* Restoring Grocery list */
-		loadCartProductCacheAndUpdateTotalSum();
+		loadCartProductCacheAndUpdateCartData();
 		
 		log.info("load grocery list from server succeed.");
 	}
@@ -230,7 +241,7 @@ public class Cart extends ACart implements ICart {
 
 		groceryList.addProduct(productPackage);
 		
-		addProductToCache(productPackage, catalogProduct);
+		addProductToCacheAndUpdateCartData(productPackage, catalogProduct);
 		
 		log.info("addProductToGroceryList command succeed.");
 	}
@@ -288,6 +299,7 @@ public class Cart extends ACart implements ICart {
 		else
 			cartProductCache.put(barcode, cartProduct);
 		
+		totalProductsAmount -= amount;
 		totalSum -= amount * cartProduct.getCatalogProduct().getPrice();
 		
 		log.info("REMOVE_PRODUCT_FROM_GROCERY_LIST command succeed.");
@@ -298,7 +310,7 @@ public class Cart extends ACart implements ICart {
 	}
 	
 	public Integer getCartProductsNum() {
-		return cartProductCache.size();
+		return totalProductsAmount;
 	}
 	
 	public Double checkOutGroceryList() throws CriticalError, CartNotConnected, GroceryListIsEmpty {
@@ -336,7 +348,7 @@ public class Cart extends ACart implements ICart {
 		groceryList = new GroceryList();
 		cartProductCache = new HashMap<Long, CartProduct>();
 		totalSum = Double.valueOf(0);
-		
+		totalProductsAmount = 0;
 		log.info("CHECKOUT_GROCERY_LIST command succeed.");
 		
 		return $;
