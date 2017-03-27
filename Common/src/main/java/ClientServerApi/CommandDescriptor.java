@@ -35,6 +35,7 @@ public enum CommandDescriptor {
 
 	/******************************************** Connection **********************************************/
 
+	//TODO Aviad - remove old LOGIN command after finishing splitting to two commands
 	/**
 	 * Description: Client login command to get in the system and receive unique sender id from server.
 	 * param1: Login.
@@ -54,6 +55,45 @@ public enum CommandDescriptor {
 	 */
 	LOGIN,
 
+	/**
+	 * Description: Employee login command to get into the system and receive unique sender id from server.
+	 * param1: Login.
+	 * retval: CLIENT_TYPE.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_ALREADY_CONNECTED,
+	 *			SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD,
+	 *
+	 *	 ***** NOTE *****
+	 * 	1. The sender ID returns in senderId field.
+	 */
+	LOGIN_EMPLOYEE,
+	
+	/**
+	 * Description: Client login command to get into the system and receive unique sender id and customer profile if needed from server.
+	 * param1: Login.
+	 * retval: CustomerProfile.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_ALREADY_CONNECTED,
+	 *			SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD,
+	 *
+	 *	 ***** NOTES *****
+	 * 	1. The sender ID returns in senderId field.
+	 *  2. For Guest login use Guest as username & password (use "Guest" on both).
+	 *  3. "Guest" will be saved username, the clients can't register with this username.
+	 *  4. For Guest, the server will return CustomerProfile with only username and password (other attributes will be null).
+	 */
+	LOGIN_CLIENT,
+	
 	/**
 	 * Description: Client logout command for logging out of server.
 	 * param1: String username.
@@ -224,6 +264,23 @@ public enum CommandDescriptor {
 	 */
 	REMOVE_PRODUCT_PACKAGE_FROM_STORE,
 	
+	/**
+	 * Description: Register new Worker to the system.
+	 * param1: Login.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_USERNAME_ALREADY_EXISTS,
+	 *			SM_SENDER_IS_ALREADY_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 */
+	REGSITER_NEW_WORKER,
+	
 	/********************************** Cart commands **********************************/
 	
 	/**
@@ -291,5 +348,39 @@ public enum CommandDescriptor {
 	 *
 	 */
 	CHECKOUT_GROCERY_LIST,
+	
+	/**
+	 * Description: Register new Customer to the system.
+	 * param1: CustomerProfile.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_USERNAME_ALREADY_EXISTS,
+	 *			SM_SENDER_IS_ALREADY_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 */
+	REGSITER_NEW_CUSTOMER,
+	
+	/**
+	 * Description: Update Customer in the system.
+	 * param1: CustomerProfile.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD,,
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 */
+	UPDATE_CUSTOMER_PROFILE,
 
 }

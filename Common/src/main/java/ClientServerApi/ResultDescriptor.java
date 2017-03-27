@@ -16,7 +16,7 @@ public enum ResultDescriptor {
 	 * The command request accepted by the server and was executed successfully.
 	 */
 	SM_OK,
-
+	
 /************************************************ Failures **************************************************/
 
 	/**************************************** General Failures **********************************************/
@@ -109,6 +109,16 @@ public enum ResultDescriptor {
 	 * 
 	 */
 	SM_CATALOG_PRODUCT_DOES_NOT_EXIST,
+	
+	/**
+	 * The sender tried to register with existing username.
+	 * 
+	 * How to fix:
+	 * 
+	 * 1. Ask user to insert different username.
+	 * 
+	 */
+	SM_USERNAME_ALREADY_EXISTS,
 	
 	/************************************** Employee failures only *****************************************/
 	
