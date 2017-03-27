@@ -89,6 +89,7 @@ public class Worker extends AEmployee implements IWorker {
 		log.info("logout from server succeed.");
 	}
 
+	@Override
 	public boolean isLoggedIn() throws CriticalError, ConnectionFailure {
 		String serverResponse;
 

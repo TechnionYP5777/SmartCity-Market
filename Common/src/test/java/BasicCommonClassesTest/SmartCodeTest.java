@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 
 import java.time.LocalDate;
 
-import BasicCommonClasses.SmartCode;;
+import BasicCommonClasses.SmartCode;
 /**@author Lior Ben Ami
  * @since 2016-12-11 */
 public class SmartCodeTest {

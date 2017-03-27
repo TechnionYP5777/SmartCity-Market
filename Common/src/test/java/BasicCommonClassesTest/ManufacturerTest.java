@@ -6,7 +6,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
 import org.junit.Test;
 
-import BasicCommonClasses.Manufacturer;;;
+import BasicCommonClasses.Manufacturer;
 /**@author Lior Ben Ami
  * @since 2016-12-11 */
 public class ManufacturerTest {

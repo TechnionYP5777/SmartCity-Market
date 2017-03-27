@@ -15,7 +15,7 @@ import BasicCommonClasses.Location;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
-import BasicCommonClasses.Manufacturer;;
+import BasicCommonClasses.Manufacturer;
 
 
 /**@author Lior Ben Ami

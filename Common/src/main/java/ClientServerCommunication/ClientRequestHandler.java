@@ -80,7 +80,7 @@ public class ClientRequestHandler implements IClientRequestHandler {
      * Send a request to the server.
      * @param request - the request to be sent.
      */
-    private void sendRequest(String request) throws IOException {
+    private void sendRequest(String request) {
 		try {
 	    	(new PrintWriter(socket.getOutputStream(), true)).println(request);
 	    	

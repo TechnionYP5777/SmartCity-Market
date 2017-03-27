@@ -81,14 +81,17 @@ public class Cart extends ACart implements ICart {
 		totalSum += p.getAmount() * catalogProduct.getPrice();
 	}
 	
+	@Override
 	public int getId() {
 		return id;
 	}
 
+	@Override
 	public HashMap<Long, CartProduct> getCartProductCache() {
 		return cartProductCache;
 	}
 
+	@Override
 	public void login(String username, String password) throws CriticalError, AuthenticationError {
 		CommandWrapper $ = null;
 		String serverResponse = null;
@@ -113,7 +116,7 @@ public class Cart extends ACart implements ICart {
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter | CartNotConnected | ProductCatalogDoesNotExist |
-				ProductNotInCart | AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty ¢) {
+				AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			¢.printStackTrace();
@@ -128,6 +131,7 @@ public class Cart extends ACart implements ICart {
 		log.info("Cart Login to server as succeed. Client id is: " + id);
 	}
 	
+	@Override
 	public void logout() throws CartNotConnected, CriticalError {
 		String serverResponse;		
 		
@@ -150,7 +154,7 @@ public class Cart extends ACart implements ICart {
 		try {
 			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter | ProductCatalogDoesNotExist |
-				ProductNotInCart | AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError ¢) {
+				 AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			¢.printStackTrace();
@@ -161,6 +165,7 @@ public class Cart extends ACart implements ICart {
 		log.info("logout from server succeed.");
 	}
 	
+	@Override
 	public void resume(int _id) throws CriticalError, CartNotConnected, ProductCatalogDoesNotExist {
 		CommandWrapper $ = null;
 		String serverResponse;
@@ -189,7 +194,7 @@ public class Cart extends ACart implements ICart {
 			id = _id;
 			groceryList = Serialization.deserialize($.getData(), GroceryList.class);
 		} catch (InvalidCommandDescriptor | InvalidParameter |
-				ProductNotInCart | AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError ¢) {
+				 AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			¢.printStackTrace();
@@ -203,6 +208,7 @@ public class Cart extends ACart implements ICart {
 		log.info("load grocery list from server succeed.");
 	}
 	
+	@Override
 	public void addProductToCart(SmartCode c, int amount) throws CriticalError, CartNotConnected,
 			AmountBiggerThanAvailable, ProductPackageDoesNotExist, ProductCatalogDoesNotExist {
 		String serverResponse;
@@ -228,7 +234,7 @@ public class Cart extends ACart implements ICart {
 		try {
 			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter |
-				ProductNotInCart | ProductCatalogDoesNotExist |
+				 ProductCatalogDoesNotExist |
 				GroceryListIsEmpty | AuthenticationError ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
@@ -246,6 +252,7 @@ public class Cart extends ACart implements ICart {
 		log.info("addProductToGroceryList command succeed.");
 	}
 	
+	@Override
 	public void returnProductToShelf(SmartCode c, int amount) throws ProductNotInCart, 
 			AmountBiggerThanAvailable, ProductPackageDoesNotExist, CriticalError, CartNotConnected {
 		String serverResponse;
@@ -305,14 +312,17 @@ public class Cart extends ACart implements ICart {
 		log.info("REMOVE_PRODUCT_FROM_GROCERY_LIST command succeed.");
 	}
 	
+	@Override
 	public Double getTotalSum() {
 		return totalSum;
 	}
 	
+	@Override
 	public Integer getCartProductsNum() {
 		return totalProductsAmount;
 	}
 	
+	@Override
 	public Double checkOutGroceryList() throws CriticalError, CartNotConnected, GroceryListIsEmpty {
 		String serverResponse;
 		Double $ = totalSum;
@@ -335,7 +345,7 @@ public class Cart extends ACart implements ICart {
 		try {
 			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter |
-				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductNotInCart | 
+				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | 
 				 AuthenticationError | ProductCatalogDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
@@ -359,6 +369,7 @@ public class Cart extends ACart implements ICart {
 		return cartProductCache.get(¢.getBarcode());
 	}
 	
+	@Override
 	public CatalogProduct viewCatalogProduct(SmartCode c) throws CriticalError, CartNotConnected,
 			ProductCatalogDoesNotExist {
 		String serverResponse;
@@ -385,7 +396,7 @@ public class Cart extends ACart implements ICart {
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter| CriticalError |
-				ProductNotInCart | AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | 
+				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | 
 				GroceryListIsEmpty | AuthenticationError ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
@@ -399,6 +410,7 @@ public class Cart extends ACart implements ICart {
 		return Serialization.deserialize($.getData(), CatalogProduct.class);
 	}
 	
+	@Override
 	public void removeAllItemsOfCartProduct(SmartCode c) throws ProductNotInCart,
 			CriticalError {
 		CartProduct cartProduct = getCartProduct(c);

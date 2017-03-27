@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import BasicCommonClasses.Location;
-import BasicCommonClasses.PlaceInMarket;;
+import BasicCommonClasses.PlaceInMarket;
 /**@author Lior Ben Ami
  * @since 2016-12-11 */
 

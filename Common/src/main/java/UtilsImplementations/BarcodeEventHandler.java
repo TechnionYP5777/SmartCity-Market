@@ -36,18 +36,21 @@ public class BarcodeEventHandler implements IBarcodeEventHandler {
 	
 	private boolean stopListening;
 		
+	@Override
 	public void initializeHandler() throws IOException  {
 		this.scannerSocket = new ServerSocket(BARCODE_SCANNER_DEFAULT_PORT, backlog);
 		eventBus = new EventBus();
 	}
 	
+	@Override
 	public void startListening()  {
 		new Thread(new BarcodeListener()).start();	
 	}
 	
 	public class BarcodeListener implements Runnable {
 
-        public void run() {
+        @Override
+		public void run() {
         	for (String code = ""; !stopListening;)
 				try {
 					Thread.sleep(5000);
@@ -63,14 +66,17 @@ public class BarcodeEventHandler implements IBarcodeEventHandler {
         }
 	}
 	
+	@Override
 	public void stopListening() {
 		stopListening = true;
 	}
 	
+	@Override
 	public void register(Object listener) {
 		eventBus.register(listener);
 	}
 	
+	@Override
 	public void unregister(Object listener) {
 		eventBus.unregister(listener);
 	}

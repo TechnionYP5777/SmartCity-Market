@@ -1,6 +1,5 @@
 package CartImplemantationsTests;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
@@ -22,7 +21,6 @@ import CartImplementations.CartDefs;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
-import CommonDefs.CLIENT_TYPE;
 import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
 

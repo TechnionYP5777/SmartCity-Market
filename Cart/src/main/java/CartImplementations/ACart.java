@@ -11,7 +11,6 @@ import CartContracts.ACartExceptions.CriticalError;
 import CartContracts.ACartExceptions.InvalidCommandDescriptor;
 import CartContracts.ACartExceptions.InvalidParameter;
 import CartContracts.ACartExceptions.AuthenticationError;
-import CartContracts.ACartExceptions.ProductNotInCart;
 import CartContracts.ACartExceptions.ProductPackageDoesNotExist;
 import CartContracts.ACartExceptions.GroceryListIsEmpty;
 import CartContracts.ACartExceptions.AmountBiggerThanAvailable;
@@ -68,7 +67,7 @@ public abstract class ACart {
 	}
 
 	protected void resultDescriptorHandler(ResultDescriptor ¢) throws InvalidCommandDescriptor,
-		InvalidParameter, CriticalError, CartNotConnected, ProductNotInCart, AmountBiggerThanAvailable,
+		InvalidParameter, CriticalError, CartNotConnected, AmountBiggerThanAvailable,
 		ProductPackageDoesNotExist, GroceryListIsEmpty, AuthenticationError, ProductCatalogDoesNotExist {
 
 		switch (¢) {
