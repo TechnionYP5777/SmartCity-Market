@@ -52,9 +52,8 @@ public class Cart extends ACart implements ICart {
 
 	private int loadCartProductsAmount() {
 		int count = 0;
-		for(HashMap.Entry<Long, CartProduct> entry : cartProductCache.entrySet()) {
+		for(HashMap.Entry<Long, CartProduct> entry : cartProductCache.entrySet())
 			count += entry.getValue().getTotalAmount();
-		}
 		return count;
 	}
 
