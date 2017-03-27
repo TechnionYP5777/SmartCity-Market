@@ -123,6 +123,7 @@ public class ManageCatalogProductTab implements Initializable {
 	void addCatalogProductRadioButtonPressed(ActionEvent __) {
 		radioButtonContainerManageCatalogProduct.selectRadioButton(addCatalogProductRadioButton);
 		addCatalogProductParamPane.setVisible(true);
+		enableRunOperation();
 
 	}
 
@@ -130,6 +131,7 @@ public class ManageCatalogProductTab implements Initializable {
 	void removeCatalogProductRadioButtonPressed(ActionEvent __) {
 		radioButtonContainerManageCatalogProduct.selectRadioButton(removeCatalogProductRadioButton);
 		addCatalogProductParamPane.setVisible(false);
+		enableRunOperation();
 	}
 
 	@FXML
