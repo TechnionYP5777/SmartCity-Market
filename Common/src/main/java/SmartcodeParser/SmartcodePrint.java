@@ -8,6 +8,12 @@ import BasicCommonClasses.SmartCode;
 import java.awt.print.*;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * This class sends smartcodes for printing
+ * 
+ * @author noam yefet
+ *
+ */
 public class SmartcodePrint implements Printable{
 
 	private static final int MIN_FONT_SIZE = 6;
@@ -103,7 +109,8 @@ public class SmartcodePrint implements Printable{
         return $;
 	}
 	
-    public int print(Graphics g, PageFormat f, int page) throws
+    @Override
+	public int print(Graphics g, PageFormat f, int page) throws
                                                         PrinterException {
    	
         /* User (0,0) is typically outside the imageable area, so we must
@@ -119,13 +126,13 @@ public class SmartcodePrint implements Printable{
 		
 		int printAreaWidth = (int) (f.getImageableWidth() - leftSpace - rightSpace);
 		int printAreaHeight = (int) (f.getImageableHeight() - topSpace - bottomSpace);
-    	int smartcodesPerRow = (int) (printAreaWidth / (horizontalSpace + barcodeTotalWidth));
-    	int smartcodesPerCol = (int) (printAreaHeight / (verticalSpace + barcodeTotalHeight));
+    	int smartcodesPerRow = printAreaWidth / (horizontalSpace + barcodeTotalWidth);
+    	int smartcodesPerCol = printAreaHeight / (verticalSpace + barcodeTotalHeight);
     	
     	int totalSmartcodesInPage = smartcodesPerCol * smartcodesPerRow;
     	int totalPagesToPrint = (int) Math.ceil((float) count / totalSmartcodesInPage);
     	
-        if (page + 1 > totalPagesToPrint) /* We have only one page, and 'page' is zero-based */
+        if (page > totalPagesToPrint - 1) /* We have only one page, and 'page' is zero-based */
             return NO_SUCH_PAGE;
  
         int smartcodesForThisPage = totalSmartcodesInPage * (page + 1) <= count ?
