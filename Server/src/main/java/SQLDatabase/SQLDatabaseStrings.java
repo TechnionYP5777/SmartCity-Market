@@ -148,7 +148,7 @@ public class SQLDatabaseStrings {
 
 		// table attributes
 		public static final String ATTR_CART_ID = "CartID";
-		public static final String ATTR_LIST_ID = GROCERIES_LISTS_TABLE.ATTR_LIST_ID;;
+		public static final String ATTR_LIST_ID = GROCERIES_LISTS_TABLE.ATTR_LIST_ID;
 
 	}
 
