@@ -60,13 +60,13 @@
 			<children>
 				<VBox spacing="15.0">
 					<children>
-					<HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
+								<HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
 									<children>
-									<Button fx:id="logout" mnemonicParsing="false" onAction="#logoutButtonPressed" prefHeight="116.0" prefWidth="65.0" />									</children>
+									<Button fx:id="logout" mnemonicParsing="false" onAction="#logoutButtonPressed" />									</children>
 									<padding>
 										<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 									</padding>
-								</HBox>					
+								</HBox>	
 						<VBox spacing="5.0">
 							<children>
 								<Label fx:id="recentActivityLbl" text="Recent Activity" textFill="#5518b9" />
