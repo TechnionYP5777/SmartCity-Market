@@ -85,7 +85,8 @@ public class EmployeeMenuScreen implements Initializable {
 			}
 		});
 
-		// setting success log listener
+		// setting success log and it's listener
+		successLogArea.setEditable(false);
 		successLogArea.textProperty().addListener(new ChangeListener<Object>() {
 			@Override
 			public void changed(ObservableValue<?> __, Object oldValue, Object newValue) {
@@ -97,7 +98,9 @@ public class EmployeeMenuScreen implements Initializable {
 	}
 
 	public void printToSuccessLog(String msg) {
+		successLogArea.setEditable(true);
 		successLogArea.appendText(new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss").format(new Date()) + " :: " + msg + "\n");
+		successLogArea.setEditable(false);
 	}
 
 	@FXML
