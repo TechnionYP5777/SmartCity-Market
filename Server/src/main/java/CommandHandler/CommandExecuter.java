@@ -45,6 +45,7 @@ public class CommandExecuter {
 		inCommandWrapper = CommandWrapper.deserialize(command);
 	}
 
+	//TODO Aviad - remove login command and splitting login command finished
 	private void loginCommand(SQLDatabaseConnection c) {
 		Login login = null;
 
@@ -103,6 +104,124 @@ public class CommandExecuter {
 		log.info("Login with User " + login.getUserName() + " finished");
 	}
 
+	private void loginEmployeeCommand(SQLDatabaseConnection c) {
+		Login login = null;
+
+		log.info("Login employee command called");
+
+		try {
+			login = new Gson().fromJson(inCommandWrapper.getData(), Login.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for login command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		if (!login.isValid()) {
+			log.info("Login command failed, username and password can't be empty");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+
+			return;
+		}
+
+		try {
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
+			//TODO Noam - change the calling of this command, all code should stay the same
+			outCommandWrapper.setSenderID((c.login(login.getUserName(), login.getPassword())));
+
+			try {
+				outCommandWrapper.setData(c.getClientType(outCommandWrapper.getSenderID()));
+			} catch (ClientNotConnected e) {
+				e.printStackTrace();
+
+				log.fatal("Client is not connected for sender ID " + outCommandWrapper.getSenderID());
+			}
+
+			log.info("Login command succeded with sender ID " + outCommandWrapper.getSenderID() + " with client type "
+					+ outCommandWrapper.getData());
+		} catch (AuthenticationError e) {
+			log.info("Login command failed, username dosen't exist or wrong password received");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD);
+		} catch (CriticalError e) {
+			log.fatal("Login command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientAlreadyConnected e) {
+			log.info("Login command failed, user already connected");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_ALREADY_CONNECTED);
+		} catch (NumberOfConnectionsExceeded e) {
+			log.fatal("Login command failed, too much connections (try to increase TRYS_NUMBER)");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		}
+
+		log.info("Login employee with User " + login.getUserName() + " finished");
+	}
+	
+	private void loginClientCommand(SQLDatabaseConnection c) {
+		Login login = null;
+
+		log.info("Login client command called");
+
+		try {
+			login = new Gson().fromJson(inCommandWrapper.getData(), Login.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for login command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		if (!login.isValid()) {
+			log.info("Login command failed, username and password can't be empty");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+
+			return;
+		}
+
+		try {
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
+			//TODO Noam - change the calling of this command, need to add CustomerProfile for login command here
+			outCommandWrapper.setSenderID((c.login(login.getUserName(), login.getPassword())));
+
+			try {
+				outCommandWrapper.setData(c.getClientType(outCommandWrapper.getSenderID()));
+			} catch (ClientNotConnected e) {
+				e.printStackTrace();
+
+				log.fatal("Client is not connected for sender ID " + outCommandWrapper.getSenderID());
+			}
+
+			log.info("Login command succeded with sender ID " + outCommandWrapper.getSenderID() + " with client type "
+					+ outCommandWrapper.getData());
+		} catch (AuthenticationError e) {
+			log.info("Login command failed, username dosen't exist or wrong password received");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD);
+		} catch (CriticalError e) {
+			log.fatal("Login command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientAlreadyConnected e) {
+			log.info("Login command failed, user already connected");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_ALREADY_CONNECTED);
+		} catch (NumberOfConnectionsExceeded e) {
+			log.fatal("Login command failed, too much connections (try to increase TRYS_NUMBER)");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		}
+
+		log.info("Login client with User " + login.getUserName() + " finished");
+	}
+	
 	private void logoutCommand(SQLDatabaseConnection c) {
 		String username;
 
@@ -725,6 +844,16 @@ public class CommandExecuter {
 		switch (inCommandWrapper.getCommandDescriptor()) {
 		case LOGIN:
 			loginCommand(c);
+
+			break;
+			
+		case LOGIN_EMPLOYEE:
+			loginEmployeeCommand(c);
+
+			break;
+			
+		case LOGIN_CLIENT:
+			loginClientCommand(c);
 
 			break;
 
