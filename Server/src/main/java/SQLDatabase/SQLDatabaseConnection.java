@@ -659,7 +659,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * @throws NumberOfConnectionsExceeded
 	 */
 	private int loginAsCart()
-			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
+			throws CriticalError, NumberOfConnectionsExceeded {
 
 		/*
 		 * initiate new session and new grocery list to cart
