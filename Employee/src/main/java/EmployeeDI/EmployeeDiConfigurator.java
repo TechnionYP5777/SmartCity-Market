@@ -14,7 +14,7 @@ import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.BarcodeEventHandler;
 
 /**
- * EmployeeDiConfigurator - This class the dependencies configurator for Employee business logic 
+ * EmployeeDiConfigurator - This class the dependencies configurator for Employee
  * 
  * @author Shimon Azulay
  * @since 2016-12-26 */ 

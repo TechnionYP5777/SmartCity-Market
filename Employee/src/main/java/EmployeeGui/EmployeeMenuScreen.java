@@ -47,7 +47,7 @@ public class EmployeeMenuScreen implements Initializable {
 
 	@FXML
 	TabPane tabsPane;
-	
+
 	@FXML
 	Tab managePackagesTab;
 
@@ -62,11 +62,28 @@ public class EmployeeMenuScreen implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 
-		if (InjectionFactory.getInstance(EmployeeScreensParameterService.class)
-				.getClientType().equals(CLIENT_TYPE.WORKER))
+		if (InjectionFactory.getInstance(EmployeeScreensParameterService.class).getClientType()
+				.equals(CLIENT_TYPE.WORKER))
 			tabsPane.getTabs().remove(manageCatalogProductTab);
-		
+
 		tabsPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+
+		tabsPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+			@Override
+			public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
+//				if (t1 == managePackagesTab) {
+//					FXMLLoader loader = new FXMLLoader(
+//							getClass().getResource("/ManagePackagesTab/ManagePackagesTab.fxml"));
+//					try {
+//						loader.load();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//					ITabPaneHandler ctrl = loader.getController();
+//					ctrl.tabSelected();
+//				}
+			}
+		});
 
 		worker = InjectionFactory.getInstance(Manager.class);
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
