@@ -87,7 +87,9 @@ public class ThreadPooledServerTest {
 		PropertyConfigurator.configure("../log4j.properties");
 	}
 	
-	@Test public void ServerWorkerRunnableHelloWorldLocalTest () {
+
+	@Test
+	 public void ServerWorkerRunnableHelloWorldLocalTest () {
 		ProcessRequestTester processRequestTester = new ProcessRequestTester();
 		ThreadPooledServer server = null;
 		try {
@@ -100,7 +102,7 @@ public class ThreadPooledServerTest {
 		new Thread(server).start();
 		
 		/* waiting for server to run */
-		while (server.isStopped());
+		while (server.isStopped()) {}
 		
 		client = new Thread(new ClientRunner(SERVER_HOST_NAME_LOCAL));
 		client.start();
@@ -128,7 +130,8 @@ public class ThreadPooledServerTest {
 		new Thread(server).start();
 		
 		/* waiting for server to run */
-		while (server.isStopped());
+		
+		while (server.isStopped()) {}
 		
 		client = new Thread(new ClientRunner(SERVER_HOST_IP));
 		client.start();
