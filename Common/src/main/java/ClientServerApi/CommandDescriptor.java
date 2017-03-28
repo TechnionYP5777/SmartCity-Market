@@ -123,7 +123,6 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *
-	 *	 ***** NOTES *****
 	 */
 	IS_LOGGED_IN,
 	
@@ -144,6 +143,28 @@ public enum CommandDescriptor {
 	 *
 	 */
 	VIEW_PRODUCT_FROM_CATALOG,
+	
+	/**
+	 * Description: Register new Customer to the system.
+	 * param1: Login.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *			SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD,
+	 *			SM_USERNAME_ALREADY_EXISTS,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only a connected Client / Manager can remove the Customer from system.
+	 * 2. The command will disconnect the Customer from system if needed.
+	 * 3. Can't remove "Guest" from system (will result in SM_INVALID_PARAMETER)
+	 */
+	REMOVE_CUSTOMER,
 	
 	/********************************** Employee commands **********************************/
 	
@@ -274,12 +295,33 @@ public enum CommandDescriptor {
 	 * 			SM_OK,
 	 * 		
 	 * 		failure:
+	 * 			SM_SENDER_IS_NOT_CONNECTED
 	 *			SM_USERNAME_ALREADY_EXISTS,
-	 *			SM_SENDER_IS_ALREADY_CONNECTED,
 	 *	 		SM_INVALID_PARAMETER,
 	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can register new worker. 
 	 */
 	REGSITER_NEW_WORKER,
+	
+	/**
+	 * Description: Register new Worker to the system.
+	 * param1: Login.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *			SM_USERNAME_ALREADY_EXISTS,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Removing connected worker will disconnect the worker from system.
+	 */
+	REMOVE_WORKER,
 	
 	/********************************** Cart commands **********************************/
 	
@@ -365,7 +407,7 @@ public enum CommandDescriptor {
 	 *
 	 */
 	REGSITER_NEW_CUSTOMER,
-	
+		
 	/**
 	 * Description: Update Customer in the system.
 	 * param1: CustomerProfile.
