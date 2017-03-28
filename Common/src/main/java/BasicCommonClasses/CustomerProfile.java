@@ -3,6 +3,11 @@ package BasicCommonClasses;
 import java.time.LocalDate;
 import java.util.HashSet;
 
+import CommonDefs.CustomerProfileException;
+import CommonDefs.CustomerProfileException.EmptyAllergensSet;
+import CommonDefs.CustomerProfileException.InvalidParameter;
+import SMExceptions.SMException;
+
 /**
  * CustomerProfile - This class represents a customer profile: user name, email, birthday etc.
  * 
@@ -17,10 +22,10 @@ public class CustomerProfile {
 	String city;
 	String street;
 	LocalDate birthdate;
-	HashSet<Ingredient> allerganics;
+	HashSet<Ingredient> allergens = new HashSet<Ingredient>();
 
 	public CustomerProfile(String userName, String firstName, String lastName, String phoneNumber, String emailAddress,
-			String city, String street, LocalDate birthdate, HashSet<Ingredient> allerganics) {
+			String city, String street, LocalDate birthdate, HashSet<Ingredient> allergens) {
 		this.userName = userName;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -29,7 +34,7 @@ public class CustomerProfile {
 		this.city = city;
 		this.street = street;
 		this.birthdate = birthdate;
-		this.allerganics = allerganics;
+		this.allergens = allergens;
 	}
 	public String getUserName() {
 		return userName;
@@ -79,17 +84,29 @@ public class CustomerProfile {
 	public void setBirthdate(LocalDate birthdate) {
 		this.birthdate = birthdate;
 	}
-	public HashSet<Ingredient> getAllerganics() {
-		return allerganics;
+	public HashSet<Ingredient> getAllergens() {
+		return allergens;
 	}
-	public void setAllerganics(HashSet<Ingredient> allerganics) {
-		this.allerganics = allerganics;
+	public void setAllergens(HashSet<Ingredient> allergens) {
+		this.allergens = allergens;
+	}
+	public void addAllergens(HashSet<Ingredient> allergens) throws InvalidParameter{
+		if (allergens == null || allergens.isEmpty())
+			throw new CustomerProfileException.InvalidParameter();
+		this.allergens.addAll(allergens);
+	}
+	public void removeAllergens(HashSet<Ingredient> allergens) throws InvalidParameter, EmptyAllergensSet{
+		if (allergens == null || allergens.isEmpty())
+			throw new CustomerProfileException.InvalidParameter();
+		if (this.allergens.isEmpty())
+			throw new CustomerProfileException.EmptyAllergensSet();
+		this.allergens.removeAll(allergens);
 	}
 	@Override
 	public String toString() {
 		return String.format(
 				"CustomerProfile [userName=%s, firstName=%s, lastName=%s, phoneNumber=%s, emailAddress=%s, city=%s, street=%s, birthdate=%s, allerganics=%s]",
-				userName, firstName, lastName, phoneNumber, emailAddress, city, street, birthdate, allerganics);
+				userName, firstName, lastName, phoneNumber, emailAddress, city, street, birthdate, allergens);
 	}
 	@Override
 	public int hashCode() {
