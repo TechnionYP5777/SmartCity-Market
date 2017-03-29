@@ -50,7 +50,7 @@ public class Worker extends AEmployee implements IWorker {
 		CommandWrapper $ = null;
 		log.info("Creating login command wrapper with username: " + username + " and password: " + password);
 		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(WorkerDefs.loginCommandSenderId,
-				CommandDescriptor.LOGIN, Serialization.serialize(new Login(username, password))).serialize()));
+				CommandDescriptor.LOGIN_EMPLOYEE, Serialization.serialize(new Login(username, password))).serialize()));
 		try {
 			$ = CommandWrapper.deserialize(serverResponse);
 		} catch (Exception e1) {
