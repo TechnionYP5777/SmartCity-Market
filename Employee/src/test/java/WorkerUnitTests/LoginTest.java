@@ -49,7 +49,7 @@ public class LoginTest {
 		try {
 			Mockito.when(
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
-							CommandDescriptor.LOGIN, Serialization.serialize(new Login("test", "test"))).serialize())))
+							CommandDescriptor.LOGIN_EMPLOYEE, Serialization.serialize(new Login("test", "test"))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, CLIENT_TYPE.WORKER.serialize()).serialize());
 		} catch (IOException ¢) {
 			¢.printStackTrace();
@@ -71,7 +71,7 @@ public class LoginTest {
 		try {
 			Mockito.when(
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
-							CommandDescriptor.LOGIN, Serialization.serialize(new Login("test", "test"))).serialize())))
+							CommandDescriptor.LOGIN_EMPLOYEE, Serialization.serialize(new Login("test", "test"))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD).serialize());
 		} catch (IOException ¢) {
 			¢.printStackTrace();
@@ -95,7 +95,7 @@ public class LoginTest {
 		try {
 			Mockito.when(
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
-							CommandDescriptor.LOGIN, Serialization.serialize(new Login("test", "test"))).serialize())))
+							CommandDescriptor.LOGIN_EMPLOYEE, Serialization.serialize(new Login("test", "test"))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_ALREADY_CONNECTED).serialize());
 		} catch (IOException ¢) {
 			¢.printStackTrace();
