@@ -6,7 +6,6 @@ import java.util.HashSet;
 import CommonDefs.CustomerProfileException;
 import CommonDefs.CustomerProfileException.EmptyAllergensSet;
 import CommonDefs.CustomerProfileException.InvalidParameter;
-import SMExceptions.SMException;
 
 /**
  * CustomerProfile - This class represents a customer profile: user name, email, birthday etc.
