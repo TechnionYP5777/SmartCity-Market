@@ -1,0 +1,54 @@
+.root {
+   -fx-background-image: url("shopping_cart.jpg");
+   -fx-background-color: transparent;
+   -fx-background-position: left;
+   -fx-background-repeat: no-repeat;
+   -fx-background-size: auto;
+   -fx-background-color: white;
+   -fx-text-fill: midnightblue;
+   -fx-opacity: 1.0;
+   -fx-font-weight: bold;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
+    -fx-text-fill: white;
+}
+
+.list-cell:even {
+    -fx-background-color: white;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: #0093ff;
+    -fx-text-fill: white;
+}
+
+#addButton {
+	-fx-background-image: url("add-to-cart-light.png");
+	-fx-background-size: cover;
+
+}
+
+#removeButton {
+	-fx-background-image: url("remove-from-cart-light.png");
+	-fx-background-size: cover;
+}
+
+#removeAllButton {
+	-fx-background-color: crimson;
+	-fx-text-base-color: aliceblue;
+	-fx-background: cornsilk;
+	-fx-control-inner-background: cornsilk;
+	-fx-border-style: dashed;
+}
+
+#cancelButton {
+	-fx-background-image: url("close-button.png");
+	-fx-background-size: cover;
+}
+
+#purchaseButton {
+	-fx-background-image: url("purchaes-button.png");
+	-fx-background-size: cover;
+}

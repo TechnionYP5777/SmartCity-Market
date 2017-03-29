@@ -53,7 +53,7 @@
   <modules>
   	<module>Server</module>
   	<module>Common</module>
-  	<module>Cart</module>
+  	<module>Customer</module>
   	<module>Employee</module>
   </modules>
   <dependencies>
