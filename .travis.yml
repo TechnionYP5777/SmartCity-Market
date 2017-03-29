@@ -17,7 +17,7 @@ branches:
 branches:
  only:
   - master
-  - gui_dev
+  - CartToCustomer
 
 
 # add this if you want to be notified about successfull/failed builds to your mail.
