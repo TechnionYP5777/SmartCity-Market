@@ -2,8 +2,6 @@ package CommandHandler;
 
 import org.apache.log4j.Logger;
 
-import com.google.gson.Gson;
-
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.PlaceInMarket;
@@ -24,6 +22,7 @@ import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
+import UtilsImplementations.Serialization;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 
@@ -52,7 +51,7 @@ public class CommandExecuter {
 		log.info("Login command called");
 
 		try {
-			login = new Gson().fromJson(inCommandWrapper.getData(), Login.class);
+			login = Serialization.deserialize(inCommandWrapper.getData(), Login.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for login command");
 
@@ -110,7 +109,7 @@ public class CommandExecuter {
 		log.info("Login employee command called");
 
 		try {
-			login = new Gson().fromJson(inCommandWrapper.getData(), Login.class);
+			login = Serialization.deserialize(inCommandWrapper.getData(), Login.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for login command");
 
@@ -169,7 +168,7 @@ public class CommandExecuter {
 		log.info("Login client command called");
 
 		try {
-			login = new Gson().fromJson(inCommandWrapper.getData(), Login.class);
+			login = Serialization.deserialize(inCommandWrapper.getData(), Login.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for login command");
 
@@ -228,7 +227,7 @@ public class CommandExecuter {
 		log.info("Logout command called");
 
 		try {
-			username = new Gson().fromJson(inCommandWrapper.getData(), String.class);
+			username = Serialization.deserialize(inCommandWrapper.getData(), String.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for logout command");
 
@@ -269,7 +268,7 @@ public class CommandExecuter {
 
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK,
-					new Gson().toJson(c.isClientLoggedIn(inCommandWrapper.getSenderID()), Boolean.class));
+					Serialization.serialize(c.isClientLoggedIn(inCommandWrapper.getSenderID())));
 		} catch (CriticalError e) {
 			log.fatal("Is logged in command failed, critical error occured from SQL Database connection");
 
@@ -285,7 +284,7 @@ public class CommandExecuter {
 		log.info("View Product From Catalog command called");
 
 		try {
-			smartCode = new Gson().fromJson(inCommandWrapper.getData(), SmartCode.class);
+			smartCode = Serialization.deserialize(inCommandWrapper.getData(), SmartCode.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for View Product From Catalog command");
 
@@ -330,7 +329,7 @@ public class CommandExecuter {
 		log.info("Add Product Package To Warehouse command called");
 
 		try {
-			productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+			productPackage = Serialization.deserialize(inCommandWrapper.getData(), ProductPackage.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for Add Product Package To Warehouse command");
 
@@ -375,7 +374,7 @@ public class CommandExecuter {
 		log.info("Add Product To Catalog command called");
 
 		try {
-			catalogProduct = new Gson().fromJson(inCommandWrapper.getData(), CatalogProduct.class);
+			catalogProduct = Serialization.deserialize(inCommandWrapper.getData(), CatalogProduct.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for Add Product To Catalog command");
 
@@ -426,7 +425,7 @@ public class CommandExecuter {
 		log.info("Remove Product From Catalog command called");
 
 		try {
-			smartCode = new Gson().fromJson(inCommandWrapper.getData(), SmartCode.class);
+			smartCode = Serialization.deserialize(inCommandWrapper.getData(), SmartCode.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for Remove Product From Catalog command");
 
@@ -473,7 +472,7 @@ public class CommandExecuter {
 		log.info("Edit Product From Catalog command called");
 
 		try {
-			catalogProduct = new Gson().fromJson(inCommandWrapper.getData(), CatalogProduct.class);
+			catalogProduct = Serialization.deserialize(inCommandWrapper.getData(), CatalogProduct.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for Edit Product From Catalog command");
 
@@ -526,7 +525,7 @@ public class CommandExecuter {
 		log.info("Place Product Package On Shelves command called");
 
 		try {
-			productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+			productPackage = Serialization.deserialize(inCommandWrapper.getData(), ProductPackage.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for Place Product Package On Shelves command");
 
@@ -580,7 +579,7 @@ public class CommandExecuter {
 		log.info("Remove Product Package From Store command called");
 
 		try {
-			productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+			productPackage = Serialization.deserialize(inCommandWrapper.getData(), ProductPackage.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for Remove Product Package From Store command");
 
@@ -639,7 +638,7 @@ public class CommandExecuter {
 		log.info("Get Product Package Amount command called");
 
 		try {
-			productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+			productPackage = Serialization.deserialize(inCommandWrapper.getData(), ProductPackage.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for Get Product Package Amount command");
 
@@ -706,7 +705,7 @@ public class CommandExecuter {
 		log.info("Add Product To Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
 
 		try {
-			productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+			productPackage = Serialization.deserialize(inCommandWrapper.getData(), ProductPackage.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for Add Product To Grocery List command");
 
@@ -760,7 +759,7 @@ public class CommandExecuter {
 				"Remove Product From Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
 
 		try {
-			productPackage = new Gson().fromJson(inCommandWrapper.getData(), ProductPackage.class);
+			productPackage = Serialization.deserialize(inCommandWrapper.getData(), ProductPackage.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for Remove Product From Grocery List command");
 
