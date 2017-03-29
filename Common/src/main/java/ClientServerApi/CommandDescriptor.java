@@ -146,7 +146,7 @@ public enum CommandDescriptor {
 	
 	/**
 	 * Description: Register new Customer to the system.
-	 * param1: Login.
+	 * param1: String - username.
 	 * retval: void.
 	 *
 	 * result_codes:
@@ -302,11 +302,11 @@ public enum CommandDescriptor {
 	 *	 ***** NOTES *****
 	 * 1. Only Manager can register new worker. 
 	 */
-	REGSITER_NEW_WORKER,
+	REGISTER_NEW_WORKER,
 	
 	/**
-	 * Description: Register new Worker to the system.
-	 * param1: Login.
+	 * Description: Remove Worker to the system.
+	 * param1: String - username.
 	 * retval: void.
 	 *
 	 * result_codes:
@@ -315,13 +315,52 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *			SM_USERNAME_ALREADY_EXISTS,
+	 *			SM_USERNAME_IS_NOT_EXISTS,
 	 *	 		SM_INVALID_PARAMETER,
 	 *
 	 *	 ***** NOTES *****
-	 * 1. Removing connected worker will disconnect the worker from system.
+	 * 1. Only Manager can remove worker.
+	 * 2. Removing connected worker will disconnect the worker from system.
 	 */
 	REMOVE_WORKER,
+	
+	/**
+	 * Description: Register new ingredient to the system.
+	 * param1: Ingredient.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 * 			SM_SENDER_IS_NOT_CONNECTED,
+	 * 			PARAM_ID_ALREADY_EXISTS,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can add new ingredient. 
+	 */
+	ADD_INGREDIENT,
+	
+	/**
+	 * Description: Remove Worker to the system.
+	 * param1: String - username.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *			PARAM_ID_IS_NOT_EXIST,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can ingredient.
+	 */
+	REMOVE_INGREDIENT,
 	
 	/********************************** Cart commands **********************************/
 	
@@ -406,7 +445,7 @@ public enum CommandDescriptor {
 	 *	 		SM_INVALID_PARAMETER,
 	 *
 	 */
-	REGSITER_NEW_CUSTOMER,
+	REGISTER_NEW_CUSTOMER,
 		
 	/**
 	 * Description: Update Customer in the system.

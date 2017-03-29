@@ -184,4 +184,21 @@ public enum ResultDescriptor {
 	 */
 	SM_GROCERY_LIST_IS_EMPTY,
 	
+	/**
+	 * The parameter exists with the given ID
+	 * 
+	 * How to fix:
+	 * 1. Report user that item already exists.
+	 * 
+	 */
+	PARAM_ID_ALREADY_EXISTS,
+	
+	/**
+	 * The parameter ID is not exist in the system
+	 * 
+	 * How to fix:
+	 * 1. Report user that item is not exist.
+	 * 
+	 */
+	PARAM_ID_IS_NOT_EXIST,
 }

@@ -3,6 +3,8 @@ package CommandHandler;
 import org.apache.log4j.Logger;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.CustomerProfile;
+import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
@@ -826,6 +828,160 @@ public class CommandExecuter {
 		log.info("Checkout Grocery List from serderID " + inCommandWrapper.getSenderID() + " finished");
 	}
 
+	private void registerNewWorker(SQLDatabaseConnection c) {
+		Login login = null;
+
+		log.info("Register new worker from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			login = Serialization.deserialize(inCommandWrapper.getData(), Login.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Register New Worker command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to register new worker " + login.getUserName() + " to system");
+
+		//TODO Noam - Call sql function here, don't forget to validate that sender ID is manager
+
+		log.info("Register new worker " + login.getUserName() + " to system finished");
+	}
+	
+	private void removeWorker(SQLDatabaseConnection c) {
+		String username = null;
+
+		log.info("Remove worker from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			username = Serialization.deserialize(inCommandWrapper.getData(), String.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Remove Worker command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to remove worker " + username + " from system");
+
+		//TODO Noam - Call sql function here, don't forget to validate that sender ID is manager
+
+		log.info("Remove worker " + username + " from system finished");
+	}
+	
+	private void registerNewCustomer(SQLDatabaseConnection c) {
+		CustomerProfile profile = null;
+
+		log.info("Register new customer from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			profile = Serialization.deserialize(inCommandWrapper.getData(), CustomerProfile.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Register New Customer command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to register new customer " + profile + " to system");
+
+		//TODO Noam - Call sql function here
+
+		log.info("Register new customer " + profile + " to system finished");
+	}
+	
+	private void removeCustomer(SQLDatabaseConnection c) {
+		String username = null;
+
+		log.info("Remove customer from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			username = Serialization.deserialize(inCommandWrapper.getData(), String.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Remove Customer command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to remove customer " + username + " from system");
+
+		//TODO Noam - Call sql function here, don't forget to validate that sender ID is manager or the client is trying to delete itself
+
+		log.info("Remove customer " + username + " from system finished");
+	}
+	
+	private void updateCustomerProfile(SQLDatabaseConnection c) {
+		CustomerProfile profile = null;
+
+		log.info("Update customer from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			profile = Serialization.deserialize(inCommandWrapper.getData(), CustomerProfile.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Update Customer Data command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to update customer " + profile + " to system");
+
+		//TODO Noam - Call sql function here
+
+		log.info("Update customer " + profile + " to system finished");
+	}
+	
+	private void addNewIngredient(SQLDatabaseConnection c) {
+		Ingredient ingredient = null;
+
+		log.info("Register new ingredient from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			ingredient = Serialization.deserialize(inCommandWrapper.getData(), Ingredient.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Add New Ingredient command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to add new ingredient " + ingredient + " to system");
+
+		//TODO Noam - Call sql function here
+
+		log.info("Add new ingredient " + ingredient + " to system finished");
+	}
+	
+	private void removeIngredient(SQLDatabaseConnection c) {
+		Ingredient ingredient = null;
+
+		log.info("Remove ingredient from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			ingredient = Serialization.deserialize(inCommandWrapper.getData(), Ingredient.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Remove Ingredient command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to remove ingredient " + ingredient + " from system");
+
+		//TODO Noam - Call sql function here, don't forget to validate that sender ID is manager or the client is trying to delete itself
+
+		log.info("Remove ingredient " + ingredient + " from system finished");
+	}
+	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
 			log.fatal("Failed to get SQL Database Connection");
@@ -925,7 +1081,42 @@ public class CommandExecuter {
 			checkoutGroceryList(c);
 
 			break;
+			
+		case REGISTER_NEW_WORKER:
+			registerNewWorker(c);
 
+			break;
+
+		case REMOVE_WORKER:
+			removeWorker(c);
+
+			break;	
+
+		case REGISTER_NEW_CUSTOMER:
+			registerNewCustomer(c);
+
+			break;
+
+		case REMOVE_CUSTOMER:
+			removeCustomer(c);
+
+			break;
+			
+		case UPDATE_CUSTOMER_PROFILE:
+			updateCustomerProfile(c);
+
+			break;
+			
+		case ADD_INGREDIENT:
+			addNewIngredient(c);
+
+			break;
+			
+		case REMOVE_INGREDIENT:
+			removeIngredient(c);
+
+			break;
+			
 		default:
 			try {
 				/* Command not supported, returning invalid command */
