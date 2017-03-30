@@ -1,8 +1,7 @@
 package UtilsImplementations;
 
 /**
- * EmployeeMainScreen - This class is the controller for the employee main screen
- * all action of this scene should be here.
+ * BarcodeEventHandler - This class is represents client that listing to barcode scanning
  * 
  * @author Aviad Cohen
  * @author Shimon Azulay
