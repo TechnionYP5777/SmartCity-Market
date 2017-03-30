@@ -18,7 +18,7 @@ import CommonDefs.GroceryListExceptions.ProductNotInList;
 import CustomerContracts.ICustomer;
 import CustomerContracts.ACustomerExceptions.AmountBiggerThanAvailable;
 import CustomerContracts.ACustomerExceptions.AuthenticationError;
-import CustomerContracts.ACustomerExceptions.CartNotConnected;
+import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
 import CustomerContracts.ACustomerExceptions.CriticalError;
 import CustomerContracts.ACustomerExceptions.GroceryListIsEmpty;
 import CustomerContracts.ACustomerExceptions.InvalidCommandDescriptor;
@@ -57,7 +57,7 @@ public class Customer extends ACustomer implements ICustomer {
 		return count;
 	}
 
-	private void loadCartProductCacheAndUpdateCartData() throws CriticalError, CartNotConnected, 
+	private void loadCartProductCacheAndUpdateCartData() throws CriticalError, CustomerNotConnected, 
 		ProductCatalogDoesNotExist {
 		log.info("restorying grocery list from server.");
 		
@@ -114,7 +114,7 @@ public class Customer extends ACustomer implements ICustomer {
 		
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | InvalidParameter | CartNotConnected | ProductCatalogDoesNotExist |
+		} catch (InvalidCommandDescriptor | InvalidParameter | CustomerNotConnected | ProductCatalogDoesNotExist |
 				AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
@@ -131,7 +131,7 @@ public class Customer extends ACustomer implements ICustomer {
 	}
 	
 	@Override
-	public void logout() throws CartNotConnected, CriticalError {
+	public void logout() throws CustomerNotConnected, CriticalError {
 		String serverResponse;		
 		
 		log.info("Creating customer logout command wrapper with id: " + id);
@@ -165,7 +165,7 @@ public class Customer extends ACustomer implements ICustomer {
 	}
 	
 	@Override
-	public void resume(int _id) throws CriticalError, CartNotConnected, ProductCatalogDoesNotExist {
+	public void resume(int _id) throws CriticalError, CustomerNotConnected, ProductCatalogDoesNotExist {
 		CommandWrapper $ = null;
 		String serverResponse;
 		
@@ -208,7 +208,7 @@ public class Customer extends ACustomer implements ICustomer {
 	}
 	
 	@Override
-	public void addProductToCart(SmartCode c, int amount) throws CriticalError, CartNotConnected,
+	public void addProductToCart(SmartCode c, int amount) throws CriticalError, CustomerNotConnected,
 			AmountBiggerThanAvailable, ProductPackageDoesNotExist, ProductCatalogDoesNotExist {
 		String serverResponse;
 		
@@ -253,7 +253,7 @@ public class Customer extends ACustomer implements ICustomer {
 	
 	@Override
 	public void returnProductToShelf(SmartCode c, int amount) throws ProductNotInCart, 
-			AmountBiggerThanAvailable, ProductPackageDoesNotExist, CriticalError, CartNotConnected {
+			AmountBiggerThanAvailable, ProductPackageDoesNotExist, CriticalError, CustomerNotConnected {
 		String serverResponse;
 		
 		log.info("Creating REMOVE_PRODUCT_FROM_GROCERY_LIST command wrapper to customer with id: " + id);
@@ -322,7 +322,7 @@ public class Customer extends ACustomer implements ICustomer {
 	}
 	
 	@Override
-	public Double checkOutGroceryList() throws CriticalError, CartNotConnected, GroceryListIsEmpty {
+	public Double checkOutGroceryList() throws CriticalError, CustomerNotConnected, GroceryListIsEmpty {
 		String serverResponse;
 		Double $ = totalSum;
 		
@@ -369,7 +369,7 @@ public class Customer extends ACustomer implements ICustomer {
 	}
 	
 	@Override
-	public CatalogProduct viewCatalogProduct(SmartCode c) throws CriticalError, CartNotConnected,
+	public CatalogProduct viewCatalogProduct(SmartCode c) throws CriticalError, CustomerNotConnected,
 			ProductCatalogDoesNotExist {
 		String serverResponse;
 		
@@ -420,7 +420,7 @@ public class Customer extends ACustomer implements ICustomer {
 		for( HashMap.Entry<SmartCode, ProductPackage> entry : cartProduct.getPackages().entrySet())
 			try {
 				returnProductToShelf(entry.getKey(), entry.getValue().getAmount());
-			} catch (AmountBiggerThanAvailable | ProductPackageDoesNotExist | CriticalError | CartNotConnected e) {
+			} catch (AmountBiggerThanAvailable | ProductPackageDoesNotExist | CriticalError | CustomerNotConnected e) {
 				
 				throw new CriticalError();
 			}

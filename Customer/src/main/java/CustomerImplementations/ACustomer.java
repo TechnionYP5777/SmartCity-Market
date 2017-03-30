@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import ClientServerApi.ResultDescriptor;
 import CustomerContracts.ACustomerExceptions.AmountBiggerThanAvailable;
 import CustomerContracts.ACustomerExceptions.AuthenticationError;
-import CustomerContracts.ACustomerExceptions.CartNotConnected;
+import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
 import CustomerContracts.ACustomerExceptions.CriticalError;
 import CustomerContracts.ACustomerExceptions.GroceryListIsEmpty;
 import CustomerContracts.ACustomerExceptions.InvalidCommandDescriptor;
@@ -67,7 +67,7 @@ public abstract class ACustomer {
 	}
 
 	protected void resultDescriptorHandler(ResultDescriptor ¢) throws InvalidCommandDescriptor,
-		InvalidParameter, CriticalError, CartNotConnected, AmountBiggerThanAvailable,
+		InvalidParameter, CriticalError, CustomerNotConnected, AmountBiggerThanAvailable,
 		ProductPackageDoesNotExist, GroceryListIsEmpty, AuthenticationError, ProductCatalogDoesNotExist {
 
 		switch (¢) {
@@ -100,7 +100,7 @@ public abstract class ACustomer {
 		case SM_SENDER_IS_NOT_CONNECTED:
 			log.fatal("Command execution failed, customer not connected");
 			
-			throw new CartNotConnected();
+			throw new CustomerNotConnected();
 
 		case SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE:
 			log.info("Command execution failed, amount is bigger then available");

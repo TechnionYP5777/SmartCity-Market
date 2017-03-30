@@ -43,7 +43,7 @@ public class ACustomerExceptions extends SMException {
 	/**
 	 * Thrown when customer try to do operation before connecting
 	 */
-	public static class CartNotConnected extends ACustomerExceptions {
+	public static class CustomerNotConnected extends ACustomerExceptions {
 		private static final long serialVersionUID = 4708231565561825649L;
 	}
 

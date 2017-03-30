@@ -7,7 +7,7 @@ import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.SmartCode;
 import CustomerContracts.ACustomerExceptions.AmountBiggerThanAvailable;
 import CustomerContracts.ACustomerExceptions.AuthenticationError;
-import CustomerContracts.ACustomerExceptions.CartNotConnected;
+import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
 import CustomerContracts.ACustomerExceptions.CriticalError;
 import CustomerContracts.ACustomerExceptions.GroceryListIsEmpty;
 import CustomerContracts.ACustomerExceptions.ProductCatalogDoesNotExist;
@@ -42,19 +42,19 @@ public interface ICustomer {
 	
 	/**
 	 * logout - the customer logout from  the server. To use in the end of the shopping.
-	 * @throws CartNotConnected 
+	 * @throws CustomerNotConnected 
 	 * @throws CriticalError 
 	 */
-	void logout() throws CartNotConnected, CriticalError;
+	void logout() throws CustomerNotConnected, CriticalError;
 	
 	/**
 	 * resume - saves the data of the customer from the server (to use in case of collapse)
 	 * @param int _id
 	 * @throws CriticalError 
-	 * @throws CartNotConnected 
+	 * @throws CustomerNotConnected 
 	 * @throws ProductCatalogDoesNotExist 
 	 */
-	void resume(int _id) throws CriticalError, CartNotConnected, ProductCatalogDoesNotExist;
+	void resume(int _id) throws CriticalError, CustomerNotConnected, ProductCatalogDoesNotExist;
 	
 	/**
 	 * addPtoductToCart - Adds product with amount to the customer
@@ -62,12 +62,12 @@ public interface ICustomer {
 	 * @param SmartCode c
 	 * @param int amount
 	 * @throws CriticalError 
-	 * @throws CartNotConnected 
+	 * @throws CustomerNotConnected 
 	 * @throws ProductPackageDoesNotExist 
 	 * @throws AmountBiggerThanAvailable 
 	 * @throws ProductCatalogDoesNotExist 
 	 */
-	void addProductToCart(SmartCode c, int amount) throws CriticalError, CartNotConnected, AmountBiggerThanAvailable, ProductPackageDoesNotExist, ProductCatalogDoesNotExist;
+	void addProductToCart(SmartCode c, int amount) throws CriticalError, CustomerNotConnected, AmountBiggerThanAvailable, ProductPackageDoesNotExist, ProductCatalogDoesNotExist;
 	
 	/**
 	 * returnProductToShelf - removes product with amount from the customer
@@ -77,10 +77,10 @@ public interface ICustomer {
 	 * @throws ProductNotInCart
 	 * @throws AmountBiggerThanAvailable 
 	 * @throws CriticalError 
-	 * @throws CartNotConnected 
+	 * @throws CustomerNotConnected 
 	 * @throws ProductPackageDoesNotExist 
 	 */
-	void returnProductToShelf(SmartCode c, int amount) throws CriticalError, CartNotConnected, ProductNotInCart, AmountBiggerThanAvailable, ProductPackageDoesNotExist;
+	void returnProductToShelf(SmartCode c, int amount) throws CriticalError, CustomerNotConnected, ProductNotInCart, AmountBiggerThanAvailable, ProductPackageDoesNotExist;
 	
 	/**
 	 * getTotalSum - returns the total sum of the shopping
@@ -98,19 +98,19 @@ public interface ICustomer {
 	 * checkOutGroceryList - returns the finale total sum of the shopping and initialize grocery list
 	 * @return Double
 	 * @throws CriticalError 
-	 * @throws CartNotConnected 
+	 * @throws CustomerNotConnected 
 	 * @throws GroceryListIsEmpty 
 	 */
-	Double checkOutGroceryList() throws CriticalError, CartNotConnected, GroceryListIsEmpty;
+	Double checkOutGroceryList() throws CriticalError, CustomerNotConnected, GroceryListIsEmpty;
 
 	CartProduct getCartProduct(SmartCode c);
 
 	/**
 	 * @throws CriticalError 
-	 * @throws CartNotConnected 
+	 * @throws CustomerNotConnected 
 	 * @throws ProductCatalogDoesNotExist
 	 */
-	CatalogProduct viewCatalogProduct(SmartCode c) throws CriticalError, CartNotConnected, ProductCatalogDoesNotExist;
+	CatalogProduct viewCatalogProduct(SmartCode c) throws CriticalError, CustomerNotConnected, ProductCatalogDoesNotExist;
 	
 	/**
 	 * @throws ProductNotInCart 

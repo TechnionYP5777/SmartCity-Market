@@ -20,7 +20,7 @@ public class CustomerGuiExceptionsHandler extends GuiExceptionHandler {
 		else if (¢ instanceof AuthenticationError)
 			DialogMessagesService.showErrorDialog(GuiCommonDefs.loginFailureDialogTitle, null,
 					GuiCommonDefs.criticalErrorMsg);
-		else if (¢ instanceof CartNotConnected)
+		else if (¢ instanceof CustomerNotConnected)
 			DialogMessagesService.showErrorDialog(GuiCommonDefs.loginFailureDialogTitle, null,
 					GuiCommonDefs.criticalErrorMsg);
 		else if (¢ instanceof ProductNotInCart)
