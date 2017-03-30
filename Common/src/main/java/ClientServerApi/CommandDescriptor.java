@@ -51,7 +51,7 @@ public enum CommandDescriptor {
 	 *
 	 *	 ***** NOTES *****
 	 * 	1. The sender ID returns in senderId field.
-	 *  2. Cart use username & password (use "Cart" on both).
+	 *  2. Customer use username & password (use "Customer" on both).
 	 */
 	LOGIN,
 
@@ -108,7 +108,7 @@ public enum CommandDescriptor {
 	 *
 	 *	 ***** NOTES *****
 	 * 	 1. This command has no data from the server side.
-	 * 	 2. On Cart, the senderId will be the identification for logout and will ABORT the current GroceryList.
+	 * 	 2. On Customer, the senderId will be the identification for logout and will ABORT the current GroceryList.
 	 */
 	LOGOUT,
 	
@@ -126,7 +126,7 @@ public enum CommandDescriptor {
 	 */
 	IS_LOGGED_IN,
 	
-	/********************************** Shared employee & cart commands **********************************/
+	/********************************** Shared employee & Customer commands **********************************/
 	
 	/**
 	 * Description: Client command for getting the relevant catalog product represented by a barcode.
@@ -427,11 +427,11 @@ public enum CommandDescriptor {
 	 *			SM_SENDER_IS_NOT_CONNECTED,
 	 */
 	GET_ALL_MANUFACTURERS,
-	
-	/********************************** Cart commands **********************************/
-	
+
+	/********************************** Customer commands **********************************/
+
 	/**
-	 * Description: Cart load it's own grocery list from the server.
+	 * Description: Customer load it's own grocery list from the server.
 	 * retval: GroceryList.
 	 *
 	 * result_codes:
@@ -445,7 +445,7 @@ public enum CommandDescriptor {
 	LOAD_GROCERY_LIST,
 	
 	/**
-	 * Description: Cart add product to grocery list.
+	 * Description: Customer add product to grocery list.
 	 * param1: ProductPackage - ProductPackage with SmartCode, amount and null on location.
 	 * retval: void.
 	 *
@@ -463,7 +463,7 @@ public enum CommandDescriptor {
 	ADD_PRODUCT_TO_GROCERY_LIST,
 
 	/**
-	 * Description: Cart remove product from grocery list.
+	 * Description: Customer remove product from grocery list.
 	 * param1: ProductPackage - ProductPackage with SmartCode, amount and null on location.
 	 * retval: void.
 	 *
@@ -481,7 +481,7 @@ public enum CommandDescriptor {
 	REMOVE_PRODUCT_FROM_GROCERY_LIST,
 
 	/**
-	 * Description: Cart checkout it's current active grocery list.
+	 * Description: Customer checkout it's current active grocery list.
 	 * param1: void.
 	 * retval: void.
 	 *
