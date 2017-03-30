@@ -13,10 +13,13 @@ import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidCommandDescriptor;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
+import EmployeeDefs.AEmployeeException.ParamIDAlreadyExists;
+import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
 import EmployeeDefs.AEmployeeException.ProductAlreadyExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductPackageDoesNotExist;
 import EmployeeDefs.AEmployeeException.ProductStillForSale;
+import EmployeeDefs.AEmployeeException.WorkerAlreadyExists;
 import EmployeeDefs.AEmployeeException.EmployeeAlreadyConnected;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.WorkerDefs;
@@ -79,7 +82,8 @@ public abstract class AEmployee {
 	protected void resultDescriptorHandler(ResultDescriptor ¢)
 			throws InvalidCommandDescriptor, InvalidParameter, CriticalError, EmployeeNotConnected,
 			EmployeeAlreadyConnected, AuthenticationError, ProductNotExistInCatalog, ProductAlreadyExistInCatalog,
-			ProductStillForSale, AmountBiggerThanAvailable, ProductPackageDoesNotExist {
+			ProductStillForSale, AmountBiggerThanAvailable, ProductPackageDoesNotExist, WorkerAlreadyExists, ParamIDAlreadyExists,
+			ParamIDDoesNotExist {
 
 		switch (¢) {
 
@@ -138,6 +142,21 @@ public abstract class AEmployee {
 
 			throw new AEmployeeException.AmountBiggerThanAvailable();
 
+		case SM_USERNAME_ALREADY_EXISTS:
+			log.info("Command execution failed, worker username already exists");
+			
+			throw new AEmployeeException.WorkerAlreadyExists();
+			
+		case PARAM_ID_ALREADY_EXISTS:
+			log.info("Command execution failed, param ID already exists");
+
+			throw new AEmployeeException.ParamIDAlreadyExists();
+			
+		case PARAM_ID_IS_NOT_EXIST:
+			log.info("Command execution failed, param ID does not exist");
+
+			throw new AEmployeeException.ParamIDDoesNotExist();
+			
 		case SM_PRODUCT_PACKAGE_DOES_NOT_EXIST:
 			log.fatal("Command execution failed, product package does not exist");
 

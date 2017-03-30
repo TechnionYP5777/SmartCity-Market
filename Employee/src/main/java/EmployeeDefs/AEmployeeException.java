@@ -120,4 +120,40 @@ public class AEmployeeException extends SMException {
 
 		private static final long serialVersionUID = -7116035947026187101L;
 	}
+	
+	/**
+	 * Thrown when trying to add worker which it's username already exists.
+	 *
+	 */
+	public static class WorkerAlreadyExists extends AEmployeeException {
+
+		private static final long serialVersionUID = 1110701675869392627L;
+	}
+	
+	/**
+	 * Thrown when trying to remove worker which it's username doesn't exist.
+	 *
+	 */
+	public static class WorkerDoesNotExist extends AEmployeeException {
+
+		private static final long serialVersionUID = -5920340047010353992L;
+	}
+	
+	/**
+	 * Thrown when trying to add item which it's ID already exists.
+	 *
+	 */
+	public static class ParamIDAlreadyExists extends AEmployeeException {
+
+		private static final long serialVersionUID = -3169770231713956064L;
+	}
+	
+	/**
+	 * Thrown when trying to add item which it's ID does not exist.
+	 *
+	 */
+	public static class ParamIDDoesNotExist extends AEmployeeException {
+
+		private static final long serialVersionUID = -4286591069692064061L;
+	}
 }
