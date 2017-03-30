@@ -9,9 +9,7 @@ import EmployeeContracts.IManager;
 import EmployeeContracts.IWorker;
 import EmployeeImplementations.Manager;
 import EmployeeImplementations.Worker;
-import UtilsContracts.IBarcodeEventHandler;
 import UtilsContracts.IClientRequestHandler;
-import UtilsImplementations.BarcodeEventHandler;
 
 /**
  * EmployeeDiConfigurator - This class the dependencies configurator for Employee
@@ -28,6 +26,5 @@ public class EmployeeDiConfigurator extends AbstractModule {
 		bind(IManager.class).to(Manager.class);
 		bind(IEmployeeScreensParameterService.class).to(EmployeeScreensParameterService.class);	
 		bind(IClientRequestHandler.class).to(ClientRequestHandler.class);
-		bind(IBarcodeEventHandler.class).to(BarcodeEventHandler.class);
 	  }
 }

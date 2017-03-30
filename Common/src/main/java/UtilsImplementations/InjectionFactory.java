@@ -1,8 +1,8 @@
 package UtilsImplementations;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 
 /**
  * InjectionFactory - Use this class to get instance of binded implementation to
@@ -15,11 +15,11 @@ public class InjectionFactory {
 
 	static Injector injector;
 
-	public static void createInjector(AbstractModule diConfigurator) {
-		injector = Guice.createInjector(diConfigurator);
+	public static void createInjector(Module... diConfigurators) {
+		injector = Guice.createInjector(diConfigurators);
 	}
 
-	public static <T> T getInstance(Class<T> classType) {
-		return injector == null ? null : injector.getInstance(classType);
+	public static <T> T getInstance(Class<T> classType) {	
+		return injector == null ? null : injector.getInstance(classType);		
 	}
 }
