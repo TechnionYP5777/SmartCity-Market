@@ -23,6 +23,9 @@ public class CustomerProfile {
 	LocalDate birthdate;
 	HashSet<Ingredient> allergens = new HashSet<Ingredient>();
 
+	public CustomerProfile(String userName) {
+		this.userName = userName;
+	}
 	public CustomerProfile(String userName, String firstName, String lastName, String phoneNumber, String emailAddress,
 			String city, String street, LocalDate birthdate, HashSet<Ingredient> allergens) {
 		this.userName = userName;

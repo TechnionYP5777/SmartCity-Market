@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
 
+import BasicCommonClasses.CustomerProfile;
 import ClientServerApi.ResultDescriptor;
 import CustomerContracts.ACustomerExceptions.AmountBiggerThanAvailable;
 import CustomerContracts.ACustomerExceptions.AuthenticationError;
@@ -28,8 +29,7 @@ public abstract class ACustomer {
 
 	protected static Logger log = Logger.getLogger(ACustomer.class.getName());
 	protected int id = CustomerDefs.loginCommandSenderId;
-	protected String username;
-	protected String password;
+	protected CustomerProfile customerProfile;
 
 	protected IClientRequestHandler clientRequestHandler;
 

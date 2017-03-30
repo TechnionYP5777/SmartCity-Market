@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.ProductPackage;
@@ -92,7 +93,7 @@ public class Customer extends ACustomer implements ICustomer {
 
 	@Override
 	public void login(String username, String password) throws CriticalError, AuthenticationError {
-		CommandWrapper $ = null;
+		CommandWrapper cmdwrppr = null;
 		String serverResponse = null;
 		
 		log.info("Creating login command wrapper for customer");
@@ -101,7 +102,7 @@ public class Customer extends ACustomer implements ICustomer {
 		
 		try {
 			serverResponse = sendRequestWithRespondToServer((new CommandWrapper(CustomerDefs.loginCommandSenderId,
-					CommandDescriptor.LOGIN, Serialization.serialize(new Login(username, password)))).serialize());
+					CommandDescriptor.LOGIN_CLIENT, Serialization.serialize(new Login(username, password)))).serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 			
@@ -110,10 +111,10 @@ public class Customer extends ACustomer implements ICustomer {
 		
 		terminateCommunication();	
 		
-		$ = CommandWrapper.deserialize(serverResponse);
+		cmdwrppr = CommandWrapper.deserialize(serverResponse);
 		
 		try {
-			resultDescriptorHandler($.getResultDescriptor());
+			resultDescriptorHandler(cmdwrppr.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter | CustomerNotConnected | ProductCatalogDoesNotExist |
 				AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
@@ -123,9 +124,8 @@ public class Customer extends ACustomer implements ICustomer {
 			throw new CriticalError();
 		}
 		
-		id = $.getSenderID();
-		this.username = username;
-		this.password = password;
+		id = cmdwrppr.getSenderID();
+		customerProfile = Serialization.deserialize(cmdwrppr.getData(), CustomerProfile.class);
 		
 		log.info("Customer Login to server as succeed. Client id is: " + id);
 	}

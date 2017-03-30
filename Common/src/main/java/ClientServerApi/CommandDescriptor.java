@@ -90,7 +90,7 @@ public enum CommandDescriptor {
 	 * 	1. The sender ID returns in senderId field.
 	 *  2. For Guest login use Guest as username & password (use "Guest" on both).
 	 *  3. "Guest" will be saved username, the clients can't register with this username.
-	 *  4. For Guest, the server will return CustomerProfile with only username and password (other attributes will be null).
+	 *  4. For Guest, the server will return CustomerProfile with only username and password (TODO - AVIAD: why password?) (other attributes will be null).
 	 */
 	LOGIN_CLIENT,
 	
