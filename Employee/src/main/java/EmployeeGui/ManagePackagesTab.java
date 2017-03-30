@@ -7,8 +7,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.ResourceBundle;
 
-import javax.inject.Singleton;
-
 import org.apache.log4j.Logger;
 
 import com.google.common.eventbus.Subscribe;

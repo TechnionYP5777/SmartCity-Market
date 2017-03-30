@@ -9,7 +9,9 @@ import EmployeeContracts.IManager;
 import EmployeeImplementations.Manager;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
+import UtilsContracts.IPersistentStore;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.XmlPersistentStore;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -38,6 +40,8 @@ public class EmployeeLoginScreen implements Initializable {
 	private TextField userNameTextField;
 	@FXML
 	private PasswordField passwordField;
+	
+	private IPersistentStore persistenceStore;
 
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
@@ -49,7 +53,22 @@ public class EmployeeLoginScreen implements Initializable {
 		passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
 			enableLoginButtonCheck();
 		});
+		persistenceStore = InjectionFactory.getInstance(XmlPersistentStore.class);
+	
+		restoreState();
+		
 		enableLoginButtonCheck();
+		
+	}
+	
+	private void restoreState() {
+		try {
+			// TODO change textbox to history
+			userNameTextField.setText(persistenceStore.restoreObject(new EmployeeUsers(), EmployeeUsers.class).users[0]);
+		} catch (Exception e) {
+			// TODO handle exception
+			e.printStackTrace();
+		}
 	}
 
 	@FXML
@@ -78,4 +97,6 @@ public class EmployeeLoginScreen implements Initializable {
 	private void enableLoginButtonCheck() {
 		loginButton.setDisable(userNameTextField.getText().isEmpty() || passwordField.getText().isEmpty());
 	}
+	
+	
 }

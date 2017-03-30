@@ -2,6 +2,8 @@ package EmployeeGui;
 
 import org.apache.log4j.PropertyConfigurator;
 import com.sun.javafx.application.LauncherImpl;
+
+import CommonDI.CommonDiConfigurator;
 import EmployeeDI.EmployeeDiConfigurator;
 import GuiUtils.AbstractApplicationScreen;
 import UtilsImplementations.BarcodeEventHandler;
@@ -25,7 +27,7 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 	public void start(Stage primaryStage) {
 		try {
 			stage = primaryStage;
-			InjectionFactory.createInjector(new EmployeeDiConfigurator());
+			InjectionFactory.createInjector(new EmployeeDiConfigurator(), new CommonDiConfigurator());
 			barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
 			barcodeEventHandler.initializeHandler();
 			barcodeEventHandler.startListening();		
