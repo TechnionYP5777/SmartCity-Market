@@ -6,6 +6,7 @@ import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
+import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
@@ -981,7 +982,51 @@ public class CommandExecuter {
 
 		log.info("Remove ingredient " + ingredient + " from system finished");
 	}
+
+	private void addNewManufacturer(SQLDatabaseConnection c) {
+		Manufacturer manufacturer = null;
+
+		log.info("Register new manufacturer from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			manufacturer = Serialization.deserialize(inCommandWrapper.getData(), Manufacturer.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Add New Manufacturer command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to add new manufacturer " + manufacturer + " to system");
+
+		//TODO Noam - Call sql function here
+
+		log.info("Add new manufacturer " + manufacturer + " to system finished");
+	}
 	
+	private void removeManufacturer(SQLDatabaseConnection c) {
+		Manufacturer manufacturer = null;
+
+		log.info("Remove manufacturer from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			manufacturer = Serialization.deserialize(inCommandWrapper.getData(), Manufacturer.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Remove Manufacturer command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to remove manufacturer " + manufacturer + " from system");
+
+		//TODO Noam - Call sql function here
+
+		log.info("Remove manufacturer " + manufacturer + " from system finished");
+	}
+		
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
 			log.fatal("Failed to get SQL Database Connection");
@@ -1114,6 +1159,16 @@ public class CommandExecuter {
 			
 		case REMOVE_INGREDIENT:
 			removeIngredient(c);
+
+			break;
+			
+		case ADD_MANUFACTURER:
+			addNewManufacturer(c);
+
+			break;
+			
+		case REMOVE_MANUFACTURER:
+			removeManufacturer(c);
 
 			break;
 			

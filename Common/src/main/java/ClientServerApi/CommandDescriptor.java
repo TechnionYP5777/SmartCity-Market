@@ -305,7 +305,7 @@ public enum CommandDescriptor {
 	REGISTER_NEW_WORKER,
 	
 	/**
-	 * Description: Remove Worker to the system.
+	 * Description: Remove Worker from the system.
 	 * param1: String - username.
 	 * retval: void.
 	 *
@@ -344,8 +344,8 @@ public enum CommandDescriptor {
 	ADD_INGREDIENT,
 	
 	/**
-	 * Description: Remove Worker to the system.
-	 * param1: String - username.
+	 * Description: Remove Ingredient from the system.
+	 * param1: Ingredient.
 	 * retval: void.
 	 *
 	 * result_codes:
@@ -358,9 +358,75 @@ public enum CommandDescriptor {
 	 *	 		SM_INVALID_PARAMETER,
 	 *
 	 *	 ***** NOTES *****
-	 * 1. Only Manager can ingredient.
+	 * 1. Only Manager can remove ingredient.
 	 */
 	REMOVE_INGREDIENT,
+	
+	/**
+	 * Description: Employee gets list of all ingredients.
+	 * param1: void.
+	 * retval: List of ingredients.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 */
+	GET_ALL_INGREDIENTS,
+	
+	/**
+	 * Description: Add new manufacturer to the system.
+	 * param1: Manufacturer.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 * 			SM_SENDER_IS_NOT_CONNECTED,
+	 * 			PARAM_ID_ALREADY_EXISTS,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can add new manufacturer. 
+	 */
+	ADD_MANUFACTURER,
+	
+	/**
+	 * Description: Remove manufacturer to the system.
+	 * param1: Manufacturer.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *			PARAM_ID_IS_NOT_EXIST,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can remove manufacturer.
+	 */
+	REMOVE_MANUFACTURER,
+	
+	/**
+	 * Description: Employee gets list of all manufacturers.
+	 * param1: void.
+	 * retval: List of manufacturers.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 */
+	GET_ALL_MANUFACTURERS,
 	
 	/********************************** Cart commands **********************************/
 	
