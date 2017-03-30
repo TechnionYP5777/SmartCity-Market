@@ -6,6 +6,7 @@ import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
+import SQLDatabase.SQLDatabaseException.GroceryListIsEmpty;
 import SQLDatabase.SQLDatabaseException.IngredientNotExist;
 import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
 import SQLDatabase.SQLDatabaseException.ManufacturerStillUsed;
@@ -81,12 +82,13 @@ public interface ISQLDatabaseConnection {
 	String getProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage productToBuy)
 			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog;
 
-	void cartCheckout(Integer cartID) throws CriticalError, ClientNotConnected;
+	void cartCheckout(Integer cartID) throws CriticalError, ClientNotConnected, GroceryListIsEmpty;
 
 	String cartRestoreGroceryList(Integer cartID) throws CriticalError, NoGroceryListToRestore;
 
 	void close() throws CriticalError;
 
 	void logoutAllUsers() throws CriticalError;
+	void clearGroceryListsHistory() throws CriticalError;
 
 }

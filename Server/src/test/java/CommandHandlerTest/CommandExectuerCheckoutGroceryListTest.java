@@ -18,6 +18,7 @@ import CommandHandler.CommandExecuter;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 import SQLDatabase.SQLDatabaseException.CriticalError;
+import SQLDatabase.SQLDatabaseException.GroceryListIsEmpty;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommandExectuerCheckoutGroceryListTest {
@@ -39,7 +40,7 @@ public class CommandExectuerCheckoutGroceryListTest {
 		
 		try {
 			Mockito.doNothing().when(sqlDatabaseConnection).cartCheckout(cartID);
-		} catch (CriticalError | ClientNotConnected e) {
+		} catch (CriticalError | ClientNotConnected | GroceryListIsEmpty e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -58,7 +59,7 @@ public class CommandExectuerCheckoutGroceryListTest {
 		
 		try {
 			Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection).cartCheckout(cartID);
-		} catch (ClientNotConnected e) {
+		} catch (ClientNotConnected | GroceryListIsEmpty e) {
 			e.printStackTrace();
 			fail();
 		} catch (CriticalError __) {
@@ -79,7 +80,7 @@ public class CommandExectuerCheckoutGroceryListTest {
 		
 		try {
 			Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection).cartCheckout(cartID);
-		} catch (CriticalError e) {
+		} catch (CriticalError | GroceryListIsEmpty e) {
 			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected __) {

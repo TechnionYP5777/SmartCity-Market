@@ -27,6 +27,7 @@ import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
+import SQLDatabase.SQLDatabaseException.GroceryListIsEmpty;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
@@ -1074,13 +1075,21 @@ public class SQLDatabaseConnectionTest {
 	@Test
 	public void testCartCheckoutDoLogout() {
 
+		ProductPackage productPackage = new ProductPackage(new SmartCode(barcodeDebug, date112000), 5,
+				locationWarehouse);
+		
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 
 		int session = 0;
 		try {
 			session = sqlConnection.login("Cart", "");
 			assertTrue(sqlConnection.isClientLoggedIn(session));
-		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
+			sqlConnection.addProductPackageToWarehouse(null, productPackage);
+			sqlConnection.placeProductPackageOnShelves(null, productPackage);
+			sqlConnection.addProductToGroceryList(session, productPackage);
+		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | 
+				NumberOfConnectionsExceeded | ClientNotConnected | ProductNotExistInCatalog | 
+				ProductPackageAmountNotMatch | ProductPackageNotExist e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -1088,7 +1097,7 @@ public class SQLDatabaseConnectionTest {
 		try {
 			sqlConnection.cartCheckout(session);
 			assertFalse(sqlConnection.isClientLoggedIn(session));
-		} catch (CriticalError | ClientNotConnected e) {
+		} catch (CriticalError | ClientNotConnected | GroceryListIsEmpty e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -1099,6 +1108,46 @@ public class SQLDatabaseConnectionTest {
 		} catch (ClientNotConnected e) {
 
 		} catch (CriticalError e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		try {
+			sqlConnection.clearGroceryListsHistory();
+		} catch (CriticalError e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@Test
+	public void testCartCantCheckoutWithEmptyList() {
+
+		
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		int session = 0;
+		try {
+			session = sqlConnection.login("Cart", "");
+			assertTrue(sqlConnection.isClientLoggedIn(session));
+		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | 
+				NumberOfConnectionsExceeded e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			sqlConnection.cartCheckout(session);
+			fail();
+		} catch (CriticalError | ClientNotConnected e) {
+			e.printStackTrace();
+			fail();
+		} catch (GroceryListIsEmpty e) {
+		}
+
+		try {
+			sqlConnection.logout(session, "Cart");
+		} catch (CriticalError | ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
 		}

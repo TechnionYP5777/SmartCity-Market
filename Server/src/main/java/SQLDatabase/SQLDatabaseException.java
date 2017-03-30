@@ -142,6 +142,16 @@ public class SQLDatabaseException extends Exception {
 	public static class NoGroceryListToRestore extends SQLDatabaseException {
 		private static final long serialVersionUID = 1L;
 	}
+	
+	/**
+	 * Thrown when cart\customer try to checkout with empty grocery list 
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class GroceryListIsEmpty extends SQLDatabaseException {
+		private static final long serialVersionUID = 1L;
+	}
 
 	/**
 	 * Thrown when no connection available

@@ -54,7 +54,10 @@ class SQLQueryGenerator {
 
 	/**
 	 * 
-	 * Generate string of select query table join with other table
+	 * Generate string of select query table left join with other table
+	 * 
+	 * (note: left join always take all the rows in the left table and match them to the right table. if there is no match 
+	 * then the row is matched with null)
 	 * 
 	 * @param tabel
 	 *            The table to select
@@ -84,6 +87,41 @@ class SQLQueryGenerator {
 
 	}
 
+	/**
+	 * 
+	 * Generate string of select query table inner join with other table
+	 * 
+	 * (note: inner join match only the rows that exists on the both table on the desired column value)
+	 * 
+	 * @param tabel
+	 *            The table to select
+	 * @param joinWithTable
+	 *            The table to join with.
+	 * @param joinByCol
+	 *            join by this column
+	 * @param orderByCol
+	 *            order results by this column
+	 * @param cs
+	 *            Set of conditions
+	 * @return string of select join query.
+	 */
+	public static String generateSelectInnerJoinWithQuery2Tables(DbTable tabel, DbTable joinWithTable,
+			DbColumn joinByCol, DbColumn orderByCol, Condition... cs) {
+
+		DbJoin custJoin = SQLDatabaseEntities.spec.addJoin(null, tabel.getAbsoluteName(), null,
+				joinWithTable.getAbsoluteName(), joinByCol.getColumnNameSQL());
+
+		SelectQuery resultQuery = new SelectQuery().addAllTableColumns(tabel).addAllTableColumns(joinWithTable)
+				.addJoins(SelectQuery.JoinType.INNER, custJoin).addOrderings(orderByCol);
+
+		for (int ¢ = 0; ¢ < cs.length; ++¢)
+			resultQuery.addCondition(cs[¢]);
+
+		return resultQuery.validate() + "";
+
+	}
+	
+	
 	/**
 	 * Generate object of update query.
 	 * 

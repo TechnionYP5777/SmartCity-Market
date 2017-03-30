@@ -63,6 +63,7 @@ import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
+import SQLDatabase.SQLDatabaseException.GroceryListIsEmpty;
 import SQLDatabase.SQLDatabaseException.NoGroceryListToRestore;
 import SQLDatabase.SQLDatabaseStrings.LOCATIONS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.PRODUCTS_PACKAGES_TABLE;
@@ -70,6 +71,7 @@ import SQLDatabase.SQLDatabaseStrings.WORKERS_TABLE;
 
 import static SQLDatabase.SQLQueryGenerator.generateSelectQuery1Table;
 import static SQLDatabase.SQLQueryGenerator.generateSelectLeftJoinWithQuery2Tables;
+import static SQLDatabase.SQLQueryGenerator.generateSelectInnerJoinWithQuery2Tables;
 import static SQLDatabase.SQLQueryGenerator.generateUpdateQuery;
 import static SQLDatabase.SQLQueryGenerator.generateDeleteQuery;
 
@@ -1206,6 +1208,30 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		if (from != null)
 			switch (from) {
+			case STORE: {
+				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
+				if (currentAmount == 0) {
+					log.info("moveProductPackage: nothing to take from Store");
+					throw new ProductPackageNotExist();
+				}
+				log.info("moveProductPackage: (from) Store have " + currentAmount + ", set to: "
+						+ (currentAmount - amount));
+				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE, currentAmount,
+						currentAmount - amount);
+				break;
+			}
+			case WAREHOUSE: {
+				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
+				if (currentAmount == 0) {
+					log.info("moveProductPackage: nothing to take from Warehouse");
+					throw new ProductPackageNotExist();
+				}
+				log.info("moveProductPackage: (from) Warehouse have " + currentAmount + ", set to: "
+						+ (currentAmount - amount));
+				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE, currentAmount,
+						currentAmount - amount);
+				break;
+			}
 			case CART: {
 				if (sessionId == null) {
 					log.fatal("moveProductPackage: you trying to move product from cart without sessionID. ABORT.");
@@ -1222,34 +1248,26 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				setNewAmountForCart(packageToMove, listID, currentAmount, currentAmount - amount);
 				break;
 			}
-			case WAREHOUSE: {
-				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
-				if (currentAmount == 0) {
-					log.info("moveProductPackage: nothing to take from Warehouse");
-					throw new ProductPackageNotExist();
-				}
-				log.info("moveProductPackage: (from) Warehouse have " + currentAmount + ", set to: "
-						+ (currentAmount - amount));
-				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE, currentAmount,
-						currentAmount - amount);
-				break;
-			}
-			case STORE: {
-				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
-				if (currentAmount == 0) {
-					log.info("moveProductPackage: nothing to take from Store");
-					throw new ProductPackageNotExist();
-				}
-				log.info("moveProductPackage: (from) Store have " + currentAmount + ", set to: "
-						+ (currentAmount - amount));
-				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE, currentAmount,
-						currentAmount - amount);
-				break;
-			}
 			}
 
 		if (to != null)
 			switch (to) {
+			case STORE: {
+				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
+				log.info("moveProductPackage: (to) Store have " + currentAmount + ", set to: "
+						+ (currentAmount + amount));
+				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE, currentAmount,
+						currentAmount + amount);
+				break;
+			}
+			case WAREHOUSE: {
+				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
+				log.info("moveProductPackage: (to) Warehouse have " + currentAmount + ", set to: "
+						+ (currentAmount + amount));
+				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE, currentAmount,
+						currentAmount + amount);
+				break;
+			}
 			case CART: {
 				if (sessionId == null) {
 					log.fatal("moveProductPackage: you trying to move product to cart without sessionID. ABORT.");
@@ -1257,28 +1275,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				}
 				int listID = getCartListId(sessionId);
 				int currentAmount = getAmountForCart(packageToMove, listID);
-
 				log.info("moveProductPackage: (to) Cart have " + currentAmount + ", set to: "
 						+ (currentAmount + amount));
 				setNewAmountForCart(packageToMove, listID, currentAmount, currentAmount + amount);
-				break;
-			}
-			case WAREHOUSE: {
-				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
-
-				log.info("moveProductPackage: (to) Warehouse have " + currentAmount + ", set to: "
-						+ (currentAmount + amount));
-				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE, currentAmount,
-						currentAmount + amount);
-				break;
-			}
-			case STORE: {
-				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
-
-				log.info("moveProductPackage: (to) Store have " + currentAmount + ", set to: "
-						+ (currentAmount + amount));
-				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE, currentAmount,
-						currentAmount + amount);
 				break;
 			}
 			}
@@ -1340,6 +1339,30 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				}
 	}
 
+	/**
+	 * get a ResultSet object of a grocery list by cartID 
+	 * 
+	 * @param cartId
+	 *            - the cartID you need its grocery list
+	 * @throws CriticalError 
+	 * @throws SQLException 
+	 */
+	private ResultSet getGroceryListResultSetByCartID(int cartId) throws CriticalError, SQLException {
+		
+		String getGroceryListQuery = generateSelectInnerJoinWithQuery2Tables(CartsListTable.table,
+				GroceriesListsTable.table, CartsListTable.listIDCol, CartsListTable.listIDCol,
+				BinaryCondition.equalTo(CartsListTable.cartIDCol, PARAM_MARK));
+		
+		
+		PreparedStatement statement = getParameterizedReadQuery(getGroceryListQuery, cartId);
+	
+		ResultSet result = statement.executeQuery();
+		
+		return result;
+
+	}
+	
+	
 	/*
 	 * 
 	 * Wrapping method for transaction operations. (I use it only to eliminate
@@ -1409,13 +1432,23 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			throw new CriticalError();
 		}
 	}
+	
+	
+	
+	
 
 	/*
 	 * #####################################################################
 	 * 
-	 * Public Methods
 	 * 
-	 * ####################################################################
+	 * 
+	 * 
+	 * 							Public Methods
+	 * 
+	 * 
+	 * 
+	 * 
+	 * #####################################################################
 	 */
 
 	/*
@@ -1858,7 +1891,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (CriticalError | ProductPackageAmountNotMatch | ProductPackageNotExist e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw e;
 		} finally {
@@ -1895,7 +1927,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (CriticalError | ProductPackageAmountNotMatch | ProductPackageNotExist e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw e;
 		} finally {
@@ -1931,7 +1962,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (CriticalError | ProductPackageAmountNotMatch | ProductPackageNotExist e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw e;
 		} finally {
@@ -1980,19 +2010,29 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * @see SQLDatabase.ISQLDatabaseConnection#cartCheckout(java.lang.Integer)
 	 */
 	@Override
-	public void cartCheckout(Integer cartID) throws CriticalError, ClientNotConnected {
+	public void cartCheckout(Integer cartID) throws CriticalError, ClientNotConnected, GroceryListIsEmpty {
 		log.info("SQL Public cartCheckout: of cart: " + cartID + " (SESSION: " + cartID + " )");
 
 		validateCartSessionEstablished(cartID);
+		
 
 		// START transaction
 		connectionStartTransaction();
 
-		// READ part of transaction
-		int listID = getCartListId(cartID);
-
 		PreparedStatement copyStatement = null;
+		ResultSet cartGroceryList = null;
+		
 		try {
+			// READ part of transaction
+			//check if grocery list of that cart is empty
+			cartGroceryList = getGroceryListResultSetByCartID(cartID);
+			
+			if (isResultSetEmpty(cartGroceryList))
+				throw new GroceryListIsEmpty();
+			
+			//everything ok - perform checkout
+			int listID = getCartListId(cartID);
+
 			// WRITE part of transaction
 			// moving grocery list to history
 			String copyQuery = "INSERT " + GroceriesListsHistoryTable.table.getTableNameSQL() + "( "
@@ -2022,7 +2062,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			throw new CriticalError();
 		} finally {
 			connectionEndTransaction();
-			closeResources(copyStatement);
+			closeResources(copyStatement,cartGroceryList);
 		}
 
 	}
@@ -2217,16 +2257,18 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		if (!isCartSessionEstablished(cartID))
 			throw new NoGroceryListToRestore();
 
-		int listID = getCartListId(cartID);
+		
+//		int listID = getCartListId(cartID);
+//
+//		PreparedStatement statement = getParameterizedReadQuery(generateSelectQuery1Table(GroceriesListsTable.table,
+//				BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK)), listID);
 
-		PreparedStatement statement = getParameterizedReadQuery(generateSelectQuery1Table(GroceriesListsTable.table,
-				BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK)), listID);
-
-		log.debug("cartRestoreGroceryList: restoring grocery list.\nrun query: " + statement);
+		log.debug("cartRestoreGroceryList: restoring grocery list.");
 
 		ResultSet result = null;
 		try {
-			result = statement.executeQuery();
+//			result = statement.executeQuery();
+			result = getGroceryListResultSetByCartID(cartID) ;
 			result.first();
 			return SQLJsonGenerator.GroceryListToJson(result);
 		} catch (SQLException e) {
@@ -2254,6 +2296,35 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			e.printStackTrace();
 			throw new CriticalError();
 		}
+	}
+
+	@Override
+	public void clearGroceryListsHistory() throws CriticalError {
+		log.info("SQL Public clearGroceryListsHistory.");
+		// START transaction
+		connectionStartTransaction();
+
+		PreparedStatement statement = null;
+		try {
+			// WRITE part of transaction
+
+			// deletes all grocery lists in the history
+			statement = getParameterizedQuery(generateDeleteQuery(GroceriesListsHistoryTable.table));
+			log.debug("logoutAllUsers: delete grocery lists in history .\n by using query: " + statement);
+			statement.executeUpdate();
+			closeResources(statement);
+
+			// END transaction
+			connectionCommitTransaction();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
+			closeResources(statement);
+		}
+		
 	}
 
 }

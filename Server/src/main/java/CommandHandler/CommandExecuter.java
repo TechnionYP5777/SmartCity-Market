@@ -16,6 +16,7 @@ import ClientServerApi.ResultDescriptor;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
+import SQLDatabase.SQLDatabaseException.GroceryListIsEmpty;
 import SQLDatabase.SQLDatabaseException.IngredientNotExist;
 import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
 import SQLDatabase.SQLDatabaseException.NoGroceryListToRestore;
@@ -824,6 +825,10 @@ public class CommandExecuter {
 			log.info("Checkout Grocery List command failed, client is not connected");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		} catch (GroceryListIsEmpty e) {
+			log.info("Checkout Grocery List command failed, grocery list is empty");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_GROCERY_LIST_IS_EMPTY);
 		}
 
 		log.info("Checkout Grocery List from serderID " + inCommandWrapper.getSenderID() + " finished");
