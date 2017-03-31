@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import BasicCommonClasses.Ingredient;
+import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
 
 /**
  * IRegisteredCustomer - This interface is the contract for RegisteredCustomer
@@ -20,57 +21,65 @@ public interface IRegisteredCustomer extends ICustomer {
 	 * getUserName - returns the customer's user name
 	 * 
 	 * @return String
+	 * @throws CustomerNotConnected 
 	 */
-	String getUserName();
+	String getUserName() throws CustomerNotConnected;
 
 	/**
 	 * getFirstName - returns the customer's first name
 	 * 
 	 * @return String
+	 * @throws CustomerNotConnected 
 	 */
-	String getFirstName();
+	String getFirstName() throws CustomerNotConnected;
 
 	/**
 	 * getLastName - returns the customer's last name
 	 * 
 	 * @return String
+	 * @throws CustomerNotConnected 
 	 */
-	String getLastName();
+	String getLastName() throws CustomerNotConnected;
 
 	/**
 	 * getPhoneNumber - returns the customer's phone number
 	 * 
 	 * @return String
+	 * @throws CustomerNotConnected 
 	 */
-	String getPhoneNumber();
+	String getPhoneNumber() throws CustomerNotConnected;
 
 	/**
 	 * getEmailAddress - returns the customer's email
 	 * 
 	 * @return String
+	 * @throws CustomerNotConnected 
 	 */
-	String getEmailAddress();
+	String getEmailAddress() throws CustomerNotConnected;
 
 	/**
 	 * getShippingAddress - returns the customer's shipping address
 	 * 
 	 * @return String
+	 * @throws CustomerNotConnected 
 	 */
-	String getShippingAddress();
+	String getShippingAddress() throws CustomerNotConnected;
 
 	/**
 	 * getBirthdate - returns the customer's shipping address
 	 * 
 	 * @return LocalDate
+	 * @throws CustomerNotConnected 
 	 */
-	LocalDate getBirthdate();
+	LocalDate getBirthdate() throws CustomerNotConnected;
 
 	/**
 	 * getAllergens - returns the customer's set of allergens
 	 * 
 	 * @return HashSet<Ingredient>
+	 * @throws CustomerNotConnected 
 	 */
-	HashSet<Ingredient> getAllergens();
+	HashSet<Ingredient> getAllergens() throws CustomerNotConnected;
 
 	// #################### Setters ###########################
 

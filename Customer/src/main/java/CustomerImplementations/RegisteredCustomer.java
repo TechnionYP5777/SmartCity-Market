@@ -7,104 +7,107 @@ import java.util.HashSet;
 import com.google.inject.Inject;
 
 import BasicCommonClasses.Ingredient;
+import CustomerContracts.ACustomerExceptions;
+import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
 import CustomerContracts.IRegisteredCustomer;
 import UtilsContracts.IClientRequestHandler;
 
 /**
+ * This class represents a registered customer and holds all it's functionalitis
+ * 
  * @author idan atias
  *
  */
 public class RegisteredCustomer extends Customer implements IRegisteredCustomer {
-	
+
 	@Inject
 	public RegisteredCustomer(IClientRequestHandler clientRequestHandler) {
 		super(clientRequestHandler);
-		// TODO Auto-generated constructor stub
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#getUserName()
-	 */
 	@Override
-	public String getUserName() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getUserName() throws CustomerNotConnected {
+		if (customerProfile == null) {
+			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
+			throw new ACustomerExceptions.CustomerNotConnected();
+		}
+		return customerProfile.getUserName();
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#getFirstName()
-	 */
 	@Override
-	public String getFirstName() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getFirstName() throws CustomerNotConnected {
+		if (customerProfile == null) {
+			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
+			throw new ACustomerExceptions.CustomerNotConnected();
+		}
+		return customerProfile.getFirstName();
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#getLastName()
-	 */
 	@Override
-	public String getLastName() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getLastName() throws CustomerNotConnected {
+		if (customerProfile == null) {
+			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
+			throw new ACustomerExceptions.CustomerNotConnected();
+		}
+		return customerProfile.getLastName();
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#getPhoneNumber()
-	 */
 	@Override
-	public String getPhoneNumber() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getPhoneNumber() throws CustomerNotConnected {
+		if (customerProfile == null) {
+			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
+			throw new ACustomerExceptions.CustomerNotConnected();
+		}
+		return customerProfile.getPhoneNumber();
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#getEmailAddress()
-	 */
 	@Override
-	public String getEmailAddress() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getEmailAddress() throws CustomerNotConnected {
+		if (customerProfile == null) {
+			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
+			throw new ACustomerExceptions.CustomerNotConnected();
+		}
+		return customerProfile.getEmailAddress();
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#getShippingAddress()
-	 */
 	@Override
-	public String getShippingAddress() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getShippingAddress() throws CustomerNotConnected {
+		if (customerProfile == null) {
+			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
+			throw new ACustomerExceptions.CustomerNotConnected();
+		}
+		return customerProfile.getStreet() + ", " + customerProfile.getCity();
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#getBirthdate()
-	 */
 	@Override
-	public LocalDate getBirthdate() {
-		// TODO Auto-generated method stub
-		return null;
+	public LocalDate getBirthdate() throws CustomerNotConnected {
+		if (customerProfile == null) {
+			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
+			throw new ACustomerExceptions.CustomerNotConnected();
+		}
+		return customerProfile.getBirthdate();
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#getAllergens()
-	 */
 	@Override
-	public HashSet<Ingredient> getAllergens() {
-		// TODO Auto-generated method stub
-		return null;
+	public HashSet<Ingredient> getAllergens() throws CustomerNotConnected {
+		if (customerProfile == null) {
+			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
+			throw new ACustomerExceptions.CustomerNotConnected();
+		}
+		return customerProfile.getAllergens();
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#changeFirstName(java.lang.String)
-	 */
 	@Override
 	public void changeFirstName(String firstname) {
 		// TODO Auto-generated method stub
 
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#changeLastName(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * CustomerContracts.IRegisteredCustomer#changeLastName(java.lang.String)
 	 */
 	@Override
 	public void changeLastName(String lastname) {
@@ -112,8 +115,11 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#changePhoneNumber(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * CustomerContracts.IRegisteredCustomer#changePhoneNumber(java.lang.String)
 	 */
 	@Override
 	public void changePhoneNumber(String phoneNumber) {
@@ -121,8 +127,11 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#changeEmailAddress(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see CustomerContracts.IRegisteredCustomer#changeEmailAddress(java.lang.
+	 * String)
 	 */
 	@Override
 	public void changeEmailAddress(String emailAddress) {
@@ -130,8 +139,12 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#changeShippingAddress(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * CustomerContracts.IRegisteredCustomer#changeShippingAddress(java.lang.
+	 * String)
 	 */
 	@Override
 	public void changeShippingAddress(String shippingAddress) {
@@ -139,8 +152,11 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#changeBirthdate(java.time.LocalDate)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see CustomerContracts.IRegisteredCustomer#changeBirthdate(java.time.
+	 * LocalDate)
 	 */
 	@Override
 	public void changeBirthdate(LocalDate birthdate) {
@@ -148,7 +164,9 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see CustomerContracts.IRegisteredCustomer#clearAllergens()
 	 */
 	@Override
@@ -157,8 +175,12 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#addAllergens(BasicCommonClasses.Ingredient)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * CustomerContracts.IRegisteredCustomer#addAllergens(BasicCommonClasses.
+	 * Ingredient)
 	 */
 	@Override
 	public void addAllergens(Ingredient allergen) {
@@ -166,8 +188,11 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#addAllergens(java.util.Collection)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * CustomerContracts.IRegisteredCustomer#addAllergens(java.util.Collection)
 	 */
 	@Override
 	public void addAllergens(Collection<Ingredient> allergens) {
@@ -175,8 +200,12 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#removeAllergen(BasicCommonClasses.Ingredient)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * CustomerContracts.IRegisteredCustomer#removeAllergen(BasicCommonClasses.
+	 * Ingredient)
 	 */
 	@Override
 	public void removeAllergen(Ingredient allergen) {
@@ -184,8 +213,11 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 
 	}
 
-	/* (non-Javadoc)
-	 * @see CustomerContracts.IRegisteredCustomer#removeAllergens(java.util.Collection)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see CustomerContracts.IRegisteredCustomer#removeAllergens(java.util.
+	 * Collection)
 	 */
 	@Override
 	public void removeAllergens(Collection<Ingredient> allergens) {

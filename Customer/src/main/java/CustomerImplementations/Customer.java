@@ -39,6 +39,7 @@ public class Customer extends ACustomer implements ICustomer {
 	@Inject
 	public Customer(IClientRequestHandler clientRequestHandler) {
 		this.clientRequestHandler = clientRequestHandler;
+		this.customerProfile = null; //as long as customer is not logged in
 	}
 	
 	GroceryList groceryList = new GroceryList();
