@@ -104,6 +104,9 @@ public class CustomerProfile {
 			throw new CustomerProfileException.EmptyAllergensSet();
 		this.allergens.removeAll(allergens);
 	}
+	public void clearAllAllergens(){
+		this.allergens.clear();
+	}
 	@Override
 	public String toString() {
 		return String.format(

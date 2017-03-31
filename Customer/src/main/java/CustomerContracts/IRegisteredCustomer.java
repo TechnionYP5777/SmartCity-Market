@@ -1,10 +1,10 @@
 package CustomerContracts;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.HashSet;
 
 import BasicCommonClasses.Ingredient;
+import CustomerContracts.ACustomerExceptions.CriticalError;
 import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
 import CustomerContracts.ACustomerExceptions.InvalidParameter;
 
@@ -91,8 +91,9 @@ public interface IRegisteredCustomer extends ICustomer {
 	 *            - user's new first name
 	 * @throws CustomerNotConnected 
 	 * @throws InvalidParameter 
+	 * @throws CriticalError 
 	 */
-	void changeFirstName(String firstname) throws CustomerNotConnected, InvalidParameter;
+	void changeFirstName(String firstname) throws CustomerNotConnected, InvalidParameter, CriticalError;
 
 	/**
 	 * changeLastName - changes the customer's last name
@@ -101,8 +102,9 @@ public interface IRegisteredCustomer extends ICustomer {
 	 *            - user's new last name
 	 * @throws InvalidParameter 
 	 * @throws CustomerNotConnected 
+	 * @throws CriticalError 
 	 */
-	void changeLastName(String lastname) throws CustomerNotConnected, InvalidParameter;
+	void changeLastName(String lastname) throws CustomerNotConnected, InvalidParameter, CriticalError;
 
 	/**
 	 * changePhoneNumber - changes the customer's phone number
@@ -111,8 +113,9 @@ public interface IRegisteredCustomer extends ICustomer {
 	 *            - user's new phone number
 	 * @throws InvalidParameter 
 	 * @throws CustomerNotConnected 
+	 * @throws CriticalError 
 	 */
-	void changePhoneNumber(String phoneNumber) throws CustomerNotConnected, InvalidParameter;
+	void changePhoneNumber(String phoneNumber) throws CustomerNotConnected, InvalidParameter, CriticalError;
 
 	/**
 	 * changeEmailAddress - changes the customer's email address
@@ -121,8 +124,9 @@ public interface IRegisteredCustomer extends ICustomer {
 	 *            - user's new email address
 	 * @throws InvalidParameter 
 	 * @throws CustomerNotConnected 
+	 * @throws CriticalError 
 	 */
-	void changeEmailAddress(String emailAddress) throws CustomerNotConnected, InvalidParameter;
+	void changeEmailAddress(String emailAddress) throws CustomerNotConnected, InvalidParameter, CriticalError;
 
 	/**
 	 * changeShippingAddress - changes the customer's shipping Address
@@ -133,8 +137,9 @@ public interface IRegisteredCustomer extends ICustomer {
 	 * 			  - user's new city
 	 * @throws InvalidParameter 
 	 * @throws CustomerNotConnected 
+	 * @throws CriticalError 
 	 */
-	void changeShippingAddress(String street, String city) throws CustomerNotConnected, InvalidParameter;
+	void changeShippingAddress(String street, String city) throws CustomerNotConnected, InvalidParameter, CriticalError;
 
 	/**
 	 * changeBirthdate - changes the customer's birthdate
@@ -143,39 +148,49 @@ public interface IRegisteredCustomer extends ICustomer {
 	 *            - user's new birthdate
 	 * @throws InvalidParameter 
 	 * @throws CustomerNotConnected 
+	 * @throws CriticalError 
 	 */
-	void changeBirthdate(LocalDate birthdate) throws CustomerNotConnected, InvalidParameter;
+	void changeBirthdate(LocalDate birthdate) throws CustomerNotConnected, InvalidParameter, CriticalError;
 
 	// #########################################################
 
 	/**
 	 * clearAllergens - removes all customer's allergens
+	 * @throws CustomerNotConnected 
 	 */
-	void clearAllergens();
+	void clearAllergens() throws CustomerNotConnected;
 
 	/**
 	 * addAllergen - add allergen to customer's allergens set
 	 * 
 	 * @param allergen
 	 *            - an ingredient the customer is allergic to.
+	 * @throws CriticalError 
+	 * @throws CustomerNotConnected 
+	 * @throws InvalidParameter 
 	 */
-	void addAllergens(Ingredient allergen);
+	void addAllergen(Ingredient allergen) throws CustomerNotConnected, CriticalError, InvalidParameter;
 
 	/**
 	 * addAllergens - add a collection of allergens to customer's allergens set
 	 * 
 	 * @param allergens
 	 *            - a collection of ingredients the customer is allergic to.
+	 * @throws CustomerNotConnected 
+	 * @throws InvalidParameter 
 	 */
-	void addAllergens(Collection<Ingredient> allergens);
+	void addAllergens(HashSet<Ingredient> allergens) throws CustomerNotConnected, InvalidParameter;
 
 	/**
 	 * removeAllergen - remove allergen from customer's allergens set
 	 * 
 	 * @param allergen
 	 *            - an ingredient the customer is not allergic to.
+	 * @throws CustomerNotConnected 
+	 * @throws CriticalError 
+	 * @throws InvalidParameter 
 	 */
-	void removeAllergen(Ingredient allergen);
+	void removeAllergen(Ingredient allergen) throws CustomerNotConnected, CriticalError, InvalidParameter;
 
 	/**
 	 * removeAllergens - remove a collection of allergens from customer's
@@ -183,7 +198,9 @@ public interface IRegisteredCustomer extends ICustomer {
 	 * 
 	 * @param allergens
 	 *            - a collection of ingredients the customer is not allergic to.
+	 * @throws CustomerNotConnected 
+	 * @throws InvalidParameter 
 	 */
-	void removeAllergens(Collection<Ingredient> allergens);
+	void removeAllergens(HashSet<Ingredient> allergens) throws CustomerNotConnected, InvalidParameter;
 
 }
