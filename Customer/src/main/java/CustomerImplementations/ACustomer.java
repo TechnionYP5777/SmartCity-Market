@@ -128,5 +128,27 @@ public abstract class ACustomer {
 			throw new CriticalError();
 		}
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		return result = prime * result + ((customerProfile == null) ? 0 : customerProfile.hashCode());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		ACustomer other = (ACustomer) o;
+		if (customerProfile == null) {
+			if (other.customerProfile != null)
+				return false;
+		} else if (!customerProfile.equals(other.customerProfile))
+			return false;
+		return true;
+	}
 
 }
