@@ -121,6 +121,7 @@ public abstract class ACustomer {
 			log.fatal("Command execution failed, product does not exist in catalog");
 			
 			throw new ProductCatalogDoesNotExist();
+		//TODO - ADD MORE CASES RELEVANT FOR REGISTERED-CUSTOMERS
 		default:
 			log.fatal("Command execution failed, failed to parse result description");
 			
