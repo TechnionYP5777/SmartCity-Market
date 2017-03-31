@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 import BasicCommonClasses.Ingredient;
 import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
+import CustomerContracts.ACustomerExceptions.InvalidParameter;
 
 /**
  * IRegisteredCustomer - This interface is the contract for RegisteredCustomer
@@ -88,48 +89,62 @@ public interface IRegisteredCustomer extends ICustomer {
 	 * 
 	 * @param firstname
 	 *            - user's new first name
+	 * @throws CustomerNotConnected 
+	 * @throws InvalidParameter 
 	 */
-	void changeFirstName(String firstname);
+	void changeFirstName(String firstname) throws CustomerNotConnected, InvalidParameter;
 
 	/**
 	 * changeLastName - changes the customer's last name
 	 * 
 	 * @param lastname
 	 *            - user's new last name
+	 * @throws InvalidParameter 
+	 * @throws CustomerNotConnected 
 	 */
-	void changeLastName(String lastname);
+	void changeLastName(String lastname) throws CustomerNotConnected, InvalidParameter;
 
 	/**
 	 * changePhoneNumber - changes the customer's phone number
 	 * 
 	 * @param phoneNumber
 	 *            - user's new phone number
+	 * @throws InvalidParameter 
+	 * @throws CustomerNotConnected 
 	 */
-	void changePhoneNumber(String phoneNumber);
+	void changePhoneNumber(String phoneNumber) throws CustomerNotConnected, InvalidParameter;
 
 	/**
 	 * changeEmailAddress - changes the customer's email address
 	 * 
 	 * @param emailAddress
 	 *            - user's new email address
+	 * @throws InvalidParameter 
+	 * @throws CustomerNotConnected 
 	 */
-	void changeEmailAddress(String emailAddress);
+	void changeEmailAddress(String emailAddress) throws CustomerNotConnected, InvalidParameter;
 
 	/**
 	 * changeShippingAddress - changes the customer's shipping Address
 	 * 
-	 * @param shippingAddress
-	 *            - user's new shipping Address
+	 * @param street
+	 *            - user's new street
+	 * @param city
+	 * 			  - user's new city
+	 * @throws InvalidParameter 
+	 * @throws CustomerNotConnected 
 	 */
-	void changeShippingAddress(String shippingAddress);
+	void changeShippingAddress(String street, String city) throws CustomerNotConnected, InvalidParameter;
 
 	/**
 	 * changeBirthdate - changes the customer's birthdate
 	 * 
 	 * @param birthdate
 	 *            - user's new birthdate
+	 * @throws InvalidParameter 
+	 * @throws CustomerNotConnected 
 	 */
-	void changeBirthdate(LocalDate birthdate);
+	void changeBirthdate(LocalDate birthdate) throws CustomerNotConnected, InvalidParameter;
 
 	// #########################################################
 

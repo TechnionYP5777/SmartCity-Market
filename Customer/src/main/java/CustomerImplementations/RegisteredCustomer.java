@@ -9,6 +9,7 @@ import com.google.inject.Inject;
 import BasicCommonClasses.Ingredient;
 import CustomerContracts.ACustomerExceptions;
 import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
+import CustomerContracts.ACustomerExceptions.InvalidParameter;
 import CustomerContracts.IRegisteredCustomer;
 import UtilsContracts.IClientRequestHandler;
 
@@ -25,151 +26,113 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 		super(clientRequestHandler);
 	}
 
+	private void validateCustomerIsLoggedIn() throws CustomerNotConnected {
+		if (customerProfile != null)
+			return;
+		log.error("Customer is not logged in. Cart id=(" + this.id + ")");
+		throw new ACustomerExceptions.CustomerNotConnected();
+	}
+
+	private void validateString(String s) throws InvalidParameter {
+		if (!s.isEmpty())
+			return;
+		log.error("Got empty string as parameter");
+		throw new InvalidParameter();
+	}
+
 	@Override
 	public String getUserName() throws CustomerNotConnected {
-		if (customerProfile == null) {
-			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
-			throw new ACustomerExceptions.CustomerNotConnected();
-		}
+		validateCustomerIsLoggedIn();
 		return customerProfile.getUserName();
 	}
 
 	@Override
 	public String getFirstName() throws CustomerNotConnected {
-		if (customerProfile == null) {
-			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
-			throw new ACustomerExceptions.CustomerNotConnected();
-		}
+		validateCustomerIsLoggedIn();
 		return customerProfile.getFirstName();
 	}
 
 	@Override
 	public String getLastName() throws CustomerNotConnected {
-		if (customerProfile == null) {
-			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
-			throw new ACustomerExceptions.CustomerNotConnected();
-		}
+		validateCustomerIsLoggedIn();
 		return customerProfile.getLastName();
 	}
 
 	@Override
 	public String getPhoneNumber() throws CustomerNotConnected {
-		if (customerProfile == null) {
-			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
-			throw new ACustomerExceptions.CustomerNotConnected();
-		}
+		validateCustomerIsLoggedIn();
 		return customerProfile.getPhoneNumber();
 	}
 
 	@Override
 	public String getEmailAddress() throws CustomerNotConnected {
-		if (customerProfile == null) {
-			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
-			throw new ACustomerExceptions.CustomerNotConnected();
-		}
+		validateCustomerIsLoggedIn();
 		return customerProfile.getEmailAddress();
 	}
 
 	@Override
 	public String getShippingAddress() throws CustomerNotConnected {
-		if (customerProfile == null) {
-			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
-			throw new ACustomerExceptions.CustomerNotConnected();
-		}
+		validateCustomerIsLoggedIn();
 		return customerProfile.getStreet() + ", " + customerProfile.getCity();
 	}
 
 	@Override
 	public LocalDate getBirthdate() throws CustomerNotConnected {
-		if (customerProfile == null) {
-			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
-			throw new ACustomerExceptions.CustomerNotConnected();
-		}
+		validateCustomerIsLoggedIn();
 		return customerProfile.getBirthdate();
 	}
 
 	@Override
 	public HashSet<Ingredient> getAllergens() throws CustomerNotConnected {
-		if (customerProfile == null) {
-			log.error("Customer is not logged in. Cart id=(" + this.id + ")");
-			throw new ACustomerExceptions.CustomerNotConnected();
-		}
+		validateCustomerIsLoggedIn();
 		return customerProfile.getAllergens();
 	}
 
 	@Override
-	public void changeFirstName(String firstname) {
-		// TODO Auto-generated method stub
-
+	public void changeFirstName(String firstname) throws CustomerNotConnected, InvalidParameter {
+		validateCustomerIsLoggedIn();
+		validateString(firstname);
+		customerProfile.setFirstName(firstname);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * CustomerContracts.IRegisteredCustomer#changeLastName(java.lang.String)
-	 */
 	@Override
-	public void changeLastName(String lastname) {
-		// TODO Auto-generated method stub
-
+	public void changeLastName(String lastname) throws CustomerNotConnected, InvalidParameter {
+		validateCustomerIsLoggedIn();
+		validateString(lastname);
+		customerProfile.setLastName(lastname);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * CustomerContracts.IRegisteredCustomer#changePhoneNumber(java.lang.String)
-	 */
 	@Override
-	public void changePhoneNumber(String phoneNumber) {
-		// TODO Auto-generated method stub
-
+	public void changePhoneNumber(String phoneNumber) throws CustomerNotConnected, InvalidParameter {
+		// TODO add validation of legal phone number
+		validateCustomerIsLoggedIn();
+		validateString(phoneNumber);
+		customerProfile.setPhoneNumber(phoneNumber);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see CustomerContracts.IRegisteredCustomer#changeEmailAddress(java.lang.
-	 * String)
-	 */
 	@Override
-	public void changeEmailAddress(String emailAddress) {
-		// TODO Auto-generated method stub
-
+	public void changeEmailAddress(String emailAddress) throws CustomerNotConnected, InvalidParameter {
+		// TODO add validation of legal email address
+		validateCustomerIsLoggedIn();
+		validateString(emailAddress);
+		customerProfile.setEmailAddress(emailAddress);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * CustomerContracts.IRegisteredCustomer#changeShippingAddress(java.lang.
-	 * String)
-	 */
 	@Override
-	public void changeShippingAddress(String shippingAddress) {
-		// TODO Auto-generated method stub
-
+	public void changeShippingAddress(String street, String city) throws CustomerNotConnected, InvalidParameter {
+		validateCustomerIsLoggedIn();
+		validateString(street);
+		validateString(city);
+		customerProfile.setStreet(street);
+		customerProfile.setCity(city);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see CustomerContracts.IRegisteredCustomer#changeBirthdate(java.time.
-	 * LocalDate)
-	 */
 	@Override
-	public void changeBirthdate(LocalDate birthdate) {
-		// TODO Auto-generated method stub
-
+	public void changeBirthdate(LocalDate birthdate) throws CustomerNotConnected, InvalidParameter {
+		validateCustomerIsLoggedIn();
+		customerProfile.setBirthdate(birthdate);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see CustomerContracts.IRegisteredCustomer#clearAllergens()
-	 */
-	@Override
 	public void clearAllergens() {
 		// TODO Auto-generated method stub
 

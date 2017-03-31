@@ -161,7 +161,8 @@ public class Customer extends ACustomer implements ICustomer {
 			
 			throw new CriticalError();
 		}
-		
+
+		customerProfile = null;
 		log.info("logout from server succeed.");
 	}
 	
