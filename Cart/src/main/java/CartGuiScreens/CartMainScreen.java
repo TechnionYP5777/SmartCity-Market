@@ -174,8 +174,8 @@ public class CartMainScreen implements Initializable {
 
 	private void updateCartProductsInfo() {
 		syncListViewWithCart();
-		productsNumberTextField.setText((cart.getCartProductsNum() + ""));
-		totalSumTextField.setText((cart.getTotalSum() + ""));
+		productsNumberTextField.setText(cart.getCartProductsNum() + "");
+		totalSumTextField.setText(String.format("%.2f", cart.getTotalSum()));
 	}
 	
 	private void syncListViewWithCart() {
