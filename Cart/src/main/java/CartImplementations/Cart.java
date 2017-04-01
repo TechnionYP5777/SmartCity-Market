@@ -242,11 +242,12 @@ public class Cart extends ACart implements ICart {
 			throw new CriticalError();
 		}
 				
-		ProductPackage productPackage = new ProductPackage(c, amount, null);
+		ProductPackage productPackage1 = new ProductPackage(c, amount, null);
+		ProductPackage productPackage2 = new ProductPackage(c, amount, null);
 
-		groceryList.addProduct(productPackage);
+		groceryList.addProduct(productPackage1);
 		
-		addProductToCacheAndUpdateCartData(productPackage, catalogProduct);
+		addProductToCacheAndUpdateCartData(productPackage2, catalogProduct);
 		
 		log.info("addProductToGroceryList command succeed.");
 	}
@@ -419,9 +420,10 @@ public class Cart extends ACart implements ICart {
 		
 		for( HashMap.Entry<SmartCode, ProductPackage> entry : cartProduct.getPackages().entrySet())
 			try {
-				returnProductToShelf(entry.getKey(), entry.getValue().getAmount());
+				SmartCode smartCode = entry.getKey();
+				int amount = entry.getValue().getAmount();
+				returnProductToShelf(smartCode, amount);
 			} catch (AmountBiggerThanAvailable | ProductPackageDoesNotExist | CriticalError | CartNotConnected e) {
-				
 				throw new CriticalError();
 			}
 	}

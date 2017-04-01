@@ -20,15 +20,15 @@ public class GroceryList {
 			groceryList = new HashMap<SmartCode, ProductPackage>();
 		
 		
-		ProductPackage productPackagInCart = groceryList.get(newProductPackage.getSmartCode());
+		ProductPackage productPackageInCart = groceryList.get(newProductPackage.getSmartCode());
 		
-		if (productPackagInCart == null)
+		if (productPackageInCart == null)
 			/* Add new ProductPackage to list */
 			groceryList.put(newProductPackage.getSmartCode(), newProductPackage);
 		else {
 			/* Updating amount of existing ProductPackage */
-			productPackagInCart.incrementAmount(newProductPackage.getAmount());
-			groceryList.put(productPackagInCart.getSmartCode(), productPackagInCart);
+			productPackageInCart.incrementAmount(newProductPackage.getAmount());
+			groceryList.put(productPackageInCart.getSmartCode(), productPackageInCart);
 		}
 	}
 	
