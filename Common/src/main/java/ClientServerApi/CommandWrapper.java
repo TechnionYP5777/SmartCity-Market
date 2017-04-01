@@ -6,7 +6,7 @@ public class CommandWrapper implements Cloneable {
 	/**
 	 * Command wrapper for sending packages between client and server:
 	 * Fields:
-	 * 		senderID - sender id of the client (worker, manager, cart, etc. )
+	 * 		senderID - sender id of the client (worker, manager, customer, etc. )
 	 * 		commandDescriptor - the command to exec on server side.
 	 * 		resultDescriptor - result code delivered from server to client.
 	 * 		data - a String (in json format) that holds the cmd's arguments in case of a client-to-server package
@@ -40,9 +40,7 @@ public class CommandWrapper implements Cloneable {
 	public CommandWrapper(ResultDescriptor resultDescriptor) {
 		this.resultDescriptor = resultDescriptor;
 	}
-	
-	//Methods:
-	// TODO change methods name
+
 	public String serialize() {
 		return Serialization.serialize(this);
 	}

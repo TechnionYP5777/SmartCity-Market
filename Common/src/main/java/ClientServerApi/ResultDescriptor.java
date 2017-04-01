@@ -97,7 +97,7 @@ public enum ResultDescriptor {
 	 */
 	SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD,
 	
-	/********************************** Shared failures for employee & cart ********************************/
+	/********************************** Shared failures for employee & customer ********************************/
 	
 	/**
 	 * The sender tried to get invalid product.
@@ -152,21 +152,21 @@ public enum ResultDescriptor {
 	 * The amount from the selected package is not available.
 	 * 
 	 * How to fix:
-	 * 1. Tell the cart/employee that the given amount is illegal and he may choose:
+	 * 1. Tell the customer/employee that the given amount is illegal and he may choose:
 	 * 		a. Change the given amount.
 	 * 		b. Abort operation.
 	 * 
 	 */
 	SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE,
 
-	/***************************************** Cart failures only ******************************************/
+	/***************************************** customer failures only ******************************************/
 	
 	/**
-	 * The cart tried to add product package to grocery list which dosen't exist.
+	 * The customer tried to add product package to grocery list which dosen't exist.
 	 * 
 	 * How to fix:
 	 * 1. Report critical error (Check for a bug when see such message).
-	 * 2. Tell the cart that the given product not available for sale (or not in the grocery list) and he may choose:
+	 * 2. Tell the customer that the given product not available for sale (or not in the grocery list) and he may choose:
 	 * 		a. Change the given SmartCode.
 	 * 		b. Abort operation.
 	 * 
@@ -174,12 +174,12 @@ public enum ResultDescriptor {
 	SM_PRODUCT_PACKAGE_DOES_NOT_EXIST,
 	
 	/**
-	 * The cart tried to checkout an empty grocery list.
+	 * The customer tried to checkout an empty grocery list.
 	 * 
 	 * How to fix:
 	 * 1. Report critical error (Check for a bug when see such message) - checkout command
 	 *    isn't supposed to be sent when grocery list is empty.
-	 * 2. Tell the cart that the given grocery list is empty and can't be checked-out.
+	 * 2. Tell the customer that the given grocery list is empty and can't be checked-out.
 	 * 
 	 */
 	SM_GROCERY_LIST_IS_EMPTY,
