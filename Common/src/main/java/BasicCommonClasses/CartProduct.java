@@ -48,19 +48,26 @@ public class CartProduct {
 	public void addProductPackage(ProductPackage p) {
 		SmartCode sc = p.getSmartCode();
 		ProductPackage inCartProductPackage = packages.get(sc);
-		if ( inCartProductPackage != null)
+		if ( inCartProductPackage != null) {
 			inCartProductPackage.incrementAmount(p.getAmount());
-		packages.put(sc, p);
+			packages.put(sc, inCartProductPackage);
+		}
+		else
+			packages.put(sc, p);
 		totalAmount += p.getAmount();
 	}
 	
 	public Boolean removeProductPackage(ProductPackage p) {
-		SmartCode sc = p.getSmartCode();
-		ProductPackage inCartProductPackage = packages.get(sc);
+		SmartCode smartCode = p.getSmartCode();
+		ProductPackage inCartProductPackage = packages.get(smartCode);
 		if (inCartProductPackage == null || inCartProductPackage.getAmount() < p.getAmount())
 			return false;
 		int prevAmount = inCartProductPackage.getAmount();
 		inCartProductPackage.setAmount(prevAmount - p.getAmount());
+		if (inCartProductPackage.getAmount() == 0) 
+			packages.remove(smartCode);
+		else 
+			packages.put(smartCode, inCartProductPackage);
 		totalAmount -= p.getAmount();
 		return true;
 	}
