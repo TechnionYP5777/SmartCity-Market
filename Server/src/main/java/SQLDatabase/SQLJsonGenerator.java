@@ -130,16 +130,17 @@ class SQLJsonGenerator {
 				while (!productIngredients.isAfterLast() && productBarcode == productIngredients
 						.getLong(ProductsCatalogIngredientsTable.barcodeCol.getColumnNameSQL())) {
 
-				// extracting the ingredients
-				int ingredientId = productIngredients.getInt(IngredientsTable.ingredientIDCol.getColumnNameSQL());
-				if (!productIngredients.wasNull()) {
-				String ingdientName = getStringFromResultset(productIngredients, IngredientsTable.ingredientNameCol);
+					// extracting the ingredients
+					int ingredientId = productIngredients.getInt(IngredientsTable.ingredientIDCol.getColumnNameSQL());
+					if (!productIngredients.wasNull()) {
+						String ingdientName = getStringFromResultset(productIngredients,
+								IngredientsTable.ingredientNameCol);
 
-				// adding the ingredient to set
-				$.add(new Ingredient(ingredientId, ingdientName));
-				}
+						// adding the ingredient to set
+						$.add(new Ingredient(ingredientId, ingdientName));
+					}
 
-				productIngredients.next();
+					productIngredients.next();
 				}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -170,22 +171,25 @@ class SQLJsonGenerator {
 				// adding all locations
 				while (!productLocations.isAfterLast() && productBarcode == productLocations
 						.getLong(ProductsCatalogLocationsTable.barcodeCol.getColumnNameSQL())) {
-				// extracting the location
-				@SuppressWarnings("unused")
-				int locationId = productLocations.getInt(LocationsTable.locationIDCol.getColumnNameSQL());
+					// extracting the location
+					@SuppressWarnings("unused")
+					int locationId = productLocations.getInt(LocationsTable.locationIDCol.getColumnNameSQL());
 
-				if (!productLocations.wasNull()) {
-				@SuppressWarnings("unused")
-				String locationDescription = getStringFromResultset(productLocations, LocationsTable.locationDescriptionCol);
-				String locationPlace = getStringFromResultset(productLocations, LocationsTable.placeInStoreCol);
-				int locationPointX = productLocations.getInt(LocationsTable.pointXCol.getColumnNameSQL());
-				int locationPointY = productLocations.getInt(LocationsTable.pointYCol.getColumnNameSQL());
+					if (!productLocations.wasNull()) {
+						@SuppressWarnings("unused")
+						String locationDescription = getStringFromResultset(productLocations,
+								LocationsTable.locationDescriptionCol);
+						String locationPlace = getStringFromResultset(productLocations, LocationsTable.placeInStoreCol);
+						int locationPointX = productLocations.getInt(LocationsTable.pointXCol.getColumnNameSQL());
+						int locationPointY = productLocations.getInt(LocationsTable.pointYCol.getColumnNameSQL());
 
-				// adding the location to set
-				$.add(new Location(locationPointX, locationPointY, locationPlace == LOCATIONS_TABLE.VALUE_PLACE_STORE ? PlaceInMarket.STORE : PlaceInMarket.WAREHOUSE));
-				}
+						// adding the location to set
+						$.add(new Location(locationPointX, locationPointY,
+								locationPlace == LOCATIONS_TABLE.VALUE_PLACE_STORE ? PlaceInMarket.STORE
+										: PlaceInMarket.WAREHOUSE));
+					}
 
-				productLocations.next();
+					productLocations.next();
 				}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -209,6 +213,24 @@ class SQLJsonGenerator {
 	 * @throws CriticalError
 	 */
 	static String GroceryListToJson(ResultSet groceryList) throws CriticalError {
+
+		return new Gson().toJson(resultSetToGroceryList(groceryList));
+
+	}
+
+	/**
+	 * convert grocery list from ResultSet to GroceryList object list
+	 * 
+	 * @param groceryList
+	 *            - ResultSet of the groceryList. the ResultSet need to point to
+	 *            the groceryList to convert (and assuming all the rows of given
+	 *            groceryList are grouped together). at returning, this object
+	 *            will point the next row after the last row of the pointed
+	 *            groceryList returning.
+	 * @return grocery list with the packages from the resultset
+	 * @throws CriticalError
+	 */
+	static GroceryList resultSetToGroceryList(ResultSet groceryList) throws CriticalError {
 		GroceryList $ = new GroceryList();
 
 		try {
@@ -229,7 +251,7 @@ class SQLJsonGenerator {
 			throw new SQLDatabaseException.CriticalError();
 		}
 
-		return new Gson().toJson($);
+		return $;
 
 	}
 

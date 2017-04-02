@@ -30,6 +30,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
 import BasicCommonClasses.Manufacturer;
@@ -126,9 +127,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		if (isDatabaseExists())
 			// connect to database
 			try {
-			connection = DriverManager.getConnection("jdbc:hsqldb:file:" + DATABASE_PATH_PARAMS + ";ifexists=true", "SA", "");
+				connection = DriverManager.getConnection("jdbc:hsqldb:file:" + DATABASE_PATH_PARAMS + ";ifexists=true",
+						"SA", "");
 			} catch (SQLException e) {
-			e.printStackTrace();
+				e.printStackTrace();
 			}
 		else {
 			// connect and create database
@@ -660,8 +662,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * @throws CriticalError
 	 * @throws NumberOfConnectionsExceeded
 	 */
-	private int loginAsCart()
-			throws CriticalError, NumberOfConnectionsExceeded {
+	private int loginAsCart() throws CriticalError, NumberOfConnectionsExceeded {
 
 		/*
 		 * initiate new session and new grocery list to cart
@@ -774,7 +775,16 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		PreparedStatement deleteCart = null;
 		try {
 			// WRITE part of transaction
-			// moving grocery list to history
+
+			// get grocery list and returns each product to shelf
+			ResultSet groceryListResultSet = getGroceryListResultSetByCartID(cartID);
+			groceryListResultSet.first();
+			GroceryList groceryList = SQLJsonGenerator.resultSetToGroceryList(groceryListResultSet);
+			if (groceryList.getList() != null)
+				for (ProductPackage p : groceryList.getList().values())
+					moveProductPackage(cartID, LOCATIONS_TYPES.CART, LOCATIONS_TYPES.STORE, p, p.getAmount());
+
+			// delete grocery list and cart
 			deleteGroceryList = getParameterizedQuery(generateDeleteQuery(GroceriesListsTable.table,
 					BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK)), listID);
 			deleteCart = getParameterizedQuery(generateDeleteQuery(CartsListTable.table,
@@ -788,6 +798,13 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new CriticalError();
+		} catch (ProductPackageAmountNotMatch e) {
+			log.error(
+					"logoutAsCart: trying to return product to shelf but amount not matched to what in the grocery list");
+			throw new CriticalError();
+		} catch (ProductPackageNotExist e) {
+			log.error("logoutAsCart: trying to return product to shelf but product package not exist in grocery list");
 			throw new CriticalError();
 		} finally {
 			closeResources(deleteGroceryList, deleteCart);
@@ -1340,29 +1357,27 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 
 	/**
-	 * get a ResultSet object of a grocery list by cartID 
+	 * get a ResultSet object of a grocery list by cartID
 	 * 
 	 * @param cartId
 	 *            - the cartID you need its grocery list
-	 * @throws CriticalError 
-	 * @throws SQLException 
+	 * @throws CriticalError
+	 * @throws SQLException
 	 */
 	private ResultSet getGroceryListResultSetByCartID(int cartId) throws CriticalError, SQLException {
-		
+
 		String getGroceryListQuery = generateSelectInnerJoinWithQuery2Tables(CartsListTable.table,
 				GroceriesListsTable.table, CartsListTable.listIDCol, CartsListTable.listIDCol,
 				BinaryCondition.equalTo(CartsListTable.cartIDCol, PARAM_MARK));
-		
-		
+
 		PreparedStatement statement = getParameterizedReadQuery(getGroceryListQuery, cartId);
-	
+
 		ResultSet result = statement.executeQuery();
-		
+
 		return result;
 
 	}
-	
-	
+
 	/*
 	 * 
 	 * Wrapping method for transaction operations. (I use it only to eliminate
@@ -1432,10 +1447,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			throw new CriticalError();
 		}
 	}
-	
-	
-	
-	
 
 	/*
 	 * #####################################################################
@@ -1443,7 +1454,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * 
 	 * 
 	 * 
-	 * 							Public Methods
+	 * Public Methods
 	 * 
 	 * 
 	 * 
@@ -2014,23 +2025,23 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		log.info("SQL Public cartCheckout: of cart: " + cartID + " (SESSION: " + cartID + " )");
 
 		validateCartSessionEstablished(cartID);
-		
 
 		// START transaction
 		connectionStartTransaction();
 
 		PreparedStatement copyStatement = null;
+		PreparedStatement deleteGroceryList = null;
 		ResultSet cartGroceryList = null;
-		
+
 		try {
 			// READ part of transaction
-			//check if grocery list of that cart is empty
+			// check if grocery list of that cart is empty
 			cartGroceryList = getGroceryListResultSetByCartID(cartID);
-			
+
 			if (isResultSetEmpty(cartGroceryList))
 				throw new GroceryListIsEmpty();
-			
-			//everything ok - perform checkout
+
+			// everything ok - perform checkout
 			int listID = getCartListId(cartID);
 
 			// WRITE part of transaction
@@ -2047,9 +2058,13 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 							.validate();
 
 			copyStatement = getParameterizedQuery(copyQuery, listID);
+			deleteGroceryList = getParameterizedQuery(generateDeleteQuery(GroceriesListsTable.table,
+					BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK)), listID);
 
-			log.debug("cartCheckout: copy groceryList " + listID + " to history.\n by run query: " + copyStatement);
+			log.debug("cartCheckout: move groceryList " + listID + " to history.\n by run query: " + copyStatement
+					+ "\n and: " + deleteGroceryList);
 			copyStatement.executeUpdate();
+			deleteGroceryList.executeUpdate();
 
 			// logout cart
 			logoutAsCart(cartID);
@@ -2062,7 +2077,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			throw new CriticalError();
 		} finally {
 			connectionEndTransaction();
-			closeResources(copyStatement,cartGroceryList);
+			closeResources(copyStatement, cartGroceryList, deleteGroceryList);
 		}
 
 	}
@@ -2257,18 +2272,19 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		if (!isCartSessionEstablished(cartID))
 			throw new NoGroceryListToRestore();
 
-		
-//		int listID = getCartListId(cartID);
-//
-//		PreparedStatement statement = getParameterizedReadQuery(generateSelectQuery1Table(GroceriesListsTable.table,
-//				BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK)), listID);
+		// int listID = getCartListId(cartID);
+		//
+		// PreparedStatement statement =
+		// getParameterizedReadQuery(generateSelectQuery1Table(GroceriesListsTable.table,
+		// BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK)),
+		// listID);
 
 		log.debug("cartRestoreGroceryList: restoring grocery list.");
 
 		ResultSet result = null;
 		try {
-//			result = statement.executeQuery();
-			result = getGroceryListResultSetByCartID(cartID) ;
+			// result = statement.executeQuery();
+			result = getGroceryListResultSetByCartID(cartID);
 			result.first();
 			return SQLJsonGenerator.GroceryListToJson(result);
 		} catch (SQLException e) {
@@ -2324,7 +2340,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			connectionEndTransaction();
 			closeResources(statement);
 		}
-		
+
 	}
 
 }
