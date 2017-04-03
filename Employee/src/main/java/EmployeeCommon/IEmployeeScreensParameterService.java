@@ -7,5 +7,9 @@ public interface IEmployeeScreensParameterService {
 	void setClientType(CLIENT_TYPE e);
 
 	CLIENT_TYPE getClientType();
+	
+	void setNotShowMainScreenVideo(boolean show);
+	
+	boolean getNotShowMainScreenVideo();
 
 }

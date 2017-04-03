@@ -3,7 +3,10 @@ package EmployeeGui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import EmployeeCommon.EmployeeScreensParameterService;
+import EmployeeCommon.IEmployeeScreensParameterService;
 import GuiUtils.AbstractApplicationScreen;
+import UtilsImplementations.InjectionFactory;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -33,18 +36,25 @@ public class EmployeeMainScreen implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(mainScreenPane);
-		MediaPlayer player = new MediaPlayer(
-				new Media(getClass().getResource("/EmployeeMainScreen/SmartMarketSplash.mp4").toExternalForm()));
-		MediaView mediaView = new MediaView(player);
-		mediaView.setFitWidth(1600);
-		mediaView.setFitHeight(900);
-		mediaView.setPreserveRatio(false);
-		mainScreenPane.getChildren().add(mediaView);
-		player.setMute(true);
-		player.setCycleCount(MediaPlayer.INDEFINITE);
-		player.play();
+		IEmployeeScreensParameterService employeeScreensParameterService = InjectionFactory
+				.getInstance(EmployeeScreensParameterService.class);
+		
+		
+		if (employeeScreensParameterService.getNotShowMainScreenVideo()) {
+			MediaPlayer player = new MediaPlayer(
+					new Media(getClass().getResource("/EmployeeMainScreen/SmartMarketSplash.mp4").toExternalForm()));
+			MediaView mediaView = new MediaView(player);
+			mediaView.setFitWidth(1600);
+			mediaView.setFitHeight(900);
+			mediaView.setPreserveRatio(false);
+			mainScreenPane.getChildren().add(mediaView);
+			player.setMute(true);
+			player.setCycleCount(MediaPlayer.INDEFINITE);
+			player.play();
+		}
 		vbox.toFront();
 		vbox.setFocusTraversable(true);
+
 	}
 
 	@FXML

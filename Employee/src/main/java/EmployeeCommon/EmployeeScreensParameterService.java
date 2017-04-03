@@ -8,6 +8,7 @@ import CommonDefs.CLIENT_TYPE;
 public class EmployeeScreensParameterService implements IEmployeeScreensParameterService {
 
 	private CLIENT_TYPE client;
+	private boolean notShow;
 
 	@Override
 	public void setClientType(CLIENT_TYPE ¢) {
@@ -18,6 +19,17 @@ public class EmployeeScreensParameterService implements IEmployeeScreensParamete
 	@Override
 	public CLIENT_TYPE getClientType() {
 		return client;
+	}
+
+	@Override
+	public void setNotShowMainScreenVideo(boolean notShow) {
+		this.notShow = notShow;
+		
+	}
+
+	@Override
+	public boolean getNotShowMainScreenVideo() {
+		return this.notShow;
 	}
 
 }
