@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.layout.StackPane?>
-
-
-<StackPane fx:id="cartWelcomeScreenPane" onMouseClicked="#mouseClicked" styleClass="root" stylesheets="@../cartCssStyles/welcomeScreen.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CartGuiScreens.CartWelcomeScreen" />
