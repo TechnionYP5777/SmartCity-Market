@@ -152,7 +152,7 @@
 						</GridPane>
 						<StackPane>
 							<children>
-								<VBox fx:id="smartcodeOperationsPane" spacing="15.0" visible="false">
+								<VBox fx:id="smartcodeOperationsPane" spacing="15.0">
 									<children>
 										<Label fx:id="chooseOprationForSmartCodeLbl" text="Choose operation for smartcode" textFill="#191970">
 											<font>
@@ -161,7 +161,7 @@
 										</Label>
 										<Separator />
                               <JFXRadioButton fx:id="printSmartCodeRadioButton" onAction="#radioButtonHandling" text="Print smart code" />
-                              <JFXRadioButton fx:id="addPackageToStoreRadioButton" onAction="#radioButtonHandling" text="Add package to store" />
+                              <JFXRadioButton fx:id="addPackageToStoreRadioButton" onAction="#radioButtonHandling" selected="true" text="Add package to store" />
                               <JFXRadioButton fx:id="removePackageFromStoreRadioButton" onAction="#radioButtonHandling" text="Remove package from store" />
                               <JFXRadioButton fx:id="removePackageFromWarhouseRadioButton" onAction="#radioButtonHandling" text="Remove package from warehouse" />
 									</children>
@@ -169,7 +169,7 @@
 										<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 									</padding>
 								</VBox>
-								<VBox fx:id="barcodeOperationsPane" spacing="15.0">
+								<VBox fx:id="barcodeOperationsPane" spacing="15.0" visible="false">
 									<children>
 										<Label fx:id="chooseOperationForBarcodeLbl" text="Choose operation for barcode" textFill="#191970">
 											<font>
@@ -179,7 +179,7 @@
 										<Separator />
 										<HBox spacing="20.0">
 											<children>
-                                    <JFXRadioButton fx:id="addPakageToWarhouseRadioButton" onAction="#radioButtonHandlingBarcode" text="Add package to warehouse" />
+                                    <JFXRadioButton fx:id="addPakageToWarhouseRadioButton" onAction="#radioButtonHandlingBarcode" selected="true" text="Add package to warehouse" />
 												<Label fx:id="expirationDateLabel" text="Expiration Date:" textFill="WHITE" />
                                     <JFXDatePicker fx:id="datePicker" />
 												<CheckBox fx:id="printTheSmartCodeCheckBox" mnemonicParsing="false" text="Print the smart code" textFill="WHITE" />
