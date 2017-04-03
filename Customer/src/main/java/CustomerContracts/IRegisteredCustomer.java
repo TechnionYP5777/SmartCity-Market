@@ -3,6 +3,7 @@ package CustomerContracts;
 import java.time.LocalDate;
 import java.util.HashSet;
 
+import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.Ingredient;
 import CustomerContracts.ACustomerExceptions.*;
 
@@ -211,4 +212,15 @@ public interface IRegisteredCustomer extends ICustomer {
 	 * @throws CriticalError
 	 */
 	void removeCustomer() throws CustomerNotConnected, InvalidParameter, AuthenticationError, CriticalError;
+	
+	/**
+	 * updateCustomerProfile - updates the customer profile!
+	 * 
+	 * @param CustomerProfile - the new CustomerProfile
+	 * @throws CustomerNotConnected 
+	 * @throws InvalidParameter 
+	 * @throws AuthenticationError
+	 * @throws CriticalError
+	 */
+	void updateCustomerProfile(CustomerProfile p) throws CustomerNotConnected, InvalidParameter, AuthenticationError, CriticalError;
 }
