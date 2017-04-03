@@ -14,7 +14,7 @@ import CustomerContracts.IRegisteredCustomer;
 import UtilsContracts.IClientRequestHandler;
 
 /**
- * This class represents a registered customer and holds all it's functionalitis
+ * This class represents a registered customer and holds all it's functionalities
  * 
  * @author idan atias
  *
@@ -29,29 +29,35 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 	private void validateCustomerIsLoggedIn() throws CustomerNotConnected {
 		if (customerProfile != null)
 			return;
+		
 		log.error("Customer is not logged in. Cart id=(" + this.id + ")");
+		
 		throw new ACustomerExceptions.CustomerNotConnected();
 	}
 
 	private void validateNotNull(Object o) throws CriticalError {
 		if (o != null)
 			return;
+		
 		log.fatal("Got NULL as parameter. Something bad happened...");
+		
 		throw new CriticalError();
-
 	}
 
 	private void validateString(String s) throws InvalidParameter, CriticalError {
 		validateNotNull(s);
 		if (!s.isEmpty())
 			return;
+		
 		log.error("Got empty string as parameter");
+		
 		throw new InvalidParameter();
 	}
 
 	@Override
 	public String getUserName() throws CustomerNotConnected {
 		validateCustomerIsLoggedIn();
+		
 		return customerProfile.getUserName();
 	}
 

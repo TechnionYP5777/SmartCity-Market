@@ -507,7 +507,6 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *			SM_USERNAME_ALREADY_EXISTS,
-	 *			SM_SENDER_IS_ALREADY_CONNECTED,
 	 *	 		SM_INVALID_PARAMETER,
 	 *
 	 */

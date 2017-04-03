@@ -4,15 +4,18 @@ import java.util.HashMap;
 
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.SmartCode;
 import CustomerContracts.ACustomerExceptions.AmountBiggerThanAvailable;
 import CustomerContracts.ACustomerExceptions.AuthenticationError;
 import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
 import CustomerContracts.ACustomerExceptions.CriticalError;
 import CustomerContracts.ACustomerExceptions.GroceryListIsEmpty;
+import CustomerContracts.ACustomerExceptions.InvalidParameter;
 import CustomerContracts.ACustomerExceptions.ProductCatalogDoesNotExist;
 import CustomerContracts.ACustomerExceptions.ProductNotInCart;
 import CustomerContracts.ACustomerExceptions.ProductPackageDoesNotExist;
+import CustomerContracts.ACustomerExceptions.UsernameAlreadyExists;
 
 /**
  * ICustomer - This interface is the contract for Customer Type.
@@ -118,4 +121,12 @@ public interface ICustomer {
 	 * 
 	 */
 	void removeAllItemsOfCartProduct(SmartCode c) throws ProductNotInCart, CriticalError;
+	
+	/**
+	 * @throws InvalidParameter
+	 * @throws ProductNotInCart 
+	 * @throws CriticalError 
+	 * 
+	 */
+	void registerNewCustomer(CustomerProfile p) throws CriticalError, InvalidParameter, UsernameAlreadyExists;
 }

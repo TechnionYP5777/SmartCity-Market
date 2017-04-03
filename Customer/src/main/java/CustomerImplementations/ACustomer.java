@@ -8,15 +8,7 @@ import org.apache.log4j.Logger;
 
 import BasicCommonClasses.CustomerProfile;
 import ClientServerApi.ResultDescriptor;
-import CustomerContracts.ACustomerExceptions.AmountBiggerThanAvailable;
-import CustomerContracts.ACustomerExceptions.AuthenticationError;
-import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
-import CustomerContracts.ACustomerExceptions.CriticalError;
-import CustomerContracts.ACustomerExceptions.GroceryListIsEmpty;
-import CustomerContracts.ACustomerExceptions.InvalidCommandDescriptor;
-import CustomerContracts.ACustomerExceptions.InvalidParameter;
-import CustomerContracts.ACustomerExceptions.ProductCatalogDoesNotExist;
-import CustomerContracts.ACustomerExceptions.ProductPackageDoesNotExist;
+import CustomerContracts.ACustomerExceptions.*;
 import UtilsContracts.IClientRequestHandler;
 
 /**
@@ -68,7 +60,8 @@ public abstract class ACustomer {
 
 	protected void resultDescriptorHandler(ResultDescriptor ¢) throws InvalidCommandDescriptor,
 		InvalidParameter, CriticalError, CustomerNotConnected, AmountBiggerThanAvailable,
-		ProductPackageDoesNotExist, GroceryListIsEmpty, AuthenticationError, ProductCatalogDoesNotExist {
+		ProductPackageDoesNotExist, GroceryListIsEmpty, AuthenticationError, ProductCatalogDoesNotExist,
+		UsernameAlreadyExists {
 
 		switch (¢) {
 
@@ -121,6 +114,12 @@ public abstract class ACustomer {
 			log.fatal("Command execution failed, product does not exist in catalog");
 			
 			throw new ProductCatalogDoesNotExist();
+			
+		case SM_USERNAME_ALREADY_EXISTS:
+			log.fatal("Command execution failed, username alread exists in the system");
+			
+			throw new UsernameAlreadyExists();
+			
 		//TODO - ADD MORE CASES RELEVANT FOR REGISTERED-CUSTOMERS
 		default:
 			log.fatal("Command execution failed, failed to parse result description");
@@ -131,9 +130,7 @@ public abstract class ACustomer {
 	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		return result = prime * result + ((customerProfile == null) ? 0 : customerProfile.hashCode());
+		return 31 + ((customerProfile == null) ? 0 : customerProfile.hashCode());
 	}
 
 	@Override

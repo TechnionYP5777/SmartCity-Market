@@ -11,9 +11,11 @@ import CommonDefs.CustomerProfileException.InvalidParameter;
  * CustomerProfile - This class represents a customer profile: user name, email, birthday etc.
  * 
  * @author Idan Atias
+ * @author Aviad Cohen
  */
 public class CustomerProfile {
 	String userName;
+	String password;
 	String firstName;
 	String lastName;
 	String phoneNumber;
@@ -22,13 +24,17 @@ public class CustomerProfile {
 	String street;
 	LocalDate birthdate;
 	HashSet<Ingredient> allergens = new HashSet<Ingredient>();
+	
+	ForgetPassword forgetPassword;
 
 	public CustomerProfile(String userName) {
 		this.userName = userName;
 	}
-	public CustomerProfile(String userName, String firstName, String lastName, String phoneNumber, String emailAddress,
-			String city, String street, LocalDate birthdate, HashSet<Ingredient> allergens) {
+	public CustomerProfile(String userName, String password, String firstName, String lastName, String phoneNumber, String emailAddress,
+			String city, String street, LocalDate birthdate, HashSet<Ingredient> allergens,
+			ForgetPassword forgetPassword) {
 		this.userName = userName;
+		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
@@ -37,6 +43,7 @@ public class CustomerProfile {
 		this.street = street;
 		this.birthdate = birthdate;
 		this.allergens = allergens;
+		this.forgetPassword = forgetPassword;
 	}
 	public String getUserName() {
 		return userName;
@@ -115,9 +122,7 @@ public class CustomerProfile {
 	}
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		return result = prime * result + ((userName == null) ? 0 : userName.hashCode());
+		return 31 + ((userName == null) ? 0 : userName.hashCode());
 	}
 	@Override
 	public boolean equals(Object o) {
@@ -132,6 +137,18 @@ public class CustomerProfile {
 		} else if (!userName.equals(other.userName))
 			return false;
 		return true;
+	}
+	ForgetPassword getForgetPassword() {
+		return forgetPassword;
+	}
+	void setForgetPassword(ForgetPassword p) {
+		this.forgetPassword = p;
+	}
+	String getPassword() {
+		return password;
+	}
+	void setPassword(String password) {
+		this.password = password;
 	}
 	
 }

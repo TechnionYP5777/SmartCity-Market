@@ -82,4 +82,11 @@ public class ACustomerExceptions extends SMException {
 	public static class ProductCatalogDoesNotExist extends ACustomerExceptions {
 		private static final long serialVersionUID = 4795491771324789368L;
 	}
+	
+	/**
+	 * Thrown when trying to register with existing username
+	 */
+	public static class UsernameAlreadyExists extends ACustomerExceptions {
+		private static final long serialVersionUID = 8895504040115716125L;
+	}
 }

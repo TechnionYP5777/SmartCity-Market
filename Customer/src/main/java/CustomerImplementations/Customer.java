@@ -27,6 +27,7 @@ import CustomerContracts.ACustomerExceptions.InvalidParameter;
 import CustomerContracts.ACustomerExceptions.ProductCatalogDoesNotExist;
 import CustomerContracts.ACustomerExceptions.ProductNotInCart;
 import CustomerContracts.ACustomerExceptions.ProductPackageDoesNotExist;
+import CustomerContracts.ACustomerExceptions.UsernameAlreadyExists;
 import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
 /**
@@ -117,7 +118,7 @@ public class Customer extends ACustomer implements ICustomer {
 		try {
 			resultDescriptorHandler(cmdwrppr.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter | CustomerNotConnected | ProductCatalogDoesNotExist |
-				AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty ¢) {
+				AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			¢.printStackTrace();
@@ -154,7 +155,7 @@ public class Customer extends ACustomer implements ICustomer {
 		try {
 			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter | ProductCatalogDoesNotExist |
-				 AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError ¢) {
+				 AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			¢.printStackTrace();
@@ -195,7 +196,7 @@ public class Customer extends ACustomer implements ICustomer {
 			id = _id;
 			groceryList = Serialization.deserialize($.getData(), GroceryList.class);
 		} catch (InvalidCommandDescriptor | InvalidParameter |
-				 AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError ¢) {
+				 AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			¢.printStackTrace();
@@ -236,7 +237,7 @@ public class Customer extends ACustomer implements ICustomer {
 			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter |
 				 ProductCatalogDoesNotExist |
-				GroceryListIsEmpty | AuthenticationError ¢) {
+				GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			¢.printStackTrace();
@@ -278,7 +279,7 @@ public class Customer extends ACustomer implements ICustomer {
 		try {
 			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter | ProductCatalogDoesNotExist |
-				GroceryListIsEmpty | AuthenticationError ¢) {
+				GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			¢.printStackTrace();
@@ -348,7 +349,7 @@ public class Customer extends ACustomer implements ICustomer {
 			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter |
 				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | 
-				 AuthenticationError | ProductCatalogDoesNotExist ¢) {
+				 AuthenticationError | ProductCatalogDoesNotExist | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			¢.printStackTrace();
@@ -399,7 +400,7 @@ public class Customer extends ACustomer implements ICustomer {
 			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter| CriticalError |
 				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | 
-				GroceryListIsEmpty | AuthenticationError ¢) {
+				GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			¢.printStackTrace();
@@ -422,11 +423,48 @@ public class Customer extends ACustomer implements ICustomer {
 		
 		for( HashMap.Entry<SmartCode, ProductPackage> entry : cartProduct.getPackages().entrySet())
 			try {
-				SmartCode smartCode = entry.getKey();
-				int amount = entry.getValue().getAmount();
-				returnProductToShelf(smartCode, amount);
+				returnProductToShelf(entry.getKey(), entry.getValue().getAmount());
 			} catch (AmountBiggerThanAvailable | ProductPackageDoesNotExist | CriticalError | CustomerNotConnected e) {
 				throw new CriticalError();
 			}
+	}
+	
+	@Override
+	public void registerNewCustomer(CustomerProfile p) throws CriticalError, InvalidParameter, UsernameAlreadyExists {
+		String serverResponse;
+		
+		log.info("Creating registerNewCustomer command wrapper to customer with username: " + p.getUserName());
+
+		establishCommunication(CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
+		
+		/* first: getting the product from the server */
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(id, CommandDescriptor.REGISTER_NEW_CUSTOMER,
+						Serialization.serialize(p)).serialize()));
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			
+			throw new CriticalError();
+		}
+		
+		terminateCommunication();
+		
+		CommandWrapper $ = CommandWrapper.deserialize(serverResponse);
+				
+		try {
+			resultDescriptorHandler($.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | CriticalError |
+				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | 
+				 GroceryListIsEmpty | AuthenticationError | CustomerNotConnected |
+				 ProductCatalogDoesNotExist ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			
+			¢.printStackTrace();
+			
+			throw new CriticalError();
+		}
+		
+		log.info("registerNewCustomer command succeed.");
 	}
 }
