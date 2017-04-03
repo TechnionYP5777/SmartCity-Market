@@ -58,13 +58,13 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 
 	public static void main(String[] args) {
 			
-		if (args.length == 1 && args[0].equals("show")) {
+		if (args.length == 0) {
 			show = true;
 		} else if (args.length == 1 && args[0].equals("notShow")) {
 			show = false;
 		} else {
 			throw new RuntimeException("Wrong parameters! please "
-					+ "choose: show or notShow");
+					+ "choose: notShow");
 		}
 
 		/* Setting log properties */
