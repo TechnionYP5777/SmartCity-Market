@@ -12,7 +12,7 @@ import CommonDefs.GroceryListExceptions.ProductNotInList;
  * @since 2017-01-04
  */
 public class GroceryList {
-	HashMap<SmartCode, ProductPackage> groceryList;
+	HashMap<SmartCode, ProductPackage> groceryList = new HashMap<SmartCode, ProductPackage>();
 
 	public void addProduct(ProductPackage newProductPackage) {
 		/* initializing new list */
