@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 import com.google.common.eventbus.Subscribe;
+import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 
 import BasicCommonClasses.CatalogProduct;
@@ -118,19 +119,19 @@ public class ManagePackagesTab implements Initializable {
 	DatePicker datePicker;
 
 	@FXML
-	RadioButton printSmartCodeRadioButton;
+	JFXRadioButton printSmartCodeRadioButton;
 
 	@FXML
-	RadioButton addPackageToStoreRadioButton;
+	JFXRadioButton addPackageToStoreRadioButton;
 
 	@FXML
-	RadioButton removePackageFromStoreRadioButton;
+	JFXRadioButton removePackageFromStoreRadioButton;
 
 	@FXML
-	RadioButton removePackageFromWarhouseRadioButton;
+	JFXRadioButton removePackageFromWarhouseRadioButton;
 
 	@FXML
-	RadioButton addPakageToWarhouseRadioButton;
+	JFXRadioButton addPakageToWarhouseRadioButton;
 
 	@FXML
 	Button searchCodeButton;
