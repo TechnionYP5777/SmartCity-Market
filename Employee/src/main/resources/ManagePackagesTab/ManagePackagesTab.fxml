@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXRadioButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
@@ -40,17 +40,7 @@
       				<Button fx:id="searchCodeButton" mnemonicParsing="false" onAction="#searchCodeButtonPressed" prefHeight="26.0" prefWidth="26.0" />
                </children>
             </HBox>
-				<DatePicker fx:id="datePickerForSmartCode" opacity="0.75" prefHeight="26.0" prefWidth="142.0">
-               <effect>
-                  <Lighting diffuseConstant="1.33">
-                     <bumpInput>
-                        <Shadow />
-                     </bumpInput>
-                     <light>
-                        <Light.Distant />
-                     </light>
-                  </Lighting>
-               </effect></DatePicker>
+            <JFXDatePicker fx:id="datePickerForSmartCode" />
 			</children>
 		</VBox>
 		<StackPane>
@@ -162,7 +152,7 @@
 						</GridPane>
 						<StackPane>
 							<children>
-								<VBox fx:id="smartcodeOperationsPane" spacing="15.0">
+								<VBox fx:id="smartcodeOperationsPane" spacing="15.0" visible="false">
 									<children>
 										<Label fx:id="chooseOprationForSmartCodeLbl" text="Choose operation for smartcode" textFill="#191970">
 											<font>
@@ -170,16 +160,16 @@
 											</font>
 										</Label>
 										<Separator />
-										<RadioButton fx:id="printSmartCodeRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" selected="true" text="Print smart code" textFill="WHITE" />
-										<RadioButton fx:id="addPackageToStoreRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Add package to store" textFill="WHITE" />
-										<RadioButton fx:id="removePackageFromStoreRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Remove package from store" textFill="WHITE" />
-										<RadioButton fx:id="removePackageFromWarhouseRadioButton" mnemonicParsing="false" onAction="#radioButtonHandling" text="Remove package from warehouse" textFill="WHITE" />
+                              <JFXRadioButton fx:id="printSmartCodeRadioButton" onAction="#radioButtonHandling" text="Print smart code" />
+                              <JFXRadioButton fx:id="addPackageToStoreRadioButton" onAction="#radioButtonHandling" text="Add package to store" />
+                              <JFXRadioButton fx:id="removePackageFromStoreRadioButton" onAction="#radioButtonHandling" text="Remove package from store" />
+                              <JFXRadioButton fx:id="removePackageFromWarhouseRadioButton" onAction="#radioButtonHandling" text="Remove package from warehouse" />
 									</children>
 									<padding>
 										<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 									</padding>
 								</VBox>
-								<VBox fx:id="barcodeOperationsPane" spacing="15.0" visible="false">
+								<VBox fx:id="barcodeOperationsPane" spacing="15.0">
 									<children>
 										<Label fx:id="chooseOperationForBarcodeLbl" text="Choose operation for barcode" textFill="#191970">
 											<font>
@@ -189,9 +179,9 @@
 										<Separator />
 										<HBox spacing="20.0">
 											<children>
-												<RadioButton fx:id="addPakageToWarhouseRadioButton" mnemonicParsing="false" onAction="#radioButtonHandlingBarcode" selected="true" text="Add package to warehouse" textFill="WHITE" />
+                                    <JFXRadioButton fx:id="addPakageToWarhouseRadioButton" onAction="#radioButtonHandlingBarcode" text="Add package to warehouse" />
 												<Label fx:id="expirationDateLabel" text="Expiration Date:" textFill="WHITE" />
-												<DatePicker fx:id="datePicker" />
+                                    <JFXDatePicker fx:id="datePicker" />
 												<CheckBox fx:id="printTheSmartCodeCheckBox" mnemonicParsing="false" text="Print the smart code" textFill="WHITE" />
 											</children>
 										</HBox>
@@ -223,7 +213,7 @@
 										</HBox>
 										<HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
 											<children>
-												<Spinner fx:id="editPackagesAmountSpinner" editable="true" initialValue="1" min="1" max="10000" opacity="0.86" prefHeight="54.0" prefWidth="55.0" styleClass="split-arrows-vertical">
+												<Spinner fx:id="editPackagesAmountSpinner" editable="true" initialValue="1" max="10000" min="1" opacity="0.86" prefHeight="54.0" prefWidth="55.0" styleClass="split-arrows-vertical">
                                        <effect>
                                           <Lighting diffuseConstant="1.46" specularConstant="0.0" specularExponent="11.43" surfaceScale="6.86">
                                              <bumpInput>
