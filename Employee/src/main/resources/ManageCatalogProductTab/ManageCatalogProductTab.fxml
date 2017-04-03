@@ -132,7 +132,7 @@
                         <ComboBox fx:id="productManufacturerCombo" prefHeight="26.0" prefWidth="171.0" />
                      </children>
 						</HBox>
-						<HBox fx:id="productPriceTextField" GridPane.columnIndex="1" GridPane.rowIndex="3">
+						<HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
 							<padding>
 								<Insets bottom="5.0" top="5.0" />
 							</padding>
