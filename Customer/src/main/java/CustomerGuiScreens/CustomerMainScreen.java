@@ -60,7 +60,7 @@ public class CustomerMainScreen implements Initializable {
 
 	// Main screen panes
 	@FXML
-	GridPane cartMainScreenPane;
+	GridPane customerMainScreenPane;
 
 	@FXML
 	ListView<CartProduct> productsListView;
@@ -206,7 +206,7 @@ public class CustomerMainScreen implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
-		AbstractApplicationScreen.fadeTransition(cartMainScreenPane);
+		AbstractApplicationScreen.fadeTransition(customerMainScreenPane);
 		barcodeEventHandler.register(this);
 		customer = TempCustomerPassingData.customer;
 		productsListView.setEditable(true);

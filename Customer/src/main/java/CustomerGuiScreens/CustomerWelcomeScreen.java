@@ -26,28 +26,28 @@ import javafx.scene.layout.StackPane;
 public class CustomerWelcomeScreen implements Initializable {
 
 	@FXML
-	private StackPane cartWelcomeScreenPane;
+	private StackPane customerWelcomeScreenPane;
 
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
-		AbstractApplicationScreen.fadeTransition(cartWelcomeScreenPane);   
+		AbstractApplicationScreen.fadeTransition(customerWelcomeScreenPane);   
 	}
 
 	@FXML
 	public void mouseClicked(MouseEvent __) {
-		ICustomer customer = InjectionFactory.getInstance(Customer.class);
-		try {
-			customer.login("Customer", "Customer");
-		} catch (SMException e) {
-			CustomerGuiExceptionsHandler.handle(e);	
-			return;
-		}
-		catch (Exception e) {
-			Alert alert = new Alert(AlertType.ERROR , e + "");
-			alert.showAndWait();
-			return;
-		}
-		TempCustomerPassingData.customer = customer;
-		AbstractApplicationScreen.setScene("/CustomerMainScreen/CustomerMainScreen.fxml");
+//		ICustomer customer = InjectionFactory.getInstance(Customer.class);
+//		try {
+//			customer.login("Cart", "Cart");
+//		} catch (SMException e) {
+//			CustomerGuiExceptionsHandler.handle(e);	
+//			return;
+//		}
+//		catch (Exception e) {
+//			Alert alert = new Alert(AlertType.ERROR , e + "");
+//			alert.showAndWait();
+//			return;
+//		}
+//		TempCustomerPassingData.customer = customer;
+		AbstractApplicationScreen.setScene("/CustomerLoginScreen/CustomerLoginScreen.fxml");
 	}
 }

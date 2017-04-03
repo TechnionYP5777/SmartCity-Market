@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:id="cartMainScreenPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="list-cell" stylesheets="@../cartCssStyles/mainScreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CartGuiScreens.CartMainScreen">
+<GridPane fx:id="customerMainScreenPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="list-cell" stylesheets="@../customerCssStyles/mainScreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerMainScreen">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1096.0" minWidth="754.0" prefWidth="808.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="510.0" minWidth="168.0" prefWidth="456.0" />
