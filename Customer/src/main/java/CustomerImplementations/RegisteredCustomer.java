@@ -1,22 +1,25 @@
 package CustomerImplementations;
 
+import java.net.SocketTimeoutException;
 import java.time.LocalDate;
 import java.util.HashSet;
 
 import com.google.inject.Inject;
 
 import BasicCommonClasses.Ingredient;
+import ClientServerApi.CommandDescriptor;
+import ClientServerApi.CommandWrapper;
 import CustomerContracts.ACustomerExceptions;
-import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
-import CustomerContracts.ACustomerExceptions.InvalidParameter;
-import CustomerContracts.ACustomerExceptions.CriticalError;
+import CustomerContracts.ACustomerExceptions.*;
 import CustomerContracts.IRegisteredCustomer;
 import UtilsContracts.IClientRequestHandler;
+import UtilsImplementations.Serialization;
 
 /**
  * This class represents a registered customer and holds all it's functionalities
  * 
  * @author idan atias
+ * @author Aviad Cohen
  *
  */
 public class RegisteredCustomer extends Customer implements IRegisteredCustomer {
@@ -209,4 +212,41 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 		}
 	}
 
+	@Override
+	public void removeCustomer() throws CustomerNotConnected, InvalidParameter, AuthenticationError, CriticalError {
+		String serverResponse;
+		
+		log.info("Creating removeCustomer command wrapper to customer with username: " + customerProfile.getUserName());
+
+		establishCommunication(CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
+		
+		/* first: getting the product from the server */
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(id, CommandDescriptor.REMOVE_CUSTOMER,
+						Serialization.serialize(customerProfile.getUserName())).serialize()));
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			
+			throw new CriticalError();
+		}
+		
+		terminateCommunication();
+		
+		CommandWrapper $ = CommandWrapper.deserialize(serverResponse);
+				
+		try {
+			resultDescriptorHandler($.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | CriticalError |
+				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | 
+				 GroceryListIsEmpty | ProductCatalogDoesNotExist | UsernameAlreadyExists ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			
+			¢.printStackTrace();
+			
+			throw new CriticalError();
+		}
+		
+		log.info("removeCustomer command succeed.");
+	}
 }

@@ -4,15 +4,14 @@ import java.time.LocalDate;
 import java.util.HashSet;
 
 import BasicCommonClasses.Ingredient;
-import CustomerContracts.ACustomerExceptions.CriticalError;
-import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
-import CustomerContracts.ACustomerExceptions.InvalidParameter;
+import CustomerContracts.ACustomerExceptions.*;
 
 /**
  * IRegisteredCustomer - This interface is the contract for RegisteredCustomer
  * type.
  * 
  * @author idan atias
+ * @author Aviad Cohen
  *
  */
 public interface IRegisteredCustomer extends ICustomer {
@@ -203,4 +202,13 @@ public interface IRegisteredCustomer extends ICustomer {
 	 */
 	void removeAllergens(HashSet<Ingredient> allergens) throws CustomerNotConnected, InvalidParameter;
 
+	/**
+	 * removeCustomer - remove the customer from system - can't be undone!
+	 * 
+	 * @throws CustomerNotConnected 
+	 * @throws InvalidParameter 
+	 * @throws AuthenticationError
+	 * @throws CriticalError
+	 */
+	void removeCustomer() throws CustomerNotConnected, InvalidParameter, AuthenticationError, CriticalError;
 }
