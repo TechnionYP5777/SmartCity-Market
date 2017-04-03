@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 import com.google.common.eventbus.Subscribe;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 
@@ -113,10 +114,10 @@ public class ManagePackagesTab implements Initializable {
 	Spinner<Integer> editPackagesAmountSpinner;
 
 	@FXML
-	DatePicker datePickerForSmartCode;
+	JFXDatePicker datePickerForSmartCode;
 
 	@FXML
-	DatePicker datePicker;
+	JFXDatePicker datePicker;
 
 	@FXML
 	JFXRadioButton printSmartCodeRadioButton;
