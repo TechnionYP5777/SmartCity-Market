@@ -193,13 +193,13 @@ public class CustomerMainScreen implements Initializable {
 		alert.showAndWait();
 		if (alert.getResult() == ButtonType.NO)
 			return;
-		
 		try {
 			customer.logout();
 		} catch (SMException e) {
 			Platform.exit();
 			System.exit(0);
 		}
+		
 		TempCustomerPassingData.customer = null;
 		AbstractApplicationScreen.setScene("/CustomerWelcomeScreen/CustomerWelcomeScreen.fxml");
 	}

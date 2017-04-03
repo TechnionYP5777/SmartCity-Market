@@ -25,7 +25,7 @@
 }
 
 #addButton {
-	-fx-background-image: url("add-to-cart-light.png");
+	-fx-background-image: url("add-to-customer-cart-light.png");
 	-fx-background-size: cover;
 
 }
