@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 
 import com.google.common.eventbus.Subscribe;
+import com.jfoenix.controls.JFXRadioButton;
+import com.jfoenix.controls.JFXTextField;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
@@ -29,7 +31,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
@@ -45,34 +46,34 @@ public class ManageCatalogProductTab implements Initializable {
 	private VBox rootPane;
 	
 	@FXML
-	private RadioButton addCatalogProductRadioButton;
+	private JFXRadioButton addCatalogProductRadioButton;
 
 	@FXML
-	private RadioButton removeCatalogProductRadioButton;
+	private JFXRadioButton removeCatalogProductRadioButton;
 
 	@FXML
-	private TextField barcodeTextField;
+	private JFXTextField barcodeTextField;
 
 	@FXML
 	private GridPane addCatalogProductParamPane;
 
 	@FXML
-	private TextField productNameTextField;
+	private JFXTextField productNameTextField;
 
 	@FXML
-	private TextField productDescriptionTextField;
+	private JFXTextField productDescriptionTextField;
 
 	@FXML
 	private ComboBox<String> productManufacturerCombo;
 
 	@FXML
-	private TextField productPriceTextField;
+	private JFXTextField productPriceTextField;
 
 	@FXML
-	private TextField productIngredientsTextField;
+	private JFXTextField productIngredientsTextField;
 
 	@FXML
-	private TextField productLocationTextField;
+	private JFXTextField productLocationTextField;
 
 	@FXML
 	private Button runTheOperationButton;

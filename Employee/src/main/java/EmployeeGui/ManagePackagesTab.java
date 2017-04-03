@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 import com.google.common.eventbus.Subscribe;
+import com.jfoenix.controls.JFXTextField;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Location;
@@ -39,7 +40,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -79,7 +79,7 @@ public class ManagePackagesTab implements Initializable {
 	HBox addPackageToWarehouseParametersPane;
 
 	@FXML
-	TextField barcodeTextField;
+	JFXTextField barcodeTextField;
 
 	@FXML
 	Button showMoreDetailsButton;

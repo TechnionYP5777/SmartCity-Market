@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -36,7 +37,7 @@
 				</HBox>
 				<HBox GridPane.columnIndex="1">
 					<children>
-						<TextField fx:id="barcodeTextField" />
+                  <JFXTextField fx:id="barcodeTextField" />
                   <Label text="*" />
 					</children>
 				</HBox>
@@ -111,7 +112,7 @@
 								<Insets bottom="5.0" />
 							</padding>
 							<children>
-								<TextField fx:id="productNameTextField" />
+                        <JFXTextField fx:id="productNameTextField" />
                         <Label text="*" />
 							</children>
 						</HBox>
@@ -120,7 +121,7 @@
 								<Insets bottom="5.0" top="5.0" />
 							</padding>
 							<children>
-								<TextField fx:id="productDescriptionTextField" />
+                        <JFXTextField fx:id="productDescriptionTextField" />
 							</children>
 						</HBox>
 						<HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -131,12 +132,12 @@
                         <ComboBox fx:id="productManufacturerCombo" prefHeight="26.0" prefWidth="171.0" />
                      </children>
 						</HBox>
-						<HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
+						<HBox fx:id="productPriceTextField" GridPane.columnIndex="1" GridPane.rowIndex="3">
 							<padding>
 								<Insets bottom="5.0" top="5.0" />
 							</padding>
 							<children>
-								<TextField fx:id="productPriceTextField" />
+                        <JFXTextField fx:id="productPriceTextField" />
                         <Label text="*" />
 							</children>
 						</HBox>

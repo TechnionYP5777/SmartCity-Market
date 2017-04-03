@@ -3,6 +3,8 @@ package EmployeeGui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.jfoenix.controls.JFXPasswordField;
+
 import CommonDefs.CLIENT_TYPE;
 import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IManager;
@@ -39,7 +41,7 @@ public class EmployeeLoginScreen implements Initializable {
 	@FXML
 	private TextField userNameTextField;
 	@FXML
-	private PasswordField passwordField;
+	private JFXPasswordField passwordField;
 	
 	private IPersistentStore persistenceStore;
 

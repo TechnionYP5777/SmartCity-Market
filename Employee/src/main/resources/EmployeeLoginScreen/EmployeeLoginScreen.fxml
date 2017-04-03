@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Light.Distant?>
@@ -76,27 +76,7 @@
                   </Lighting>
                </effect>
             </TextField>
-            <PasswordField fx:id="passwordField" minHeight="40.0" onAction="#loginButtonPressed" prefHeight="60.0" promptText="  Password" styleClass="label">
-               <padding>
-                  <Insets top="10.0" />
-               </padding>
-               <font>
-                  <Font name="Lucida Bright Regular" size="13.0" />
-               </font>
-               <effect>
-                  <Lighting diffuseConstant="1.42">
-                     <bumpInput>
-                        <Shadow />
-                     </bumpInput>
-                     <light>
-                        <Light.Distant />
-                     </light>
-                  </Lighting>
-               </effect>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </PasswordField>
+            <JFXPasswordField fx:id="passwordField" onAction="#loginButtonPressed" promptText=" Password" />
             <GridPane>
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
