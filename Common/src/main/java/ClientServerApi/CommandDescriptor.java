@@ -362,7 +362,7 @@ public enum CommandDescriptor {
 	REMOVE_INGREDIENT,
 	
 	/**
-	 * Description: Employee gets list of all ingredients.
+	 * Description: Employee / Customer gets list of all ingredients.
 	 * param1: void.
 	 * retval: List of ingredients.
 	 *
@@ -371,8 +371,9 @@ public enum CommandDescriptor {
 	 * 			SM_OK,
 	 * 		
 	 * 		failure:
-	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 * 
 	 */
+	
 	GET_ALL_INGREDIENTS,
 	
 	/**

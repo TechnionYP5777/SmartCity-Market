@@ -2,14 +2,19 @@
 
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
+import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
 
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.GroceryList;
+import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
+import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandDescriptor;
@@ -466,5 +471,45 @@ public class Customer extends ACustomer implements ICustomer {
 		}
 		
 		log.info("registerNewCustomer command succeed.");
+	}
+
+	@Override
+	public List<Ingredient> getAllIngredients() throws CriticalError {
+		String serverResponse;
+		
+		log.info("Creating getAllIngredients command wrapper");
+
+		establishCommunication(CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
+		
+		/* first: getting the product from the server */
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(id, CommandDescriptor.GET_ALL_INGREDIENTS).serialize()));
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			
+			throw new CriticalError();
+		}
+		
+		terminateCommunication();
+		
+		CommandWrapper commandWrapper = CommandWrapper.deserialize(serverResponse);
+				
+		try {
+			resultDescriptorHandler(commandWrapper.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | CriticalError |
+				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | 
+				 GroceryListIsEmpty | AuthenticationError | CustomerNotConnected |
+				 ProductCatalogDoesNotExist | InvalidParameter | UsernameAlreadyExists ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			
+			¢.printStackTrace();
+			
+			throw new CriticalError();
+		}
+		
+		log.info("getAllIngredients command succeed.");
+		
+		return new Gson().fromJson(commandWrapper.getData(), new TypeToken<List<Manufacturer>>(){}.getType());
 	}
 }

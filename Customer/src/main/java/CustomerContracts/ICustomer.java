@@ -1,10 +1,12 @@
 package CustomerContracts;
 
 import java.util.HashMap;
+import java.util.List;
 
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
+import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.SmartCode;
 import CustomerContracts.ACustomerExceptions.AmountBiggerThanAvailable;
 import CustomerContracts.ACustomerExceptions.AuthenticationError;
@@ -129,4 +131,10 @@ public interface ICustomer {
 	 * 
 	 */
 	void registerNewCustomer(CustomerProfile p) throws CriticalError, InvalidParameter, UsernameAlreadyExists;
+	
+	/**
+	 * @throws CriticalError 
+	 * 
+	 */
+	List<Ingredient> getAllIngredients() throws CriticalError;
 }
