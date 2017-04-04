@@ -5,7 +5,9 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
-import SQLDatabase.SQLDatabaseStrings.CARTS_LIST_TABLE;
+import SQLDatabase.SQLDatabaseStrings.ACTIVE_CUSTOMERS_LIST_TABLE;
+import SQLDatabase.SQLDatabaseStrings.CUSTOMERS_INGREDIENTS_TABLE;
+import SQLDatabase.SQLDatabaseStrings.CUSTOMERS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.FREE_IDS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.GROCERIES_LISTS_HISTORY_TABLE;
 import SQLDatabase.SQLDatabaseStrings.GROCERIES_LISTS_TABLE;
@@ -102,6 +104,7 @@ class SQLDatabaseEntities {
 		static DbColumn manufacturerIDCol;
 		static DbColumn productDescriptionCol;
 		static DbColumn productPriceCol;
+		static DbColumn productWeightCol;
 		static DbColumn productPictureCol;
 	}
 
@@ -182,16 +185,16 @@ class SQLDatabaseEntities {
 	}
 
 	/**
-	 * this class contains all the objects used buy SQLBuilder for CartsList
+	 * this class contains all the objects used buy SQLBuilder for ActiveCustomersList
 	 * Table
 	 * 
 	 * @author noam
 	 *
 	 */
-	static class CartsListTable {
+	static class ActiveCustomersListTable {
 		static DbTable table;
 
-		static DbColumn cartIDCol;
+		static DbColumn CustomerIDCol;
 		static DbColumn listIDCol;
 	}
 
@@ -210,6 +213,47 @@ class SQLDatabaseEntities {
 		static DbColumn workerPrivilegesCol;
 		static DbColumn isLoggedInCol;
 		static DbColumn sessionIDCol;
+		static DbColumn securityQuestionCol;
+		static DbColumn securityAnswerCol;
+	}
+	
+	/**
+	 * this class contains all the objects used buy SQLBuilder for Customers Table
+	 * 
+	 * @author noam
+	 *
+	 */
+	static class CustomersTable {
+		static DbTable table;
+		
+		static DbColumn customerIDCol;
+		static DbColumn customerUsernameCol;
+		static DbColumn customerPasswordCol;
+		static DbColumn isLoggedInCol;
+		static DbColumn sessionIDCol;
+		static DbColumn securityQuestionCol;
+		static DbColumn securityAnswerCol;
+		static DbColumn customerFirstnameCol;
+		static DbColumn customerLastnameCol;
+		static DbColumn customerPhonenumberCol;
+		static DbColumn customerEmailCol;
+		static DbColumn customerCityCol;
+		static DbColumn customerAddressCol;
+		static DbColumn customerBirthdateCol;
+	}
+	
+	/**
+	 * this class contains all the objects used buy SQLBuilder for
+	 * CustomersIngredients Table
+	 * 
+	 * @author noam
+	 *
+	 */
+	static class CustomersIngredientsTable {
+		static DbTable table;
+
+		static DbColumn customerUsernameCol;
+		static DbColumn ingredientIDCol;
 	}
 	
 	/**
@@ -288,6 +332,8 @@ class SQLDatabaseEntities {
 				.addColumn(PRODUCTS_CATALOG_TABLE.ATTR_PRODUCT_PICTURE, TYPE_TEXT, null);
 		ProductsCatalogTable.productPriceCol = ProductsCatalogTable.table
 				.addColumn(PRODUCTS_CATALOG_TABLE.ATTR_PRODUCT_PRICE, TYPE_REAL, null);
+		ProductsCatalogTable.productWeightCol = ProductsCatalogTable.table
+				.addColumn(PRODUCTS_CATALOG_TABLE.ATTR_PRODUCT_WEIGHT, TYPE_REAL, null);
 		// set primary key
 		ProductsCatalogTable.table.primaryKey(ProductsCatalogTable.table.getName(),
 				ProductsCatalogTable.barcodeCol.getName());
@@ -365,11 +411,11 @@ class SQLDatabaseEntities {
 				GroceriesListsHistoryTable.listIDCol.getName());
 
 		/*
-		 * initialize the CartsList Table
+		 * initialize the ActiveCustomersList Table
 		 */
-		CartsListTable.table = databaseSchema.addTable(CARTS_LIST_TABLE.CARTS_LIST_TABLE);
-		CartsListTable.cartIDCol = CartsListTable.table.addColumn(CARTS_LIST_TABLE.ATTR_CART_ID, TYPE_ID, null);
-		CartsListTable.listIDCol = CartsListTable.table.addColumn(CARTS_LIST_TABLE.ATTR_LIST_ID, TYPE_ID, null);
+		ActiveCustomersListTable.table = databaseSchema.addTable(ACTIVE_CUSTOMERS_LIST_TABLE.ACTIVE_CUSTOMERS_LIST_TABLE);
+		ActiveCustomersListTable.CustomerIDCol = ActiveCustomersListTable.table.addColumn(ACTIVE_CUSTOMERS_LIST_TABLE.ATTR_CUSTOMER_ID, TYPE_ID, null);
+		ActiveCustomersListTable.listIDCol = ActiveCustomersListTable.table.addColumn(ACTIVE_CUSTOMERS_LIST_TABLE.ATTR_LIST_ID, TYPE_ID, null);
 
 		/*
 		 * initialize the Workers Table
@@ -384,6 +430,52 @@ class SQLDatabaseEntities {
 				null);
 		WorkersTable.workerPrivilegesCol = WorkersTable.table.addColumn(WORKERS_TABLE.ATTR_WORKER_PRIVILEGES,
 				TYPE_INTEGER, null);
+		WorkersTable.securityAnswerCol = WorkersTable.table.addColumn(WORKERS_TABLE.ATTR_SECURITY_ANSWER, TYPE_TEXT,
+				null);
+		WorkersTable.securityQuestionCol = WorkersTable.table.addColumn(WORKERS_TABLE.ATTR_SECURITY_QUESTION, TYPE_TEXT,
+				null);
+		
+		/*
+		 * initialize the Costumers Table
+		 */
+		CustomersTable.table = databaseSchema.addTable(CUSTOMERS_TABLE.CUSTOMERS_TABLE);
+		CustomersTable.customerIDCol = CustomersTable.table.addColumn(CUSTOMERS_TABLE.ATTR_CUSTOMER_ID, TYPE_ID, null);
+		CustomersTable.isLoggedInCol = CustomersTable.table.addColumn(CUSTOMERS_TABLE.ATTR_IS_LOGGED_IN, TYPE_BOOLEAN, null);
+		CustomersTable.sessionIDCol = CustomersTable.table.addColumn(CUSTOMERS_TABLE.ATTR_SESSION_ID, TYPE_LONG, null);
+		CustomersTable.customerPasswordCol = CustomersTable.table.addColumn(CUSTOMERS_TABLE.ATTR_CUSTOMER_PASSWORD, TYPE_TEXT,
+				null);
+		CustomersTable.customerUsernameCol = CustomersTable.table.addColumn(CUSTOMERS_TABLE.ATTR_CUSTOMER_USERNAME, TYPE_TEXT,
+				null);
+		CustomersTable.customerAddressCol = CustomersTable.table.addColumn(CUSTOMERS_TABLE.ATTR_CUSTOMER_ADDRESS, TYPE_TEXT,
+				null);
+		CustomersTable.customerBirthdateCol = CustomersTable.table.addColumn(CUSTOMERS_TABLE.ATTR_CUSTOMER_BIRTHDATE, TYPE_DATE,
+				null);
+		CustomersTable.customerCityCol = CustomersTable.table.addColumn(CUSTOMERS_TABLE.ATTR_CUSTOMER_CITY, TYPE_TEXT,
+				null);
+		CustomersTable.customerEmailCol = CustomersTable.table.addColumn(CUSTOMERS_TABLE.ATTR_CUSTOMER_EMAIL, TYPE_TEXT,
+				null);
+		CustomersTable.customerFirstnameCol = CustomersTable.table.addColumn(CUSTOMERS_TABLE.ATTR_CUSTOMER_FIRSTNAME, TYPE_TEXT,
+				null);
+		CustomersTable.customerLastnameCol = CustomersTable.table.addColumn(CUSTOMERS_TABLE.ATTR_CUSTOMER_LASTNAME, TYPE_TEXT,
+				null);
+		CustomersTable.customerPhonenumberCol = CustomersTable.table.addColumn(CUSTOMERS_TABLE.ATTR_CUSTOMER_PHONENUMBER, TYPE_TEXT,
+				null);
+		CustomersTable.securityAnswerCol = CustomersTable.table.addColumn(CUSTOMERS_TABLE.ATTR_SECURITY_ANSWER, TYPE_TEXT,
+				null);
+		CustomersTable.securityQuestionCol = CustomersTable.table.addColumn(CUSTOMERS_TABLE.ATTR_SECURITY_QUESTION, TYPE_TEXT,
+				null);
+		CustomersTable.table.primaryKey(CustomersTable.table.getName(),
+				CustomersTable.customerIDCol.getName(), CustomersTable.customerUsernameCol.getName());
+		
+		/*
+		 * initialize the CustomersIngredients Table
+		 */
+		CustomersIngredientsTable.table = databaseSchema.addTable(CUSTOMERS_INGREDIENTS_TABLE.CUSTOMERS_INGREDIENTS_TABLE);
+		CustomersIngredientsTable.customerUsernameCol = CustomersIngredientsTable.table
+				.addColumn(CUSTOMERS_INGREDIENTS_TABLE.ATTR_CUSTOMER_USERNAME, TYPE_TEXT, null);
+		CustomersIngredientsTable.ingredientIDCol = CustomersIngredientsTable.table
+				.addColumn(CUSTOMERS_INGREDIENTS_TABLE.ATTR_INGREDIENT_ID, TYPE_ID, null);
+
 		
 		/*
 		 * initialize the Free IDs Table

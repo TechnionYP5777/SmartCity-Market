@@ -66,6 +66,7 @@ public class SQLDatabaseStrings {
 		public static final String ATTR_MANUFACTURER_ID = MANUFACTURER_TABLE.ATTR_MANUFACTURER_ID;
 		public static final String ATTR_PRODUCT_DESCRIPTION = "ProductDescription";
 		public static final String ATTR_PRODUCT_PRICE = "ProductPrice";
+		public static final String ATTR_PRODUCT_WEIGHT = "ProductWeight";
 		public static final String ATTR_PRODUCT_PICTURE = "ProductPicture";
 	}
 
@@ -140,14 +141,14 @@ public class SQLDatabaseStrings {
 	}
 
 	/*
-	 * CARTS LIST TABLE
+	 * ACTIVE CUSTOMER LIST TABLE
 	 */
-	public static class CARTS_LIST_TABLE {
+	public static class ACTIVE_CUSTOMERS_LIST_TABLE {
 		// table name
-		public static final String CARTS_LIST_TABLE = "CartsListTable";
+		public static final String ACTIVE_CUSTOMERS_LIST_TABLE = "ActiveCustomersListTable";
 
 		// table attributes
-		public static final String ATTR_CART_ID = "CartID";
+		public static final String ATTR_CUSTOMER_ID = "CustomerID";
 		public static final String ATTR_LIST_ID = GROCERIES_LISTS_TABLE.ATTR_LIST_ID;
 
 	}
@@ -166,10 +167,49 @@ public class SQLDatabaseStrings {
 		public static final String ATTR_WORKER_PRIVILEGES = "WorkerPrivileges";
 		public static final String ATTR_IS_LOGGED_IN = "IsLoggedIn";
 		public static final String ATTR_SESSION_ID = "SessionID";
+		public static final String ATTR_SECURITY_QUESTION = "SecurityQuestion";
+		public static final String ATTR_SECURITY_ANSWER = "SecurityAnswer";
 
 		// table values
 		public static final Integer VALUE_PRIVILEGE_MANAGER = 1;
 		public static final Integer VALUE_PRIVILEGE_WORKER = 4;
+	}
+	
+	/*
+	 * CUSTOMERS TABLE
+	 */
+	public static class CUSTOMERS_TABLE {
+		// table name
+		public static final String CUSTOMERS_TABLE = "CustomersTable";
+
+		// table attributes
+		public static final String ATTR_CUSTOMER_ID = "CustomerID";
+		public static final String ATTR_CUSTOMER_USERNAME = "CustomerUsername";
+		public static final String ATTR_CUSTOMER_PASSWORD = "CustomerPassword";
+		public static final String ATTR_CUSTOMER_FIRSTNAME = "FirstName";
+		public static final String ATTR_CUSTOMER_LASTNAME = "LastName";
+		public static final String ATTR_CUSTOMER_PHONENUMBER = "PhoneNumber";
+		public static final String ATTR_CUSTOMER_EMAIL = "Email";
+		public static final String ATTR_CUSTOMER_CITY = "City";
+		public static final String ATTR_CUSTOMER_ADDRESS = "Address";
+		public static final String ATTR_CUSTOMER_BIRTHDATE = "Birthdate";
+		public static final String ATTR_IS_LOGGED_IN = WORKERS_TABLE.ATTR_IS_LOGGED_IN;
+		public static final String ATTR_SESSION_ID = WORKERS_TABLE.ATTR_SESSION_ID;
+		public static final String ATTR_SECURITY_QUESTION = WORKERS_TABLE.ATTR_SECURITY_QUESTION;
+		public static final String ATTR_SECURITY_ANSWER = WORKERS_TABLE.ATTR_SECURITY_ANSWER;
+	
+	}
+	
+	/*
+	 * CUSTOMERS INGREDIENTS TABLE
+	 */
+	public static class CUSTOMERS_INGREDIENTS_TABLE {
+		// table name
+		public static final String CUSTOMERS_INGREDIENTS_TABLE = "CustomersIngredientsTable";
+
+		// table attributes
+		public static final String ATTR_CUSTOMER_USERNAME = CUSTOMERS_TABLE.ATTR_CUSTOMER_USERNAME;
+		public static final String ATTR_INGREDIENT_ID = INGREDIENTS_TABLE.ATTR_INGREDIENT_ID;
 	}
 	
 	/*

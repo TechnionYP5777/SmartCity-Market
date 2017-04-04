@@ -39,7 +39,9 @@ import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import CommonDefs.CLIENT_TYPE;
 import SQLDatabase.SQLDatabaseEntities;
-import SQLDatabase.SQLDatabaseEntities.CartsListTable;
+import SQLDatabase.SQLDatabaseEntities.ActiveCustomersListTable;
+import SQLDatabase.SQLDatabaseEntities.CustomersIngredientsTable;
+import SQLDatabase.SQLDatabaseEntities.CustomersTable;
 import SQLDatabase.SQLDatabaseEntities.FreeIDsTable;
 import SQLDatabase.SQLDatabaseEntities.GroceriesListsHistoryTable;
 import SQLDatabase.SQLDatabaseEntities.GroceriesListsTable;
@@ -172,11 +174,15 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			statement.executeUpdate(createTableString);
 			createTableString = new CreateTableQuery(GroceriesListsHistoryTable.table, true).validate() + "";
 			statement.executeUpdate(createTableString);
-			createTableString = new CreateTableQuery(CartsListTable.table, true).validate() + "";
+			createTableString = new CreateTableQuery(ActiveCustomersListTable.table, true).validate() + "";
 			statement.executeUpdate(createTableString);
 			createTableString = new CreateTableQuery(WorkersTable.table, true).validate() + "";
 			statement.executeUpdate(createTableString);
 			createTableString = new CreateTableQuery(FreeIDsTable.table, true).validate() + "";
+			statement.executeUpdate(createTableString);
+			createTableString = new CreateTableQuery(CustomersTable.table, true).validate() + "";
+			statement.executeUpdate(createTableString);
+			createTableString = new CreateTableQuery(CustomersIngredientsTable.table, true).validate() + "";
 			statement.executeUpdate(createTableString);
 
 		} catch (SQLException e) {
@@ -445,7 +451,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			}
 
 			// CASE: cart
-			if (isSuchRowExist(CartsListTable.table, CartsListTable.cartIDCol, sessionID)) {
+			if (isSuchRowExist(ActiveCustomersListTable.table, ActiveCustomersListTable.CustomerIDCol, sessionID)) {
 				log.debug("getClientTypeBySessionID: cart found!");
 				return CLIENT_TYPE.CART;
 			}
@@ -671,7 +677,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		// find max list id from grocery list table and history list table
 		String maxListIDQuery = new SelectQuery()
-				.addCustomColumns(FunctionCall.max().addColumnParams(CartsListTable.listIDCol)).validate() + "";
+				.addCustomColumns(FunctionCall.max().addColumnParams(ActiveCustomersListTable.listIDCol)).validate() + "";
 		String maxHistoryListIDQuery = new SelectQuery()
 				.addCustomColumns(FunctionCall.max().addColumnParams(GroceriesListsHistoryTable.listIDCol)).validate()
 				+ "";
@@ -698,8 +704,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			maxListID = Math.max(maxListID, maxHistoryListID) + 1;
 
 			// adding new cart connection to table
-			String insertQuery = new InsertQuery(CartsListTable.table).addColumn(CartsListTable.cartIDCol, PARAM_MARK)
-					.addColumn(CartsListTable.listIDCol, PARAM_MARK).validate() + "";
+			String insertQuery = new InsertQuery(ActiveCustomersListTable.table).addColumn(ActiveCustomersListTable.CustomerIDCol, PARAM_MARK)
+					.addColumn(ActiveCustomersListTable.listIDCol, PARAM_MARK).validate() + "";
 			insertQuery.hashCode();
 
 			log.info("loginAsCart: run query: " + insertQuery);
@@ -787,8 +793,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// delete grocery list and cart
 			deleteGroceryList = getParameterizedQuery(generateDeleteQuery(GroceriesListsTable.table,
 					BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK)), listID);
-			deleteCart = getParameterizedQuery(generateDeleteQuery(CartsListTable.table,
-					BinaryCondition.equalTo(CartsListTable.listIDCol, PARAM_MARK)), listID);
+			deleteCart = getParameterizedQuery(generateDeleteQuery(ActiveCustomersListTable.table,
+					BinaryCondition.equalTo(ActiveCustomersListTable.listIDCol, PARAM_MARK)), listID);
 
 			log.debug("logoutAsCart: delete groceryList " + listID + ".\n by run query: " + deleteGroceryList);
 			deleteGroceryList.executeUpdate();
@@ -1178,8 +1184,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	private int getCartListId(int cartId) throws CriticalError {
 
-		String selectQuery = generateSelectQuery1Table(CartsListTable.table,
-				BinaryCondition.equalTo(CartsListTable.cartIDCol, PARAM_MARK));
+		String selectQuery = generateSelectQuery1Table(ActiveCustomersListTable.table,
+				BinaryCondition.equalTo(ActiveCustomersListTable.CustomerIDCol, PARAM_MARK));
 
 		PreparedStatement statement = getParameterizedReadQuery(selectQuery, cartId);
 
@@ -1189,7 +1195,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			result = statement.executeQuery();
 
 			result.first();
-			return result.getInt(CartsListTable.listIDCol.getColumnNameSQL());
+			return result.getInt(ActiveCustomersListTable.listIDCol.getColumnNameSQL());
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1366,9 +1372,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	private ResultSet getGroceryListResultSetByCartID(int cartId) throws CriticalError, SQLException {
 
-		String getGroceryListQuery = generateSelectInnerJoinWithQuery2Tables(CartsListTable.table,
-				GroceriesListsTable.table, CartsListTable.listIDCol, CartsListTable.listIDCol,
-				BinaryCondition.equalTo(CartsListTable.cartIDCol, PARAM_MARK));
+		String getGroceryListQuery = generateSelectInnerJoinWithQuery2Tables(ActiveCustomersListTable.table,
+				GroceriesListsTable.table, ActiveCustomersListTable.listIDCol, ActiveCustomersListTable.listIDCol,
+				BinaryCondition.equalTo(ActiveCustomersListTable.CustomerIDCol, PARAM_MARK));
 
 		PreparedStatement statement = getParameterizedReadQuery(getGroceryListQuery, cartId);
 
@@ -2221,7 +2227,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		try {
 			// WRITE part of transaction
 			// disconnect all carts
-			statement = getParameterizedQuery(generateDeleteQuery(CartsListTable.table));
+			statement = getParameterizedQuery(generateDeleteQuery(ActiveCustomersListTable.table));
 			log.debug("logoutAllUsers: logout carts.\n by using query: " + statement);
 			statement.executeUpdate();
 			closeResources(statement);
