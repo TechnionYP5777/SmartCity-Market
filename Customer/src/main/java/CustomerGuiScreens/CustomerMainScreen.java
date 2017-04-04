@@ -190,8 +190,7 @@ public class CustomerMainScreen implements Initializable {
 		Alert alert = new Alert(AlertType.NONE, "Already leaving?", ButtonType.YES, ButtonType.NO);
 		
 		alert.setTitle("Cancel shopping");
-		alert.showAndWait();
-		if (alert.getResult() == ButtonType.NO)
+		if (alert.showAndWait().isPresent() && alert.getResult() == ButtonType.NO)
 			return;
 		try {
 			customer.logout();
@@ -233,8 +232,10 @@ public class CustomerMainScreen implements Initializable {
 		totalSumTextField.setEditable(false);
 
 		// defining behavior when stage/window is closed.
-		primeStage.setOnCloseRequest(event -> 
-			logoutAndExit());
+		primeStage.setOnCloseRequest(event -> {
+			event.consume();
+			logoutAndExit();
+		} );
 	}
 
 	@FXML
