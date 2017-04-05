@@ -109,7 +109,7 @@ public class Customer extends ACustomer implements ICustomer {
 		
 		try {
 			serverResponse = sendRequestWithRespondToServer((new CommandWrapper(CustomerDefs.loginCommandSenderId,
-					CommandDescriptor.LOGIN_CLIENT, Serialization.serialize(new Login(username, password)))).serialize());
+					CommandDescriptor.LOGIN_CUSTOMER, Serialization.serialize(new Login(username, password)))).serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 			

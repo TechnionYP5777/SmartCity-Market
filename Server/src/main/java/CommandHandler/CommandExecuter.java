@@ -1057,7 +1057,7 @@ public class CommandExecuter {
 
 			break;
 			
-		case LOGIN_CLIENT:
+		case LOGIN_CUSTOMER:
 			loginClientCommand(c);
 
 			break;

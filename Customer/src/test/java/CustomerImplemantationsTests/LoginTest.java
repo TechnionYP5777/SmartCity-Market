@@ -49,7 +49,7 @@ public class LoginTest {
 		try {
 			Mockito.when(
 				clientRequestHandler.sendRequestWithRespond((new CommandWrapper(CustomerDefs.loginCommandSenderId,
-						CommandDescriptor.LOGIN_CLIENT, Serialization.serialize(new Login("Guest", "Guest"))).serialize())))
+						CommandDescriptor.LOGIN_CUSTOMER, Serialization.serialize(new Login("Guest", "Guest"))).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(new CustomerProfile("Guest"))).serialize());
 			
 		} catch (IOException ¢) {
@@ -72,7 +72,7 @@ public class LoginTest {
 		try {
 			Mockito.when(
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(CustomerDefs.loginCommandSenderId,
-							CommandDescriptor.LOGIN_CLIENT, Serialization.serialize(new Login("Guest", "Guest"))).serialize())))
+							CommandDescriptor.LOGIN_CUSTOMER, Serialization.serialize(new Login("Guest", "Guest"))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException ¢) {
 			¢.printStackTrace();
@@ -93,7 +93,7 @@ public class LoginTest {
 		try {
 			Mockito.when(
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(CustomerDefs.loginCommandSenderId,
-							CommandDescriptor.LOGIN_CLIENT, Serialization.serialize(new Login("Guest", "GuesT"))).serialize())))
+							CommandDescriptor.LOGIN_CUSTOMER, Serialization.serialize(new Login("Guest", "GuesT"))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD).serialize());
 		} catch (IOException ¢) {
 			¢.printStackTrace();
@@ -114,7 +114,7 @@ public class LoginTest {
 		try {
 			Mockito.when(
 					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(CustomerDefs.loginCommandSenderId,
-							CommandDescriptor.LOGIN_CLIENT, Serialization.serialize(new Login("Guesttt", "Guest"))).serialize())))
+							CommandDescriptor.LOGIN_CUSTOMER, Serialization.serialize(new Login("Guesttt", "Guest"))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD).serialize());
 		} catch (IOException ¢) {
 			¢.printStackTrace();

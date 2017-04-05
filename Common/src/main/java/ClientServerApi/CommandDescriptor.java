@@ -74,7 +74,7 @@ public enum CommandDescriptor {
 	LOGIN_EMPLOYEE,
 	
 	/**
-	 * Description: Client login command to get into the system and receive unique sender id and customer profile if needed from server.
+	 * Description: Customer login command to get into the system and receive unique sender id and customer profile if needed from server.
 	 * param1: Login.
 	 * retval: CustomerProfile.
 	 *
@@ -92,7 +92,7 @@ public enum CommandDescriptor {
 	 *  3. "Guest" will be saved username, the clients can't register with this username.
 	 *  4. For Guest, the server will return CustomerProfile with only username and password (TODO - AVIAD: why password?) (other attributes will be null).
 	 */
-	LOGIN_CLIENT,
+	LOGIN_CUSTOMER,
 	
 	/**
 	 * Description: Client logout command for logging out of server.

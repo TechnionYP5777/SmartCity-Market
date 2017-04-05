@@ -37,6 +37,7 @@ import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
+import ClientServerApi.ClientServerDefs;
 import CommonDefs.CLIENT_TYPE;
 import SQLDatabase.SQLDatabaseEntities;
 import SQLDatabase.SQLDatabaseEntities.ActiveCustomersListTable;
@@ -1483,7 +1484,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// START transaction
 			connectionStartTransaction();
 
-			int $ = "Cart".equals(username) ? loginAsCart() : loginAsWorker(username, password);
+			int $ = ClientServerDefs.anonymousCustomerPassword.equals(password)
+					& ClientServerDefs.anonymousCustomerUsername.equals(username)
+					? loginAsCart() : loginAsWorker(username, password);
 
 			// END transaction
 			connectionCommitTransaction();

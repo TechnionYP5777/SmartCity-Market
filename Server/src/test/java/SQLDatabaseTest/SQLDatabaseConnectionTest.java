@@ -23,6 +23,7 @@ import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
+import ClientServerApi.ClientServerDefs;
 import CommonDefs.CLIENT_TYPE;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException;
@@ -221,7 +222,7 @@ public class SQLDatabaseConnectionTest {
 		int session = 0;
 
 		try {
-			session = sqlConnection.login("Cart", null);
+			session = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 		} catch (AuthenticationError | ClientAlreadyConnected | CriticalError | NumberOfConnectionsExceeded e1) {
 			e1.printStackTrace();
 			fail();
@@ -237,7 +238,7 @@ public class SQLDatabaseConnectionTest {
 		}
 
 		try {
-			sqlConnection.logout(session, "Cart");
+			sqlConnection.logout(session, ClientServerDefs.anonymousCustomerUsername);
 		} catch (ClientNotConnected | CriticalError e1) {
 			e1.printStackTrace();
 			fail();
@@ -659,7 +660,7 @@ public class SQLDatabaseConnectionTest {
 
 		int session = 0;
 		try {
-			session = sqlConnection.login("Cart", "");
+			session = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 			assertTrue(sqlConnection.isClientLoggedIn(session));
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
 			e.printStackTrace();
@@ -667,7 +668,7 @@ public class SQLDatabaseConnectionTest {
 		}
 
 		try {
-			sqlConnection.logout(session, "Cart");
+			sqlConnection.logout(session, ClientServerDefs.anonymousCustomerUsername);
 			assertFalse(sqlConnection.isClientLoggedIn(session));
 		} catch (CriticalError | ClientNotConnected e) {
 			e.printStackTrace();
@@ -683,7 +684,7 @@ public class SQLDatabaseConnectionTest {
 		int session = 0;
 
 		try {
-			session = sqlConnection.login("Cart", "");
+			session = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 			assertTrue(sqlConnection.isClientLoggedIn(session));
 			assertEquals(new Gson().toJson(CLIENT_TYPE.CART), sqlConnection.getClientType(session));
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded
@@ -693,7 +694,7 @@ public class SQLDatabaseConnectionTest {
 		}
 
 		try {
-			sqlConnection.logout(session, "Cart");
+			sqlConnection.logout(session, ClientServerDefs.anonymousCustomerUsername);
 			assertFalse(sqlConnection.isClientLoggedIn(session));
 		} catch (CriticalError | ClientNotConnected e) {
 			e.printStackTrace();
@@ -747,7 +748,7 @@ public class SQLDatabaseConnectionTest {
 		int sessionCart = 0;
 		try {
 
-			sessionCart = sqlConnection.login("Cart", "Cart");
+			sessionCart = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 			sqlConnection.addProductPackageToWarehouse(null, productPackage);
 			assertEquals("10", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
 
@@ -781,7 +782,7 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.removeProductFromGroceryList(sessionCart, productPackage);
 			sqlConnection.removeProductPackageFromShelves(null, productPackage);
 			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
-			sqlConnection.logout(sessionCart, "Cart");
+			sqlConnection.logout(sessionCart, ClientServerDefs.anonymousCustomerUsername);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
 			e.printStackTrace();
@@ -801,7 +802,7 @@ public class SQLDatabaseConnectionTest {
 		int sessionCart = 0;
 
 		try {
-			sessionCart = sqlConnection.login("Cart", "Cart");
+			sessionCart = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 		} catch (AuthenticationError | ClientAlreadyConnected | CriticalError | NumberOfConnectionsExceeded e1) {
 			e1.printStackTrace();
 			fail();
@@ -897,7 +898,7 @@ public class SQLDatabaseConnectionTest {
 		}
 
 		try {
-			sqlConnection.logout(sessionCart, "Cart");
+			sqlConnection.logout(sessionCart, ClientServerDefs.anonymousCustomerUsername);
 		} catch (ClientNotConnected | CriticalError e) {
 			e.printStackTrace();
 			fail();
@@ -915,7 +916,7 @@ public class SQLDatabaseConnectionTest {
 
 		int cartSession = 0;
 		try {
-			cartSession = sqlConnection.login("Cart", null);
+			cartSession = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 			sqlConnection.addProductPackageToWarehouse(null, productPackage);
 			sqlConnection.placeProductPackageOnShelves(null, productPackage);
 			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
@@ -960,7 +961,7 @@ public class SQLDatabaseConnectionTest {
 		}
 
 		try {
-			sqlConnection.logout(cartSession, "Cart");
+			sqlConnection.logout(cartSession, ClientServerDefs.anonymousCustomerUsername);
 		} catch (ClientNotConnected | CriticalError e) {
 			e.printStackTrace();
 			fail();
@@ -977,7 +978,7 @@ public class SQLDatabaseConnectionTest {
 
 		int cartSession = 0;
 		try {
-			cartSession = sqlConnection.login("Cart", null);
+			cartSession = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 
 			sqlConnection.addProductPackageToWarehouse(null, productPackage);
 			sqlConnection.addProductPackageToWarehouse(null, productPackage);
@@ -1033,7 +1034,7 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
 			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
 
-			sqlConnection.logout(cartSession, "Cart");
+			sqlConnection.logout(cartSession, ClientServerDefs.anonymousCustomerUsername);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
 			e.printStackTrace();
@@ -1055,7 +1056,7 @@ public class SQLDatabaseConnectionTest {
 		int cartSession = 0;
 
 		try {
-			cartSession = sqlConnection.login("Cart", null);
+			cartSession = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 
 			sqlConnection.addProductPackageToWarehouse(null, productPackage);
 			sqlConnection.placeProductPackageOnShelves(null, productPackage);
@@ -1081,7 +1082,7 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.removeProductPackageFromShelves(null, productPackageCart);
 			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
 			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackageCart));
-			sqlConnection.logout(cartSession, "Cart");
+			sqlConnection.logout(cartSession, ClientServerDefs.anonymousCustomerUsername);
 		} catch (ProductPackageNotExist | CriticalError | ClientNotConnected | ProductNotExistInCatalog
 				| ProductPackageAmountNotMatch e) {
 			e.printStackTrace();
@@ -1103,7 +1104,7 @@ public class SQLDatabaseConnectionTest {
 
 		int session = 0;
 		try {
-			session = sqlConnection.login("Cart", "");
+			session = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 			assertTrue(sqlConnection.isClientLoggedIn(session));
 			sqlConnection.addProductPackageToWarehouse(null, productPackage);
 			sqlConnection.placeProductPackageOnShelves(null, productPackage);
@@ -1124,7 +1125,7 @@ public class SQLDatabaseConnectionTest {
 		}
 
 		try {
-			sqlConnection.logout(session, "Cart");
+			sqlConnection.logout(session,ClientServerDefs.anonymousCustomerUsername);
 			fail();
 		} catch (ClientNotConnected e) {
 
@@ -1148,7 +1149,7 @@ public class SQLDatabaseConnectionTest {
 
 		int session = 0;
 		try {
-			session = sqlConnection.login("Cart", "");
+			session = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 			assertTrue(sqlConnection.isClientLoggedIn(session));
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
 			e.printStackTrace();
@@ -1165,7 +1166,7 @@ public class SQLDatabaseConnectionTest {
 		}
 
 		try {
-			sqlConnection.logout(session, "Cart");
+			sqlConnection.logout(session, ClientServerDefs.anonymousCustomerUsername);
 		} catch (CriticalError | ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
@@ -1182,7 +1183,7 @@ public class SQLDatabaseConnectionTest {
 
 		int session = 0;
 		try {
-			session = sqlConnection.login("Cart", "");
+			session = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 			sqlConnection.addProductPackageToWarehouse(null, productPackage);
 			sqlConnection.placeProductPackageOnShelves(null, productPackage);
 			assertEquals("5", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
@@ -1196,7 +1197,7 @@ public class SQLDatabaseConnectionTest {
 		}
 
 		try {
-			sqlConnection.logout(session, "Cart");
+			sqlConnection.logout(session, ClientServerDefs.anonymousCustomerUsername);
 			assertFalse(sqlConnection.isClientLoggedIn(session));
 			assertEquals("5", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
 			sqlConnection.removeProductPackageFromShelves(null, productPackage);
@@ -1218,7 +1219,7 @@ public class SQLDatabaseConnectionTest {
 
 		int session = 0;
 		try {
-			session = sqlConnection.login("Cart", "");
+			session = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 			assertTrue(sqlConnection.isClientLoggedIn(session));
 			sqlConnection.addProductPackageToWarehouse(null, productPackage);
 			sqlConnection.placeProductPackageOnShelves(null, productPackage);
