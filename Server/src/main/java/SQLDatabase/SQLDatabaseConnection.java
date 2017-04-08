@@ -40,7 +40,9 @@ import BasicCommonClasses.SmartCode;
 import ClientServerApi.ClientServerDefs;
 import CommonDefs.CLIENT_TYPE;
 import SQLDatabase.SQLDatabaseEntities;
-import SQLDatabase.SQLDatabaseEntities.ActiveCustomersListTable;
+import SQLDatabase.SQLDatabaseEntities.CartsListTable;
+import SQLDatabase.SQLDatabaseEntities.ClientsTable;
+import SQLDatabase.SQLDatabaseEntities.ClientsTable;
 import SQLDatabase.SQLDatabaseEntities.CustomersIngredientsTable;
 import SQLDatabase.SQLDatabaseEntities.CustomersTable;
 import SQLDatabase.SQLDatabaseEntities.FreeIDsTable;
@@ -175,13 +177,13 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			statement.executeUpdate(createTableString);
 			createTableString = new CreateTableQuery(GroceriesListsHistoryTable.table, true).validate() + "";
 			statement.executeUpdate(createTableString);
-			createTableString = new CreateTableQuery(ActiveCustomersListTable.table, true).validate() + "";
+			createTableString = new CreateTableQuery(CartsListTable.table, true).validate() + "";
 			statement.executeUpdate(createTableString);
-			createTableString = new CreateTableQuery(WorkersTable.table, true).validate() + "";
+			createTableString = new CreateTableQuery(WorkersTable.workertable, true).validate() + "";
 			statement.executeUpdate(createTableString);
 			createTableString = new CreateTableQuery(FreeIDsTable.table, true).validate() + "";
 			statement.executeUpdate(createTableString);
-			createTableString = new CreateTableQuery(CustomersTable.table, true).validate() + "";
+			createTableString = new CreateTableQuery(CustomersTable.customertable, true).validate() + "";
 			statement.executeUpdate(createTableString);
 			createTableString = new CreateTableQuery(CustomersIngredientsTable.table, true).validate() + "";
 			statement.executeUpdate(createTableString);
@@ -279,7 +281,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// generate number between mivVal to maxVal (include)
 			$ = new Random().nextInt(maxVal - minVal) + minVal;
 
-			if (!isSessionEstablished($))
+			if (!isSessionExist($))
 				return $;
 		}
 
@@ -387,7 +389,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	private void validateSessionEstablished(Integer sessionID) throws ClientNotConnected, CriticalError {
 		try {
-			if (!isSessionEstablished(sessionID))
+			if (!isSessionExist(sessionID))
 				throw new SQLDatabaseException.ClientNotConnected();
 		} catch (ValidationException e) {
 			e.printStackTrace();
@@ -430,8 +432,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		if (sessionID == null)
 			return null;
 
-		String query = generateSelectQuery1Table(WorkersTable.table,
-				BinaryCondition.equalTo(WorkersTable.sessionIDCol, PARAM_MARK));
+		String query = generateSelectQuery1Table(WorkersTable.workertable,
+				BinaryCondition.equalTo(WorkersTable.workersessionIDCol, PARAM_MARK));
 
 		PreparedStatement statement = getParameterizedReadQuery(query, sessionID);
 
@@ -450,10 +452,16 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 				return clientType != WORKERS_TABLE.VALUE_PRIVILEGE_MANAGER ? CLIENT_TYPE.WORKER : CLIENT_TYPE.MANAGER;
 			}
+			
+			// CASE: registered customer
+			if (isSuchRowExist(CustomersTable.customertable, CustomersTable.customersessionIDCol, sessionID)) {
+				log.debug("getClientTypeBySessionID: customer found!");
+				return CLIENT_TYPE.CUSTOMER;
+			}
 
-			// CASE: cart
-			if (isSuchRowExist(ActiveCustomersListTable.table, ActiveCustomersListTable.CustomerIDCol, sessionID)) {
-				log.debug("getClientTypeBySessionID: cart found!");
+			// CASE: anonymous customer
+			if (isSuchRowExist(CartsListTable.table, CartsListTable.CartIDCol, sessionID)) {
+				log.debug("getClientTypeBySessionID: anonymous customer found!");
 				return CLIENT_TYPE.CART;
 			}
 
@@ -470,14 +478,14 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 
 	/**
-	 * Check if the worker or cart logged in the system
+	 * Check if the sessionID used in the system
 	 * 
 	 * @param sessionID
-	 *            sessionID of the worker/cart
+	 *            sessionID of the worker/custoemr
 	 * @return true - if connected
 	 * @throws CriticalError
 	 */
-	private boolean isSessionEstablished(Integer sessionID) throws CriticalError {
+	private boolean isSessionExist(Integer sessionID) throws CriticalError {
 		return (sessionID == null) || (getClientTypeBySessionID(sessionID) != null);
 	}
 
@@ -501,21 +509,36 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * @return true - if connected
 	 * @throws CriticalError
 	 */
-	private boolean isWorkerSessionEstablished(String username) throws CriticalError {
+	private boolean isWorkerConnected(String username) throws CriticalError {
 
+		return isClientConnected(new WorkersTable(), username);
+
+	}
+	
+	/**
+	 * 	
+	 * General method to check if the customer or worker logged in the system
+	 * 
+	 * @param clientsTable - the relevant sql table to check in
+	 * @param username username of the client
+	 * @return true - if connected
+	 * @throws CriticalError
+	 */
+	private boolean isClientConnected(ClientsTable t, String username) throws CriticalError {
 		if (username == null)
 			return true;
 
 		ResultSet result = null;
 		try {
-			result = getParameterizedQuery(generateSelectQuery1Table(WorkersTable.table,
-					BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK)), username).executeQuery();
+			result = getParameterizedQuery(generateSelectQuery1Table(t.table,
+					BinaryCondition.equalTo(t.usernameCol, PARAM_MARK)), username).executeQuery();
 
 			if (isResultSetEmpty(result))
 				return false;
 
 			result.first();
-			return result.getObject(WorkersTable.sessionIDCol.getName()) != null;
+			
+			return result.getObject(t.sessionIDCol.getName()) != null;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -523,6 +546,19 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		} finally {
 			closeResources(result);
 		}
+	}
+	
+	/**
+	 * Check if the customer logged in the system
+	 * 
+	 * @param username
+	 *            username of the customer
+	 * @return true - if connected
+	 * @throws CriticalError
+	 */
+	private boolean isCustomerConnected(String username) throws CriticalError {
+
+		return isClientConnected(new CustomersTable(), username);
 
 	}
 
@@ -614,52 +650,118 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	private int loginAsWorker(String username, String password)
 			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
-		String query = generateSelectQuery1Table(WorkersTable.table,
-				BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK),
-				BinaryCondition.equalTo(WorkersTable.workerPasswordCol, PARAM_MARK));
+		String query = generateSelectQuery1Table(WorkersTable.workertable,
+				BinaryCondition.equalTo(WorkersTable.workerusernameCol, PARAM_MARK),
+				BinaryCondition.equalTo(WorkersTable.workerpasswordCol, PARAM_MARK));
 
 		PreparedStatement statement = getParameterizedQuery(query, username, password);
 
 		ResultSet result = null;
 		try {
 			result = statement.executeQuery();
+			
+			// check if no results or more than one - throw exception user not exist
+			if (getResultSetRowCount(result) != 1)
+				throw new SQLDatabaseException.AuthenticationError();
+
+			// check if worker already connected
+			if (isWorkerConnected(username))
+				throw new SQLDatabaseException.ClientAlreadyConnected();
+
+			/*
+			 * EVERYTHING OK - initiate new session to worker
+			 */
+			int $ = generateSessionID();
+			
+			assignSessionIDToRegisteredClient(new WorkersTable(), username, $);
+
+			return $;
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			closeResources(statement, result);
 			throw new CriticalError();
+		} finally {
+			closeResources(statement, result);
 		}
 
-		// check if no results or more than one - throw exception user not exist
-		if (getResultSetRowCount(result) != 1)
-			throw new SQLDatabaseException.AuthenticationError();
 
-		// check if worker already connected
-		if (isWorkerSessionEstablished(username))
-			throw new SQLDatabaseException.ClientAlreadyConnected();
+	}
+	
+	/**
+	 * login method for customer
+	 * 
+	 * @param username
+	 * @param password
+	 * @return new sessionID for connection
+	 * @throws AuthenticationError
+	 * @throws ClientAlreadyConnected
+	 * @throws CriticalError
+	 * @throws NumberOfConnectionsExceeded
+	 */
+	private int loginAsCustomer(String username, String password)
+			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
+		String query = generateSelectQuery1Table(CustomersTable.customertable,
+				BinaryCondition.equalTo(CustomersTable.customerusernameCol, PARAM_MARK),
+				BinaryCondition.equalTo(CustomersTable.customerpasswordCol, PARAM_MARK));
 
-		/*
-		 * EVERYTHING OK - initiate new session to worker
-		 */
-		int $ = generateSessionID();
+		PreparedStatement statement = getParameterizedQuery(query, username, password);
 
-		UpdateQuery updateQuery = generateUpdateQuery(WorkersTable.table,
-				BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK),
-				BinaryCondition.equalTo(WorkersTable.workerPasswordCol, PARAM_MARK));
+		ResultSet result = null;
+		try {
+			result = statement.executeQuery();
+			
+			// check if no results or more than one - throw exception user not exist
+			if (getResultSetRowCount(result) != 1)
+				throw new SQLDatabaseException.AuthenticationError();
 
-		updateQuery.addSetClause(WorkersTable.sessionIDCol, $).validate();
+			// check if customer already connected
+			if (isCustomerConnected(username))
+				throw new SQLDatabaseException.ClientAlreadyConnected();
 
-		statement = getParameterizedQuery(updateQuery + "", username, password);
+			/*
+			 * EVERYTHING OK - initiate new session to customer and create new list for the customer
+			 */
+			int $ = generateSessionID();
+
+			assignSessionIDToRegisteredClient(new CustomersTable(), username, $);
+			initiateNewGroceryList($);
+			
+			return $;
+		} catch (SQLException e) {
+			e.printStackTrace();	
+			throw new CriticalError();
+		} finally {
+			closeResources(statement, result);
+		}
+
+	}
+
+	/**
+	 * inserts sessionID to registered client (worker/customer)
+	 * 
+	 * @param t the table to assign the sessionID to
+	 * @param username the username whose the sessionID is to be assigned
+	 * @param sessionID the sessionID to assign
+	 * @throws CriticalError
+	 */
+	private void assignSessionIDToRegisteredClient(ClientsTable t, String username, int sessionID) throws CriticalError {
+		
+		PreparedStatement statement;
+		UpdateQuery updateQuery = generateUpdateQuery(t.table,
+				BinaryCondition.equalTo(t.usernameCol, PARAM_MARK));
+
+		updateQuery.addSetClause(t.sessionIDCol, sessionID).validate();
+
+		statement = getParameterizedQuery(updateQuery + "", username);
 
 		try {
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			closeResources(statement);
 			e.printStackTrace();
 			throw new CriticalError();
+		} finally {
+			closeResources(statement);
 		}
-
-		closeResources(statement, result);
-		return $;
 	}
 
 	/**
@@ -675,10 +777,23 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		 * initiate new session and new grocery list to cart
 		 */
 		int $ = generateSessionID();
+		
+		initiateNewGroceryList($);
 
+		return $;
+	}
+	
+	/**
+	 * Creates new grocery list to the given sessionID and adds its to the database
+	 * 
+	 * @param sessionID the sessionID whose the new grocery list will be created to
+	 * @throws CriticalError
+	 */
+	private void initiateNewGroceryList(int sessionID) throws CriticalError{
+		
 		// find max list id from grocery list table and history list table
 		String maxListIDQuery = new SelectQuery()
-				.addCustomColumns(FunctionCall.max().addColumnParams(ActiveCustomersListTable.listIDCol)).validate() + "";
+				.addCustomColumns(FunctionCall.max().addColumnParams(CartsListTable.listIDCol)).validate() + "";
 		String maxHistoryListIDQuery = new SelectQuery()
 				.addCustomColumns(FunctionCall.max().addColumnParams(GroceriesListsHistoryTable.listIDCol)).validate()
 				+ "";
@@ -705,20 +820,20 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			maxListID = Math.max(maxListID, maxHistoryListID) + 1;
 
 			// adding new cart connection to table
-			String insertQuery = new InsertQuery(ActiveCustomersListTable.table).addColumn(ActiveCustomersListTable.CustomerIDCol, PARAM_MARK)
-					.addColumn(ActiveCustomersListTable.listIDCol, PARAM_MARK).validate() + "";
-			insertQuery.hashCode();
+			String insertQuery = new InsertQuery(CartsListTable.table)
+					.addColumn(CartsListTable.CartIDCol, PARAM_MARK)
+					.addColumn(CartsListTable.listIDCol, PARAM_MARK).validate() + "";
 
-			log.info("loginAsCart: run query: " + insertQuery);
-			getParameterizedQuery(insertQuery, $, maxListID).executeUpdate();
-
-			return $;
+			log.info("initiateNewGroceryList: run query: " + insertQuery);
+			getParameterizedQuery(insertQuery, sessionID, maxListID).executeUpdate();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(maxHistoryListIDResult, maxListIDResult);
 		}
+			
 	}
 
 	/**
@@ -732,9 +847,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	private void logoutAsWorker(Integer sessionID, String username) throws CriticalError {
 
-		String query = generateSelectQuery1Table(WorkersTable.table,
-				BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK),
-				BinaryCondition.equalTo(WorkersTable.sessionIDCol, PARAM_MARK));
+		String query = generateSelectQuery1Table(WorkersTable.workertable,
+				BinaryCondition.equalTo(WorkersTable.workerusernameCol, PARAM_MARK),
+				BinaryCondition.equalTo(WorkersTable.workersessionIDCol, PARAM_MARK));
 
 		PreparedStatement statement = getParameterizedQuery(query, username, sessionID);
 
@@ -750,10 +865,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			/*
 			 * EVERYTHING OK - disconnect worker
 			 */
-			UpdateQuery updateQuery = generateUpdateQuery(WorkersTable.table,
-					BinaryCondition.equalTo(WorkersTable.workerUsernameCol, PARAM_MARK));
+			UpdateQuery updateQuery = generateUpdateQuery(WorkersTable.workertable,
+					BinaryCondition.equalTo(WorkersTable.workerusernameCol, PARAM_MARK));
 
-			updateQuery.addSetClause(WorkersTable.sessionIDCol, null).validate();
+			updateQuery.addSetClause(WorkersTable.workersessionIDCol, null).validate();
 
 			statement = getParameterizedQuery(updateQuery + "", username);
 
@@ -794,8 +909,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// delete grocery list and cart
 			deleteGroceryList = getParameterizedQuery(generateDeleteQuery(GroceriesListsTable.table,
 					BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK)), listID);
-			deleteCart = getParameterizedQuery(generateDeleteQuery(ActiveCustomersListTable.table,
-					BinaryCondition.equalTo(ActiveCustomersListTable.listIDCol, PARAM_MARK)), listID);
+			deleteCart = getParameterizedQuery(generateDeleteQuery(CartsListTable.table,
+					BinaryCondition.equalTo(CartsListTable.listIDCol, PARAM_MARK)), listID);
 
 			log.debug("logoutAsCart: delete groceryList " + listID + ".\n by run query: " + deleteGroceryList);
 			deleteGroceryList.executeUpdate();
@@ -1185,8 +1300,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	private int getCartListId(int cartId) throws CriticalError {
 
-		String selectQuery = generateSelectQuery1Table(ActiveCustomersListTable.table,
-				BinaryCondition.equalTo(ActiveCustomersListTable.CustomerIDCol, PARAM_MARK));
+		String selectQuery = generateSelectQuery1Table(CartsListTable.table,
+				BinaryCondition.equalTo(CartsListTable.CartIDCol, PARAM_MARK));
 
 		PreparedStatement statement = getParameterizedReadQuery(selectQuery, cartId);
 
@@ -1196,7 +1311,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			result = statement.executeQuery();
 
 			result.first();
-			return result.getInt(ActiveCustomersListTable.listIDCol.getColumnNameSQL());
+			return result.getInt(CartsListTable.listIDCol.getColumnNameSQL());
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1373,9 +1488,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	private ResultSet getGroceryListResultSetByCartID(int cartId) throws CriticalError, SQLException {
 
-		String getGroceryListQuery = generateSelectInnerJoinWithQuery2Tables(ActiveCustomersListTable.table,
-				GroceriesListsTable.table, ActiveCustomersListTable.listIDCol, ActiveCustomersListTable.listIDCol,
-				BinaryCondition.equalTo(ActiveCustomersListTable.CustomerIDCol, PARAM_MARK));
+		String getGroceryListQuery = generateSelectInnerJoinWithQuery2Tables(CartsListTable.table,
+				GroceriesListsTable.table, CartsListTable.listIDCol, CartsListTable.listIDCol,
+				BinaryCondition.equalTo(CartsListTable.CartIDCol, PARAM_MARK));
 
 		PreparedStatement statement = getParameterizedReadQuery(getGroceryListQuery, cartId);
 
@@ -1501,6 +1616,40 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		} finally {
 			connectionEndTransaction();
 		}
+	}
+	
+	@Override
+	public int loginCustomer(String username, String password)
+			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
+		log.info("SQL Public loginCustomer: Customer trying to connect as: " + username);
+		try {
+			// START transaction
+			connectionStartTransaction();
+
+			int $ = ClientServerDefs.anonymousCustomerPassword.equals(password)
+					& ClientServerDefs.anonymousCustomerUsername.equals(username)
+					? loginAsCart() : loginAsWorker(username, password);
+
+			// END transaction
+			connectionCommitTransaction();
+
+			return $;
+
+		} catch (SQLDatabaseException e) {
+			// NOTE: all exceptions flows here - for doing rollback
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw e;
+		} finally {
+			connectionEndTransaction();
+		}
+	}
+
+	@Override
+	public int loginWorker(String username, String password)
+			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
@@ -2230,24 +2379,32 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		try {
 			// WRITE part of transaction
 			// disconnect all carts
-			statement = getParameterizedQuery(generateDeleteQuery(ActiveCustomersListTable.table));
-			log.debug("logoutAllUsers: logout carts.\n by using query: " + statement);
+			statement = getParameterizedQuery(generateDeleteQuery(CartsListTable.table));
+			log.debug("logoutAllUsers: clear carts.\n by using query: " + statement);
 			statement.executeUpdate();
 			closeResources(statement);
 
 			// deletes all grocery lists
+			//Todo - noam : when log out all users - the products not returns to shelf
 			statement = getParameterizedQuery(generateDeleteQuery(GroceriesListsTable.table));
 			log.debug("logoutAllUsers: delete grocery lists.\n by using query: " + statement);
 			statement.executeUpdate();
 			closeResources(statement);
 
 			// disconnect all workers
-			statement = getParameterizedQuery(new UpdateQuery(WorkersTable.table)
-					.addSetClause(WorkersTable.sessionIDCol, SqlObject.NULL_VALUE).validate() + "");
+			statement = getParameterizedQuery(new UpdateQuery(WorkersTable.workertable)
+					.addSetClause(WorkersTable.workersessionIDCol, SqlObject.NULL_VALUE).validate() + "");
 			log.debug("logoutAllUsers: logout workers.\n by using query: " + statement);
 			statement.executeUpdate();
 			closeResources(statement);
 
+			// disconnect all customers
+			statement = getParameterizedQuery(new UpdateQuery(CustomersTable.customertable)
+					.addSetClause(CustomersTable.customersessionIDCol, SqlObject.NULL_VALUE).validate() + "");
+			log.debug("logoutAllUsers: logout customers.\n by using query: " + statement);
+			statement.executeUpdate();
+			closeResources(statement);
+			
 			// END transaction
 			connectionCommitTransaction();
 		} catch (SQLException e) {
@@ -2264,13 +2421,13 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public boolean isClientLoggedIn(Integer sessionID) throws CriticalError {
 		log.info("SQL Public isClientLoggedIn: sessionID: " + sessionID);
-		return isSessionEstablished(sessionID);
+		return isSessionExist(sessionID);
 	}
 
 	@Override
 	public boolean isWorkerLoggedIn(String username) throws CriticalError {
 		log.info("SQL Public isWorkerLoggedIn: worker name: " + username);
-		return isWorkerSessionEstablished(username);
+		return isWorkerConnected(username);
 	}
 
 	@Override

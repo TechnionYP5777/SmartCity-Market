@@ -16,7 +16,10 @@ public enum CLIENT_TYPE {
 	MANAGER,
 	
 	/* Username matches cart type */
-	CART;
+	CART,
+	
+	/* Username matches customer type */
+	CUSTOMER;
 	
 	public String serialize() {
 		return Serialization.serialize(this);

@@ -24,6 +24,12 @@ public interface ISQLDatabaseConnection {
 
 	int login(String username, String password)
 			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded;
+	
+	int loginCustomer(String username, String password)
+			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded;
+	
+	int loginWorker(String username, String password)
+			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded;
 
 	String getClientType(Integer sessionID) throws ClientNotConnected, CriticalError;
 
