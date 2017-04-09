@@ -173,7 +173,7 @@ public class Customer extends ACustomer implements ICustomer {
 	}
 	
 	@Override
-	public void resume(int _id) throws CriticalError, CustomerNotConnected, ProductCatalogDoesNotExist {
+	public void resume(int _id) throws CriticalError, CustomerNotConnected {
 		CommandWrapper $ = null;
 		String serverResponse;
 		
@@ -200,7 +200,7 @@ public class Customer extends ACustomer implements ICustomer {
 			
 			id = _id;
 			groceryList = Serialization.deserialize($.getData(), GroceryList.class);
-		} catch (InvalidCommandDescriptor | InvalidParameter |
+		} catch (InvalidCommandDescriptor | InvalidParameter | ProductCatalogDoesNotExist |
 				 AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
@@ -210,19 +210,34 @@ public class Customer extends ACustomer implements ICustomer {
 		}
 		
 		/* Restoring Grocery list */
-		loadCartProductCacheAndUpdateCartData();
+		try {
+			loadCartProductCacheAndUpdateCartData();
+		} catch (ProductCatalogDoesNotExist | CriticalError | CustomerNotConnected e) {
+			log.fatal("Critical bug: Failed to fetch grocery list items from server");
+			
+			e.printStackTrace();
+		}
 		
 		log.info("load grocery list from server succeed.");
 	}
 	
 	@Override
 	public void addProductToCart(SmartCode c, int amount) throws CriticalError, CustomerNotConnected,
-			AmountBiggerThanAvailable, ProductPackageDoesNotExist, ProductCatalogDoesNotExist {
+			AmountBiggerThanAvailable, ProductPackageDoesNotExist, InvalidParameter {
 		String serverResponse;
 		
 		log.info("Creating viewProductFromCatalog (in order to addPtoductToCart) command wrapper to customer with id: " + id);
 
-		CatalogProduct catalogProduct = viewCatalogProduct(c);
+		CatalogProduct catalogProduct;
+		try {
+			catalogProduct = viewCatalogProduct(c);
+		} catch (ProductCatalogDoesNotExist e1) {
+			log.fatal("Critical bug: failed to get catalog product from server");
+			
+			e1.printStackTrace();
+			
+			throw new CriticalError();
+		}
 		
 		establishCommunication(CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
 		
@@ -240,8 +255,7 @@ public class Customer extends ACustomer implements ICustomer {
 				
 		try {
 			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
-		} catch (InvalidCommandDescriptor | InvalidParameter |
-				 ProductCatalogDoesNotExist |
+		} catch (InvalidCommandDescriptor | ProductCatalogDoesNotExist |
 				GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			

@@ -57,9 +57,8 @@ public interface ICustomer {
 	 * @param int _id
 	 * @throws CriticalError 
 	 * @throws CustomerNotConnected 
-	 * @throws ProductCatalogDoesNotExist 
 	 */
-	void resume(int _id) throws CriticalError, CustomerNotConnected, ProductCatalogDoesNotExist;
+	void resume(int _id) throws CriticalError, CustomerNotConnected;
 	
 	/**
 	 * addPtoductToCart - Adds product with amount to the customer
@@ -70,9 +69,9 @@ public interface ICustomer {
 	 * @throws CustomerNotConnected 
 	 * @throws ProductPackageDoesNotExist 
 	 * @throws AmountBiggerThanAvailable 
-	 * @throws ProductCatalogDoesNotExist 
+	 * @throws InvalidParameter 
 	 */
-	void addProductToCart(SmartCode c, int amount) throws CriticalError, CustomerNotConnected, AmountBiggerThanAvailable, ProductPackageDoesNotExist, ProductCatalogDoesNotExist;
+	void addProductToCart(SmartCode c, int amount) throws CriticalError, CustomerNotConnected, AmountBiggerThanAvailable, ProductPackageDoesNotExist, InvalidParameter;
 	
 	/**
 	 * returnProductToShelf - removes product with amount from the customer
