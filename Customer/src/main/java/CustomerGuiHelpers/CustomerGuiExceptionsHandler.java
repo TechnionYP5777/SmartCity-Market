@@ -36,8 +36,8 @@ public class CustomerGuiExceptionsHandler extends GuiExceptionHandler {
 			DialogMessagesService.showErrorDialog(GuiCommonDefs.purchaseOperationFailureTitle, null,
 					GuiCommonDefs.groceryListIseEmptyMsg);
 		else
-			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, null,
-					¢ instanceof ProductCatalogDoesNotExist ? GuiCommonDefs.productNotLeftInStore
-							: GuiCommonDefs.productPackageDoesNotExistMsg);
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, "",
+					¢ instanceof ProductCatalogDoesNotExist ? GuiCommonDefs.productDoesNotExistInDatabase
+							: GuiCommonDefs.criticalErrorTitle);
 	}
 }

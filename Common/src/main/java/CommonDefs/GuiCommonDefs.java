@@ -14,11 +14,13 @@ public class GuiCommonDefs {
 	
 	public static final String notEnoughAmountInStore = "There is not enough amount in store";
 	
+	public static final String productDoesNotExistInDatabase = "The product doesn't exist in the Market database, please contact the supermarket manager";
+	
 	public static final String loginFailureDialogTitle = "Login failue!";
 
 	public static final String productOperationFailureTitle = "Product operation failure!";
 	
-	public static final String criticalErrorTitle = "INTERNAL ERROR!";
+	public static final String criticalErrorTitle = "INTERNAL ERROR! Please contact a the supermarket management";
 	
 	public static final String scanFailureDialogTitle = "Scan failure!";
 	
