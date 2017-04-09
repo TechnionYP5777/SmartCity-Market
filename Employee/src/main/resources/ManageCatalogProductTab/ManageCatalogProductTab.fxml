@@ -13,11 +13,12 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.control.CheckComboBox?>
 
 <VBox fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" spacing="15.0" stylesheets="@ManageCatalogProductTab.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductTab">
 	<children>
 		<Label text="Choose operation:" />
-      <JFXRadioButton fx:id="addCatalogProductRadioButton" onAction="#addCatalogProductRadioButtonPressed" text="Add Catalog Product" />
+      <JFXRadioButton fx:id="addCatalogProductRadioButton" onAction="#addCatalogProductRadioButtonPressed" selected="true" text="Add Catalog Product" />
       <JFXRadioButton fx:id="removeCatalogProductRadioButton" onAction="#removeCatalogProductRadioButtonPressed" text="Remove Catalog Product" />
 		<Separator />
 		<GridPane>
@@ -33,12 +34,18 @@
 					<children>
 						<Label text="Barcode:" />
 					</children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
 				</HBox>
 				<HBox GridPane.columnIndex="1">
 					<children>
                   <JFXTextField fx:id="barcodeTextField" />
                   <Label text="*" />
 					</children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
 				</HBox>
 			</children>
 		</GridPane>
@@ -54,6 +61,7 @@
 						<RowConstraints vgrow="SOMETIMES" />
 						<RowConstraints vgrow="SOMETIMES" />
 						<RowConstraints vgrow="SOMETIMES" />
+                  <RowConstraints vgrow="SOMETIMES" />
 					</rowConstraints>
 					<children>
 						<HBox>
@@ -61,7 +69,7 @@
 								<Label text="Product Name:" />
 							</children>
 							<padding>
-								<Insets bottom="5.0" top="5.0" />
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 							</padding>
 						</HBox>
 						<HBox GridPane.rowIndex="1">
@@ -69,7 +77,7 @@
 								<Label text="Product Description:" />
 							</children>
 							<padding>
-								<Insets bottom="5.0" top="5.0" />
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 							</padding>
 						</HBox>
 						<HBox GridPane.rowIndex="2">
@@ -77,7 +85,7 @@
 								<Label text="Product manufacturer:" />
 							</children>
 							<padding>
-								<Insets bottom="5.0" top="5.0" />
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 							</padding>
 						</HBox>
 						<HBox GridPane.rowIndex="3">
@@ -85,12 +93,12 @@
 								<Label text="Product Price:" />
 							</children>
 							<padding>
-								<Insets bottom="5.0" top="5.0" />
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 							</padding>
 						</HBox>
 						<HBox GridPane.columnIndex="1">
 							<padding>
-								<Insets bottom="5.0" />
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 							</padding>
 							<children>
                         <JFXTextField fx:id="productNameTextField" />
@@ -99,7 +107,7 @@
 						</HBox>
 						<HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
 							<padding>
-								<Insets bottom="5.0" top="5.0" />
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 							</padding>
 							<children>
                         <JFXTextField fx:id="productDescriptionTextField" />
@@ -107,21 +115,37 @@
 						</HBox>
 						<HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
 							<padding>
-								<Insets bottom="5.0" top="5.0" />
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 							</padding>
                      <children>
-                        <ComboBox fx:id="productManufacturerCombo" prefHeight="26.0" prefWidth="171.0" />
+                        <ComboBox fx:id="productManufacturerCombo" prefWidth="155.0" />
                      </children>
 						</HBox>
 						<HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
 							<padding>
-								<Insets bottom="5.0" top="5.0" />
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 							</padding>
 							<children>
                         <JFXTextField fx:id="productPriceTextField" />
                         <Label text="*" />
 							</children>
 						</HBox>
+                  <HBox GridPane.rowIndex="4">
+                     <children>
+                        <Label text="Ingridients:" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <children>
+                        <CheckComboBox fx:id="ingridientsCombo" prefWidth="155.0" />
+                     </children>
+                  </HBox>
 					</children>
 				</GridPane>
 			</children>
