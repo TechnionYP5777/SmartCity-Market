@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import org.controlsfx.control.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.canvas.*?>
 <?import javafx.geometry.*?>
 <?import com.jfoenix.controls.*?>
 <?import javafx.scene.control.*?>
@@ -101,10 +107,35 @@
             </HBox>
          </children>
       </GridPane>
-      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
+      <VBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <children>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" />
+            <JFXButton fx:id="nextButton" buttonType="RAISED" onAction="#nextButtonPressed" text="Next" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
+      </VBox>
+      <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+         <children>
+            <VBox>
+               <children>
+                  <Label text="Registration" textFill="#120e8d6e">
+                     <font>
+                        <Font size="46.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox>
+               <children>
+                  <Label text="Personal Info" textFill="#3569c3">
+                     <font>
+                        <Font size="34.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
       </VBox>
    </children>
 </GridPane>
