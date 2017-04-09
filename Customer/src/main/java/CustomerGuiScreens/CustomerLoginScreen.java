@@ -20,6 +20,12 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
+
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXButton;;
+
+
 /**
  * CartLogiScreen - Controller for customer login screen
  * 
@@ -33,13 +39,20 @@ public class CustomerLoginScreen implements Initializable {
 	@FXML
 	private GridPane loginScreenPane;
 	@FXML
-	private Button loginButton;
+	private JFXButton loginButton;
 	@FXML
 	private Button backButton;
 	@FXML
-	private TextField userNameTextField;
+	private JFXTextField userNameTextField;
 	@FXML
-	private PasswordField passwordField;
+	private JFXPasswordField passwordField;
+	
+	@FXML
+	private JFXButton registerButton;
+	
+	@FXML
+	private JFXButton guestLoginButton;
+	
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(loginScreenPane);
@@ -86,6 +99,35 @@ public class CustomerLoginScreen implements Initializable {
 
 	private void enableLoginButtonCheck() {
 		loginButton.setDisable(username.isEmpty() || password.isEmpty());
+	}
+	
+	@FXML
+	private void guestLoginButtonPressed(ActionEvent __) {
+		ICustomer customer = InjectionFactory.getInstance(Customer.class);
+		try {
+			customer.login("Guest", "Guest");
+		} catch (CriticalError e) {
+			Alert alert = new Alert(AlertType.ERROR , "A problem had occured. Please Try again or let us know if it continues.");
+			alert.showAndWait();
+			return;
+		} catch (AuthenticationError e) {
+			Alert alert = new Alert(AlertType.ERROR , "Wrong user name or password.");
+			alert.showAndWait();
+			return;
+		}
+		catch (Exception e) {
+			Alert alert = new Alert(AlertType.ERROR , e + "");
+			alert.showAndWait();
+			return;
+		}
+		TempCustomerPassingData.customer = customer;
+		AbstractApplicationScreen.setScene("/CustomerMainScreen/CustomerMainScreen.fxml");
+	}
+	
+	@FXML
+	private void registerButtonPressed(ActionEvent __) {
+		
+		AbstractApplicationScreen.setScene("/CustomerWelcomeScreen/CustomerWelcomeScreen.fxml");
 	}
 	
 }
