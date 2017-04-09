@@ -8,7 +8,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerRegistration_FinalStepScreen">
    <children>
       <VBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
@@ -53,7 +53,7 @@
             <JFXTextArea prefHeight="547.0" prefWidth="1840.0" />
             <VBox>
                <children>
-                  <JFXCheckBox text="I’ve read and accept the terms.">
+                  <JFXCheckBox fx:id="final_acceptChecKBox" text="I’ve read and accept the terms.">
                      <font>
                         <Font size="19.0" />
                      </font>
@@ -66,7 +66,7 @@
          <children>
             <VBox alignment="CENTER">
                <children>
-                  <JFXButton fx:id="backButton" buttonType="RAISED" onAction="#backButtonPressed" text="Back" />
+                  <JFXButton fx:id="final_backButton" buttonType="RAISED" onAction="#backButtonPressed" text="Back" />
                </children>
                <GridPane.margin>
                   <Insets />
@@ -74,7 +74,7 @@
             </VBox>
             <VBox alignment="CENTER" GridPane.columnIndex="1">
                <children>
-                  <JFXButton fx:id="registerButton" buttonType="RAISED" onAction="#registerButtonPressed" text="Register">
+                  <JFXButton fx:id="final_registerButton" buttonType="RAISED" onAction="#registerButtonPressed" text="Register">
                      <font>
                         <Font size="30.0" />
                      </font>

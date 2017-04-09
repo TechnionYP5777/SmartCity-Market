@@ -22,6 +22,9 @@ import javafx.scene.layout.GridPane;
 
 
 import com.jfoenix.controls.JFXTextField;
+
+import BasicCommonClasses.Login;
+
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXButton;;
 
@@ -36,6 +39,7 @@ public class CustomerLoginScreen implements Initializable {
 	
 	private String username = "";
 	private String password = "";
+	private static Login guestLogin = new Login("Guest", "Guest");
 	@FXML
 	private GridPane loginScreenPane;
 	@FXML
@@ -78,6 +82,11 @@ public class CustomerLoginScreen implements Initializable {
 	private void loginButtonPressed(ActionEvent __) {
 		ICustomer customer = InjectionFactory.getInstance(Customer.class);
 		try {
+			if (username.equals(guestLogin.getUserName()) ) {
+				Alert alert = new Alert(AlertType.ERROR , String.format("The user: \"{0}\" can access only as a guest user.", username));
+				alert.showAndWait();
+				return;
+			}
 			customer.login(username, password);
 		} catch (CriticalError e) {
 			Alert alert = new Alert(AlertType.ERROR , "A problem had occured. Please Try again or let us know if it continues.");
@@ -105,7 +114,7 @@ public class CustomerLoginScreen implements Initializable {
 	private void guestLoginButtonPressed(ActionEvent __) {
 		ICustomer customer = InjectionFactory.getInstance(Customer.class);
 		try {
-			customer.login("Guest", "Guest");
+			customer.login(guestLogin.getUserName(), guestLogin.getUserName());
 		} catch (CriticalError e) {
 			Alert alert = new Alert(AlertType.ERROR , "A problem had occured. Please Try again or let us know if it continues.");
 			alert.showAndWait();
@@ -127,7 +136,7 @@ public class CustomerLoginScreen implements Initializable {
 	@FXML
 	private void registerButtonPressed(ActionEvent __) {
 		
-		AbstractApplicationScreen.setScene("/CustomerWelcomeScreen/CustomerWelcomeScreen.fxml");
+		AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_PersonalInfoScreen.fxml");
 	}
 	
 }

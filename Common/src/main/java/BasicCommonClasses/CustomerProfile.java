@@ -13,7 +13,7 @@ import CommonDefs.CustomerProfileException.InvalidParameter;
  * @author Idan Atias
  * @author Aviad Cohen
  */
-public class CustomerProfile {
+public class CustomerProfile implements ICustomerProfile {
 	String userName;
 	String password;
 	String firstName;
