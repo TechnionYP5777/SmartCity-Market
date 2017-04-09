@@ -7,7 +7,6 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -17,7 +16,7 @@
 
 <VBox fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" spacing="15.0" stylesheets="@ManageCatalogProductTab.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductTab">
 	<children>
-		<Label fx:id="ChooseOperationLbl" text="Choose operation:" />
+		<Label text="Choose operation:" />
       <JFXRadioButton fx:id="addCatalogProductRadioButton" onAction="#addCatalogProductRadioButtonPressed" text="Add Catalog Product" />
       <JFXRadioButton fx:id="removeCatalogProductRadioButton" onAction="#removeCatalogProductRadioButtonPressed" text="Remove Catalog Product" />
 		<Separator />
@@ -51,8 +50,6 @@
 						<ColumnConstraints hgrow="SOMETIMES" />
 					</columnConstraints>
 					<rowConstraints>
-						<RowConstraints vgrow="SOMETIMES" />
-						<RowConstraints vgrow="SOMETIMES" />
 						<RowConstraints vgrow="SOMETIMES" />
 						<RowConstraints vgrow="SOMETIMES" />
 						<RowConstraints vgrow="SOMETIMES" />
@@ -91,22 +88,6 @@
 								<Insets bottom="5.0" top="5.0" />
 							</padding>
 						</HBox>
-						<HBox GridPane.rowIndex="4">
-							<children>
-								<Label text="Product Ingredients:" visible="false" />
-							</children>
-							<padding>
-								<Insets bottom="5.0" top="5.0" />
-							</padding>
-						</HBox>
-						<HBox GridPane.rowIndex="5">
-							<children>
-								<Label text="Product Location:" visible="false" />
-							</children>
-							<padding>
-								<Insets bottom="5.0" top="5.0" />
-							</padding>
-						</HBox>
 						<HBox GridPane.columnIndex="1">
 							<padding>
 								<Insets bottom="5.0" />
@@ -139,22 +120,6 @@
 							<children>
                         <JFXTextField fx:id="productPriceTextField" />
                         <Label text="*" />
-							</children>
-						</HBox>
-						<HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
-							<padding>
-								<Insets bottom="5.0" top="5.0" />
-							</padding>
-							<children>
-								<TextField fx:id="productIngredientsTextField" visible="false" />
-							</children>
-						</HBox>
-						<HBox GridPane.columnIndex="1" GridPane.rowIndex="5">
-							<padding>
-								<Insets bottom="5.0" top="5.0" />
-							</padding>
-							<children>
-								<TextField fx:id="productLocationTextField" visible="false" />
 							</children>
 						</HBox>
 					</children>

@@ -69,11 +69,8 @@ public class ManageCatalogProductTab implements Initializable {
 	@FXML
 	private JFXTextField productPriceTextField;
 
-	@FXML
-	private JFXTextField productIngredientsTextField;
-
-	@FXML
-	private JFXTextField productLocationTextField;
+//	@FXML
+//	private JFXTextField productLocationTextField;
 
 	@FXML
 	private Button runTheOperationButton;
@@ -105,10 +102,8 @@ public class ManageCatalogProductTab implements Initializable {
 				productPriceTextField.setText(oldValue);
 			enableRunOperation();
 		});
-		productIngredientsTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-		});
-		productLocationTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-		});
+//		productLocationTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+//		});
 		radioButtonContainerManageCatalogProduct.addRadioButtons(
 				(Arrays.asList((new RadioButton[] { addCatalogProductRadioButton, removeCatalogProductRadioButton }))));
 		enableRunOperation();
