@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
@@ -172,7 +172,7 @@
                                     <JFXRadioButton fx:id="addPakageToWarhouseRadioButton" onAction="#radioButtonHandlingBarcode" selected="true" text="Add package to warehouse" />
 												<Label fx:id="expirationDateLabel" text="Expiration Date:" textFill="WHITE" />
                                     <JFXDatePicker fx:id="datePicker" />
-												<CheckBox fx:id="printTheSmartCodeCheckBox" mnemonicParsing="false" text="Print the smart code" textFill="WHITE" />
+                                    <JFXCheckBox fx:id="printTheSmartCodeCheckBox" text="Print the smart code" />
 											</children>
 										</HBox>
 									</children>
