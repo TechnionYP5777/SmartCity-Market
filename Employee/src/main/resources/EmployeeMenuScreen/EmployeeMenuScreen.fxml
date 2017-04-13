@@ -48,6 +48,13 @@
 							source="/ManageCatalogProductTab/ManageCatalogProductTab.fxml" />
 					</content>
 				</Tab>
+				<Tab fx:id="manageCatalogProductDetailsTab" closable="true"
+					text="Manage Catalog Product Details">
+					<content>
+						<fx:include
+							source="/ManageCatalogProductDetailsTab/ManageCatalogProductDetailsTab.fxml" />
+					</content>
+				</Tab>
 			</tabs>
 		</TabPane>
 		<GridPane GridPane.rowIndex="1">

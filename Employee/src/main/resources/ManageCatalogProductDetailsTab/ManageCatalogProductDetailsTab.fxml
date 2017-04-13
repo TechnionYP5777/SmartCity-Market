@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductDetailsTab">
+   <children>
+      <Label text="Manage Manufacturers" />
+      <HBox>
+         <children>
+            <JFXListView fx:id="manufacturerList" />
+            <VBox>
+               <children>
+                  <JFXButton onAction="#addManuPressed" text="Add Manufacturer" />
+                  <JFXButton onAction="#removeManuPress" text="Remove Manufacturer" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <Label text="Manage Ingredients" />
+      <HBox>
+         <children>
+            <JFXListView fx:id="ingredientsList" />
+            <VBox>
+               <children>
+                  <JFXButton onAction="#addIngPressed" text="Add Ingredient" />
+                  <JFXButton onAction="#removeIngrPressed" text="Remove Ingredient" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>
