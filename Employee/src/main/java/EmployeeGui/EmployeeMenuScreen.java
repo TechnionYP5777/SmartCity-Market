@@ -94,6 +94,7 @@ public class EmployeeMenuScreen implements Initializable {
 		worker = InjectionFactory.getInstance(Manager.class);
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
 
+		
 		// defining behavior when stage/window is closed.
 		primeStage.setOnCloseRequest(event -> {
 			try {
