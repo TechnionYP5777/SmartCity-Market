@@ -99,8 +99,9 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			String item = "Manuf " + i;
 			manufacturerList.getItems().add(item);
 		}
+		
 	
-
+		
 		manufacturerList.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
 			@Override
 			public ObservableValue<Boolean> call(String item) {
