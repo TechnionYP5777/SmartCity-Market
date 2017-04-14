@@ -13,6 +13,7 @@ import org.controlsfx.control.CheckComboBox;
 import com.google.common.eventbus.Subscribe;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RequiredFieldValidator;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
@@ -31,6 +32,9 @@ import UtilsContracts.BarcodeScanEvent;
 import UtilsContracts.IBarcodeEventHandler;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
+import de.jensd.fx.glyphs.GlyphsBuilder;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -129,14 +133,54 @@ public class ManageCatalogProductTab implements Initializable {
 			enableRunOperation();
 		});
 
-		//createIngredientMap();
-		ingridientsCombo.getItems().addAll(/*ingredients.keySet()*/ "תנובה", "מאפיות ברמן", "עלית", "אסם", "בייגל-בייגל");
+		// createIngredientMap();
+		ingridientsCombo.getItems().addAll(/* ingredients.keySet() */ "תנובה", "מאפיות ברמן", "עלית", "אסם",
+				"בייגל-בייגל");
 
 		// productLocationTextField.textProperty().addListener((observable,
 		// oldValue, newValue) -> {
 		// });
 		radioButtonContainerManageCatalogProduct.addRadioButtons(
 				(Arrays.asList((new RadioButton[] { addCatalogProductRadioButton, removeCatalogProductRadioButton }))));
+
+		RequiredFieldValidator validator = new RequiredFieldValidator();
+		validator.setMessage("Input Required");
+		validator.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
+				.styleClass("error").build());
+		
+		barcodeTextField.getValidators().add(validator);
+		barcodeTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				barcodeTextField.validate();
+			}
+		});
+		
+		RequiredFieldValidator validator2 = new RequiredFieldValidator();
+		validator2.setMessage("Input Required");
+		validator2.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
+				.styleClass("error").build());
+		
+		productNameTextField.getValidators().add(validator2);
+		productNameTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				productNameTextField.validate();
+			}
+		});
+		
+		RequiredFieldValidator validator3 = new RequiredFieldValidator();
+		validator3.setMessage("Input Required");
+		validator3.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
+				.styleClass("error").build());
+		
+		productPriceTextField.getValidators().add(validator3);
+		productPriceTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				productPriceTextField.validate();
+			}
+		});
+		
+		
+
 		enableRunOperation();
 	}
 

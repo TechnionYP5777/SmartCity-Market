@@ -105,6 +105,11 @@
       <artifactId>jfoenix</artifactId>
       <version>1.0.0</version>
   </dependency>
+  <dependency>
+    <groupId>de.jensd</groupId>
+    <artifactId>fontawesomefx</artifactId>
+    <version>8.9</version>
+</dependency>
   </dependencies>
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

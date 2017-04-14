@@ -15,7 +15,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.CheckComboBox?>
 
-
 <VBox fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" spacing="15.0" stylesheets="@ManageCatalogProductTab.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductTab">
 	<children>
 		<Label text="Choose operation:" />
@@ -41,8 +40,7 @@
 				</HBox>
 				<HBox GridPane.columnIndex="1">
 					<children>
-                  <JFXTextField fx:id="barcodeTextField" />
-                  <Label text="*" />
+                  <JFXTextField fx:id="barcodeTextField" promptText="Required Field" />
 					</children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -102,8 +100,7 @@
 								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 							</padding>
 							<children>
-                        <JFXTextField fx:id="productNameTextField" />
-                        <Label text="*" />
+                        <JFXTextField fx:id="productNameTextField" promptText="Required Field" />
 							</children>
 						</HBox>
 						<HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -111,7 +108,7 @@
 								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 							</padding>
 							<children>
-                        <JFXTextField fx:id="productDescriptionTextField" />
+                        <JFXTextField fx:id="productDescriptionTextField" promptText="Optional" />
 							</children>
 						</HBox>
 						<HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -127,8 +124,7 @@
 								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 							</padding>
 							<children>
-                        <JFXTextField fx:id="productPriceTextField" />
-                        <Label text="*" />
+                        <JFXTextField fx:id="productPriceTextField" promptText="Required Field" />
 							</children>
 						</HBox>
                   <HBox GridPane.rowIndex="4">
@@ -156,7 +152,6 @@
 				<Button fx:id="runTheOperationButton" mnemonicParsing="false" onAction="#runTheOperationButtonPressed" styleClass="ourButton" text="Run The Operation" />
 			</children>
 		</HBox>
-      <Label text="* Required Field" />
 	</children>
 	<padding>
 		<Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
