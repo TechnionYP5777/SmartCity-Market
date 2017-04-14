@@ -1,22 +1,25 @@
 package EmployeeGui;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXPopup;
-import com.jfoenix.controls.JFXPopup.PopupHPosition;
-import com.jfoenix.controls.JFXPopup.PopupVPosition;
-import com.jfoenix.controls.JFXRippler;
-import com.jfoenix.controls.JFXRippler.RipplerMask;
-import com.jfoenix.controls.JFXRippler.RipplerPos;
+import com.jfoenix.controls.JFXTextField;
 
+import BasicCommonClasses.Ingredient;
+import BasicCommonClasses.Manufacturer;
 import EmployeeContracts.IManager;
+import EmployeeDefs.AEmployeeException.ConnectionFailure;
+import EmployeeDefs.AEmployeeException.CriticalError;
+import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
+import EmployeeDefs.AEmployeeException.InvalidParameter;
+import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
 import EmployeeImplementations.Manager;
 import UtilsImplementations.InjectionFactory;
 import javafx.beans.property.BooleanProperty;
@@ -24,10 +27,10 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.control.cell.CheckBoxListCell;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
@@ -44,9 +47,9 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	static Logger log = Logger.getLogger(ManagePackagesTab.class.getName());
 
 	IManager manager = InjectionFactory.getInstance(Manager.class);
-	
-    @FXML
-    private VBox rootPane;
+
+	@FXML
+	private VBox rootPane;
 
 	@FXML
 	private JFXListView<String> manufacturerList;
@@ -70,6 +73,10 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 	private HashSet<String> selectedIngr = new HashSet<String>();
 
+	private HashMap<String, Manufacturer> manufacturars;
+
+	private HashMap<String, Ingredient> ingredients;
+
 	@FXML
 	void addIngPressed(ActionEvent event) {
 
@@ -82,26 +89,43 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 	@FXML
 	void removeIngrPressed(ActionEvent event) {
-
+		selectedIngr.forEach(ing -> {
+			try {
+				manager.removeIngredient(ingredients.get(ing));
+			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure
+					| ParamIDDoesNotExist e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		selectedIngr.clear();
+		createIngredientList();
 	}
 
 	@FXML
 	void removeManuPress(ActionEvent event) {
-
+		selectedManu.forEach(man -> {
+			try {
+				manager.removeManufacturer(manufacturars.get(man));
+			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure
+					| ParamIDDoesNotExist e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		selectedManu.clear();
+		createManufacturerList();
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-
-		// TODO just for test	
+		// TODO just for test
 		for (int i = 1; i <= 20; i++) {
 			String item = "Manuf " + i;
 			manufacturerList.getItems().add(item);
 		}
-		
-	
-		
+
 		manufacturerList.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
 			@Override
 			public ObservableValue<Boolean> call(String item) {
@@ -142,16 +166,41 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			}
 		}));
 		
+		// TODO enable this later
+		//createIngredientList();
+		//createManufacturerList();
 		enableButtons();
 
 	}
 
-	private void createManuList() {
+	private void createManufacturerList() {
+
+		manufacturars = new HashMap<String, Manufacturer>();
+
+		try {
+			manager.getAllManufacturers().forEach(manufacturer -> {
+				manufacturars.put(manufacturer.getName(), manufacturer);
+			});
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
+			e.printStackTrace();
+		}
+
+		manufacturerList.getItems().addAll(manufacturars.keySet());
 
 	}
 
-	private void createIngrList() {
+	private void createIngredientList() {
+		ingredients = new HashMap<String, Ingredient>();
+		try {
+			manager.getAllIngredients().forEach(ingredient -> {
+				ingredients.put(ingredient.getName(), ingredient);
+			});
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
+		ingredientsList.getItems().addAll(ingredients.keySet());
 	}
 
 	private void enableButtons() {
