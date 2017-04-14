@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXDrawersStack?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -28,9 +30,14 @@
                <children>
                   <JFXTextField fx:id="barcodeTextField" onAction="#searchCodeButtonPressed" promptText="Type Or Scan Product Code..." />
       				<Button fx:id="searchCodeButton" mnemonicParsing="false" onAction="#searchCodeButtonPressed" prefHeight="26.0" prefWidth="26.0" />
+                  <JFXButton fx:id="showDatePickerBtn" text="Show Date Picker" />
                </children>
             </HBox>
-            <JFXDatePicker fx:id="datePickerForSmartCode" />
+            <VBox alignment="CENTER">
+               <children>
+                  <JFXDrawersStack fx:id="drawerStack" />
+               </children>
+            </VBox>
 			</children>
 		</VBox>
 		<StackPane>

@@ -1,5 +1,7 @@
 package EmployeeGui;
 
+import static javafx.scene.input.MouseEvent.MOUSE_PRESSED;
+
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -10,9 +12,13 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 import com.google.common.eventbus.Subscribe;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXDrawer;
+import com.jfoenix.controls.JFXDrawersStack;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXDrawer.DrawerDirection;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Location;
@@ -34,6 +40,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DateCell;
@@ -45,6 +52,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
@@ -114,9 +123,6 @@ public class ManagePackagesTab implements Initializable {
 	Spinner<Integer> editPackagesAmountSpinner;
 
 	@FXML
-	JFXDatePicker datePickerForSmartCode;
-
-	@FXML
 	JFXDatePicker datePicker;
 
 	@FXML
@@ -133,6 +139,12 @@ public class ManagePackagesTab implements Initializable {
 
 	@FXML
 	JFXRadioButton addPakageToWarhouseRadioButton;
+
+	@FXML
+	JFXDrawersStack drawerStack;
+
+	@FXML
+	JFXButton showDatePickerBtn;
 
 	@FXML
 	Button searchCodeButton;
@@ -152,6 +164,11 @@ public class ManagePackagesTab implements Initializable {
 	IBarcodeEventHandler barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
 
 	IWorker worker = InjectionFactory.getInstance(Manager.class);
+
+	JFXDatePicker datePickerForSmartCode;
+
+	@FXML
+	JFXDrawer drawer;
 
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
@@ -195,6 +212,26 @@ public class ManagePackagesTab implements Initializable {
 		};
 		datePicker.setDayCellFactory(dayCellFactory);
 		datePicker.setValue(LocalDate.now());
+
+		JFXDrawer topDrawer = new JFXDrawer();
+		VBox topDrawerPane = new VBox();
+		topDrawerPane.setStyle("-fx-background-color: rgb(230, 243, 255); -fx-border-color: rgb(0, 41, 77)");
+		topDrawerPane.setAlignment(Pos.CENTER);
+		topDrawerPane.minHeight(Region.USE_COMPUTED_SIZE);
+		topDrawerPane.minWidth(Region.USE_COMPUTED_SIZE);
+		topDrawerPane.prefWidth(Region.USE_COMPUTED_SIZE);
+		topDrawerPane.prefHeight(Region.USE_COMPUTED_SIZE);
+		topDrawerPane.maxHeight(Region.USE_COMPUTED_SIZE);
+		topDrawerPane.maxWidth(Region.USE_COMPUTED_SIZE);
+		datePickerForSmartCode = new JFXDatePicker();
+		Label lbl = new Label("Choose Date");
+		topDrawerPane.getChildren().addAll(lbl, datePickerForSmartCode);
+		topDrawer.setDirection(DrawerDirection.TOP);
+		topDrawer.setSidePane(topDrawerPane);
+		topDrawer.setOverLayVisible(false);
+		topDrawer.setResizableOnDrag(true);
+
+		showDatePickerBtn.addEventHandler(MOUSE_PRESSED, e -> drawerStack.toggle(topDrawer));
 
 		radioButtonContainerSmarcodeOperations.addRadioButtons(
 				(Arrays.asList((new RadioButton[] { printSmartCodeRadioButton, addPackageToStoreRadioButton,
@@ -319,8 +356,7 @@ public class ManagePackagesTab implements Initializable {
 		showSmartCodeOperationsPane(true);
 
 		addProductParametersToQuickView(catalogProduct.getName(), barcodeTextField.getText(),
-				(c.getExpirationDate() + ""), Integer.toString(amountInStore),
-				Integer.toString(amountInWarehouse));
+				(c.getExpirationDate() + ""), Integer.toString(amountInStore), Integer.toString(amountInWarehouse));
 		log.info("amount in store: " + amountInStore);
 		log.info("amount in werehouse: " + amountInWarehouse);
 		log.info("===============================smartcodeEntered======================================");
@@ -330,7 +366,8 @@ public class ManagePackagesTab implements Initializable {
 	@FXML
 	private void searchCodeButtonPressed(ActionEvent __) {
 		try {
-			LocalDate expirationDate = this.expirationDate != null ? this.expirationDate : datePickerForSmartCode.getValue();
+			LocalDate expirationDate = this.expirationDate != null ? this.expirationDate
+					: datePickerForSmartCode.getValue();
 
 			if (expirationDate == null)
 				barcodeEntered(barcodeTextField.getText());
