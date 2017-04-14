@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Light.Distant?>
 <?import javafx.scene.effect.Lighting?>
 <?import javafx.scene.effect.Shadow?>
@@ -61,22 +61,8 @@
                   </Lighting>
                </effect>
             </Separator>
-            <TextField fx:id="userNameTextField" minHeight="40.0" onAction="#loginButtonPressed" prefHeight="60.0" promptText="User Name" styleClass="label">
-               <font>
-                  <Font name="Lucida Bright Regular" size="13.0" />
-               </font>
-               <effect>
-                  <Lighting diffuseConstant="1.42">
-                     <bumpInput>
-                        <Shadow />
-                     </bumpInput>
-                     <light>
-                        <Light.Distant />
-                     </light>
-                  </Lighting>
-               </effect>
-            </TextField>
-            <JFXPasswordField fx:id="passwordField" onAction="#loginButtonPressed" promptText=" Password" />
+            <JFXTextField fx:id="userNameTextField" onAction="#loginButtonPressed" promptText="User Name" />
+            <JFXPasswordField fx:id="passwordField" onAction="#loginButtonPressed" promptText="Password" />
             <GridPane>
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
+
 
 import CommonDefs.CLIENT_TYPE;
 import EmployeeCommon.EmployeeScreensParameterService;
@@ -18,8 +20,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -39,7 +39,7 @@ public class EmployeeLoginScreen implements Initializable {
 	@FXML
 	private Button backButton;
 	@FXML
-	private TextField userNameTextField;
+	private JFXTextField userNameTextField;
 	@FXML
 	private JFXPasswordField passwordField;
 	
@@ -56,7 +56,7 @@ public class EmployeeLoginScreen implements Initializable {
 			enableLoginButtonCheck();
 		});
 		persistenceStore = InjectionFactory.getInstance(XmlPersistentStore.class);
-	
+		
 		restoreState();
 		
 		enableLoginButtonCheck();
