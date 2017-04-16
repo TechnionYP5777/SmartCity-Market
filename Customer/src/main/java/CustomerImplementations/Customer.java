@@ -132,7 +132,8 @@ public class Customer extends ACustomer implements ICustomer {
 		}
 		
 		id = cmdwrppr.getSenderID();
-		//customerProfile = Serialization.deserialize(cmdwrppr.getData(), CustomerProfile.class);
+		if (this instanceof RegisteredCustomer)
+			customerProfile = Serialization.deserialize(cmdwrppr.getData(), CustomerProfile.class);
 		
 		log.info("Customer Login to server as succeed. Client id is: " + id);
 	}
