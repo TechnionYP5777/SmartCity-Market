@@ -62,13 +62,12 @@ public class UpdateCustomerProfileTest {
 			fail();
 		}
 	}
-	
+
 	@After
-	public void cleanup(){
+	public void cleanup() {
 		try {
-			Mockito.when(
-					clientRequestHandler.sendRequestWithRespond(
-							new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT).serialize()))
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 
 		} catch (IOException ¢) {
@@ -91,25 +90,51 @@ public class UpdateCustomerProfileTest {
 			assert ("kuku".equals(cProfile.getUserName()));
 			assert (cProfile.getFirstName() == null);
 			cProfile.setFirstName("bla");
-		} catch(Exception ex){
+		} catch (Exception ex) {
 			fail();
 		}
 		try {
-			Mockito.when(
-					clientRequestHandler.sendRequestWithRespond(new CommandWrapper(regCustomer.getId(), CommandDescriptor.UPDATE_CUSTOMER_PROFILE,
-							Serialization.serialize(cProfile)).serialize()))
-					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK)
-							.serialize());
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(new CommandWrapper(regCustomer.getId(),
+					CommandDescriptor.UPDATE_CUSTOMER_PROFILE, Serialization.serialize(cProfile)).serialize()))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
 			¢.printStackTrace();
 			fail();
 		}
-		
-		try{
+
+		try {
 			regCustomer.updateCustomerProfile(cProfile);
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail();
 		}
+	}
+
+	@Test
+	public void validateExcpetionIsThrownIfARegisteredCustomerGetsAuthenticationErrorTest() {
+		CustomerProfile cProfile = null;
+		try {
+			cProfile = regCustomer.getCustomerProfile();
+		} catch (CriticalError e) {
+			e.printStackTrace();
+			fail();
+		}
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(new CommandWrapper(regCustomer.getId(),
+					CommandDescriptor.UPDATE_CUSTOMER_PROFILE, Serialization.serialize(cProfile)).serialize()))
+					.thenReturn(
+							new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD).serialize());
+		} catch (IOException ¢) {
+			¢.printStackTrace();
+			fail();
+		}
+
+		try {
+			regCustomer.updateCustomerProfile(cProfile);
+		} catch (Exception ex) {
+			/* success */
+			return;
+		}
+		fail();
 	}
 }
