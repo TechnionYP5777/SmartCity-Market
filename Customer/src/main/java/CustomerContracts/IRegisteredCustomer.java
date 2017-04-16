@@ -202,6 +202,14 @@ public interface IRegisteredCustomer extends ICustomer {
 	 * @throws InvalidParameter 
 	 */
 	void removeAllergens(HashSet<Ingredient> allergens) throws CustomerNotConnected, InvalidParameter;
+	
+	
+	/**
+	 * getCustomerProfile - returns the customer profile of a registered customer
+	 * @throws CriticalError 
+	 * 
+	 */
+	CustomerProfile getCustomerProfile() throws CriticalError;
 
 	/**
 	 * removeCustomer - remove the customer from system - can't be undone!
@@ -223,4 +231,5 @@ public interface IRegisteredCustomer extends ICustomer {
 	 * @throws CriticalError
 	 */
 	void updateCustomerProfile(CustomerProfile p) throws CustomerNotConnected, InvalidParameter, AuthenticationError, CriticalError;
+	
 }

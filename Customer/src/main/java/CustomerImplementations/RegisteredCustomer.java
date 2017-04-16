@@ -212,6 +212,12 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 			log.error("Tried to remove ingredients from empty allergens list");
 		}
 	}
+	
+	@Override
+	public CustomerProfile getCustomerProfile() throws CriticalError{
+		validateNotNull(customerProfile);
+		return customerProfile;
+	}
 
 	@Override
 	public void removeCustomer() throws CustomerNotConnected, InvalidParameter, AuthenticationError, CriticalError {
