@@ -16,14 +16,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
 
 import com.jfoenix.controls.JFXTextField;
 
 import BasicCommonClasses.Login;
+import ClientServerApi.ClientServerDefs;
 
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXButton;;
@@ -39,7 +38,7 @@ public class CustomerLoginScreen implements Initializable {
 	
 	private String username = "";
 	private String password = "";
-	private static Login guestLogin = new Login("Guest", "Guest");
+	private static Login guestLogin = new Login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerUsername);
 	@FXML
 	private GridPane loginScreenPane;
 	@FXML
