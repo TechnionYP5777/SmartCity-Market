@@ -4,12 +4,12 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.stream.IntStream;
 
 import org.apache.log4j.Logger;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
-import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXTextField;
 
 import BasicCommonClasses.Ingredient;
@@ -25,11 +25,12 @@ import UtilsImplementations.InjectionFactory;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -76,7 +77,13 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	private HashMap<String, Manufacturer> manufacturars;
 
 	private HashMap<String, Ingredient> ingredients;
-
+	
+	@FXML
+	private JFXTextField filterManu;
+	
+	@FXML
+	private JFXTextField filterIngr;
+	
 	@FXML
 	void addIngPressed(ActionEvent event) {
 
@@ -119,17 +126,30 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		ObservableList<String> dataManu = FXCollections.observableArrayList();
+	    IntStream.range(0, 1000).mapToObj(Integer::toString).forEach(dataManu::add);
 
-		// TODO just for test
-		for (int i = 1; i <= 20; i++) {
-			String item = "Manuf " + i;
-			manufacturerList.getItems().add(item);
-		}
+	    FilteredList<String> filteredDataManu = new FilteredList<>(dataManu, s -> true);
+
+	    filterManu.textProperty().addListener(obs->{
+	        String filter = filterManu.getText(); 
+	        if(filter == null || filter.length() == 0) {
+	        	filteredDataManu.setPredicate(s -> true);
+	        }
+	        else {
+	        	filteredDataManu.setPredicate(s -> s.contains(filter));
+	        }
+	    });
+		  
+	    manufacturerList.setItems(filteredDataManu); 
 
 		manufacturerList.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
 			@Override
 			public ObservableValue<Boolean> call(String item) {
 				BooleanProperty observable = new SimpleBooleanProperty();
+				observable.set(selectedManu.contains(item));
+				
 				observable.addListener((obs, wasSelected, isNowSelected) -> {
 					if (isNowSelected) {
 						selectedManu.add(item);
@@ -143,16 +163,28 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			}
 		}));
 
-		// TODO just for test
-		for (int i = 1; i <= 20; i++) {
-			String item = "Ingr " + i;
-			ingredientsList.getItems().add(item);
-		}
+		ObservableList<String> dataIngr = FXCollections.observableArrayList();
+	    IntStream.range(0, 1000).mapToObj(Integer::toString).forEach(dataIngr::add);
+
+	    FilteredList<String> filteredDataIngr = new FilteredList<>(dataIngr, s -> true);
+
+	    filterIngr.textProperty().addListener(obs->{
+	        String filter = filterIngr.getText(); 
+	        if(filter == null || filter.length() == 0) {
+	        	filteredDataIngr.setPredicate(s -> true);
+	        }
+	        else {
+	        	filteredDataIngr.setPredicate(s -> s.contains(filter));
+	        }
+	    });
+		  
+	    ingredientsList.setItems(filteredDataIngr); 
 
 		ingredientsList.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
 			@Override
 			public ObservableValue<Boolean> call(String item) {
 				BooleanProperty observable = new SimpleBooleanProperty();
+				observable.set(selectedIngr.contains(item));
 				observable.addListener((obs, wasSelected, isNowSelected) -> {
 					if (isNowSelected) {
 						selectedIngr.add(item);
@@ -165,6 +197,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 				return observable;
 			}
 		}));
+		
 		
 		// TODO enable this later
 		//createIngredientList();

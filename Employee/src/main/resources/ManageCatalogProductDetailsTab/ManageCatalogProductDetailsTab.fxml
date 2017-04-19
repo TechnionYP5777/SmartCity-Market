@@ -2,35 +2,51 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductDetailsTab">
+
+<HBox prefHeight="496.0" prefWidth="904.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductDetailsTab">
    <children>
-      <Label text="Manage Manufacturers" />
-      <HBox>
+      <VBox>
          <children>
-            <JFXListView fx:id="manufacturerList" />
-            <VBox>
+            <Label text="Manage Manufacturers" />
+            <HBox>
                <children>
-                  <JFXButton fx:id="addManuBtn" onAction="#addManuPressed" text="Add Manufacturer" />
-                  <JFXButton fx:id="removeManuBtn" onAction="#removeManuPress" text="Remove Manufacturer" />
+                  <JFXListView fx:id="manufacturerList" minHeight="500.0" minWidth="250.0" />
+                  <VBox>
+                     <children>
+                        <JFXButton fx:id="addManuBtn" onAction="#addManuPressed" text="Add Manufacturer" />
+                        <JFXButton fx:id="removeManuBtn" onAction="#removeManuPress" text="Remove Manufacturer" />
+                        <Label text="Search" />
+                        <JFXTextField fx:id="filterManu" />
+                     </children>
+                  </VBox>
                </children>
-            </VBox>
+            </HBox>
          </children>
-      </HBox>
-      <Label text="Manage Ingredients" />
-      <HBox>
+      </VBox>
+      <Separator orientation="VERTICAL" prefHeight="200.0" />
+      <VBox>
          <children>
-            <JFXListView fx:id="ingredientsList" />
-            <VBox>
+            <Label text="Manage Ingredients" />
+            <HBox>
                <children>
-                  <JFXButton fx:id="addIngrBtn" onAction="#addIngPressed" text="Add Ingredient" />
-                  <JFXButton fx:id="removeIngrBtn" onAction="#removeIngrPressed" text="Remove Ingredient" />
+                  <JFXListView fx:id="ingredientsList" minHeight="500.0" minWidth="250.0" />
+                  <VBox>
+                     <children>
+                        <JFXButton fx:id="addIngrBtn" onAction="#addIngPressed" text="Add Ingredient" />
+                        <JFXButton fx:id="removeIngrBtn" onAction="#removeIngrPressed" text="Remove Ingredient" />
+                        <Label text="Search" />
+                        <JFXTextField fx:id="filterIngr" />
+                     </children>
+                  </VBox>
                </children>
-            </VBox>
+            </HBox>
          </children>
-      </HBox>
+      </VBox>
    </children>
-</VBox>
+</HBox>
