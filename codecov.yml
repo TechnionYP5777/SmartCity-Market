@@ -14,7 +14,7 @@ coverage:
         threshold: 1%
     changes: no
 
-  ignore: 
+ignore: 
    - "Employee/src/main/java/EmployeeGui/*"
    - "Employee/src/main/java/EmployeeDefs/*"
    - "Common/src/main/java/SMExceptions/*"
