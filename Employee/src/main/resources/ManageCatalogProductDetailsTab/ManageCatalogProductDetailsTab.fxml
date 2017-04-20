@@ -9,14 +9,14 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<HBox prefHeight="496.0" prefWidth="904.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductDetailsTab">
+<HBox prefHeight="496.0" prefWidth="904.0" stylesheets="@details.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductDetailsTab">
    <children>
       <VBox>
          <children>
             <Label text="Manage Manufacturers" />
             <HBox>
                <children>
-                  <JFXListView fx:id="manufacturerList" minHeight="500.0" minWidth="250.0" />
+                  <JFXListView fx:id="manufacturerList" minHeight="500.0" minWidth="250.0" stylesheets="@details.css" />
                   <VBox>
                      <children>
                         <JFXButton fx:id="addManuBtn" onAction="#addManuPressed" text="Add Manufacturer" />

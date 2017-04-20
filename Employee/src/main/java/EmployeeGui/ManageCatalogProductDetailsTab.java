@@ -162,6 +162,9 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 				return observable;
 			}
 		}));
+		
+		manufacturerList.depthProperty().set(1);
+		manufacturerList.setExpanded(true);
 
 		ObservableList<String> dataIngr = FXCollections.observableArrayList();
 	    IntStream.range(0, 1000).mapToObj(Integer::toString).forEach(dataIngr::add);
@@ -198,6 +201,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			}
 		}));
 		
+		ingredientsList.depthProperty().set(1);
+		ingredientsList.setExpanded(true);
 		
 		// TODO enable this later
 		//createIngredientList();
