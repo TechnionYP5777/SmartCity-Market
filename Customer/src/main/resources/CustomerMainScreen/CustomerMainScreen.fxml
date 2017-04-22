@@ -27,10 +27,10 @@
   </columnConstraints>
   <rowConstraints>
     <RowConstraints vgrow="SOMETIMES" />
-    <RowConstraints vgrow="SOMETIMES" maxHeight="-Infinity" />
+    <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-   	  <JFXListView fx:id="productsListView" editable="true" style="-fx-background-color: TRANSPARENT;" verticalGap="10.0" GridPane.columnIndex="1" maxWidth="600" >
+   	  <JFXListView fx:id="productsListView" editable="true" maxWidth="600" style="-fx-background-color: TRANSPARENT;" verticalGap="10.0" GridPane.columnIndex="1">
    	  <padding>
            <Insets bottom="10.0" left="45.0" right="40.0" top="130.0" />
       </padding>
@@ -280,8 +280,13 @@
             <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
          </GridPane.margin>
       </VBox>
-      <HBox alignment="BOTTOM_RIGHT" prefHeight="157.0" prefWidth="483.0" spacing="60.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <HBox alignment="BOTTOM_RIGHT" prefHeight="157.0" prefWidth="483.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
+            <JFXTextField fx:id="searchField" promptText="Search Product">
+               <font>
+                  <Font size="42.0" />
+               </font>
+            </JFXTextField>
             <Button fx:id="cancelButton" alignment="BOTTOM_CENTER" mnemonicParsing="false" onAction="#cancelButtonPressed" prefHeight="80.0" prefWidth="80.0">
                <font>
                   <Font size="20.0" />
@@ -292,7 +297,7 @@
                </font></Button>
          </children>
          <padding>
-            <Insets bottom="20.0" left="20.0" right="1.0" top="20.0" />
+            <Insets bottom="20.0" right="1.0" top="20.0" />
          </padding>
       </HBox>
    </children>

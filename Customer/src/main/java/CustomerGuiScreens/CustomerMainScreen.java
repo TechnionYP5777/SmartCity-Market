@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import com.google.common.eventbus.Subscribe;
 import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXTextField;
 
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
@@ -28,6 +29,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -103,11 +105,16 @@ public class CustomerMainScreen implements Initializable {
 	@FXML
 	ImageView productInfoImage;
 	
+	@FXML
+	JFXTextField searchField;
+	
 	SmartCode scannedSmartCode;
 	
 	CatalogProduct catalogProduct;
 	
 	ObservableList<CartProduct> productsObservableList = FXCollections.<CartProduct>observableArrayList();
+	
+	FilteredList<CartProduct> filteredProductList;
 
 	// Lock smartCodeLocker;
 
@@ -186,6 +193,8 @@ public class CustomerMainScreen implements Initializable {
 		shoppingList.forEach((key,value) -> {
 			productsObservableList.add(value);
 		});
+		
+		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
 	}
 	
 	private void logoutAndExit() {
@@ -210,12 +219,21 @@ public class CustomerMainScreen implements Initializable {
 		AbstractApplicationScreen.fadeTransition(customerMainScreenPane);
 		barcodeEventHandler.register(this);
 		customer = TempCustomerPassingData.customer;
-		productsListView.setItems(productsObservableList);
+		
+	    filteredProductList = new FilteredList<>(productsObservableList, s -> true);
+
+	    searchField.textProperty().addListener(obs->{
+	        String filter = searchField.getText(); 
+	        
+	        filteredProductList.setPredicate((filter == null || filter.length() == 0) ? s -> true :
+	        																			s -> s.getCatalogProduct().getName().contains(filter));
+	    });
+		
+		productsListView.setItems(filteredProductList);
 		productsListView.setCellFactory(new Callback<ListView<CartProduct>, ListCell<CartProduct>>() {
 			
 			@Override
 			public ListCell<CartProduct> call(ListView<CartProduct> __) {
-                
 				return new CustomerProductCellFormat();
 			}
 		});
