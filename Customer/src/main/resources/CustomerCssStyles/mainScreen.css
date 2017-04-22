@@ -1,27 +1,12 @@
 .root {
-   -fx-background-image: url("shopping_cart.jpg");
+   -fx-background-image: url("mainScreen.jpg");
    -fx-background-color: transparent;
-   -fx-background-position: left;
+   -fx-background-position: center;
    -fx-background-repeat: no-repeat;
    -fx-background-size: auto;
-   -fx-background-color: white;
    -fx-text-fill: midnightblue;
    -fx-opacity: 1.0;
    -fx-font-weight: bold;
-}
-
-.list-cell:filled:selected:focused, .list-cell:filled:selected {
-    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
-    -fx-text-fill: white;
-}
-
-.list-cell:even {
-    -fx-background-color: white;
-}
-
-.list-cell:filled:hover {
-    -fx-background-color: #0093ff;
-    -fx-text-fill: white;
 }
 
 #addButton {
@@ -51,4 +36,27 @@
 #purchaseButton {
 	-fx-background-image: url("purchaes-button.png");
 	-fx-background-size: cover;
+}
+
+.jfx-list-view {
+	-fx-background-image: url("groceryListBackground.png");
+	-fx-background-repeat: no-repeat;
+	-fx-background-size: auto;
+	-fx-background-insets: 0;
+	-fx-cell-vertical-margin: 10.0;
+	-fx-vertical-gap: 10;
+	-fx-pref-width: 100;
+}
+
+.jfx-list-cell {
+  -fx-max-width: 10px;
+  -fx-background-radius: 30px;
+}
+
+.jfx-list-cell .jfx-rippler{
+	-fx-rippler-fill:BLUE;
+}
+
+.jfx-list-cell:hover{
+	-fx-background-color: #9bb5ad;
 }

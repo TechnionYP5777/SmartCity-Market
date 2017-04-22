@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
@@ -22,15 +23,19 @@
 <GridPane fx:id="customerMainScreenPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="list-cell" stylesheets="@../CustomerCssStyles/mainScreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerMainScreen">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1096.0" minWidth="754.0" prefWidth="808.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="510.0" minWidth="168.0" prefWidth="456.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="Infinity" minWidth="168.0" prefWidth="456.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints vgrow="SOMETIMES" />
-    <RowConstraints vgrow="SOMETIMES" />
+    <RowConstraints vgrow="SOMETIMES" maxHeight="-Infinity" />
   </rowConstraints>
    <children>
-      <ListView fx:id="productsListView" styleClass="list-cell" stylesheets="@../CustomerCssStyles/mainScreen.css" GridPane.columnIndex="1" />
-      <VBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
+   	  <JFXListView fx:id="productsListView" editable="true" style="-fx-background-color: TRANSPARENT;" verticalGap="10.0" GridPane.columnIndex="1" maxWidth="600" >
+   	  <padding>
+           <Insets bottom="10.0" left="45.0" right="40.0" top="130.0" />
+      </padding>
+      </JFXListView>
+      <VBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
          <children>
             <GridPane>
               <columnConstraints>
@@ -275,19 +280,19 @@
             <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
          </GridPane.margin>
       </VBox>
-      <HBox alignment="BOTTOM_CENTER" prefHeight="157.0" prefWidth="483.0" spacing="60.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <HBox alignment="BOTTOM_RIGHT" prefHeight="157.0" prefWidth="483.0" spacing="60.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
-            <Button  fx:id="cancelButton" alignment="CENTER" mnemonicParsing="false" onAction="#cancelButtonPressed" prefHeight="80.0" prefWidth="80.0" >
+            <Button fx:id="cancelButton" alignment="BOTTOM_CENTER" mnemonicParsing="false" onAction="#cancelButtonPressed" prefHeight="80.0" prefWidth="80.0">
                <font>
                   <Font size="20.0" />
                </font></Button>
-            <Button fx:id="purchaseButton" alignment="CENTER" mnemonicParsing="false" onAction="#purchaseButtonPressed" prefHeight="80.0" prefWidth="80.0" >
+            <Button fx:id="purchaseButton" alignment="BOTTOM_CENTER" mnemonicParsing="false" onAction="#purchaseButtonPressed" prefHeight="80.0" prefWidth="80.0">
                <font>
                   <Font size="20.0" />
                </font></Button>
          </children>
          <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            <Insets bottom="20.0" left="20.0" right="1.0" top="20.0" />
          </padding>
       </HBox>
    </children>

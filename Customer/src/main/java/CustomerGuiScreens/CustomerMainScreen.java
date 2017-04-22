@@ -8,6 +8,8 @@ import java.util.ResourceBundle;
 
 
 import com.google.common.eventbus.Subscribe;
+import com.jfoenix.controls.JFXListView;
+
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.SmartCode;
@@ -63,7 +65,7 @@ public class CustomerMainScreen implements Initializable {
 	GridPane customerMainScreenPane;
 
 	@FXML
-	ListView<CartProduct> productsListView;
+	JFXListView<CartProduct> productsListView;
 
 	@FXML
 	TextField productsNumberTextField;
@@ -208,11 +210,12 @@ public class CustomerMainScreen implements Initializable {
 		AbstractApplicationScreen.fadeTransition(customerMainScreenPane);
 		barcodeEventHandler.register(this);
 		customer = TempCustomerPassingData.customer;
-		productsListView.setEditable(true);
 		productsListView.setItems(productsObservableList);
 		productsListView.setCellFactory(new Callback<ListView<CartProduct>, ListCell<CartProduct>>() {
+			
 			@Override
 			public ListCell<CartProduct> call(ListView<CartProduct> __) {
+                
 				return new CustomerProductCellFormat();
 			}
 		});
@@ -226,6 +229,10 @@ public class CustomerMainScreen implements Initializable {
 				
 			}
 		});
+		
+		productsListView.depthProperty().set(1);
+		productsListView.setExpanded(true);
+		
 		setAbilityAndVisibilityOfProductInfoPane(false);
 		descriptionTextArea.setEditable(false);
 		productsNumberTextField.setEditable(false);

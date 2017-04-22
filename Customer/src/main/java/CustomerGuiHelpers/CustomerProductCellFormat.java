@@ -4,16 +4,18 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.jfoenix.controls.JFXListCell;
+
 import BasicCommonClasses.CartProduct;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
-public class CustomerProductCellFormat extends ListCell<CartProduct> {
+public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 
 	@Override
 	public void updateItem(CartProduct item, boolean empty) {
@@ -25,15 +27,18 @@ public class CustomerProductCellFormat extends ListCell<CartProduct> {
 			return;
 		}
 
-		HBox hbx = new HBox(5);
+		HBox hbx = new HBox(280);
 		VBox vbx = new VBox(5); // spacing = 5
 	
 		//vbox
 		Label productName = new Label("Name: " + item.getCatalogProduct().getName());
+		productName.setFont(new Font(20));
 		Label productAmount = new Label("Amount: " + item.getTotalAmount());
+		productAmount.setFont(new Font(20));
 		Label productPrice = new Label("Price: " + Double.valueOf(item.getCatalogProduct().getPrice()) + " nis");
+		productPrice.setFont(new Font(20));
 	    vbx.getChildren().addAll(productName, productAmount, productPrice);
-	    vbx.setAlignment(Pos.CENTER);	    
+	    vbx.setAlignment(Pos.CENTER_LEFT);	    
 
 	    //image
 	    long itemBarcode = item.getCatalogProduct().getBarcode();
@@ -46,6 +51,8 @@ public class CustomerProductCellFormat extends ListCell<CartProduct> {
 		}
 		Image image = new Image(imageUrl + "", 100, 100, true, false);
 		ImageView productImage = new ImageView(image);
+				
+		hbx.setSpacing(230);
 	    hbx.getChildren().addAll(vbx, productImage);
 
 		setGraphic(hbx);
