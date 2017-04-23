@@ -1,0 +1,41 @@
+.root {
+   -fx-background-image: url("family.jpg");
+   -fx-background-position: center;
+   -fx-background-repeat: no-repeat;
+   -fx-background-size: cover;
+   -fx-background-color: white;
+   
+}
+
+#backButton {
+	-fx-background-image: url("home.png");
+	-fx-background-size: cover;
+    -fx-background-color: transparent;
+}
+
+#settingsButton {
+	-fx-background-image: url("setting.png");
+	-fx-background-size: cover;
+    -fx-background-color: transparent;
+}
+ 
+#loginButton {
+	-jfx-button-type: RAISED;
+	-fx-background-color: #00FFCC;
+	-fx-border-radius: 8px;
+	-fx-text-fill: WHITE;
+}
+
+#registerButton {
+	-jfx-button-type: RAISED;
+	-fx-background-color: #00FFCC;
+	-fx-border-radius: 8px;
+	 -fx-text-fill: WHITE;
+}
+
+#guestLoginButton {
+	-jfx-button-type: RAISED;
+	-fx-background-color: #00CC66;
+	-fx-border-radius: 8px;
+	-fx-text-fill: WHITE;
+}
