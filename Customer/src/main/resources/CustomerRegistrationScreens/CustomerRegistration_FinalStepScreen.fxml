@@ -8,14 +8,14 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerRegistration_FinalStepScreen">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@./FinalStepScreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerRegistration_FinalStepScreen">
    <children>
       <VBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
          <children>
             <VBox>
                <children>
-                  <Label text="Registration" textFill="#120e8d6e">
+                  <Label text="Registration" textFill="#120e8d6e" underline="true">
                      <font>
                         <Font size="46.0" />
                      </font>
@@ -66,7 +66,7 @@
          <children>
             <VBox alignment="CENTER">
                <children>
-                  <JFXButton fx:id="final_backButton" buttonType="RAISED" onAction="#backButtonPressed" text="Back" />
+                  <JFXButton fx:id="backButton" buttonType="RAISED" onAction="#backButtonPressed" text="Back" />
                </children>
                <GridPane.margin>
                   <Insets />
@@ -74,12 +74,15 @@
             </VBox>
             <VBox alignment="CENTER" GridPane.columnIndex="1">
                <children>
-                  <JFXButton fx:id="final_registerButton" buttonType="RAISED" onAction="#registerButtonPressed" text="Register">
+                  <JFXButton fx:id="registerButton" buttonType="RAISED" onAction="#registerButtonPressed" text="Register">
                      <font>
                         <Font size="30.0" />
                      </font>
                   </JFXButton>
                </children>
+               <padding>
+                  <Insets bottom="15.0" />
+               </padding>
             </VBox>
          </children>
          <columnConstraints>

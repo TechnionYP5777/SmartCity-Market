@@ -26,17 +26,18 @@
 
 <GridPane fx:id="loginScreenPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@./CustomerLoginScreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerLoginScreen">
    <columnConstraints>
-      <ColumnConstraints hgrow="ALWAYS" maxWidth="531.0" minWidth="10.0" prefWidth="441.0" />
-      <ColumnConstraints hgrow="ALWAYS" maxWidth="944.0" minWidth="555.0" prefWidth="669.0" />
-      <ColumnConstraints hgrow="ALWAYS" maxWidth="900.0" minWidth="799.0" prefWidth="799.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="531.0" minWidth="10.0" prefWidth="441.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="944.0" minWidth="555.0" prefWidth="669.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="900.0" minWidth="799.0" prefWidth="799.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints vgrow="SOMETIMES" />
       <RowConstraints vgrow="SOMETIMES" />
       <RowConstraints vgrow="SOMETIMES" />
    </rowConstraints>
+
    <children>
-      <VBox alignment="CENTER" blendMode="MULTIPLY" spacing="15.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <VBox alignment="CENTER" blendMode="MULTIPLY" spacing="20.0" GridPane.columnIndex="1" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
          <children>
             <VBox prefHeight="84.0" prefWidth="896.0">
                <children>
@@ -124,16 +125,19 @@
             </GridPane>
          </children>
          <GridPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
          </GridPane.margin>
       </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0">
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0">
          <children>
             <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonPressed" prefHeight="60.0" prefWidth="60.0" />
          </children>
          <padding>
             <Insets left="30.0" top="30.0" />
          </padding>
+         <GridPane.margin>
+            <Insets left="30.0" />
+         </GridPane.margin>
       </VBox>
       <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
          <children>

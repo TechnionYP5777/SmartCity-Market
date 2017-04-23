@@ -8,8 +8,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerRegistration_IngredientsScreen">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@./IngredientsScreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerRegistration_IngredientsScreen">
    <children>
       <GridPane GridPane.rowIndex="2">
          <rowConstraints>
@@ -22,24 +23,24 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
       </GridPane>
+      <VBox GridPane.rowIndex="1" GridPane.rowSpan="2">
+         <children>
+            <CheckListView fx:id="ingredientsCheckListView" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+         </children>
+         <GridPane.margin>
+            <Insets left="15.0" right="15.0" />
+         </GridPane.margin>
+      </VBox>
       <VBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <children>
-            <JFXButton fx:id="ingridients_nextButton" buttonType="RAISED" onAction="#ingridients_nextButtonPressed" text="Next" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <JFXButton fx:id="nextButton" buttonType="RAISED" onAction="#ingridients_nextButtonPressed" text="Next" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
       </VBox>
-      <CheckListView fx:id="ingredientsCheckListView" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2">
-         <padding>
-            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-         </padding>
-         <GridPane.margin>
-            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-         </GridPane.margin>
-      </CheckListView>
       <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
          <children>
             <VBox>
                <children>
-                  <Label text="Registration" textFill="#120e8d6e">
+                  <Label text="Registration" textFill="#120e8d6e" underline="true">
                      <font>
                         <Font size="46.0" />
                      </font>
@@ -71,11 +72,8 @@
          <children>
             <VBox alignment="CENTER">
                <children>
-                  <JFXButton fx:id="ingridients_backButton" buttonType="RAISED" onAction="#ingridients_backButtonPressed" text="Back" />
+                  <JFXButton fx:id="backButton" buttonType="RAISED" onAction="#ingridients_backButtonPressed" text="Back" />
                </children>
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
             </VBox>
          </children>
       </GridPane>
