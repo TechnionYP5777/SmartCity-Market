@@ -1,9 +1,9 @@
 coverage:
   ignore: 
-     - "Employee/src/main/java/EmployeeGui/*"
-     - "Employee/src/main/java/EmployeeDefs/*"
-     - "Common/src/main/java/SMExceptions/*"
-     - "Common/src/main/java/GuiUtils/*"
-     - "Common/src/main/java/CommonDefs/*"
-     - "Cart/src/main/java/CartGuiHelpers/*"
-     - "Cart/src/main/java/CartGuiScreens/*"
+     - "Employee/src/main/java/EmployeeGui/"
+     - "Employee/src/main/java/EmployeeDefs/"
+     - "Common/src/main/java/SMExceptions/"
+     - "Common/src/main/java/GuiUtils/"
+     - "Common/src/main/java/CommonDefs/"
+     - "Customer/src/main/java/CustomerGuiHelpers/"
+     - "Customer/src/main/java/CustomerGuiScreens/"
