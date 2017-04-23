@@ -2,7 +2,6 @@ coverage:
   precision: 2
   round: nearest
   range: "40...70"
-  threshold: 80%
   ignore: 
      - "Employee/src/main/java/EmployeeGui/"
      - "Employee/src/main/java/EmployeeDefs/"
