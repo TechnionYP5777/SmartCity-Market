@@ -77,13 +77,21 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	private HashMap<String, Manufacturer> manufacturars;
 
 	private HashMap<String, Ingredient> ingredients;
-	
+
 	@FXML
 	private JFXTextField filterManu;
-	
+
 	@FXML
 	private JFXTextField filterIngr;
-	
+
+	ObservableList<String> dataManu;
+
+	FilteredList<String> filteredDataManu;
+
+	ObservableList<String> dataIngr;
+
+	FilteredList<String> filteredDataIngr;
+
 	@FXML
 	void addIngPressed(ActionEvent event) {
 
@@ -126,30 +134,25 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+
+		createManufacturerList();
+		createIngredientList();
 		
-		ObservableList<String> dataManu = FXCollections.observableArrayList();
-	    IntStream.range(0, 1000).mapToObj(Integer::toString).forEach(dataManu::add);
-
-	    FilteredList<String> filteredDataManu = new FilteredList<>(dataManu, s -> true);
-
-	    filterManu.textProperty().addListener(obs->{
-	        String filter = filterManu.getText(); 
-	        if(filter == null || filter.length() == 0) {
-	        	filteredDataManu.setPredicate(s -> true);
-	        }
-	        else {
-	        	filteredDataManu.setPredicate(s -> s.contains(filter));
-	        }
-	    });
-		  
-	    manufacturerList.setItems(filteredDataManu); 
+		filterManu.textProperty().addListener(obs -> {
+			String filter = filterManu.getText();
+			if (filter == null || filter.length() == 0) {
+				filteredDataManu.setPredicate(s -> true);
+			} else {
+				filteredDataManu.setPredicate(s -> s.contains(filter));
+			}
+		});
 
 		manufacturerList.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
 			@Override
 			public ObservableValue<Boolean> call(String item) {
 				BooleanProperty observable = new SimpleBooleanProperty();
 				observable.set(selectedManu.contains(item));
-				
+
 				observable.addListener((obs, wasSelected, isNowSelected) -> {
 					if (isNowSelected) {
 						selectedManu.add(item);
@@ -162,26 +165,15 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 				return observable;
 			}
 		}));
-		
-		manufacturerList.depthProperty().set(1);
-		manufacturerList.setExpanded(true);
 
-		ObservableList<String> dataIngr = FXCollections.observableArrayList();
-	    IntStream.range(0, 1000).mapToObj(Integer::toString).forEach(dataIngr::add);
-
-	    FilteredList<String> filteredDataIngr = new FilteredList<>(dataIngr, s -> true);
-
-	    filterIngr.textProperty().addListener(obs->{
-	        String filter = filterIngr.getText(); 
-	        if(filter == null || filter.length() == 0) {
-	        	filteredDataIngr.setPredicate(s -> true);
-	        }
-	        else {
-	        	filteredDataIngr.setPredicate(s -> s.contains(filter));
-	        }
-	    });
-		  
-	    ingredientsList.setItems(filteredDataIngr); 
+		filterIngr.textProperty().addListener(obs -> {
+			String filter = filterIngr.getText();
+			if (filter == null || filter.length() == 0) {
+				filteredDataIngr.setPredicate(s -> true);
+			} else {
+				filteredDataIngr.setPredicate(s -> s.contains(filter));
+			}
+		});
 
 		ingredientsList.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
 			@Override
@@ -201,12 +193,6 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			}
 		}));
 		
-		ingredientsList.depthProperty().set(1);
-		ingredientsList.setExpanded(true);
-		
-		// TODO enable this later
-		//createIngredientList();
-		//createManufacturerList();
 		enableButtons();
 
 	}
@@ -215,30 +201,46 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 		manufacturars = new HashMap<String, Manufacturer>();
 
-		try {
-			manager.getAllManufacturers().forEach(manufacturer -> {
-				manufacturars.put(manufacturer.getName(), manufacturer);
-			});
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
-			e.printStackTrace();
-		}
+//		try {
+//			manager.getAllManufacturers().forEach(manufacturer -> {
+//				manufacturars.put(manufacturer.getName(), manufacturer);
+//			});
+//		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
+//			e.printStackTrace();
+//		}
 
-		manufacturerList.getItems().addAll(manufacturars.keySet());
+		dataManu = FXCollections.observableArrayList();
+
+//		dataManu.setAll(manufacturars.keySet());
+
+		IntStream.range(0, 1000).mapToObj(Integer::toString).forEach(dataManu::add);
+
+		filteredDataManu = new FilteredList<>(dataManu, s -> true);
+
+		manufacturerList.setItems(filteredDataManu);
 
 	}
 
 	private void createIngredientList() {
 		ingredients = new HashMap<String, Ingredient>();
-		try {
-			manager.getAllIngredients().forEach(ingredient -> {
-				ingredients.put(ingredient.getName(), ingredient);
-			});
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			manager.getAllIngredients().forEach(ingredient -> {
+//				ingredients.put(ingredient.getName(), ingredient);
+//			});
+//		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
-		ingredientsList.getItems().addAll(ingredients.keySet());
+		dataIngr = FXCollections.observableArrayList();
+		
+		dataIngr.setAll(ingredients.keySet());
+
+		IntStream.range(0, 1000).mapToObj(Integer::toString).forEach(dataIngr::add);
+
+		filteredDataIngr = new FilteredList<>(dataIngr, s -> true);
+
+		ingredientsList.setItems(filteredDataIngr);
 	}
 
 	private void enableButtons() {
