@@ -8,18 +8,6 @@ addons:
   packages:
    - oracle-java8-installer
 
-# blocklist: add here branches you don't want build using Travis
-branches:
- except:
- - Travis_integration
-
-# safe list: add here branches you want to verify the build & tests will pass
-branches:
- only:
-  - master
-  - CartToCustomer
-
-
 # add this if you want to be notified about successfull/failed builds to your mail.
 notifications:
  email:
