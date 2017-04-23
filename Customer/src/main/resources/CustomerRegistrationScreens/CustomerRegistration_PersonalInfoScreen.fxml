@@ -44,32 +44,32 @@
          <children>
             <VBox alignment="CENTER" GridPane.rowIndex="4">
                <children>
-                  <JFXTextField fx:id="info_lastNameTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Last Name" />
+                  <JFXTextField fx:id="lastNameTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Last Name" />
                </children>
             </VBox>
             <VBox alignment="CENTER" GridPane.rowIndex="3">
                <children>
-                  <JFXTextField fx:id="info_firstNameTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="First Name" />
+                  <JFXTextField fx:id="firstNameTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="First Name" />
                </children>
             </VBox>
             <VBox alignment="CENTER" GridPane.rowIndex="5">
                <children>
-                  <JFXTextField fx:id="info_phoneNumberTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Phone Number" />
+                  <JFXTextField fx:id="phoneNumberTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Phone Number" />
                </children>
             </VBox>
             <VBox alignment="CENTER" GridPane.rowIndex="6">
                <children>
-                  <JFXTextField fx:id="info_emailTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Email" />
+                  <JFXTextField fx:id="emailTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Email" />
                </children>
             </VBox>
             <VBox alignment="CENTER" GridPane.rowIndex="7">
                <children>
-                  <JFXTextField fx:id="info_cityTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="City" />
+                  <JFXTextField fx:id="cityTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="City" />
                </children>
             </VBox>
             <VBox alignment="CENTER" GridPane.rowIndex="8">
                <children>
-                  <JFXTextField fx:id="info_streetTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Street" />
+                  <JFXTextField fx:id="streetTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Street" />
                </children>
             </VBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.rowIndex="9">
@@ -79,22 +79,22 @@
                         <Label text="Birth Date:" />
                      </children>
                   </VBox>
-                  <DatePicker fx:id="info_BirthDatePicker" />
+                  <DatePicker fx:id="birthDatePicker" />
                </children>
             </HBox>
             <VBox alignment="CENTER">
                <children>
-                  <JFXTextField fx:id="info_userNameTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="User Name" />
+                  <JFXTextField fx:id="userNameTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="User Name" />
                </children>
             </VBox>
             <VBox alignment="CENTER" GridPane.rowIndex="1">
                <children>
-                  <JFXPasswordField fx:id="info_passwordField" maxHeight="-Infinity" maxWidth="-Infinity" promptText="Password" />
+                  <JFXPasswordField fx:id="passwordField" maxHeight="-Infinity" maxWidth="-Infinity" promptText="Password" />
                </children>
             </VBox>
             <VBox alignment="CENTER" GridPane.rowIndex="2">
                <children>
-                  <JFXPasswordField fx:id="info_repeatPassField" maxHeight="-Infinity" maxWidth="-Infinity" promptText="Repeat Password" />
+                  <JFXPasswordField fx:id="repeatPassField" maxHeight="-Infinity" maxWidth="-Infinity" promptText="Repeat Password" />
                </children>
             </VBox>
          </children>

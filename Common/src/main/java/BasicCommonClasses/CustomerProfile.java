@@ -27,6 +27,10 @@ public class CustomerProfile implements ICustomerProfile {
 	
 	ForgetPassword forgetPassword;
 
+	public CustomerProfile() {
+
+	}
+	
 	public CustomerProfile(String userName) {
 		this.userName = userName;
 	}
