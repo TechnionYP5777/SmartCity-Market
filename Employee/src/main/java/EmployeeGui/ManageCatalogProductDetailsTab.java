@@ -10,7 +10,10 @@ import org.apache.log4j.Logger;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXPopup.PopupHPosition;
+import com.jfoenix.controls.JFXPopup.PopupVPosition;
 
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Manufacturer;
@@ -29,8 +32,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -92,14 +98,22 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 	FilteredList<String> filteredDataIngr;
 
-	@FXML
-	void addIngPressed(ActionEvent event) {
+	JFXTextField newManu;
+	
+	JFXTextField newIngr;
 
+	JFXButton okNewManu;
+	
+	JFXButton okNewIngr;
+
+	void addIngPressed() {
+		// TODO ID?
+		//manager.addIngredient(new Ingredient(id, newIngr.getText()));
 	}
 
-	@FXML
-	void addManuPressed(ActionEvent event) {
-
+	void addManuPressed() {
+		// TODO ID?
+		//manager.addManufacturer(new Manufacturer(id, newManu.getText()));
 	}
 
 	@FXML
@@ -137,7 +151,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 		createManufacturerList();
 		createIngredientList();
-		
+
 		filterManu.textProperty().addListener(obs -> {
 			String filter = filterManu.getText();
 			if (filter == null || filter.length() == 0) {
@@ -192,26 +206,79 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 				return observable;
 			}
 		}));
-		
-		enableButtons();
 
+		Label lbl1 = new Label("Insert New Manufacturar");
+		newManu = new JFXTextField();
+		okNewManu = new JFXButton("Done!");
+		okNewManu.setOnAction(new EventHandler<ActionEvent>() {
+	            @Override
+	            public void handle(ActionEvent event) {
+	            	addManuPressed();
+	            }
+	        });
+		
+		VBox manuContainer = new VBox();
+		manuContainer.getChildren().addAll(lbl1, newManu, okNewManu);
+		manuContainer.setPadding(new Insets(10, 50, 50, 50));
+		manuContainer.setSpacing(10);
+
+		JFXPopup popup1 = new JFXPopup(manuContainer);
+		addManuBtn.setOnMouseClicked(e -> popup1.show(addManuBtn, PopupVPosition.TOP, PopupHPosition.LEFT));
+		
+		newManu.textProperty().addListener((observable, oldValue, newValue) -> {
+			enableAddButtons();
+		});
+		
+		
+		Label lbl2 = new Label("Insert New Ingredient");
+		newIngr = new JFXTextField();
+		okNewIngr = new JFXButton("Done!");
+		okNewIngr.setOnAction(new EventHandler<ActionEvent>() {
+	            @Override
+	            public void handle(ActionEvent event) {
+	            	addIngPressed();
+	            }
+	        });
+		
+		VBox ingrContainer = new VBox();
+		ingrContainer.getChildren().addAll(lbl2, newIngr, okNewIngr);
+		ingrContainer.setPadding(new Insets(10, 50, 50, 50));
+		ingrContainer.setSpacing(10);
+
+		JFXPopup popup2 = new JFXPopup(ingrContainer);
+		addIngrBtn.setOnMouseClicked(e -> popup2.show(addIngrBtn, PopupVPosition.TOP, PopupHPosition.LEFT));
+		
+
+		newIngr.textProperty().addListener((observable, oldValue, newValue) -> {
+			enableAddButtons();
+		});
+	
+		enableButtons();
+		enableAddButtons();
+
+	}
+	
+	private void enableAddButtons() {
+		okNewManu.setDisable(newManu.getText().isEmpty());
+		okNewIngr.setDisable(newIngr.getText().isEmpty());
 	}
 
 	private void createManufacturerList() {
 
 		manufacturars = new HashMap<String, Manufacturer>();
 
-//		try {
-//			manager.getAllManufacturers().forEach(manufacturer -> {
-//				manufacturars.put(manufacturer.getName(), manufacturer);
-//			});
-//		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
-//			e.printStackTrace();
-//		}
+		// try {
+		// manager.getAllManufacturers().forEach(manufacturer -> {
+		// manufacturars.put(manufacturer.getName(), manufacturer);
+		// });
+		// } catch (InvalidParameter | CriticalError | EmployeeNotConnected |
+		// ConnectionFailure e) {
+		// e.printStackTrace();
+		// }
 
 		dataManu = FXCollections.observableArrayList();
 
-//		dataManu.setAll(manufacturars.keySet());
+		// dataManu.setAll(manufacturars.keySet());
 
 		IntStream.range(0, 1000).mapToObj(Integer::toString).forEach(dataManu::add);
 
@@ -223,17 +290,18 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 	private void createIngredientList() {
 		ingredients = new HashMap<String, Ingredient>();
-//		try {
-//			manager.getAllIngredients().forEach(ingredient -> {
-//				ingredients.put(ingredient.getName(), ingredient);
-//			});
-//		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		// try {
+		// manager.getAllIngredients().forEach(ingredient -> {
+		// ingredients.put(ingredient.getName(), ingredient);
+		// });
+		// } catch (InvalidParameter | CriticalError | EmployeeNotConnected |
+		// ConnectionFailure e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 
 		dataIngr = FXCollections.observableArrayList();
-		
+
 		dataIngr.setAll(ingredients.keySet());
 
 		IntStream.range(0, 1000).mapToObj(Integer::toString).forEach(dataIngr::add);
