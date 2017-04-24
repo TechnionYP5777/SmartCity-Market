@@ -1032,6 +1032,22 @@ public class CommandExecuter {
 		log.info("Remove manufacturer " + manufacturer + " from system finished");
 	}
 		
+	private void getAllManufacturers(SQLDatabaseConnection c) {
+		log.info("Get all manufacturers from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		//TODO Noam - Call sql function here
+				
+		log.info("Get all manufacturers from system finished");
+	}
+	
+	private void getAllIngredients(SQLDatabaseConnection c) {
+		log.info("Get all ingredeints from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		//TODO Noam - Call sql function here
+				
+		log.info("Get all ingredeints from system finished");
+	}
+	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
 			log.fatal("Failed to get SQL Database Connection");
@@ -1175,6 +1191,16 @@ public class CommandExecuter {
 		case REMOVE_MANUFACTURER:
 			removeManufacturer(c);
 
+			break;
+			
+		case GET_ALL_MANUFACTURERS:
+			getAllManufacturers(c);
+			
+			break;
+			
+		case GET_ALL_INGREDIENTS:
+			getAllIngredients(c);
+			
 			break;
 			
 		default:
