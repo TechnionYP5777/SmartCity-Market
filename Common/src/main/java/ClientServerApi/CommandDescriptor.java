@@ -314,7 +314,7 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *			SM_USERNAME_IS_NOT_EXISTS,
+	 *			SM_USERNAME_DOES_NOT_EXIST,
 	 *	 		SM_INVALID_PARAMETER,
 	 *
 	 *	 ***** NOTES *****

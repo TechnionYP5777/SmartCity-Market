@@ -20,6 +20,7 @@ import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductPackageDoesNotExist;
 import EmployeeDefs.AEmployeeException.ProductStillForSale;
 import EmployeeDefs.AEmployeeException.WorkerAlreadyExists;
+import EmployeeDefs.AEmployeeException.WorkerDoesNotExist;
 import EmployeeDefs.AEmployeeException.EmployeeAlreadyConnected;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.WorkerDefs;
@@ -83,7 +84,7 @@ public abstract class AEmployee {
 			throws InvalidCommandDescriptor, InvalidParameter, CriticalError, EmployeeNotConnected,
 			EmployeeAlreadyConnected, AuthenticationError, ProductNotExistInCatalog, ProductAlreadyExistInCatalog,
 			ProductStillForSale, AmountBiggerThanAvailable, ProductPackageDoesNotExist, WorkerAlreadyExists, ParamIDAlreadyExists,
-			ParamIDDoesNotExist {
+			ParamIDDoesNotExist, WorkerDoesNotExist {
 
 		switch (¢) {
 
@@ -146,6 +147,11 @@ public abstract class AEmployee {
 			log.info("Command execution failed, worker username already exists");
 			
 			throw new AEmployeeException.WorkerAlreadyExists();
+			
+		case SM_USERNAME_DOES_NOT_EXIST:
+			log.info("Command execution failed, worker username does not exist");
+			
+			throw new AEmployeeException.WorkerDoesNotExist();
 			
 		case PARAM_ID_ALREADY_EXISTS:
 			log.info("Command execution failed, param ID already exists");

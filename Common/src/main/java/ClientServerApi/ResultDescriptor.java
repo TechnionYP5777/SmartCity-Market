@@ -120,6 +120,16 @@ public enum ResultDescriptor {
 	 */
 	SM_USERNAME_ALREADY_EXISTS,
 	
+	/**
+	 * The sender tried to register with existing username.
+	 * 
+	 * How to fix:
+	 * 
+	 * 1. Ask user to insert different username.
+	 * 
+	 */
+	SM_USERNAME_DOES_NOT_EXIST,
+	
 	/************************************** Employee failures only *****************************************/
 	
 	/**
