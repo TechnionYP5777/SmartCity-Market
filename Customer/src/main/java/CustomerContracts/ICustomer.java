@@ -136,4 +136,10 @@ public interface ICustomer {
 	 * 
 	 */
 	List<Ingredient> getAllIngredients() throws CriticalError;
+	
+	/**
+	 * @throws CriticalError 
+	 * 
+	 */
+	Boolean isFreeUsername(String username) throws CriticalError;
 }

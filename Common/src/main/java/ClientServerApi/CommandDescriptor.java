@@ -528,5 +528,19 @@ public enum CommandDescriptor {
 	 *
 	 */
 	UPDATE_CUSTOMER_PROFILE,
-
+	
+	/**
+	 * Description: Checks if a given username is free (SM_OK on result code)
+	 * param1: String.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_USERNAME_ALREADY_EXISTS,
+	 *
+	 */
+	IS_FREE_CUSTOMER_NAME,
 }

@@ -1048,6 +1048,26 @@ public class CommandExecuter {
 		log.info("Get all ingredeints from system finished");
 	}
 	
+	private void isFreeCustomerUsername(SQLDatabaseConnection c) {
+		String username;
+		
+		log.info("Is free customer username command called with from serderID " + inCommandWrapper.getSenderID() + " command called");
+		
+		try {
+			username = Serialization.deserialize(inCommandWrapper.getData(), String.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Is free customer username command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+		
+		//TODO Noam - Call sql function here - is username dosen't exit put SM_USERNAME_ALREADY_EXISTS in result descriptor
+				
+		log.info("Is free customer username command system finished, username " + username + " is free");
+	}
+	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
 			log.fatal("Failed to get SQL Database Connection");
@@ -1200,6 +1220,11 @@ public class CommandExecuter {
 			
 		case GET_ALL_INGREDIENTS:
 			getAllIngredients(c);
+			
+			break;
+			
+		case IS_FREE_CUSTOMER_NAME:
+			isFreeCustomerUsername(c);
 			
 			break;
 			

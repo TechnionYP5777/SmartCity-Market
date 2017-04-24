@@ -527,4 +527,47 @@ public class Customer extends ACustomer implements ICustomer {
 		
 		return new Gson().fromJson(commandWrapper.getData(), new TypeToken<List<Manufacturer>>(){}.getType());
 	}
+	
+	@Override
+	public Boolean isFreeUsername(String username) throws CriticalError {
+		Boolean isFree = true;
+		String serverResponse;
+		
+		log.info("Creating isFreeUsername command wrapper");
+
+		establishCommunication(CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
+		
+		/* first: getting the product from the server */
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(id, CommandDescriptor.IS_FREE_CUSTOMER_NAME, Serialization.serialize(username)).serialize()));
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+			
+			throw new CriticalError();
+		}
+		
+		terminateCommunication();
+		
+		CommandWrapper commandWrapper = CommandWrapper.deserialize(serverResponse);
+				
+		try {
+			resultDescriptorHandler(commandWrapper.getResultDescriptor());
+		} catch (UsernameAlreadyExists e) {
+			isFree = false;
+		} catch (InvalidCommandDescriptor | CriticalError |
+				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | 
+				 GroceryListIsEmpty | AuthenticationError | CustomerNotConnected |
+				 ProductCatalogDoesNotExist | InvalidParameter ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			
+			¢.printStackTrace();
+			
+			throw new CriticalError();
+		}
+		
+		log.info("isFreeUsername command succeed.");
+		
+		return isFree;
+	}
 }
