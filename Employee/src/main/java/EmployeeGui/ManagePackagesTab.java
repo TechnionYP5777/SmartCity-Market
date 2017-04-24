@@ -1,7 +1,5 @@
 package EmployeeGui;
 
-import static javafx.scene.input.MouseEvent.MOUSE_PRESSED;
-
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -14,11 +12,11 @@ import org.apache.log4j.Logger;
 import com.google.common.eventbus.Subscribe;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
-import com.jfoenix.controls.JFXDrawer;
-import com.jfoenix.controls.JFXDrawersStack;
+import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXDrawer.DrawerDirection;
+import com.jfoenix.controls.JFXPopup.PopupHPosition;
+import com.jfoenix.controls.JFXPopup.PopupVPosition;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Location;
@@ -40,7 +38,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DateCell;
@@ -52,7 +50,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
@@ -140,9 +137,6 @@ public class ManagePackagesTab implements Initializable {
 	JFXRadioButton addPakageToWarhouseRadioButton;
 
 	@FXML
-	JFXDrawersStack drawerStack;
-
-	@FXML
 	JFXButton showDatePickerBtn;
 
 	@FXML
@@ -165,9 +159,6 @@ public class ManagePackagesTab implements Initializable {
 	IWorker worker = InjectionFactory.getInstance(Manager.class);
 
 	JFXDatePicker datePickerForSmartCode;
-
-	@FXML
-	JFXDrawer drawer;
 
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
@@ -211,26 +202,19 @@ public class ManagePackagesTab implements Initializable {
 		};
 		datePicker.setDayCellFactory(dayCellFactory);
 		datePicker.setValue(LocalDate.now());
-
-		JFXDrawer topDrawer = new JFXDrawer();
-		VBox topDrawerPane = new VBox();
-		topDrawerPane.setStyle("-fx-background-color: rgb(230, 243, 255); -fx-border-color: rgb(0, 41, 77)");
-		topDrawerPane.setAlignment(Pos.CENTER);
-		topDrawerPane.minHeight(Region.USE_COMPUTED_SIZE);
-		topDrawerPane.minWidth(Region.USE_COMPUTED_SIZE);
-		topDrawerPane.prefWidth(Region.USE_COMPUTED_SIZE);
-		topDrawerPane.prefHeight(Region.USE_COMPUTED_SIZE);
-		topDrawerPane.maxHeight(Region.USE_COMPUTED_SIZE);
-		topDrawerPane.maxWidth(Region.USE_COMPUTED_SIZE);
+		
+		VBox vbox = new VBox();
+		vbox.setPadding(new Insets(10, 50, 50, 50));
+		vbox.setSpacing(10);
+		
 		datePickerForSmartCode = new JFXDatePicker();
 		Label lbl = new Label("Choose Date");
-		topDrawerPane.getChildren().addAll(lbl, datePickerForSmartCode);
-		topDrawer.setDirection(DrawerDirection.TOP);
-		topDrawer.setSidePane(topDrawerPane);
-		topDrawer.setOverLayVisible(false);
-		topDrawer.setResizableOnDrag(true);
-
-		showDatePickerBtn.addEventHandler(MOUSE_PRESSED, e -> drawerStack.toggle(topDrawer));
+		vbox.getChildren().addAll(lbl, datePickerForSmartCode);
+		
+		JFXPopup popup = new JFXPopup(vbox);
+		showDatePickerBtn.setOnMouseClicked(e -> popup.show(showDatePickerBtn, PopupVPosition.TOP, PopupHPosition.LEFT));
+		
+	
 
 		radioButtonContainerSmarcodeOperations.addRadioButtons(
 				(Arrays.asList((new RadioButton[] { printSmartCodeRadioButton, addPackageToStoreRadioButton,
@@ -304,7 +288,7 @@ public class ManagePackagesTab implements Initializable {
 
 		scanOrTypeCodePane.setVisible(show);
 		productAfterScanPane.setVisible(!show);
-		datePickerForSmartCode.setVisible(show);
+		showDatePickerBtn.setVisible(show);
 		(show ? scanOrTypeCodePane : datePickerForSmartCode).toFront();
 	}
 

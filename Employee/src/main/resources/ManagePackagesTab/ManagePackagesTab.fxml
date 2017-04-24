@@ -3,7 +3,6 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
-<?import com.jfoenix.controls.JFXDrawersStack?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -22,24 +21,23 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="rootPane" stylesheets="@ManagePackages.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManagePackagesTab">
+<VBox fx:id="rootPane" spacing="10.0" stylesheets="@ManagePackages.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManagePackagesTab">
 	<children>
-		<VBox alignment="CENTER" spacing="10.0">
+		<VBox alignment="CENTER" spacing="20.0">
 			<children>
-            <HBox alignment="TOP_CENTER" spacing="10.0">
+            <HBox alignment="TOP_CENTER" spacing="20.0">
                <children>
-                  <JFXTextField fx:id="barcodeTextField" onAction="#searchCodeButtonPressed" promptText="Type Or Scan Product Code..." />
+                  <JFXTextField fx:id="barcodeTextField" onAction="#searchCodeButtonPressed" prefHeight="24.0" prefWidth="196.0" promptText="Type Or Scan Product Code..." />
       				<Button fx:id="searchCodeButton" mnemonicParsing="false" onAction="#searchCodeButtonPressed" prefHeight="26.0" prefWidth="26.0" />
-                  <JFXButton fx:id="showDatePickerBtn" text="Show Date Picker" />
                </children>
             </HBox>
-            <VBox alignment="CENTER">
-               <children>
-                  <JFXDrawersStack fx:id="drawerStack" />
-               </children>
-            </VBox>
 			</children>
 		</VBox>
+      <HBox alignment="CENTER">
+         <children>
+            <JFXButton fx:id="showDatePickerBtn" text="Show Date Picker" />
+         </children>
+      </HBox>
 		<StackPane>
 			<children>
 				<VBox fx:id="productAfterScanPane" spacing="5.0">
