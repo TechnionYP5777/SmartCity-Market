@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
@@ -30,6 +31,8 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.CustomerProfile;
+import BasicCommonClasses.ForgetPassword;
 import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
@@ -41,7 +44,6 @@ import ClientServerApi.ClientServerDefs;
 import CommonDefs.CLIENT_TYPE;
 import SQLDatabase.SQLDatabaseEntities;
 import SQLDatabase.SQLDatabaseEntities.CartsListTable;
-import SQLDatabase.SQLDatabaseEntities.ClientsTable;
 import SQLDatabase.SQLDatabaseEntities.ClientsTable;
 import SQLDatabase.SQLDatabaseEntities.CustomersIngredientsTable;
 import SQLDatabase.SQLDatabaseEntities.CustomersTable;
@@ -56,21 +58,7 @@ import SQLDatabase.SQLDatabaseEntities.ProductsCatalogLocationsTable;
 import SQLDatabase.SQLDatabaseEntities.ProductsCatalogTable;
 import SQLDatabase.SQLDatabaseEntities.ProductsPackagesTable;
 import SQLDatabase.SQLDatabaseEntities.WorkersTable;
-import SQLDatabase.SQLDatabaseException.AuthenticationError;
-import SQLDatabase.SQLDatabaseException.CriticalError;
-import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
-import SQLDatabase.SQLDatabaseException.ProductAlreadyExistInCatalog;
-import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
-import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
-import SQLDatabase.SQLDatabaseException.ManufacturerStillUsed;
-import SQLDatabase.SQLDatabaseException.IngredientNotExist;
-import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
-import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
-import SQLDatabase.SQLDatabaseException.ProductStillForSale;
-import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
-import SQLDatabase.SQLDatabaseException.ClientNotConnected;
-import SQLDatabase.SQLDatabaseException.GroceryListIsEmpty;
-import SQLDatabase.SQLDatabaseException.NoGroceryListToRestore;
+import SQLDatabase.SQLDatabaseException.*;
 import SQLDatabase.SQLDatabaseStrings.LOCATIONS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.PRODUCTS_PACKAGES_TABLE;
 import SQLDatabase.SQLDatabaseStrings.WORKERS_TABLE;
@@ -746,21 +734,87 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	private void assignSessionIDToRegisteredClient(ClientsTable t, String username, int sessionID) throws CriticalError {
 		
+		setValueToRegisteredClient(t, username, t.sessionIDCol, sessionID);
+	}
+
+	/**
+	 * set one field to registered client (worker/customer)
+	 * 
+	 * 
+	 * @param t the table to assign the new value to
+	 * @param username the username whose the new value is to be assigned
+	 * @param setColumn in which column assign the new value
+	 * @param newValue the new value to assign
+	 * @throws CriticalError
+	 */
+	private<T> void setValueToRegisteredClient(ClientsTable t,String username, DbColumn setColumn, T newValue) throws CriticalError {
+		
+		log.info("setValueoRegisteredClient: set: " + newValue + " to: " + setColumn.getColumnNameSQL() + " in table: " + t + " for user: " + username);
 		PreparedStatement statement;
 		UpdateQuery updateQuery = generateUpdateQuery(t.table,
 				BinaryCondition.equalTo(t.usernameCol, PARAM_MARK));
 
-		updateQuery.addSetClause(t.sessionIDCol, sessionID).validate();
-
-		statement = getParameterizedQuery(updateQuery + "", username);
-
+		updateQuery.addSetClause(setColumn, PARAM_MARK).validate();
+		
+		//note: the username is last because in the query the order of paramerters is: set newValue and then Where username 
+		statement = getParameterizedQuery(updateQuery + "", newValue, username);
+		
 		try {
+			log.debug("setValueoRegisteredClient: run query: " + statement);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement);
+		}
+	}
+	
+	/**
+	 *
+	 * get one field of registered client (worker/customer)
+	 * this method run select query to find relevant rows (where selectColumn == selectValue) and returns the value of getColumn
+	 * 
+	 * @param from the table to get the value from
+	 * @param selectColumn the column to compare to selectValue 
+	 * @param selectValue the value to compare to the selectColumn
+	 * @param getColumn the column to fetch the desired value from
+	 * 
+	 * @return the desired value
+	 * @throws CriticalError
+	 */
+	@SuppressWarnings("unchecked")
+	private<E,T> T getValueForRegisteredClient(ClientsTable from, DbColumn selectColumn, E selectValue, DbColumn getColumn) throws CriticalError {
+		
+		//TODO: refactor all relevant methods to use this method
+
+		log.info("getValueForRegisteredClient: trying to get value from tabel " + from);
+		
+		String query = generateSelectQuery1Table(from.table,
+				BinaryCondition.equalTo(selectColumn, PARAM_MARK));
+
+		PreparedStatement statement = getParameterizedReadQuery(query, selectValue);
+
+		ResultSet result = null;
+		try {
+			log.debug("getValueForRegisteredClient: get desired value\nby execute query: " + statement);
+			result = statement.executeQuery();
+
+			if (isResultSetEmpty(result)){
+				log.error("getValueForRegisteredClient: value not found");
+				return null;
+			}
+			
+			log.info("getValueForRegisteredClient: value found");
+			
+			//get the desired value
+			result.first();
+			return (T) result.getObject(getColumn.getColumnNameSQL());
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		} finally {
+			closeResources(statement, result);
 		}
 	}
 
@@ -836,6 +890,63 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			
 	}
 
+	/**
+	 * set new password to registered client (worker/customer)
+	 * 
+	 * @param t the table to assign the sessionID to
+	 * @param username the username whose the sessionID is to be assigned
+	 * @param newPassword the new password to assign
+	 * @throws CriticalError
+	 */
+	private void assignPasswordToRegisteredClient(ClientsTable t, String username, String newPassword) throws CriticalError {
+		
+		setValueToRegisteredClient(t, username, t.passwordCol, newPassword);
+	}
+	
+	/**
+	 * set new security question & answer to registered client (worker/customer)
+	 * 
+	 * @param t the table to assign the values to
+	 * @param username the username whose the values is to be assigned
+	 * @param forgetPassword object that contains the new values.
+	 * @throws CriticalError
+	 */
+	private void assignSecurityQAToRegisteredClient(ClientsTable t, String username, ForgetPassword forgetPassword) throws CriticalError {
+		setValueToRegisteredClient(t, username, t.securityQuestionCol, forgetPassword.getQuestion());
+		setValueToRegisteredClient(t, username, t.securityAnswerCol, forgetPassword.getAnswer());
+	}
+	
+	/**
+	 * verify security answer of registered client (worker/customer).
+	 * compare the real answer given by client with the real answer in the database
+	 * 
+	 * @param t the table to check the username in
+	 * @param username the username whose his answer is to be checked
+	 * @param givenAnswer the answer was given from the client
+	 * 
+	 * @return true - if the answers are same, false otherwise
+	 * @throws CriticalError
+	 */
+	private boolean verifySecurityAnswerForRegisteredClient(ClientsTable t, String username, String givenAnswer) throws CriticalError {
+		String realSecurityAnwser = getValueForRegisteredClient(t, t.usernameCol, username, t.securityAnswerCol);
+		
+		return realSecurityAnwser.equals(givenAnswer);
+	}
+	
+	/**
+	 * get security question of registered client (worker/customer)
+	 * 
+	 * @param t the table to get the username from
+	 * @param username the username with the desired question
+	 * 
+	 * @return the security question of the given username
+	 * @throws CriticalError
+	 */
+	private String getSecurityQuestionForRegisteredClient(ClientsTable t, String username) throws CriticalError {		
+		return getValueForRegisteredClient(t, t.usernameCol, username, t.securityQuestionCol);
+	}
+	
+	
 	/**
 	 * logout worker from system. the method disconnects worker with the given
 	 * sessionID and username.
@@ -1321,6 +1432,50 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		}
 
 	}
+	
+	/**
+	 * update the ingredients of the user to the ones in the hashset.
+	 * 
+	 * @param username The username of the customer to update.
+	 * @param newSet The new set of ingredients to update to. cannot be null.
+	 * @throws CriticalError
+	 */
+	private void updateIngredientsForCustomer(String username, HashSet<Ingredient> newSet) throws CriticalError {
+
+		PreparedStatement statement = null;
+		try {
+			//remove the old list of ingredients
+			String deleteIngredientsQuery = generateDeleteQuery(CustomersIngredientsTable.table,
+					BinaryCondition.equalTo(CustomersIngredientsTable.customerUsernameCol, PARAM_MARK));
+			
+			statement = getParameterizedQuery(deleteIngredientsQuery, username);
+	
+			log.debug("updateIngredientsForCustomer: removing old ingredients of customer: " + username + "\nby running query: " + statement);
+			statement.executeUpdate();
+			closeResources(statement);
+			
+			
+			for (Ingredient ingredient : newSet){
+				//add new ingredients 
+				String insertIngredientQuery = new InsertQuery(CustomersIngredientsTable.table)
+						.addColumn(CustomersIngredientsTable.customerUsernameCol, PARAM_MARK)
+						.addColumn(CustomersIngredientsTable.ingredientIDCol, PARAM_MARK).validate() + "";
+				
+				statement = getParameterizedQuery(insertIngredientQuery, username, ingredient.getId());
+				
+				log.debug("updateIngredientsForCustomer: add igredient: " + ingredient + " to customer: " + username + "\nby running query: statement");
+				statement.executeUpdate();
+				closeResources(statement);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		} finally {
+			closeResources(statement);
+		}
+
+	}
+	
 
 	/**
 	 * Move product package form anywhere to anywhere
@@ -1461,6 +1616,23 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	private boolean isIngredientExist(Integer ingredientID) throws CriticalError {
 		return isSuchRowExist(IngredientsTable.table, IngredientsTable.ingredientIDCol, ingredientID);
 	}
+	
+	/**
+	 * Check if all the ingredients in the set exist in the database
+	 * 
+	 * @param setToCheck set to check its ingredients
+	 * @throws CriticalError
+	 * @throws IngredientNotExist
+	 */
+	private void checkAllIngredientsExist(HashSet<Ingredient> setToCheck) throws CriticalError, IngredientNotExist {
+		for (Ingredient ¢ : setToCheck)
+			if (!isIngredientExist((int) ¢.getId()))
+				throw new IngredientNotExist();
+	}
+	
+	private boolean isCustomerExist(String username) throws CriticalError {
+		return isSuchRowExist(CustomersTable.customertable, CustomersTable.customerusernameCol, username);
+	}
 
 	/**
 	 * close opened resources.
@@ -1594,7 +1766,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public int login(String username, String password)
 			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
 
-		log.info("SQL Public workerLogin: Worker trying to connect as: " + username);
+		log.info("SQL Public login: Worker trying to connect as: " + username);
 		try {
 			// START transaction
 			connectionStartTransaction();
@@ -1628,7 +1800,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			int $ = ClientServerDefs.anonymousCustomerPassword.equals(password)
 					& ClientServerDefs.anonymousCustomerUsername.equals(username)
-					? loginAsCart() : loginAsWorker(username, password);
+					? loginAsCart() : loginAsCustomer(username, password);
 
 			// END transaction
 			connectionCommitTransaction();
@@ -1648,8 +1820,26 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public int loginWorker(String username, String password)
 			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
-		// TODO Auto-generated method stub
-		return 0;
+		log.info("SQL Public loginWorker: Customer trying to connect as: " + username);
+		try {
+			// START transaction
+			connectionStartTransaction();
+
+			int $ = loginAsWorker(username, password);
+
+			// END transaction
+			connectionCommitTransaction();
+
+			return $;
+
+		} catch (SQLDatabaseException e) {
+			// NOTE: all exceptions flows here - for doing rollback
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw e;
+		} finally {
+			connectionEndTransaction();
+		}
 	}
 
 	@Override
@@ -1660,6 +1850,269 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		return new Gson().toJson(getClientTypeBySessionID(sessionID));
 
+	}
+	
+	@Override
+	public void registerCustomer(String username, String password) throws CriticalError, ClientAlreadyExist{
+		log.info("SQL Public registerCustomer: Customer trying to register with username: " + username);
+		
+		if (isCustomerExist(username)){
+			log.info("SQL Public registerCustomer: already exist customer with username: " + username);
+			throw new ClientAlreadyExist();
+		}
+		
+		
+		PreparedStatement statement = null;
+		try {		
+			// START transaction
+			connectionStartTransaction();
+			
+			//Write part of transaction
+			String insertCustomerQuery = new InsertQuery(CustomersTable.customertable)
+					.addColumn(CustomersTable.customerusernameCol, PARAM_MARK)
+					.addColumn(CustomersTable.customerpasswordCol, PARAM_MARK)
+					.addColumn(CustomersTable.customerAddressCol, PARAM_MARK)
+					.addColumn(CustomersTable.customerCityCol, PARAM_MARK)
+					.addColumn(CustomersTable.customerEmailCol, PARAM_MARK)
+					.addColumn(CustomersTable.customerFirstnameCol, PARAM_MARK)
+					.addColumn(CustomersTable.customerLastnameCol, PARAM_MARK)
+					.addColumn(CustomersTable.customerisLoggedInCol, PARAM_MARK)
+					.addColumn(CustomersTable.customerPhonenumberCol, PARAM_MARK)
+					.addColumn(CustomersTable.customersecurityAnswerCol, PARAM_MARK)
+					.addColumn(CustomersTable.customersecurityQuestionCol, PARAM_MARK).validate() + "";
+
+			statement = getParameterizedQuery(insertCustomerQuery, username, password,
+					"", "", "", "", "", 0, "", "", "");
+
+			statement.executeUpdate();
+
+			// END transaction
+			connectionCommitTransaction();
+
+		} catch (SQLDatabaseException e) {
+			// NOTE: all exceptions flows here - for doing rollback
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
+			closeResources(statement);
+		}
+	}
+	
+	@Override
+	public void setCustomerProfile(String username, CustomerProfile p) throws CriticalError, ClientNotExist, IngredientNotExist{
+		log.info("SQL Public setCustomerProfile: Customer set profile: " + p + " to username: " + username);
+		
+		if (!isCustomerExist(username)){
+			log.info("SQL Public setCustomerProfile: no such customer with username: " + username);
+			throw new ClientNotExist();
+		}
+		
+		checkAllIngredientsExist(p.getAllergens()); 
+		
+		PreparedStatement statement = null;
+		try {		
+			// START transaction
+			connectionStartTransaction();
+			
+			//Write part of transaction
+			//updating general info
+			UpdateQuery updateQuery = generateUpdateQuery(CustomersTable.customertable,
+					BinaryCondition.equalTo(CustomersTable.customerusernameCol, PARAM_MARK));
+			updateQuery.addSetClause(CustomersTable.customerAddressCol, PARAM_MARK)
+				.addSetClause(CustomersTable.customerCityCol, PARAM_MARK)
+				.addSetClause(CustomersTable.customerEmailCol, PARAM_MARK)
+				.addSetClause(CustomersTable.customerFirstnameCol, PARAM_MARK)
+				.addSetClause(CustomersTable.customerLastnameCol, PARAM_MARK)
+				.addSetClause(CustomersTable.customerPhonenumberCol, PARAM_MARK)
+				.addSetClause(CustomersTable.customerBirthdateCol, 
+						JdbcEscape.date(Date.from(p.getBirthdate()
+						.atStartOfDay(ZoneId.systemDefault()).toInstant()))).validate();
+
+			statement = getParameterizedQuery(updateQuery + "", username, 
+					p.getStreet(), p.getCity(), p.getEmailAddress(), p.getFirstName(), p.getLastName(), p.getPhoneNumber());
+ 
+			statement.executeUpdate();
+
+			//updating ingredients of customer
+			updateIngredientsForCustomer(username, p.getAllergens());
+			
+			log.info("SQL Public setCustomerProfile: Success setting profile for username: " + username);
+
+			// END transaction
+			connectionCommitTransaction();
+
+		} catch (SQLDatabaseException e) {
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
+			closeResources(statement);
+		}
+	}
+	
+	@Override
+	public String getCustomerProfile(String username) throws CriticalError, ClientNotExist{
+		log.info("SQL Public getCustomerProfile: Customer get profile: for username: " + username);
+		
+		if (!isCustomerExist(username)){
+			log.info("SQL Public getCustomerProfile: no such customer with username: " + username);
+			throw new ClientNotExist();
+		}
+		
+		PreparedStatement selectCustomerStatement = null;
+		PreparedStatement selectCustomerIngredientsStatement = null;
+		ResultSet selectCustomerResult = null;
+		ResultSet selectCustomerIngredientsResult = null;
+		try {		
+			
+			//Read part of transaction
+			String selectCustomerQuery = generateSelectQuery1Table(CustomersTable.customertable,
+					BinaryCondition.equalTo(CustomersTable.customerusernameCol, PARAM_MARK));
+			
+			String selectCustomerIngredientsQuery = generateSelectInnerJoinWithQuery2Tables(
+					CustomersIngredientsTable.table, IngredientsTable.table, CustomersIngredientsTable.ingredientIDCol,
+					CustomersIngredientsTable.customerUsernameCol,
+					BinaryCondition.equalTo(CustomersTable.customerusernameCol, PARAM_MARK));
+
+			selectCustomerStatement = getParameterizedQuery(selectCustomerQuery + "", username);
+			selectCustomerIngredientsStatement = getParameterizedQuery(selectCustomerIngredientsQuery + "", username);
+ 
+			selectCustomerResult = selectCustomerStatement.executeQuery();
+			selectCustomerResult.first();
+			selectCustomerIngredientsResult = selectCustomerIngredientsStatement.executeQuery();
+
+			String result = SQLJsonGenerator.CostumerProfileToJson(selectCustomerResult, selectCustomerIngredientsResult);
+			log.info("SQL Public setCustomerProfile: Success getting profile for username: " + username);
+			
+			return result;
+
+		} catch (SQLDatabaseException e) {
+			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		} finally {
+			closeResources(selectCustomerStatement, selectCustomerIngredientsStatement,
+					selectCustomerResult, selectCustomerIngredientsResult);
+		}
+		
+	}
+	
+	@Override
+	public void setPasswordCustomer(String username, String newPassword) throws CriticalError, ClientNotExist{
+		log.info("SQL Public setPasswordCustomer: Customer: " + username + " sets password.");
+		
+		if (!isCustomerExist(username)){
+			log.info("SQL Public setPasswordCustomer: no such customer with username: " + username);
+			throw new ClientNotExist();
+		}
+		
+		try {		
+			// START transaction
+			connectionStartTransaction();
+			
+			//Write part of transaction
+			//updating password
+			assignPasswordToRegisteredClient(new CustomersTable(), username, newPassword);
+
+			log.info("SQL Public setPasswordCustomer: Success setting password for username: " + username);
+
+			// END transaction
+			connectionCommitTransaction();
+		} catch (SQLDatabaseException e) {
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw e;
+		} finally {
+			connectionEndTransaction();
+		}
+	}
+	
+	@Override
+	public void setSecurityQACustomer(String username, ForgetPassword forgetPassword) throws CriticalError, ClientNotExist{
+		log.info("SQL Public setSecurityQACustomer: Customer: " + username + " sets security Q&A.");
+		
+		if (!isCustomerExist(username)){
+			log.info("SQL Public setSecurityQACustomer: no such customer with username: " + username);
+			throw new ClientNotExist();
+		}
+		
+		try {		
+			// START transaction
+			connectionStartTransaction();
+			
+			//Write part of transaction
+			//updating security question and answer
+			assignSecurityQAToRegisteredClient(new CustomersTable(), username, forgetPassword);
+
+			log.info("SQL Public setSecurityQACustomer: Success setting ecurity Q&A for username: " + username);
+
+			// END transaction
+			connectionCommitTransaction();
+		} catch (SQLDatabaseException e) {
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw e;
+		} finally {
+			connectionEndTransaction();
+		}
+	}
+	
+	@Override
+	public String getSecurityQuestionCustomer(String username) throws CriticalError, ClientNotExist{
+		log.info("SQL Public getSecurityQuestionCustomer: Customer: " + username + " get security question.");
+		
+		if (!isCustomerExist(username)){
+			log.info("SQL Public getSecurityQuestionCustomer: no such customer with username: " + username);
+			throw new ClientNotExist();
+		}
+		
+		try {
+			
+			//Read part of transaction
+			String result = getSecurityQuestionForRegisteredClient(new CustomersTable(), username);
+
+			log.info("SQL Public getSecurityQuestionCustomer: the security question of user: " + username + " is: \n" + result);
+			return result;
+
+		} catch (SQLDatabaseException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	@Override
+	public boolean verifySecurityAnswerCustomer(String username, String givenAnswer) throws CriticalError, ClientNotExist{
+		log.info("SQL Public verifySecurityAnswerCustomer: Customer: " + username + " verify security answer.");
+		
+		if (!isCustomerExist(username)){
+			log.info("SQL Public verifySecurityAnswerCustomer: no such customer with username: " + username);
+			throw new ClientNotExist();
+		}
+		
+		try {
+			
+			//Read part of transaction
+			boolean result = verifySecurityAnswerForRegisteredClient(new CustomersTable(), username, givenAnswer);
+
+			log.info("SQL Public verifySecurityAnswerCustomer: result of verification for user: " + username + " is: " + result);
+			return result;
+
+		} catch (SQLDatabaseException e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	/*
@@ -1867,9 +2320,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				throw new ManufacturerNotExist();
 
 			// check if all ingredients exists
-			for (Ingredient ¢ : productToAdd.getIngredients())
-				if (!isIngredientExist((int) ¢.getId()))
-					throw new IngredientNotExist();
+			checkAllIngredientsExist(productToAdd.getIngredients());
 
 			// WRITE part of transaction
 			addCatalogProduct(productToAdd);
@@ -1971,10 +2422,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			if (isManufacturerExist((int) productToUpdate.getManufacturer().getId()))
 				throw new ManufacturerNotExist();
 
-			// check if all ingredients exists
-			for (Ingredient ¢ : productToUpdate.getIngredients())
-				if (!isIngredientExist((int) ¢.getId()))
-					throw new IngredientNotExist();
+			checkAllIngredientsExist(productToUpdate.getIngredients());
 
 			// WRITE part of transaction
 			// do update = remove product and adds it again

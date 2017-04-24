@@ -142,16 +142,16 @@ public class CustomerProfile implements ICustomerProfile {
 			return false;
 		return true;
 	}
-	ForgetPassword getForgetPassword() {
+	public ForgetPassword getForgetPassword() {
 		return forgetPassword;
 	}
-	void setForgetPassword(ForgetPassword p) {
+	public void setForgetPassword(ForgetPassword p) {
 		this.forgetPassword = p;
 	}
-	String getPassword() {
+	public String getPassword() {
 		return password;
 	}
-	void setPassword(String password) {
+	public void setPassword(String password) {
 		this.password = password;
 	}
 	

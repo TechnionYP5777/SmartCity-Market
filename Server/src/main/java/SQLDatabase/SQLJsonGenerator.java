@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
@@ -17,6 +18,8 @@ import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
+import SQLDatabase.SQLDatabaseEntities.CustomersIngredientsTable;
+import SQLDatabase.SQLDatabaseEntities.CustomersTable;
 import SQLDatabase.SQLDatabaseEntities.GroceriesListsTable;
 import SQLDatabase.SQLDatabaseEntities.IngredientsTable;
 import SQLDatabase.SQLDatabaseEntities.LocationsTable;
@@ -26,6 +29,7 @@ import SQLDatabase.SQLDatabaseEntities.ProductsCatalogLocationsTable;
 import SQLDatabase.SQLDatabaseEntities.ProductsCatalogTable;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseStrings.LOCATIONS_TABLE;
+import UtilsImplementations.Serialization;
 
 class SQLJsonGenerator {
 
@@ -84,7 +88,7 @@ class SQLJsonGenerator {
 			long productBarcode = product.getLong(ProductsCatalogTable.barcodeCol.getColumnNameSQL());
 
 			// adding all ingredients
-			ingredients = createIngredientsList(productBarcode, productIngredients);
+			ingredients = createIngredientsListByBarcode(productBarcode, productIngredients);
 
 			// adding all locations
 			locations = createLocationsList(productBarcode, productLocations);
@@ -108,11 +112,11 @@ class SQLJsonGenerator {
 		}
 
 	}
-
+	
 	/**
 	 * create ingredients list for specified barcode.
 	 *
-	 * @param barcode
+	 * @param barcode (assuming the resultset is ordered by barcode column)
 	 * @param productIngredients
 	 *            the resultset of ingredients (assuming the result set pointing
 	 *            to the first ingredient with specified barcode OR pointing the
@@ -120,27 +124,126 @@ class SQLJsonGenerator {
 	 * @return
 	 * @throws CriticalError
 	 */
-	private static HashSet<Ingredient> createIngredientsList(long productBarcode, ResultSet productIngredients)
+	private static HashSet<Ingredient> createIngredientsListByBarcode(long productBarcode, ResultSet productIngredients)
+			throws CriticalError {
+//		HashSet<Ingredient> $ = new HashSet<Ingredient>();
+//
+//		try {
+//			if (productIngredients.getRow() != 0)
+//				// adding all ingredients
+//				while (!productIngredients.isAfterLast() && productBarcode == productIngredients
+//						.getLong(ProductsCatalogIngredientsTable.barcodeCol.getColumnNameSQL())) {
+//
+//					// extracting the ingredients
+//					Ingredient ingredient = newIngredientFromResultset(productIngredients);
+//					if (ingredient != null)
+//						$.add(ingredient);
+//
+//					productIngredients.next();
+//				}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			throw new SQLDatabaseException.CriticalError();
+//		}
+//
+//		return $;
+		return createIngredientsList(productBarcode, ProductsCatalogIngredientsTable.barcodeCol, productIngredients);
+	}
+	
+	
+	/**
+	 * convert customerProfile from ResultSet to Json representation of product
+	 * 
+	 * @param customer
+	 *            - ResultSet of the customer profile. the
+	 *            ResultSet need to point to the username to convert). this
+	 *            object will point the next product after returning.
+	 * @param customerIngredients
+	 *            - ResultSet of the customer\s ingredients (assuming the
+	 *            ResultSet ordered by username column) the ResultSet should
+	 *            pointing the product to convert, if it has ingredients. if so,
+	 *            this object will point the next customer (or after last line) after returning.
+	 * @return
+	 * @throws CriticalError
+	 */
+	static String CostumerProfileToJson(ResultSet customer, ResultSet customerIngredients)
+			throws CriticalError {
+
+		HashSet<Ingredient> ingredients;
+
+		try {
+			
+			//get customer username
+			String customerUsername = getStringFromResultset(customer, CustomersTable.customerusernameCol);
+
+			// get all customer ingredients
+			ingredients = createIngredientsListForCustomer(customerUsername, customerIngredients);
+
+			// get customer other details
+			String customeraddress = getStringFromResultset(customer, CustomersTable.customerAddressCol);
+			String customerCity = getStringFromResultset(customer, CustomersTable.customerCityCol);
+			String customerEmail = getStringFromResultset(customer, CustomersTable.customerEmailCol);
+			String customerFirstname = getStringFromResultset(customer, CustomersTable.customerFirstnameCol);
+			String customerLastname = getStringFromResultset(customer, CustomersTable.customerLastnameCol);
+			String customerPhonenumber = getStringFromResultset(customer, CustomersTable.customerPhonenumberCol);
+			LocalDate customerBirthdate = customer.getDate(CustomersTable.customerBirthdateCol.getColumnNameSQL()).toLocalDate();
+
+			customer.next();
+			return Serialization.serialize(new CustomerProfile(customerUsername, null, customerFirstname, customerLastname,
+					customerPhonenumber, customerEmail, customerCity, customeraddress, customerBirthdate, ingredients, null));
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLDatabaseException.CriticalError();
+		}
+
+	}
+	
+	/**
+	 * create ingredients list for specified customer.
+	 *
+	 * @param username the username of the costumer to get its ingredients (assuming the resultset is ordered by username column)
+	 * @param customerIngredients
+	 *            the resultset of ingredients (assuming the result set pointing
+	 *            to the first ingredient with specified barcode OR pointing the
+	 *            AfterLast row OR the resultset is empty.
+	 * @return
+	 * @throws CriticalError
+	 */
+	private static HashSet<Ingredient> createIngredientsListForCustomer(String username, ResultSet customerIngredients)
+			throws CriticalError {
+
+		return createIngredientsList(username, CustomersIngredientsTable.customerUsernameCol, customerIngredients);
+	}
+	
+	
+	/**
+	 * generic method that creating ingredients list for given resultset (either for customer or product)
+	 * 
+	 * @param whileThisID assuming resultset is ordered by columnToCheckIn, the extraction of ingredients will be only while the row contain that value. 
+	 * @param columnToCheckIn assuming resultset is ordered by columnToCheckIn, this column define which column to compare to whileThisID
+	 * @param ingredientsSet
+	 * 			  the resultset of ingredients (assuming the result set pointing
+	 *            to the first ingredient with specified barcode OR pointing the
+	 *            AfterLast row OR the resultset is empty.
+	 * @return
+	 * @throws CriticalError
+	 */
+	private static<T> HashSet<Ingredient> createIngredientsList(T whileThisID, DbColumn columnToCheckIn, ResultSet ingredientsSet)
 			throws CriticalError {
 		HashSet<Ingredient> $ = new HashSet<Ingredient>();
 
 		try {
-			if (productIngredients.getRow() != 0)
+			if (ingredientsSet.getRow() != 0)
 				// adding all ingredients
-				while (!productIngredients.isAfterLast() && productBarcode == productIngredients
-						.getLong(ProductsCatalogIngredientsTable.barcodeCol.getColumnNameSQL())) {
+				while (!ingredientsSet.isAfterLast() && whileThisID.equals(ingredientsSet.getObject(columnToCheckIn.getColumnNameSQL()))) {
 
 					// extracting the ingredients
-					int ingredientId = productIngredients.getInt(IngredientsTable.ingredientIDCol.getColumnNameSQL());
-					if (!productIngredients.wasNull()) {
-						String ingdientName = getStringFromResultset(productIngredients,
-								IngredientsTable.ingredientNameCol);
+					Ingredient ingredient = newIngredientFromResultset(ingredientsSet);
+					if (ingredient != null)
+						$.add(ingredient);
 
-						// adding the ingredient to set
-						$.add(new Ingredient(ingredientId, ingdientName));
-					}
-
-					productIngredients.next();
+					ingredientsSet.next();
 				}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -148,6 +251,29 @@ class SQLJsonGenerator {
 		}
 
 		return $;
+	}
+	
+	/**
+	 * Create Ingredient from current row of an resultset
+	 * @param ingredients the result to extract the data from. the resultset must contain the column: ingredientIDCol, ingredientNameCol
+	 * @return new ingredient. on error - return null
+	 * @throws SQLException 
+	 * @throws CriticalError 
+	 */
+	private static Ingredient newIngredientFromResultset(ResultSet ingredients) throws SQLException, CriticalError{
+		Ingredient result = null;
+		
+		// extracting the ingredient
+		int ingredientId = ingredients.getInt(IngredientsTable.ingredientIDCol.getColumnNameSQL());
+		if (!ingredients.wasNull()) {
+			String ingdientName = getStringFromResultset(ingredients,
+					IngredientsTable.ingredientNameCol);
+
+			// adding the ingredient to set
+			result = new Ingredient(ingredientId, ingdientName);
+		}
+		
+		return result;
 	}
 
 	/**

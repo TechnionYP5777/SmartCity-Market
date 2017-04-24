@@ -1,6 +1,8 @@
 package SQLDatabase;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.CustomerProfile;
+import BasicCommonClasses.ForgetPassword;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
@@ -18,7 +20,9 @@ import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
+import SQLDatabase.SQLDatabaseException.ClientAlreadyExist;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
+import SQLDatabase.SQLDatabaseException.ClientNotExist;
 
 public interface ISQLDatabaseConnection {
 
@@ -96,5 +100,20 @@ public interface ISQLDatabaseConnection {
 
 	void logoutAllUsers() throws CriticalError;
 	void clearGroceryListsHistory() throws CriticalError;
+
+	void registerCustomer(String username, String password) throws CriticalError, ClientAlreadyExist;
+
+	void setCustomerProfile(String username, CustomerProfile p)
+			throws CriticalError, ClientNotExist, IngredientNotExist;
+
+	String getCustomerProfile(String username) throws CriticalError, ClientNotExist;
+
+	void setPasswordCustomer(String username, String newPassword) throws CriticalError, ClientNotExist;
+
+	void setSecurityQACustomer(String username, ForgetPassword forgetPassword) throws CriticalError, ClientNotExist;
+
+	String getSecurityQuestionCustomer(String username) throws CriticalError, ClientNotExist;
+
+	boolean verifySecurityAnswerCustomer(String username, String givenAnswer) throws CriticalError, ClientNotExist;
 
 }

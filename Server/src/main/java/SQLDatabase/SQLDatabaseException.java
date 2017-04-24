@@ -132,6 +132,26 @@ public class SQLDatabaseException extends Exception {
 	public static class ClientAlreadyConnected extends SQLDatabaseException {
 		private static final long serialVersionUID = 1L;
 	}
+	
+	/**
+	 * Thrown when try to add new client (customer/worker) with existed username
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class ClientAlreadyExist extends SQLDatabaseException {
+		private static final long serialVersionUID = 1L;
+	}
+	
+	/**
+	 * Thrown when try to edit client (customer/worker) with no existed username
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class ClientNotExist extends SQLDatabaseException {
+		private static final long serialVersionUID = 1L;
+	}
 
 	/**
 	 * Thrown when try to restore non-existed grocery list
