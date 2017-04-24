@@ -90,7 +90,7 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		});
 		
 		repeatPassField.textProperty().addListener((observable, oldValue, newValue) -> {
-			//todo: assert equal to passwordFieldpasswordField
+			//todo: assert equal to passwordField
 		});
 		
 		firstNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -124,7 +124,6 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 
 	private void updateFields() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@FXML

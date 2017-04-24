@@ -101,7 +101,10 @@
       </GridPane>
       <VBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2">
          <children>
-            <JFXButton fx:id="nextButton" buttonType="RAISED" onAction="#nextButtonPressed" text="Next" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <JFXButton fx:id="nextButton" buttonType="RAISED" onAction="#nextButtonPressed" text="Next" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <font>
+                  <Font size="15.0" />
+               </font></JFXButton>
          </children>
       </VBox>
       <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">

@@ -7,6 +7,27 @@
    
 }
 
+#loginButton {
+	-jfx-button-type: RAISED;
+	-fx-background-color: #00FFCC;
+	-fx-border-radius: 8px;
+	-fx-text-fill: WHITE;
+}
+
+#registerButton {
+	-jfx-button-type: RAISED;
+	-fx-background-color: #00FFCC;
+	-fx-border-radius: 8px;
+	-fx-text-fill: WHITE;
+}
+
+#guestLoginButton {
+	-jfx-button-type: RAISED;
+	-fx-background-color: #00CC66;
+	-fx-border-radius: 8px;
+	-fx-text-fill: WHITE;
+}
+
 #backButton {
 	-fx-background-image: url("home.png");
 	-fx-background-size: cover;
@@ -19,23 +40,4 @@
     -fx-background-color: transparent;
 }
  
-#loginButton {
-	-jfx-button-type: RAISED;
-	-fx-background-color: #00FFCC;
-	-fx-border-radius: 8px;
-	-fx-text-fill: WHITE;
-}
 
-#registerButton {
-	-jfx-button-type: RAISED;
-	-fx-background-color: #00FFCC;
-	-fx-border-radius: 8px;
-	 -fx-text-fill: WHITE;
-}
-
-#guestLoginButton {
-	-jfx-button-type: RAISED;
-	-fx-background-color: #00CC66;
-	-fx-border-radius: 8px;
-	-fx-text-fill: WHITE;
-}
