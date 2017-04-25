@@ -170,6 +170,8 @@ public class ManagePackagesTab implements Initializable {
 			resetParams();
 			searchCodeButton.setDisable(newValue.isEmpty());
 		});
+		editPackagesAmountSpinner.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
+		
 
 		editPackagesAmountSpinner.valueProperty().addListener((obs, oldValue, newValue) -> {
 			if (newValue == null || newValue < 1)
