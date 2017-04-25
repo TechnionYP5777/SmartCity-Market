@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import BasicCommonClasses.Ingredient;
+import BasicCommonClasses.Manufacturer;
 
 
 /**
@@ -33,6 +34,16 @@ public class Serialization {
 		Type hashsetType = new TypeToken<HashSet<Ingredient>>(){}.getType();
 
 		HashSet<Ingredient> result = gson.fromJson(hashsetToDeserialize, hashsetType);
+		
+		return result;
+	}
+	
+	public static HashSet<Manufacturer> deserializeManufacturerstHashSet(String hashsetToDeserialize){
+		Gson gson = new Gson();
+
+		Type hashsetType = new TypeToken<HashSet<Manufacturer>>(){}.getType();
+
+		HashSet<Manufacturer> result = gson.fromJson(hashsetToDeserialize, hashsetType);
 		
 		return result;
 	}

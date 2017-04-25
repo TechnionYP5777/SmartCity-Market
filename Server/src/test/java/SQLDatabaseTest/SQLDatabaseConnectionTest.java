@@ -33,6 +33,8 @@ import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.GroceryListIsEmpty;
 import SQLDatabase.SQLDatabaseException.IngredientNotExist;
 import SQLDatabase.SQLDatabaseException.IngredientStillUsed;
+import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
+import SQLDatabase.SQLDatabaseException.ManufacturerStillUsed;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
@@ -723,16 +725,12 @@ public class SQLDatabaseConnectionTest {
 
 		try {
 
-			HashMap<Integer, Manufacturer> list = new HashMap<>();
+			HashSet<Manufacturer> list = new HashSet<>();
 
-			Type listType = new TypeToken<HashMap<Integer, Manufacturer>>() {
-			}.getType();
-			list = new Gson().fromJson(sqlConnection.getManufacturersList(null), listType);
+			list = Serialization.deserializeManufacturerstHashSet(sqlConnection.getManufacturersList(null));
 
-			assertTrue(list.containsKey(1));
-			assertTrue(list.containsKey(2));
-			assertEquals(new Manufacturer(1, "תנובה"), list.get(1));
-			assertEquals(new Manufacturer(2, "מאפיות ברמן"), list.get(2));
+			assertTrue(list.contains(new Manufacturer(1, "תנובה")));
+			assertTrue(list.contains(new Manufacturer(2, "מאפיות ברמן")));
 		} catch (CriticalError | ClientNotConnected e) {
 			e.printStackTrace();
 			fail();
@@ -1330,6 +1328,62 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		} catch (IngredientNotExist e){
 		}
+		
+
+	}
+	
+	@Test
+	public void testAddRemoveManufacturer() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String manufacturerName = "manydebug";
+		String result = null;
+		Manufacturer manufacturer = null;
+		
+		//test add ingredient
+		try {
+			String tempID = sqlConnection.addManufacturer(null, manufacturerName);
+			manufacturer = Serialization.deserialize(tempID, Manufacturer.class);
+			
+			result = sqlConnection.getManufacturersList(null);
+		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		}
+		
+		assertNotNull(result);
+		HashSet<Manufacturer> set = Serialization.deserializeManufacturerstHashSet(result);
+		assertNotNull(set);	
+		assertTrue(set.contains(manufacturer));
+		
+		//test remove ingredient
+		try {
+			sqlConnection.removeManufacturer(null, manufacturer);
+			
+			result = sqlConnection.getManufacturersList(null);
+		} catch (CriticalError | ClientNotConnected | ManufacturerNotExist | ManufacturerStillUsed e) {
+			fail();
+		}
+		
+		assertNotNull(result);
+		set = Serialization.deserializeManufacturerstHashSet(result);
+		assertNotNull(set);
+		assertFalse(set.contains(manufacturer));
+	}
+	
+	@Test
+	public void testCantRemoveNotExistedManufacturer() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String manufacturerName = "manydebug";
+		Manufacturer manufacturer = new Manufacturer(999,manufacturerName);
+		
+			try {
+				sqlConnection.removeManufacturer(null, manufacturer);
+				fail();
+			} catch (CriticalError | ClientNotConnected | ManufacturerStillUsed e) {
+				fail();
+			} catch (ManufacturerNotExist e) {
+			} 
 		
 
 	}

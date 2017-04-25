@@ -410,7 +410,7 @@ class SQLJsonGenerator {
 	 * @throws CriticalError
 	 */
 	static String manufaturersListToJson(ResultSet manufaturersList) throws CriticalError {
-		HashMap<Integer, Manufacturer> $ = new HashMap<>();
+		HashSet<Manufacturer> $ = new HashSet<>();
 
 		try {
 			if (manufaturersList.getRow() != 0)
@@ -418,7 +418,7 @@ class SQLJsonGenerator {
 					int manufaturerID = manufaturersList.getInt(ManufacturerTable.manufacturerIDCol.getColumnNameSQL());
 					String manufaturerName = getStringFromResultset(manufaturersList,
 							ManufacturerTable.manufacturerNameCol);
-					$.put(manufaturerID, new Manufacturer(manufaturerID, manufaturerName));
+					$.add(new Manufacturer(manufaturerID, manufaturerName));
 					manufaturersList.next();
 				}
 		} catch (SQLException e) {
