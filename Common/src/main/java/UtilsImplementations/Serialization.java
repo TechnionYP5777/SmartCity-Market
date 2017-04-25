@@ -1,6 +1,13 @@
 package UtilsImplementations;
 
+import java.lang.reflect.Type;
+import java.util.HashSet;
+
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import BasicCommonClasses.Ingredient;
+
 
 /**
  * Serialization - This class gives serialization service
@@ -18,6 +25,16 @@ public class Serialization {
 
 	public static <T> T deserialize(String toDeserialize, Class<T> classType) {
 		return new Gson().fromJson(toDeserialize, classType);
+	}
+	
+	public static HashSet<Ingredient> deserializeIngredientHashSet(String hashsetToDeserialize){
+		Gson gson = new Gson();
+
+		Type hashsetType = new TypeToken<HashSet<Ingredient>>(){}.getType();
+
+		HashSet<Ingredient> result = gson.fromJson(hashsetToDeserialize, hashsetType);
+		
+		return result;
 	}
 
 }

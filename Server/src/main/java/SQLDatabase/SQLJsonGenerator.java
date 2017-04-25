@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import com.google.gson.Gson;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 
 import BasicCommonClasses.CatalogProduct;
@@ -102,7 +101,7 @@ class SQLJsonGenerator {
 			double productPrice = product.getDouble(ProductsCatalogTable.productPriceCol.getColumnNameSQL());
 
 			product.next();
-			return new Gson().toJson(new CatalogProduct(productBarcode, productName, ingredients,
+			return Serialization.serialize(new CatalogProduct(productBarcode, productName, ingredients,
 					new Manufacturer(productManufacturerID, productManufacturerName), productDescription, productPrice,
 					productPicture, locations));
 
@@ -220,7 +219,8 @@ class SQLJsonGenerator {
 	/**
 	 * generic method that creating ingredients list for given resultset (either for customer or product)
 	 * 
-	 * @param whileThisID assuming resultset is ordered by columnToCheckIn, the extraction of ingredients will be only while the row contain that value. 
+	 * @param whileThisID assuming resultset is ordered by columnToCheckIn, the extraction of ingredients will be only while the row contain that value.
+	 * 			if this parameter is null then this constrain is ignored (and the parameter columnToCheckIn is irrelevant too)
 	 * @param columnToCheckIn assuming resultset is ordered by columnToCheckIn, this column define which column to compare to whileThisID
 	 * @param ingredientsSet
 	 * 			  the resultset of ingredients (assuming the result set pointing
@@ -236,7 +236,8 @@ class SQLJsonGenerator {
 		try {
 			if (ingredientsSet.getRow() != 0)
 				// adding all ingredients
-				while (!ingredientsSet.isAfterLast() && whileThisID.equals(ingredientsSet.getObject(columnToCheckIn.getColumnNameSQL()))) {
+				while (!ingredientsSet.isAfterLast() && 
+						( (whileThisID == null) || whileThisID.equals(ingredientsSet.getObject(columnToCheckIn.getColumnNameSQL())) ) ) {
 
 					// extracting the ingredients
 					Ingredient ingredient = newIngredientFromResultset(ingredientsSet);
@@ -274,6 +275,22 @@ class SQLJsonGenerator {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * convert ingredients list from ResultSet to Json representation of list
+	 * of ingredients list
+	 * 
+	 * @param ingredientsSet
+	 * 			  - ResultSet of the ingredientsList. The ResultSet should
+	 *            point the first row. At returning, this object will point the
+	 *            next row after the last row.
+	 * @return Json representation of the ingredients list
+	 * @throws CriticalError
+	 */
+	public static String allIngredientsListToJson(ResultSet ingredientsSet)
+			throws CriticalError {
+		return Serialization.serialize(createIngredientsList(null, null, ingredientsSet));
 	}
 
 	/**
@@ -340,7 +357,7 @@ class SQLJsonGenerator {
 	 */
 	static String GroceryListToJson(ResultSet groceryList) throws CriticalError {
 
-		return new Gson().toJson(resultSetToGroceryList(groceryList));
+		return Serialization.serialize(resultSetToGroceryList(groceryList));
 
 	}
 
@@ -389,7 +406,7 @@ class SQLJsonGenerator {
 	 *            - ResultSet of the manufaturersList. The ResultSet should
 	 *            point the first row. At returning, this object will point the
 	 *            next row after the last row.
-	 * @return Json representation of the grocery list
+	 * @return Json representation of the manufacturers list
 	 * @throws CriticalError
 	 */
 	static String manufaturersListToJson(ResultSet manufaturersList) throws CriticalError {
@@ -409,7 +426,7 @@ class SQLJsonGenerator {
 			throw new SQLDatabaseException.CriticalError();
 		}
 
-		return new Gson().toJson($);
+		return Serialization.serialize($);
 
 	}
 }

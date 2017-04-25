@@ -3,6 +3,7 @@ package SQLDatabase;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.ForgetPassword;
+import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
@@ -10,6 +11,7 @@ import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.GroceryListIsEmpty;
 import SQLDatabase.SQLDatabaseException.IngredientNotExist;
+import SQLDatabase.SQLDatabaseException.IngredientStillUsed;
 import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
 import SQLDatabase.SQLDatabaseException.ManufacturerStillUsed;
 import SQLDatabase.SQLDatabaseException.NoGroceryListToRestore;
@@ -115,5 +117,15 @@ public interface ISQLDatabaseConnection {
 	String getSecurityQuestionCustomer(String username) throws CriticalError, ClientNotExist;
 
 	boolean verifySecurityAnswerCustomer(String username, String givenAnswer) throws CriticalError, ClientNotExist;
+
+	String addIngredient(Integer sessionID, String ingredientName) throws CriticalError, ClientNotConnected;
+
+	void removeIngredient(Integer sessionID, Ingredient i)
+			throws CriticalError, ClientNotConnected, IngredientNotExist, IngredientStillUsed;
+
+	void editIngredient(Integer sessionID, Ingredient newIngredient)
+			throws CriticalError, ClientNotConnected, IngredientNotExist;
+
+	String getIngredientsList() throws CriticalError;
 
 }

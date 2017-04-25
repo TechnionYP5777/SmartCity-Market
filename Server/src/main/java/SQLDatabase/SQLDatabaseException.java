@@ -94,6 +94,16 @@ public class SQLDatabaseException extends Exception {
 	}
 
 	/**
+	 * Thrown when try to remove ingredient that still used in the system
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class IngredientStillUsed extends SQLDatabaseException {
+		private static final long serialVersionUID = 3092110065622921929L;
+	}
+	
+	/**
 	 * Thrown when try to do operation on non-existed ingredient.
 	 * 
 	 * @author Noam Yefet

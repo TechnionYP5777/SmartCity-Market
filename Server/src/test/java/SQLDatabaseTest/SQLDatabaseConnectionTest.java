@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.After;
@@ -30,11 +31,14 @@ import SQLDatabase.SQLDatabaseException;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.GroceryListIsEmpty;
+import SQLDatabase.SQLDatabaseException.IngredientNotExist;
+import SQLDatabase.SQLDatabaseException.IngredientStillUsed;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
+import UtilsImplementations.Serialization;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 
@@ -1253,4 +1257,82 @@ public class SQLDatabaseConnectionTest {
 		}
 	}
 
+	
+	public void testGetEmptyIngredientsList() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		String result = null;
+		try {
+			result = sqlConnection.getIngredientsList();
+		} catch (CriticalError e) {
+			fail();
+		}
+		
+		assertNotNull(result);
+		HashSet<Ingredient> set = Serialization.deserializeIngredientHashSet(result);
+		assertNotNull(set);
+		assertTrue(set.isEmpty());
+	}
+	
+	
+	
+	@Test
+	public void testAddRemoveIngredient() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String ingredientName = "glotendebug";
+		int ingredient1Id = 0;
+		String result = null;
+		Ingredient ingredient = null;
+		
+		//test add ingredient
+		try {
+			String tempID = sqlConnection.addIngredient(null, ingredientName);
+			ingredient = Serialization.deserialize(tempID, Ingredient.class);
+			
+			result = sqlConnection.getIngredientsList();
+		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		}
+		
+		assertNotNull(result);
+		HashSet<Ingredient> set = Serialization.deserializeIngredientHashSet(result);
+		assertNotNull(set);	
+		assertTrue(set.contains(ingredient));
+		
+		//test remove ingredient
+		try {
+			sqlConnection.removeIngredient(null, ingredient);
+			
+			result = sqlConnection.getIngredientsList();
+		} catch (CriticalError | ClientNotConnected | IngredientNotExist | IngredientStillUsed e) {
+			fail();
+		}
+		
+		assertNotNull(result);
+		set = Serialization.deserializeIngredientHashSet(result);
+		assertNotNull(set);
+		assertFalse(set.contains(ingredient));
+	}
+	
+	@Test
+	public void testCantRemoveNotExistedIngredient() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String ingredientName = "glotendebug";
+		Ingredient ingredient = new Ingredient(999,ingredientName);
+		
+		try {
+			sqlConnection.removeIngredient(null, ingredient);
+			fail();
+		} catch (CriticalError | ClientNotConnected | IngredientStillUsed e) {
+			fail();
+		} catch (IngredientNotExist e){
+		}
+		
+
+	}
+	
+	
 }

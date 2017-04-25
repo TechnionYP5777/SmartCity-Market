@@ -62,6 +62,7 @@ import SQLDatabase.SQLDatabaseException.*;
 import SQLDatabase.SQLDatabaseStrings.LOCATIONS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.PRODUCTS_PACKAGES_TABLE;
 import SQLDatabase.SQLDatabaseStrings.WORKERS_TABLE;
+import UtilsImplementations.Serialization;
 
 import static SQLDatabase.SQLQueryGenerator.generateSelectQuery1Table;
 import static SQLDatabase.SQLQueryGenerator.generateSelectLeftJoinWithQuery2Tables;
@@ -1613,8 +1614,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		return isSuchRowExist(ManufacturerTable.table, ManufacturerTable.manufacturerIDCol, manufacturerID);
 	}
 
-	private boolean isIngredientExist(Integer ingredientID) throws CriticalError {
-		return isSuchRowExist(IngredientsTable.table, IngredientsTable.ingredientIDCol, ingredientID);
+	private boolean isIngredientExist(long l) throws CriticalError {
+		return isSuchRowExist(IngredientsTable.table, IngredientsTable.ingredientIDCol, l);
 	}
 	
 	/**
@@ -2739,7 +2740,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			connectionEndTransaction();
 		}
 
-		return new Gson().toJson($);
+		return new Gson().toJson(new Manufacturer($, manufacturerName));
 	}
 
 	@Override
@@ -2815,6 +2816,153 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			connectionEndTransaction();
 		}
 
+	}
+	
+	@Override
+	public String getManufacturersList(Integer sessionID) throws ClientNotConnected, CriticalError {
+		validateSessionEstablished(sessionID);
+
+		try {
+			ResultSet manufacturerResultSet = getParameterizedReadQuery(
+					new SelectQuery().addAllTableColumns(ManufacturerTable.table).validate() + "", (Object[]) null)
+							.executeQuery();
+			manufacturerResultSet.first();
+
+			return SQLJsonGenerator.manufaturersListToJson(manufacturerResultSet);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		}
+	}
+	
+	@Override
+	public String addIngredient(Integer sessionID, String ingredientName) throws CriticalError, ClientNotConnected {
+
+		log.info("SQL Public addIngredient: ingredient name: " + ingredientName + " (SESSION: " + sessionID
+				+ " )");
+
+		validateSessionEstablished(sessionID);
+
+		int $;
+		// START transaction
+		connectionStartTransaction();
+		try {
+			// WRITE part of transaction
+			// get "fresh" id for the new ingredient
+			$ = allocateIDToTable(IngredientsTable.table, IngredientsTable.ingredientIDCol);
+
+			String insertQuery = new InsertQuery(IngredientsTable.table)
+					.addColumn(IngredientsTable.ingredientIDCol, PARAM_MARK)
+					.addColumn(IngredientsTable.ingredientNameCol, PARAM_MARK).validate() + "";
+
+			insertQuery.hashCode();
+
+			getParameterizedQuery(insertQuery, $, ingredientName).executeUpdate();
+
+			// END transaction
+			connectionCommitTransaction();
+		} catch (CriticalError | SQLException e) {
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
+		}
+
+		return Serialization.serialize(new Ingredient($, ingredientName));
+	}
+
+	@Override
+	public void removeIngredient(Integer sessionID, Ingredient i)
+			throws CriticalError, ClientNotConnected, IngredientNotExist, IngredientStillUsed {
+		log.info("SQL Public removeIngredient: ingredient: " + i + " (SESSION: " + sessionID + " )");
+
+		validateSessionEstablished(sessionID);
+
+		// START transaction
+		connectionStartTransaction();
+		try {
+			// READ part of transaction
+			if (!isIngredientExist(i.getId()))
+				throw new IngredientNotExist();
+
+			// if the ingredient still used in catalog or customers - throw exception
+			if (isSuchRowExist(ProductsCatalogIngredientsTable.table, ProductsCatalogIngredientsTable.ingredientIDCol, i.getId())
+				|| isSuchRowExist(CustomersIngredientsTable.table, CustomersIngredientsTable.ingredientIDCol, i.getId()))
+				throw new IngredientStillUsed();
+
+			// WRITE part of transaction
+			// delete manufacturer
+			getParameterizedQuery(generateDeleteQuery(IngredientsTable.table,
+					BinaryCondition.equalTo(IngredientsTable.ingredientIDCol, PARAM_MARK)), i.getId())
+							.executeUpdate();
+
+			// sign manufacturer's id as free
+			freeIDOfTable(IngredientsTable.table, (int) i.getId());
+
+			// END transaction
+			connectionCommitTransaction();
+		} catch (CriticalError | SQLException e) {
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
+		}
+
+	}
+
+	@Override
+	public void editIngredient(Integer sessionID, Ingredient newIngredient)
+			throws CriticalError, ClientNotConnected, IngredientNotExist {
+		log.info("SQL Public editIngredient: edit to ingredient: " + newIngredient + " (SESSION: " + sessionID
+				+ " )");
+
+		validateSessionEstablished(sessionID);
+
+		// START transaction
+		connectionStartTransaction();
+		try {
+			// READ part of transaction
+			if (!isIngredientExist(newIngredient.getId()))
+				throw new IngredientNotExist();
+
+			// WRITE part of transaction
+			// update manufacturer
+			UpdateQuery updateQuery = generateUpdateQuery(IngredientsTable.table,
+					BinaryCondition.equalTo(IngredientsTable.ingredientIDCol, PARAM_MARK));
+
+			updateQuery.addSetClause(IngredientsTable.ingredientNameCol, PARAM_MARK).validate();
+
+			getParameterizedQuery(updateQuery + "", newIngredient.getId(), newIngredient.getName()).executeUpdate();
+
+			// END transaction
+			connectionCommitTransaction();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
+		}
+
+	}
+	
+	@Override
+	public String getIngredientsList() throws CriticalError {
+
+		try {
+			ResultSet ingredientsResultSet = getParameterizedReadQuery(
+					new SelectQuery().addAllTableColumns(IngredientsTable.table).validate() + "", (Object[]) null)
+							.executeQuery();
+			
+			ingredientsResultSet.first();
+
+			return SQLJsonGenerator.allIngredientsListToJson(ingredientsResultSet);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		}
 	}
 
 	@Override
@@ -2909,23 +3057,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		return null;
 
-	}
-
-	@Override
-	public String getManufacturersList(Integer sessionID) throws ClientNotConnected, CriticalError {
-		validateSessionEstablished(sessionID);
-
-		try {
-			ResultSet manufacturerResultSet = getParameterizedReadQuery(
-					new SelectQuery().addAllTableColumns(ManufacturerTable.table).validate() + "", (Object[]) null)
-							.executeQuery();
-			manufacturerResultSet.first();
-
-			return SQLJsonGenerator.manufaturersListToJson(manufacturerResultSet);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new CriticalError();
-		}
 	}
 
 	@Override
