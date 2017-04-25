@@ -987,6 +987,28 @@ public class CommandExecuter {
 
 		log.info("Remove ingredient " + ingredient + " from system finished");
 	}
+	
+	private void editIngredient(SQLDatabaseConnection c) {
+		Ingredient ingredient = null;
+
+		log.info("Edit ingredient from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			ingredient = Serialization.deserialize(inCommandWrapper.getData(), Ingredient.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Edit Ingredient command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to edit ingredient " + ingredient);
+
+		//TODO Noam - Call sql function here, don't forget to validate that sender ID is manager
+
+		log.info("Edit ingredient " + ingredient + " from system finished");
+	}
 
 	private void addNewManufacturer(SQLDatabaseConnection c) {
 		Manufacturer manufacturer = null;
@@ -1030,6 +1052,28 @@ public class CommandExecuter {
 		//TODO Noam - Call sql function here
 
 		log.info("Remove manufacturer " + manufacturer + " from system finished");
+	}
+	
+	private void editManufacturer(SQLDatabaseConnection c) {
+		Manufacturer manufacturer = null;
+
+		log.info("Edit manufacturer from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			manufacturer = Serialization.deserialize(inCommandWrapper.getData(), Manufacturer.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Edit Manufacturer command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to edit manufacturer " + manufacturer);
+
+		//TODO Noam - Call sql function here
+
+		log.info("Edit manufacturer " + manufacturer + " to system finished");
 	}
 		
 	private void getAllManufacturers(SQLDatabaseConnection c) {
@@ -1203,8 +1247,18 @@ public class CommandExecuter {
 
 			break;
 			
+		case EDIT_INGREDIENT:
+			editIngredient(c);
+
+			break;
+			
 		case ADD_MANUFACTURER:
 			addNewManufacturer(c);
+
+			break;
+			
+		case EDIT_MANUFACTURER:
+			editManufacturer(c);
 
 			break;
 			

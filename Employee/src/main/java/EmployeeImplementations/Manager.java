@@ -208,6 +208,28 @@ public class Manager extends Worker implements IManager {
 	}
 
 	@Override
+	public void editIngredient(Ingredient w)
+			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist {
+		log.info("Creating editIngredient command wrapper with Ingredient: " + w);
+		String serverResponse = sendRequestWithRespondToServer(
+				(new CommandWrapper(clientId, CommandDescriptor.EDIT_INGREDIENT, Serialization.serialize(w)))
+						.serialize());
+
+		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+
+		try {
+			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
+				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
+			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			¢.printStackTrace();
+		}
+
+		log.info("editIngredient command succeed.");	
+	}
+	
+	@Override
 	public void addManufacturer(Manufacturer m)
 			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDAlreadyExists {
 		log.info("Creating addManufacturer command wrapper with Manufacturer: " + m);
@@ -251,6 +273,28 @@ public class Manager extends Worker implements IManager {
 		log.info("removeManufacturer command succeed.");		
 	}
 
+	@Override
+	public void editManufacturer(Manufacturer m)
+			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist {
+		log.info("Creating editManufacturer command wrapper with Manufacturer: " + m);
+		String serverResponse = sendRequestWithRespondToServer(
+				(new CommandWrapper(clientId, CommandDescriptor.EDIT_MANUFACTURER, Serialization.serialize(m)))
+						.serialize());
+
+		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+
+		try {
+			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
+				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
+			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			¢.printStackTrace();
+		}
+
+		log.info("editManufacturer command succeed.");		
+	}
+	
 	@Override
 	public List<Manufacturer> getAllManufacturers()
 			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure {

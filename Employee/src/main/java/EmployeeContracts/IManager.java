@@ -143,7 +143,7 @@ public interface IManager extends IWorker {
 	/**
 	 * Manager remove Manufacturer.
 	 * 
-	 * @param Ingredient
+	 * @param Manufacturer
 	 * @return void
 	 * @throws EmployeeNotConnected 
 	 * @throws CriticalError 
@@ -179,4 +179,32 @@ public interface IManager extends IWorker {
 	 * @throws ConnectionFailure 
 	 */
 	List<Ingredient> getAllIngredients() throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure;
+
+	/**
+	 * Manager edit Manufacturer.
+	 * 
+	 * @param Manufacturer
+	 * @return void
+	 * @throws EmployeeNotConnected 
+	 * @throws CriticalError 
+	 * @throws UnknownSenderID 
+	 * @throws InvalidParameter 
+	 * @throws ConnectionFailure 
+	 * @throws ParamIDDoesNotExist 
+	 */
+	void editManufacturer(Manufacturer m) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist;
+
+	/**
+	 * Manager edit Manufacturer.
+	 * 
+	 * @param Manufacturer
+	 * @return void
+	 * @throws EmployeeNotConnected 
+	 * @throws CriticalError 
+	 * @throws UnknownSenderID 
+	 * @throws InvalidParameter 
+	 * @throws ConnectionFailure 
+	 * @throws ParamIDDoesNotExist 
+	 */
+	void editIngredient(Ingredient w) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist;
 }

@@ -362,6 +362,25 @@ public enum CommandDescriptor {
 	REMOVE_INGREDIENT,
 	
 	/**
+	 * Description: edit Ingredient, ID must exist in the system and will be updated according to param1
+	 * param1: Ingredient.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *			PARAM_ID_IS_NOT_EXIST,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can remove ingredient.
+	 */
+	EDIT_INGREDIENT,
+	
+	/**
 	 * Description: Employee / Customer gets list of all ingredients.
 	 * param1: void.
 	 * retval: List of ingredients.
@@ -413,6 +432,25 @@ public enum CommandDescriptor {
 	 * 1. Only Manager can remove manufacturer.
 	 */
 	REMOVE_MANUFACTURER,
+	
+	/**
+	 * Description: edit existing manufacturer - the ID must exists in the system and will be updated with new name
+	 * param1: Manufacturer.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *			PARAM_ID_IS_NOT_EXIST,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can remove manufacturer.
+	 */
+	EDIT_MANUFACTURER,
 	
 	/**
 	 * Description: Employee gets list of all manufacturers.
