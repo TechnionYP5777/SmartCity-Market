@@ -914,9 +914,9 @@ public class CommandExecuter {
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST);
 		} catch (IngredientNotExist e) {
-			log.fatal("Register new customer command failed, client try to use not existed ingredient");
+			log.info("Register new customer command failed, client try to use not existed ingredient");
 
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
 		}
 
 
