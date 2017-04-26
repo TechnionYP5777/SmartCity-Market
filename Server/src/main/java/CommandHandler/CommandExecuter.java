@@ -20,6 +20,7 @@ import SQLDatabase.SQLDatabaseException.GroceryListIsEmpty;
 import SQLDatabase.SQLDatabaseException.IngredientNotExist;
 import SQLDatabase.SQLDatabaseException.IngredientStillUsed;
 import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
+import SQLDatabase.SQLDatabaseException.ManufacturerStillUsed;
 import SQLDatabase.SQLDatabaseException.NoGroceryListToRestore;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductAlreadyExistInCatalog;
@@ -1095,7 +1096,7 @@ public class CommandExecuter {
 	private void addNewManufacturer(SQLDatabaseConnection c) {
 		Manufacturer manufacturer = null;
 
-		log.info("Register new manufacturer from serderID " + inCommandWrapper.getSenderID() + " command called");
+		log.info("Add new manufacturer from serderID " + inCommandWrapper.getSenderID() + " command called");
 
 		try {
 			manufacturer = Serialization.deserialize(inCommandWrapper.getData(), Manufacturer.class);
@@ -1109,7 +1110,18 @@ public class CommandExecuter {
 
 		log.info("Trying to add new manufacturer " + manufacturer + " to system");
 
-		//TODO Noam - Call sql function here
+		try {
+			String manufacturerResult = c.addManufacturer(inCommandWrapper.getSenderID(), manufacturer.getName());
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, manufacturerResult);
+		} catch (CriticalError e) {
+			log.fatal("Add new manufacturer command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientNotConnected e) {
+			log.info("Add new manufacturer command failed, client is not connected");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		}
 
 		log.info("Add new manufacturer " + manufacturer + " to system finished");
 	}
@@ -1131,7 +1143,30 @@ public class CommandExecuter {
 
 		log.info("Trying to remove manufacturer " + manufacturer + " from system");
 
-		//TODO Noam - Call sql function here
+		try {
+			c.removeManufacturer(inCommandWrapper.getSenderID(), manufacturer);
+		} catch (CriticalError e) {
+			log.fatal("Remove manufacturer command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientNotConnected e) {
+			log.info("Remove manufacturer command failed, client is not connected");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		} catch (ManufacturerNotExist e) {
+			log.info("Remove manufacturer customer command failed, manufacturer does not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.PARAM_ID_IS_NOT_EXIST);
+		} catch (ManufacturerStillUsed e) {
+			log.info("Remove manufacturer customer command failed, manufacturer still in use");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_MANUFACTURER_STILL_IN_USE);
+		}
+		
+
+		log.info("Remove ingredient customer command failed, ingredient still in use");
+
+		outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE);
 
 		log.info("Remove manufacturer " + manufacturer + " from system finished");
 	}
@@ -1153,15 +1188,41 @@ public class CommandExecuter {
 
 		log.info("Trying to edit manufacturer " + manufacturer);
 
-		//TODO Noam - Call sql function here
+		try {
+			c.editManufacturer(inCommandWrapper.getSenderID(), manufacturer);
+		} catch (CriticalError e) {
+			log.fatal("Edit manufacturer command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientNotConnected e) {
+			log.info("Edit manufacturer command failed, client is not connected");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		} catch (ManufacturerNotExist e) {
+			log.info("Edit manufacturer customer command failed, manufacturer does not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.PARAM_ID_IS_NOT_EXIST);
+		}
 
 		log.info("Edit manufacturer " + manufacturer + " to system finished");
 	}
 		
 	private void getAllManufacturers(SQLDatabaseConnection c) {
 		log.info("Get all manufacturers from serderID " + inCommandWrapper.getSenderID() + " command called");
+		
+		try {
+			String manufacturersList = c.getManufacturersList(inCommandWrapper.getSenderID());
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, manufacturersList);
+		} catch (ClientNotConnected e) {
+			log.info("Get all manufacturers command failed, client is not connected");
 
-		//TODO Noam - Call sql function here
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		} catch (CriticalError e) {
+			log.fatal("Get all manufacturers command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		}
+		
 				
 		log.info("Get all manufacturers from system finished");
 	}

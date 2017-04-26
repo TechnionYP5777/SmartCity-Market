@@ -326,7 +326,7 @@ public enum CommandDescriptor {
 	/**
 	 * Description: Register new ingredient to the system.
 	 * param1: Ingredient (only name is used)
-	 * retval: new Ingredient with the given name and the id assigned to it
+	 * retval: new Ingredient with the given name and the id generated to it by server
 	 *
 	 * result_codes:
 	 * 		success:
@@ -398,7 +398,7 @@ public enum CommandDescriptor {
 	/**
 	 * Description: Add new manufacturer to the system.
 	 * param1: Manufacturer.
-	 * retval: void.
+	 * retval: new manufacturer with the given name and the id generated to it by server
 	 *
 	 * result_codes:
 	 * 		success:
@@ -406,7 +406,6 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 * 			SM_SENDER_IS_NOT_CONNECTED,
-	 * 			PARAM_ID_ALREADY_EXISTS,
 	 *	 		SM_INVALID_PARAMETER,
 	 *
 	 *	 ***** NOTES *****
