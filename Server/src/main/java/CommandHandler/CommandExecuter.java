@@ -962,7 +962,21 @@ public class CommandExecuter {
 
 		log.info("Trying to update customer " + profile + " to system");
 
-		//TODO Noam - Call sql function here
+		try {
+			c.setCustomerProfile(profile.getUserName(), profile);
+		} catch (CriticalError e) {
+			log.fatal("Update customer command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientNotExist e) {
+			log.info("Update customer command failed, client is not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST);
+		} catch (IngredientNotExist e) {
+			log.info("Update customer command failed, client try to use not existed ingredient");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+		}
 
 		log.info("Update customer " + profile + " to system finished");
 	}

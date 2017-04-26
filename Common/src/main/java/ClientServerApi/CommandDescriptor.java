@@ -551,7 +551,7 @@ public enum CommandDescriptor {
 	REGISTER_NEW_CUSTOMER,
 		
 	/**
-	 * Description: Update Customer in the system.
+	 * Description: Update Customer in the system. this command update any detail except to the password and ForgetPassword structure
 	 * param1: CustomerProfile.
 	 * retval: void.
 	 *
@@ -560,7 +560,7 @@ public enum CommandDescriptor {
 	 * 			SM_OK,
 	 * 		
 	 * 		failure:
-	 *			SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD,,
+	 *			SM_USERNAME_DOES_NOT_EXIST,
 	 *			SM_SENDER_IS_NOT_CONNECTED,
 	 *	 		SM_INVALID_PARAMETER,
 	 *
