@@ -1230,7 +1230,16 @@ public class CommandExecuter {
 	private void getAllIngredients(SQLDatabaseConnection c) {
 		log.info("Get all ingredeints from serderID " + inCommandWrapper.getSenderID() + " command called");
 
-		//TODO Noam - Call sql function here
+		String ingredientsList;
+		try {
+			ingredientsList = c.getIngredientsList();
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, ingredientsList);
+		} catch (CriticalError e) {
+			log.fatal("Get all manufacturers command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		}
+		
 				
 		log.info("Get all ingredeints from system finished");
 	}
