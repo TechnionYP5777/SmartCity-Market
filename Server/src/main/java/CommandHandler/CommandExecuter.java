@@ -1073,7 +1073,21 @@ public class CommandExecuter {
 
 		log.info("Trying to edit ingredient " + ingredient);
 
-		//TODO Noam - Call sql function here, don't forget to validate that sender ID is manager
+		try {
+			c.editIngredient(inCommandWrapper.getSenderID(), ingredient);
+		} catch (CriticalError e) {
+			log.fatal("Edit ingredient command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientNotConnected e) {
+			log.info("Edit ingredient customer command failed, client is not connected");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		} catch (IngredientNotExist e) {
+			log.info("Edit ingredient customer command failed, ingredient does not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.PARAM_ID_IS_NOT_EXIST);
+		}
 
 		log.info("Edit ingredient " + ingredient + " from system finished");
 	}
