@@ -28,7 +28,9 @@ import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
 import UtilsImplementations.Serialization;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
+import SQLDatabase.SQLDatabaseException.ClientAlreadyExist;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
+import SQLDatabase.SQLDatabaseException.ClientNotExist;
 
 /**
  * CommandExecuter - This structure will execute the given command the clients.
@@ -895,7 +897,28 @@ public class CommandExecuter {
 
 		log.info("Trying to register new customer " + profile + " to system");
 
-		//TODO Noam - Call sql function here
+		try {
+			c.registerCustomer(profile.getUserName(), profile.getPassword());
+			c.setCustomerProfile(profile.getUserName(), profile);
+			c.setSecurityQACustomer(profile.getUserName(), profile.getForgetPassword());
+		} catch (CriticalError e) {
+			log.fatal("Register new customer command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientAlreadyExist e) {
+			log.info("Register new customer command failed, client is not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_ALREADY_EXISTS);
+		} catch (ClientNotExist e) {
+			log.info("Register new customer command failed, client is not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST);
+		} catch (IngredientNotExist e) {
+			log.fatal("Register new customer command failed, client try to use not existed ingredient");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		}
+
 
 		log.info("Register new customer " + profile + " to system finished");
 	}
