@@ -325,8 +325,8 @@ public enum CommandDescriptor {
 	
 	/**
 	 * Description: Register new ingredient to the system.
-	 * param1: Ingredient.
-	 * retval: void.
+	 * param1: Ingredient (only name is used)
+	 * retval: new Ingredient with the given name and the id assigned to it
 	 *
 	 * result_codes:
 	 * 		success:
@@ -334,7 +334,6 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 * 			SM_SENDER_IS_NOT_CONNECTED,
-	 * 			PARAM_ID_ALREADY_EXISTS,
 	 *	 		SM_INVALID_PARAMETER,
 	 *
 	 *	 ***** NOTES *****

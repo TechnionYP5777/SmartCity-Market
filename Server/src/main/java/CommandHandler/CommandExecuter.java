@@ -983,8 +983,9 @@ public class CommandExecuter {
 	
 	private void addNewIngredient(SQLDatabaseConnection c) {
 		Ingredient ingredient = null;
+		String ingredientResult = null;
 
-		log.info("Register new ingredient from serderID " + inCommandWrapper.getSenderID() + " command called");
+		log.info("Add new ingredient from serderID " + inCommandWrapper.getSenderID() + " command called");
 
 		try {
 			ingredient = Serialization.deserialize(inCommandWrapper.getData(), Ingredient.class);
@@ -998,7 +999,18 @@ public class CommandExecuter {
 
 		log.info("Trying to add new ingredient " + ingredient + " to system");
 
-		//TODO Noam - Call sql function here
+		try {
+			ingredientResult = c.addIngredient(inCommandWrapper.getSenderID(), ingredient.getName());
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, ingredientResult);
+		} catch (CriticalError e) {
+			log.fatal("Add new ingredient command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientNotConnected e) {
+			log.info("Add new ingredient customer command failed, client is not connected");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		}
 
 		log.info("Add new ingredient " + ingredient + " to system finished");
 	}
