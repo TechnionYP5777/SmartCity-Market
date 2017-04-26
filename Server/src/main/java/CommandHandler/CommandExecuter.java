@@ -18,6 +18,7 @@ import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.GroceryListIsEmpty;
 import SQLDatabase.SQLDatabaseException.IngredientNotExist;
+import SQLDatabase.SQLDatabaseException.IngredientStillUsed;
 import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
 import SQLDatabase.SQLDatabaseException.NoGroceryListToRestore;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
@@ -1032,7 +1033,25 @@ public class CommandExecuter {
 
 		log.info("Trying to remove ingredient " + ingredient + " from system");
 
-		//TODO Noam - Call sql function here, don't forget to validate that sender ID is manager or the client is trying to delete itself
+		try {
+			c.removeIngredient(inCommandWrapper.getSenderID(), ingredient);
+		} catch (CriticalError e) {
+			log.fatal("Remove ingredient command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientNotConnected e) {
+			log.info("Remove ingredient customer command failed, client is not connected");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		} catch (IngredientNotExist e) {
+			log.info("Remove ingredient customer command failed, ingredient does not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.PARAM_ID_IS_NOT_EXIST);
+		} catch (IngredientStillUsed e) {
+			log.info("Remove ingredient customer command failed, ingredient still in use");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE);
+		}
 
 		log.info("Remove ingredient " + ingredient + " from system finished");
 	}

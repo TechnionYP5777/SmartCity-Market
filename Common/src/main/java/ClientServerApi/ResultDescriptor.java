@@ -211,4 +211,28 @@ public enum ResultDescriptor {
 	 * 
 	 */
 	PARAM_ID_IS_NOT_EXIST,
+	
+	/**
+	 * The ingredient is still in use in the system
+	 * 
+	 * How to fix:
+	 * 1. Tell the manager that the given ingredient still used in products or in customers profiles
+	 * 		a. Remove the Ingredient anyway and remove all existing occurences in the system.
+	 * 		b. Abort operation.
+	 * 
+	 */
+	SM_INGREDIENT_STILL_IN_USE,
+	
+	/**
+	 * The manufacturer is still in use in the system
+	 * 
+	 * How to fix:
+	 * 1. Tell the manager that the given product still available for sale and he may choose:
+	 * 		a. Change the given manager.
+	 * 		b. Abort operation.
+	 * 
+	 */
+	SM_MANUFACTURER_STILL_IN_USE,
+	
+	
 }

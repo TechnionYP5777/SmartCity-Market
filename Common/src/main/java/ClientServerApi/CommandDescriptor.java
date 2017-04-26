@@ -353,6 +353,7 @@ public enum CommandDescriptor {
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
 	 *			PARAM_ID_IS_NOT_EXIST,
+	 *			SM_INGREDIENT_STILL_IN_USE,
 	 *	 		SM_INVALID_PARAMETER,
 	 *
 	 *	 ***** NOTES *****
@@ -425,6 +426,7 @@ public enum CommandDescriptor {
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
 	 *			PARAM_ID_IS_NOT_EXIST,
+	 *			SM_MANUFACTURER_STILL_IN_USE,
 	 *	 		SM_INVALID_PARAMETER,
 	 *
 	 *	 ***** NOTES *****
