@@ -145,7 +145,7 @@ public enum CommandDescriptor {
 	VIEW_PRODUCT_FROM_CATALOG,
 	
 	/**
-	 * Description: Register new Customer to the system.
+	 * Description: Remove Customer from the system.
 	 * param1: String - username.
 	 * retval: void.
 	 *
@@ -154,16 +154,15 @@ public enum CommandDescriptor {
 	 * 			SM_OK,
 	 * 		
 	 * 		failure:
-	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *			SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD,
+	 *			SM_USERNAME_DOES_NOT_EXIST,
 	 *	 		SM_INVALID_PARAMETER,
 	 *
 	 *	 ***** NOTES *****
-	 * 1. Only a connected Client / Manager can remove the Customer from system.
+	 * 1. Only a Manager can remove the Customer from system.
 	 * 2. The command will disconnect the Customer from system if needed.
 	 * 3. Can't remove "Guest" from system (will result in SM_INVALID_PARAMETER)
 	 */
-	REMOVE_CUSTOMER,
+	REMOVE_CUSTOMER, 
 	
 	/********************************** Employee commands **********************************/
 	

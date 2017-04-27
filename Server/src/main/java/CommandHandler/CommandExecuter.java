@@ -10,6 +10,7 @@ import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
+import ClientServerApi.ClientServerDefs;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
@@ -939,10 +940,27 @@ public class CommandExecuter {
 
 			return;
 		}
+		
+		if (ClientServerDefs.anonymousCustomerUsername.equals(username)){
+			log.info("Remove customer command failed, can't remove guest");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER);
+			return;
+		}
 
 		log.info("Trying to remove customer " + username + " from system");
 
-		//TODO Noam - Call sql function here, don't forget to validate that sender ID is manager or the client is trying to delete itself
+		try {
+			c.removeCustomer(username);
+		} catch (CriticalError e) {
+			log.fatal("Remove customer command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientNotExist e) {
+			log.info("Remove customer command failed, customer is not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST);
+		}
 
 		log.info("Remove customer " + username + " from system finished");
 	}
