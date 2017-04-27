@@ -162,7 +162,7 @@ public enum CommandDescriptor {
 	 * 2. The command will disconnect the Customer from system if needed.
 	 * 3. Can't remove "Guest" from system (will result in SM_INVALID_PARAMETER)
 	 */
-	REMOVE_CUSTOMER, 
+	REMOVE_CUSTOMER,
 	
 	/********************************** Employee commands **********************************/
 	

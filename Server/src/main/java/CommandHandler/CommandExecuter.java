@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
+import BasicCommonClasses.ForgetPassword;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
@@ -856,7 +857,21 @@ public class CommandExecuter {
 
 		log.info("Trying to register new worker " + login.getUserName() + " to system");
 
-		//TODO Noam - Call sql function here, don't forget to validate that sender ID is manager
+		try {
+			c.addWorker(inCommandWrapper.getSenderID(), login, new ForgetPassword("question", "answer"));
+		} catch (CriticalError e) {
+			log.fatal("Register new worker command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientAlreadyExist e) {
+			log.info("Register new worker command failed, worker already exists");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_ALREADY_EXISTS);
+		} catch (ClientNotConnected e) {
+			log.info("Register new worker command failed, manager is not connected");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		}
 
 		log.info("Register new worker " + login.getUserName() + " to system finished");
 	}
@@ -878,7 +893,21 @@ public class CommandExecuter {
 
 		log.info("Trying to remove worker " + username + " from system");
 
-		//TODO Noam - Call sql function here, don't forget to validate that sender ID is manager
+		try {
+			c.removeWorker(inCommandWrapper.getSenderID(), username);
+		} catch (CriticalError e) {
+			log.fatal("Remove worker command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientNotExist e) {
+			log.info("Remove worker command failed, worker is not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST);
+		} catch (ClientNotConnected e) {
+			log.info("Remove worker command failed, manager is not connected");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		}
 
 		log.info("Remove worker " + username + " from system finished");
 	}
@@ -909,13 +938,13 @@ public class CommandExecuter {
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 		} catch (ClientAlreadyExist e) {
-			log.info("Register new customer command failed, client is not exist");
+			log.info("Register new customer command failed, client already exists");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_ALREADY_EXISTS);
 		} catch (ClientNotExist e) {
-			log.info("Register new customer command failed, client is not exist");
+			log.fatal("Register new customer command failed, the sql report that the client not exists but i added it just now");
 
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST);
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 		} catch (IngredientNotExist e) {
 			log.info("Register new customer command failed, client try to use not existed ingredient");
 
