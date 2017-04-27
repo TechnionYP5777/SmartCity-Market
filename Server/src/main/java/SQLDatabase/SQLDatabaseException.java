@@ -192,4 +192,14 @@ public class SQLDatabaseException extends Exception {
 	public static class NumberOfConnectionsExceeded extends SQLDatabaseException {
 		private static final long serialVersionUID = 1L;
 	}
+	
+	/**
+	 * Thrown when parameter contain invalid input
+	 * InvalidParameter 
+	 * @author Noam Yefet 
+	 *
+	 */
+	public static class InvalidParameter extends SQLDatabaseException {
+		private static final long serialVersionUID = 1L;
+	}
 }

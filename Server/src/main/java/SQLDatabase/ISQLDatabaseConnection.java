@@ -4,6 +4,7 @@ import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.ForgetPassword;
 import BasicCommonClasses.Ingredient;
+import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
@@ -127,5 +128,11 @@ public interface ISQLDatabaseConnection {
 			throws CriticalError, ClientNotConnected, IngredientNotExist;
 
 	String getIngredientsList() throws CriticalError;
+
+	void removeCustomer(String username) throws CriticalError, ClientNotExist;
+
+	void addWorker(Integer sessionID, Login login, ForgetPassword security) throws CriticalError, ClientAlreadyExist, ClientNotConnected;
+
+	void removeWorker(Integer sessionID, String username) throws CriticalError, ClientNotExist, ClientNotConnected;
 
 }

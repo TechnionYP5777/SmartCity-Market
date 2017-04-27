@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
 
+import javax.swing.text.StyledEditorKit.ForegroundAction;
+
 import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
@@ -36,6 +38,7 @@ import BasicCommonClasses.ForgetPassword;
 import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
+import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
@@ -465,6 +468,50 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		}
 
 	}
+	
+	/**
+	 * Get the worker type by his username.
+	 * @param username
+	 * @return If this worker is exist - returns client type. else -
+	 *         returns null
+	 * @throws CriticalError
+	 */
+	private CLIENT_TYPE getWorkerTypeByUsername(String username) throws CriticalError {
+
+		if (username == null)
+			return null;
+
+		String query = generateSelectQuery1Table(WorkersTable.workertable,
+				BinaryCondition.equalTo(WorkersTable.workerusernameCol, PARAM_MARK));
+
+		PreparedStatement statement = getParameterizedReadQuery(query, username);
+
+		ResultSet result = null;
+		try {
+			log.debug("getWorkerTypeByUsername: check if client is worker/manager \nby execute query: " + statement);
+			result = statement.executeQuery();
+
+			// CASE: worker/manager
+			if (!isResultSetEmpty(result)) {
+
+				result.first();
+
+				int clientType = result.getInt(WorkersTable.workerPrivilegesCol.getColumnNameSQL());
+				log.debug("getWorkerTypeByUsername: worker found! worker type code from SQL: " + clientType);
+
+				return clientType != WORKERS_TABLE.VALUE_PRIVILEGE_MANAGER ? CLIENT_TYPE.WORKER : CLIENT_TYPE.MANAGER;
+			}
+			// CASE: none
+			log.info("getWorkerTypeByUsername: no such id!");
+			return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
+		} finally {
+			closeResources(statement, result);
+		}
+
+	}
 
 	/**
 	 * Check if the sessionID used in the system
@@ -737,6 +784,24 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		
 		setValueToRegisteredClient(t, username, t.sessionIDCol, sessionID);
 	}
+	
+	/**
+	 * remove the specified username from the given table
+	 * 
+	 * @param t the table to remove the username from
+	 * @param username the username to be deleted
+	 * @throws CriticalError
+	 * @throws SQLException 
+	 */
+	private void removeRegisteredClient(ClientsTable t, String username) throws CriticalError, SQLException {
+		
+		// remove all ingredients of client
+		PreparedStatement statement = getParameterizedQuery(
+				generateDeleteQuery(t.table, BinaryCondition.equalTo(ProductsCatalogIngredientsTable.barcodeCol, PARAM_MARK)),
+				username);
+		statement.executeUpdate();
+		
+	}
 
 	/**
 	 * set one field to registered client (worker/customer)
@@ -786,8 +851,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@SuppressWarnings("unchecked")
 	private<E,T> T getValueForRegisteredClient(ClientsTable from, DbColumn selectColumn, E selectValue, DbColumn getColumn) throws CriticalError {
-		
-		//TODO: refactor all relevant methods to use this method
 
 		log.info("getValueForRegisteredClient: trying to get value from tabel " + from);
 		
@@ -909,12 +972,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * 
 	 * @param t the table to assign the values to
 	 * @param username the username whose the values is to be assigned
-	 * @param forgetPassword object that contains the new values.
+	 * @param p object that contains the new values.
 	 * @throws CriticalError
 	 */
-	private void assignSecurityQAToRegisteredClient(ClientsTable t, String username, ForgetPassword forgetPassword) throws CriticalError {
-		setValueToRegisteredClient(t, username, t.securityQuestionCol, forgetPassword.getQuestion());
-		setValueToRegisteredClient(t, username, t.securityAnswerCol, forgetPassword.getAnswer());
+	private void assignSecurityQAToRegisteredClient(ClientsTable t, String username, ForgetPassword p) throws CriticalError {
+		setValueToRegisteredClient(t, username, t.securityQuestionCol, p.getQuestion());
+		setValueToRegisteredClient(t, username, t.securityAnswerCol, p.getAnswer());
 	}
 	
 	/**
@@ -1441,7 +1504,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * @param newSet The new set of ingredients to update to. cannot be null.
 	 * @throws CriticalError
 	 */
-	private void updateIngredientsForCustomer(String username, HashSet<Ingredient> newSet) throws CriticalError {
+	private void setIngredientsForCustomer(String username, HashSet<Ingredient> newSet) throws CriticalError {
 
 		PreparedStatement statement = null;
 		try {
@@ -1633,6 +1696,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	
 	private boolean isCustomerExist(String username) throws CriticalError {
 		return isSuchRowExist(CustomersTable.customertable, CustomersTable.customerusernameCol, username);
+	}
+	
+	private boolean isWorkerExist(String username) throws CriticalError {
+		return isSuchRowExist(WorkersTable.workertable, WorkersTable.workerusernameCol, username);
 	}
 
 	/**
@@ -1941,7 +2008,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			statement.executeUpdate();
 
 			//updating ingredients of customer
-			updateIngredientsForCustomer(username, p.getAllergens());
+			setIngredientsForCustomer(username, p.getAllergens());
 			
 			log.info("SQL Public setCustomerProfile: Success setting profile for username: " + username);
 
@@ -1959,6 +2026,152 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		} finally {
 			connectionEndTransaction();
 			closeResources(statement);
+		}
+	}
+	
+	@Override
+	public void removeCustomer(String username) throws CriticalError, ClientNotExist{
+		log.info("SQL Public removeCustomer: Remove customer with username: " + username);
+		
+		if (!isCustomerExist(username)){
+			log.info("SQL Public removeCustomer: no such customer with username: " + username);
+			throw new ClientNotExist();
+		}
+		
+		try {		
+			// START transaction
+			connectionStartTransaction();
+			
+			//Read part of transaction
+			Integer customerSessionID = getValueForRegisteredClient(new CustomersTable(), CustomersTable.customerusernameCol
+					,username, CustomersTable.customersessionIDCol);
+			
+			//Write part of transaction
+			if (customerSessionID != null){
+				log.info("SQL Public removeCustomer: user " + username + " connected! doing logout first");
+				logoutAsCart(customerSessionID);
+			}
+			
+			log.info("SQL Public removeCustomer: remove user " + username + " from customers table and his ingredients");
+			setIngredientsForCustomer(username, new HashSet<>());
+			removeRegisteredClient(new CustomersTable(), username);
+			
+			log.info("SQL Public removeCustomer: Success removing username: " + username);
+
+			// END transaction
+			connectionCommitTransaction();
+
+		} catch (SQLDatabaseException e) {
+			log.info("SQL Public removeCustomer: known error occured:" + e.getMessage());
+			connectionRollbackTransaction();
+			throw e;
+		} catch (SQLException e) {
+			log.fatal("SQL Public removeCustomer: SQL error occured:" + e.getMessage());
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
+		}
+	}
+	
+	@Override
+	public void addWorker(Integer sessionID, Login login, ForgetPassword security) throws CriticalError, ClientAlreadyExist, ClientNotConnected{
+		log.info("SQL Public addWorker: add new worker with username: " + login.getUserName());
+		
+		validateSessionEstablished(sessionID);
+		
+		if (isWorkerExist(login.getUserName())){
+			log.info("SQL Public addWorker: already exist worker with username: " + login.getUserName());
+			throw new ClientAlreadyExist();
+		}
+		
+		PreparedStatement statement = null;
+		try {		
+			// START transaction
+			connectionStartTransaction();
+			
+			//Write part of transaction
+			String insertCustomerQuery = new InsertQuery(WorkersTable.workertable)
+					.addColumn(WorkersTable.workerusernameCol, PARAM_MARK)
+					.addColumn(WorkersTable.workerpasswordCol, PARAM_MARK)
+					.addColumn(WorkersTable.workerPrivilegesCol, PARAM_MARK)
+					.addColumn(WorkersTable.workersecurityQuestionCol, PARAM_MARK)
+					.addColumn(WorkersTable.workersecurityAnswerCol, PARAM_MARK)
+					.addColumn(WorkersTable.workerisLoggedInCol, PARAM_MARK).validate() + "";
+
+			statement = getParameterizedQuery(insertCustomerQuery, login.getUserName(), login.getPassword(),
+					WORKERS_TABLE.VALUE_PRIVILEGE_WORKER, security.getQuestion(), security.getAnswer(), 0);
+
+			statement.executeUpdate();
+
+			log.info("SQL Public addWorker: worker " + login.getUserName() + "added successfuly");
+			// END transaction
+			connectionCommitTransaction();
+
+		} catch (SQLDatabaseException e) {
+			// NOTE: all exceptions flows here - for doing rollback
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw e;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
+			closeResources(statement);
+		}
+	}
+	
+	@Override
+	public void removeWorker(Integer sessionID, String username) throws CriticalError, ClientNotExist, ClientNotConnected{
+		log.info("SQL Public removeWorker: Remove worker with username: " + username);
+		
+		validateSessionEstablished(sessionID);
+		
+		if (!isWorkerExist(username)){
+			log.info("SQL Public removeWorker: no such worker with username: " + username);
+			throw new ClientNotExist();
+		}
+		
+		//validate not deleting the admin
+		if (getWorkerTypeByUsername(username) == CLIENT_TYPE.MANAGER){
+			log.info("SQL Public removeWorker: cant remove the manager!");
+			throw new CriticalError();
+		}
+		
+		try {		
+			// START transaction
+			connectionStartTransaction();
+			
+			//Read part of transaction
+			Integer workerSessionID = getValueForRegisteredClient(new WorkersTable(), WorkersTable.workerusernameCol
+					,username, WorkersTable.workersessionIDCol);
+			
+			//Write part of transaction
+			if (workerSessionID != null){
+				log.info("SQL Public removeWorker: user " + username + " connected! doing logout first");
+				logoutAsWorker(workerSessionID, username);
+			}
+			
+			log.info("SQL Public removeWorker: remove user " + username + " from workers table");
+			removeRegisteredClient(new WorkersTable(), username);
+			
+			log.info("SQL Public removeWorker: Success removing username: " + username);
+
+			// END transaction
+			connectionCommitTransaction();
+
+		} catch (SQLDatabaseException e) {
+			log.info("SQL Public removeCustomer: known error occured:" + e.getMessage());
+			connectionRollbackTransaction();
+			throw e;
+		} catch (SQLException e) {
+			log.fatal("SQL Public removeCustomer: SQL error occured:" + e.getMessage());
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
 		}
 	}
 	
@@ -2041,7 +2254,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 	
 	@Override
-	public void setSecurityQACustomer(String username, ForgetPassword forgetPassword) throws CriticalError, ClientNotExist{
+	public void setSecurityQACustomer(String username, ForgetPassword p) throws CriticalError, ClientNotExist{
 		log.info("SQL Public setSecurityQACustomer: Customer: " + username + " sets security Q&A.");
 		
 		if (!isCustomerExist(username)){
@@ -2055,7 +2268,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			
 			//Write part of transaction
 			//updating security question and answer
-			assignSecurityQAToRegisteredClient(new CustomersTable(), username, forgetPassword);
+			assignSecurityQAToRegisteredClient(new CustomersTable(), username, p);
 
 			log.info("SQL Public setSecurityQACustomer: Success setting ecurity Q&A for username: " + username);
 
@@ -2138,9 +2351,13 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			if (getClientTypeBySessionID(sessionID) == CLIENT_TYPE.CART) {
 				log.info("SQL Public workerLogout: logout as Cart");
 				logoutAsCart(sessionID);
-			} else {
+			} else if (getClientTypeBySessionID(sessionID) != CLIENT_TYPE.CUSTOMER) {
 				log.info("SQL Public workerLogout: logout as Worker/Manager");
 				logoutAsWorker(sessionID, username);
+			} else {
+				log.info("SQL Public workerLogout: logout as Customer");
+				logoutAsCart(sessionID);
+				setValueToRegisteredClient(new CustomersTable(), username, CustomersTable.customersessionIDCol, null);
 			}
 
 			// END transaction
