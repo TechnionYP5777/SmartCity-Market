@@ -137,8 +137,8 @@ public interface ISQLDatabaseConnection {
 
 	String getWorkersList(Integer sessionID) throws ClientNotConnected, CriticalError;
 
-	String isCustomerUsernameAvailable(String username) throws CriticalError;
+	boolean isCustomerUsernameAvailable(String username) throws CriticalError;
 
-	String isWorkerUsernameAvailable(String username) throws CriticalError;
+	boolean isWorkerUsernameAvailable(String username) throws CriticalError;
 
 }

@@ -1929,20 +1929,20 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 	
 	@Override
-	public String isCustomerUsernameAvailable(String username) throws  CriticalError {
+	public boolean isCustomerUsernameAvailable(String username) throws  CriticalError {
 
 		log.info("SQL Public isCustomerUsernameAvailable: check availability of username: " + username);
 
-		return new Gson().toJson(!isCustomerExist(username));
+		return !isCustomerExist(username);
 
 	}
 	
 	@Override
-	public String isWorkerUsernameAvailable(String username) throws  CriticalError {
+	public boolean isWorkerUsernameAvailable(String username) throws  CriticalError {
 
 		log.info("SQL Public isCustomerUsernameAvailable: check availability of username: " + username);
 
-		return new Gson().toJson(!isWorkerExist(username));
+		return !isWorkerExist(username);
 	}
 	
 	@Override

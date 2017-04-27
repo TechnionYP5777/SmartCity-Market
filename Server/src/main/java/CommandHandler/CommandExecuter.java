@@ -1306,7 +1306,17 @@ public class CommandExecuter {
 			return;
 		}
 		
-		//TODO Noam - Call sql function here - is username dosen't exit put SM_USERNAME_ALREADY_EXISTS in result descriptor
+		try {
+			if (c.isCustomerUsernameAvailable(username)) {
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
+			} else {
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_ALREADY_EXISTS);
+			}
+		} catch (CriticalError e) {
+			log.fatal("Is free customer username command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		}
 				
 		log.info("Is free customer username command system finished, username " + username + " is free");
 	}
