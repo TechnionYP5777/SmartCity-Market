@@ -1,6 +1,7 @@
 package UtilsImplementations;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import com.google.gson.Gson;
@@ -38,12 +39,22 @@ public class Serialization {
 		return result;
 	}
 	
-	public static HashSet<Manufacturer> deserializeManufacturerstHashSet(String hashsetToDeserialize){
+	public static HashSet<Manufacturer> deserializeManufacturersHashSet(String hashsetToDeserialize){
 		Gson gson = new Gson();
 
 		Type hashsetType = new TypeToken<HashSet<Manufacturer>>(){}.getType();
 
 		HashSet<Manufacturer> result = gson.fromJson(hashsetToDeserialize, hashsetType);
+		
+		return result;
+	}
+	
+	public static HashMap<String,Boolean> deserializeWorkersHashMap(String hashmapToDeserialize){
+		Gson gson = new Gson();
+
+		Type hashsetType = new TypeToken<HashMap<String,Boolean>>(){}.getType();
+
+		HashMap<String,Boolean> result = gson.fromJson(hashmapToDeserialize, hashsetType);
 		
 		return result;
 	}
