@@ -135,4 +135,6 @@ public interface ISQLDatabaseConnection {
 
 	void removeWorker(Integer sessionID, String username) throws CriticalError, ClientNotExist, ClientNotConnected;
 
+	String getWorkersList(Integer sessionID) throws ClientNotConnected, CriticalError;
+
 }

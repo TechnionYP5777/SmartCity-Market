@@ -10,10 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
-
-import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 import org.apache.log4j.Logger;
 
@@ -67,11 +66,7 @@ import SQLDatabase.SQLDatabaseStrings.PRODUCTS_PACKAGES_TABLE;
 import SQLDatabase.SQLDatabaseStrings.WORKERS_TABLE;
 import UtilsImplementations.Serialization;
 
-import static SQLDatabase.SQLQueryGenerator.generateSelectQuery1Table;
-import static SQLDatabase.SQLQueryGenerator.generateSelectLeftJoinWithQuery2Tables;
-import static SQLDatabase.SQLQueryGenerator.generateSelectInnerJoinWithQuery2Tables;
-import static SQLDatabase.SQLQueryGenerator.generateUpdateQuery;
-import static SQLDatabase.SQLQueryGenerator.generateDeleteQuery;
+import static SQLDatabase.SQLQueryGenerator.*;
 
 /**
  * SqlDBConnection - Handles the server request to the SQL database.
@@ -797,7 +792,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		
 		// remove all ingredients of client
 		PreparedStatement statement = getParameterizedQuery(
-				generateDeleteQuery(t.table, BinaryCondition.equalTo(ProductsCatalogIngredientsTable.barcodeCol, PARAM_MARK)),
+				generateDeleteQuery(t.table, BinaryCondition.equalTo(t.usernameCol, PARAM_MARK)),
 				username);
 		statement.executeUpdate();
 		
@@ -880,6 +875,19 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		} finally {
 			closeResources(statement, result);
 		}
+	}
+	
+	/**
+	 * get sessionId of registered client (customer/worker)
+	 * 
+	 * @param t the table to get the value from
+	 * @param username the username of the desired sessionID
+	 * @return if client connected - returns its sessionID, else - returns null
+	 * @throws CriticalError
+	 */
+	private Integer getSessionByUsernameOfRegisteredClient(ClientsTable t, String username) throws CriticalError {
+		return getValueForRegisteredClient(t, t.usernameCol
+				,username, t.sessionIDCol);
 	}
 
 	/**
@@ -2043,8 +2051,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			connectionStartTransaction();
 			
 			//Read part of transaction
-			Integer customerSessionID = getValueForRegisteredClient(new CustomersTable(), CustomersTable.customerusernameCol
-					,username, CustomersTable.customersessionIDCol);
+			Integer customerSessionID = getSessionByUsernameOfRegisteredClient(new CustomersTable(), username);
 			
 			//Write part of transaction
 			if (customerSessionID != null){
@@ -2073,15 +2080,17 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			connectionEndTransaction();
 		}
 	}
+
+
 	
 	@Override
-	public void addWorker(Integer sessionID, Login login, ForgetPassword security) throws CriticalError, ClientAlreadyExist, ClientNotConnected{
-		log.info("SQL Public addWorker: add new worker with username: " + login.getUserName());
+	public void addWorker(Integer sessionID, Login l, ForgetPassword security) throws CriticalError, ClientAlreadyExist, ClientNotConnected{
+		log.info("SQL Public addWorker: add new worker with username: " + l.getUserName());
 		
 		validateSessionEstablished(sessionID);
 		
-		if (isWorkerExist(login.getUserName())){
-			log.info("SQL Public addWorker: already exist worker with username: " + login.getUserName());
+		if (isWorkerExist(l.getUserName())){
+			log.info("SQL Public addWorker: already exist worker with username: " + l.getUserName());
 			throw new ClientAlreadyExist();
 		}
 		
@@ -2099,12 +2108,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 					.addColumn(WorkersTable.workersecurityAnswerCol, PARAM_MARK)
 					.addColumn(WorkersTable.workerisLoggedInCol, PARAM_MARK).validate() + "";
 
-			statement = getParameterizedQuery(insertCustomerQuery, login.getUserName(), login.getPassword(),
+			statement = getParameterizedQuery(insertCustomerQuery, l.getUserName(), l.getPassword(),
 					WORKERS_TABLE.VALUE_PRIVILEGE_WORKER, security.getQuestion(), security.getAnswer(), 0);
 
 			statement.executeUpdate();
 
-			log.info("SQL Public addWorker: worker " + login.getUserName() + "added successfuly");
+			log.info("SQL Public addWorker: worker " + l.getUserName() + "added successfuly");
 			// END transaction
 			connectionCommitTransaction();
 
@@ -2145,8 +2154,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			connectionStartTransaction();
 			
 			//Read part of transaction
-			Integer workerSessionID = getValueForRegisteredClient(new WorkersTable(), WorkersTable.workerusernameCol
-					,username, WorkersTable.workersessionIDCol);
+			Integer workerSessionID = getSessionByUsernameOfRegisteredClient(new WorkersTable(), username);
 			
 			//Write part of transaction
 			if (workerSessionID != null){
@@ -2172,6 +2180,34 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			throw new CriticalError();
 		} finally {
 			connectionEndTransaction();
+		}
+	}
+	
+	@Override
+	public String getWorkersList(Integer sessionID) throws ClientNotConnected, CriticalError {
+		log.info("SQL Public getWorkersList: retreiving workers list");
+		HashMap<String, Boolean> result = new HashMap<>();
+		
+		validateSessionEstablished(sessionID);
+
+		try {
+			log.debug("SQL Public getWorkersList: run sql query to get all workers");
+			ResultSet workersResultSet = getParameterizedReadQuery(
+					new SelectQuery().addAllTableColumns(WorkersTable.workertable).validate() + "", (Object[]) null)
+							.executeQuery();
+			workersResultSet.first();
+			
+			HashSet<String> workersNames = SQLJsonGenerator.createWorkersList(workersResultSet);
+			
+			log.debug("SQL Public getWorkersList: find if workers are connected");
+			for (String name : workersNames) 
+				result.put(name, isWorkerConnected(name));
+			
+
+			return Serialization.serialize(result);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new CriticalError();
 		}
 	}
 	

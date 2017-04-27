@@ -26,6 +26,7 @@ import SQLDatabase.SQLDatabaseEntities.ManufacturerTable;
 import SQLDatabase.SQLDatabaseEntities.ProductsCatalogIngredientsTable;
 import SQLDatabase.SQLDatabaseEntities.ProductsCatalogLocationsTable;
 import SQLDatabase.SQLDatabaseEntities.ProductsCatalogTable;
+import SQLDatabase.SQLDatabaseEntities.WorkersTable;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseStrings.LOCATIONS_TABLE;
 import UtilsImplementations.Serialization;
@@ -427,6 +428,37 @@ class SQLJsonGenerator {
 		}
 
 		return Serialization.serialize($);
+
+	}
+	
+	/**
+	 * convert workers list from ResultSet to list of workers usernames
+	 * 
+	 * @param workersList
+	 *            - ResultSet of the workersList. The ResultSet should
+	 *            point the first row. At returning, this object will point the
+	 *            next row after the last row.
+	 * @return workers usernames list
+	 * @throws CriticalError
+	 */
+	static HashSet<String> createWorkersList(ResultSet workersList) throws CriticalError {
+		HashSet<String> $ = new HashSet<>();
+
+		try {
+			if (workersList.getRow() != 0)
+				while (!workersList.isAfterLast()) {
+					
+					String workerUsername = getStringFromResultset(workersList,
+							WorkersTable.workerusernameCol);
+					$.add(workerUsername);
+					workersList.next();
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLDatabaseException.CriticalError();
+		}
+
+		return $;
 
 	}
 }

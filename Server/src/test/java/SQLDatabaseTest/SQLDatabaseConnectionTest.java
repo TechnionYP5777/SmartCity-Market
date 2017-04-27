@@ -18,8 +18,10 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.ForgetPassword;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
+import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
@@ -42,7 +44,9 @@ import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
 import UtilsImplementations.Serialization;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
+import SQLDatabase.SQLDatabaseException.ClientAlreadyExist;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
+import SQLDatabase.SQLDatabaseException.ClientNotExist;
 
 /**
  * @author Noam Yefet
@@ -727,7 +731,7 @@ public class SQLDatabaseConnectionTest {
 
 			HashSet<Manufacturer> list = new HashSet<>();
 
-			list = Serialization.deserializeManufacturerstHashSet(sqlConnection.getManufacturersList(null));
+			list = Serialization.deserializeManufacturersHashSet(sqlConnection.getManufacturersList(null));
 
 			assertTrue(list.contains(new Manufacturer(1, "תנובה")));
 			assertTrue(list.contains(new Manufacturer(2, "מאפיות ברמן")));
@@ -1351,7 +1355,7 @@ public class SQLDatabaseConnectionTest {
 		}
 		
 		assertNotNull(result);
-		HashSet<Manufacturer> set = Serialization.deserializeManufacturerstHashSet(result);
+		HashSet<Manufacturer> set = Serialization.deserializeManufacturersHashSet(result);
 		assertNotNull(set);	
 		assertTrue(set.contains(manufacturer));
 		
@@ -1365,7 +1369,7 @@ public class SQLDatabaseConnectionTest {
 		}
 		
 		assertNotNull(result);
-		set = Serialization.deserializeManufacturerstHashSet(result);
+		set = Serialization.deserializeManufacturersHashSet(result);
 		assertNotNull(set);
 		assertFalse(set.contains(manufacturer));
 	}
@@ -1385,6 +1389,110 @@ public class SQLDatabaseConnectionTest {
 			} catch (ManufacturerNotExist e) {
 			} 
 		
+
+	}
+	
+	@Test
+	public void testAddRemoveWorker() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String workerName = "workdebug";
+		String result = null;
+		
+		//test add worker
+		try {
+			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgetPassword("", ""));
+			
+			result = sqlConnection.getWorkersList(null);
+		} catch (CriticalError | ClientNotConnected | ClientAlreadyExist e) {
+			fail();
+		}
+		
+		assertNotNull(result);
+		HashMap<String, Boolean> map = Serialization.deserializeWorkersHashMap(result);
+		assertNotNull(map);	
+		assertTrue(map.containsKey(workerName));
+		assertEquals(false, map.get(workerName));
+		
+		//test remove worker
+		try {
+			sqlConnection.removeWorker(null, workerName);
+			
+			result = sqlConnection.getWorkersList(null);
+		} catch (CriticalError | ClientNotConnected | ClientNotExist  e) {
+			fail();
+		}
+		
+		
+		assertNotNull(result);
+		map = Serialization.deserializeWorkersHashMap(result);
+		assertNotNull(map);	
+		assertFalse(map.containsKey(workerName));
+
+	}
+	
+	@Test
+	public void testCantRemoveNotExistedWorker() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String workerName = "workdebug";
+		
+		try {
+			sqlConnection.removeWorker(null, workerName);
+			fail();
+		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		} catch (ClientNotExist e) {
+		}
+		
+	}
+	
+	@Test
+	public void testCantAddWorkerAlreadyExisted() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String workerName = "workdebug";
+		String result = null;
+		
+		//test add worker
+		try {
+			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgetPassword("", ""));
+			
+			result = sqlConnection.getWorkersList(null);
+		} catch (CriticalError | ClientNotConnected | ClientAlreadyExist e) {
+			fail();
+		}
+		
+		assertNotNull(result);
+		HashMap<String, Boolean> map = Serialization.deserializeWorkersHashMap(result);
+		assertNotNull(map);	
+		assertTrue(map.containsKey(workerName));
+		assertEquals(false, map.get(workerName));
+		
+		//test add again the same worker
+		try {
+			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgetPassword("", ""));
+			fail();
+		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		}
+		catch (ClientAlreadyExist e) {
+		}
+		
+		//remove worker
+		try {
+			sqlConnection.removeWorker(null, workerName);
+			
+			result = sqlConnection.getWorkersList(null);
+		} catch (CriticalError | ClientNotConnected | ClientNotExist e) {
+			fail();
+		}
+		
+		
+		assertNotNull(result);
+		map = Serialization.deserializeWorkersHashMap(result);
+		assertNotNull(map);	
+		assertFalse(map.containsKey(workerName));
 
 	}
 	
