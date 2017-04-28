@@ -54,14 +54,14 @@ public class RegisterNewWorkerTest {
 							Serialization.serialize(newWorker)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
 		try {
 			manager.registerNewWorker(newWorker);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | WorkerAlreadyExists e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -75,7 +75,7 @@ public class RegisterNewWorkerTest {
 							Serialization.serialize(newWorker)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
@@ -84,7 +84,7 @@ public class RegisterNewWorkerTest {
 		} catch (InvalidParameter e) {
 			/* success */
 		} catch (CriticalError | EmployeeNotConnected | ConnectionFailure | WorkerAlreadyExists e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -98,7 +98,7 @@ public class RegisterNewWorkerTest {
 							Serialization.serialize(newWorker)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
@@ -107,7 +107,7 @@ public class RegisterNewWorkerTest {
 		} catch (CriticalError e) {
 			/* success */
 		} catch (InvalidParameter | EmployeeNotConnected | ConnectionFailure | WorkerAlreadyExists e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -121,7 +121,7 @@ public class RegisterNewWorkerTest {
 							Serialization.serialize(newWorker)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
@@ -130,7 +130,7 @@ public class RegisterNewWorkerTest {
 		} catch (EmployeeNotConnected e) {
 			/* success */
 		} catch (InvalidParameter | CriticalError | ConnectionFailure | WorkerAlreadyExists e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -144,7 +144,7 @@ public class RegisterNewWorkerTest {
 							Serialization.serialize(newWorker)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_USERNAME_ALREADY_EXISTS).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
@@ -153,7 +153,7 @@ public class RegisterNewWorkerTest {
 		} catch (WorkerAlreadyExists e) {
 			/* success */
 		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 	}

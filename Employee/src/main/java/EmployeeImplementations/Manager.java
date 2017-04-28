@@ -68,7 +68,6 @@ public class Manager extends Worker implements IManager {
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductNotExistInCatalog | WorkerAlreadyExists 
 				| ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 		log.info("addProductToCatalog command succeed.");
 	}
@@ -89,7 +88,6 @@ public class Manager extends Worker implements IManager {
 				| ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | WorkerAlreadyExists | ParamIDAlreadyExists 
 				| ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 
 		log.info("removeProductFromCatalog command succeed.");
@@ -112,7 +110,6 @@ public class Manager extends Worker implements IManager {
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | WorkerAlreadyExists 
 				| ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 
 		log.info("editProductFromCatalog command succeed.");
@@ -134,7 +131,6 @@ public class Manager extends Worker implements IManager {
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
 				| ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 
 		log.info("registerNewWorker command succeed.");
@@ -156,7 +152,6 @@ public class Manager extends Worker implements IManager {
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
 				| ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 
 		log.info("removeWorker command succeed.");
@@ -179,7 +174,7 @@ public class Manager extends Worker implements IManager {
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
 			    | ParamIDDoesNotExist | WorkerAlreadyExists | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
+			;
 		}
 
 		log.info("addIngredient command succeed.");		
@@ -201,7 +196,6 @@ public class Manager extends Worker implements IManager {
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
 			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 
 		log.info("removeIngredient command succeed.");	
@@ -223,7 +217,6 @@ public class Manager extends Worker implements IManager {
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
 			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 
 		log.info("editIngredient command succeed.");	
@@ -245,7 +238,6 @@ public class Manager extends Worker implements IManager {
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
 			    | WorkerAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 
 		log.info("addManufacturer command succeed.");
@@ -267,7 +259,6 @@ public class Manager extends Worker implements IManager {
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
 			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 
 		log.info("removeManufacturer command succeed.");		
@@ -289,7 +280,6 @@ public class Manager extends Worker implements IManager {
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
 			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 
 		log.info("editManufacturer command succeed.");		
@@ -311,7 +301,6 @@ public class Manager extends Worker implements IManager {
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
 			    | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 			
 			return null;
 		}
@@ -337,8 +326,6 @@ public class Manager extends Worker implements IManager {
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
 			    | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
-			
 			return null;
 		}
 		

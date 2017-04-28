@@ -49,14 +49,14 @@ public class LogoutTest {
 							CommandDescriptor.LOGOUT, Serialization.serialize(null)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 		
 		try {
 			worker.logout();
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -69,7 +69,7 @@ public class LogoutTest {
 							CommandDescriptor.LOGOUT, Serialization.serialize(null)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 		
@@ -78,7 +78,7 @@ public class LogoutTest {
 			
 			fail();
 		} catch (InvalidParameter | CriticalError | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch (EmployeeNotConnected e) {
 			/* Test Passed */

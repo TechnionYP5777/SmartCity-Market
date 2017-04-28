@@ -52,13 +52,13 @@ public class LoginTest {
 							CommandDescriptor.LOGIN_EMPLOYEE, Serialization.serialize(new Login("test", "test"))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, CLIENT_TYPE.WORKER.serialize()).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 		try {
 			clType = worker.login("test", "test");
 		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected | AuthenticationError | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 		assertEquals("test", worker.getWorkerLoginDetails().getUserName());
@@ -74,7 +74,7 @@ public class LoginTest {
 							CommandDescriptor.LOGIN_EMPLOYEE, Serialization.serialize(new Login("test", "test"))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 		
@@ -83,7 +83,7 @@ public class LoginTest {
 			
 			fail();
 		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch (AuthenticationError e) {
 			/* Test Passed */
@@ -98,7 +98,7 @@ public class LoginTest {
 							CommandDescriptor.LOGIN_EMPLOYEE, Serialization.serialize(new Login("test", "test"))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_ALREADY_CONNECTED).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 		
@@ -107,7 +107,7 @@ public class LoginTest {
 			
 			fail();
 		} catch (InvalidParameter | CriticalError | AuthenticationError | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch (EmployeeAlreadyConnected e) {
 			/* Test Passed */

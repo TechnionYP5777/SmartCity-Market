@@ -61,7 +61,7 @@ public class RemoveProductPackageFromStoreTest {
 							Serialization.serialize(pp)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 
@@ -70,7 +70,7 @@ public class RemoveProductPackageFromStoreTest {
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected |
 				ProductNotExistInCatalog | AmountBiggerThanAvailable |
 				ProductPackageDoesNotExist | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -84,7 +84,7 @@ public class RemoveProductPackageFromStoreTest {
 							Serialization.serialize(pp)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 
@@ -95,7 +95,7 @@ public class RemoveProductPackageFromStoreTest {
 		} catch (CriticalError | EmployeeNotConnected |
 				ProductNotExistInCatalog | AmountBiggerThanAvailable |
 				ProductPackageDoesNotExist | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch (InvalidParameter  ¢) {
 			//test success
@@ -111,7 +111,7 @@ public class RemoveProductPackageFromStoreTest {
 							Serialization.serialize(pp)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 
@@ -122,7 +122,7 @@ public class RemoveProductPackageFromStoreTest {
 		} catch (CriticalError | InvalidParameter | 
 				ProductNotExistInCatalog | AmountBiggerThanAvailable |
 				ProductPackageDoesNotExist | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch (EmployeeNotConnected ¢) {
 			//test success
@@ -138,7 +138,7 @@ public class RemoveProductPackageFromStoreTest {
 							Serialization.serialize(pp)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 
@@ -149,7 +149,7 @@ public class RemoveProductPackageFromStoreTest {
 		} catch (CriticalError | InvalidParameter | 
 				ProductNotExistInCatalog | EmployeeNotConnected  |
 				ProductPackageDoesNotExist | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch ( AmountBiggerThanAvailable ¢) {
 			//test success
@@ -165,7 +165,7 @@ public class RemoveProductPackageFromStoreTest {
 							Serialization.serialize(pp)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 
@@ -176,7 +176,7 @@ public class RemoveProductPackageFromStoreTest {
 		} catch (CriticalError | InvalidParameter | 
 				AmountBiggerThanAvailable | EmployeeNotConnected  |
 				ProductPackageDoesNotExist | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch (ProductNotExistInCatalog ¢) {
 			//test success
@@ -192,7 +192,7 @@ public class RemoveProductPackageFromStoreTest {
 							Serialization.serialize(pp)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_DOES_NOT_EXIST).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 
@@ -203,7 +203,7 @@ public class RemoveProductPackageFromStoreTest {
 		} catch (CriticalError | InvalidParameter | 
 				AmountBiggerThanAvailable | EmployeeNotConnected  |
 				ProductNotExistInCatalog | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch (ProductPackageDoesNotExist ¢) {
 			//test success

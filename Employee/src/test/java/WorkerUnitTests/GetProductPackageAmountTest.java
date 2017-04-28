@@ -61,7 +61,7 @@ public class GetProductPackageAmountTest {
 							Serialization.serialize(pp)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, "2").serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 
@@ -69,7 +69,7 @@ public class GetProductPackageAmountTest {
 			retAmmount = worker.getProductPackageAmount(pp);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | 
 				ProductPackageDoesNotExist | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 		
@@ -85,7 +85,7 @@ public class GetProductPackageAmountTest {
 							Serialization.serialize(pp)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER, "2").serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 
@@ -95,7 +95,7 @@ public class GetProductPackageAmountTest {
 			fail();
 		} catch (CriticalError | EmployeeNotConnected | 
 				ProductPackageDoesNotExist | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch (InvalidParameter ¢) {
 			/* Test success */
@@ -111,7 +111,7 @@ public class GetProductPackageAmountTest {
 							Serialization.serialize(pp)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED, "2").serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 
 			fail();
 		}
@@ -122,7 +122,7 @@ public class GetProductPackageAmountTest {
 			fail();
 		} catch (CriticalError | InvalidParameter | 
 				ProductPackageDoesNotExist | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch (EmployeeNotConnected  ¢) {
 			/* Test success */
@@ -138,7 +138,7 @@ public class GetProductPackageAmountTest {
 							Serialization.serialize(pp)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_DOES_NOT_EXIST, "2").serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 
@@ -148,7 +148,7 @@ public class GetProductPackageAmountTest {
 			fail();
 		} catch (CriticalError | InvalidParameter | 
 				EmployeeNotConnected | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch (ProductPackageDoesNotExist ¢) {
 			//Test success

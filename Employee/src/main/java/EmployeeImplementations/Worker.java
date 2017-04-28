@@ -58,7 +58,7 @@ public class Worker extends AEmployee implements IWorker {
 		try {
 			$ = CommandWrapper.deserialize(serverResponse);
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			log.fatal("Critical bug in serialize");
 		}
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
@@ -66,7 +66,6 @@ public class Worker extends AEmployee implements IWorker {
 				| ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable
 				| ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 		clientId = $.getSenderID();
 		this.username = username;
@@ -87,7 +86,6 @@ public class Worker extends AEmployee implements IWorker {
 				| ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable
 				| ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 		clientId = WorkerDefs.loginCommandSenderId;
 		log.info("logout from server succeed.");
@@ -110,8 +108,6 @@ public class Worker extends AEmployee implements IWorker {
 				| AuthenticationError | ProductNotExistInCatalog | ProductAlreadyExistInCatalog | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-
-			e.printStackTrace();
 		}
 
 		log.info("is logged out from server succeed");
@@ -134,7 +130,6 @@ public class Worker extends AEmployee implements IWorker {
 				| ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable
 				| ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 		log.info("viewProductFromCatalog command succeed.");
 		return Serialization.deserialize($.getData(), CatalogProduct.class);
@@ -154,7 +149,6 @@ public class Worker extends AEmployee implements IWorker {
 				| ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable
 				| ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 		log.info("addProductToWarehouse command succeed.");
 	}
@@ -173,7 +167,6 @@ public class Worker extends AEmployee implements IWorker {
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
 				| ProductAlreadyExistInCatalog | ProductStillForSale | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 		log.info("placeProductPackageOnShelves command succeed.");
 	}
@@ -192,7 +185,6 @@ public class Worker extends AEmployee implements IWorker {
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
 				| ProductAlreadyExistInCatalog | ProductStillForSale | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 		log.info("removeProductPackageFromStore command succeed.");
 	}
@@ -211,7 +203,6 @@ public class Worker extends AEmployee implements IWorker {
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductNotExistInCatalog
 				| ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			¢.printStackTrace();
 		}
 		log.info("getProductPackageAmount command succeed.");
 		return Serialization.deserialize($.getData(), Integer.class);

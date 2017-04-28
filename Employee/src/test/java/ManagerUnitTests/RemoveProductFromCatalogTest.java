@@ -54,7 +54,7 @@ public class RemoveProductFromCatalogTest {
 							Serialization.serialize(smartCode)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
@@ -62,7 +62,7 @@ public class RemoveProductFromCatalogTest {
 			manager.removeProductFromCatalog(smartCode);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductStillForSale
 				| ProductNotExistInCatalog | ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -76,7 +76,7 @@ public class RemoveProductFromCatalogTest {
 							Serialization.serialize(smartCode)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 
@@ -86,7 +86,7 @@ public class RemoveProductFromCatalogTest {
 			fail();
 		} catch (CriticalError | EmployeeNotConnected | ProductStillForSale
 				| ProductNotExistInCatalog | ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		} catch (InvalidParameter e) {
 			/* test success */
@@ -102,7 +102,7 @@ public class RemoveProductFromCatalogTest {
 							Serialization.serialize(smartCode)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 
@@ -112,7 +112,7 @@ public class RemoveProductFromCatalogTest {
 			fail();
 		} catch (InvalidParameter | CriticalError | ProductStillForSale
 				| ProductNotExistInCatalog | ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		} catch (EmployeeNotConnected e) {
 			/* test success */
@@ -128,7 +128,7 @@ public class RemoveProductFromCatalogTest {
 							Serialization.serialize(smartCode)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 
@@ -137,7 +137,7 @@ public class RemoveProductFromCatalogTest {
 			
 			fail();
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductStillForSale | ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		} catch (ProductNotExistInCatalog e) {
 			/* test success */
@@ -153,7 +153,7 @@ public class RemoveProductFromCatalogTest {
 							Serialization.serialize(smartCode)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_STILL_FOR_SALE).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
@@ -162,7 +162,7 @@ public class RemoveProductFromCatalogTest {
 			
 			fail();
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		} catch (ProductStillForSale e) {
 			/* test success */

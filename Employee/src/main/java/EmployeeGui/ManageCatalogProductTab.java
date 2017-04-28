@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
 import org.controlsfx.control.CheckComboBox;
 
 import com.google.common.eventbus.Subscribe;
@@ -54,6 +55,8 @@ import javafx.scene.layout.VBox;
  * @author Shimon Azulay
  */
 public class ManageCatalogProductTab implements Initializable {
+	
+	static Logger log = Logger.getLogger(ManageCatalogProductTab.class.getName());
 
 	@FXML
 	private VBox rootPane;
@@ -199,7 +202,7 @@ public class ManageCatalogProductTab implements Initializable {
 				manufacturars.put(manufacturer.getName(), manufacturer);
 			});
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
-			e.printStackTrace();
+			log.fatal(e.getMessage());
 		}
 
 	}
@@ -211,8 +214,7 @@ public class ManageCatalogProductTab implements Initializable {
 				ingredients.put(ingredient.getName(), ingredient);
 			});
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.fatal(e.getMessage());
 		}
 	}
 

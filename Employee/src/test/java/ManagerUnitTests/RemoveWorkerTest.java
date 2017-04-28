@@ -53,14 +53,14 @@ public class RemoveWorkerTest {
 							Serialization.serialize(userToRemove)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
 		try {
 			manager.removeWorker(userToRemove);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | WorkerDoesNotExist e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -74,7 +74,7 @@ public class RemoveWorkerTest {
 							Serialization.serialize(userToRemove)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
@@ -83,7 +83,7 @@ public class RemoveWorkerTest {
 		} catch (InvalidParameter e) {
 			/* success */
 		} catch (CriticalError | EmployeeNotConnected | ConnectionFailure | WorkerDoesNotExist e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -97,7 +97,7 @@ public class RemoveWorkerTest {
 							Serialization.serialize(userToRemove)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
@@ -106,7 +106,7 @@ public class RemoveWorkerTest {
 		} catch (CriticalError e) {
 			/* success */
 		} catch (InvalidParameter | EmployeeNotConnected | ConnectionFailure | WorkerDoesNotExist e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -120,7 +120,7 @@ public class RemoveWorkerTest {
 							Serialization.serialize(userToRemove)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
@@ -129,7 +129,7 @@ public class RemoveWorkerTest {
 		} catch (EmployeeNotConnected e) {
 			/* success */
 		} catch (InvalidParameter | CriticalError | ConnectionFailure | WorkerDoesNotExist e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -143,7 +143,7 @@ public class RemoveWorkerTest {
 							Serialization.serialize(userToRemove)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
@@ -152,7 +152,7 @@ public class RemoveWorkerTest {
 		} catch (WorkerDoesNotExist e) {
 			/* success */
 		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 	}

@@ -47,13 +47,13 @@ public class IsLoggedInTest {
 							CommandDescriptor.IS_LOGGED_IN).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(answer)).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 		try {			
 			assertEquals(worker.isLoggedIn(), answer);
 		} catch (CriticalError | ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -66,13 +66,13 @@ public class IsLoggedInTest {
 							CommandDescriptor.IS_LOGGED_IN).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR, Serialization.serialize(answer)).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 		try {			
 			assertEquals(worker.isLoggedIn(), answer);
 		} catch (ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		} catch (CriticalError __) {
 			/* Successful */

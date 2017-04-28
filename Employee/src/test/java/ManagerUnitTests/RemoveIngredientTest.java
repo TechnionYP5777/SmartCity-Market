@@ -54,14 +54,14 @@ public class RemoveIngredientTest {
 							Serialization.serialize(newIngredient)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
 		try {
 			manager.removeIngredient(newIngredient);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e1) {
-			e1.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -75,7 +75,7 @@ public class RemoveIngredientTest {
 							Serialization.serialize(newIngredient)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
@@ -84,7 +84,7 @@ public class RemoveIngredientTest {
 		} catch (InvalidParameter e) {
 			/* success */
 		} catch (CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e1) {
-			e1.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -98,7 +98,7 @@ public class RemoveIngredientTest {
 							Serialization.serialize(newIngredient)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
@@ -107,7 +107,7 @@ public class RemoveIngredientTest {
 		} catch (CriticalError e) {
 			/* success */
 		} catch (InvalidParameter | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e1) {
-			e1.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -121,7 +121,7 @@ public class RemoveIngredientTest {
 							Serialization.serialize(newIngredient)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
@@ -130,7 +130,7 @@ public class RemoveIngredientTest {
 		} catch (EmployeeNotConnected e) {
 			/* success */
 		} catch (InvalidParameter | CriticalError | ConnectionFailure | ParamIDDoesNotExist e1) {
-			e1.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -144,7 +144,7 @@ public class RemoveIngredientTest {
 							Serialization.serialize(newIngredient)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.PARAM_ID_IS_NOT_EXIST).serialize());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 		
@@ -153,7 +153,7 @@ public class RemoveIngredientTest {
 		} catch (ParamIDDoesNotExist e) {
 			/* success */
 		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected e1) {
-			e1.printStackTrace();
+			
 			fail();
 		}
 	}

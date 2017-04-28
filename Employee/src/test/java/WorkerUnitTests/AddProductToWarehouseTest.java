@@ -57,14 +57,14 @@ public class AddProductToWarehouseTest {
 							Serialization.serialize(pp)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 
 		try {
 			worker.addProductToWarehouse(pp);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -78,7 +78,7 @@ public class AddProductToWarehouseTest {
 							Serialization.serialize(pp)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 
@@ -87,7 +87,7 @@ public class AddProductToWarehouseTest {
 			
 			fail();
 		} catch (CriticalError | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch (InvalidParameter ¢) {
 			// test success
@@ -103,7 +103,7 @@ public class AddProductToWarehouseTest {
 							Serialization.serialize(pp)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 
@@ -112,7 +112,7 @@ public class AddProductToWarehouseTest {
 			
 			fail();
 		} catch (CriticalError | InvalidParameter | ProductNotExistInCatalog | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch (EmployeeNotConnected ¢) {
 			// test success
@@ -128,7 +128,7 @@ public class AddProductToWarehouseTest {
 							Serialization.serialize(pp)).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 
@@ -137,7 +137,7 @@ public class AddProductToWarehouseTest {
 			
 			fail();
 		} catch (CriticalError | InvalidParameter | EmployeeNotConnected | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch (ProductNotExistInCatalog ¢) {
 			// test success 

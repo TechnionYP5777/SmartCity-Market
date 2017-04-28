@@ -59,7 +59,7 @@ public class EditProductFromCatalogTest {
 		try {
 			manager.editProductFromCatalog(catalogProduct);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -80,7 +80,7 @@ public class EditProductFromCatalogTest {
 			
 			fail();
 		} catch (CriticalError | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		} catch (InvalidParameter ¢) {
 			/* test success */
@@ -102,7 +102,7 @@ public class EditProductFromCatalogTest {
 		try {
 			manager.editProductFromCatalog(catalogProduct);
 		} catch (InvalidParameter | CriticalError | ProductNotExistInCatalog | ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		} catch (EmployeeNotConnected ¢) {
 			/* test success */
@@ -124,7 +124,7 @@ public class EditProductFromCatalogTest {
 		try {
 			manager.editProductFromCatalog(catalogProduct);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		} catch (ProductNotExistInCatalog ¢) {
 			/* test success */

@@ -60,7 +60,7 @@ public class AddProductToCatalogTest {
 			manager.addProductToCatalog(catalogProduct);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductAlreadyExistInCatalog
 				| ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		}
 	}
@@ -81,7 +81,7 @@ public class AddProductToCatalogTest {
 			manager.addProductToCatalog(catalogProduct);
 		} catch (CriticalError | EmployeeNotConnected | ProductAlreadyExistInCatalog
 				| ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		} catch (InvalidParameter ¢) {
 			/* test success */
@@ -104,7 +104,7 @@ public class AddProductToCatalogTest {
 			manager.addProductToCatalog(catalogProduct);
 		} catch (InvalidParameter | EmployeeNotConnected | ProductAlreadyExistInCatalog
 				| ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		} catch (CriticalError ¢) {
 			/* test success */
@@ -127,7 +127,7 @@ public class AddProductToCatalogTest {
 			manager.addProductToCatalog(catalogProduct);
 		} catch (CriticalError | InvalidParameter | ProductAlreadyExistInCatalog
 				| ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		} catch (EmployeeNotConnected ¢) {
 			/* test success */
@@ -150,7 +150,7 @@ public class AddProductToCatalogTest {
 			manager.addProductToCatalog(catalogProduct);
 		} catch (CriticalError | InvalidParameter | EmployeeNotConnected
 				| ConnectionFailure e) {
-			e.printStackTrace();
+			
 			fail();
 		} catch (ProductAlreadyExistInCatalog ¢) {
 			/* test success */

@@ -57,14 +57,14 @@ public class ViewProductFromCatalogTest {
 							Serialization.serialize(new SmartCode(1234567890, null))).serialize())))
 					.thenReturn(commandWrapper.serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 
 		try {
 			testCatalogProduct = worker.viewProductFromCatalog(1234567890);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 		
@@ -82,7 +82,7 @@ public class ViewProductFromCatalogTest {
 							Serialization.serialize(new SmartCode(1234567890, null))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 		
@@ -91,7 +91,7 @@ public class ViewProductFromCatalogTest {
 			
 			fail();
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch (ProductNotExistInCatalog e) {
 			/* Test Passed */
@@ -106,7 +106,7 @@ public class ViewProductFromCatalogTest {
 							Serialization.serialize(new SmartCode(1234567890, null))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		}
 		
@@ -115,7 +115,7 @@ public class ViewProductFromCatalogTest {
 			
 			fail();
 		} catch (InvalidParameter  | CriticalError | ProductNotExistInCatalog | ConnectionFailure ¢) {
-			¢.printStackTrace();
+			
 			fail();
 		} catch (EmployeeNotConnected e) {
 			/* Test Passed */

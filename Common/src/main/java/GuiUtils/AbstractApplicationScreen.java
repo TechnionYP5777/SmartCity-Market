@@ -59,7 +59,7 @@ public abstract class AbstractApplicationScreen extends Application {
 		try {
 			parent = FXMLLoader.load(AbstractApplicationScreen.class.getResource(sceneName));
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.fatal(e.getMessage());
 			return;
 		}
 		Scene scene = new Scene(parent);

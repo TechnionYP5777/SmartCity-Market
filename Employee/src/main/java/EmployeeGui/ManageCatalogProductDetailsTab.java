@@ -137,8 +137,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 				manager.removeManufacturer(manufacturars.get(man));
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure
 					| ParamIDDoesNotExist e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.fatal(e.getMessage());
 			}
 		});
 		selectedManu.clear();
