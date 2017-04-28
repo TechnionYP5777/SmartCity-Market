@@ -55,4 +55,6 @@ public class GuiCommonDefs {
 	public static final String criticalErrorMsg = "Please contact SmartMarket support at smart.market.cs@gmail.com";
 
 	public static final String registrationWrongRepeatedPass = "Wrong password. Repeted password doesn't match original password!";
+
+	public static final String registrationUsedUserName = "This user name already in used. Please try another one.";
 }

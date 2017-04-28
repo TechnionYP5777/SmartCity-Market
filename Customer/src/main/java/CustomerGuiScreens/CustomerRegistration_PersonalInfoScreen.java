@@ -10,13 +10,17 @@ import com.jfoenix.controls.JFXTextField;
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.ICustomerProfile;
 import CommonDefs.GuiCommonDefs;
+import CustomerContracts.ACustomerExceptions.CriticalError;
 import CustomerContracts.ICustomer;
 import CustomerContracts.IRegisteredCustomer;
+import CustomerGuiHelpers.CustomerGuiExceptionsHandler;
 import CustomerGuiHelpers.TempCustomerPassingData;
 import CustomerGuiHelpers.TempCustomerProfilePassingData;
 import CustomerImplementations.Customer;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
+import SMExceptions.SMException;
+import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -84,7 +88,13 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		}
 
 		userNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			TempCustomerProfilePassingData.customerProfile.setUserName(newValue);
+			if (validNewUserName(newValue))
+				TempCustomerProfilePassingData.customerProfile.setUserName(newValue);
+			else {
+				DialogMessagesService.showErrorDialog(GuiCommonDefs.registrationFieldFailureTitle, null,
+						GuiCommonDefs.registrationUsedUserName);
+			}
+				
 		});
 
 		passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -130,6 +140,17 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		birthDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
 			TempCustomerProfilePassingData.customerProfile.setBirthdate(newValue);
 		});
+	}
+
+	private boolean validNewUserName(String username) {
+		ICustomer customer = InjectionFactory.getInstance(Customer.class);	
+		Boolean res = false;
+		try {
+			res= customer.isFreeUsername(username);
+		} catch (SMException e) {
+			CustomerGuiExceptionsHandler.handle(e);	
+		}
+		return res;
 	}
 
 	private void updateFields() {
