@@ -26,6 +26,7 @@ public class GuiCommonDefs {
 	
 	public static final String purchaseOperationFailureTitle = "Purchse operation failure!";
 	
+	public static final String registrationFieldFailureTitle = "Registartion field failure!";
 	//GUI dialog messages
 	
 	//final public static String userAlreadyConnectedFailureMessage = "The user is already connected.";
@@ -53,4 +54,5 @@ public class GuiCommonDefs {
 	
 	public static final String criticalErrorMsg = "Please contact SmartMarket support at smart.market.cs@gmail.com";
 
+	public static final String registrationWrongRepeatedPass = "Wrong password. Repeted password doesn't match original password!";
 }

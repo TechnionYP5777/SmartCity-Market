@@ -9,12 +9,14 @@ import com.jfoenix.controls.JFXTextField;
 
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.ICustomerProfile;
+import CommonDefs.GuiCommonDefs;
 import CustomerContracts.ICustomer;
 import CustomerContracts.IRegisteredCustomer;
 import CustomerGuiHelpers.TempCustomerPassingData;
 import CustomerGuiHelpers.TempCustomerProfilePassingData;
 import CustomerImplementations.Customer;
 import GuiUtils.AbstractApplicationScreen;
+import GuiUtils.DialogMessagesService;
 import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -48,7 +50,7 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
     private JFXTextField firstNameTextField;
     
     @FXML
-    private JFXTextField lastNameTextField;
+    JFXTextField lastNameTextField;
     
     @FXML
     private JFXTextField phoneNumberTextField;
@@ -90,7 +92,15 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		});
 		
 		repeatPassField.textProperty().addListener((observable, oldValue, newValue) -> {
-			//todo: assert equal to passwordField
+			if (!passwordField.getText().equals(newValue) && (newValue!= null && !newValue.equals(""))) {
+				DialogMessagesService.showErrorDialog(GuiCommonDefs.registrationFieldFailureTitle, null,
+						GuiCommonDefs.registrationWrongRepeatedPass);
+				nextButton.setDisable(true);
+			}
+
+			else {
+				nextButton.setDisable(false);
+			}
 		});
 		
 		firstNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -123,9 +133,34 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 	}
 
 	private void updateFields() {
-		// TODO Auto-generated method stub
-	}
+		if (TempCustomerProfilePassingData.customerProfile.getUserName() != null)
+			userNameTextField.setText(TempCustomerProfilePassingData.customerProfile.getUserName());
+		if (TempCustomerProfilePassingData.password != null) {
+			passwordField.setText(TempCustomerProfilePassingData.password);
+			repeatPassField.setText(TempCustomerProfilePassingData.password);
+		}
+		if (TempCustomerProfilePassingData.customerProfile.getFirstName() != null)
+			firstNameTextField.setText(TempCustomerProfilePassingData.customerProfile.getFirstName());
+		
+		if (TempCustomerProfilePassingData.customerProfile.getLastName() != null)
+			lastNameTextField.setText(TempCustomerProfilePassingData.customerProfile.getLastName());
+		
+		if (TempCustomerProfilePassingData.customerProfile.getPhoneNumber() != null)
+			phoneNumberTextField.setText(TempCustomerProfilePassingData.customerProfile.getPhoneNumber());
+		
+		if (TempCustomerProfilePassingData.customerProfile.getEmailAddress() != null)
+			emailTextField.setText(TempCustomerProfilePassingData.customerProfile.getEmailAddress());
 
+		if (TempCustomerProfilePassingData.customerProfile.getCity() != null)
+			cityTextField.setText(TempCustomerProfilePassingData.customerProfile.getCity());
+		
+		if (TempCustomerProfilePassingData.customerProfile.getStreet() != null)
+			streetTextField.setText(TempCustomerProfilePassingData.customerProfile.getStreet());
+		
+		if (TempCustomerProfilePassingData.customerProfile.getBirthdate() != null)
+			birthDatePicker.valueProperty().setValue(TempCustomerProfilePassingData.customerProfile.getBirthdate());
+	}
+	
 	@FXML
     void nextButtonPressed(ActionEvent event) {
 	  	if (checkFieldsVadility())
@@ -133,7 +168,12 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
   	}
 
 	private boolean checkFieldsVadility() {
-		// TODO Auto-generated method stub
+		if (!passwordField.getText().equals(repeatPassField.getText())) {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.registrationFieldFailureTitle, null,
+					GuiCommonDefs.registrationWrongRepeatedPass);
+			nextButton.setDisable(true);
+			return false;
+		}
 		return true;
 	}
 }

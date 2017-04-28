@@ -33,9 +33,15 @@ public class CustomerRegistration_IngredientsScreen implements Initializable {
     @FXML
     void ingridients_nextButtonPressed(ActionEvent event) {
     	AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_FinalStepScreen.fxml");
+    	updateFields();
     }
 
-    @FXML
+    private void updateFields() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@FXML
     void ingridients_backButtonPressed(ActionEvent event) {
     	AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_PersonalInfoScreen.fxml");
     }
