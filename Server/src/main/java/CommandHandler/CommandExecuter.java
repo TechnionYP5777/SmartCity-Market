@@ -859,6 +859,7 @@ public class CommandExecuter {
 
 		try {
 			c.addWorker(inCommandWrapper.getSenderID(), login, new ForgetPassword("question", "answer"));
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 		} catch (CriticalError e) {
 			log.fatal("Register new worker command failed, critical error occured from SQL Database connection");
 
@@ -895,6 +896,7 @@ public class CommandExecuter {
 
 		try {
 			c.removeWorker(inCommandWrapper.getSenderID(), username);
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 		} catch (CriticalError e) {
 			log.fatal("Remove worker command failed, critical error occured from SQL Database connection");
 
@@ -933,6 +935,7 @@ public class CommandExecuter {
 			c.registerCustomer(profile.getUserName(), profile.getPassword());
 			c.setCustomerProfile(profile.getUserName(), profile);
 			c.setSecurityQACustomer(profile.getUserName(), profile.getForgetPassword());
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 		} catch (CriticalError e) {
 			log.fatal("Register new customer command failed, critical error occured from SQL Database connection");
 
@@ -981,6 +984,7 @@ public class CommandExecuter {
 
 		try {
 			c.removeCustomer(username);
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 		} catch (CriticalError e) {
 			log.fatal("Remove customer command failed, critical error occured from SQL Database connection");
 
@@ -1013,6 +1017,7 @@ public class CommandExecuter {
 
 		try {
 			c.setCustomerProfile(profile.getUserName(), profile);
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 		} catch (CriticalError e) {
 			log.fatal("Update customer command failed, critical error occured from SQL Database connection");
 
@@ -1083,6 +1088,7 @@ public class CommandExecuter {
 
 		try {
 			c.removeIngredient(inCommandWrapper.getSenderID(), ingredient);
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 		} catch (CriticalError e) {
 			log.fatal("Remove ingredient command failed, critical error occured from SQL Database connection");
 
@@ -1123,6 +1129,7 @@ public class CommandExecuter {
 
 		try {
 			c.editIngredient(inCommandWrapper.getSenderID(), ingredient);
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 		} catch (CriticalError e) {
 			log.fatal("Edit ingredient command failed, critical error occured from SQL Database connection");
 
@@ -1192,6 +1199,7 @@ public class CommandExecuter {
 
 		try {
 			c.removeManufacturer(inCommandWrapper.getSenderID(), manufacturer);
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 		} catch (CriticalError e) {
 			log.fatal("Remove manufacturer command failed, critical error occured from SQL Database connection");
 
@@ -1237,6 +1245,7 @@ public class CommandExecuter {
 
 		try {
 			c.editManufacturer(inCommandWrapper.getSenderID(), manufacturer);
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 		} catch (CriticalError e) {
 			log.fatal("Edit manufacturer command failed, critical error occured from SQL Database connection");
 
@@ -1307,11 +1316,8 @@ public class CommandExecuter {
 		}
 		
 		try {
-			if (c.isCustomerUsernameAvailable(username)) {
-				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
-			} else {
-				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_ALREADY_EXISTS);
-			}
+			outCommandWrapper = new CommandWrapper(c.isCustomerUsernameAvailable(username) ? ResultDescriptor.SM_OK
+					: ResultDescriptor.SM_USERNAME_ALREADY_EXISTS);
 		} catch (CriticalError e) {
 			log.fatal("Is free customer username command failed, critical error occured from SQL Database connection");
 
