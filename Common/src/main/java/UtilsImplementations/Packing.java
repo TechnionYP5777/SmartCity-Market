@@ -5,9 +5,12 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.Enumeration;
 import java.util.zip.*;
 
 import org.apache.log4j.Logger;
+
+import SMExceptions.SMException;
 
 /**
  * @author idan atias
@@ -38,7 +41,7 @@ public class Packing {
 
 				String filename = file.getName();
 				String filepath = file.getAbsolutePath();
-				long filesize = file.length(); //size in bytes
+				long filesize = file.length(); // size in bytes
 
 				log.info("Zipping and adding: " + filename + " into " + zipFilePath);
 
@@ -70,4 +73,51 @@ public class Packing {
 			return null;
 		}
 	}
+
+	public static void unpack(ZipFile zfile, String unpackPath) throws SMException {
+		if (zfile == null || unpackPath == null || unpackPath.isEmpty()) {
+			log.fatal("unpacking failed due to invalid parameter.");
+			throw new SMException();
+		}
+
+		File unpackDir;
+		try {
+			unpackDir = new File(unpackPath);
+		} catch (Exception e) {
+			log.error(e + "");
+			throw new SMException();
+		}
+
+		if (!unpackDir.isDirectory()) {
+			log.error("Unpacking failed: Unpack path must be a directory");
+			throw new SMException();
+		}
+
+		try {
+			BufferedOutputStream dest = null;
+			BufferedInputStream is = null;
+			ZipEntry entry;
+			for (Enumeration<? extends ZipEntry> e = zfile.entries(); e.hasMoreElements();) {
+				entry = e.nextElement();
+				log.info("Extracting: " + entry);
+				is = new BufferedInputStream(zfile.getInputStream(entry));
+				int count;
+				byte data[] = new byte[bufferSize];
+
+				FileOutputStream fos = new FileOutputStream(unpackDir.getAbsolutePath() + '/' + entry.getName());
+				dest = new BufferedOutputStream(fos, bufferSize);
+
+				while ((count = is.read(data, 0, bufferSize)) != -1)
+					dest.write(data, 0, count);
+
+				dest.flush();
+				dest.close();
+				is.close();
+			}
+		} catch (Exception e) {
+			log.error(e + "");
+			log.error("Failed extracting zipfile " + zfile + " into " + unpackDir.getAbsolutePath());
+		}
+	}
+
 }
