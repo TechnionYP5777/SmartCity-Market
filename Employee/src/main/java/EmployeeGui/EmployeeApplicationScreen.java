@@ -52,7 +52,7 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 			});
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.fatal(e.getMessage());
 		}
 	}
 

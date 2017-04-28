@@ -50,7 +50,7 @@ import javafx.util.Callback;
  */
 
 public class ManageCatalogProductDetailsTab implements Initializable {
-
+	
 	static Logger log = Logger.getLogger(ManagePackagesTab.class.getName());
 
 	IManager manager = InjectionFactory.getInstance(Manager.class);
@@ -123,8 +123,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 				manager.removeIngredient(ingredients.get(ing));
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure
 					| ParamIDDoesNotExist e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.fatal(e.getMessage());
 			}
 		});
 		selectedIngr.clear();

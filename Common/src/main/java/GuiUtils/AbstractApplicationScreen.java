@@ -2,6 +2,8 @@ package GuiUtils;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import com.sun.javafx.application.LauncherImpl;
 
 import javafx.animation.FadeTransition;
@@ -26,6 +28,8 @@ import javafx.util.Duration;
 
 @SuppressWarnings("restriction")
 public abstract class AbstractApplicationScreen extends Application {
+	
+	protected static Logger log = Logger.getLogger(AbstractApplicationScreen.class.getName());
 	
 	public static Stage stage;
 	public static double stageHieght = GuiDefs.stageHeight;

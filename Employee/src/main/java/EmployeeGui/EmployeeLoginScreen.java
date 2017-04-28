@@ -3,6 +3,8 @@ package EmployeeGui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
@@ -31,6 +33,8 @@ import javafx.scene.layout.GridPane;
  */
 
 public class EmployeeLoginScreen implements Initializable {
+	
+	protected static Logger log = Logger.getLogger(EmployeeLoginScreen.class.getName());
 
 	@FXML
 	private GridPane loginScreenPane;
@@ -68,8 +72,7 @@ public class EmployeeLoginScreen implements Initializable {
 			// TODO change textbox to history
 			userNameTextField.setText(persistenceStore.restoreObject(new EmployeeUsers(), EmployeeUsers.class).users[0]);
 		} catch (Exception e) {
-			// TODO handle exception
-			e.printStackTrace();
+			log.fatal(e.getMessage());
 		}
 	}
 
