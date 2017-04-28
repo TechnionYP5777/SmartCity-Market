@@ -29,7 +29,7 @@ public class PackingTest {
 	static String zipfileToUnpackPath = String.valueOf("src/test/java/UtilsImplementationsTest/testingDirForPackingModule/toUnpack/packed.zip");
 	static String unpackDirPath = String.valueOf("src/test/java/UtilsImplementationsTest/testingDirForPackingModule/unpacked/");
 
-	static boolean DEBUG = true; //initialized as false
+	static boolean DEBUG; //initialized as false
 
 	@BeforeClass
 	public static void setup() {
