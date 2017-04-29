@@ -10,6 +10,7 @@ import BasicCommonClasses.SmartCode;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
+import EmployeeDefs.AEmployeeException.ManfacturerStillInUse;
 import EmployeeDefs.AEmployeeException.ParamIDAlreadyExists;
 import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
 import EmployeeDefs.AEmployeeException.ProductAlreadyExistInCatalog;
@@ -18,6 +19,7 @@ import EmployeeDefs.AEmployeeException.ProductStillForSale;
 import EmployeeDefs.AEmployeeException.WorkerAlreadyExists;
 import EmployeeDefs.AEmployeeException.WorkerDoesNotExist;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
+import EmployeeDefs.AEmployeeException.IngredientStillInUse;
 
 /** IManager - This interface represent the manager functionality which is a worker.
  * 
@@ -123,8 +125,9 @@ public interface IManager extends IWorker {
 	 * @throws InvalidParameter 
 	 * @throws ConnectionFailure 
 	 * @throws ParamIDDoesNotExist 
+	 * @throws IngredientStillInUse 
 	 */
-	void removeIngredient(Ingredient w) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist;
+	void removeIngredient(Ingredient w) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist, IngredientStillInUse;
 	
 	/**
 	 * Manager add new Manufacturer.
@@ -151,8 +154,9 @@ public interface IManager extends IWorker {
 	 * @throws InvalidParameter 
 	 * @throws ConnectionFailure 
 	 * @throws ParamIDDoesNotExist 
+	 * @throws ManfacturerStillInUse 
 	 */
-	void removeManufacturer(Manufacturer w) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist;
+	void removeManufacturer(Manufacturer w) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist, ManfacturerStillInUse;
 	
 	/**
 	 * Manager get list of all Manufacturers.

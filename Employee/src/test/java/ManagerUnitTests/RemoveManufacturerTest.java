@@ -20,6 +20,7 @@ import EmployeeContracts.IManager;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
+import EmployeeDefs.AEmployeeException.ManfacturerStillInUse;
 import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.WorkerDefs;
@@ -60,7 +61,7 @@ public class RemoveManufacturerTest {
 		
 		try {
 			manager.removeManufacturer(newManufacturer);
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e1) {
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist | ManfacturerStillInUse e1) {
 			
 			fail();
 		}
@@ -83,7 +84,7 @@ public class RemoveManufacturerTest {
 			manager.removeManufacturer(newManufacturer);
 		} catch (InvalidParameter e) {
 			/* success */
-		} catch (CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e1) {
+		} catch (CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist | ManfacturerStillInUse e1) {
 			
 			fail();
 		}
@@ -106,7 +107,7 @@ public class RemoveManufacturerTest {
 			manager.removeManufacturer(newManufacturer);
 		} catch (CriticalError e) {
 			/* success */
-		} catch (InvalidParameter | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e1) {
+		} catch (InvalidParameter | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist | ManfacturerStillInUse e1) {
 			
 			fail();
 		}
@@ -129,7 +130,7 @@ public class RemoveManufacturerTest {
 			manager.removeManufacturer(newManufacturer);
 		} catch (EmployeeNotConnected e) {
 			/* success */
-		} catch (InvalidParameter | CriticalError | ConnectionFailure | ParamIDDoesNotExist e1) {
+		} catch (InvalidParameter | CriticalError | ConnectionFailure | ParamIDDoesNotExist | ManfacturerStillInUse e1) {
 			
 			fail();
 		}
@@ -152,7 +153,30 @@ public class RemoveManufacturerTest {
 			manager.removeManufacturer(newManufacturer);
 		} catch (ParamIDDoesNotExist e) {
 			/* success */
-		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected e1) {
+		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected | ManfacturerStillInUse e1) {
+			
+			fail();
+		}
+	}
+	
+	@Test
+	public void RemoveManufacturerManfacturerStillInUseTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
+							CommandDescriptor.REMOVE_MANUFACTURER,
+							Serialization.serialize(newManufacturer)).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_MANUFACTURER_STILL_IN_USE).serialize());
+		} catch (IOException e) {
+			
+			fail();
+		}
+		
+		try {
+			manager.removeManufacturer(newManufacturer);
+		} catch (ManfacturerStillInUse  e) {
+			/* success */
+		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected | ParamIDDoesNotExist e1) {
 			
 			fail();
 		}

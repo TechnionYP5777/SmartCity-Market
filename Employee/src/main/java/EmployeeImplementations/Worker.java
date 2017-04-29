@@ -18,6 +18,7 @@ import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidCommandDescriptor;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
+import EmployeeDefs.AEmployeeException.ManfacturerStillInUse;
 import EmployeeDefs.AEmployeeException.ParamIDAlreadyExists;
 import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
 import EmployeeDefs.AEmployeeException.ProductAlreadyExistInCatalog;
@@ -28,6 +29,7 @@ import EmployeeDefs.AEmployeeException.WorkerAlreadyExists;
 import EmployeeDefs.AEmployeeException.WorkerDoesNotExist;
 import EmployeeDefs.AEmployeeException.EmployeeAlreadyConnected;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
+import EmployeeDefs.AEmployeeException.IngredientStillInUse;
 import EmployeeDefs.WorkerDefs;
 import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
@@ -64,7 +66,8 @@ public class Worker extends AEmployee implements IWorker {
 			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeNotConnected | ProductNotExistInCatalog
 				| ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable
-				| ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
+				| ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | 
+				WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 		}
 		clientId = $.getSenderID();
@@ -84,7 +87,8 @@ public class Worker extends AEmployee implements IWorker {
 			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductNotExistInCatalog
 				| ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable
-				| ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
+				| ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | 
+				WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 		}
 		clientId = WorkerDefs.loginCommandSenderId;
@@ -106,7 +110,8 @@ public class Worker extends AEmployee implements IWorker {
 			resultDescriptorHandler(commandWrapper.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter | EmployeeNotConnected | EmployeeAlreadyConnected
 				| AuthenticationError | ProductNotExistInCatalog | ProductAlreadyExistInCatalog | ProductStillForSale
-				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist e) {
+				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists |
+				ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse e) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 		}
 
@@ -128,7 +133,8 @@ public class Worker extends AEmployee implements IWorker {
 			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
 				| ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable
-				| ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
+				| ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | 
+				WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 		}
 		log.info("viewProductFromCatalog command succeed.");
@@ -147,7 +153,8 @@ public class Worker extends AEmployee implements IWorker {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
 				| ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable
-				| ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
+				| ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist |
+				WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 		}
 		log.info("addProductToWarehouse command succeed.");
@@ -165,7 +172,8 @@ public class Worker extends AEmployee implements IWorker {
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
-				| ProductAlreadyExistInCatalog | ProductStillForSale | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
+				| ProductAlreadyExistInCatalog | ProductStillForSale | WorkerAlreadyExists | ParamIDAlreadyExists | 
+				ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 		}
 		log.info("placeProductPackageOnShelves command succeed.");
@@ -183,7 +191,8 @@ public class Worker extends AEmployee implements IWorker {
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
-				| ProductAlreadyExistInCatalog | ProductStillForSale | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
+				| ProductAlreadyExistInCatalog | ProductStillForSale | WorkerAlreadyExists | ParamIDAlreadyExists | 
+				ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 		}
 		log.info("removeProductPackageFromStore command succeed.");
@@ -201,7 +210,8 @@ public class Worker extends AEmployee implements IWorker {
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductNotExistInCatalog
-				| ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist ¢) {
+				| ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable | WorkerAlreadyExists |
+				ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 		}
 		log.info("getProductPackageAmount command succeed.");

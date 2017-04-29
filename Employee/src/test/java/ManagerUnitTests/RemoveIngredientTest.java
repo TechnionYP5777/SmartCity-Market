@@ -22,6 +22,7 @@ import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
+import EmployeeDefs.AEmployeeException.IngredientStillInUse;
 import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Manager;
 import UtilsContracts.IClientRequestHandler;
@@ -60,7 +61,7 @@ public class RemoveIngredientTest {
 		
 		try {
 			manager.removeIngredient(newIngredient);
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e1) {
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist | IngredientStillInUse e1) {
 			
 			fail();
 		}
@@ -83,7 +84,7 @@ public class RemoveIngredientTest {
 			manager.removeIngredient(newIngredient);
 		} catch (InvalidParameter e) {
 			/* success */
-		} catch (CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e1) {
+		} catch (CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist | IngredientStillInUse e1) {
 			
 			fail();
 		}
@@ -106,7 +107,7 @@ public class RemoveIngredientTest {
 			manager.removeIngredient(newIngredient);
 		} catch (CriticalError e) {
 			/* success */
-		} catch (InvalidParameter | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e1) {
+		} catch (InvalidParameter | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist | IngredientStillInUse e1) {
 			
 			fail();
 		}
@@ -129,7 +130,7 @@ public class RemoveIngredientTest {
 			manager.removeIngredient(newIngredient);
 		} catch (EmployeeNotConnected e) {
 			/* success */
-		} catch (InvalidParameter | CriticalError | ConnectionFailure | ParamIDDoesNotExist e1) {
+		} catch (InvalidParameter | CriticalError | ConnectionFailure | ParamIDDoesNotExist | IngredientStillInUse e1) {
 			
 			fail();
 		}
@@ -152,7 +153,30 @@ public class RemoveIngredientTest {
 			manager.removeIngredient(newIngredient);
 		} catch (ParamIDDoesNotExist e) {
 			/* success */
-		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected e1) {
+		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected | IngredientStillInUse e1) {
+			
+			fail();
+		}
+	}
+	
+	@Test
+	public void RemoveIngredientIngredientStillInUseTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
+							CommandDescriptor.REMOVE_INGREDIENT,
+							Serialization.serialize(newIngredient)).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE).serialize());
+		} catch (IOException e) {
+			
+			fail();
+		}
+		
+		try {
+			manager.removeIngredient(newIngredient);
+		} catch (IngredientStillInUse e) {
+			/* success */
+		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected | ParamIDDoesNotExist e1) {
 			
 			fail();
 		}

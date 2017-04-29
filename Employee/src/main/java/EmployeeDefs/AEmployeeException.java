@@ -156,4 +156,22 @@ public class AEmployeeException extends SMException {
 
 		private static final long serialVersionUID = -4286591069692064061L;
 	}
+	
+	/**
+	 * Thrown when trying to remove ingredient which still in use.
+	 *
+	 */
+	public static class IngredientStillInUse extends AEmployeeException {
+
+		private static final long serialVersionUID = -1228674600657566979L;
+	}
+	
+	/**
+	 * Thrown when trying to remove manufacturer which still in use.
+	 *
+	 */
+	public static class ManfacturerStillInUse extends AEmployeeException {
+
+		private static final long serialVersionUID = 907342426645603127L;
+	}
 }

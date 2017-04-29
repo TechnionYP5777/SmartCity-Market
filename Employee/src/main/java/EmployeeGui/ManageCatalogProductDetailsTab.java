@@ -21,7 +21,9 @@ import EmployeeContracts.IManager;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
+import EmployeeDefs.AEmployeeException.IngredientStillInUse;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
+import EmployeeDefs.AEmployeeException.ManfacturerStillInUse;
 import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
 import EmployeeImplementations.Manager;
 import UtilsImplementations.InjectionFactory;
@@ -122,7 +124,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			try {
 				manager.removeIngredient(ingredients.get(ing));
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure
-					| ParamIDDoesNotExist e) {
+					| ParamIDDoesNotExist | IngredientStillInUse e) {
 				log.fatal(e.getMessage());
 			}
 		});
@@ -136,7 +138,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			try {
 				manager.removeManufacturer(manufacturars.get(man));
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure
-					| ParamIDDoesNotExist e) {
+					| ParamIDDoesNotExist | ManfacturerStillInUse e) {
 				log.fatal(e.getMessage());
 			}
 		});

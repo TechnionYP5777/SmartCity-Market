@@ -222,7 +222,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				throw new RuntimeException();
 			}
 		}
-		return 0;
 	}
 
 	/**
@@ -1647,7 +1646,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		}
 
 		// if somehow we got here - bad and throw exception
-		throw new CriticalError();
 	}
 
 	private boolean isProductExistInCatalog(Long barcode) throws CriticalError {
@@ -3260,9 +3258,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		} finally {
 			closeResources(result);
 		}
-
-		return null;
-
 	}
 
 	@Override

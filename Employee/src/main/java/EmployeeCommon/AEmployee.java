@@ -13,6 +13,7 @@ import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidCommandDescriptor;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
+import EmployeeDefs.AEmployeeException.ManfacturerStillInUse;
 import EmployeeDefs.AEmployeeException.ParamIDAlreadyExists;
 import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
 import EmployeeDefs.AEmployeeException.ProductAlreadyExistInCatalog;
@@ -23,6 +24,7 @@ import EmployeeDefs.AEmployeeException.WorkerAlreadyExists;
 import EmployeeDefs.AEmployeeException.WorkerDoesNotExist;
 import EmployeeDefs.AEmployeeException.EmployeeAlreadyConnected;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
+import EmployeeDefs.AEmployeeException.IngredientStillInUse;
 import EmployeeDefs.WorkerDefs;
 import UtilsContracts.IClientRequestHandler;
 
@@ -84,7 +86,7 @@ public abstract class AEmployee {
 			throws InvalidCommandDescriptor, InvalidParameter, CriticalError, EmployeeNotConnected,
 			EmployeeAlreadyConnected, AuthenticationError, ProductNotExistInCatalog, ProductAlreadyExistInCatalog,
 			ProductStillForSale, AmountBiggerThanAvailable, ProductPackageDoesNotExist, WorkerAlreadyExists, ParamIDAlreadyExists,
-			ParamIDDoesNotExist, WorkerDoesNotExist {
+			ParamIDDoesNotExist, WorkerDoesNotExist, IngredientStillInUse, ManfacturerStillInUse {
 
 		switch (¢) {
 
@@ -167,6 +169,16 @@ public abstract class AEmployee {
 			log.fatal("Command execution failed, product package does not exist");
 
 			throw new AEmployeeException.ProductPackageDoesNotExist();
+			
+		case SM_INGREDIENT_STILL_IN_USE:
+			log.fatal("Command execution failed, ingredient still in use");
+
+			throw new AEmployeeException.IngredientStillInUse();
+			
+		case SM_MANUFACTURER_STILL_IN_USE:
+			log.fatal("Command execution failed, ingredient still in use");
+
+			throw new AEmployeeException.ManfacturerStillInUse();
 
 		default:
 			log.fatal("Command execution failed, failed to parse result description");
