@@ -52,13 +52,11 @@ public class UpdateCustomerProfileTest {
 									.serialize());
 
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		try {
 			regCustomer.login("kuku", "1234");
 		} catch (CriticalError | AuthenticationError ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 	}
@@ -71,13 +69,11 @@ public class UpdateCustomerProfileTest {
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		try {
 			regCustomer.login("kuku", "1234");
 		} catch (CriticalError | AuthenticationError ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 	}
@@ -98,14 +94,12 @@ public class UpdateCustomerProfileTest {
 					CommandDescriptor.UPDATE_CUSTOMER_PROFILE, Serialization.serialize(cProfile)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 
 		try {
 			regCustomer.updateCustomerProfile(cProfile);
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			fail();
 		}
 	}
@@ -116,7 +110,6 @@ public class UpdateCustomerProfileTest {
 		try {
 			cProfile = regCustomer.getCustomerProfile();
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		}
 		try {
@@ -125,7 +118,6 @@ public class UpdateCustomerProfileTest {
 					.thenReturn(
 							new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 

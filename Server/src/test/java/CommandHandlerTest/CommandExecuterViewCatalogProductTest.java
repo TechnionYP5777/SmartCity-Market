@@ -48,13 +48,10 @@ public class CommandExecuterViewCatalogProductTest {
 					sqlDatabaseConnection.getProductFromCatalog(senderID, smartCode.getBarcode()))
 					.thenReturn("");
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -77,13 +74,10 @@ public class CommandExecuterViewCatalogProductTest {
 					sqlDatabaseConnection.getProductFromCatalog(senderID, smartCode.getBarcode()))
 					.thenThrow(new CriticalError());
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -114,13 +108,10 @@ public class CommandExecuterViewCatalogProductTest {
 					sqlDatabaseConnection.getProductFromCatalog(senderID, smartCode.getBarcode()))
 					.thenThrow(new ClientNotConnected());
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -143,13 +134,10 @@ public class CommandExecuterViewCatalogProductTest {
 					sqlDatabaseConnection.getProductFromCatalog(senderID, smartCode.getBarcode()))
 					.thenThrow(new ProductNotExistInCatalog());
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog e) {
-			e.printStackTrace();
 			fail();
 		}
 		

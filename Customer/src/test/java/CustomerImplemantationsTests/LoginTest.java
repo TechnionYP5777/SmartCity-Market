@@ -53,13 +53,11 @@ public class LoginTest {
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(new CustomerProfile("Guest"))).serialize());
 			
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		try {
 			customer.login("Guest", "Guest");
 		} catch (CriticalError | AuthenticationError ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		//TODO lior - add getCartLoginDetails - issue #301
@@ -75,13 +73,11 @@ public class LoginTest {
 							CommandDescriptor.LOGIN_CUSTOMER, Serialization.serialize(new Login("Guest", "Guest"))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		try {
 			customer.login("Guest", "Guest");
 		} catch (AuthenticationError ¢) {
-			¢.printStackTrace();
 			fail();
 		} catch (CriticalError ¢) {
 		/* Test Passed */
@@ -96,13 +92,11 @@ public class LoginTest {
 							CommandDescriptor.LOGIN_CUSTOMER, Serialization.serialize(new Login("Guest", "GuesT"))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		try {
 			customer.login("Guest", "GuesT");
 		} catch (CriticalError ¢) {
-			¢.printStackTrace();
 			fail();
 		} catch (AuthenticationError ¢) {
 		/* Test Passed */
@@ -117,13 +111,11 @@ public class LoginTest {
 							CommandDescriptor.LOGIN_CUSTOMER, Serialization.serialize(new Login("Guesttt", "Guest"))).serialize())))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		try {
 			customer.login("Guesttt", "Guest");
 		} catch (CriticalError ¢) {
-			¢.printStackTrace();
 			fail();
 		} catch (AuthenticationError ¢) {
 		/* Test Passed */

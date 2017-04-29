@@ -52,7 +52,6 @@ public class CommandExecuterPlaceProductPackageOnShelvesTest {
 			Mockito.doNothing().when(sqlDatabaseConnection).placeProductPackageOnShelves(senderID, productPackage);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -74,7 +73,6 @@ public class CommandExecuterPlaceProductPackageOnShelvesTest {
 			Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection).placeProductPackageOnShelves(senderID, productPackage);
 		} catch (ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		} catch (CriticalError __) {
 			/* Success */
@@ -98,7 +96,6 @@ public class CommandExecuterPlaceProductPackageOnShelvesTest {
 			Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection).placeProductPackageOnShelves(senderID, productPackage);
 		} catch (CriticalError | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected __) {
 			/* Success */
@@ -122,7 +119,6 @@ public class CommandExecuterPlaceProductPackageOnShelvesTest {
 			Mockito.doThrow(new ProductNotExistInCatalog()).when(sqlDatabaseConnection).placeProductPackageOnShelves(senderID, productPackage);
 		} catch (CriticalError | ClientNotConnected | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog __) {
 			/* Success */
@@ -146,7 +142,6 @@ public class CommandExecuterPlaceProductPackageOnShelvesTest {
 			Mockito.doThrow(new ProductPackageAmountNotMatch()).when(sqlDatabaseConnection).placeProductPackageOnShelves(senderID, productPackage);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductPackageAmountNotMatch __) {
 			/* Success */
@@ -170,7 +165,6 @@ public class CommandExecuterPlaceProductPackageOnShelvesTest {
 			Mockito.doThrow(new ProductPackageNotExist()).when(sqlDatabaseConnection).placeProductPackageOnShelves(senderID, productPackage);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog
 				| ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductPackageNotExist __) {
 			/* Success */

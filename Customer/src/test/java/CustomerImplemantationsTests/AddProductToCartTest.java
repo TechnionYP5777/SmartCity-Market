@@ -60,7 +60,6 @@ public class AddProductToCartTest {
 						CommandDescriptor.ADD_PRODUCT_TO_GROCERY_LIST, Serialization.serialize(pp)).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
@@ -70,7 +69,6 @@ public class AddProductToCartTest {
 						CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG, Serialization.serialize(sc)).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(catalogProduct)).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
@@ -78,7 +76,6 @@ public class AddProductToCartTest {
 			customer.addProductToCart(sc, amount);
 		} catch (CriticalError | CustomerNotConnected | AmountBiggerThanAvailable | ProductPackageDoesNotExist
 				| InvalidParameter e1) {
-			e1.printStackTrace();
 			fail();
 		}
 		
@@ -86,7 +83,6 @@ public class AddProductToCartTest {
 			customer.addProductToCart(sc, amount);
 		} catch (CriticalError | CustomerNotConnected | AmountBiggerThanAvailable | ProductPackageDoesNotExist
 				| InvalidParameter e) {
-			e.printStackTrace();
 			fail();
 		}
 	}
@@ -99,7 +95,6 @@ public class AddProductToCartTest {
 						CommandDescriptor.ADD_PRODUCT_TO_GROCERY_LIST, Serialization.serialize(pp)).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
@@ -109,7 +104,6 @@ public class AddProductToCartTest {
 						CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG, Serialization.serialize(sc)).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(catalogProduct)).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
@@ -117,7 +111,6 @@ public class AddProductToCartTest {
 			customer.addProductToCart(sc, amount);
 		} catch (CustomerNotConnected | AmountBiggerThanAvailable | ProductPackageDoesNotExist
 				| InvalidParameter e) {
-			e.printStackTrace();
 			fail();
 		} catch (CriticalError __) {
 			/* success */
@@ -132,7 +125,6 @@ public class AddProductToCartTest {
 						CommandDescriptor.ADD_PRODUCT_TO_GROCERY_LIST, Serialization.serialize(pp)).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
@@ -142,7 +134,6 @@ public class AddProductToCartTest {
 						CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG, Serialization.serialize(sc)).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(catalogProduct)).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
@@ -150,7 +141,6 @@ public class AddProductToCartTest {
 			customer.addProductToCart(sc, amount);
 		} catch (CriticalError | AmountBiggerThanAvailable | ProductPackageDoesNotExist
 				| InvalidParameter e) {
-			e.printStackTrace();
 			fail();
 		} catch (CustomerNotConnected __) {
 			/* success */
@@ -165,7 +155,6 @@ public class AddProductToCartTest {
 						CommandDescriptor.ADD_PRODUCT_TO_GROCERY_LIST, Serialization.serialize(pp)).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
@@ -175,7 +164,6 @@ public class AddProductToCartTest {
 						CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG, Serialization.serialize(sc)).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(catalogProduct)).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
@@ -183,7 +171,6 @@ public class AddProductToCartTest {
 			customer.addProductToCart(sc, amount);
 		} catch (CriticalError | CustomerNotConnected | ProductPackageDoesNotExist
 				| InvalidParameter e) {
-			e.printStackTrace();
 			fail();
 		} catch (AmountBiggerThanAvailable __) {
 			/* success */
@@ -198,7 +185,6 @@ public class AddProductToCartTest {
 						CommandDescriptor.ADD_PRODUCT_TO_GROCERY_LIST, Serialization.serialize(pp)).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_DOES_NOT_EXIST).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
@@ -208,7 +194,6 @@ public class AddProductToCartTest {
 						CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG, Serialization.serialize(sc)).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(catalogProduct)).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
@@ -216,7 +201,6 @@ public class AddProductToCartTest {
 			customer.addProductToCart(sc, amount);
 		} catch (CriticalError | CustomerNotConnected | AmountBiggerThanAvailable
 				| InvalidParameter e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductPackageDoesNotExist __) {
 			/* success */
@@ -231,7 +215,6 @@ public class AddProductToCartTest {
 						CommandDescriptor.ADD_PRODUCT_TO_GROCERY_LIST, Serialization.serialize(pp)).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
@@ -241,7 +224,6 @@ public class AddProductToCartTest {
 						CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG, Serialization.serialize(sc)).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(catalogProduct)).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
@@ -249,7 +231,6 @@ public class AddProductToCartTest {
 			customer.addProductToCart(sc, amount);
 		} catch (CriticalError | CustomerNotConnected | AmountBiggerThanAvailable
 				| ProductPackageDoesNotExist e) {
-			e.printStackTrace();
 			fail();
 		} catch (InvalidParameter __) {
 			/* success */

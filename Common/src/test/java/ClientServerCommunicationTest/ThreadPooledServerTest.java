@@ -45,7 +45,6 @@ public class ThreadPooledServerTest {
 				while ($ == null)
 					$ = in.readLine();
 			} catch (IOException e1) {
-				e1.printStackTrace();
 				fail();
 			}
 		}
@@ -66,7 +65,6 @@ public class ThreadPooledServerTest {
 				clientRequestManager = new ClientRequestHandler();
 				clientRequestManager.createSocket(SERVER_PORT, serverIP, TIMEOUT);
 			} catch (UnknownHostException | RuntimeException e1) {
-				e1.printStackTrace();
 				fail();
 			}
 			
@@ -74,7 +72,6 @@ public class ThreadPooledServerTest {
 			try {
 				assertEquals(clientRequestManager.sendRequestWithRespond(CLIENT_MSG_HELLO), SERVER_MSG_WORLD);
 			} catch (IOException e) {
-				e.printStackTrace();
 				fail();
 			}
 			
@@ -95,7 +92,6 @@ public class ThreadPooledServerTest {
 		try {
 			server = new ThreadPooledServer(SERVER_PORT, 1, processRequestTester);
 		} catch (UnknownHostException e1) {
-			e1.printStackTrace();
 			fail();
 		}
 		Thread client;
@@ -110,7 +106,6 @@ public class ThreadPooledServerTest {
 		try {
 			client.join();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -123,7 +118,6 @@ public class ThreadPooledServerTest {
 		try {
 			server = new ThreadPooledServer(SERVER_PORT, 1, processRequestTester, SERVER_HOST_IP);
 		} catch (UnknownHostException e1) {
-			e1.printStackTrace();
 			fail();
 		}
 		Thread client;
@@ -139,7 +133,6 @@ public class ThreadPooledServerTest {
 		try {
 			client.join();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 			fail();
 		}
 		

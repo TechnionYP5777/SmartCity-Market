@@ -40,7 +40,6 @@ public class ServerWorkerRunnableTest {
 				clientRequestManager = new ClientRequestHandler();
 				clientRequestManager.createSocket(SERVER_PORT, SERVER_HOST_NAME, TIMEOUT);
 			} catch (UnknownHostException | RuntimeException e1) {
-				e1.printStackTrace();
 				fail();
 			}
 			
@@ -48,7 +47,6 @@ public class ServerWorkerRunnableTest {
 			try {
 				assertEquals(clientRequestManager.sendRequestWithRespond(CLIENT_MSG_HELLO), SERVER_MSG_WORLD);
 			} catch (IOException e) {
-				e.printStackTrace();
 				fail();
 			}
 			
@@ -67,13 +65,11 @@ public class ServerWorkerRunnableTest {
 			try {
 				in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			} catch (IOException e1) {
-				e1.printStackTrace();
 				fail();
 			}
 			try {
 				out = new PrintWriter(s.getOutputStream(), true);
 			} catch (IOException e1) {
-				e1.printStackTrace();
 				fail();
 			}
             
@@ -85,7 +81,6 @@ public class ServerWorkerRunnableTest {
 				
 				out.println(SERVER_MSG_WORLD);
 			} catch (IOException e) {
-				e.printStackTrace();
 				fail();
 			}		
 		}
@@ -104,7 +99,6 @@ public class ServerWorkerRunnableTest {
 				while (clientSocket == null)
 					clientSocket = serverSocket.accept();
 			} catch (IOException e1) {
-				e1.printStackTrace();
 				fail();
 			}
 			ServerWorkerRunnable workerRunnable = new ServerWorkerRunnable(clientSocket, new ServerProcessRequestHelloWorld());
@@ -115,7 +109,6 @@ public class ServerWorkerRunnableTest {
 			try {
 				serverSocket.close();
 			} catch (IOException e) {
-				e.printStackTrace();
 				fail();
 			}
 		}
@@ -134,7 +127,6 @@ public class ServerWorkerRunnableTest {
 		    Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			assert(false);
-		    e.printStackTrace();
 		}
 	}
 	

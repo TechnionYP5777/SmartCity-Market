@@ -48,16 +48,12 @@ public class CommandExecuterLoginTest {
 					sqlDatabaseConnection.login(login.getUserName(), login.getPassword()))
 					.thenReturn(senderID);
 		} catch (AuthenticationError e) {
-			e.printStackTrace();
 			fail();
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientAlreadyConnected e) {
-			e.printStackTrace();
 			fail();
 		} catch (NumberOfConnectionsExceeded e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -80,16 +76,12 @@ public class CommandExecuterLoginTest {
 					sqlDatabaseConnection.login(login.getUserName(), login.getPassword()))
 			       .thenThrow(new AuthenticationError());
 		} catch (AuthenticationError e) {
-			e.printStackTrace();
 			fail();
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientAlreadyConnected e) {
-			e.printStackTrace();
 			fail();
 		} catch (NumberOfConnectionsExceeded e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -111,16 +103,12 @@ public class CommandExecuterLoginTest {
 					sqlDatabaseConnection.login(login.getUserName(), login.getPassword()))
 			       .thenThrow(new CriticalError());
 		} catch (AuthenticationError e) {
-			e.printStackTrace();
 			fail();
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientAlreadyConnected e) {
-			e.printStackTrace();
 			fail();
 		} catch (NumberOfConnectionsExceeded e) {
-			e.printStackTrace();
 			fail();
 		}
 		

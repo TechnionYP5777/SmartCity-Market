@@ -51,7 +51,6 @@ class SQLJsonGenerator {
 			result = s.getString(c.getColumnNameSQL());
 			return s.wasNull() ? "" : result;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new SQLDatabaseException.CriticalError();
 		}
 
@@ -107,7 +106,6 @@ class SQLJsonGenerator {
 					productPicture, locations));
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new SQLDatabaseException.CriticalError();
 		}
 
@@ -142,7 +140,6 @@ class SQLJsonGenerator {
 //					productIngredients.next();
 //				}
 //		} catch (SQLException e) {
-//			e.printStackTrace();
 //			throw new SQLDatabaseException.CriticalError();
 //		}
 //
@@ -193,7 +190,6 @@ class SQLJsonGenerator {
 					customerPhonenumber, customerEmail, customerCity, customeraddress, customerBirthdate, ingredients, null));
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new SQLDatabaseException.CriticalError();
 		}
 
@@ -248,7 +244,6 @@ class SQLJsonGenerator {
 					ingredientsSet.next();
 				}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new SQLDatabaseException.CriticalError();
 		}
 
@@ -336,7 +331,6 @@ class SQLJsonGenerator {
 					productLocations.next();
 				}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new SQLDatabaseException.CriticalError();
 		}
 
@@ -391,7 +385,6 @@ class SQLJsonGenerator {
 					groceryList.next();
 				}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new SQLDatabaseException.CriticalError();
 		}
 
@@ -423,7 +416,6 @@ class SQLJsonGenerator {
 					manufaturersList.next();
 				}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new SQLDatabaseException.CriticalError();
 		}
 
@@ -454,7 +446,6 @@ class SQLJsonGenerator {
 					workersList.next();
 				}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new SQLDatabaseException.CriticalError();
 		}
 

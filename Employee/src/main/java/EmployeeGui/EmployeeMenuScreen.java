@@ -83,7 +83,6 @@ public class EmployeeMenuScreen implements Initializable {
 //					try {
 //						loader.load();
 //					} catch (IOException e) {
-//						e.printStackTrace();
 //					}
 //					ITabPaneHandler ctrl = loader.getController();
 //					ctrl.tabSelected();

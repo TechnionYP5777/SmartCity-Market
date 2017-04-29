@@ -49,7 +49,6 @@ public class CommandExectuerEditProductFromCatalogTest {
 			Mockito.doNothing().when(sqlDatabaseConnection).editProductInCatalog(senderID, catalogProduct);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | IngredientNotExist
 				| ManufacturerNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -71,7 +70,6 @@ public class CommandExectuerEditProductFromCatalogTest {
 			Mockito.doNothing().when(sqlDatabaseConnection).editProductInCatalog(senderID, catalogProduct);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | IngredientNotExist
 				| ManufacturerNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -93,7 +91,6 @@ public class CommandExectuerEditProductFromCatalogTest {
 			Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection).editProductInCatalog(senderID, catalogProduct);
 		} catch (ClientNotConnected | ProductNotExistInCatalog | IngredientNotExist
 				| ManufacturerNotExist e1) {
-			e1.printStackTrace();
 			fail();
 		} catch (CriticalError __) {
 			/* Success */
@@ -117,7 +114,6 @@ public class CommandExectuerEditProductFromCatalogTest {
 			Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection).editProductInCatalog(senderID, catalogProduct);
 		} catch (CriticalError | ProductNotExistInCatalog | IngredientNotExist
 				| ManufacturerNotExist e1) {
-			e1.printStackTrace();
 			fail();
 		} catch (ClientNotConnected __) {
 			/* Success */
@@ -141,7 +137,6 @@ public class CommandExectuerEditProductFromCatalogTest {
 			Mockito.doThrow(new ProductNotExistInCatalog()).when(sqlDatabaseConnection).editProductInCatalog(senderID, catalogProduct);
 		} catch (CriticalError | ClientNotConnected | IngredientNotExist
 				| ManufacturerNotExist e1) {
-			e1.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog __) {
 			/* Success */
@@ -165,7 +160,6 @@ public class CommandExectuerEditProductFromCatalogTest {
 			Mockito.doThrow(new IngredientNotExist()).when(sqlDatabaseConnection).editProductInCatalog(senderID, catalogProduct);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog
 				| ManufacturerNotExist e1) {
-			e1.printStackTrace();
 			fail();
 		} catch (IngredientNotExist __) {
 			/* Success */
@@ -188,7 +182,6 @@ public class CommandExectuerEditProductFromCatalogTest {
 		try {
 			Mockito.doThrow(new ManufacturerNotExist()).when(sqlDatabaseConnection).editProductInCatalog(senderID, catalogProduct);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | IngredientNotExist e1) {
-			e1.printStackTrace();
 			fail();
 		} catch (ManufacturerNotExist __) {
 			/* Success */

@@ -49,7 +49,6 @@ public class CommandExectuerAddProductPackageToWarehouseTest {
 		try {
 			Mockito.doNothing().when(sqlDatabaseConnection).addProductPackageToWarehouse(senderID, productPackage);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -70,7 +69,6 @@ public class CommandExectuerAddProductPackageToWarehouseTest {
 		try {
 			Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection).addProductPackageToWarehouse(senderID, productPackage);
 		} catch (ClientNotConnected | ProductNotExistInCatalog e) {
-			e.printStackTrace();
 			fail();
 		} catch (CriticalError __) {
 			/* Success */
@@ -93,7 +91,6 @@ public class CommandExectuerAddProductPackageToWarehouseTest {
 		try {
 			Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection).addProductPackageToWarehouse(senderID, productPackage);
 		} catch (CriticalError | ProductNotExistInCatalog e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected __) {
 			/* Success */
@@ -116,7 +113,6 @@ public class CommandExectuerAddProductPackageToWarehouseTest {
 		try {
 			Mockito.doThrow(new ProductNotExistInCatalog()).when(sqlDatabaseConnection).addProductPackageToWarehouse(senderID, productPackage);
 		} catch (CriticalError | ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog __) {
 			/* Success */

@@ -46,8 +46,7 @@ public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 		try {
 			imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + itemBarcode + ".jpg").toURI().toURL();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException();
 		}
 		Image image = new Image(imageUrl + "", 100, 100, true, false);
 		ImageView productImage = new ImageView(image);

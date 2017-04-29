@@ -52,7 +52,6 @@ public class CommandExecuerGetProductPackageAmountTest {
 					: sqlDatabaseConnection.getProductPackageAmonutInWarehouse(senderID, productPackage)))
 							.thenReturn("");
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog e1) {
-			e1.printStackTrace();
 			fail();
 		}
 		
@@ -74,7 +73,6 @@ public class CommandExecuerGetProductPackageAmountTest {
 			Mockito.when(sqlDatabaseConnection.getProductPackageAmonutOnShelves(senderID, productPackage)).thenThrow(new CriticalError());
 			Mockito.when(sqlDatabaseConnection.getProductPackageAmonutInWarehouse(senderID, productPackage)).thenThrow(new CriticalError());
 		} catch (ClientNotConnected | ProductNotExistInCatalog e1) {
-			e1.printStackTrace();
 			fail();
 		} catch (CriticalError __) {
 			/* Success */
@@ -98,7 +96,6 @@ public class CommandExecuerGetProductPackageAmountTest {
 			Mockito.when(sqlDatabaseConnection.getProductPackageAmonutOnShelves(senderID, productPackage)).thenThrow(new ClientNotConnected());
 			Mockito.when(sqlDatabaseConnection.getProductPackageAmonutInWarehouse(senderID, productPackage)).thenThrow(new ClientNotConnected());
 		} catch (CriticalError | ProductNotExistInCatalog e1) {
-			e1.printStackTrace();
 			fail();
 		} catch (ClientNotConnected __) {
 			/* Success */
@@ -122,7 +119,6 @@ public class CommandExecuerGetProductPackageAmountTest {
 			Mockito.when(sqlDatabaseConnection.getProductPackageAmonutOnShelves(senderID, productPackage)).thenThrow(new ProductNotExistInCatalog());
 			Mockito.when(sqlDatabaseConnection.getProductPackageAmonutInWarehouse(senderID, productPackage)).thenThrow(new ProductNotExistInCatalog());
 		} catch (CriticalError | ClientNotConnected e1) {
-			e1.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog __) {
 			/* Success */

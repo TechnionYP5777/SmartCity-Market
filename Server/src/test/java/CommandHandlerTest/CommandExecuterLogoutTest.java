@@ -44,10 +44,8 @@ public class CommandExecuterLogoutTest {
 		try {
 			Mockito.doNothing().when(sqlDatabaseConnection).logout(senderID, userName);
 		} catch (ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -69,10 +67,8 @@ public class CommandExecuterLogoutTest {
 			Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection)
 					.logout(senderID, userName);
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -94,10 +90,8 @@ public class CommandExecuterLogoutTest {
 			Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection)
 					.logout(senderID, userName);
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		}
 		

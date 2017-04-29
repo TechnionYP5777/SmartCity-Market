@@ -171,7 +171,7 @@ public class CustomerMainScreen implements Initializable {
 		try {
 			imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI().toURL();
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			throw new RuntimeException();
 		}
 		productInfoImage.setImage((new Image(imageUrl + "", 290, 230, true, false)));
 	}

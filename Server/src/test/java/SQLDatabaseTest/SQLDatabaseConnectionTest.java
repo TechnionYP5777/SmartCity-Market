@@ -90,7 +90,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage2));
 			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage2));
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -107,14 +106,12 @@ public class SQLDatabaseConnectionTest {
 			session = sqlConnection.login("admin", "admin");
 
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
-			e.printStackTrace();
 			fail();
 		}
 
 		try {
 			sqlConnection.logout(session, "admin");
 		} catch (CriticalError | ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		}
 	}
@@ -130,14 +127,12 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.logoutAllUsers();
 			session = sqlConnection.login("admin", "admin");
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
-			e.printStackTrace();
 			fail();
 		}
 
 		try {
 			sqlConnection.logout(session, "admin");
 		} catch (CriticalError | ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		}
 	}
@@ -157,7 +152,6 @@ public class SQLDatabaseConnectionTest {
 					new Gson().toJson(new CatalogProduct(1234567890L, "חלב", ingredients, new Manufacturer(1, "תנובה"),
 							"", 10.5, milkImage, locations)));
 		} catch (ProductNotExistInCatalog | ClientNotConnected | CriticalError e) {
-			e.printStackTrace();
 			fail();
 		}
 	}
@@ -175,7 +169,6 @@ public class SQLDatabaseConnectionTest {
 		try {
 			product = new Gson().fromJson(sqlConnection.getProductFromCatalog(null, barcodeNum), CatalogProduct.class);
 		} catch (ProductNotExistInCatalog | ClientNotConnected | CriticalError e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -194,14 +187,12 @@ public class SQLDatabaseConnectionTest {
 		try {
 			session = sqlConnection.login("admin", "admin");
 		} catch (AuthenticationError | ClientAlreadyConnected | CriticalError | NumberOfConnectionsExceeded e1) {
-			e1.printStackTrace();
 			fail();
 		}
 
 		try {
 			sqlConnection.getProductFromCatalog(session, 1234567890);
 		} catch (ProductNotExistInCatalog | CriticalError e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected e) {
 			fail();
@@ -210,7 +201,6 @@ public class SQLDatabaseConnectionTest {
 		try {
 			sqlConnection.logout(session, "admin");
 		} catch (ClientNotConnected | CriticalError e1) {
-			e1.printStackTrace();
 			fail();
 		}
 
@@ -218,7 +208,6 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.getProductFromCatalog(session, 1234567890);
 			fail();
 		} catch (ProductNotExistInCatalog | CriticalError e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected e) {
 		}
@@ -234,14 +223,12 @@ public class SQLDatabaseConnectionTest {
 		try {
 			session = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 		} catch (AuthenticationError | ClientAlreadyConnected | CriticalError | NumberOfConnectionsExceeded e1) {
-			e1.printStackTrace();
 			fail();
 		}
 
 		try {
 			sqlConnection.getProductFromCatalog(session, 1234567890);
 		} catch (ProductNotExistInCatalog | CriticalError e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected e) {
 			fail();
@@ -250,7 +237,6 @@ public class SQLDatabaseConnectionTest {
 		try {
 			sqlConnection.logout(session, ClientServerDefs.anonymousCustomerUsername);
 		} catch (ClientNotConnected | CriticalError e1) {
-			e1.printStackTrace();
 			fail();
 		}
 
@@ -258,7 +244,6 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.getProductFromCatalog(session, 1234567890);
 			fail();
 		} catch (ProductNotExistInCatalog | CriticalError e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected e) {
 		}
@@ -280,7 +265,6 @@ public class SQLDatabaseConnectionTest {
 					new Gson().toJson(newProduct));
 			sqlConnection.removeProductFromCatalog(null, new SmartCode(newProduct.getBarcode(), null));
 		} catch (SQLDatabaseException e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -289,7 +273,6 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		} catch (ProductNotExistInCatalog e) {
 		} catch (CriticalError | ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -311,7 +294,6 @@ public class SQLDatabaseConnectionTest {
 					new Gson().toJson(newProduct));
 			sqlConnection.removeProductFromCatalog(null, new SmartCode(newProduct.getBarcode(), null));
 		} catch (SQLDatabaseException e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -320,7 +302,6 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		} catch (ProductNotExistInCatalog e) {
 		} catch (CriticalError | ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -343,7 +324,6 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.addProductPackageToWarehouse(null, newPackage);
 			assertEquals("5", sqlConnection.getProductPackageAmonutInWarehouse(null, newPackage));
 		} catch (SQLDatabaseException e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -354,7 +334,6 @@ public class SQLDatabaseConnectionTest {
 		} catch (ProductStillForSale e1) {
 
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog e1) {
-			e1.printStackTrace();
 			fail();
 		}
 
@@ -364,7 +343,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, newPackage));
 			assertEquals("5", sqlConnection.getProductPackageAmonutOnShelves(null, newPackage));
 		} catch (SQLDatabaseException e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -375,7 +353,6 @@ public class SQLDatabaseConnectionTest {
 		} catch (ProductStillForSale e1) {
 
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog e1) {
-			e1.printStackTrace();
 			fail();
 		}
 
@@ -386,7 +363,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, newPackage));
 			sqlConnection.removeProductFromCatalog(null, new SmartCode(newProduct.getBarcode(), null));
 		} catch (SQLDatabaseException e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -407,7 +383,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -432,7 +407,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -457,7 +431,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -476,7 +449,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("10", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
 
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -486,7 +458,6 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		} catch (ProductPackageAmountNotMatch e) {
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -496,7 +467,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -516,7 +486,6 @@ public class SQLDatabaseConnectionTest {
 		} catch (ProductPackageNotExist e) {
 
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -540,7 +509,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("5", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -548,7 +516,6 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.removeProductPackageFromWarehouse(null, productPackage);
 			fail();
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductPackageNotExist e) {
 
@@ -560,14 +527,12 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
 		try {
 			sqlConnection.close();
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		}
 	}
@@ -594,7 +559,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("10", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -602,7 +566,6 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.removeProductPackageFromWarehouse(null, productPackage);
 			fail();
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductPackageNotExist e) {
 
@@ -617,7 +580,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -645,7 +607,6 @@ public class SQLDatabaseConnectionTest {
 					sqlConnection.getProductPackageAmonutOnShelves(null, productPackageShelf));
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -657,7 +618,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackageShelf));
 		} catch (ProductPackageNotExist | CriticalError | ClientNotConnected | ProductNotExistInCatalog
 				| ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -673,7 +633,6 @@ public class SQLDatabaseConnectionTest {
 			session = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 			assertTrue(sqlConnection.isClientLoggedIn(session));
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -681,7 +640,6 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.logout(session, ClientServerDefs.anonymousCustomerUsername);
 			assertFalse(sqlConnection.isClientLoggedIn(session));
 		} catch (CriticalError | ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		}
 	}
@@ -699,7 +657,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals(new Gson().toJson(CLIENT_TYPE.CART), sqlConnection.getClientType(session));
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded
 				| ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -707,7 +664,6 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.logout(session, ClientServerDefs.anonymousCustomerUsername);
 			assertFalse(sqlConnection.isClientLoggedIn(session));
 		} catch (CriticalError | ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -717,7 +673,6 @@ public class SQLDatabaseConnectionTest {
 		} catch (ClientNotConnected e) {
 
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		}
 	}
@@ -736,7 +691,6 @@ public class SQLDatabaseConnectionTest {
 			assertTrue(list.contains(new Manufacturer(1, "תנובה")));
 			assertTrue(list.contains(new Manufacturer(2, "מאפיות ברמן")));
 		} catch (CriticalError | ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		}
 	}
@@ -769,7 +723,6 @@ public class SQLDatabaseConnectionTest {
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | AuthenticationError
 				| ClientAlreadyConnected | NumberOfConnectionsExceeded | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -779,7 +732,6 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		} catch (ProductPackageAmountNotMatch e) {
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -791,7 +743,6 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.logout(sessionCart, ClientServerDefs.anonymousCustomerUsername);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -810,7 +761,6 @@ public class SQLDatabaseConnectionTest {
 		try {
 			sessionCart = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 		} catch (AuthenticationError | ClientAlreadyConnected | CriticalError | NumberOfConnectionsExceeded e1) {
-			e1.printStackTrace();
 			fail();
 		}
 
@@ -820,7 +770,6 @@ public class SQLDatabaseConnectionTest {
 		} catch (ProductPackageNotExist e) {
 
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -829,7 +778,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("10", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
 			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog e1) {
-			e1.printStackTrace();
 			fail();
 		}
 
@@ -838,7 +786,6 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		} catch (ProductPackageNotExist e) {
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -848,7 +795,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("10", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e1) {
-			e1.printStackTrace();
 			fail();
 		}
 
@@ -857,7 +803,6 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		} catch (ProductPackageNotExist e) {
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -871,7 +816,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("10", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e1) {
-			e1.printStackTrace();
 			fail();
 		}
 
@@ -880,7 +824,6 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		} catch (ProductPackageNotExist e) {
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -890,7 +833,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e1) {
-			e1.printStackTrace();
 			fail();
 		}
 
@@ -899,14 +841,12 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		} catch (ProductPackageNotExist e) {
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		}
 
 		try {
 			sqlConnection.logout(sessionCart, ClientServerDefs.anonymousCustomerUsername);
 		} catch (ClientNotConnected | CriticalError e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -942,7 +882,6 @@ public class SQLDatabaseConnectionTest {
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist | AuthenticationError | ClientAlreadyConnected
 				| NumberOfConnectionsExceeded e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -952,7 +891,6 @@ public class SQLDatabaseConnectionTest {
 		} catch (ProductPackageNotExist e) {
 
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -962,14 +900,12 @@ public class SQLDatabaseConnectionTest {
 		} catch (ProductPackageNotExist e) {
 
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		}
 
 		try {
 			sqlConnection.logout(cartSession, ClientServerDefs.anonymousCustomerUsername);
 		} catch (ClientNotConnected | CriticalError e) {
-			e.printStackTrace();
 			fail();
 		}
 	}
@@ -1009,7 +945,6 @@ public class SQLDatabaseConnectionTest {
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist | AuthenticationError | ClientAlreadyConnected
 				| NumberOfConnectionsExceeded e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -1017,7 +952,6 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.removeProductPackageFromShelves(null, productPackage);
 			fail();
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductPackageNotExist e) {
 
@@ -1043,7 +977,6 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.logout(cartSession, ClientServerDefs.anonymousCustomerUsername);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -1075,7 +1008,6 @@ public class SQLDatabaseConnectionTest {
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist | AuthenticationError | ClientAlreadyConnected
 				| NumberOfConnectionsExceeded e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -1091,7 +1023,6 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.logout(cartSession, ClientServerDefs.anonymousCustomerUsername);
 		} catch (ProductPackageNotExist | CriticalError | ClientNotConnected | ProductNotExistInCatalog
 				| ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -1118,7 +1049,6 @@ public class SQLDatabaseConnectionTest {
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded
 				| ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -1126,7 +1056,6 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.cartCheckout(session);
 			assertFalse(sqlConnection.isClientLoggedIn(session));
 		} catch (CriticalError | ClientNotConnected | GroceryListIsEmpty e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -1136,14 +1065,12 @@ public class SQLDatabaseConnectionTest {
 		} catch (ClientNotConnected e) {
 
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		}
 
 		try {
 			sqlConnection.clearGroceryListsHistory();
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		}
 	}
@@ -1158,7 +1085,6 @@ public class SQLDatabaseConnectionTest {
 			session = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
 			assertTrue(sqlConnection.isClientLoggedIn(session));
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -1166,7 +1092,6 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.cartCheckout(session);
 			fail();
 		} catch (CriticalError | ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		} catch (GroceryListIsEmpty e) {
 		}
@@ -1174,7 +1099,6 @@ public class SQLDatabaseConnectionTest {
 		try {
 			sqlConnection.logout(session, ClientServerDefs.anonymousCustomerUsername);
 		} catch (CriticalError | ClientNotConnected e) {
-			e.printStackTrace();
 			fail();
 		}
 	}
@@ -1198,7 +1122,6 @@ public class SQLDatabaseConnectionTest {
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded
 				| ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -1210,7 +1133,6 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 	}
@@ -1237,7 +1159,6 @@ public class SQLDatabaseConnectionTest {
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded
 				| ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 
@@ -1247,14 +1168,12 @@ public class SQLDatabaseConnectionTest {
 			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
 			assertFalse(sqlConnection.isClientLoggedIn(session));
 		} catch (CriticalError | ClientNotConnected | GroceryListIsEmpty | ProductNotExistInCatalog e) {
-			e.printStackTrace();
 			fail();
 		}
 
 		try {
 			sqlConnection.clearGroceryListsHistory();
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		}
 	}

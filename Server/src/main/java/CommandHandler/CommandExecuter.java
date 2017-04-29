@@ -85,8 +85,6 @@ public class CommandExecuter {
 			try {
 				outCommandWrapper.setData(c.getClientType(outCommandWrapper.getSenderID()));
 			} catch (ClientNotConnected e) {
-				e.printStackTrace();
-
 				log.fatal("Client is not connected for sender ID " + outCommandWrapper.getSenderID());
 			}
 
@@ -144,8 +142,6 @@ public class CommandExecuter {
 			try {
 				outCommandWrapper.setData(c.getClientType(outCommandWrapper.getSenderID()));
 			} catch (ClientNotConnected e) {
-				e.printStackTrace();
-
 				log.fatal("Client is not connected for sender ID " + outCommandWrapper.getSenderID());
 			}
 
@@ -203,8 +199,6 @@ public class CommandExecuter {
 			try {
 				outCommandWrapper.setData(c.getClientType(outCommandWrapper.getSenderID()));
 			} catch (ClientNotConnected e) {
-				e.printStackTrace();
-
 				log.fatal("Client is not connected for sender ID " + outCommandWrapper.getSenderID());
 			}
 
@@ -342,8 +336,6 @@ public class CommandExecuter {
 			productPackage = Serialization.deserialize(inCommandWrapper.getData(), ProductPackage.class);
 		} catch (java.lang.RuntimeException e) {
 			log.fatal("Failed to parse data for Add Product Package To Warehouse command");
-
-			e.printStackTrace();
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 

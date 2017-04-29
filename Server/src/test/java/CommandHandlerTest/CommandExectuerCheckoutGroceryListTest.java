@@ -41,7 +41,6 @@ public class CommandExectuerCheckoutGroceryListTest {
 		try {
 			Mockito.doNothing().when(sqlDatabaseConnection).cartCheckout(cartID);
 		} catch (CriticalError | ClientNotConnected | GroceryListIsEmpty e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -60,7 +59,6 @@ public class CommandExectuerCheckoutGroceryListTest {
 		try {
 			Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection).cartCheckout(cartID);
 		} catch (ClientNotConnected | GroceryListIsEmpty e) {
-			e.printStackTrace();
 			fail();
 		} catch (CriticalError __) {
 			/* Successful */
@@ -81,7 +79,6 @@ public class CommandExectuerCheckoutGroceryListTest {
 		try {
 			Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection).cartCheckout(cartID);
 		} catch (CriticalError | GroceryListIsEmpty e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected __) {
 			/* Successful */

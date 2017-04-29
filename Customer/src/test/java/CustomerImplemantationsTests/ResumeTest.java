@@ -48,15 +48,12 @@ public class ResumeTest {
 						CommandDescriptor.LOAD_GROCERY_LIST).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(groceryList)).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
 		try {
 			customer.resume(CustomerDefs.loginCommandSenderId);
-		} catch (CriticalError | CustomerNotConnected e1) {
-			e1.printStackTrace();
-			
+		} catch (CriticalError | CustomerNotConnected e1) {			
 			fail();
 		}
 	}
@@ -71,15 +68,12 @@ public class ResumeTest {
 						CommandDescriptor.LOAD_GROCERY_LIST).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR, Serialization.serialize(groceryList)).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
 		try {
 			customer.resume(CustomerDefs.loginCommandSenderId);
-		} catch (CustomerNotConnected e1) {
-			e1.printStackTrace();
-			
+		} catch (CustomerNotConnected e1) {			
 			fail();
 		} catch (CriticalError __) {
 			/* success */
@@ -96,15 +90,12 @@ public class ResumeTest {
 						CommandDescriptor.LOAD_GROCERY_LIST).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED, Serialization.serialize(groceryList)).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
 		try {
 			customer.resume(CustomerDefs.loginCommandSenderId);
-		} catch (CriticalError e1) {
-			e1.printStackTrace();
-			
+		} catch (CriticalError e1) {			
 			fail();
 		} catch (CustomerNotConnected __) {
 			/* success */

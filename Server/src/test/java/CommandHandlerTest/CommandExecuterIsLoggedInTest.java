@@ -42,7 +42,6 @@ public class CommandExecuterIsLoggedInTest {
 			Mockito.when(
 					sqlDatabaseConnection.isClientLoggedIn(senderID)).thenReturn(true);
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -64,7 +63,6 @@ public class CommandExecuterIsLoggedInTest {
 			Mockito.when(
 					sqlDatabaseConnection.isClientLoggedIn(senderID)).thenThrow(new CriticalError());
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		}
 		

@@ -41,7 +41,6 @@ public class CommandExectuerLoadGroceryList {
 			Mockito.when(sqlDatabaseConnection.cartRestoreGroceryList(senderID))
 							.thenReturn("");
 		} catch (CriticalError | NoGroceryListToRestore e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -63,7 +62,6 @@ public class CommandExectuerLoadGroceryList {
 		} catch (CriticalError __) {
 			/* Success */
 		} catch (NoGroceryListToRestore e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -85,7 +83,6 @@ public class CommandExectuerLoadGroceryList {
 		} catch (NoGroceryListToRestore __) {
 			/* Success */
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			fail();
 		}
 		

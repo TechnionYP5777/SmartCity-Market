@@ -271,7 +271,6 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		// });
 		// } catch (InvalidParameter | CriticalError | EmployeeNotConnected |
 		// ConnectionFailure e) {
-		// e.printStackTrace();
 		// }
 
 		dataManu = FXCollections.observableArrayList();
@@ -295,7 +294,6 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		// } catch (InvalidParameter | CriticalError | EmployeeNotConnected |
 		// ConnectionFailure e) {
 		// // TODO Auto-generated catch block
-		// e.printStackTrace();
 		// }
 
 		dataIngr = FXCollections.observableArrayList();

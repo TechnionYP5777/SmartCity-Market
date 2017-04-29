@@ -52,7 +52,6 @@ public class CommandExectuerRemoveProductPackageFromGroceryListTest {
 			Mockito.doNothing().when(sqlDatabaseConnection).removeProductFromGroceryList(cartID, productPackage);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -74,7 +73,6 @@ public class CommandExectuerRemoveProductPackageFromGroceryListTest {
 			Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection).removeProductFromGroceryList(cartID, productPackage);
 		} catch (ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		} catch (CriticalError __) {
 			/* Successful */
@@ -98,7 +96,6 @@ public class CommandExectuerRemoveProductPackageFromGroceryListTest {
 			Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection).removeProductFromGroceryList(cartID, productPackage);
 		} catch (CriticalError | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected __) {
 			/* Successful */
@@ -122,7 +119,6 @@ public class CommandExectuerRemoveProductPackageFromGroceryListTest {
 			Mockito.doThrow(new ProductNotExistInCatalog()).when(sqlDatabaseConnection).removeProductFromGroceryList(cartID, productPackage);
 		} catch (CriticalError | ClientNotConnected | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog __) {
 			/* Successful */
@@ -146,7 +142,6 @@ public class CommandExectuerRemoveProductPackageFromGroceryListTest {
 			Mockito.doThrow(new ProductPackageAmountNotMatch()).when(sqlDatabaseConnection).removeProductFromGroceryList(cartID, productPackage);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductPackageAmountNotMatch __) {
 			/* Successful */
@@ -170,7 +165,6 @@ public class CommandExectuerRemoveProductPackageFromGroceryListTest {
 			Mockito.doThrow(new ProductPackageNotExist()).when(sqlDatabaseConnection).removeProductFromGroceryList(cartID, productPackage);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog
 				| ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductPackageNotExist __) {
 			/* Successful */

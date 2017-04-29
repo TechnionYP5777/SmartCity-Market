@@ -33,7 +33,6 @@ public class ClientRequestHandlerTest {
 			try {
 				serverSocket.close();
 			} catch (IOException e) {
-				e.printStackTrace();
 				fail();
 			}
 
@@ -49,7 +48,6 @@ public class ClientRequestHandlerTest {
 				serverSocket = new ServerSocket(portTest);
 				serverSocket.accept();
 			} catch (IOException e1) {
-				e1.printStackTrace();
 				fail();
 			}
 
@@ -69,7 +67,6 @@ public class ClientRequestHandlerTest {
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e1) {
-			e1.printStackTrace();
 			fail();
 		}
 
@@ -78,7 +75,6 @@ public class ClientRequestHandlerTest {
 			clientRequestHandler.createSocket(portTest, SERVER_HOST_NAME, TIMEOUT);
 			clientRequestHandler.finishRequest();
 		} catch (UnknownHostException | RuntimeException e) {
-			e.printStackTrace();
 			fail();
 		}
 	}
@@ -88,7 +84,6 @@ public class ClientRequestHandlerTest {
 		try {
 			(new ClientRequestHandler()).createSocket(portTest, SERVER_HOST_NAME, 0);
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
 			fail();
 		} catch (RuntimeException e) {
 			/* success */
@@ -102,7 +97,6 @@ public class ClientRequestHandlerTest {
 		} catch (RuntimeException e) {
 			/* success */
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
 			fail();
 		}
 	}
@@ -116,7 +110,6 @@ public class ClientRequestHandlerTest {
 		} catch (UnknownHostException e) {
 			/* success */
 		} catch (RuntimeException e) {
-			e.printStackTrace();
 			fail();
 		}
 	}

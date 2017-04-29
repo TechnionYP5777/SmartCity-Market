@@ -122,14 +122,14 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				connection = DriverManager.getConnection("jdbc:hsqldb:file:" + DATABASE_PATH_PARAMS + ";ifexists=true",
 						"SA", "");
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new RuntimeException();
 			}
 		else {
 			// connect and create database
 			try {
 				connection = DriverManager.getConnection("jdbc:hsqldb:file:" + DATABASE_PATH_PARAMS, "SA", "");
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new RuntimeException();
 			}
 
 			// creates tables
@@ -176,9 +176,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			statement.executeUpdate(createTableString);
 
 		} catch (SQLException e) {
-
-			e.printStackTrace();
-
+			throw new RuntimeException();
 		}
 
 	}
@@ -216,12 +214,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			s.last();
 			return s.getRow();
 		} catch (SQLException exp) {
-			exp.printStackTrace();
+			throw new RuntimeException();
 		} finally {
 			try {
 				s.beforeFirst();
 			} catch (SQLException exp) {
-				exp.printStackTrace();
+				throw new RuntimeException();
 			}
 		}
 		return 0;
@@ -242,7 +240,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			¢.beforeFirst();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		}
 		return !$;
@@ -328,7 +325,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement, result, maxIDResult);
@@ -358,7 +354,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		try {
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement);
@@ -379,7 +374,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			if (!isSessionExist(sessionID))
 				throw new SQLDatabaseException.ClientNotConnected();
 		} catch (ValidationException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		}
 	}
@@ -397,7 +391,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			if (!isCartSessionEstablished(cartID))
 				throw new SQLDatabaseException.ClientNotConnected();
 		} catch (ValidationException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		}
 	}
@@ -456,7 +449,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			log.debug("getClientTypeBySessionID: no such id!");
 			return null;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement, result);
@@ -500,7 +492,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			log.info("getWorkerTypeByUsername: no such id!");
 			return null;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement, result);
@@ -572,7 +563,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			return result.getObject(t.sessionIDCol.getName()) != null;
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(result);
@@ -615,7 +605,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		try {
 			$ = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		}
 
@@ -624,7 +613,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				try {
 					$.setObject(¢ + 1, parameters[¢]);
 				} catch (SQLException e) {
-					e.printStackTrace();
 					throw new CriticalError();
 				}
 
@@ -651,7 +639,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		try {
 			$ = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		}
 
@@ -660,7 +647,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				try {
 					$.setObject(¢ + 1, parameters[¢]);
 				} catch (SQLException e) {
-					e.printStackTrace();
 					throw new CriticalError();
 				}
 
@@ -709,7 +695,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			return $;
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement, result);
@@ -759,7 +744,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			
 			return $;
 		} catch (SQLException e) {
-			e.printStackTrace();	
 			throw new CriticalError();
 		} finally {
 			closeResources(statement, result);
@@ -824,7 +808,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			log.debug("setValueoRegisteredClient: run query: " + statement);
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement);
@@ -870,7 +853,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			result.first();
 			return (T) result.getObject(getColumn.getColumnNameSQL());
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement, result);
@@ -954,7 +936,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			getParameterizedQuery(insertQuery, sessionID, maxListID).executeUpdate();
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(maxHistoryListIDResult, maxListIDResult);
@@ -1057,7 +1038,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement, result);
@@ -1102,7 +1082,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			deleteCart.executeUpdate();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} catch (ProductPackageAmountNotMatch e) {
 			log.error(
@@ -1187,7 +1166,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement);
@@ -1258,7 +1236,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement);
@@ -1422,7 +1399,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			return result.getInt(ProductsPackagesTable.amountCol.getColumnNameSQL());
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement, result);
@@ -1465,7 +1441,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			return result.getInt(GroceriesListsTable.amountCol.getColumnNameSQL());
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement, result);
@@ -1497,7 +1472,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			return result.getInt(CartsListTable.listIDCol.getColumnNameSQL());
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement, result);
@@ -1540,7 +1514,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				closeResources(statement);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(statement);
@@ -1668,7 +1641,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			productResult = productStatement.executeQuery();
 			return !isResultSetEmpty(productResult);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException();
 		} finally {
 			closeResources(productStatement, productResult);
 		}
@@ -1722,7 +1695,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				try {
 					resource.close();
 				} catch (Exception e) {
-					e.printStackTrace();
+					throw new RuntimeException();
 				}
 	}
 
@@ -1765,7 +1738,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		try {
 			connection.setAutoCommit(false);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		}
 	}
@@ -1781,7 +1753,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		try {
 			connection.setAutoCommit(true);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		}
 	}
@@ -1797,7 +1768,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		try {
 			connection.commit();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		}
 	}
@@ -1813,7 +1783,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		try {
 			connection.rollback();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		}
 	}
@@ -1858,7 +1827,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		} catch (SQLDatabaseException e) {
 			// NOTE: all exceptions flows here - for doing rollback
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw e;
 		} finally {
@@ -1885,7 +1853,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		} catch (SQLDatabaseException e) {
 			// NOTE: all exceptions flows here - for doing rollback
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw e;
 		} finally {
@@ -1910,7 +1877,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		} catch (SQLDatabaseException e) {
 			// NOTE: all exceptions flows here - for doing rollback
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw e;
 		} finally {
@@ -1984,11 +1950,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		} catch (SQLDatabaseException e) {
 			// NOTE: all exceptions flows here - for doing rollback
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw e;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
@@ -2041,11 +2005,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			connectionCommitTransaction();
 
 		} catch (SQLDatabaseException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw e;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
@@ -2136,11 +2098,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		} catch (SQLDatabaseException e) {
 			// NOTE: all exceptions flows here - for doing rollback
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw e;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
@@ -2223,7 +2183,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			return Serialization.serialize(result);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		}
 	}
@@ -2267,7 +2226,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		} catch (SQLDatabaseException e) {
 			throw e;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		} finally {
 			closeResources(selectCustomerStatement, selectCustomerIngredientsStatement,
@@ -2298,7 +2256,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (SQLDatabaseException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw e;
 		} finally {
@@ -2328,7 +2285,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (SQLDatabaseException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw e;
 		} finally {
@@ -2354,7 +2310,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			return result;
 
 		} catch (SQLDatabaseException e) {
-			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -2377,7 +2332,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			return result;
 
 		} catch (SQLDatabaseException e) {
-			e.printStackTrace();
 			throw e;
 		}
 	}
@@ -2416,7 +2370,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (CriticalError e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw e;
 		} finally {
@@ -2482,7 +2435,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			return SQLJsonGenerator.ProductToJson(productResult, ingredientResult, locationsResult);
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
@@ -2518,7 +2470,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (CriticalError | ProductPackageAmountNotMatch | ProductPackageNotExist e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			/*
 			 * throw CriticalError instead of: ProductPackageAmountNotMatch |
@@ -2599,7 +2550,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (CriticalError | SQLException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
@@ -2646,7 +2596,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (CriticalError | SQLException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
@@ -2703,7 +2652,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (CriticalError | SQLException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
@@ -2740,7 +2688,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (CriticalError | ProductPackageAmountNotMatch | ProductPackageNotExist e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw e;
 		} finally {
@@ -2949,7 +2896,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// COMMIT transaction
 			connectionCommitTransaction();
 		} catch (SQLException | CriticalError e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
@@ -2971,7 +2917,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		try {
 			connection.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new SQLDatabaseException.CriticalError();
 		}
 	}
@@ -3003,7 +2948,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (CriticalError | SQLException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
@@ -3043,7 +2987,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (CriticalError | SQLException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
@@ -3079,7 +3022,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
@@ -3100,7 +3042,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			return SQLJsonGenerator.manufaturersListToJson(manufacturerResultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		}
 	}
@@ -3132,7 +3073,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (CriticalError | SQLException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
@@ -3173,7 +3113,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (CriticalError | SQLException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
@@ -3209,7 +3148,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
@@ -3230,7 +3168,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			return SQLJsonGenerator.allIngredientsListToJson(ingredientsResultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new CriticalError();
 		}
 	}
@@ -3274,7 +3211,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {
@@ -3320,7 +3256,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			result.first();
 			return SQLJsonGenerator.GroceryListToJson(result);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException();
 		} finally {
 			closeResources(result);
 		}
@@ -3348,7 +3284,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// END transaction
 			connectionCommitTransaction();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			connectionRollbackTransaction();
 			throw new CriticalError();
 		} finally {

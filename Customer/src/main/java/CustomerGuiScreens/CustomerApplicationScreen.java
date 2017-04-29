@@ -42,7 +42,7 @@ public class CustomerApplicationScreen extends AbstractApplicationScreen {
 			);
 			
 		} catch (Exception ¢) {
-			¢.printStackTrace();
+			throw new RuntimeException();
 		}
 	}
 

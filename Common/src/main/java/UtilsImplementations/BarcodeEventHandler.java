@@ -59,7 +59,7 @@ public class BarcodeEventHandler implements IBarcodeEventHandler {
 					eventBus.post(smartcode.getExpirationDate() != null ? new SmartcodeScanEvent(smartcode)
 							: new BarcodeScanEvent(smartcode.getBarcode()));
 				} catch (IOException | InterruptedException e) {
-					e.printStackTrace();
+					/* Drop scan silently */
 				}
       
         }

@@ -44,15 +44,12 @@ public class LogoutTest {
 						CommandDescriptor.LOGOUT).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
 		try {
 			customer.logout();
-		} catch (CustomerNotConnected | CriticalError e) {
-			e.printStackTrace();
-			
+		} catch (CustomerNotConnected | CriticalError e) {			
 			fail();
 		}
 	}
@@ -65,15 +62,12 @@ public class LogoutTest {
 						CommandDescriptor.LOGOUT).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
 		try {
 			customer.logout();
-		} catch (CustomerNotConnected e) {
-			e.printStackTrace();
-			
+		} catch (CustomerNotConnected e) {			
 			fail();
 		} catch (CriticalError __) {
 			/* success */
@@ -88,15 +82,12 @@ public class LogoutTest {
 						CommandDescriptor.LOGOUT).serialize())))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 		
 		try {
 			customer.logout();
-		} catch (CriticalError e) {
-			e.printStackTrace();
-			
+		} catch (CriticalError e) {			
 			fail();
 		} catch (CustomerNotConnected __) {
 			/* success */

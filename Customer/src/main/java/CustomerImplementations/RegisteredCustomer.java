@@ -248,9 +248,7 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | 
 				 GroceryListIsEmpty | ProductCatalogDoesNotExist | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			
-			¢.printStackTrace();
-			
+						
 			throw new CriticalError();
 		}
 		
@@ -286,9 +284,7 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | 
 				 GroceryListIsEmpty | ProductCatalogDoesNotExist | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			
-			¢.printStackTrace();
-			
+						
 			throw new CriticalError();
 		}
 		

@@ -55,7 +55,6 @@ public class CommandExecuterRemoveProductPackageFromStoreTest {
 				Mockito.doNothing().when(sqlDatabaseConnection).removeProductPackageFromWarehouse(senderID, productPackage);			
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -80,7 +79,6 @@ public class CommandExecuterRemoveProductPackageFromStoreTest {
 				Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection).removeProductPackageFromWarehouse(senderID, productPackage);
 		} catch (ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		} catch (CriticalError __) {
 			/* Success */
@@ -106,7 +104,6 @@ public class CommandExecuterRemoveProductPackageFromStoreTest {
 			else
 				Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection).removeProductPackageFromWarehouse(senderID, productPackage);		} catch (CriticalError | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected __) {
 			/* Success */
@@ -132,7 +129,6 @@ public class CommandExecuterRemoveProductPackageFromStoreTest {
 			else
 				Mockito.doThrow(new ProductNotExistInCatalog()).when(sqlDatabaseConnection).removeProductPackageFromWarehouse(senderID, productPackage);		} catch (CriticalError | ClientNotConnected | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog __) {
 			/* Success */
@@ -158,7 +154,6 @@ public class CommandExecuterRemoveProductPackageFromStoreTest {
 			else
 				Mockito.doThrow(new ProductPackageAmountNotMatch()).when(sqlDatabaseConnection).removeProductPackageFromWarehouse(senderID, productPackage);		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog
 				| ProductPackageNotExist e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductPackageAmountNotMatch __) {
 			/* Success */
@@ -184,7 +179,6 @@ public class CommandExecuterRemoveProductPackageFromStoreTest {
 			else
 				Mockito.doThrow(new ProductPackageNotExist()).when(sqlDatabaseConnection).removeProductPackageFromWarehouse(senderID, productPackage);		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog
 				| ProductPackageAmountNotMatch e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductPackageNotExist __) {
 			/* Success */

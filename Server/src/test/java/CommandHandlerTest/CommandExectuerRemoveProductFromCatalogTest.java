@@ -47,7 +47,6 @@ public class CommandExectuerRemoveProductFromCatalogTest {
 		try {
 			Mockito.doNothing().when(sqlDatabaseConnection).removeProductFromCatalog(senderID, smartCode);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductStillForSale e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -68,7 +67,6 @@ public class CommandExectuerRemoveProductFromCatalogTest {
 		try {
 			Mockito.doNothing().when(sqlDatabaseConnection).removeProductFromCatalog(senderID, smartCode);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductStillForSale e) {
-			e.printStackTrace();
 			fail();
 		}
 		
@@ -89,7 +87,6 @@ public class CommandExectuerRemoveProductFromCatalogTest {
 		try {
 			Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection).removeProductFromCatalog(senderID, smartCode);
 		} catch (CriticalError | ProductNotExistInCatalog | ProductStillForSale e) {
-			e.printStackTrace();
 			fail();
 		} catch (ClientNotConnected e) {
 			/* success */
@@ -112,7 +109,6 @@ public class CommandExectuerRemoveProductFromCatalogTest {
 		try {
 			Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection).removeProductFromCatalog(senderID, smartCode);
 		} catch (ClientNotConnected | ProductNotExistInCatalog | ProductStillForSale e) {
-			e.printStackTrace();
 			fail();
 		} catch (CriticalError e) {
 			/* success */
@@ -135,7 +131,6 @@ public class CommandExectuerRemoveProductFromCatalogTest {
 		try {
 			Mockito.doThrow(new ProductNotExistInCatalog()).when(sqlDatabaseConnection).removeProductFromCatalog(senderID, smartCode);
 		} catch (CriticalError | ClientNotConnected | ProductStillForSale e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductNotExistInCatalog e) {
 			/* success */
@@ -158,7 +153,6 @@ public class CommandExectuerRemoveProductFromCatalogTest {
 		try {
 			Mockito.doThrow(new ProductStillForSale()).when(sqlDatabaseConnection).removeProductFromCatalog(senderID, smartCode);
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog e) {
-			e.printStackTrace();
 			fail();
 		} catch (ProductStillForSale e) {
 			/* success */

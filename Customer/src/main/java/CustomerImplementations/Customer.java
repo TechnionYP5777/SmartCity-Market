@@ -125,9 +125,7 @@ public class Customer extends ACustomer implements ICustomer {
 		} catch (InvalidCommandDescriptor | InvalidParameter | CustomerNotConnected | ProductCatalogDoesNotExist |
 				AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			
-			¢.printStackTrace();
-			
+						
 			throw new CriticalError();
 		}
 		
@@ -163,9 +161,7 @@ public class Customer extends ACustomer implements ICustomer {
 		} catch (InvalidCommandDescriptor | InvalidParameter | ProductCatalogDoesNotExist |
 				 AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			
-			¢.printStackTrace();
-			
+						
 			throw new CriticalError();
 		}
 
@@ -204,9 +200,7 @@ public class Customer extends ACustomer implements ICustomer {
 		} catch (InvalidCommandDescriptor | InvalidParameter | ProductCatalogDoesNotExist |
 				 AmountBiggerThanAvailable | 	ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			
-			¢.printStackTrace();
-			
+						
 			throw new CriticalError();
 		}
 		
@@ -215,8 +209,6 @@ public class Customer extends ACustomer implements ICustomer {
 			loadCartProductCacheAndUpdateCartData();
 		} catch (ProductCatalogDoesNotExist | CriticalError | CustomerNotConnected e) {
 			log.fatal("Critical bug: Failed to fetch grocery list items from server");
-			
-			e.printStackTrace();
 		}
 		
 		log.info("load grocery list from server succeed.");
@@ -234,9 +226,7 @@ public class Customer extends ACustomer implements ICustomer {
 			catalogProduct = viewCatalogProduct(c);
 		} catch (ProductCatalogDoesNotExist e1) {
 			log.fatal("Critical bug: failed to get catalog product from server");
-			
-			e1.printStackTrace();
-			
+						
 			throw new CriticalError();
 		}
 		
@@ -259,9 +249,7 @@ public class Customer extends ACustomer implements ICustomer {
 		} catch (InvalidCommandDescriptor | ProductCatalogDoesNotExist |
 				GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			
-			¢.printStackTrace();
-			
+						
 			throw new CriticalError();
 		}
 				
@@ -301,9 +289,7 @@ public class Customer extends ACustomer implements ICustomer {
 		} catch (InvalidCommandDescriptor | InvalidParameter | ProductCatalogDoesNotExist |
 				GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			
-			¢.printStackTrace();
-			
+						
 			throw new CriticalError();
 		}
 
@@ -371,9 +357,7 @@ public class Customer extends ACustomer implements ICustomer {
 				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | 
 				 AuthenticationError | ProductCatalogDoesNotExist | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			
-			¢.printStackTrace();
-			
+						
 			throw new CriticalError();
 		}
 
@@ -422,9 +406,7 @@ public class Customer extends ACustomer implements ICustomer {
 				 AmountBiggerThanAvailable | ProductPackageDoesNotExist | 
 				GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			
-			¢.printStackTrace();
-			
+						
 			throw new CriticalError();
 		}
 		
@@ -479,9 +461,7 @@ public class Customer extends ACustomer implements ICustomer {
 				 GroceryListIsEmpty | AuthenticationError | CustomerNotConnected |
 				 ProductCatalogDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			
-			¢.printStackTrace();
-			
+						
 			throw new CriticalError();
 		}
 		
@@ -517,9 +497,7 @@ public class Customer extends ACustomer implements ICustomer {
 				 GroceryListIsEmpty | AuthenticationError | CustomerNotConnected |
 				 ProductCatalogDoesNotExist | InvalidParameter | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			
-			¢.printStackTrace();
-			
+						
 			throw new CriticalError();
 		}
 		
@@ -560,9 +538,7 @@ public class Customer extends ACustomer implements ICustomer {
 				 GroceryListIsEmpty | AuthenticationError | CustomerNotConnected |
 				 ProductCatalogDoesNotExist | InvalidParameter ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
-			
-			¢.printStackTrace();
-			
+						
 			throw new CriticalError();
 		}
 		

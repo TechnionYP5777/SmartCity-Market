@@ -31,7 +31,7 @@ public abstract class ACustomer {
 			clientRequestHandler.createSocket(port, host, timeout);
 		} catch (UnknownHostException | RuntimeException e) {
 			log.fatal("Creating communication with the server encounter severe fault: " + e.getMessage());
-			e.printStackTrace();
+
 			throw new RuntimeException(e.getMessage());
 		}
 	}
@@ -46,12 +46,10 @@ public abstract class ACustomer {
 		try {
 			return this.clientRequestHandler.sendRequestWithRespond(request); 
 		} catch (java.net.SocketTimeoutException e) {
-			e.printStackTrace();
 			log.fatal("Sending logout command to server encounter sever fault : " + e.getMessage());
 			terminateCommunication();
 			throw new java.net.SocketTimeoutException(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
 			log.fatal("Sending logout command to server encounter sever fault : " + e.getMessage());
 			terminateCommunication();
 			throw new RuntimeException(e.getMessage());

@@ -63,7 +63,6 @@ public class ReturnProductToShelfTest {
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(catalogProduct))
 							.serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 	}
@@ -75,7 +74,6 @@ public class ReturnProductToShelfTest {
 					CommandDescriptor.ADD_PRODUCT_TO_GROCERY_LIST, Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 
@@ -84,7 +82,6 @@ public class ReturnProductToShelfTest {
 					CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST, Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 
@@ -92,7 +89,6 @@ public class ReturnProductToShelfTest {
 			customer.addProductToCart(sc, amount);
 		} catch (CriticalError | CustomerNotConnected | AmountBiggerThanAvailable | ProductPackageDoesNotExist
 				| InvalidParameter e1) {
-			e1.printStackTrace();
 			fail();
 		}
 
@@ -100,7 +96,6 @@ public class ReturnProductToShelfTest {
 			customer.returnProductToShelf(sc, amount);
 		} catch (CriticalError | CustomerNotConnected | AmountBiggerThanAvailable | ProductPackageDoesNotExist
 				| ProductNotInCart e) {
-			e.printStackTrace();
 			fail();
 		}
 	}
@@ -112,7 +107,6 @@ public class ReturnProductToShelfTest {
 					CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST, Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
-			¢.printStackTrace();
 			fail();
 		}
 

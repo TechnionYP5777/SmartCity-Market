@@ -101,8 +101,6 @@ public class Main {
 		try {
 			server = new ThreadPooledServer(port, numOfThreads, commandProcess, serverIP);
 		} catch (UnknownHostException e1) {
-			e1.printStackTrace();
-
 			log.fatal("Server IP address leads to unknown host, server won't start.");
 			return;
 		}
@@ -114,7 +112,6 @@ public class Main {
 			connection.logoutAllUsers();
 			connection.close();
 		} catch (CriticalError e1) {
-			e1.printStackTrace();
 			log.fatal("Disconnect failed");
 			return;
 		}
