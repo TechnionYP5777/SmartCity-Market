@@ -61,7 +61,7 @@ public class PackingTest {
 		try{
 			ZipFile zipfile = new ZipFile(zipfileToUnpackPath);
 			Packing.unpack(zipfile, unpackDirPath);
-		} catch(Exception e){
+		} catch(Exception e){			
 			fail();
 		}
 	}
