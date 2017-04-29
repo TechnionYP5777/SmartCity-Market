@@ -122,7 +122,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	void removeIngrPressed(ActionEvent event) {
 		selectedIngr.forEach(ing -> {
 			try {
-				manager.removeIngredient(ingredients.get(ing));
+				manager.removeIngredient(ingredients.get(ing), false);
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure
 					| ParamIDDoesNotExist | IngredientStillInUse e) {
 				log.fatal(e.getMessage());

@@ -183,11 +183,11 @@ public class Manager extends Worker implements IManager {
 	}
 
 	@Override
-	public void removeIngredient(Ingredient w)
+	public void removeIngredient(Ingredient w, Boolean forced)
 			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist, IngredientStillInUse {
 		log.info("Creating removeIngredient command wrapper with Ingredient: " + w);
 		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.REMOVE_INGREDIENT, Serialization.serialize(w)))
+				(new CommandWrapper(clientId, !forced ? CommandDescriptor.REMOVE_INGREDIENT : CommandDescriptor.FORCE_REMOVE_INGREDIENT, Serialization.serialize(w)))
 						.serialize());
 
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);

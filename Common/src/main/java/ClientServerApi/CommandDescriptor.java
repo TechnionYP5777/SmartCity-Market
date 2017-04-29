@@ -597,4 +597,24 @@ public enum CommandDescriptor {
 	 *
 	 */
 	IS_FREE_CUSTOMER_NAME,
+	
+	/**
+	 * Description: Forces remove Ingredient from the system.
+	 * param1: Ingredient.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *			PARAM_ID_IS_NOT_EXIST,
+	 *			SM_INGREDIENT_STILL_IN_USE,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can remove ingredient.
+	 */
+	FORCE_REMOVE_INGREDIENT,
 }

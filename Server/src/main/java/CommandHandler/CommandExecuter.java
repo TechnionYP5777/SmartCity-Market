@@ -1122,6 +1122,48 @@ public class CommandExecuter {
 		log.info("Remove ingredient " + ingredient + " from system finished");
 	}
 	
+	private void forceRemoveIngredient(SQLDatabaseConnection c) {
+		Ingredient ingredient = null;
+
+		log.info("Force remove ingredient from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			ingredient = Serialization.deserialize(inCommandWrapper.getData(), Ingredient.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Force Remove Ingredient command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to force remove ingredient " + ingredient + " from system");
+
+		try {
+			//TODO noam call here to force remove ingredient
+			c.removeIngredient(inCommandWrapper.getSenderID(), ingredient);
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
+		} catch (CriticalError e) {
+			log.fatal("Force Remove ingredient command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientNotConnected e) {
+			log.info("Force Remove ingredient customer command failed, client is not connected");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		} catch (IngredientNotExist e) {
+			log.info("Force Remove ingredient customer command failed, ingredient does not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.PARAM_ID_IS_NOT_EXIST);
+		} catch (IngredientStillUsed e) {
+			log.info("Force Remove ingredient customer command failed, ingredient still in use");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE);
+		}
+
+		log.info("Force Remove ingredient " + ingredient + " from system finished");
+	}
+	
 	private void editIngredient(SQLDatabaseConnection c) {
 		Ingredient ingredient = null;
 
@@ -1476,6 +1518,11 @@ public class CommandExecuter {
 			
 		case REMOVE_INGREDIENT:
 			removeIngredient(c);
+
+			break;
+			
+		case FORCE_REMOVE_INGREDIENT:
+			forceRemoveIngredient(c);
 
 			break;
 			

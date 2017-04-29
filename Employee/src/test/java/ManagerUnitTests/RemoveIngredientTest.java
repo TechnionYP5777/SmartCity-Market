@@ -60,7 +60,7 @@ public class RemoveIngredientTest {
 		}
 		
 		try {
-			manager.removeIngredient(newIngredient);
+			manager.removeIngredient(newIngredient, false);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist | IngredientStillInUse e1) {
 			
 			fail();
@@ -81,7 +81,7 @@ public class RemoveIngredientTest {
 		}
 		
 		try {
-			manager.removeIngredient(newIngredient);
+			manager.removeIngredient(newIngredient, false);
 		} catch (InvalidParameter e) {
 			/* success */
 		} catch (CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist | IngredientStillInUse e1) {
@@ -104,7 +104,7 @@ public class RemoveIngredientTest {
 		}
 		
 		try {
-			manager.removeIngredient(newIngredient);
+			manager.removeIngredient(newIngredient, false);
 		} catch (CriticalError e) {
 			/* success */
 		} catch (InvalidParameter | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist | IngredientStillInUse e1) {
@@ -127,7 +127,7 @@ public class RemoveIngredientTest {
 		}
 		
 		try {
-			manager.removeIngredient(newIngredient);
+			manager.removeIngredient(newIngredient, false);
 		} catch (EmployeeNotConnected e) {
 			/* success */
 		} catch (InvalidParameter | CriticalError | ConnectionFailure | ParamIDDoesNotExist | IngredientStillInUse e1) {
@@ -150,7 +150,7 @@ public class RemoveIngredientTest {
 		}
 		
 		try {
-			manager.removeIngredient(newIngredient);
+			manager.removeIngredient(newIngredient, false);
 		} catch (ParamIDDoesNotExist e) {
 			/* success */
 		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected | IngredientStillInUse e1) {
@@ -173,7 +173,7 @@ public class RemoveIngredientTest {
 		}
 		
 		try {
-			manager.removeIngredient(newIngredient);
+			manager.removeIngredient(newIngredient, false);
 		} catch (IngredientStillInUse e) {
 			/* success */
 		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected | ParamIDDoesNotExist e1) {

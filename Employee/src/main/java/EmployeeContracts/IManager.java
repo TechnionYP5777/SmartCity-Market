@@ -119,6 +119,7 @@ public interface IManager extends IWorker {
 	 * Manager remove Ingredient.
 	 * 
 	 * @param Ingredient
+	 * @param forced - force remove the ingredient from system
 	 * @return void
 	 * @throws EmployeeNotConnected 
 	 * @throws CriticalError 
@@ -128,7 +129,7 @@ public interface IManager extends IWorker {
 	 * @throws ParamIDDoesNotExist 
 	 * @throws IngredientStillInUse 
 	 */
-	void removeIngredient(Ingredient w) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist, IngredientStillInUse;
+	void removeIngredient(Ingredient w, Boolean forced) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist, IngredientStillInUse;
 	
 	/**
 	 * Manager add new Manufacturer.
