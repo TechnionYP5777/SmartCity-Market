@@ -906,6 +906,26 @@ public class CommandExecuter {
 		log.info("Remove worker " + username + " from system finished");
 	}
 	
+	private void getAllWorkers(SQLDatabaseConnection c) {
+		log.info("Get all workers from serderID " + inCommandWrapper.getSenderID() + " command called");
+		
+		try {
+			String workersList = c.getWorkersList(inCommandWrapper.getSenderID());
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, workersList);
+		} catch (ClientNotConnected e) {
+			log.info("Get all workers command failed, client is not connected");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		} catch (CriticalError e) {
+			log.fatal("Get all workers command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		}
+		
+				
+		log.info("Get all workers from system finished");
+	}
+	
 	private void registerNewCustomer(SQLDatabaseConnection c) {
 		CustomerProfile profile = null;
 
@@ -1426,6 +1446,11 @@ public class CommandExecuter {
 
 		case REMOVE_WORKER:
 			removeWorker(c);
+
+			break;	
+			
+		case GET_ALL_WORKERS:
+			getAllWorkers(c);
 
 			break;	
 

@@ -323,6 +323,23 @@ public enum CommandDescriptor {
 	REMOVE_WORKER,
 	
 	/**
+	 * Description: Get list of all workers is the system.
+	 * param1: void
+	 * retval: map of worker names and connect/disconnected
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can run this command.
+	 */
+	GET_ALL_WORKERS,
+	
+	/**
 	 * Description: Register new ingredient to the system.
 	 * param1: Ingredient (only name is used)
 	 * retval: new Ingredient with the given name and the id generated to it by server

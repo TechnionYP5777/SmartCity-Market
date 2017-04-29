@@ -1,6 +1,7 @@
 package EmployeeContracts;
 
 import java.util.List;
+import java.util.Map;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
@@ -211,4 +212,15 @@ public interface IManager extends IWorker {
 	 * @throws ParamIDDoesNotExist 
 	 */
 	void editIngredient(Ingredient w) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist;
+
+	/**
+	 * Manager edit Manufacturer.
+	 * 
+	 * @param void
+	 * @return List<String>
+	 * @throws EmployeeNotConnected 
+	 * @throws CriticalError 
+	 * @throws ConnectionFailure 
+	 */
+	Map<String, Boolean> getAllWorkers() throws CriticalError, EmployeeNotConnected, ConnectionFailure;
 }

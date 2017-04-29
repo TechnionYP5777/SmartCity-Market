@@ -1,5 +1,6 @@
 package EmployeeImplementations;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Singleton;
@@ -333,5 +334,30 @@ public class Manager extends Worker implements IManager {
 		log.info("getAllIngredients command succeed.");
 		
 		return new Gson().fromJson(commandDescriptor.getData(), new TypeToken<List<Ingredient>>(){}.getType());
+	}
+	
+	@Override
+	public HashMap<String, Boolean> getAllWorkers()
+			throws CriticalError, EmployeeNotConnected, ConnectionFailure {
+		log.info("Creating getAllWorkers command wrapper");
+		String serverResponse = sendRequestWithRespondToServer(
+				(new CommandWrapper(clientId, CommandDescriptor.GET_ALL_WORKERS, Serialization.serialize("")))
+						.serialize());
+
+		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+
+		try {
+			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
+				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
+			    | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse |
+			    InvalidParameter ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			return null;
+		}
+		
+		log.info("getAllWorkers command succeed.");
+		
+		return new Gson().fromJson(commandDescriptor.getData(), new TypeToken<HashMap<String, Boolean>>(){}.getType());
 	}
 }
