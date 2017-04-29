@@ -119,9 +119,9 @@ public class ManageCatalogProductTab implements Initializable {
 			enableRunOperation();
 		});
 
-		// createManufacturerMap();
-		productManufacturerCombo.getItems().addAll(/* manufacturars.keySet() */
-				"תנובה", "מאפיות ברמן", "עלית", "אסם", "בייגל-בייגל");
+		createManufacturerMap();
+		productManufacturerCombo.getItems().addAll( manufacturars.keySet() /*
+				"תנובה", "מאפיות ברמן", "עלית", "אסם", "בייגל-בייגל"*/);
 
 		productManufacturerCombo.valueProperty().addListener(new ChangeListener<String>() {
 			@Override
@@ -136,9 +136,9 @@ public class ManageCatalogProductTab implements Initializable {
 			enableRunOperation();
 		});
 
-		// createIngredientMap();
-		ingridientsCombo.getItems().addAll(/* ingredients.keySet() */ "תנובה", "מאפיות ברמן", "עלית", "אסם",
-				"בייגל-בייגל");
+		createIngredientMap();
+		ingridientsCombo.getItems().addAll(ingredients.keySet()/* "תנובה", "מאפיות ברמן", "עלית", "אסם",
+				"בייגל-בייגל"*/);
 
 		// productLocationTextField.textProperty().addListener((observable,
 		// oldValue, newValue) -> {
