@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Enumeration;
 import java.util.zip.*;
+import java.util.Base64;
 
 import org.apache.log4j.Logger;
 
@@ -118,6 +119,47 @@ public class Packing {
 			log.error(e + "");
 			log.error("Failed extracting zipfile " + zfile + " into " + unpackDir.getAbsolutePath());
 		}
+	}
+
+	public static String encode(File f) {
+		String encodedfile = null;
+		try {
+			FileInputStream fileInputStreamReader = new FileInputStream(f);
+			byte[] bytes = new byte[(int) f.length()];
+			fileInputStreamReader.read(bytes);
+			encodedfile = Base64.getEncoder().encodeToString(bytes) + "";
+			fileInputStreamReader.close();
+		} catch (Exception e) {
+			log.error(e + "");
+			log.error("Failed encoding file " + f);
+			return null;
+		}
+		return encodedfile;
+	}
+	
+	public static File decode(String s, String resPath){
+		try {	
+
+			byte[] sBytes = Base64.getDecoder().decode(s);
+			int len = sBytes.length;
+	
+			FileOutputStream fos = new FileOutputStream(resPath);
+			BufferedOutputStream dest = new BufferedOutputStream(fos, bufferSize);				
+
+			dest.write(sBytes, 0, len);
+
+			dest.flush();
+			dest.close();
+			fos.close();
+			
+			return new File(resPath);
+
+		} catch (Exception e) {
+			log.error(e + "");
+			log.error("Failed decoding string into " + resPath);
+			return null;
+		}
+
 	}
 
 }
