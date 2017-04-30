@@ -19,31 +19,34 @@ import UtilsImplementations.Packing;
  *        Class for testing packing module
  */
 public class PackingTest {
-	
-	//pack test
-	static File[] filesToZip;
-	static String filesToZipPath = String.valueOf("src/test/java/UtilsImplementationsTest/testingDirForPackingModule/toPack");
-	static String zipfileToPackPath = String.valueOf("src/test/java/UtilsImplementationsTest/testingDirForPackingModule/packed.zip");
-	
-	//unpack test
-	static String zipfileToUnpackPath = String.valueOf("src/test/java/UtilsImplementationsTest/testingDirForPackingModule/toUnpack/packed.zip");
-	static String unpackDirPath = String.valueOf("src/test/java/UtilsImplementationsTest/testingDirForPackingModule/unpacked/");
 
-	static boolean DEBUG; //initialized as false
+	static boolean CLEAN_ALL; //init as false
+	static String testDir = String.valueOf("src/test/java/UtilsImplementationsTest/testingDirForPackingModule/");
+
+	// pack test
+	static File[] filesToZip;
+	static String filesToZipPath = String.valueOf(testDir + "toPack");
+	static String zipfileToPackPath = String.valueOf(testDir + "packed.zip");
+
+	// unpack test
+	static String zipfileToUnpackPath = String.valueOf(testDir + "toUnpack/packed.zip");
+	static String unpackDirPath = String.valueOf(testDir + "unpacked/");
 
 	@BeforeClass
 	public static void setup() {
 		File toPackFolder = new File(filesToZipPath);
-		//System.out.println("Working Directory = " + System.getProperty("user.dir"));
+		// System.out.println("Working Directory = " +
+		// System.getProperty("user.dir"));
 		filesToZip = toPackFolder.listFiles();
 	}
 
 	@AfterClass
-	public static void cleanup(){
-		if (DEBUG)
+	public static void cleanup() {
+		if (!CLEAN_ALL){
+			File zipfileToDelete = new File(zipfileToPackPath);
+			zipfileToDelete.delete();
 			return;
-		File zipfileToDelete = new File(zipfileToPackPath);
-		zipfileToDelete.delete();
+		}
 		File unpackedFolder = new File(unpackDirPath);
 		for (File file : unpackedFolder.listFiles())
 			file.delete();
@@ -56,13 +59,24 @@ public class PackingTest {
 			fail();
 	}
 
-	@Test 
-	public void unpackTest(){
-		try{
+	@Test
+	public void unpackTest() {
+		try {
 			ZipFile zipfile = new ZipFile(zipfileToUnpackPath);
 			Packing.unpack(zipfile, unpackDirPath);
-		} catch(Exception e){		
+		} catch (Exception e) {
 			fail();
 		}
+	}
+
+	@Test
+	public void endcodeAndDecodeTest() {
+		File orgFile = new File(zipfileToUnpackPath);
+		String encodedFile = Packing.encode(orgFile);
+		if (encodedFile == null)
+			fail();
+		File decodedFile = Packing.decode(encodedFile, testDir + "decoded.zip");
+		if (decodedFile == null)
+			fail();
 	}
 }
