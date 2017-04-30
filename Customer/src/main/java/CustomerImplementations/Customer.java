@@ -156,7 +156,7 @@ public class Customer extends ACustomer implements ICustomer {
 					throw new RuntimeException();
 				}
 			}
-			log.info("Customer Login to server as succeed. Client id is: " + id);
+			log.info("Successfully updated product pictures");
 		}
 
 		private LocalDate getOldestPictureDate() {
