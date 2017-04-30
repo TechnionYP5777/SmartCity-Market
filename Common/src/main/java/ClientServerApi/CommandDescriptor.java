@@ -129,6 +129,22 @@ public enum CommandDescriptor {
 	/********************************** Shared employee & Customer commands **********************************/
 	
 	/**
+	 * Description: Client command for verifying the product pictures he holds are the most recent.
+	 * 				if not, he gets them from the server.
+	 * param1: LocalDate - the date of the "oldest" product picture. (for example: photo1 last modified is 1/1/2017 and photo2 is 1/1/2016 then the second is sent)
+	 * retval: ZipFile - holds the updated photos if needed, else returns null. (TODO IDAN TO AVIAD - we can say it's "needed" if the date sent is older then the date the server holds)
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *
+	 */
+	UPDATE_PRODUCTS_PICTURES,
+
+	/**
 	 * Description: Client command for getting the relevant catalog product represented by a barcode.
 	 * param1: SmartCode - Smartcode with barcode and null on expertionDate.
 	 * retval: CatalogProduct.
