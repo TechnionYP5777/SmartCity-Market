@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
+import org.controlsfx.control.textfield.TextFields;
 
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -69,9 +70,10 @@ public class EmployeeLoginScreen implements Initializable {
 
 	private void restoreState() {
 		try {
-			// TODO change textbox to history
-			userNameTextField
-					.setText(persistenceStore.restoreObject(new EmployeeUsers(), EmployeeUsers.class).users[0]);
+
+			TextFields.bindAutoCompletion(userNameTextField,
+					persistenceStore.restoreObject(new EmployeeUsers(), EmployeeUsers.class).users);
+
 		} catch (Exception e) {
 			log.fatal(e.getMessage());
 		}
@@ -102,7 +104,7 @@ public class EmployeeLoginScreen implements Initializable {
 
 	@FXML
 	void forgetPassPressed(MouseEvent event) {
-		// TODO call forget 
+		// TODO call forget
 	}
 
 	private void enableLoginButtonCheck() {
