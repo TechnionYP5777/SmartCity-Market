@@ -103,5 +103,4 @@ public class EmployeeLoginScreen implements Initializable {
 		loginButton.setDisable(userNameTextField.getText().isEmpty() || passwordField.getText().isEmpty());
 	}
 	
-	
 }
