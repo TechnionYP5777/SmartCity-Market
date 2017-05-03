@@ -114,6 +114,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
 			log.fatal(e.getMessage());
 		}
+		createIngredientList();
 	}
 
 	void addManuPressed() {
@@ -122,6 +123,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
 			log.fatal(e.getMessage());
 		}
+		createManufacturerList();
 	}
 
 	@FXML
