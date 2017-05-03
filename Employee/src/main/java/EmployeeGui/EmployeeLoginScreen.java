@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
-
 import CommonDefs.CLIENT_TYPE;
 import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IManager;
@@ -22,6 +21,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -33,7 +33,7 @@ import javafx.scene.layout.GridPane;
  */
 
 public class EmployeeLoginScreen implements Initializable {
-	
+
 	protected static Logger log = Logger.getLogger(EmployeeLoginScreen.class.getName());
 
 	@FXML
@@ -46,7 +46,7 @@ public class EmployeeLoginScreen implements Initializable {
 	private JFXTextField userNameTextField;
 	@FXML
 	private JFXPasswordField passwordField;
-	
+
 	private IPersistentStore persistenceStore;
 
 	@Override
@@ -60,17 +60,18 @@ public class EmployeeLoginScreen implements Initializable {
 			enableLoginButtonCheck();
 		});
 		persistenceStore = InjectionFactory.getInstance(XmlPersistentStore.class);
-		
+
 		restoreState();
-		
+
 		enableLoginButtonCheck();
-		
+
 	}
-	
+
 	private void restoreState() {
 		try {
 			// TODO change textbox to history
-			userNameTextField.setText(persistenceStore.restoreObject(new EmployeeUsers(), EmployeeUsers.class).users[0]);
+			userNameTextField
+					.setText(persistenceStore.restoreObject(new EmployeeUsers(), EmployeeUsers.class).users[0]);
 		} catch (Exception e) {
 			log.fatal(e.getMessage());
 		}
@@ -99,8 +100,13 @@ public class EmployeeLoginScreen implements Initializable {
 
 	}
 
+	@FXML
+	void forgetPassPressed(MouseEvent event) {
+		// TODO call forget 
+	}
+
 	private void enableLoginButtonCheck() {
 		loginButton.setDisable(userNameTextField.getText().isEmpty() || passwordField.getText().isEmpty());
 	}
-	
+
 }

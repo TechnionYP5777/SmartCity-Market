@@ -74,7 +74,7 @@
                <children>
                   <VBox spacing="5.0">
                      <children>
-                        <Label fx:id="forgotPassLbl" text="I forgot my password" textFill="#1009ee" underline="true">
+                        <Label fx:id="forgotPassLbl" onMouseClicked="#forgetPassPressed" text="I forgot my password" textFill="#1009ee" underline="true">
                            <font>
                               <Font name="Lucida Bright Regular" size="14.0" />
                            </font>
