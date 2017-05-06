@@ -596,8 +596,7 @@ public class Customer extends ACustomer implements ICustomer {
 
 		log.info("getAllIngredients command succeed.");
 
-		return new Gson().fromJson(commandWrapper.getData(), new TypeToken<List<Manufacturer>>() {
-		}.getType());
+		return new Gson().fromJson(commandWrapper.getData(), new TypeToken<List<Ingredient>>() {}.getType());
 	}
 
 	@Override

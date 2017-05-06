@@ -39,5 +39,10 @@ public class Ingredient {
 	public boolean equals(Object ¢) {
 		return ¢ == this || (¢ != null && getClass() == ¢.getClass() && id == ((Ingredient) ¢).id);
 	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
 		
 }

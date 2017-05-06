@@ -3,8 +3,10 @@ package CustomerGuiHelpers;
 import org.controlsfx.control.CheckListView;
 
 import BasicCommonClasses.Ingredient;
+import javafx.scene.control.Cell;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.util.Callback;
 
 /**
@@ -13,7 +15,7 @@ import javafx.util.Callback;
  * @author Lior Ben Ami
  * @since 2017-05-06
  */
-public class IngredientCellFactory implements  Callback<ListView<Ingredient>, ListCell<Ingredient>>
+public class IngredientCellFactory implements Callback<ListView<Ingredient>, ListCell<Ingredient>>
 {
 	@Override
 	public ListCell<Ingredient> call(ListView<Ingredient> param) {

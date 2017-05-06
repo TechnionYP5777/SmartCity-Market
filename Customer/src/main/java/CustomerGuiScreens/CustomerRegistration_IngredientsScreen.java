@@ -5,7 +5,6 @@ import com.jfoenix.controls.JFXButton;
 import BasicCommonClasses.Ingredient;
 import CustomerContracts.ICustomer;
 import CustomerGuiHelpers.CustomerGuiExceptionsHandler;
-import CustomerGuiHelpers.IngredientCellFactory;
 import CustomerGuiHelpers.TempCustomerProfilePassingData;
 import CustomerImplementations.Customer;
 import GuiUtils.AbstractApplicationScreen;
@@ -30,7 +29,7 @@ public class CustomerRegistration_IngredientsScreen implements Initializable {
 	private GridPane ingredientsScreenPane;
 	
     @FXML
-    private CheckListView<Ingredient> ingredientsCheckListView;
+    private CheckListView<Ingredient> ingredientsCheckListView = new CheckListView<Ingredient>();;
 
     @FXML
     private JFXButton ingridients_nextButton;
@@ -40,7 +39,6 @@ public class CustomerRegistration_IngredientsScreen implements Initializable {
 
 	ObservableList<Ingredient> ingredientsObservableList = FXCollections.<Ingredient>observableArrayList();
 
-
     private void updateIngredientsCheckList() {
 		ICustomer customer = InjectionFactory.getInstance(Customer.class);	
 		try {
@@ -49,15 +47,15 @@ public class CustomerRegistration_IngredientsScreen implements Initializable {
 			CustomerGuiExceptionsHandler.handle(e);	
     	}
 		ingredientsCheckListView.setItems(ingredientsObservableList);
-		ingredientsCheckListView.setCellFactory(new IngredientCellFactory());
+
 		HashSet<Ingredient> currentAllergans =  TempCustomerProfilePassingData.customerProfile.getAllergens();
-		if (currentAllergans != null && currentAllergans.isEmpty()) {
+		if (currentAllergans != null && !currentAllergans.isEmpty()) {
 			updateListViewWithChosenIngreidients(currentAllergans);
 		}
 	}
 
 	private void updateListViewWithChosenIngreidients(HashSet<Ingredient> currentAllergans) {
-		HashSet<Ingredient> currentIngredientsHashSet =TempCustomerProfilePassingData.customerProfile.getAllergens();
+		HashSet<Ingredient> currentIngredientsHashSet = TempCustomerProfilePassingData.customerProfile.getAllergens();
 		for (Ingredient ingredient : currentIngredientsHashSet)
 			ingredientsCheckListView.getCheckModel().check(ingredient);
 	}
