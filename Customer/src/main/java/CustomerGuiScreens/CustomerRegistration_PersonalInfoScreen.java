@@ -10,17 +10,13 @@ import com.jfoenix.controls.JFXTextField;
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.ICustomerProfile;
 import CommonDefs.GuiCommonDefs;
-import CustomerContracts.ACustomerExceptions.CriticalError;
 import CustomerContracts.ICustomer;
-import CustomerContracts.IRegisteredCustomer;
 import CustomerGuiHelpers.CustomerGuiExceptionsHandler;
-import CustomerGuiHelpers.TempCustomerPassingData;
 import CustomerGuiHelpers.TempCustomerProfilePassingData;
 import CustomerImplementations.Customer;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
 import SMExceptions.SMException;
-import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,11 +26,11 @@ import javafx.scene.layout.GridPane;
 
 
 /**
- * CustomerRegistration_IngredientsScreen - Controller for CustomerRegistration_IngredientsScreen
- * 	the second (of three) registration screens.
+ * CustomerRegistration_PersonalInfoScreen - Controller for the first screen of the customer registration screens.
+ * 											This screen handles the username, pass and personal info.
  * 
  * @author Lior Ben Ami
- * @since 2017-04-09
+ * @since 2017-04
  */
 public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 	

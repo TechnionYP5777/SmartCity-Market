@@ -23,6 +23,13 @@ import java.util.ResourceBundle;
 
 import org.controlsfx.control.CheckListView;
 
+/**
+ * CustomerRegistration_IngredientsScreen - Controller for the second screen of the customer registration screens.
+ * 											This screen handle the ingredients choices.
+ * 
+ * @author Lior Ben Ami
+ * @since 2017-04
+ */
 public class CustomerRegistration_IngredientsScreen implements Initializable {
 
 	@FXML

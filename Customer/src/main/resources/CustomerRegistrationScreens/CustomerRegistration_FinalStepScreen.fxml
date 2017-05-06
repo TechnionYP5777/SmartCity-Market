@@ -50,7 +50,7 @@
                   </Label>
                </children>
             </VBox>
-            <JFXTextArea prefHeight="547.0" prefWidth="1840.0" />
+            <JFXTextArea fx:id="termsTextArea" prefHeight="547.0" prefWidth="1840.0" />
             <VBox>
                <children>
                   <JFXCheckBox fx:id="final_acceptChecKBox" text="I’ve read and accept the terms.">
