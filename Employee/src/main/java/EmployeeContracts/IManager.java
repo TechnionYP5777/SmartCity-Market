@@ -113,7 +113,7 @@ public interface IManager extends IWorker {
 	 * @throws ConnectionFailure 
 	 * @throws ParamIDAlreadyExists 
 	 */
-	void addIngredient(Ingredient w) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDAlreadyExists;
+	Ingredient addIngredient(Ingredient w) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDAlreadyExists;
 	
 	/**
 	 * Manager remove Ingredient.
@@ -143,7 +143,7 @@ public interface IManager extends IWorker {
 	 * @throws ConnectionFailure 
 	 * @throws ParamIDAlreadyExists 
 	 */
-	void addManufacturer(Manufacturer m) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDAlreadyExists;
+	Manufacturer addManufacturer(Manufacturer m) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDAlreadyExists;
 	
 	/**
 	 * Manager remove Manufacturer.

@@ -162,7 +162,7 @@ public class Manager extends Worker implements IManager {
 	}
 
 	@Override
-	public void addIngredient(Ingredient w)
+	public Ingredient addIngredient(Ingredient w)
 			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDAlreadyExists {
 		log.info("Creating addIngredient command wrapper with Ingredient: " + w);
 		String serverResponse = sendRequestWithRespondToServer(
@@ -179,7 +179,9 @@ public class Manager extends Worker implements IManager {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 		}
 
-		log.info("addIngredient command succeed.");		
+		log.info("addIngredient command succeed.");	
+		
+		return Serialization.deserialize(commandDescriptor.getData(), Ingredient.class);
 	}
 
 	@Override
@@ -225,7 +227,7 @@ public class Manager extends Worker implements IManager {
 	}
 	
 	@Override
-	public void addManufacturer(Manufacturer m)
+	public Manufacturer addManufacturer(Manufacturer m)
 			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDAlreadyExists {
 		log.info("Creating addManufacturer command wrapper with Manufacturer: " + m);
 		String serverResponse = sendRequestWithRespondToServer(
@@ -243,6 +245,8 @@ public class Manager extends Worker implements IManager {
 		}
 
 		log.info("addManufacturer command succeed.");
+		
+		return Serialization.deserialize(commandDescriptor.getData(), Manufacturer.class);
 	}
 
 	@Override
