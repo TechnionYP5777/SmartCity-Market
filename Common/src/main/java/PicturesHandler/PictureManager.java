@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.LocalDate;
+import java.util.zip.ZipFile;
 
 import CommonDefs.GuiCommonDefs;
+import SMExceptions.SMException;
+import UtilsImplementations.Packing;
 
 public class PictureManager {
 	public static boolean checkIfMostUpdate(LocalDate d) throws IOException {
@@ -26,7 +29,7 @@ public class PictureManager {
 				objectinputstream.close(); 
 		}
 		
-		return updatedDate != null && updatedDate.compareTo(d) >= 0;
+		return updatedDate != null && d.compareTo(updatedDate) >= 0;
 	}
 	
 	public static void updateDate(LocalDate d) throws IOException {
@@ -64,5 +67,14 @@ public class PictureManager {
 		}
 		
 		return updatedDate;
+	}
+	
+	public static void doPicturesExchange(String encodedPicturesZipFile) throws IOException, SMException{
+		File decodedZipFile = Packing.decode(encodedPicturesZipFile, GuiCommonDefs.productsCustomerPicturesFolderZipFile);
+		if (decodedZipFile == null)
+			throw new RuntimeException();
+		ZipFile productPicturesZip = new ZipFile(decodedZipFile);
+		Packing.unpack(productPicturesZip, GuiCommonDefs.productsPicturesFolderPath);
+		decodedZipFile.delete();
 	}
 }

@@ -67,6 +67,11 @@ public abstract class ACustomer {
 			log.info("Command executed successfully");
 
 			break;
+		
+		case SM_NO_UPDATE_NEEDED:
+			log.info("Command executed successfully");
+			
+			break;
 			
 		case SM_INVALID_CMD_DESCRIPTOR:
 			log.fatal("Command execution failed, invalid command description");

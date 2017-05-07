@@ -291,7 +291,7 @@ public class CommandExecuter {
 		}
 		
 		try {
-			if (!PictureManager.checkIfMostUpdate(customerDate)) {
+			if (PictureManager.checkIfMostUpdate(customerDate)) {
 				log.info("No update needed products");
 				
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_NO_UPDATE_NEEDED);

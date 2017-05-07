@@ -26,10 +26,12 @@ import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
+import ClientServerApi.ResultDescriptor;
 import CommonDefs.GroceryListExceptions.AmountIsBiggerThanAvailable;
 import CommonDefs.GroceryListExceptions.ProductNotInList;
 import CommonDefs.GuiCommonDefs;
 import CustomerContracts.ICustomer;
+import PicturesHandler.PictureManager;
 import CustomerContracts.ACustomerExceptions.AmountBiggerThanAvailable;
 import CustomerContracts.ACustomerExceptions.AuthenticationError;
 import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
@@ -98,6 +100,14 @@ public class Customer extends ACustomer implements ICustomer {
 		totalSum += p.getAmount() * catalogProduct.getPrice();
 	}
 
+	/***
+	 * 
+	 * @author idan atias
+	 *
+	 * @since April 30, 2017
+	 * 
+	 * This class used for verifying our product pictures are up to date. if not, we fetch them from server.
+	 */
 	private class UpdateProductPictures extends Thread {
 				
 		@Override
@@ -110,21 +120,23 @@ public class Customer extends ACustomer implements ICustomer {
 			establishCommunication(CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
 
 			try {
-				LocalDate oldestPicDate = this.getOldestPictureDate();
+				LocalDate currentPicturesDate = PictureManager.getCurrentDate();
 				serverResponse = sendRequestWithRespondToServer(
 						(new CommandWrapper(id, CommandDescriptor.UPDATE_PRODUCTS_PICTURES,
-								Serialization.serialize(oldestPicDate))).serialize());
-			} catch (SocketTimeoutException e) {
+								Serialization.serialize(currentPicturesDate))).serialize());
+			} catch (/*SocketTimeoutException |*/ IOException e) {
 				log.fatal("Critical bug: failed to get respond from server");
+				log.fatal(e + "");
 				throw new RuntimeException();
 			}
 
 			terminateCommunication();
 
 			cmdwrppr = CommandWrapper.deserialize(serverResponse);
+			ResultDescriptor resDesc = cmdwrppr.getResultDescriptor();
 
 			try {
-				resultDescriptorHandler(cmdwrppr.getResultDescriptor());
+				resultDescriptorHandler(resDesc);
 			} catch (InvalidCommandDescriptor | InvalidParameter | CustomerNotConnected | ProductCatalogDoesNotExist
 					| AmountBiggerThanAvailable | ProductPackageDoesNotExist | GroceryListIsEmpty
 					| UsernameAlreadyExists | CriticalError | AuthenticationError ¢) {
@@ -132,51 +144,22 @@ public class Customer extends ACustomer implements ICustomer {
 
 				throw new RuntimeException();
 			}
+			
+			if (resDesc == ResultDescriptor.SM_NO_UPDATE_NEEDED){
+				log.info("No need to update the products pictures currently on this cart");
+				return;
+			}
 
 			String productsPicturesEncodedZipFile = Serialization.deserialize(cmdwrppr.getData(), String.class);
 			
-			if (productsPicturesEncodedZipFile == null)
-				log.info("There aren't any new product pictures");
-			else {
-				File decodedZipFile = Packing.decode(productsPicturesEncodedZipFile, GuiCommonDefs.productsCustomerPicturesFolderZipFile);
-				if (decodedZipFile == null){
-					log.error("Error while trying to decode the string returned from server");
-					throw new RuntimeException();
-				}
-				try {
-					ZipFile productPicturesZip = new ZipFile(decodedZipFile);
-					Packing.unpack(productPicturesZip, "/home/aviad/workspace/SmartCity-Market/Common/src/main/resources/ProductsPictures");
-					decodedZipFile.delete();
-
-				} catch (Exception e){
-					log.error("Error while trying to unpack the zip file returned from server");
-					throw new RuntimeException();
-				}
+			try {
+				PictureManager.doPicturesExchange(productsPicturesEncodedZipFile);
+			} catch (Exception e){
+				log.error("Error while trying to unpack the zip file returned from server");
+				throw new RuntimeException();
 			}
 			log.info("Successfully updated product pictures");
 		}
-
-		private LocalDate getOldestPictureDate() {
-			File productsPicturesFolder = new File(GuiCommonDefs.productsPicturesFolderPath);
-			File[] pics = productsPicturesFolder.listFiles();
-			if (pics.length == 0)
-				return LocalDate.MIN; // very old date. for getting the server
-										// to send pictures if it has some.
-			long oldest = -1;
-			for (File pic : pics) {
-				if (oldest == -1) {
-					oldest = pic.lastModified();
-					continue;
-				}
-				long current = pic.lastModified();
-				if (current < oldest)
-					oldest = current;
-			}
-			Date oldestDate = new Date(oldest);
-			LocalDate oldestLocalDate = oldestDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-			return oldestLocalDate;
-		}
-
 	}
 
 	@Override
