@@ -89,8 +89,7 @@ public class Main {
 	public static void main(String[] args) {
 		if (!parseArguments(args))
 			return;
-		
-		
+				
 		/* Setting log properties */
 		PropertyConfigurator.configure("../log4j.properties");
 		log.setLevel(verbosity);

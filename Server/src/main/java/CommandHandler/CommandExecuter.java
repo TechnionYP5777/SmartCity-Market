@@ -1,5 +1,10 @@
 package CommandHandler;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.zip.ZipFile;
+
 import org.apache.log4j.Logger;
 
 import BasicCommonClasses.CatalogProduct;
@@ -15,6 +20,8 @@ import ClientServerApi.ClientServerDefs;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
+import CommonDefs.GuiCommonDefs;
+import PicturesHandler.PictureManager;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
@@ -30,6 +37,7 @@ import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
+import UtilsImplementations.Packing;
 import UtilsImplementations.Serialization;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyExist;
@@ -267,6 +275,49 @@ public class CommandExecuter {
 		log.info("Logout with User " + username + " finished");
 	}
 
+	private void updateProductsPictures(SQLDatabaseConnection c) {
+		LocalDate customerDate;
+		
+		log.info("Update products pictures command called with senderID " + inCommandWrapper.getSenderID());
+
+		try {
+			customerDate = Serialization.deserialize(inCommandWrapper.getData(), LocalDate.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Update products pictures command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+		
+		try {
+			if (!PictureManager.checkIfMostUpdate(customerDate)) {
+				log.info("No update needed products");
+				
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_NO_UPDATE_NEEDED);
+
+			} else {
+				File productsPicturesFolder = new File(GuiCommonDefs.productsPicturesFolderPath);
+				File[] pics = productsPicturesFolder.listFiles();
+				ZipFile pictures = Packing.pack(pics, GuiCommonDefs.productsPicturesFolderZipFile);
+				if (pictures == null) {
+					log.fatal("Failed to pack pictures in Update products pictures command");
+					outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+				}
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization
+						.serialize(Packing.encode((new File(GuiCommonDefs.productsPicturesFolderZipFile)))));
+			}
+		} catch (IOException e1) {
+			log.fatal("Failed to fecth date for Update products pictures command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Update products pictures finished");
+	}
+	
 	private void isLoggedInCommand(SQLDatabaseConnection c) {
 		log.info("Is logged in command called with senderID " + inCommandWrapper.getSenderID());
 
@@ -1416,6 +1467,11 @@ public class CommandExecuter {
 
 			break;
 
+		case UPDATE_PRODUCTS_PICTURES:
+			updateProductsPictures(c);
+			
+			break;
+			
 		case IS_LOGGED_IN:
 			isLoggedInCommand(c);
 

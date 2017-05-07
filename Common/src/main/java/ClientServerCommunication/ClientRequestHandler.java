@@ -66,7 +66,9 @@ public class ClientRequestHandler implements IClientRequestHandler {
     		while ($ == null)
     			$ = in.readLine();
     		
-        	log.info("Client request handler got respond: " + $);
+    		if ($.length() < 200) {
+            	log.info("Client request handler got respond: " + $);    			
+    		}
         	
         	return $;
 		} catch (java.net.SocketTimeoutException e) {

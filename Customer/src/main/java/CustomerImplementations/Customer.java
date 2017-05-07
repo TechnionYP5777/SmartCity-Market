@@ -28,6 +28,7 @@ import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import CommonDefs.GroceryListExceptions.AmountIsBiggerThanAvailable;
 import CommonDefs.GroceryListExceptions.ProductNotInList;
+import CommonDefs.GuiCommonDefs;
 import CustomerContracts.ICustomer;
 import CustomerContracts.ACustomerExceptions.AmountBiggerThanAvailable;
 import CustomerContracts.ACustomerExceptions.AuthenticationError;
@@ -98,13 +99,9 @@ public class Customer extends ACustomer implements ICustomer {
 	}
 
 	private class UpdateProductPictures extends Thread {
-		
-		static final boolean DEBUG = true;
-
+				
 		@Override
-		public void run(){
-			if (DEBUG)
-				return;
+		public void run() {		
 			CommandWrapper cmdwrppr = null;
 			String serverResponse = null;
 
@@ -141,14 +138,14 @@ public class Customer extends ACustomer implements ICustomer {
 			if (productsPicturesEncodedZipFile == null)
 				log.info("There aren't any new product pictures");
 			else {
-				File decodedZipFile = Packing.decode(productsPicturesEncodedZipFile, CustomerDefs.productsPicturesFolderPath);
+				File decodedZipFile = Packing.decode(productsPicturesEncodedZipFile, GuiCommonDefs.productsCustomerPicturesFolderZipFile);
 				if (decodedZipFile == null){
 					log.error("Error while trying to decode the string returned from server");
 					throw new RuntimeException();
 				}
 				try {
 					ZipFile productPicturesZip = new ZipFile(decodedZipFile);
-					Packing.unpack(productPicturesZip, CustomerDefs.productsPicturesFolderPath);
+					Packing.unpack(productPicturesZip, "/home/aviad/workspace/SmartCity-Market/Common/src/main/resources/ProductsPictures");
 					decodedZipFile.delete();
 
 				} catch (Exception e){
@@ -160,7 +157,7 @@ public class Customer extends ACustomer implements ICustomer {
 		}
 
 		private LocalDate getOldestPictureDate() {
-			File productsPicturesFolder = new File(CustomerDefs.productsPicturesFolderPath);
+			File productsPicturesFolder = new File(GuiCommonDefs.productsPicturesFolderPath);
 			File[] pics = productsPicturesFolder.listFiles();
 			if (pics.length == 0)
 				return LocalDate.MIN; // very old date. for getting the server

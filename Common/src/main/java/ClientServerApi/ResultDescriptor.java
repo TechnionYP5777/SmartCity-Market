@@ -234,5 +234,9 @@ public enum ResultDescriptor {
 	 */
 	SM_MANUFACTURER_STILL_IN_USE,
 	
-	
+	/**
+	 * The tried to get pictures no update needed.
+	 * 
+	 */
+	SM_NO_UPDATE_NEEDED,
 }

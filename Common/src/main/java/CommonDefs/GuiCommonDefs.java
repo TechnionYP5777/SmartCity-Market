@@ -57,4 +57,12 @@ public class GuiCommonDefs {
 	public static final String registrationWrongRepeatedPass = "Wrong password. Repeted password doesn't match original password!";
 
 	public static final String registrationUsedUserName = "This user name already in used. Please try another one.";
+	
+	public static String productsPicturesFolderPath = String.valueOf("../Common/src/main/resources/ProductsPictures");
+	
+	public static String productsPicturesPathLastUpdate = String.valueOf("../Common/src/main/resources/ProductsPictures/LastUpdate.txt");
+	
+	public static String productsPicturesFolderZipFile = String.valueOf("../Common/src/main/resources/PicturesZipFile/pictures.zip");
+	
+	public static String productsCustomerPicturesFolderZipFile = String.valueOf("../Common/src/main/resources/PicturesZipFile/customer_pictures.zip");
 }
