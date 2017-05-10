@@ -55,6 +55,13 @@
 							source="/ManageCatalogProductDetailsTab/ManageCatalogProductDetailsTab.fxml" />
 					</content>
 				</Tab>
+				<Tab fx:id="manageEmployeesTab" closable="true"
+					text="Manage Employees">
+					<content>
+						<fx:include
+							source="/ManageEmployeesTab/ManageEmployeesTab.fxml" />
+					</content>
+				</Tab>
 			</tabs>
 		</TabPane>
 		<GridPane GridPane.rowIndex="1">

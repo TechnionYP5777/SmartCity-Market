@@ -56,7 +56,10 @@ public class EmployeeMenuScreen implements Initializable {
 	
 	@FXML
 	Tab manageCatalogProductDetailsTab;
-
+	
+	@FXML
+	Tab manageEmployeesTab; 
+	
 	@FXML
 	Button logout;
 
@@ -69,6 +72,7 @@ public class EmployeeMenuScreen implements Initializable {
 				.equals(CLIENT_TYPE.WORKER)) {
 			tabsPane.getTabs().remove(manageCatalogProductTab);
 			tabsPane.getTabs().remove(manageCatalogProductDetailsTab);
+			tabsPane.getTabs().remove(manageEmployeesTab);
 			
 		}
 

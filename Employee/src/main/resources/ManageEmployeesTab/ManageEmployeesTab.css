@@ -1,0 +1,6 @@
+
+#userImg {
+	-fx-background-image: url("userIcon.png");
+	-fx-background-size: cover;
+    -fx-background-color: transparent;
+}
