@@ -1,6 +1,7 @@
 package EmployeeGui;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXButton;
@@ -8,11 +9,16 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RequiredFieldValidator;
 
+import GuiUtils.RadioButtonEnabler;
+import de.jensd.fx.glyphs.GlyphsBuilder;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 
 /**
  * ManageEmployeesTab - manages the employee tab
@@ -22,8 +28,6 @@ import javafx.scene.control.Label;
  */
 public class ManageEmployeesTab implements Initializable {
 
-    @FXML
-    private Label userImg;
 
     @FXML
     private JFXTextField nameTxt;
@@ -35,7 +39,7 @@ public class ManageEmployeesTab implements Initializable {
     private JFXPasswordField passTxt;
 
     @FXML
-    private JFXComboBox<?> securityCombo;
+    private JFXComboBox<String> securityCombo;
 
     @FXML
     private JFXTextField securityAnswerTxt;
@@ -48,16 +52,102 @@ public class ManageEmployeesTab implements Initializable {
 
     @FXML
     private JFXButton finishBtn;
+    
+    RadioButtonEnabler radioBtnCont = new RadioButtonEnabler();
 
     @FXML
     void finishBtnPressed(ActionEvent event) {
-
+    	
     }
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
+		nameTxt.textProperty().addListener((observable, oldValue, newValue) -> {
+			enableFinishBtn();
+		});
 		
+		userTxt.textProperty().addListener((observable, oldValue, newValue) -> {
+			enableFinishBtn();
+		});
+		
+		passTxt.textProperty().addListener((observable, oldValue, newValue) -> {
+			enableFinishBtn();
+		});
+		
+		securityAnswerTxt.textProperty().addListener((observable, oldValue, newValue) -> {
+			enableFinishBtn();
+		});
+		
+		radioBtnCont.addRadioButtons(
+				(Arrays.asList((new RadioButton[] { workerRadioBtn, managerRadioBtn }))));
+		
+		securityCombo.getItems().addAll(
+				"Q1", "Q2", "Q3", "Q4");
+		
+		
+		RequiredFieldValidator validator = new RequiredFieldValidator();
+		validator.setMessage("Input Required");
+		validator.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
+				.styleClass("error").build());
+		
+		nameTxt.getValidators().add(validator);
+		nameTxt.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				nameTxt.validate();
+			}
+		});
+		
+		RequiredFieldValidator validator2 = new RequiredFieldValidator();
+		validator2.setMessage("Input Required");
+		validator2.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
+				.styleClass("error").build());
+		
+		userTxt.getValidators().add(validator2);
+		userTxt.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				userTxt.validate();
+			}
+		});
+		
+		RequiredFieldValidator validator3 = new RequiredFieldValidator();
+		validator3.setMessage("Input Required");
+		validator3.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
+				.styleClass("error").build());
+		
+		passTxt.getValidators().add(validator3);
+		passTxt.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				passTxt.validate();
+			}
+		});
+		
+		
+		RequiredFieldValidator validator4 = new RequiredFieldValidator();
+		validator4.setMessage("Input Required");
+		validator4.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
+				.styleClass("error").build());
+		
+		securityAnswerTxt.getValidators().add(validator4);
+		securityAnswerTxt.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				securityAnswerTxt.validate();
+			}
+		});
+	
+		
+		enableFinishBtn();
+		
+	}
+
+	private void enableFinishBtn() {
+		finishBtn.setDisable(nameTxt.getText().isEmpty() || userTxt.getText().isEmpty() || passTxt.getText().isEmpty() ||
+				securityAnswerTxt.getText().isEmpty());
+	}
+	
+	@FXML
+	private void radioButtonHandling(ActionEvent ¢) {
+		radioBtnCont.selectRadioButton((RadioButton) ¢.getSource());
+		enableFinishBtn();
 	}
 
 }

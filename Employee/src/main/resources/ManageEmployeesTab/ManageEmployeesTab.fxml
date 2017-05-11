@@ -10,19 +10,19 @@
 
 <VBox alignment="CENTER" fillWidth="false" spacing="40.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageEmployeesTab">
    <children>
-      <JFXTextField fx:id="nameTxt" promptText="Employee Name" />
-      <JFXTextField fx:id="userTxt" promptText="Employee Username" />
-      <JFXPasswordField fx:id="passTxt" promptText="Employee Password" />
+      <JFXTextField fx:id="nameTxt" prefWidth="300.0" promptText="Employee Name" />
+      <JFXTextField fx:id="userTxt" prefWidth="300.0" promptText="Employee Username" />
+      <JFXPasswordField fx:id="passTxt" prefWidth="300.0" promptText="Employee Password" />
       <HBox alignment="CENTER" spacing="10.0">
          <children>
-            <JFXComboBox fx:id="securityCombo" promptText="Security Question" />
+            <JFXComboBox fx:id="securityCombo" prefWidth="300.0" promptText="Security Question" />
          </children>
       </HBox>
-      <JFXTextField fx:id="securityAnswerTxt" promptText="Security Question Answer" />
+      <JFXTextField fx:id="securityAnswerTxt" prefWidth="300.0" promptText="Security Question Answer" />
       <HBox alignment="CENTER">
          <children>
-            <JFXRadioButton fx:id="workerRadioBtn" selected="true" text="Worker" />
-            <JFXRadioButton fx:id="managerRadioBtn" text="Manager" />
+            <JFXRadioButton fx:id="workerRadioBtn" onAction="#radioButtonHandling" selected="true" text="Worker" />
+            <JFXRadioButton fx:id="managerRadioBtn" onAction="#radioButtonHandling" text="Manager" />
          </children>
       </HBox>
       <JFXButton fx:id="finishBtn" onAction="#finishBtnPressed" text="Finish Registration" />
