@@ -6,6 +6,12 @@ import GuiUtils.DialogMessagesService;
 import GuiUtils.GuiExceptionHandler;
 import SMExceptions.SMException;
 
+/**
+ * EmployeeGuiExeptionHandler - Handles exceptions of the gui
+ * 
+ * @author aviad
+ * @since 2017-01-04
+ */
 public class EmployeeGuiExeptionHandler extends GuiExceptionHandler {
 	public static void handle(SMException ¢) {
 		if (¢ instanceof AuthenticationError)

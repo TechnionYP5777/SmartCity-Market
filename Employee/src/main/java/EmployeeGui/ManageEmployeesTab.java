@@ -14,7 +14,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 
-public class ManageEmployeesTab implements Initializable{
+/**
+ * ManageEmployeesTab - manages the employee tab
+ * 
+ * @author aviad
+ * @since 2017-01-04
+ */
+public class ManageEmployeesTab implements Initializable {
 
     @FXML
     private Label userImg;

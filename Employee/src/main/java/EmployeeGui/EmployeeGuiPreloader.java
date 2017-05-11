@@ -10,6 +10,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+/**
+ * EmployeeGuiPreloader - handles the preloading of Employee
+ * 
+ * @author aviad
+ * @since 2017-01-04
+ */
 public class EmployeeGuiPreloader extends Preloader {
 	private static final double WIDTH = 200;
 	private static final double HEIGHT = 200;
