@@ -9,7 +9,10 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbJoin;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
 /**
+ * SQLQueryGenerator - Generates query for the SQL database
+ * 
  * @author Noam Yefet
+ * @since 2016-12-14
  */
 class SQLQueryGenerator {
 

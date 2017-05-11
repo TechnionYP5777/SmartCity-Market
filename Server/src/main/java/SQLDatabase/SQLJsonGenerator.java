@@ -31,6 +31,13 @@ import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseStrings.LOCATIONS_TABLE;
 import UtilsImplementations.Serialization;
 
+/**
+ * SQLJsonGenerator - This class generate strings for JSon
+ * throw
+ * 
+ * @author Noam Yefet
+ * @since 2016-12-14
+ */
 class SQLJsonGenerator {
 
 	/**

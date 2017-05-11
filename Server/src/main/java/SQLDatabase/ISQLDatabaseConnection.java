@@ -27,6 +27,13 @@ import SQLDatabase.SQLDatabaseException.ClientAlreadyExist;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 import SQLDatabase.SQLDatabaseException.ClientNotExist;
 
+/**
+ * ISqlDBConnection - This class represents the server request to the SQL database handler
+ * 
+ * @author Noam Yefet
+ * @since 2016-12-14
+ * 
+ */
 public interface ISQLDatabaseConnection {
 
 	int login(String username, String password)
