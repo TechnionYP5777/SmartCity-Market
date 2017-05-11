@@ -2,9 +2,12 @@ package EmployeeCommon;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.time.LocalDate;
 
 import org.apache.log4j.Logger;
 
+import ClientServerApi.CommandDescriptor;
+import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import EmployeeDefs.AEmployeeException;
 import EmployeeDefs.AEmployeeException.AmountBiggerThanAvailable;
@@ -22,11 +25,13 @@ import EmployeeDefs.AEmployeeException.ProductPackageDoesNotExist;
 import EmployeeDefs.AEmployeeException.ProductStillForSale;
 import EmployeeDefs.AEmployeeException.WorkerAlreadyExists;
 import EmployeeDefs.AEmployeeException.WorkerDoesNotExist;
+import PicturesHandler.PictureManager;
 import EmployeeDefs.AEmployeeException.EmployeeAlreadyConnected;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.IngredientStillInUse;
 import EmployeeDefs.WorkerDefs;
 import UtilsContracts.IClientRequestHandler;
+import UtilsImplementations.Serialization;
 
 /**
  * AEmployee - This abstract holds common functionality for the Employee such as
@@ -91,6 +96,11 @@ public abstract class AEmployee {
 		switch (¢) {
 
 		case SM_OK:
+			log.info("Command executed successfully");
+
+			break;
+		
+		case SM_NO_UPDATE_NEEDED:
 			log.info("Command executed successfully");
 
 			break;
@@ -184,6 +194,76 @@ public abstract class AEmployee {
 			log.fatal("Command execution failed, failed to parse result description");
 
 			throw new AEmployeeException.CriticalError();
+		}
+	}
+	
+	/***
+	 * 
+	 * @author idan atias
+	 *
+	 * @since May 11, 2017
+	 * 
+	 * This class used for verifying our product pictures are up to date. if not, we fetch them from server.
+	 */
+	public class UpdateProductPictures extends Thread {
+				
+		@Override
+		public void run() {		
+			CommandWrapper cmdwrppr = null;
+			String serverResponse = null;
+
+			log.info("Creating UpdateProductPictures wrapper for customer");
+
+			try {
+				establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
+			} catch (ConnectionFailure e) {
+				log.fatal("Critical bug: failed to get respond from server");
+				log.fatal(e + "");
+				throw new RuntimeException();
+			}
+
+			try {
+				LocalDate currentPicturesDate = PictureManager.getCurrentDate();
+				serverResponse = sendRequestWithRespondToServer(
+						(new CommandWrapper(clientId, CommandDescriptor.UPDATE_PRODUCTS_PICTURES,
+								Serialization.serialize(currentPicturesDate))).serialize());
+			} catch (/*SocketTimeoutException |*/ IOException | ConnectionFailure e) {
+				log.fatal("Critical bug: failed to get respond from server");
+				log.fatal(e + "");
+				throw new RuntimeException();
+			}
+
+			terminateCommunication();
+
+			cmdwrppr = CommandWrapper.deserialize(serverResponse);
+			ResultDescriptor resDesc = cmdwrppr.getResultDescriptor();
+
+			try {
+				resultDescriptorHandler(resDesc);
+			} catch (InvalidCommandDescriptor | InvalidParameter | CriticalError | EmployeeNotConnected
+					| EmployeeAlreadyConnected | AuthenticationError | ProductNotExistInCatalog
+					| ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable
+					| ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist
+					| WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse e1) {
+
+				log.fatal("Critical bug: this command result isn't supposed to return here");
+				throw new RuntimeException();
+			}
+			
+			if (resDesc == ResultDescriptor.SM_NO_UPDATE_NEEDED){
+				log.info("No need to update the products pictures");
+				return;
+			}
+
+			String productsPicturesEncodedZipFile = Serialization.deserialize(cmdwrppr.getData(), String.class);
+			
+			try {
+				PictureManager.doPicturesExchange(productsPicturesEncodedZipFile);
+			} catch (Exception e){
+				log.error("Error while trying to unpack the zip file returned from server");
+				throw new RuntimeException();
+			}
+			log.info("Successfully updated product pictures");
 		}
 	}
 
