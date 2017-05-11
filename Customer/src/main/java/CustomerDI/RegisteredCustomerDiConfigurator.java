@@ -8,9 +8,11 @@ import CustomerImplementations.RegisteredCustomer;
 import UtilsContracts.IClientRequestHandler;
 
 /**
- * @author idan atias
+ * 
  * Configuring DI for RegisteredCustomer for enabling Mockito testing
- *
+ * 
+ * @author idan atias 
+ * @since 2017-01-16 
  */
 public class RegisteredCustomerDiConfigurator extends AbstractModule {
 	 @Override 

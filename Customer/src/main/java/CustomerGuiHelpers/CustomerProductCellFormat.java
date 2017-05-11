@@ -15,6 +15,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
+/**
+ * CustomerProductCellFormat - This class will format the cell content
+ * 
+ * @author aviad
+ * @since 2017-01-28
+ */
 public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 
 	@Override

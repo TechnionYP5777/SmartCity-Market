@@ -1,5 +1,12 @@
 package CustomerImplementations;
 
+
+/**
+ * CustomerDefs - the common constants of Customer project
+ * 
+ * @author aviad
+ * @since 2017-01-04
+ */
 public class CustomerDefs {
 	public static int port = 2000;
 	public static String host = "127.0.0.1";

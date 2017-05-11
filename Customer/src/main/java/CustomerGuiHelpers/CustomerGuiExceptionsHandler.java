@@ -6,6 +6,13 @@ import GuiUtils.DialogMessagesService;
 import GuiUtils.GuiExceptionHandler;
 import SMExceptions.SMException;
 
+/**
+ * 
+ * CustomerGuiExceptionsHandler - Handles the gui customer exceptions
+ * 
+ * @author Lior Ben Ami
+ * @since 2017-01-20
+ */
 public class CustomerGuiExceptionsHandler extends GuiExceptionHandler {
 	public static void handle(SMException ¢) {
 		if (¢ instanceof InvalidCommandDescriptor)

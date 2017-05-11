@@ -13,6 +13,7 @@ import CustomerContracts.ACustomerExceptions.*;
  * 
  * @author idan atias
  * @author Aviad Cohen
+ * @since 2017-01-04
  *
  */
 public interface IRegisteredCustomer extends ICustomer {
