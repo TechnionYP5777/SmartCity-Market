@@ -3,6 +3,7 @@ package BasicCommonClasses;
 import java.lang.String;
 
 /** Ingredient - A product can contain special ingredient. 
+ * 
  * @author Lior Ben Ami
  * @since 2016-12-09 */
 public class Ingredient {

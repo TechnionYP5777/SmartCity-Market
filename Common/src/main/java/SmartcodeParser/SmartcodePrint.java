@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
  * This class sends smartcodes for printing
  * 
  * @author noam yefet
- *
+ * @since  2017-01-02
  */
 public class SmartcodePrint implements Printable{
 

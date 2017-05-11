@@ -29,6 +29,7 @@ package ClientServerApi;
  * @author shimon azulay
  * @author Aviad Cohen
  * @author Lior Ben Ami
+ * @since 2016-10-19
  */
 public enum CommandDescriptor {
 	

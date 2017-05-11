@@ -16,7 +16,7 @@ import UtilsImplementations.XmlSerializerProvider;
  * CommonDiConfigurator - This class define the dependencies configurator for Common module
  * 
  * @author Shimon Azulay
- * @since 20117-03-28 */ 
+ * @since 2017-03-28 */ 
 
 public class CommonDiConfigurator extends AbstractModule {
 	

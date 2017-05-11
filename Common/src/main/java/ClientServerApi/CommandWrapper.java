@@ -2,6 +2,12 @@ package ClientServerApi;
 
 import UtilsImplementations.Serialization;
 
+/**
+ * CommandWrapper - this class is a wrapper to store data which will be sent from serve rto client
+ * 
+ * @author Aviad Cohen
+ * @since 2016-12-09 
+ */
 public class CommandWrapper implements Cloneable {
 	/**
 	 * Command wrapper for sending packages between client and server:

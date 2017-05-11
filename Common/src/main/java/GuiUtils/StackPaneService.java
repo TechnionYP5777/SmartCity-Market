@@ -4,9 +4,11 @@ import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
 
 /**
+ * StackPaneService - Service to handle the stack pane.
+ * 
  * 
  * @author Shimon Azulay
- *
+ * @since 2016-12-10
  */
 public class StackPaneService {
 

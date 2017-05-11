@@ -4,7 +4,7 @@ package SMExceptions;
  * SMException is a base class that all our module-based-exceptions should inherit from. (like AEmployeeException)
  * This allows us a more generic way for catching & handling our exceptions.
  * @author idan atias
- *
+ * @since  2017-01-02
  */
 
 public class SMException extends Exception{

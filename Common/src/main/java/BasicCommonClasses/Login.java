@@ -1,5 +1,11 @@
 package BasicCommonClasses;
 
+/**
+ * Login - this class stores the username and password on login commands
+ * 
+ * @author Aviad Cohen 
+ * @since 2017-02-02
+ */
 public class Login {
 
 	private String userName;

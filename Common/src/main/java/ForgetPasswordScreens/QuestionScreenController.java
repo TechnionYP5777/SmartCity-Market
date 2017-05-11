@@ -11,6 +11,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 
+/**
+ * QuestionScreenController - controller for password retrieve questions.
+ * 
+ * @author Shimon Azulay
+ * @since 2017-04-09 
+ *
+ */
 public class QuestionScreenController implements Initializable {
 
     @FXML

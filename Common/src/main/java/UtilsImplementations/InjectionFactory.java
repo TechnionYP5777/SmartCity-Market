@@ -9,6 +9,7 @@ import com.google.inject.Module;
  * interface
  * 
  * @author Shimon Azulay
+ * @since 2017-01-06
  *
  */
 public class InjectionFactory {

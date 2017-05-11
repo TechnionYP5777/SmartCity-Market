@@ -6,8 +6,10 @@ import java.util.HashMap;
 import BasicCommonClasses.SmartCode;
 
 /**
+ * SmartcodeParser - This class parse the Smartcode which is been sent from the scanner.
  * 
  * @author Noam Yefet
+ * @since  2017-01-02
  */
 public class SmartcodeParser implements Codex {
 

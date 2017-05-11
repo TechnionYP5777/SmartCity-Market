@@ -9,6 +9,8 @@ import UtilsContracts.IXmlSerializer;
 import UtilsContracts.IXmlSerializerProvider;
 
 /**
+ * XmlSerializerProvider - This class is used to serialize xml.
+ * 
  * @author Shimon Azulay
  * @since 2016-03-29
  */

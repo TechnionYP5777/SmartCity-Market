@@ -1,5 +1,11 @@
 package ClientServerApi;
 
+/**
+ * ClientServerDefs - definitions of client-server constant
+ * 
+ * @author Aviad Cohen
+ * @since 2016-11-09
+ */
 public class ClientServerDefs {
 	
 	/*

@@ -6,6 +6,7 @@ import SMExceptions.SMException;
  * This class define all the Exceptions {@link CustomerProfile} could throw.
  * 
  * @author Idan Atias
+ * @since 2016-12-09
  */
 public class CustomerProfileException extends SMException {
 

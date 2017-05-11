@@ -13,6 +13,13 @@ import CommonDefs.GuiCommonDefs;
 import SMExceptions.SMException;
 import UtilsImplementations.Packing;
 
+/**
+ * PictureManager - this class validate if the pictures are updated and changes if not.
+ * 
+ * @author Aviad Cohen
+ * @since  2017-05-02
+ * 
+ */
 public class PictureManager {
 	public static boolean checkIfMostUpdate(LocalDate d) throws IOException {
 		ObjectInputStream objectinputstream = null;

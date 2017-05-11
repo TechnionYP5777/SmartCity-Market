@@ -1,6 +1,11 @@
 package BasicCommonClasses;
 
-
+/**
+ * ForgetPassword - This class will hold and maintain the forget password flow.
+ * 
+ * @author Aviad Cohen
+ * @since 2016-12-09
+ */
 public class ForgetPassword {
 
 	String question;

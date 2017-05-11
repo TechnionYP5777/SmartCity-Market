@@ -1,5 +1,12 @@
 package CommonDefs;
 
+/**
+ * GuiCommonDefs - definition of gui common constants.
+ *  
+ * @author Aviad Cohen
+ * @since 2017-02-03 
+ *
+ */
 public class GuiCommonDefs {
 	
 	public static final String smartCodePrompt = "Type Or Scan Product SmartCode...";

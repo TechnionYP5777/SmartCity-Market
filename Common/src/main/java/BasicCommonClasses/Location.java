@@ -1,6 +1,7 @@
 package BasicCommonClasses;
 
 /** Location - the SmartMarket is mapped by the locations of its product.
+ * 
  * @see main.BasicCommonClasses.PlaceInMarket
  * @author Lior Ben Ami
  * @since 2016-12-09 */

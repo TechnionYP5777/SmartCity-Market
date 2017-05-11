@@ -10,6 +10,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
+/**
+ * NewPasswordScreenController - controller for new password screen
+ * 
+ * @author Shimon Azulay
+ * @since 2017-04-09 
+ *
+ */
 public class NewPasswordScreenController implements Initializable {
 
     @FXML
