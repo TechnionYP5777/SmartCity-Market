@@ -66,9 +66,8 @@ public class ClientRequestHandler implements IClientRequestHandler {
     		while ($ == null)
     			$ = in.readLine();
     		
-    		if ($.length() < 200) {
-            	log.info("Client request handler got respond: " + $);    			
-    		}
+    		if ($.length() < 200)
+				log.info("Client request handler got respond: " + $);
         	
         	return $;
 		} catch (java.net.SocketTimeoutException e) {
@@ -101,9 +100,9 @@ public class ClientRequestHandler implements IClientRequestHandler {
      */
     @Override
 	public String sendRequestWithRespond(String request) throws IOException {
-		sendRequest(request);
+    	sendRequestNoRespond(request);
 		
-		return getRespond();
+		return waitForRespond();
 	}
 	
     /** 
