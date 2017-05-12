@@ -197,6 +197,14 @@ public abstract class AEmployee {
 		}
 	}
 	
+	public int getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
+	}
+
 	/***
 	 * 
 	 * @author idan atias
@@ -225,7 +233,7 @@ public abstract class AEmployee {
 			try {
 				LocalDate currentPicturesDate = PictureManager.getCurrentDate();
 				serverResponse = sendRequestWithRespondToServer(
-						(new CommandWrapper(clientId, CommandDescriptor.UPDATE_PRODUCTS_PICTURES,
+						(new CommandWrapper(getClientId(), CommandDescriptor.UPDATE_PRODUCTS_PICTURES,
 								Serialization.serialize(currentPicturesDate))).serialize());
 			} catch (/*SocketTimeoutException |*/ IOException | ConnectionFailure e) {
 				log.fatal("Critical bug: failed to get respond from server");

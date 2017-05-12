@@ -74,10 +74,10 @@ public class Worker extends AEmployee implements IWorker {
 			
 			throw new CriticalError();
 		}
-		clientId = $.getSenderID();
+		setClientId($.getSenderID());
 		this.username = username;
 		this.password = password;
-		log.info("Login to server as " + $.getData() + " succeed. Client id is: " + clientId);
+		log.info("Login to server as " + $.getData() + " succeed. Client id is: " + getClientId());
 		new UpdateProductPictures().start();
 		
 		return CLIENT_TYPE.deserialize($.getData());
@@ -87,7 +87,7 @@ public class Worker extends AEmployee implements IWorker {
 	public void logout() throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure {
 		log.info("Creating logout command wrapper with username: " + username);
 		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.LOGOUT, Serialization.serialize(username)))
+				(new CommandWrapper(getClientId(), CommandDescriptor.LOGOUT, Serialization.serialize(username)))
 						.serialize());
 		try {
 			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
@@ -99,7 +99,7 @@ public class Worker extends AEmployee implements IWorker {
 			
 			throw new CriticalError();
 		}
-		clientId = WorkerDefs.loginCommandSenderId;
+		setClientId(WorkerDefs.loginCommandSenderId);
 		log.info("logout from server succeed.");
 	}
 
@@ -107,10 +107,10 @@ public class Worker extends AEmployee implements IWorker {
 	public boolean isLoggedIn() throws CriticalError, ConnectionFailure {
 		String serverResponse;
 
-		log.info("Creating is logged in command wrapper with senderID: " + clientId);
+		log.info("Creating is logged in command wrapper with senderID: " + getClientId());
 
 		serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.IS_LOGGED_IN)).serialize());
+				(new CommandWrapper(getClientId(), CommandDescriptor.IS_LOGGED_IN)).serialize());
 
 		CommandWrapper commandWrapper = CommandWrapper.deserialize(serverResponse);
 
@@ -135,7 +135,7 @@ public class Worker extends AEmployee implements IWorker {
 			throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ConnectionFailure {
 		log.info("Creating viewProductFromCatalog command wrapper with barcode: " + barcode);
 		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
+				(new CommandWrapper(getClientId(), CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
 						Serialization.serialize(new SmartCode(barcode, null))).serialize()));
 
 		CommandWrapper $ = CommandWrapper.deserialize(serverResponse);
@@ -157,7 +157,7 @@ public class Worker extends AEmployee implements IWorker {
 	public void addProductToWarehouse(ProductPackage p)
 			throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ConnectionFailure {
 		log.info("Creating addProductToWarehouse command wrapper with product package: " + p);
-		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(clientId,
+		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(getClientId(),
 				CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE, Serialization.serialize(p)).serialize()));
 
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
@@ -179,7 +179,7 @@ public class Worker extends AEmployee implements IWorker {
 			throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
 			AmountBiggerThanAvailable, ProductPackageDoesNotExist, ConnectionFailure {
 		log.info("Creating placeProductPackageOnShelves command wrapper with product package: " + p);
-		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(clientId,
+		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(getClientId(),
 				CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES, Serialization.serialize(p)).serialize()));
 
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
@@ -200,7 +200,7 @@ public class Worker extends AEmployee implements IWorker {
 			throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
 			AmountBiggerThanAvailable, ProductPackageDoesNotExist, ConnectionFailure {
 		log.info("Creating removeProductPackageFromStore command wrapper with product package: " + p);
-		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(clientId,
+		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(getClientId(),
 				CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE, Serialization.serialize(p)).serialize()));
 		
 		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
@@ -221,7 +221,7 @@ public class Worker extends AEmployee implements IWorker {
 			ProductPackageDoesNotExist, ConnectionFailure {
 		log.info("Creating getProductPackageAmount command wrapper with product package: " + p);
 		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(clientId, CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT, Serialization.serialize(p))
+				(new CommandWrapper(getClientId(), CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT, Serialization.serialize(p))
 						.serialize()));
 
 		CommandWrapper $ = CommandWrapper.deserialize(serverResponse);
