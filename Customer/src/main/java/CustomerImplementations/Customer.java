@@ -108,7 +108,7 @@ public class Customer extends ACustomer implements ICustomer {
 	 * 
 	 * This class used for verifying our product pictures are up to date. if not, we fetch them from server.
 	 */
-	private class UpdateProductPictures extends Thread {
+	public class UpdateProductPictures extends Thread {
 				
 		@Override
 		public void run() {		

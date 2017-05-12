@@ -21,6 +21,8 @@ import UtilsImplementations.Serialization;
  * 
  * @author idan atias
  * @author Aviad Cohen
+ * 
+ * since March 31, 2017
  *
  */
 public class RegisteredCustomer extends Customer implements IRegisteredCustomer {
