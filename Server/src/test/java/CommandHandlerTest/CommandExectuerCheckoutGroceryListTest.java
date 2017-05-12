@@ -88,4 +88,24 @@ public class CommandExectuerCheckoutGroceryListTest {
 		
 		assertEquals(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED, out.getResultDescriptor());
 	}
+	
+	@Test
+	public void checkoutGroceryListEmptyTest() {
+		int cartID = 1;
+		String command = new CommandWrapper(cartID, CommandDescriptor.CHECKOUT_GROCERY_LIST).serialize();
+		CommandExecuter commandExecuter = new CommandExecuter(command);
+		CommandWrapper out;
+		
+		try {
+			Mockito.doThrow(new GroceryListIsEmpty()).when(sqlDatabaseConnection).cartCheckout(cartID);
+		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		} catch (GroceryListIsEmpty __) {
+			/* Successful */
+		}
+		
+		out = commandExecuter.execute(sqlDatabaseConnection);
+		
+		assertEquals(ResultDescriptor.SM_GROCERY_LIST_IS_EMPTY, out.getResultDescriptor());
+	}
 }

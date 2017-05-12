@@ -80,6 +80,19 @@ public class CommandExectuerAddProductPackageToWarehouseTest {
 	}
 	
 	@Test
+	public void addProductPackageToWarehouseIllegalProductPackageTest() {
+		assertEquals(ResultDescriptor.SM_ERR,
+				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
+						new Gson().toJson("", String.class)).serialize())).execute(sqlDatabaseConnection)
+								.getResultDescriptor());
+		
+		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER,
+				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
+						new Gson().toJson(new ProductPackage(new SmartCode(1, null), -1, new Location(0, 0, PlaceInMarket.WAREHOUSE)), ProductPackage.class)).serialize())).execute(sqlDatabaseConnection)
+								.getResultDescriptor());
+	}
+	
+	@Test
 	public void addProductPackageToWarehouseClientNotConnectedTest() {
 		int senderID = 1;
 		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));

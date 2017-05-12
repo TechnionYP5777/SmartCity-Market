@@ -107,6 +107,19 @@ public class CommandExectuerRemoveProductPackageFromGroceryListTest {
 	}
 	
 	@Test
+	public void removeProductToGroceryListIllegalCatalogProductTest() {
+		assertEquals(ResultDescriptor.SM_ERR,
+				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST,
+						new Gson().toJson("", String.class)).serialize())).execute(sqlDatabaseConnection)
+								.getResultDescriptor());
+		
+		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER,
+				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST,
+						new Gson().toJson(new ProductPackage(new SmartCode(1, null), -1, new Location(0, 0, PlaceInMarket.WAREHOUSE)), ProductPackage.class)).serialize())).execute(sqlDatabaseConnection)
+								.getResultDescriptor());
+	}
+	
+	@Test
 	public void removeProductPackageFromGroceryListProductNotExistInCatalogTest() {
 		int cartID = 1;
 		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));

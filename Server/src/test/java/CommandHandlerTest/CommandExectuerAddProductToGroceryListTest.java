@@ -84,6 +84,19 @@ public class CommandExectuerAddProductToGroceryListTest {
 	}
 	
 	@Test
+	public void addProductToGroceryListIllegalCatalogProductTest() {
+		assertEquals(ResultDescriptor.SM_ERR,
+				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.ADD_PRODUCT_TO_GROCERY_LIST,
+						new Gson().toJson("", String.class)).serialize())).execute(sqlDatabaseConnection)
+								.getResultDescriptor());
+		
+		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER,
+				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.ADD_PRODUCT_TO_GROCERY_LIST,
+						new Gson().toJson(new ProductPackage(new SmartCode(1, null), -1, new Location(0, 0, PlaceInMarket.WAREHOUSE)), ProductPackage.class)).serialize())).execute(sqlDatabaseConnection)
+								.getResultDescriptor());
+	}
+	
+	@Test
 	public void addProductToGroceryListProductNotExistInCatalogTest() {
 		int cartID = 1;
 		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));

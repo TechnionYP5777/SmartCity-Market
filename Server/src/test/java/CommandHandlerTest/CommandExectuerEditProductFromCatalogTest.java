@@ -102,6 +102,14 @@ public class CommandExectuerEditProductFromCatalogTest {
 	}
 	
 	@Test
+	public void editCatalogProductIllegalCatalogProductTest() {
+		assertEquals(ResultDescriptor.SM_ERR,
+				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
+						new Gson().toJson("", String.class)).serialize())).execute(sqlDatabaseConnection)
+								.getResultDescriptor());
+	}
+	
+	@Test
 	public void editCatalogProductClientNotConnectedTest() {
 		int senderID = 1;
 		CatalogProduct catalogProduct = new CatalogProduct(0, "Shoko", null, null, null, 4, null, null);

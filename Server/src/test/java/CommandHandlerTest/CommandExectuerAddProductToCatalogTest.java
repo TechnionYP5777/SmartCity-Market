@@ -77,6 +77,14 @@ public class CommandExectuerAddProductToCatalogTest {
 	}
 	
 	@Test
+	public void addCatalogProductIllegalCatalogProductTest() {
+		assertEquals(ResultDescriptor.SM_ERR,
+				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
+						new Gson().toJson("", String.class)).serialize())).execute(sqlDatabaseConnection)
+								.getResultDescriptor());
+	}
+	
+	@Test
 	public void addCatalogProductProductAlreadyExistInCatalogTest() {
 		int senderID = 1;
 		CatalogProduct catalogProduct = new CatalogProduct(0, "Shoko", null, null, null, 4, null, null);

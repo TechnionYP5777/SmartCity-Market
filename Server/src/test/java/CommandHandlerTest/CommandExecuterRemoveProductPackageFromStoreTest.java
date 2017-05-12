@@ -42,7 +42,7 @@ public class CommandExecuterRemoveProductPackageFromStoreTest {
 	@Test
 	public void removeProductPackageFromStoreSuccessfulTest() {
 		int senderID = 1;
-		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));
+		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.STORE));
 		String command = new CommandWrapper(senderID, CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
 				new Gson().toJson(productPackage, ProductPackage.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
@@ -112,6 +112,19 @@ public class CommandExecuterRemoveProductPackageFromStoreTest {
 		out = commandExecuter.execute(sqlDatabaseConnection);
 		
 		assertEquals(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED, out.getResultDescriptor());
+	}
+	
+	@Test
+	public void placeProductPackageOnShelvesIllegalCatalogProductTest() {
+		assertEquals(ResultDescriptor.SM_ERR,
+				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
+						new Gson().toJson("", String.class)).serialize())).execute(sqlDatabaseConnection)
+								.getResultDescriptor());
+		
+		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER,
+				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
+						new Gson().toJson(new ProductPackage(new SmartCode(1, null), -1, new Location(0, 0, PlaceInMarket.WAREHOUSE)), ProductPackage.class)).serialize())).execute(sqlDatabaseConnection)
+								.getResultDescriptor());
 	}
 	
 	@Test

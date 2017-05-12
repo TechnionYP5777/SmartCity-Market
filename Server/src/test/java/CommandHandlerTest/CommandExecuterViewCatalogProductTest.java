@@ -87,6 +87,14 @@ public class CommandExecuterViewCatalogProductTest {
 	}
 	
 	@Test
+	public void viewCatalogProductIllegalSmartCodeTest() {
+		assertEquals(ResultDescriptor.SM_ERR,
+				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
+						new Gson().toJson("", String.class)).serialize())).execute(sqlDatabaseConnection)
+								.getResultDescriptor());
+	}
+	
+	@Test
 	public void viewCatalogProductInvalidUserNameTest() {
 		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER,
 				(new CommandExecuter(new CommandWrapper(0, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,

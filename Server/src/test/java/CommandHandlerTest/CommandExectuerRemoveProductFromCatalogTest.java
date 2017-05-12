@@ -76,6 +76,14 @@ public class CommandExectuerRemoveProductFromCatalogTest {
 	}
 	
 	@Test
+	public void removeCatalogProductIllegalCatalogProductTest() {
+		assertEquals(ResultDescriptor.SM_ERR,
+				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
+						new Gson().toJson("", String.class)).serialize())).execute(sqlDatabaseConnection)
+								.getResultDescriptor());
+	}
+	
+	@Test
 	public void removeCatalogProductClientNotConnectedTest() {
 		int senderID = 1;
 		SmartCode smartCode = new SmartCode(1, null);
