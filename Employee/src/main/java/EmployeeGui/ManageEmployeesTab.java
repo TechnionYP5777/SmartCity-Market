@@ -34,7 +34,7 @@ import javafx.scene.control.RadioButton;
 /**
  * ManageEmployeesTab - manages the employee tab
  * 
- * @author aviad
+ * @author Shimon Azulay
  * @since 2017-01-04
  */
 public class ManageEmployeesTab implements Initializable {
@@ -63,6 +63,9 @@ public class ManageEmployeesTab implements Initializable {
 
     @FXML
     private JFXButton finishBtn;
+    
+    @FXML
+    private JFXButton searchBtn;
     
     RadioButtonEnabler radioBtnCont = new RadioButtonEnabler();
     
@@ -152,7 +155,7 @@ public class ManageEmployeesTab implements Initializable {
 				securityAnswerTxt.validate();
 			}
 		});
-	
+		
 		
 		enableFinishBtn();
 		
@@ -168,6 +171,11 @@ public class ManageEmployeesTab implements Initializable {
 		radioBtnCont.selectRadioButton((RadioButton) ¢.getSource());
 		enableFinishBtn();
 	}
+	
+    @FXML
+    void removeBtnPressed(ActionEvent event) {
+
+    }
 
 }
 

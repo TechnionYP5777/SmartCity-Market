@@ -53,6 +53,7 @@ import javafx.scene.layout.VBox;
  * products Tab all action of this tab should be here.
  * 
  * @author Shimon Azulay
+ * @since 2017-01-04
  */
 public class ManageCatalogProductTab implements Initializable {
 	

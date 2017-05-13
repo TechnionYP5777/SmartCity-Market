@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import com.google.common.eventbus.Subscribe;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
@@ -50,6 +51,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
@@ -142,6 +144,31 @@ public class ManagePackagesTab implements Initializable {
 
 	@FXML
 	Button searchCodeButton;
+	
+	@FXML
+    private JFXListView<String> employeesList;
+
+    @FXML
+    private StackPane stackPane;
+
+    @FXML
+    private VBox waitingPane;
+
+    @FXML
+    private VBox detailsPane;
+
+    @FXML
+    private Label emplyeeTitleLbl;
+
+    @FXML
+    private Label emplyeeNameLbl;
+
+    @FXML
+    private Label employeeUser;
+
+    @FXML
+    private JFXButton removeBtn;
+
 
 	RadioButtonEnabler radioButtonContainerSmarcodeOperations = new RadioButtonEnabler();
 

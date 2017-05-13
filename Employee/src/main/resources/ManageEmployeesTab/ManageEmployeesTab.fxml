@@ -2,29 +2,103 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" fillWidth="false" spacing="40.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageEmployeesTab">
+<GridPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageEmployeesTab">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+      <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+   </rowConstraints>
    <children>
-      <JFXTextField fx:id="nameTxt" prefWidth="300.0" promptText="Employee Name" />
-      <JFXTextField fx:id="userTxt" prefWidth="300.0" promptText="Employee Username" />
-      <JFXPasswordField fx:id="passTxt" prefWidth="300.0" promptText="Employee Password" />
-      <HBox alignment="CENTER" spacing="10.0">
+      <VBox fx:id="employeesList" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
          <children>
-            <JFXComboBox fx:id="securityCombo" prefWidth="300.0" promptText="Security Question" />
+            <JFXListView fx:id="employeesList" />
+            <HBox>
+               <children>
+                  <JFXButton fx:id="searchBtn" text="Search" />
+               </children>
+            </HBox>
+            <Separator prefWidth="200.0" />
+            <StackPane fx:id="stackPane" prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <VBox fx:id="waitingPane" alignment="CENTER">
+                     <children>
+                        <Label text="Choose Emploee From The List" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="detailsPane" spacing="10.0" visible="false">
+                     <children>
+                        <HBox spacing="20.0">
+                           <children>
+                              <Label text="Employee Title:" />
+                              <Label fx:id="emplyeeTitleLbl" />
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox spacing="20.0">
+                           <children>
+                              <Label text="Employee Name:" />
+                              <Label fx:id="emplyeeNameLbl" />
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox spacing="20.0">
+                           <children>
+                              <Label text="Employee Username:" />
+                              <Label fx:id="employeeUser" />
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </HBox>
+                        <JFXButton fx:id="removeBtn" onAction="#removeBtnPressed" text="Remove Employee" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </StackPane>
          </children>
-      </HBox>
-      <JFXTextField fx:id="securityAnswerTxt" prefWidth="300.0" promptText="Security Question Answer" />
-      <HBox alignment="CENTER">
+      </VBox>
+      <VBox alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="40.0" GridPane.columnIndex="1">
          <children>
-            <JFXRadioButton fx:id="workerRadioBtn" onAction="#radioButtonHandling" selected="true" text="Worker" />
-            <JFXRadioButton fx:id="managerRadioBtn" onAction="#radioButtonHandling" text="Manager" />
+            <JFXTextField fx:id="nameTxt" prefWidth="300.0" promptText="Employee Name" />
+            <JFXTextField fx:id="userTxt" prefWidth="300.0" promptText="Employee Username" />
+            <JFXPasswordField fx:id="passTxt" prefWidth="300.0" promptText="Employee Password" />
+            <HBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <JFXComboBox fx:id="securityCombo" prefWidth="300.0" promptText="Security Question" />
+               </children>
+            </HBox>
+            <JFXTextField fx:id="securityAnswerTxt" prefWidth="300.0" promptText="Security Question Answer" />
+            <HBox alignment="CENTER">
+               <children>
+                  <JFXRadioButton fx:id="workerRadioBtn" onAction="#radioButtonHandling" selected="true" text="Worker" />
+                  <JFXRadioButton fx:id="managerRadioBtn" onAction="#radioButtonHandling" text="Manager" />
+               </children>
+            </HBox>
+            <JFXButton fx:id="finishBtn" onAction="#finishBtnPressed" text="Finish Registration" />
          </children>
-      </HBox>
-      <JFXButton fx:id="finishBtn" onAction="#finishBtnPressed" text="Finish Registration" />
+      </VBox>
    </children>
-</VBox>
+</GridPane>
