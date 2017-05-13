@@ -78,7 +78,7 @@ public class Worker extends AEmployee implements IWorker {
 		this.username = username;
 		this.password = password;
 		log.info("Login to server as " + $.getData() + " succeed. Client id is: " + getClientId());
-		new UpdateProductPictures().start();
+		//new UpdateProductPictures().start();
 		
 		return CLIENT_TYPE.deserialize($.getData());
 	}
