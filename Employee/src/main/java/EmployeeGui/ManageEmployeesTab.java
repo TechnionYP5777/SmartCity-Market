@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
@@ -11,7 +13,16 @@ import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 
+import BasicCommonClasses.Login;
+import EmployeeContracts.IManager;
+import EmployeeDefs.AEmployeeException.ConnectionFailure;
+import EmployeeDefs.AEmployeeException.CriticalError;
+import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
+import EmployeeDefs.AEmployeeException.InvalidParameter;
+import EmployeeDefs.AEmployeeException.WorkerAlreadyExists;
+import EmployeeImplementations.Manager;
 import GuiUtils.RadioButtonEnabler;
+import UtilsImplementations.InjectionFactory;
 import de.jensd.fx.glyphs.GlyphsBuilder;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -54,10 +65,18 @@ public class ManageEmployeesTab implements Initializable {
     private JFXButton finishBtn;
     
     RadioButtonEnabler radioBtnCont = new RadioButtonEnabler();
+    
+    IManager manager = InjectionFactory.getInstance(Manager.class);
+    
+	static Logger log = Logger.getLogger(ManageCatalogProductTab.class.getName());
 
     @FXML
     void finishBtnPressed(ActionEvent event) {
-    	
+    	try {
+			manager.registerNewWorker(new Login(userTxt.getText(), passTxt.getText()));
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | WorkerAlreadyExists e) {
+			log.fatal(e.getMessage());
+		}
     }
 
 	@Override
