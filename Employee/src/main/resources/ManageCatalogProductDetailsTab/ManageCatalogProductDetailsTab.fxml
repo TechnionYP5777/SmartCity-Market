@@ -14,7 +14,7 @@
             <Label text="Manage Manufacturers" />
             <HBox spacing="10.0">
                <children>
-                  <JFXListView fx:id="manufacturerList" minHeight="500.0" minWidth="250.0" stylesheets="@details.css" />
+                  <JFXListView fx:id="manufacturerList" minHeight="500.0" minWidth="250.0"/>
                   <VBox>
                      <children>
                         <JFXButton fx:id="addManuBtn" text="Add Manufacturer" />
