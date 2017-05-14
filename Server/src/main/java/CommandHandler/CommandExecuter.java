@@ -58,7 +58,11 @@ public class CommandExecuter {
 	private CommandWrapper outCommandWrapper;
 
 	public CommandExecuter(String command) {
-		inCommandWrapper = CommandWrapper.deserialize(command);
+		try {
+			inCommandWrapper = CommandWrapper.deserialize(command);
+		} catch (Exception e) {
+			log.fatal("Failed to parse data for command");
+		}
 	}
 
 	//TODO Aviad - remove login command and splitting login command finished

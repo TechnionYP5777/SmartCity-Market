@@ -87,6 +87,16 @@ public abstract class AEmployee {
 		}
 	}
 
+	private CommandWrapper getCommandWrapper(String serverResponse) {
+		try {
+			return CommandWrapper.deserialize(serverResponse);
+		} catch (Exception e) {
+			log.fatal("Critical bug: failed to desirealize server respond: " + serverResponse);
+			
+			throw new RuntimeException();
+		}
+	}
+	
 	protected void resultDescriptorHandler(ResultDescriptor ¢)
 			throws InvalidCommandDescriptor, InvalidParameter, CriticalError, EmployeeNotConnected,
 			EmployeeAlreadyConnected, AuthenticationError, ProductNotExistInCatalog, ProductAlreadyExistInCatalog,
@@ -243,7 +253,7 @@ public abstract class AEmployee {
 
 			terminateCommunication();
 
-			cmdwrppr = CommandWrapper.deserialize(serverResponse);
+			cmdwrppr = getCommandWrapper(serverResponse);
 			ResultDescriptor resDesc = cmdwrppr.getResultDescriptor();
 
 			try {

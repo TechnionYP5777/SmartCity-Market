@@ -78,5 +78,26 @@ public class IsLoggedInTest {
 			/* Successful */
 		}
 	}
+	
+	@Test
+	public void isLoggedInIllegalResultTest() {		
+		try {
+			Mockito.when(
+					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.IS_LOGGED_IN).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE, Serialization.serialize(answer)).serialize());
+		} catch (IOException ¢) {
+			
+			fail();
+		}
+		try {			
+			assertEquals(worker.isLoggedIn(), answer);
+		} catch (ConnectionFailure e) {
+			
+			fail();
+		} catch (CriticalError __) {
+			/* Successful */
+		}
+	}
 }
 

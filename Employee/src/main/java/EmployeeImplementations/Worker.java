@@ -50,6 +50,16 @@ public class Worker extends AEmployee implements IWorker {
 		this.clientRequestHandler = clientRequestHandler;
 	}
 
+	public CommandWrapper getCommandWrapper(String serverResponse) throws CriticalError {
+		try {
+			return CommandWrapper.deserialize(serverResponse);
+		} catch (Exception e) {
+			log.fatal("Critical bug: failed to desirealize server respond: " + serverResponse);
+			
+			throw new CriticalError();
+		}
+	}
+	
 	@Override
 	public CLIENT_TYPE login(String username, String password)
 			throws InvalidParameter, CriticalError, EmployeeAlreadyConnected, AuthenticationError, ConnectionFailure {
@@ -57,14 +67,10 @@ public class Worker extends AEmployee implements IWorker {
 		log.info("Creating login command wrapper with username: " + username + " and password: " + password);
 		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(WorkerDefs.loginCommandSenderId,
 				CommandDescriptor.LOGIN_EMPLOYEE, Serialization.serialize(new Login(username, password))).serialize()));
+
 		try {
-			$ = CommandWrapper.deserialize(serverResponse);
-		} catch (Exception e1) {
-			log.fatal("Critical bug in serialize");
+			$ = getCommandWrapper(serverResponse);
 			
-			throw new CriticalError();
-		}
-		try {
 			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeNotConnected | ProductNotExistInCatalog
 				| ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable
@@ -90,7 +96,7 @@ public class Worker extends AEmployee implements IWorker {
 				(new CommandWrapper(getClientId(), CommandDescriptor.LOGOUT, Serialization.serialize(username)))
 						.serialize());
 		try {
-			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
+			resultDescriptorHandler(getCommandWrapper(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductNotExistInCatalog
 				| ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable
 				| ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | 
@@ -112,7 +118,7 @@ public class Worker extends AEmployee implements IWorker {
 		serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(getClientId(), CommandDescriptor.IS_LOGGED_IN)).serialize());
 
-		CommandWrapper commandWrapper = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandWrapper = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandWrapper.getResultDescriptor());
@@ -138,7 +144,7 @@ public class Worker extends AEmployee implements IWorker {
 				(new CommandWrapper(getClientId(), CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
 						Serialization.serialize(new SmartCode(barcode, null))).serialize()));
 
-		CommandWrapper $ = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper $ = getCommandWrapper(serverResponse);
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
@@ -160,7 +166,7 @@ public class Worker extends AEmployee implements IWorker {
 		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(getClientId(),
 				CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE, Serialization.serialize(p)).serialize()));
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
@@ -182,7 +188,7 @@ public class Worker extends AEmployee implements IWorker {
 		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(getClientId(),
 				CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES, Serialization.serialize(p)).serialize()));
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
@@ -203,7 +209,7 @@ public class Worker extends AEmployee implements IWorker {
 		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(getClientId(),
 				CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE, Serialization.serialize(p)).serialize()));
 		
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError
@@ -224,7 +230,7 @@ public class Worker extends AEmployee implements IWorker {
 				(new CommandWrapper(getClientId(), CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT, Serialization.serialize(p))
 						.serialize()));
 
-		CommandWrapper $ = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper $ = getCommandWrapper(serverResponse);
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductNotExistInCatalog

@@ -242,7 +242,7 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 		
 		terminateCommunication();
 		
-		CommandWrapper $ = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper $ = getCommandWrapper(serverResponse);
 				
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
@@ -278,7 +278,7 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 		
 		terminateCommunication();
 		
-		CommandWrapper $ = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper $ = getCommandWrapper(serverResponse);
 				
 		try {
 			resultDescriptorHandler($.getResultDescriptor());

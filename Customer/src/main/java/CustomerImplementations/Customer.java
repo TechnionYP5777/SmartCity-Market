@@ -92,6 +92,16 @@ public class Customer extends ACustomer implements ICustomer {
 		totalSum += p.getAmount() * catalogProduct.getPrice();
 	}
 
+	public CommandWrapper getCommandWrapper(String serverResponse) throws CriticalError {
+		try {
+			return CommandWrapper.deserialize(serverResponse);
+		} catch (Exception e) {
+			log.fatal("Critical bug: failed to desirealize server respond: " + serverResponse);
+			
+			throw new CriticalError();
+		}
+	}
+	
 	/***
 	 * 
 	 * @author idan atias
@@ -124,7 +134,11 @@ public class Customer extends ACustomer implements ICustomer {
 
 			terminateCommunication();
 
-			cmdwrppr = CommandWrapper.deserialize(serverResponse);
+			try {
+				cmdwrppr = getCommandWrapper(serverResponse);
+			} catch (CriticalError e1) {
+				throw new RuntimeException();
+			}
 			ResultDescriptor resDesc = cmdwrppr.getResultDescriptor();
 
 			try {
@@ -185,7 +199,7 @@ public class Customer extends ACustomer implements ICustomer {
 
 		terminateCommunication();
 
-		cmdwrppr = CommandWrapper.deserialize(serverResponse);
+		cmdwrppr = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(cmdwrppr.getResultDescriptor());
@@ -227,7 +241,7 @@ public class Customer extends ACustomer implements ICustomer {
 		terminateCommunication();
 
 		try {
-			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
+			resultDescriptorHandler(getCommandWrapper(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter | ProductCatalogDoesNotExist | AmountBiggerThanAvailable
 				| ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
@@ -260,7 +274,7 @@ public class Customer extends ACustomer implements ICustomer {
 		terminateCommunication();
 
 		try {
-			$ = CommandWrapper.deserialize(serverResponse);
+			$ = getCommandWrapper(serverResponse);
 
 			resultDescriptorHandler($.getResultDescriptor());
 
@@ -315,7 +329,7 @@ public class Customer extends ACustomer implements ICustomer {
 		terminateCommunication();
 
 		try {
-			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
+			resultDescriptorHandler(getCommandWrapper(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | ProductCatalogDoesNotExist | GroceryListIsEmpty | AuthenticationError
 				| UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
@@ -355,7 +369,7 @@ public class Customer extends ACustomer implements ICustomer {
 		terminateCommunication();
 
 		try {
-			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
+			resultDescriptorHandler(getCommandWrapper(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter | ProductCatalogDoesNotExist | GroceryListIsEmpty
 				| AuthenticationError | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
@@ -422,7 +436,7 @@ public class Customer extends ACustomer implements ICustomer {
 		terminateCommunication();
 
 		try {
-			resultDescriptorHandler(CommandWrapper.deserialize(serverResponse).getResultDescriptor());
+			resultDescriptorHandler(getCommandWrapper(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter | AmountBiggerThanAvailable | ProductPackageDoesNotExist
 				| AuthenticationError | ProductCatalogDoesNotExist | UsernameAlreadyExists ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
@@ -468,7 +482,7 @@ public class Customer extends ACustomer implements ICustomer {
 
 		terminateCommunication();
 
-		CommandWrapper $ = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper $ = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
@@ -520,7 +534,7 @@ public class Customer extends ACustomer implements ICustomer {
 
 		terminateCommunication();
 
-		CommandWrapper $ = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper $ = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
@@ -554,7 +568,7 @@ public class Customer extends ACustomer implements ICustomer {
 
 		terminateCommunication();
 
-		CommandWrapper commandWrapper = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandWrapper = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandWrapper.getResultDescriptor());
@@ -593,7 +607,7 @@ public class Customer extends ACustomer implements ICustomer {
 
 		terminateCommunication();
 
-		CommandWrapper commandWrapper = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandWrapper = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandWrapper.getResultDescriptor());

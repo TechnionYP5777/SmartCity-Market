@@ -51,8 +51,13 @@ public class CommandWrapper implements Cloneable {
 		return Serialization.serialize(this);
 	}
 	
-	public static CommandWrapper deserialize(String cmdWrap) {
-		return Serialization.deserialize(cmdWrap, CommandWrapper.class);
+	public static CommandWrapper deserialize(String cmdWrap) throws Exception {
+		CommandWrapper cmdWrapper = Serialization.deserialize(cmdWrap, CommandWrapper.class);
+		
+		if (cmdWrapper == null)
+			throw new Exception();
+		
+		return cmdWrapper;
 	}
 	
 	@Override

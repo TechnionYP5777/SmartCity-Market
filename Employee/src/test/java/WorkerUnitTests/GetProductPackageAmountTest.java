@@ -154,4 +154,30 @@ public class GetProductPackageAmountTest {
 			//Test success
 		}
 	}
+	
+	@Test
+	public void GetProductPackageAmountIllegalResultTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
+							CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
+							Serialization.serialize(pp)).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE, "2").serialize());
+		} catch (IOException ¢) {
+			
+			fail();
+		}
+
+		try {
+			worker.getProductPackageAmount(pp);
+			
+			fail();
+		} catch (InvalidParameter | ProductPackageDoesNotExist |
+				EmployeeNotConnected | ConnectionFailure ¢) {
+			
+			fail();
+		} catch (CriticalError ¢) {
+			//Test success
+		}
+	}
 }

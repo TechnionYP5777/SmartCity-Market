@@ -63,7 +63,7 @@ public class Manager extends Worker implements IManager {
 				(new CommandWrapper(getClientId(), CommandDescriptor.ADD_PRODUCT_TO_CATALOG, Serialization.serialize(p)))
 						.serialize());
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
@@ -85,7 +85,7 @@ public class Manager extends Worker implements IManager {
 		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(getClientId(),
 				CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG, Serialization.serialize(c))).serialize());
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
@@ -109,7 +109,7 @@ public class Manager extends Worker implements IManager {
 				(new CommandWrapper(getClientId(), CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG, Serialization.serialize(p)))
 						.serialize());
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
@@ -132,7 +132,7 @@ public class Manager extends Worker implements IManager {
 				(new CommandWrapper(getClientId(), CommandDescriptor.REGISTER_NEW_WORKER, Serialization.serialize(l)))
 						.serialize());
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
@@ -155,7 +155,7 @@ public class Manager extends Worker implements IManager {
 				(new CommandWrapper(getClientId(), CommandDescriptor.REMOVE_WORKER, Serialization.serialize(s)))
 						.serialize());
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
@@ -179,7 +179,7 @@ public class Manager extends Worker implements IManager {
 				(new CommandWrapper(getClientId(), CommandDescriptor.ADD_INGREDIENT, Serialization.serialize(w)))
 						.serialize());
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
@@ -204,7 +204,7 @@ public class Manager extends Worker implements IManager {
 				(new CommandWrapper(getClientId(), !forced ? CommandDescriptor.REMOVE_INGREDIENT : CommandDescriptor.FORCE_REMOVE_INGREDIENT, Serialization.serialize(w)))
 						.serialize());
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
@@ -227,7 +227,7 @@ public class Manager extends Worker implements IManager {
 				(new CommandWrapper(getClientId(), CommandDescriptor.EDIT_INGREDIENT, Serialization.serialize(w)))
 						.serialize());
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
@@ -250,7 +250,7 @@ public class Manager extends Worker implements IManager {
 				(new CommandWrapper(getClientId(), CommandDescriptor.ADD_MANUFACTURER, Serialization.serialize(m)))
 						.serialize());
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
@@ -275,7 +275,7 @@ public class Manager extends Worker implements IManager {
 				(new CommandWrapper(getClientId(), CommandDescriptor.REMOVE_MANUFACTURER, Serialization.serialize(m)))
 						.serialize());
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
@@ -298,7 +298,7 @@ public class Manager extends Worker implements IManager {
 				(new CommandWrapper(getClientId(), CommandDescriptor.EDIT_MANUFACTURER, Serialization.serialize(m)))
 						.serialize());
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
@@ -321,7 +321,7 @@ public class Manager extends Worker implements IManager {
 				(new CommandWrapper(getClientId(), CommandDescriptor.GET_ALL_MANUFACTURERS, Serialization.serialize("")))
 						.serialize());
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
@@ -346,7 +346,7 @@ public class Manager extends Worker implements IManager {
 				(new CommandWrapper(getClientId(), CommandDescriptor.GET_ALL_INGREDIENTS, Serialization.serialize("")))
 						.serialize());
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
@@ -371,7 +371,7 @@ public class Manager extends Worker implements IManager {
 				(new CommandWrapper(getClientId(), CommandDescriptor.GET_ALL_WORKERS, Serialization.serialize("")))
 						.serialize());
 
-		CommandWrapper commandDescriptor = CommandWrapper.deserialize(serverResponse);
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());

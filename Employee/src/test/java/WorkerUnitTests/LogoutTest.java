@@ -84,4 +84,28 @@ public class LogoutTest {
 			/* Test Passed */
 		}
 	}
+	
+	@Test
+	public void logoutIllegalResultTest() {
+		try {
+			Mockito.when(
+					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.LOGOUT, Serialization.serialize(null)).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE).serialize());
+		} catch (IOException ¢) {
+			
+			fail();
+		}
+		
+		try {
+			worker.logout();
+			
+			fail();
+		} catch (InvalidParameter | EmployeeNotConnected | ConnectionFailure ¢) {
+			
+			fail();
+		} catch (CriticalError e) {
+			/* Test Passed */
+		}
+	}
 }

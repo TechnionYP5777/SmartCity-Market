@@ -121,4 +121,28 @@ public class ViewProductFromCatalogTest {
 			/* Test Passed */
 		}
 	}
+	
+	@Test
+	public void ViewProductFromCatalogproductIllegalResultTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(new SmartCode(1234567890, null))).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE).serialize());
+		} catch (IOException ¢) {
+			
+			fail();
+		}
+		
+		try {
+			worker.viewProductFromCatalog(1234567890);
+			
+			fail();
+		} catch (InvalidParameter  | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure ¢) {
+			
+			fail();
+		} catch (CriticalError e) {
+			/* Test Passed */
+		}
+	}
 }

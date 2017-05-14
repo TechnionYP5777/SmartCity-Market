@@ -114,4 +114,49 @@ public class LoginTest {
 		}
 	}
 
+	@Test
+	public void loginParseFailuteTest() {
+		try {
+			Mockito.when(
+					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.LOGIN_EMPLOYEE, Serialization.serialize(new Login("test", "test"))).serialize())))
+					.thenReturn("");
+		} catch (IOException ¢) {
+			fail();
+		}
+		
+		try {
+			worker.login("test", "test");
+			
+			fail();
+		} catch (InvalidParameter | EmployeeAlreadyConnected | AuthenticationError | ConnectionFailure ¢) {
+			
+			fail();
+		} catch (CriticalError e) {
+			/* Test Passed */
+		}
+	}
+	
+	@Test
+	public void loginIllegalResultTest() {
+		try {
+			Mockito.when(
+					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.LOGIN_EMPLOYEE, Serialization.serialize(new Login("test", "test"))).serialize())))
+			.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE).serialize());
+		} catch (IOException ¢) {
+			fail();
+		}
+		
+		try {
+			worker.login("test", "test");
+			
+			fail();
+		} catch (InvalidParameter | EmployeeAlreadyConnected | AuthenticationError | ConnectionFailure ¢) {
+			
+			fail();
+		} catch (CriticalError e) {
+			/* Test Passed */
+		}
+	}
 }

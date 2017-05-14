@@ -209,4 +209,31 @@ public class RemoveProductPackageFromStoreTest {
 			//test success
 		}
 	}
+	
+	@Test
+	public void RemoveProductPackageFromStoreIllegalResultTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
+							CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
+							Serialization.serialize(pp)).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE).serialize());
+		} catch (IOException ¢) {
+			
+			fail();
+		}
+
+		try {
+			worker.removeProductPackageFromStore(pp);
+			
+			fail();
+		} catch (ProductPackageDoesNotExist | InvalidParameter | 
+				AmountBiggerThanAvailable | EmployeeNotConnected  |
+				ProductNotExistInCatalog | ConnectionFailure ¢) {
+			
+			fail();
+		} catch (CriticalError ¢) {
+			//test success
+		}
+	}
 }

@@ -209,4 +209,31 @@ public class PlaceProductPackageOnShelvesTest {
 			//test success
 		}
 	}
+	
+	@Test
+	public void PlaceProductPackageOnShelvesIllegalResultTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
+							CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES,
+							Serialization.serialize(pp)).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_MANUFACTURER_STILL_IN_USE).serialize());
+		} catch (IOException ¢) {
+			
+			fail();
+		}
+
+		try {
+			worker.placeProductPackageOnShelves(pp);
+			
+			fail();
+		} catch (ProductPackageDoesNotExist | InvalidParameter | 
+				AmountBiggerThanAvailable | EmployeeNotConnected  |
+				ProductNotExistInCatalog | ConnectionFailure ¢) {
+			
+			fail();
+		} catch (CriticalError ¢) {
+			//test success
+		}
+	}
 }

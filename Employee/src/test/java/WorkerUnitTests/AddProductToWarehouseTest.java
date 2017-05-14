@@ -143,4 +143,29 @@ public class AddProductToWarehouseTest {
 			// test success 
 		}
 	}
+	
+	@Test
+	public void AddProductToWarehouseProductIllegalResultTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
+							CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
+							Serialization.serialize(pp)).serialize())))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_STILL_FOR_SALE).serialize());
+		} catch (IOException ¢) {
+			
+			fail();
+		}
+
+		try {
+			worker.addProductToWarehouse(pp);
+			
+			fail();
+		} catch (ProductNotExistInCatalog | InvalidParameter | EmployeeNotConnected | ConnectionFailure ¢) {
+			
+			fail();
+		} catch (CriticalError ¢) {
+			// test success 
+		}
+	}
 }
