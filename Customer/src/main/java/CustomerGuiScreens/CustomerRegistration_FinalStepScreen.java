@@ -12,9 +12,6 @@ import com.jfoenix.controls.JFXTextArea;
 
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.ICustomerProfile;
-import CustomerContracts.ACustomerExceptions.CriticalError;
-import CustomerContracts.ACustomerExceptions.InvalidParameter;
-import CustomerContracts.ACustomerExceptions.UsernameAlreadyExists;
 import CustomerContracts.ICustomer;
 import CustomerGuiHelpers.CustomerGuiExceptionsHandler;
 import CustomerGuiHelpers.TempCustomerProfilePassingData;

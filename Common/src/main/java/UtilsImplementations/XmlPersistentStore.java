@@ -2,7 +2,6 @@ package UtilsImplementations;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Arrays;
 
 import javax.inject.Inject;
@@ -11,7 +10,6 @@ import org.apache.log4j.Logger;
 
 import UtilsContracts.IFilePathLocator;
 import UtilsContracts.IPersistentStore;
-import UtilsContracts.IXmlSerializer;
 import UtilsContracts.IXmlSerializerProvider;
 
 
@@ -28,7 +26,6 @@ public class XmlPersistentStore implements IPersistentStore {
 
 	@Inject
 	public XmlPersistentStore(IFilePathLocator appDirectories, IXmlSerializerProvider xmlSerializerProvider) {
-		super();
 		mAppDirectories = appDirectories;
 		mXmlSerializerProvider = xmlSerializerProvider;
 		
@@ -37,9 +34,8 @@ public class XmlPersistentStore implements IPersistentStore {
 
 	@Override
 	public void storeObject(Object requester, Object objectToStore) throws Exception {
-		String path = getXmlPath(requester, objectToStore.getClass());
-		IXmlSerializer<Object> xmlSerializer = mXmlSerializerProvider.getSerializer(Object.class);
-		xmlSerializer.serializeToFile(objectToStore, path);
+		mXmlSerializerProvider.getSerializer(Object.class).serializeToFile(objectToStore,
+				getXmlPath(requester, objectToStore.getClass()));
 	}
 
 	@Override
@@ -53,20 +49,16 @@ public class XmlPersistentStore implements IPersistentStore {
 			throw new FileNotFoundException();
 		}
 		
-		IXmlSerializer<TObject> xmlSerializer = mXmlSerializerProvider.getSerializer(restoredType);
-		TObject restored = xmlSerializer.deserializeFromFile(path);
-		return restored;
+		return mXmlSerializerProvider.getSerializer(restoredType).deserializeFromFile(path);
 	}
 	
-	private String getXmlPath(Object requester, Class<?> objectType) throws IOException {
+	private String getXmlPath(Object requester, Class<?> objectType) {
 		PersistenceData persistenceData = getPersistenceDataAnnotation(objectType);
-		if (persistenceData != null) {
+		if (persistenceData != null)
 			return mAppDirectories.getFilePath(requester.getClass(), persistenceData.relativePath());
-		}
-		else {
-			File file = new File(requester.getClass().getPackage().getName(), objectType.getCanonicalName() + ".xml");
-			return mAppDirectories.getFilePath(getClass(), file.getPath());
-		}
+		return mAppDirectories.getFilePath(getClass(),
+				(new File(requester.getClass().getPackage().getName(), objectType.getCanonicalName() + ".xml"))
+						.getPath());
 	}
 	
 	private PersistenceData getPersistenceDataAnnotation(Class<?> objectType) {

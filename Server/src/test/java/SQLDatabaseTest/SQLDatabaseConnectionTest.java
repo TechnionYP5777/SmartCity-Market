@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.After;
@@ -13,9 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.ForgetPassword;
@@ -1203,7 +1199,6 @@ public class SQLDatabaseConnectionTest {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		final String ingredientName = "glotendebug";
-		int ingredient1Id = 0;
 		String result = null;
 		Ingredient ingredient = null;
 		

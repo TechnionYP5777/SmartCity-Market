@@ -3,17 +3,10 @@ package CustomerGuiScreens;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import CustomerContracts.ICustomer;
-import CustomerGuiHelpers.CustomerGuiExceptionsHandler;
-import CustomerGuiHelpers.TempCustomerPassingData;
-import CustomerImplementations.Customer;
 import GuiUtils.AbstractApplicationScreen;
-import SMExceptions.SMException;
-import UtilsImplementations.InjectionFactory;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 

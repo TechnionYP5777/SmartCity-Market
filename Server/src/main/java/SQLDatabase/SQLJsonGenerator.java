@@ -3,7 +3,6 @@ package SQLDatabase;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;

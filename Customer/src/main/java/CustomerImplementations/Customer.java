@@ -1,15 +1,10 @@
 package CustomerImplementations;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.zip.ZipException;
-import java.util.zip.ZipFile;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -21,7 +16,6 @@ import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
-import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandDescriptor;
@@ -29,7 +23,6 @@ import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import CommonDefs.GroceryListExceptions.AmountIsBiggerThanAvailable;
 import CommonDefs.GroceryListExceptions.ProductNotInList;
-import CommonDefs.GuiCommonDefs;
 import CustomerContracts.ICustomer;
 import PicturesHandler.PictureManager;
 import CustomerContracts.ACustomerExceptions.AmountBiggerThanAvailable;
@@ -44,7 +37,6 @@ import CustomerContracts.ACustomerExceptions.ProductNotInCart;
 import CustomerContracts.ACustomerExceptions.ProductPackageDoesNotExist;
 import CustomerContracts.ACustomerExceptions.UsernameAlreadyExists;
 import UtilsContracts.IClientRequestHandler;
-import UtilsImplementations.Packing;
 import UtilsImplementations.Serialization;
 
 /**
