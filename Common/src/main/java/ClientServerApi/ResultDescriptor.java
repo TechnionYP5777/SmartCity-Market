@@ -98,6 +98,17 @@ public enum ResultDescriptor {
 	 */
 	SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD,
 	
+	/**
+	 * The sender tried to recover his forgotten password but the answer for the authentication question was wrong.
+	 * 
+	 * 
+	 * How to fix:
+	 * 
+	 * 1. Try again.
+	 * 
+	 */
+	SM_FOROGT_PASSWORD_WRONG_ANSWER,
+	
 	/********************************** Shared failures for employee & customer ********************************/
 	
 	/**

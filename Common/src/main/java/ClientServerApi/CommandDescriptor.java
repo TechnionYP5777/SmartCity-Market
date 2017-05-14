@@ -123,9 +123,42 @@ public enum CommandDescriptor {
 	 * 			SM_OK,
 	 * 		
 	 * 		failure:
-	 *
+	 *			
 	 */
 	IS_LOGGED_IN,
+
+
+	/**
+	 * Description: Returns the authentication question the user entered when he signed up.
+	 * param1: String username.
+	 * retval: String (the question).
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_USERNAME_DOES_NOT_EXIST,
+	 *			SM_ERR,
+	 */
+	FORGOT_PASSWORD_GET_QUESTION,
+	
+	/**
+	 * Description: Sends the answer for the authentication question to the server along with the new password.
+	 * 				If answer is correct then password is changed and server returns true (boolean).
+	 * 				else, return false.
+	 * param1: Login. (for holding the answer and new password) 
+	 * retval: Boolean.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 * 			SM_FOROGT_PASSWORD_WRONG_ANSWER,
+	 *			SM_ERR,
+	 */
+	FORGOT_PASSWORD_SEND_ANSWER_WITH_NEW_PASSWORD,
 	
 	/********************************** Shared employee & Customer commands **********************************/
 	
