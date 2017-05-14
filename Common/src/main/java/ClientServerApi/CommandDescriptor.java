@@ -585,7 +585,7 @@ public enum CommandDescriptor {
 	REGISTER_NEW_CUSTOMER,
 		
 	/**
-	 * Description: Update Customer in the system. this command update any detail except to the password and ForgetPassword structure
+	 * Description: Update Customer in the system. this command update any detail except to the password and ForgotPasswordData structure
 	 * param1: CustomerProfile.
 	 * retval: void.
 	 *

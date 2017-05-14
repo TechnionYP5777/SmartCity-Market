@@ -33,7 +33,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
-import BasicCommonClasses.ForgetPassword;
+import BasicCommonClasses.ForgotPasswordData;
 import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
@@ -963,7 +963,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * @param p object that contains the new values.
 	 * @throws CriticalError
 	 */
-	private void assignSecurityQAToRegisteredClient(ClientsTable t, String username, ForgetPassword p) throws CriticalError {
+	private void assignSecurityQAToRegisteredClient(ClientsTable t, String username, ForgotPasswordData p) throws CriticalError {
 		setValueToRegisteredClient(t, username, t.securityQuestionCol, p.getQuestion());
 		setValueToRegisteredClient(t, username, t.securityAnswerCol, p.getAnswer());
 	}
@@ -2061,7 +2061,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	
 	@Override
-	public void addWorker(Integer sessionID, Login l, ForgetPassword security) throws CriticalError, ClientAlreadyExist, ClientNotConnected{
+	public void addWorker(Integer sessionID, Login l, ForgotPasswordData security) throws CriticalError, ClientAlreadyExist, ClientNotConnected{
 		log.info("SQL Public addWorker: add new worker with username: " + l.getUserName());
 		
 		validateSessionEstablished(sessionID);
@@ -2262,7 +2262,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 	
 	@Override
-	public void setSecurityQACustomer(String username, ForgetPassword p) throws CriticalError, ClientNotExist{
+	public void setSecurityQACustomer(String username, ForgotPasswordData p) throws CriticalError, ClientNotExist{
 		log.info("SQL Public setSecurityQACustomer: Customer: " + username + " sets security Q&A.");
 		
 		if (!isCustomerExist(username)){

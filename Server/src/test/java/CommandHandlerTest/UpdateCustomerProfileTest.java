@@ -17,7 +17,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.google.gson.Gson;
 
 import BasicCommonClasses.CustomerProfile;
-import BasicCommonClasses.ForgetPassword;
+import BasicCommonClasses.ForgotPasswordData;
 import BasicCommonClasses.Ingredient;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
@@ -42,7 +42,7 @@ public class UpdateCustomerProfileTest {
 	private static final CustomerProfile customerProfile = new CustomerProfile("userName", "password",
 			"firstName", "lastName", "phoneNumber", "emailAddress",
 			"city", "street", LocalDate.now(), new HashSet<Ingredient>(),
-			new ForgetPassword("q", "a"));
+			new ForgotPasswordData("q", "a"));
 	private static final int senderID = 1;
 	
 	@Test

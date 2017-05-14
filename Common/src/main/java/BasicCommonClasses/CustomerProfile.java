@@ -26,7 +26,7 @@ public class CustomerProfile implements ICustomerProfile {
 	LocalDate birthdate;
 	HashSet<Ingredient> allergens = new HashSet<Ingredient>();
 	
-	ForgetPassword forgetPassword;
+	ForgotPasswordData forgotPasswordData;
 
 	public CustomerProfile() {
 
@@ -37,7 +37,7 @@ public class CustomerProfile implements ICustomerProfile {
 	}
 	public CustomerProfile(String userName, String password, String firstName, String lastName, String phoneNumber, String emailAddress,
 			String city, String street, LocalDate birthdate, HashSet<Ingredient> allergens,
-			ForgetPassword forgetPassword) {
+			ForgotPasswordData forgotPasswordData) {
 		this.userName = userName;
 		this.password = password;
 		this.firstName = firstName;
@@ -48,7 +48,7 @@ public class CustomerProfile implements ICustomerProfile {
 		this.street = street;
 		this.birthdate = birthdate;
 		this.allergens = allergens;
-		this.forgetPassword = forgetPassword;
+		this.forgotPasswordData = forgotPasswordData;
 	}
 	@Override
 	public String getUserName() {
@@ -164,11 +164,11 @@ public class CustomerProfile implements ICustomerProfile {
 			return false;
 		return true;
 	}
-	public ForgetPassword getForgetPassword() {
-		return forgetPassword;
+	public ForgotPasswordData getForgetPassword() {
+		return forgotPasswordData;
 	}
-	public void setForgetPassword(ForgetPassword p) {
-		this.forgetPassword = p;
+	public void setForgetPassword(ForgotPasswordData p) {
+		this.forgotPasswordData = p;
 	}
 	public String getPassword() {
 		return password;

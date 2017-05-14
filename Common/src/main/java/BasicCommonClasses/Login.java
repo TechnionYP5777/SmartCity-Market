@@ -11,25 +11,25 @@ public class Login {
 	private String userName;
 	private String password;
 	
-	public ForgetPassword getForgetPassword() {
-		return forgetPassword;
+	public ForgotPasswordData getForgetPassword() {
+		return forgotPasswordData;
 	}
 
-	public void setForgetPassword(ForgetPassword p) {
-		this.forgetPassword = p;
+	public void setForgetPassword(ForgotPasswordData p) {
+		this.forgotPasswordData = p;
 	}
 
-	ForgetPassword forgetPassword;
+	ForgotPasswordData forgotPasswordData;
 	
 	public Login(String userName, String password) {
 		this.userName = userName;
 		this.password = password;
 	}
 	
-	public Login(String userName, String password, ForgetPassword forgetPassword) {
+	public Login(String userName, String password, ForgotPasswordData forgotPasswordData) {
 		this.userName = userName;
 		this.password = password;
-		this.forgetPassword = forgetPassword;
+		this.forgotPasswordData = forgotPasswordData;
 	}
 
 	public String getUserName() {
@@ -61,6 +61,6 @@ public class Login {
 	public boolean equals(Object ¢) {
 		return ¢ == this || (¢ != null && getClass() == ¢.getClass() &&
 				userName.equals(((Login) ¢).userName) && password.equals(((Login) ¢).password) &&
-				forgetPassword.equals(((Login) ¢).forgetPassword));
+				forgotPasswordData.equals(((Login) ¢).forgotPasswordData));
 	}
 }

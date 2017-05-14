@@ -14,7 +14,7 @@ import org.junit.Test;
 import com.google.gson.Gson;
 
 import BasicCommonClasses.CatalogProduct;
-import BasicCommonClasses.ForgetPassword;
+import BasicCommonClasses.ForgotPasswordData;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
 import BasicCommonClasses.Login;
@@ -1315,7 +1315,7 @@ public class SQLDatabaseConnectionTest {
 		
 		//test add worker
 		try {
-			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgetPassword("", ""));
+			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgotPasswordData("", ""));
 			
 			result = sqlConnection.getWorkersList(null);
 		} catch (CriticalError | ClientNotConnected | ClientAlreadyExist e) {
@@ -1370,7 +1370,7 @@ public class SQLDatabaseConnectionTest {
 		
 		//test add worker
 		try {
-			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgetPassword("", ""));
+			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgotPasswordData("", ""));
 			
 			result = sqlConnection.getWorkersList(null);
 		} catch (CriticalError | ClientNotConnected | ClientAlreadyExist e) {
@@ -1385,7 +1385,7 @@ public class SQLDatabaseConnectionTest {
 		
 		//test add again the same worker
 		try {
-			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgetPassword("", ""));
+			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgotPasswordData("", ""));
 			fail();
 		} catch (CriticalError | ClientNotConnected e) {
 			fail();

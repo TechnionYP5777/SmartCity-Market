@@ -13,7 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 
-import BasicCommonClasses.ForgetPassword;
+import BasicCommonClasses.ForgotPasswordData;
 import BasicCommonClasses.Login;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
@@ -35,8 +35,8 @@ public class RegisterNewWorkerTest {
 		PropertyConfigurator.configure("../log4j.properties");
 	}
 
-	private static final ForgetPassword forgetPassword = new ForgetPassword("question", "answer");
-	private static final Login worker = new Login("worker", "worker", forgetPassword);
+	private static final ForgotPasswordData forgotPasswordData = new ForgotPasswordData("question", "answer");
+	private static final Login worker = new Login("worker", "worker", forgotPasswordData);
 	
 	@Test
 	public void registerNewWorkerSuccessfulTest() {

@@ -1,22 +1,22 @@
 package BasicCommonClasses;
 
 /**
- * ForgetPassword - This class will hold and maintain the forget password flow.
+ * ForgotPasswordData - This class will hold and maintain the forget password flow.
  * 
  * @author Aviad Cohen
  * @since 2016-12-09
  */
-public class ForgetPassword {
+public class ForgotPasswordData {
 
 	String question;
 	String answer;
 	
-	public ForgetPassword(String question, String answer) {
+	public ForgotPasswordData(String question, String answer) {
 		this.question = question;
 		this.answer = answer;
 	}
 	
-	public ForgetPassword() {
+	public ForgotPasswordData() {
 		this.question = new String();
 		this.answer = new String();
 	}
@@ -42,6 +42,6 @@ public class ForgetPassword {
 	@Override
 	public boolean equals(Object ¢) {
 		return ¢ == this || (¢ != null && getClass() == ¢.getClass() &&
-				question.equals(((ForgetPassword) ¢).question) && answer.equals(((ForgetPassword) ¢).answer));
+				question.equals(((ForgotPasswordData) ¢).question) && answer.equals(((ForgotPasswordData) ¢).answer));
 	}
 }
