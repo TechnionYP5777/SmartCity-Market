@@ -233,14 +233,6 @@ public abstract class AEmployee {
 			log.info("Creating UpdateProductPictures wrapper for customer");
 
 			try {
-				establishCommunication(WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
-			} catch (ConnectionFailure e) {
-				log.fatal("Critical bug: failed to get respond from server");
-				log.fatal(e + "");
-				throw new RuntimeException();
-			}
-
-			try {
 				LocalDate currentPicturesDate = PictureManager.getCurrentDate();
 				serverResponse = sendRequestWithRespondToServer(
 						(new CommandWrapper(getClientId(), CommandDescriptor.UPDATE_PRODUCTS_PICTURES,
@@ -250,8 +242,6 @@ public abstract class AEmployee {
 				log.fatal(e + "");
 				throw new RuntimeException();
 			}
-
-			terminateCommunication();
 
 			cmdwrppr = getCommandWrapper(serverResponse);
 			ResultDescriptor resDesc = cmdwrppr.getResultDescriptor();
