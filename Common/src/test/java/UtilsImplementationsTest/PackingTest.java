@@ -5,7 +5,9 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.util.zip.ZipFile;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -32,12 +34,11 @@ public class PackingTest {
 	static String zipfileToUnpackPath = String.valueOf(testDir + "toUnpack/packed.zip");
 	static String unpackDirPath = String.valueOf(testDir + "unpacked/");
 
+	
 	@BeforeClass
 	public static void setup() {
-		File toPackFolder = new File(filesToZipPath);
-		// System.out.println("Working Directory = " +
-		// System.getProperty("user.dir"));
-		filesToZip = toPackFolder.listFiles();
+		PropertyConfigurator.configure("../log4j.properties");
+		filesToZip = (new File(filesToZipPath)).listFiles();
 	}
 
 	@AfterClass
@@ -47,8 +48,7 @@ public class PackingTest {
 			zipfileToDelete.delete();
 			return;
 		}
-		File unpackedFolder = new File(unpackDirPath);
-		for (File file : unpackedFolder.listFiles())
+		for (File file : (new File(unpackDirPath)).listFiles())
 			file.delete();
 	}
 
