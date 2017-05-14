@@ -29,7 +29,7 @@ import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CommandExectuerRemoveProductPackageFromGroceryListTest {
+public class RemoveProductPackageFromStoreTest {
 
 	@Mock
 	private SQLDatabaseConnection sqlDatabaseConnection;
@@ -40,16 +40,19 @@ public class CommandExectuerRemoveProductPackageFromGroceryListTest {
 	}
 	
 	@Test
-	public void removeProductPackageFromGroceryListSuccessfulTest() {
-		int cartID = 1;
-		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));
-		String command = new CommandWrapper(cartID, CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST,
+	public void removeProductPackageFromStoreSuccessfulTest() {
+		int senderID = 1;
+		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.STORE));
+		String command = new CommandWrapper(senderID, CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
 				new Gson().toJson(productPackage, ProductPackage.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
 		
 		try {
-			Mockito.doNothing().when(sqlDatabaseConnection).removeProductFromGroceryList(cartID, productPackage);
+			if (productPackage.getLocation().equals(PlaceInMarket.STORE))
+				Mockito.doNothing().when(sqlDatabaseConnection).removeProductPackageFromShelves(senderID, productPackage);
+			else
+				Mockito.doNothing().when(sqlDatabaseConnection).removeProductPackageFromWarehouse(senderID, productPackage);			
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
 			fail();
@@ -61,21 +64,24 @@ public class CommandExectuerRemoveProductPackageFromGroceryListTest {
 	}
 	
 	@Test
-	public void removeProductPackageFromGroceryListCriticalErrorTest() {
-		int cartID = 1;
+	public void removeProductPackageFromStoreCriticalErrorTest() {
+		int senderID = 1;
 		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));
-		String command = new CommandWrapper(cartID, CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST,
+		String command = new CommandWrapper(senderID, CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
 				new Gson().toJson(productPackage, ProductPackage.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
 		
 		try {
-			Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection).removeProductFromGroceryList(cartID, productPackage);
+			if (productPackage.getLocation().equals(PlaceInMarket.STORE))
+				Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection).removeProductPackageFromShelves(senderID, productPackage);
+			else
+				Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection).removeProductPackageFromWarehouse(senderID, productPackage);
 		} catch (ClientNotConnected | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
 			fail();
 		} catch (CriticalError __) {
-			/* Successful */
+			/* Success */
 		}
 		
 		out = commandExecuter.execute(sqlDatabaseConnection);
@@ -84,21 +90,23 @@ public class CommandExectuerRemoveProductPackageFromGroceryListTest {
 	}
 	
 	@Test
-	public void removeProductPackageFromGroceryListClientNotConnectedTest() {
-		int cartID = 1;
+	public void removeProductPackageFromStoreClientNotConnectedTest() {
+		int senderID = 1;
 		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));
-		String command = new CommandWrapper(cartID, CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST,
+		String command = new CommandWrapper(senderID, CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
 				new Gson().toJson(productPackage, ProductPackage.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
 		
 		try {
-			Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection).removeProductFromGroceryList(cartID, productPackage);
-		} catch (CriticalError | ProductNotExistInCatalog | ProductPackageAmountNotMatch
+			if (productPackage.getLocation().equals(PlaceInMarket.STORE))
+				Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection).removeProductPackageFromShelves(senderID, productPackage);
+			else
+				Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection).removeProductPackageFromWarehouse(senderID, productPackage);		} catch (CriticalError | ProductNotExistInCatalog | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
 			fail();
 		} catch (ClientNotConnected __) {
-			/* Successful */
+			/* Success */
 		}
 		
 		out = commandExecuter.execute(sqlDatabaseConnection);
@@ -107,34 +115,36 @@ public class CommandExectuerRemoveProductPackageFromGroceryListTest {
 	}
 	
 	@Test
-	public void removeProductToGroceryListIllegalCatalogProductTest() {
+	public void placeProductPackageOnShelvesIllegalCatalogProductTest() {
 		assertEquals(ResultDescriptor.SM_ERR,
-				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST,
+				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
 						new Gson().toJson("", String.class)).serialize())).execute(sqlDatabaseConnection)
 								.getResultDescriptor());
 		
 		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER,
-				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST,
+				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
 						new Gson().toJson(new ProductPackage(new SmartCode(1, null), -1, new Location(0, 0, PlaceInMarket.WAREHOUSE)), ProductPackage.class)).serialize())).execute(sqlDatabaseConnection)
 								.getResultDescriptor());
 	}
 	
 	@Test
-	public void removeProductPackageFromGroceryListProductNotExistInCatalogTest() {
-		int cartID = 1;
+	public void removeProductPackageFromStoreProductNotExistInCatalogTest() {
+		int senderID = 1;
 		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));
-		String command = new CommandWrapper(cartID, CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST,
+		String command = new CommandWrapper(senderID, CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
 				new Gson().toJson(productPackage, ProductPackage.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
 		
 		try {
-			Mockito.doThrow(new ProductNotExistInCatalog()).when(sqlDatabaseConnection).removeProductFromGroceryList(cartID, productPackage);
-		} catch (CriticalError | ClientNotConnected | ProductPackageAmountNotMatch
+			if (productPackage.getLocation().equals(PlaceInMarket.STORE))
+				Mockito.doThrow(new ProductNotExistInCatalog()).when(sqlDatabaseConnection).removeProductPackageFromShelves(senderID, productPackage);
+			else
+				Mockito.doThrow(new ProductNotExistInCatalog()).when(sqlDatabaseConnection).removeProductPackageFromWarehouse(senderID, productPackage);		} catch (CriticalError | ClientNotConnected | ProductPackageAmountNotMatch
 				| ProductPackageNotExist e) {
 			fail();
 		} catch (ProductNotExistInCatalog __) {
-			/* Successful */
+			/* Success */
 		}
 		
 		out = commandExecuter.execute(sqlDatabaseConnection);
@@ -143,21 +153,23 @@ public class CommandExectuerRemoveProductPackageFromGroceryListTest {
 	}
 	
 	@Test
-	public void removeProductPackageFromGroceryListProductPackageAmountNotMatchTest() {
-		int cartID = 1;
+	public void removeProductPackageFromStoreProductPackageAmountNotMatchTest() {
+		int senderID = 1;
 		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));
-		String command = new CommandWrapper(cartID, CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST,
+		String command = new CommandWrapper(senderID, CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
 				new Gson().toJson(productPackage, ProductPackage.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
 		
 		try {
-			Mockito.doThrow(new ProductPackageAmountNotMatch()).when(sqlDatabaseConnection).removeProductFromGroceryList(cartID, productPackage);
-		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog
+			if (productPackage.getLocation().equals(PlaceInMarket.STORE))
+				Mockito.doThrow(new ProductPackageAmountNotMatch()).when(sqlDatabaseConnection).removeProductPackageFromShelves(senderID, productPackage);
+			else
+				Mockito.doThrow(new ProductPackageAmountNotMatch()).when(sqlDatabaseConnection).removeProductPackageFromWarehouse(senderID, productPackage);		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog
 				| ProductPackageNotExist e) {
 			fail();
 		} catch (ProductPackageAmountNotMatch __) {
-			/* Successful */
+			/* Success */
 		}
 		
 		out = commandExecuter.execute(sqlDatabaseConnection);
@@ -166,21 +178,23 @@ public class CommandExectuerRemoveProductPackageFromGroceryListTest {
 	}
 	
 	@Test
-	public void removeProductPackageFromGroceryListProductPackageNotExistTest() {
-		int cartID = 1;
+	public void removeProductPackageFromStoreProductPackageNotExistTest() {
+		int senderID = 1;
 		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));
-		String command = new CommandWrapper(cartID, CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST,
+		String command = new CommandWrapper(senderID, CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
 				new Gson().toJson(productPackage, ProductPackage.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
 		
 		try {
-			Mockito.doThrow(new ProductPackageNotExist()).when(sqlDatabaseConnection).removeProductFromGroceryList(cartID, productPackage);
-		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog
+			if (productPackage.getLocation().equals(PlaceInMarket.STORE))
+				Mockito.doThrow(new ProductPackageNotExist()).when(sqlDatabaseConnection).removeProductPackageFromShelves(senderID, productPackage);
+			else
+				Mockito.doThrow(new ProductPackageNotExist()).when(sqlDatabaseConnection).removeProductPackageFromWarehouse(senderID, productPackage);		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog
 				| ProductPackageAmountNotMatch e) {
 			fail();
 		} catch (ProductPackageNotExist __) {
-			/* Successful */
+			/* Success */
 		}
 		
 		out = commandExecuter.execute(sqlDatabaseConnection);

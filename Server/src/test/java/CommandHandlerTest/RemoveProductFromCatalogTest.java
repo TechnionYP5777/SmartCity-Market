@@ -25,7 +25,7 @@ import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CommandExectuerRemoveProductFromCatalogTest {
+public class RemoveProductFromCatalogTest {
 
 	@Mock
 	private SQLDatabaseConnection sqlDatabaseConnection;

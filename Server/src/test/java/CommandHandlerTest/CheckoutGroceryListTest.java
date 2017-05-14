@@ -21,7 +21,7 @@ import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.GroceryListIsEmpty;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CommandExectuerCheckoutGroceryListTest {
+public class CheckoutGroceryListTest {
 
 	@Mock
 	private SQLDatabaseConnection sqlDatabaseConnection;

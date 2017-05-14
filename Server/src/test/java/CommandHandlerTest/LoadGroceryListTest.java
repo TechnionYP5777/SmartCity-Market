@@ -20,7 +20,7 @@ import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.NoGroceryListToRestore;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CommandExectuerLoadGroceryList {
+public class LoadGroceryListTest {
 
 	@Mock
 	private SQLDatabaseConnection sqlDatabaseConnection;

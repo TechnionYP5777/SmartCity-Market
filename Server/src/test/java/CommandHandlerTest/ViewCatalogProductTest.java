@@ -24,7 +24,7 @@ import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CommandExecuterViewCatalogProductTest {
+public class ViewCatalogProductTest {
 
 	@Mock
 	private SQLDatabaseConnection sqlDatabaseConnection;

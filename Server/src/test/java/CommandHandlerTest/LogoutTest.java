@@ -22,7 +22,7 @@ import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CommandExecuterLogoutTest {
+public class LogoutTest {
 
 	@Mock
 	private SQLDatabaseConnection sqlDatabaseConnection;

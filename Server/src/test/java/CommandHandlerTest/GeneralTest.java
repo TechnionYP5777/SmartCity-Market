@@ -14,7 +14,7 @@ import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import CommandHandler.CommandExecuter;
 
-public class CommandExecuterGeneralTest {
+public class GeneralTest {
 
 	@Before
 	public void setup() {

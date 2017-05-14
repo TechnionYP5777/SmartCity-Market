@@ -3,7 +3,6 @@ package BasicCommonClasses;
 import java.time.LocalDate;
 import java.util.HashSet;
 
-import CommonDefs.CustomerProfileException;
 import CommonDefs.CustomerProfileException.EmptyAllergensSet;
 import CommonDefs.CustomerProfileException.InvalidParameter;
 

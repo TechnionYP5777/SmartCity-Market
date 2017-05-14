@@ -33,4 +33,15 @@ public class ForgetPassword {
 	public void setAnswer(String answer) {
 		this.answer = answer;
 	}
+	
+	@Override
+	public int hashCode() {
+		return question.hashCode() + answer.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object ¢) {
+		return ¢ == this || (¢ != null && getClass() == ¢.getClass() &&
+				question.equals(((ForgetPassword) ¢).question) && answer.equals(((ForgetPassword) ¢).answer));
+	}
 }

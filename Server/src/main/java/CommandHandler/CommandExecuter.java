@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
-import BasicCommonClasses.ForgetPassword;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
@@ -901,7 +900,7 @@ public class CommandExecuter {
 		log.info("Trying to register new worker " + login.getUserName() + " to system");
 
 		try {
-			c.addWorker(inCommandWrapper.getSenderID(), login, new ForgetPassword("question", "answer"));
+			c.addWorker(inCommandWrapper.getSenderID(), login, login.getForgetPassword());
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 		} catch (CriticalError e) {
 			log.fatal("Register new worker command failed, critical error occured from SQL Database connection");
@@ -1270,8 +1269,8 @@ public class CommandExecuter {
 		log.info("Trying to add new manufacturer " + manufacturer + " to system");
 
 		try {
-			String manufacturerResult = c.addManufacturer(inCommandWrapper.getSenderID(), manufacturer.getName());
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, manufacturerResult);
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK,
+					c.addManufacturer(inCommandWrapper.getSenderID(), manufacturer.getName()));
 		} catch (CriticalError e) {
 			log.fatal("Add new manufacturer command failed, critical error occured from SQL Database connection");
 
@@ -1322,11 +1321,6 @@ public class CommandExecuter {
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_MANUFACTURER_STILL_IN_USE);
 		}
-		
-
-		log.info("Remove ingredient customer command failed, ingredient still in use");
-
-		outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE);
 
 		log.info("Remove manufacturer " + manufacturer + " from system finished");
 	}

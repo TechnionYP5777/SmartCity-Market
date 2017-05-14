@@ -24,7 +24,7 @@ import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CommandExecuterLoginTest {
+public class LoginTest {
 		
 	@Mock
 	private SQLDatabaseConnection sqlDatabaseConnection;

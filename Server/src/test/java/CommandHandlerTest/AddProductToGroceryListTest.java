@@ -29,7 +29,7 @@ import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CommandExectuerAddProductToGroceryListTest {
+public class AddProductToGroceryListTest {
 
 	@Mock
 	private SQLDatabaseConnection sqlDatabaseConnection;

@@ -21,7 +21,7 @@ import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CommandExecuterIsLoggedInTest {
+public class IsLoggedInTest {
 		
 	@Mock
 	private SQLDatabaseConnection sqlDatabaseConnection;

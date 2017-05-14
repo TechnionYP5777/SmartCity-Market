@@ -27,7 +27,7 @@ import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CommandExecuerGetProductPackageAmountTest {
+public class GetProductPackageAmountTest {
 
 	@Mock
 	private SQLDatabaseConnection sqlDatabaseConnection;
