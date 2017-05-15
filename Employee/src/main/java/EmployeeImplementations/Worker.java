@@ -61,7 +61,7 @@ public class Worker extends AEmployee implements IWorker {
 	}
 	
 	@Override
-	public CLIENT_TYPE login(String username, String password)
+	public CLIENT_TYPE login(String username, String password, boolean updateProductPictures)
 			throws InvalidParameter, CriticalError, EmployeeAlreadyConnected, AuthenticationError, ConnectionFailure {
 		CommandWrapper $ = null;
 		log.info("Creating login command wrapper with username: " + username + " and password: " + password);
@@ -84,10 +84,12 @@ public class Worker extends AEmployee implements IWorker {
 		this.username = username;
 		this.password = password;
 		log.info("Login to server as " + $.getData() + " succeed. Client id is: " + getClientId());
-		
-		UpdateProductPictures UpdateProductPicturesThread = new UpdateProductPictures();
-		UpdateProductPicturesThread.start();
-		
+
+		if (updateProductPictures){
+			UpdateProductPictures UpdateProductPicturesThread = new UpdateProductPictures();
+			UpdateProductPicturesThread.start();
+		}
+
 		return CLIENT_TYPE.deserialize($.getData());
 	}
 

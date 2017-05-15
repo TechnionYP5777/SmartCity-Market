@@ -56,7 +56,7 @@ public class LoginTest {
 			fail();
 		}
 		try {
-			clType = worker.login("test", "test");
+			clType = worker.login("test", "test", false);
 		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected | AuthenticationError | ConnectionFailure ¢) {
 			
 			fail();
@@ -79,7 +79,7 @@ public class LoginTest {
 		}
 		
 		try {
-			worker.login("test", "test");
+			worker.login("test", "test", false);
 			
 			fail();
 		} catch (InvalidParameter | CriticalError | EmployeeAlreadyConnected | ConnectionFailure ¢) {
@@ -103,7 +103,7 @@ public class LoginTest {
 		}
 		
 		try {
-			worker.login("test", "test");
+			worker.login("test", "test", false);
 			
 			fail();
 		} catch (InvalidParameter | CriticalError | AuthenticationError | ConnectionFailure ¢) {
@@ -126,7 +126,7 @@ public class LoginTest {
 		}
 		
 		try {
-			worker.login("test", "test");
+			worker.login("test", "test", false);
 			
 			fail();
 		} catch (InvalidParameter | EmployeeAlreadyConnected | AuthenticationError | ConnectionFailure ¢) {
@@ -149,7 +149,7 @@ public class LoginTest {
 		}
 		
 		try {
-			worker.login("test", "test");
+			worker.login("test", "test", false);
 			
 			fail();
 		} catch (InvalidParameter | EmployeeAlreadyConnected | AuthenticationError | ConnectionFailure ¢) {

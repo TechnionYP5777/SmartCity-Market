@@ -91,7 +91,7 @@ public class EmployeeLoginScreen implements Initializable {
 		IManager employee = InjectionFactory.getInstance(Manager.class);
 		CLIENT_TYPE employeeType = null;
 		try {
-			employeeType = employee.login(userNameTextField.getText(), passwordField.getText());
+			employeeType = employee.login(userNameTextField.getText(), passwordField.getText(), true);
 		} catch (SMException e) {
 			e.showInfoToUser();
 			return;

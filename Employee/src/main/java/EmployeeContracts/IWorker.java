@@ -33,6 +33,7 @@ public interface IWorker {
 	 * 
 	 * @param username - worker username
 	 * @param password - worker password
+	 * @param updateProductPictures - when set true, UpdateProductPictures flow is activated. By default it should be false.
 	 * @return CLIENT_TYPE - the client type
 	 * @throws AuthenticationError 
 	 * @throws EmployeeAlreadyConnected 
@@ -40,7 +41,7 @@ public interface IWorker {
 	 * @throws InvalidParameter 
 	 * @throws ConnectionFailure 
 	 */
-	CLIENT_TYPE login(String username, String password) throws InvalidParameter, CriticalError, EmployeeAlreadyConnected, AuthenticationError, ConnectionFailure;
+	CLIENT_TYPE login(String username, String password, boolean updateProductPictures) throws InvalidParameter, CriticalError, EmployeeAlreadyConnected, AuthenticationError, ConnectionFailure;
 	
 	/**
 	 * logout method use for the worker to logout from the server.
