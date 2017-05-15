@@ -48,9 +48,8 @@ public class EditProductFromCatalogTest {
 	public void EditProductFromCatalogSuccesfulTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(catalogProduct)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(catalogProduct)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
 			fail();
@@ -68,9 +67,8 @@ public class EditProductFromCatalogTest {
 	public void EditProductFromCatalogInvalidParameterTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(catalogProduct)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(catalogProduct)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException e) {
 			fail();
@@ -91,9 +89,8 @@ public class EditProductFromCatalogTest {
 	public void EditProductFromCatalogEmployeeNotConnectedTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(catalogProduct)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(catalogProduct)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException e) {
 			fail();
@@ -113,9 +110,8 @@ public class EditProductFromCatalogTest {
 	public void EditProductFromCatalogProductNotExistInCatalogTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(catalogProduct)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(catalogProduct)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
 		} catch (IOException e) {
 			fail();
@@ -127,6 +123,27 @@ public class EditProductFromCatalogTest {
 			
 			fail();
 		} catch (ProductNotExistInCatalog ¢) {
+			/* test success */
+		}
+	}
+	
+	@Test
+	public void EditProductFromCatalogIllegalResultTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.EDIT_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(catalogProduct)).serialize()))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE).serialize());
+		} catch (IOException e) {
+			fail();
+		}
+		
+		try {
+			manager.editProductFromCatalog(catalogProduct);
+		} catch (InvalidParameter | ProductNotExistInCatalog | EmployeeNotConnected | ConnectionFailure e) {
+			
+			fail();
+		} catch (CriticalError ¢) {
 			/* test success */
 		}
 	}

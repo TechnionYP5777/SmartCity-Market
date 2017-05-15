@@ -50,9 +50,8 @@ public class RemoveManufacturerTest {
 	public void RemoveManufacturerSuccesfulTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_MANUFACTURER,
-							Serialization.serialize(newManufacturer)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_MANUFACTURER,
+							Serialization.serialize(newManufacturer)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
 			
@@ -71,9 +70,8 @@ public class RemoveManufacturerTest {
 	public void RemoveManufacturerInvalidParameterTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_MANUFACTURER,
-							Serialization.serialize(newManufacturer)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_MANUFACTURER,
+							Serialization.serialize(newManufacturer)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException e) {
 			
@@ -94,9 +92,8 @@ public class RemoveManufacturerTest {
 	public void RemoveManufacturerCriticalErrorTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_MANUFACTURER,
-							Serialization.serialize(newManufacturer)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_MANUFACTURER,
+							Serialization.serialize(newManufacturer)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException e) {
 			
@@ -117,9 +114,8 @@ public class RemoveManufacturerTest {
 	public void RemoveManufacturerEmployeeNotConnectedTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_MANUFACTURER,
-							Serialization.serialize(newManufacturer)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_MANUFACTURER,
+							Serialization.serialize(newManufacturer)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException e) {
 			
@@ -140,9 +136,8 @@ public class RemoveManufacturerTest {
 	public void RemoveManufacturerParamIDDoesNotExistTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_MANUFACTURER,
-							Serialization.serialize(newManufacturer)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_MANUFACTURER,
+							Serialization.serialize(newManufacturer)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.PARAM_ID_IS_NOT_EXIST).serialize());
 		} catch (IOException e) {
 			
@@ -163,9 +158,8 @@ public class RemoveManufacturerTest {
 	public void RemoveManufacturerManfacturerStillInUseTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_MANUFACTURER,
-							Serialization.serialize(newManufacturer)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_MANUFACTURER,
+							Serialization.serialize(newManufacturer)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_MANUFACTURER_STILL_IN_USE).serialize());
 		} catch (IOException e) {
 			
@@ -177,6 +171,28 @@ public class RemoveManufacturerTest {
 		} catch (ManfacturerStillInUse  e) {
 			/* success */
 		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected | ParamIDDoesNotExist e1) {
+			
+			fail();
+		}
+	}
+	
+	@Test
+	public void RemoveManufacturerIllegalResultTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_MANUFACTURER,
+							Serialization.serialize(newManufacturer)).serialize()))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE).serialize());
+		} catch (IOException e) {
+			
+			fail();
+		}
+		
+		try {
+			manager.removeManufacturer(newManufacturer);
+		} catch (CriticalError e) {
+			/* success */
+		} catch (InvalidParameter | ManfacturerStillInUse | ConnectionFailure | EmployeeNotConnected | ParamIDDoesNotExist e1) {
 			
 			fail();
 		}

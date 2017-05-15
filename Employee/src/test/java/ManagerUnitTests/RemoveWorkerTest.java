@@ -48,9 +48,8 @@ public class RemoveWorkerTest {
 	public void RemoveWorkerSuccesfulTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_WORKER,
-							Serialization.serialize(userToRemove)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_WORKER,
+							Serialization.serialize(userToRemove)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
 			
@@ -69,9 +68,8 @@ public class RemoveWorkerTest {
 	public void RemoveWorkerInvalidParameterTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_WORKER,
-							Serialization.serialize(userToRemove)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_WORKER,
+							Serialization.serialize(userToRemove)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException e) {
 			
@@ -92,9 +90,8 @@ public class RemoveWorkerTest {
 	public void RemoveWorkerCriticalErrorTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_WORKER,
-							Serialization.serialize(userToRemove)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_WORKER,
+							Serialization.serialize(userToRemove)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException e) {
 			
@@ -115,9 +112,8 @@ public class RemoveWorkerTest {
 	public void RemoveWorkerEmployeeNotConnectedTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_WORKER,
-							Serialization.serialize(userToRemove)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_WORKER,
+							Serialization.serialize(userToRemove)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException e) {
 			
@@ -138,9 +134,8 @@ public class RemoveWorkerTest {
 	public void RemoveWorkerWorkerDoesNotExistTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_WORKER,
-							Serialization.serialize(userToRemove)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_WORKER,
+							Serialization.serialize(userToRemove)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST).serialize());
 		} catch (IOException e) {
 			
@@ -152,6 +147,28 @@ public class RemoveWorkerTest {
 		} catch (WorkerDoesNotExist e) {
 			/* success */
 		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected e) {
+			
+			fail();
+		}
+	}
+	
+	@Test
+	public void RemoveWorkerIllegalResultTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_WORKER,
+							Serialization.serialize(userToRemove)).serialize()))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_GROCERY_LIST_IS_EMPTY).serialize());
+		} catch (IOException e) {
+			
+			fail();
+		}
+		
+		try {
+			manager.removeWorker(userToRemove);
+		} catch (CriticalError e) {
+			/* success */
+		} catch (InvalidParameter | WorkerDoesNotExist | ConnectionFailure | EmployeeNotConnected e) {
 			
 			fail();
 		}

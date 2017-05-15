@@ -49,9 +49,8 @@ public class AddIngredientTest {
 	public void AddIngredientSuccesfulTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.ADD_INGREDIENT,
-							Serialization.serialize(newIngredient)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_INGREDIENT,
+							Serialization.serialize(newIngredient)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
 			
@@ -70,9 +69,8 @@ public class AddIngredientTest {
 	public void AddIngredientInvalidParameterTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.ADD_INGREDIENT,
-							Serialization.serialize(newIngredient)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_INGREDIENT,
+							Serialization.serialize(newIngredient)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException e) {
 			
@@ -93,9 +91,8 @@ public class AddIngredientTest {
 	public void AddIngredientCriticalErrorTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.ADD_INGREDIENT,
-							Serialization.serialize(newIngredient)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_INGREDIENT,
+							Serialization.serialize(newIngredient)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException e) {
 			
@@ -116,9 +113,8 @@ public class AddIngredientTest {
 	public void AddIngredientEmployeeNotConnectedTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.ADD_INGREDIENT,
-							Serialization.serialize(newIngredient)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_INGREDIENT,
+							Serialization.serialize(newIngredient)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException e) {
 			
@@ -139,9 +135,8 @@ public class AddIngredientTest {
 	public void AddIngredientParamIDAlreadyExistsTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.ADD_INGREDIENT,
-							Serialization.serialize(newIngredient)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_INGREDIENT,
+							Serialization.serialize(newIngredient)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.PARAM_ID_ALREADY_EXISTS).serialize());
 		} catch (IOException e) {
 			
@@ -153,6 +148,28 @@ public class AddIngredientTest {
 		} catch (ParamIDAlreadyExists e) {
 			/* success */
 		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected e) {
+			
+			fail();
+		}
+	}
+	
+	@Test
+	public void AddIngredientIllegalResultTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_INGREDIENT,
+							Serialization.serialize(newIngredient)).serialize()))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_MANUFACTURER_STILL_IN_USE).serialize());
+		} catch (IOException e) {
+			
+			fail();
+		}
+		
+		try {
+			manager.addIngredient(newIngredient);
+		} catch (CriticalError e) {
+			/* success */
+		} catch (InvalidParameter | ParamIDAlreadyExists | ConnectionFailure | EmployeeNotConnected e) {
 			
 			fail();
 		}

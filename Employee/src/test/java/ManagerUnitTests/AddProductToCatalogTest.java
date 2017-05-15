@@ -48,9 +48,8 @@ public class AddProductToCatalogTest {
 	public void AddProductToCatalogSuccesfulTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
-							Serialization.serialize(catalogProduct)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
+							Serialization.serialize(catalogProduct)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
 			fail();
@@ -69,9 +68,8 @@ public class AddProductToCatalogTest {
 	public void AddProductToCatalogInvalidParameterTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
-							Serialization.serialize(catalogProduct)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
+							Serialization.serialize(catalogProduct)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException e) {
 			fail();
@@ -92,9 +90,8 @@ public class AddProductToCatalogTest {
 	public void AddProductToCatalogCriticalErrorTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
-							Serialization.serialize(catalogProduct)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
+							Serialization.serialize(catalogProduct)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException e) {
 			fail();
@@ -115,9 +112,8 @@ public class AddProductToCatalogTest {
 	public void AddProductToCatalogEmployeeNotConnectedTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
-							Serialization.serialize(catalogProduct)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
+							Serialization.serialize(catalogProduct)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException e) {
 			fail();
@@ -138,9 +134,8 @@ public class AddProductToCatalogTest {
 	public void AddProductToCatalogProductAlreadyExistInCatalogTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
-							Serialization.serialize(catalogProduct)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
+							Serialization.serialize(catalogProduct)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_ALREADY_EXISTS).serialize());
 		} catch (IOException e) {
 			fail();
@@ -153,6 +148,28 @@ public class AddProductToCatalogTest {
 			
 			fail();
 		} catch (ProductAlreadyExistInCatalog ¢) {
+			/* test success */
+		}
+	}
+	
+	@Test
+	public void AddProductToCatalogIllegalResultTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_PRODUCT_TO_CATALOG,
+							Serialization.serialize(catalogProduct)).serialize()))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_GROCERY_LIST_IS_EMPTY).serialize());
+		} catch (IOException e) {
+			fail();
+		}
+		
+		try {
+			manager.addProductToCatalog(catalogProduct);
+		} catch (ProductAlreadyExistInCatalog | InvalidParameter | EmployeeNotConnected
+				| ConnectionFailure e) {
+			
+			fail();
+		} catch (CriticalError ¢) {
 			/* test success */
 		}
 	}

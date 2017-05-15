@@ -49,9 +49,8 @@ public class RegisterNewWorkerTest {
 	public void RegisterNewWorkerSuccesfulTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REGISTER_NEW_WORKER,
-							Serialization.serialize(newWorker)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REGISTER_NEW_WORKER,
+							Serialization.serialize(newWorker)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
 			
@@ -70,9 +69,8 @@ public class RegisterNewWorkerTest {
 	public void RegisterNewWorkerInvalidParameterTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REGISTER_NEW_WORKER,
-							Serialization.serialize(newWorker)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REGISTER_NEW_WORKER,
+							Serialization.serialize(newWorker)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException e) {
 			
@@ -93,9 +91,8 @@ public class RegisterNewWorkerTest {
 	public void RegisterNewWorkerCriticalErrorTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REGISTER_NEW_WORKER,
-							Serialization.serialize(newWorker)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REGISTER_NEW_WORKER,
+							Serialization.serialize(newWorker)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException e) {
 			
@@ -116,9 +113,8 @@ public class RegisterNewWorkerTest {
 	public void RegisterNewWorkerEmployeeNotConnectedTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REGISTER_NEW_WORKER,
-							Serialization.serialize(newWorker)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REGISTER_NEW_WORKER,
+							Serialization.serialize(newWorker)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException e) {
 			
@@ -139,9 +135,8 @@ public class RegisterNewWorkerTest {
 	public void RegisterNewWorkerWorkerAlreadyExistsTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REGISTER_NEW_WORKER,
-							Serialization.serialize(newWorker)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REGISTER_NEW_WORKER,
+							Serialization.serialize(newWorker)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_USERNAME_ALREADY_EXISTS).serialize());
 		} catch (IOException e) {
 			
@@ -153,6 +148,28 @@ public class RegisterNewWorkerTest {
 		} catch (WorkerAlreadyExists e) {
 			/* success */
 		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected e) {
+			
+			fail();
+		}
+	}
+	
+	@Test
+	public void RegisterNewWorkerIllegalResultTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REGISTER_NEW_WORKER,
+							Serialization.serialize(newWorker)).serialize()))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_GROCERY_LIST_IS_EMPTY).serialize());
+		} catch (IOException e) {
+			
+			fail();
+		}
+		
+		try {
+			manager.registerNewWorker(newWorker);
+		} catch (CriticalError e) {
+			/* success */
+		} catch (InvalidParameter | WorkerAlreadyExists | ConnectionFailure | EmployeeNotConnected e) {
 			
 			fail();
 		}

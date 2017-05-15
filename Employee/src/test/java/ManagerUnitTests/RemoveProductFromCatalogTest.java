@@ -49,9 +49,8 @@ public class RemoveProductFromCatalogTest {
 	public void RemoveProductFromCatalogSuccesfulTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(smartCode)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(smartCode)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
 			
@@ -71,9 +70,8 @@ public class RemoveProductFromCatalogTest {
 	public void RemoveProductFromCatalogInvalidParameterTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(smartCode)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(smartCode)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException e) {
 			
@@ -97,9 +95,8 @@ public class RemoveProductFromCatalogTest {
 	public void RemoveProductFromCatalogEmployeeNotConnectedTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(smartCode)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(smartCode)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException e) {
 			
@@ -123,9 +120,8 @@ public class RemoveProductFromCatalogTest {
 	public void RemoveProductFromCatalogProductNotExistInCatalogTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(smartCode)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(smartCode)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
 		} catch (IOException e) {
 			
@@ -148,9 +144,8 @@ public class RemoveProductFromCatalogTest {
 	public void RemoveProductFromCatalogProductStillForSaleTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(smartCode)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(smartCode)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_STILL_FOR_SALE).serialize());
 		} catch (IOException e) {
 			
@@ -165,6 +160,30 @@ public class RemoveProductFromCatalogTest {
 			
 			fail();
 		} catch (ProductStillForSale e) {
+			/* test success */
+		}
+	}
+	
+	@Test
+	public void RemoveProductFromCatalogIllegalResultTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(smartCode)).serialize()))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_GROCERY_LIST_IS_EMPTY).serialize());
+		} catch (IOException e) {
+			
+			fail();
+		}
+		
+		try {
+			manager.removeProductFromCatalog(smartCode);
+			
+			fail();
+		} catch (InvalidParameter | ProductStillForSale | EmployeeNotConnected | ProductNotExistInCatalog | ConnectionFailure e) {
+			
+			fail();
+		} catch (CriticalError e) {
 			/* test success */
 		}
 	}

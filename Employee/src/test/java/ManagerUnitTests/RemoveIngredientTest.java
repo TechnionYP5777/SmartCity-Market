@@ -50,9 +50,8 @@ public class RemoveIngredientTest {
 	public void RemoveIngredientSuccesfulTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_INGREDIENT,
-							Serialization.serialize(newIngredient)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_INGREDIENT,
+							Serialization.serialize(newIngredient)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
 			
@@ -71,9 +70,8 @@ public class RemoveIngredientTest {
 	public void RemoveIngredientInvalidParameterTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_INGREDIENT,
-							Serialization.serialize(newIngredient)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_INGREDIENT,
+							Serialization.serialize(newIngredient)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException e) {
 			
@@ -94,9 +92,8 @@ public class RemoveIngredientTest {
 	public void RemoveIngredientCriticalErrorTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_INGREDIENT,
-							Serialization.serialize(newIngredient)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_INGREDIENT,
+							Serialization.serialize(newIngredient)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException e) {
 			
@@ -117,9 +114,8 @@ public class RemoveIngredientTest {
 	public void RemoveIngredientEmployeeNotConnectedTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_INGREDIENT,
-							Serialization.serialize(newIngredient)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_INGREDIENT,
+							Serialization.serialize(newIngredient)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException e) {
 			
@@ -140,9 +136,8 @@ public class RemoveIngredientTest {
 	public void RemoveIngredientParamIDDoesNotExistTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_INGREDIENT,
-							Serialization.serialize(newIngredient)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_INGREDIENT,
+							Serialization.serialize(newIngredient)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.PARAM_ID_IS_NOT_EXIST).serialize());
 		} catch (IOException e) {
 			
@@ -163,9 +158,8 @@ public class RemoveIngredientTest {
 	public void RemoveIngredientIngredientStillInUseTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_INGREDIENT,
-							Serialization.serialize(newIngredient)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_INGREDIENT,
+							Serialization.serialize(newIngredient)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE).serialize());
 		} catch (IOException e) {
 			
@@ -177,6 +171,28 @@ public class RemoveIngredientTest {
 		} catch (IngredientStillInUse e) {
 			/* success */
 		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected | ParamIDDoesNotExist e1) {
+			
+			fail();
+		}
+	}
+	
+	@Test
+	public void RemoveIngredientIllegalResultTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_INGREDIENT,
+							Serialization.serialize(newIngredient)).serialize()))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_MANUFACTURER_STILL_IN_USE).serialize());
+		} catch (IOException e) {
+			
+			fail();
+		}
+		
+		try {
+			manager.removeIngredient(newIngredient, false);
+		} catch (CriticalError e) {
+			/* success */
+		} catch (InvalidParameter | IngredientStillInUse | ConnectionFailure | EmployeeNotConnected | ParamIDDoesNotExist e1) {
 			
 			fail();
 		}

@@ -20,7 +20,7 @@ import EmployeeContracts.IManager;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
-import EmployeeDefs.AEmployeeException.ParamIDAlreadyExists;
+import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Manager;
@@ -32,7 +32,7 @@ import UtilsImplementations.Serialization;
  * @since 2016-04-24 */
 
 @RunWith(MockitoJUnitRunner.class)
-public class AddManufacturerTest {
+public class EditManufacturerTest {
 	private IManager manager;
 	@Mock
 	private IClientRequestHandler clientRequestHandler;
@@ -46,10 +46,10 @@ public class AddManufacturerTest {
 	static Manufacturer newManufacturer = new Manufacturer(0, "Manu");
 	
 	@Test
-	public void AddManufacturerSuccesfulTest() {
+	public void EditManufacturerSuccesfulTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_MANUFACTURER,
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.EDIT_MANUFACTURER,
 							Serialization.serialize(newManufacturer)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException e) {
@@ -58,18 +58,18 @@ public class AddManufacturerTest {
 		}
 		
 		try {
-			manager.addManufacturer(newManufacturer);
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
+			manager.editManufacturer(newManufacturer);
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e) {
 			
 			fail();
 		}
 	}
 
 	@Test
-	public void AddManufacturerInvalidParameterTest() {
+	public void EditManufacturerInvalidParameterTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_MANUFACTURER,
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.EDIT_MANUFACTURER,
 							Serialization.serialize(newManufacturer)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException e) {
@@ -78,20 +78,20 @@ public class AddManufacturerTest {
 		}
 		
 		try {
-			manager.addManufacturer(newManufacturer);
+			manager.editManufacturer(newManufacturer);
 		} catch (InvalidParameter e) {
 			/* success */
-		} catch (CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
+		} catch (CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e) {
 			
 			fail();
 		}
 	}
 	
 	@Test
-	public void AddManufacturerCriticalErrorTest() {
+	public void EditManufacturerCriticalErrorTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_MANUFACTURER,
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.EDIT_MANUFACTURER,
 							Serialization.serialize(newManufacturer)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException e) {
@@ -100,20 +100,20 @@ public class AddManufacturerTest {
 		}
 		
 		try {
-			manager.addManufacturer(newManufacturer);
+			manager.editManufacturer(newManufacturer);
 		} catch (CriticalError e) {
 			/* success */
-		} catch (InvalidParameter | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
+		} catch (InvalidParameter | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e) {
 			
 			fail();
 		}
 	}
 	
 	@Test
-	public void AddManufacturerEmployeeNotConnectedTest() {
+	public void EditManufacturerEmployeeNotConnectedTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_MANUFACTURER,
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.EDIT_MANUFACTURER,
 							Serialization.serialize(newManufacturer)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException e) {
@@ -122,30 +122,30 @@ public class AddManufacturerTest {
 		}
 		
 		try {
-			manager.addManufacturer(newManufacturer);
+			manager.editManufacturer(newManufacturer);
 		} catch (EmployeeNotConnected e) {
 			/* success */
-		} catch (InvalidParameter | CriticalError | ConnectionFailure | ParamIDAlreadyExists e) {
+		} catch (InvalidParameter | CriticalError | ConnectionFailure | ParamIDDoesNotExist e) {
 			
 			fail();
 		}
 	}
 	
 	@Test
-	public void AddManufacturerParamIDAlreadyExistsTest() {
+	public void EditManufacturerParamIDNotExistTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_MANUFACTURER,
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.EDIT_MANUFACTURER,
 							Serialization.serialize(newManufacturer)).serialize()))
-					.thenReturn(new CommandWrapper(ResultDescriptor.PARAM_ID_ALREADY_EXISTS).serialize());
+					.thenReturn(new CommandWrapper(ResultDescriptor.PARAM_ID_IS_NOT_EXIST).serialize());
 		} catch (IOException e) {
 			
 			fail();
 		}
 		
 		try {
-			manager.addManufacturer(newManufacturer);
-		} catch (ParamIDAlreadyExists e) {
+			manager.editManufacturer(newManufacturer);
+		} catch (ParamIDDoesNotExist e) {
 			/* success */
 		} catch (InvalidParameter | CriticalError | ConnectionFailure | EmployeeNotConnected e) {
 			
@@ -154,10 +154,10 @@ public class AddManufacturerTest {
 	}
 	
 	@Test
-	public void AddManufacturerIllegalResultTest() {
+	public void EditManufacturerIllegalResultTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.ADD_MANUFACTURER,
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.EDIT_MANUFACTURER,
 							Serialization.serialize(newManufacturer)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE).serialize());
 		} catch (IOException e) {
@@ -166,10 +166,10 @@ public class AddManufacturerTest {
 		}
 		
 		try {
-			manager.addManufacturer(newManufacturer);
+			manager.editManufacturer(newManufacturer);
 		} catch (CriticalError e) {
 			/* success */
-		} catch (InvalidParameter | ParamIDAlreadyExists | ConnectionFailure | EmployeeNotConnected e) {
+		} catch (InvalidParameter | ConnectionFailure | EmployeeNotConnected | ParamIDDoesNotExist e) {
 			
 			fail();
 		}
