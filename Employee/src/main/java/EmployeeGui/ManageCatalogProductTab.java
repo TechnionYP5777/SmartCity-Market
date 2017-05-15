@@ -251,7 +251,7 @@ public class ManageCatalogProductTab implements Initializable {
 				printToSuccessLog(("Remove product '" + productNameTextField.getText() + "' from catalog"));
 			}
 		} catch (SMException e) {
-			EmployeeGuiExeptionHandler.handle(e);
+			e.showInfoToUser();
 		}
 	}
 

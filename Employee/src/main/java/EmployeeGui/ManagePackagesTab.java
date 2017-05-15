@@ -390,7 +390,7 @@ public class ManagePackagesTab implements Initializable {
 			this.expirationDate = expirationDate;
 
 		} catch (SMException e) {
-			EmployeeGuiExeptionHandler.handle(e);
+			e.showInfoToUser();
 			return;
 		}
 
@@ -461,7 +461,7 @@ public class ManagePackagesTab implements Initializable {
 			}
 
 		} catch (SMException e) {
-			EmployeeGuiExeptionHandler.handle(e);
+			e.showInfoToUser();
 		}
 		log.info("===============================runTheOperationButtonPressed======================================");
 	}

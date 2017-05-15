@@ -106,7 +106,7 @@ public class EmployeeMenuScreen implements Initializable {
 				Platform.exit();
 				System.exit(0);
 			} catch (SMException e) {
-				EmployeeGuiExeptionHandler.handle(e);
+				e.showInfoToUser();
 				Platform.exit();
 				System.exit(0);
 			}
@@ -136,7 +136,7 @@ public class EmployeeMenuScreen implements Initializable {
 			if (worker.isLoggedIn())
 				worker.logout();
 		} catch (SMException e) {
-			EmployeeGuiExeptionHandler.handle(e);
+			e.showInfoToUser();
 		}
 		AbstractApplicationScreen.setScene("/EmployeeLoginScreen/EmployeeLoginScreen.fxml");
 	}

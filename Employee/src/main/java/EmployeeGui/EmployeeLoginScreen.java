@@ -93,7 +93,7 @@ public class EmployeeLoginScreen implements Initializable {
 		try {
 			employeeType = employee.login(userNameTextField.getText(), passwordField.getText());
 		} catch (SMException e) {
-			EmployeeGuiExeptionHandler.handle(e);
+			e.showInfoToUser();
 			return;
 		}
 		InjectionFactory.getInstance(EmployeeScreensParameterService.class).setClientType(employeeType);
