@@ -22,13 +22,14 @@
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+      <VBox alignment="CENTER">
          <children>
             <Label text="Employees" />
             <JFXListView fx:id="employeesList" />
             <HBox>
                <children>
                   <JFXTextField fx:id="searchEmployee" promptText="Search Employee" />
+                  <JFXButton fx:id="removeEmployeesBtn" onAction="#removeBtnPressed" text="Remove Selected Employees" />
                </children>
             </HBox>
          </children>

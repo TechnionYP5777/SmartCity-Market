@@ -55,7 +55,7 @@
 							source="/ManageCatalogProductDetailsTab/ManageCatalogProductDetailsTab.fxml" />
 					</content>
 				</Tab>
-				<Tab fx:id="manageEmployeesTab" closable="true"
+				 <Tab fx:id="manageEmployeesTab" closable="true"
 					text="Manage Employees">
 					<content>
 						<fx:include
