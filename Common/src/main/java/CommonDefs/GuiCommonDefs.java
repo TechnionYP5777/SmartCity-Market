@@ -24,6 +24,12 @@ public class GuiCommonDefs {
 	public static final String productDoesNotExistInDatabase = "The product doesn't exist in the Market database, please contact the supermarket manager";
 	
 	public static final String loginFailureDialogTitle = "Login failue!";
+	
+	public static final String ganeralDialogTitle = "Failue!";
+	
+	public static final String workerOprDialofTitle = "Worker opeartion failure!";
+	
+	public static final String managerOprDialofTitle = "Manager opeartion failure!";
 
 	public static final String productOperationFailureTitle = "Product operation failure!";
 	
@@ -39,6 +45,8 @@ public class GuiCommonDefs {
 	//final public static String userAlreadyConnectedFailureMessage = "The user is already connected.";
 	//TODO : (by idan to shimon) i think this case is for critical error, what do you say?
 	
+	public static final String invalidParamFailureMsg = "One or more inserted parameters are invalid.";
+	
 	public static final String wrongUserNamePasswordFailureMsg = "Wrong user name or password, please try again.";
 		
 	public static final String productNotExistsInCatalogMsg = "Could not find this barcode in the product catalog, please check your input.";
@@ -50,6 +58,8 @@ public class GuiCommonDefs {
 	public static final String productCapacityIsNotEnoughMsg = "There are not enough items of this product, please validate the inserted amount.";
 	
 	public static final String connectionFailureMsg = "Failed to send respond to server";
+	
+	public static final String unexpectedFailureMsg = "Unexpected error occurred.";
 	
 	public static final String productPackageDoesNotExistMsg = "There is no such product package, please check the inserted SmartCode.";
 	
@@ -64,6 +74,25 @@ public class GuiCommonDefs {
 	public static final String registrationWrongRepeatedPass = "Wrong password. Repeted password doesn't match original password!";
 
 	public static final String registrationUsedUserName = "This user name already in used. Please try another one.";
+	
+	public static final String workerNotConnected = "The user is not connected.";
+	
+	public static final String workerIsAlreadyConnected = "The user is already connected.";
+	
+	public static final String workerIsAlreadyInSys = "Worker is already in the system, Choose other username.";
+	
+	public static final String emplIsNotInSys = "The choosen employee is not in system";
+	
+	public static final String itemIsInSys = "The item is already in system.";
+	
+	public static final String itemIsNotInSys = "The item is not in the system.";
+	
+	public static final String ingIsInUse = "The ingredient is still in use.";
+	
+	public static final String manuIsInUse = "The manufacturer is still in use.";
+	
+	
+	
 	
 	public static String productsPicturesFolderPath = String.valueOf("../Common/src/main/resources/ProductsPictures");
 	

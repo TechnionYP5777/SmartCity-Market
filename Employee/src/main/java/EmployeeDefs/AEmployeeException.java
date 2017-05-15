@@ -35,7 +35,8 @@ public class AEmployeeException extends SMException {
 		
 		@Override
 		public void showInfoToUser() {
-			// TODO
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.ganeralDialogTitle, null,
+					GuiCommonDefs.invalidParamFailureMsg);
 		}
 
 	}
@@ -50,7 +51,8 @@ public class AEmployeeException extends SMException {
 		
 		@Override
 		public void showInfoToUser() {
-			// TODO
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.criticalErrorTitle, GuiCommonDefs.unexpectedFailureMsg,
+					GuiCommonDefs.criticalErrorMsg);
 		}
 	}
 	
@@ -64,7 +66,8 @@ public class AEmployeeException extends SMException {
 		
 		@Override
 		public void showInfoToUser() {
-			// TODO
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.workerOprDialofTitle, null, 
+					GuiCommonDefs.workerNotConnected);
 		}
 	}
 
@@ -78,7 +81,8 @@ public class AEmployeeException extends SMException {
 		
 		@Override
 		public void showInfoToUser() {
-			// TODO
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.workerOprDialofTitle, null, 
+					GuiCommonDefs.workerIsAlreadyConnected);
 		}
 	}
 	
@@ -199,7 +203,8 @@ public class AEmployeeException extends SMException {
 		
 		@Override
 		public void showInfoToUser() {
-			// TODO
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.managerOprDialofTitle, null, 
+					GuiCommonDefs.workerIsAlreadyInSys);
 		}
 	}
 	
@@ -213,7 +218,8 @@ public class AEmployeeException extends SMException {
 		
 		@Override
 		public void showInfoToUser() {
-			// TODO
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.managerOprDialofTitle, null, 
+					GuiCommonDefs.emplIsNotInSys);
 		}
 	}
 	
@@ -227,7 +233,8 @@ public class AEmployeeException extends SMException {
 		
 		@Override
 		public void showInfoToUser() {
-			// TODO
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.managerOprDialofTitle, null, 
+					GuiCommonDefs.itemIsInSys);
 		}
 	}
 	
@@ -241,7 +248,8 @@ public class AEmployeeException extends SMException {
 		
 		@Override
 		public void showInfoToUser() {
-			// TODO
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.managerOprDialofTitle, null, 
+					GuiCommonDefs.itemIsNotInSys);
 		}
 	}
 	
@@ -255,7 +263,8 @@ public class AEmployeeException extends SMException {
 		
 		@Override
 		public void showInfoToUser() {
-			// TODO
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.managerOprDialofTitle, null, 
+					GuiCommonDefs.ingIsInUse);
 		}
 	}
 	
@@ -269,7 +278,8 @@ public class AEmployeeException extends SMException {
 		
 		@Override
 		public void showInfoToUser() {
-			// TODO
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.managerOprDialofTitle, null, 
+					GuiCommonDefs.manuIsInUse);
 		}
 	}
 }
