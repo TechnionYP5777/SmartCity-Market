@@ -104,6 +104,7 @@ public class ManageEmployeesTab implements Initializable {
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | WorkerAlreadyExists e) {
 			log.debug(e.getStackTrace());
 			log.fatal(e.getMessage());
+			e.showInfoToUser();
 		}
 		createEmployeesList();
 		enableRemoveButton();
@@ -224,6 +225,7 @@ public class ManageEmployeesTab implements Initializable {
 		} catch (CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			log.debug(e.getStackTrace());
 			log.fatal(e.getMessage());
+			e.showInfoToUser();
 		}
 
 		dataEmployees.setAll(employeesInSystem.keySet());
@@ -253,6 +255,7 @@ public class ManageEmployeesTab implements Initializable {
 					| WorkerDoesNotExist e) {
 				log.debug(e.getStackTrace());
 				log.fatal(e.getMessage());
+				e.showInfoToUser();
 			}
 		});
 		createEmployeesList();
