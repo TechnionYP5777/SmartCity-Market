@@ -113,6 +113,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			manager.addIngredient(new Ingredient(0, newIngr.getText()));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
 			log.fatal(e.getMessage());
+			e.showInfoToUser();
 		}
 		createIngredientList();
 	}
@@ -122,6 +123,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			manager.addManufacturer(new Manufacturer(0, newManu.getText()));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
 			log.fatal(e.getMessage());
+			e.showInfoToUser();
 		}
 		createManufacturerList();
 	}
@@ -134,6 +136,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist
 					| IngredientStillInUse e) {
 				log.fatal(e.getMessage());
+				e.showInfoToUser();
 			}
 		});
 		selectedIngr.clear();
@@ -148,6 +151,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist
 					| ManfacturerStillInUse e) {
 				log.fatal(e.getMessage());
+				e.showInfoToUser();
 			}
 		});
 		selectedManu.clear();
@@ -279,6 +283,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			});
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			log.fatal(e.getMessage());
+			e.showInfoToUser();
 		}
 
 		dataManu = FXCollections.observableArrayList();
@@ -302,6 +307,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			});
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			log.fatal(e.getMessage());
+			e.showInfoToUser();
 		}
 
 		dataIngr = FXCollections.observableArrayList();
