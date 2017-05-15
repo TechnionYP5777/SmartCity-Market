@@ -3,8 +3,8 @@ package EmployeeGui;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.stream.IntStream;
 
 import org.apache.log4j.Logger;
 
@@ -52,50 +52,50 @@ import javafx.util.Callback;
 public class ManageEmployeesTab implements Initializable {
 
 	@FXML
-    private JFXListView<String> employeesList;
+	private JFXListView<String> employeesList;
 
-    @FXML
-    private JFXTextField searchEmployee;
+	@FXML
+	private JFXTextField searchEmployee;
 
-    @FXML
-    private JFXTextField userTxt;
+	@FXML
+	private JFXTextField userTxt;
 
-    @FXML
-    private JFXPasswordField passTxt;
+	@FXML
+	private JFXPasswordField passTxt;
 
-    @FXML
-    private JFXComboBox<String> securityCombo;
+	@FXML
+	private JFXComboBox<String> securityCombo;
 
-    @FXML
-    private JFXTextField securityAnswerTxt;
+	@FXML
+	private JFXTextField securityAnswerTxt;
 
-    @FXML
-    private JFXRadioButton workerRadioBtn;
+	@FXML
+	private JFXRadioButton workerRadioBtn;
 
-    @FXML
-    private JFXRadioButton managerRadioBtn;
-    
-    @FXML
-    private JFXButton finishBtn;
-    
-    @FXML
-    private JFXButton removeEmployeesBtn;
+	@FXML
+	private JFXRadioButton managerRadioBtn;
+
+	@FXML
+	private JFXButton finishBtn;
+
+	@FXML
+	private JFXButton removeEmployeesBtn;
 
 	RadioButtonEnabler radioBtnCont = new RadioButtonEnabler();
 
 	IManager manager = InjectionFactory.getInstance(Manager.class);
 
 	static Logger log = Logger.getLogger(ManageEmployeesTab.class.getName());
-	
+
 	private HashSet<String> selectedEmployees = new HashSet<String>();
-	
+
 	private ObservableList<String> dataEmployees;
-	
+
 	private FilteredList<String> filteredDataEmployees;
-	
-//	private HashMap<String,>
-	
-	
+
+	private Map<String, Boolean> employeesInSystem;
+
+	private boolean helpRetVal;
 
 	@FXML
 	void finishBtnPressed(ActionEvent event) {
@@ -127,7 +127,6 @@ public class ManageEmployeesTab implements Initializable {
 		radioBtnCont.addRadioButtons((Arrays.asList((new RadioButton[] { workerRadioBtn, managerRadioBtn }))));
 
 		securityCombo.getItems().addAll("Q1", "Q2", "Q3", "Q4");
-
 
 		RequiredFieldValidator validator2 = new RequiredFieldValidator();
 		validator2.setMessage("Input Required");
@@ -166,7 +165,7 @@ public class ManageEmployeesTab implements Initializable {
 		});
 
 		createEmployeesList();
-		
+
 		searchEmployee.textProperty().addListener(obs -> {
 			String filter = searchEmployee.getText();
 			if (filter == null || filter.length() == 0) {
@@ -175,7 +174,7 @@ public class ManageEmployeesTab implements Initializable {
 				filteredDataEmployees.setPredicate(s -> s.contains(filter));
 			}
 		});
-		
+
 		employeesList.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
 			@Override
 			public ObservableValue<Boolean> call(String item) {
@@ -194,33 +193,49 @@ public class ManageEmployeesTab implements Initializable {
 				return observable;
 			}
 		}));
-		
+
 		enableFinishBtn();
 		enableRemoveButton();
 	}
-	
+
 	private void enableRemoveButton() {
-		removeEmployeesBtn.setDisable(/* TODO check if the selected is now connected and */ selectedEmployees.isEmpty());
-		
+		removeEmployeesBtn.setDisable(isConnectedManagerSelected() || selectedEmployees.isEmpty());
+
 	}
-	
+
+	private boolean isConnectedManagerSelected() {
+		helpRetVal = false;
+		selectedEmployees.forEach(eml -> {
+			if (employeesInSystem.get(eml)) {
+				helpRetVal = true;
+			}
+		});
+		return helpRetVal;
+	}
 
 	private void createEmployeesList() {
-		
+
 		selectedEmployees = new HashSet<String>();
 
 		dataEmployees = FXCollections.observableArrayList();
 
-		IntStream.range(0, 1000).mapToObj(Integer::toString).forEach(dataEmployees::add);
+		try {
+			employeesInSystem = manager.getAllWorkers();
+		} catch (CriticalError | EmployeeNotConnected | ConnectionFailure e) {
+			log.debug(e.getStackTrace());
+			log.fatal(e.getMessage());
+		}
+
+		dataEmployees.setAll(employeesInSystem.keySet());
 
 		filteredDataEmployees = new FilteredList<>(dataEmployees, s -> true);
 
-		employeesList.setItems(filteredDataEmployees);    
+		employeesList.setItems(filteredDataEmployees);
 	}
 
 	private void enableFinishBtn() {
-		finishBtn.setDisable(userTxt.getText().isEmpty() || passTxt.getText().isEmpty()
-				|| securityAnswerTxt.getText().isEmpty());
+		finishBtn.setDisable(
+				userTxt.getText().isEmpty() || passTxt.getText().isEmpty() || securityAnswerTxt.getText().isEmpty());
 	}
 
 	@FXML
@@ -237,7 +252,7 @@ public class ManageEmployeesTab implements Initializable {
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure
 					| WorkerDoesNotExist e) {
 				log.debug(e.getStackTrace());
-				log.fatal(e.getMessage());		
+				log.fatal(e.getMessage());
 			}
 		});
 		createEmployeesList();

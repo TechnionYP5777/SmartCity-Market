@@ -25,7 +25,7 @@
       <VBox alignment="CENTER">
          <children>
             <Label text="Employees" />
-            <JFXListView fx:id="employeesList" />
+            <JFXListView fx:id="employeesList" prefHeight="390.0" prefWidth="155.0" />
             <HBox>
                <children>
                   <JFXTextField fx:id="searchEmployee" promptText="Search Employee" />
