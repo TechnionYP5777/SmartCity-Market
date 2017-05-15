@@ -107,6 +107,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	private Connection connection;
 	private static boolean isEntitiesInitialized;
 
+	@SuppressWarnings("deprecation")
 	public SQLDatabaseConnection() {
 
 		// initialize entities object in first-run
@@ -253,17 +254,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	private int generateSessionID() throws CriticalError, NumberOfConnectionsExceeded {
 
-		int minVal, maxVal;
-		int $;
-
-		minVal = 1;
-		maxVal = Integer.MAX_VALUE;
-
-		// trying to find available random session id.
-		for (int ¢ = 0; ¢ < TRYS_NUMBER; ++¢) {
-			// generate number between mivVal to maxVal (include)
+		for (int minVal = 1, maxVal = Integer.MAX_VALUE, $, ¢ = 0; ¢ < TRYS_NUMBER; ++¢) {
 			$ = new Random().nextInt(maxVal - minVal) + minVal;
-
 			if (!isSessionExist($))
 				return $;
 		}
@@ -290,8 +282,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				BinaryCondition.equalTo(FreeIDsTable.fromTableNameCol, PARAM_MARK));
 
 		PreparedStatement statement = null;
-		ResultSet result = null;
-		ResultSet maxIDResult = null;
+		ResultSet result = null, maxIDResult = null;
 		try {
 			statement = getParameterizedReadQuery(selectId, t.getName());
 
@@ -898,22 +889,17 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	private void initiateNewGroceryList(int sessionID) throws CriticalError{
 		
-		// find max list id from grocery list table and history list table
 		String maxListIDQuery = new SelectQuery()
-				.addCustomColumns(FunctionCall.max().addColumnParams(CartsListTable.listIDCol)).validate() + "";
-		String maxHistoryListIDQuery = new SelectQuery()
-				.addCustomColumns(FunctionCall.max().addColumnParams(GroceriesListsHistoryTable.listIDCol)).validate()
-				+ "";
-
-		ResultSet maxListIDResult = null;
-		ResultSet maxHistoryListIDResult = null;
+				.addCustomColumns(FunctionCall.max().addColumnParams(CartsListTable.listIDCol)).validate() + "",
+				maxHistoryListIDQuery = new SelectQuery()
+						.addCustomColumns(FunctionCall.max().addColumnParams(GroceriesListsHistoryTable.listIDCol))
+						.validate() + "";
+		ResultSet maxListIDResult = null, maxHistoryListIDResult = null;
 		try {
 			maxListIDResult = getParameterizedReadQuery(maxListIDQuery).executeQuery();
 			maxHistoryListIDResult = getParameterizedReadQuery(maxHistoryListIDQuery).executeQuery();
 
-			int maxListID = 0;
-			int maxHistoryListID = 0;
-
+			int maxListID = 0, maxHistoryListID = 0;
 			// get the max id from tables (if exist)
 			if (!isResultSetEmpty(maxListIDResult)) {
 				maxListIDResult.first();
@@ -960,12 +946,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * 
 	 * @param t the table to assign the values to
 	 * @param username the username whose the values is to be assigned
-	 * @param p object that contains the new values.
+	 * @param d object that contains the new values.
 	 * @throws CriticalError
 	 */
-	private void assignSecurityQAToRegisteredClient(ClientsTable t, String username, ForgotPasswordData p) throws CriticalError {
-		setValueToRegisteredClient(t, username, t.securityQuestionCol, p.getQuestion());
-		setValueToRegisteredClient(t, username, t.securityAnswerCol, p.getAnswer());
+	private void assignSecurityQAToRegisteredClient(ClientsTable t, String username, ForgotPasswordData d) throws CriticalError {
+		setValueToRegisteredClient(t, username, t.securityQuestionCol, d.getQuestion());
+		setValueToRegisteredClient(t, username, t.securityAnswerCol, d.getAnswer());
 	}
 	
 	/**
@@ -1055,8 +1041,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		// READ part of transaction
 		int listID = getCartListId(cartID);
 
-		PreparedStatement deleteGroceryList = null;
-		PreparedStatement deleteCart = null;
+		PreparedStatement deleteGroceryList = null, deleteCart = null;
 		try {
 			// WRITE part of transaction
 
@@ -1334,15 +1319,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		statement.executeUpdate();
 		closeResources(statement);
 
-		// remove all locations of product
 		String selectAllLocationsQuery = new SelectQuery().addColumns(ProductsCatalogLocationsTable.locationIDCol)
 				.addCondition(BinaryCondition.equalTo(ProductsCatalogLocationsTable.barcodeCol, PARAM_MARK)).validate()
-				+ "";
-		String deleteLocationsQuery = new DeleteQuery(LocationsTable.table)
-				.addCondition(new CustomCondition(
+				+ "",
+				deleteLocationsQuery = new DeleteQuery(LocationsTable.table).addCondition(new CustomCondition(
 						LocationsTable.locationIDCol.getColumnNameSQL() + " IN (" + selectAllLocationsQuery + " ) "))
-				.validate() + "";
-
+						.validate() + "";
 		PreparedStatement LocationsStatement = getParameterizedQuery(deleteLocationsQuery, p.getBarcode());
 		LocationsStatement.executeUpdate();
 		closeResources(LocationsStatement);
@@ -1575,8 +1557,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 					log.fatal("moveProductPackage: you trying to move product from cart without sessionID. ABORT.");
 					return;
 				}
-				int listID = getCartListId(sessionId);
-				int currentAmount = getAmountForCart(packageToMove, listID);
+				int listID = getCartListId(sessionId), currentAmount = getAmountForCart(packageToMove, listID);
 				if (currentAmount == 0) {
 					log.info("moveProductPackage: nothing to take from Cart");
 					throw new ProductPackageNotExist();
@@ -1611,8 +1592,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 					log.fatal("moveProductPackage: you trying to move product to cart without sessionID. ABORT.");
 					return;
 				}
-				int listID = getCartListId(sessionId);
-				int currentAmount = getAmountForCart(packageToMove, listID);
+				int listID = getCartListId(sessionId), currentAmount = getAmountForCart(packageToMove, listID);
 				log.info("moveProductPackage: (to) Cart have " + currentAmount + ", set to: "
 						+ (currentAmount + amount));
 				setNewAmountForCart(packageToMove, listID, currentAmount, currentAmount + amount);
@@ -2194,21 +2174,17 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			throw new ClientNotExist();
 		}
 		
-		PreparedStatement selectCustomerStatement = null;
-		PreparedStatement selectCustomerIngredientsStatement = null;
-		ResultSet selectCustomerResult = null;
-		ResultSet selectCustomerIngredientsResult = null;
+		PreparedStatement selectCustomerStatement = null, selectCustomerIngredientsStatement = null;
+		ResultSet selectCustomerResult = null, selectCustomerIngredientsResult = null;
 		try {		
 			
-			//Read part of transaction
 			String selectCustomerQuery = generateSelectQuery1Table(CustomersTable.customertable,
-					BinaryCondition.equalTo(CustomersTable.customerusernameCol, PARAM_MARK));
+					BinaryCondition.equalTo(CustomersTable.customerusernameCol, PARAM_MARK)),
+					selectCustomerIngredientsQuery = generateSelectInnerJoinWithQuery2Tables(
+							CustomersIngredientsTable.table, IngredientsTable.table,
+							CustomersIngredientsTable.ingredientIDCol, CustomersIngredientsTable.customerUsernameCol,
+							BinaryCondition.equalTo(CustomersTable.customerusernameCol, PARAM_MARK));
 			
-			String selectCustomerIngredientsQuery = generateSelectInnerJoinWithQuery2Tables(
-					CustomersIngredientsTable.table, IngredientsTable.table, CustomersIngredientsTable.ingredientIDCol,
-					CustomersIngredientsTable.customerUsernameCol,
-					BinaryCondition.equalTo(CustomersTable.customerusernameCol, PARAM_MARK));
-
 			selectCustomerStatement = getParameterizedQuery(selectCustomerQuery + "", username);
 			selectCustomerIngredientsStatement = getParameterizedQuery(selectCustomerIngredientsQuery + "", username);
  
@@ -2262,7 +2238,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 	
 	@Override
-	public void setSecurityQACustomer(String username, ForgotPasswordData p) throws CriticalError, ClientNotExist{
+	public void setSecurityQACustomer(String username, ForgotPasswordData d) throws CriticalError, ClientNotExist{
 		log.info("SQL Public setSecurityQACustomer: Customer: " + username + " sets security Q&A.");
 		
 		if (!isCustomerExist(username)){
@@ -2276,7 +2252,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			
 			//Write part of transaction
 			//updating security question and answer
-			assignSecurityQAToRegisteredClient(new CustomersTable(), username, p);
+			assignSecurityQAToRegisteredClient(new CustomersTable(), username, d);
 
 			log.info("SQL Public setSecurityQACustomer: Success setting ecurity Q&A for username: " + username);
 
@@ -2393,26 +2369,18 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		String prodctsIngredientsQuery = generateSelectLeftJoinWithQuery2Tables(ProductsCatalogIngredientsTable.table,
 				IngredientsTable.table, IngredientsTable.ingredientIDCol, ProductsCatalogIngredientsTable.barcodeCol,
-				BinaryCondition.equalTo(ProductsCatalogIngredientsTable.barcodeCol, PARAM_MARK));
+				BinaryCondition.equalTo(ProductsCatalogIngredientsTable.barcodeCol, PARAM_MARK)),
+				prodctsLocationsQuery = generateSelectLeftJoinWithQuery2Tables(ProductsCatalogLocationsTable.table,
+						LocationsTable.table, LocationsTable.locationIDCol, ProductsCatalogLocationsTable.barcodeCol,
+						BinaryCondition.equalTo(ProductsCatalogLocationsTable.barcodeCol, PARAM_MARK)),
+				prodctsTableQuery = generateSelectLeftJoinWithQuery2Tables(ProductsCatalogTable.table,
+						ManufacturerTable.table, ManufacturerTable.manufacturerIDCol, ProductsCatalogTable.barcodeCol,
+						BinaryCondition.equalTo(ProductsCatalogTable.barcodeCol, PARAM_MARK));
 
-		String prodctsLocationsQuery = generateSelectLeftJoinWithQuery2Tables(ProductsCatalogLocationsTable.table,
-				LocationsTable.table, LocationsTable.locationIDCol, ProductsCatalogLocationsTable.barcodeCol,
-				BinaryCondition.equalTo(ProductsCatalogLocationsTable.barcodeCol, PARAM_MARK));
-
-		String prodctsTableQuery = generateSelectLeftJoinWithQuery2Tables(ProductsCatalogTable.table,
-				ManufacturerTable.table, ManufacturerTable.manufacturerIDCol, ProductsCatalogTable.barcodeCol,
-				BinaryCondition.equalTo(ProductsCatalogTable.barcodeCol, PARAM_MARK));
-
-		PreparedStatement productStatement = getParameterizedReadQuery(prodctsTableQuery, Long.valueOf(barcode));
-		PreparedStatement productIngredientsStatement = getParameterizedReadQuery(prodctsIngredientsQuery,
-				Long.valueOf(barcode));
-		PreparedStatement productLocationsStatement = getParameterizedReadQuery(prodctsLocationsQuery,
-				Long.valueOf(barcode));
-
-		ResultSet productResult = null;
-		ResultSet ingredientResult = null;
-		ResultSet locationsResult = null;
-
+		PreparedStatement productStatement = getParameterizedReadQuery(prodctsTableQuery, Long.valueOf(barcode)),
+				productIngredientsStatement = getParameterizedReadQuery(prodctsIngredientsQuery, Long.valueOf(barcode)),
+				productLocationsStatement = getParameterizedReadQuery(prodctsLocationsQuery, Long.valueOf(barcode));
+		ResultSet productResult = null, ingredientResult = null, locationsResult = null;
 		try {
 			// START transaction
 			connectionStartTransaction();
@@ -2851,8 +2819,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		// START transaction
 		connectionStartTransaction();
 
-		PreparedStatement copyStatement = null;
-		PreparedStatement deleteGroceryList = null;
+		PreparedStatement copyStatement = null, deleteGroceryList = null;
 		ResultSet cartGroceryList = null;
 
 		try {

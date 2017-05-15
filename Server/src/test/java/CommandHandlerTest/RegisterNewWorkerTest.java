@@ -126,9 +126,7 @@ public class RegisterNewWorkerTest {
 		String command = new CommandWrapper(senderID, CommandDescriptor.REGISTER_NEW_WORKER,
 				new Gson().toJson("", String.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
-		CommandWrapper out;
-		
-		out = commandExecuter.execute(sqlDatabaseConnection);
+		CommandWrapper out = commandExecuter.execute(sqlDatabaseConnection);
 		
 		assertEquals(ResultDescriptor.SM_ERR, out.getResultDescriptor());
 	}

@@ -13,10 +13,10 @@ import java.util.List;
  * @since 2017-05-11
  */
 public class TextFileReader {
-	public List<String> read(File file) throws IOException {
+	public List<String> read(File f) throws IOException {
 		List<String> lines = new ArrayList<String>();
 		String line;
-		BufferedReader br = new BufferedReader(new FileReader(file));
+		BufferedReader br = new BufferedReader(new FileReader(f));
 		while ((line = br.readLine()) != null)
 			lines.add(line);
 		br.close();

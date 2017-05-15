@@ -36,7 +36,7 @@ public class CustomerRegistration_IngredientsScreen implements Initializable {
 	private GridPane ingredientsScreenPane;
 	
     @FXML
-    private CheckListView<Ingredient> ingredientsCheckListView = new CheckListView<Ingredient>();;
+    private CheckListView<Ingredient> ingredientsCheckListView = new CheckListView<Ingredient>();
 
     @FXML
     private JFXButton ingridients_nextButton;
@@ -56,9 +56,8 @@ public class CustomerRegistration_IngredientsScreen implements Initializable {
 		ingredientsCheckListView.setItems(ingredientsObservableList);
 
 		HashSet<Ingredient> currentAllergans =  TempCustomerProfilePassingData.customerProfile.getAllergens();
-		if (currentAllergans != null && !currentAllergans.isEmpty()) {
+		if (currentAllergans != null && !currentAllergans.isEmpty())
 			updateListViewWithChosenIngreidients(currentAllergans);
-		}
 	}
 
 	private void updateListViewWithChosenIngreidients(HashSet<Ingredient> currentAllergans) {
@@ -74,19 +73,19 @@ public class CustomerRegistration_IngredientsScreen implements Initializable {
 	}
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(ingredientsScreenPane);
     	updateIngredientsCheckList();
 	}
 	
 	@FXML
-    void ingridients_backButtonPressed(ActionEvent event) {
+    void ingridients_backButtonPressed(ActionEvent __) {
 		updateCurrentChosenIngredients();
 		AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_PersonalInfoScreen.fxml");
     }
 	
     @FXML
-    void ingridients_nextButtonPressed(ActionEvent event) {
+    void ingridients_nextButtonPressed(ActionEvent __) {
 		updateCurrentChosenIngredients();
     	AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_FinalStepScreen.fxml");
     }

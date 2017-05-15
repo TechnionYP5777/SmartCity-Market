@@ -45,9 +45,7 @@ public class SmartcodeParser implements Codex {
 	 * @return
 	 */
 	private static SmartCode codeToSmartcode(String scannedCode) {
-		boolean flgDateFilled = false;
-		boolean flgSerialFilled = false;
-
+		boolean flgDateFilled = false, flgSerialFilled = false;
 		SmartCode $ = new SmartCode(0, null);
 
 		// move to the smartcode itself
@@ -66,10 +64,9 @@ public class SmartcodeParser implements Codex {
 
 				// start parsing expiration date
 				flgDateFilled = true;
-				int year = Integer.parseInt(scannedCode.substring(0, 2));
-				int month = Integer.parseInt(scannedCode.substring(2, 4));
-				int day = Integer.parseInt(scannedCode.substring(4, 6));
-
+				int year = Integer.parseInt(scannedCode.substring(0, 2)),
+						month = Integer.parseInt(scannedCode.substring(2, 4)),
+						day = Integer.parseInt(scannedCode.substring(4, 6));
 				if (month > 12 || month < 1 || day > 31 || day < 1)
 					return null;
 
@@ -185,9 +182,7 @@ public class SmartcodeParser implements Codex {
 
 		StringBuilder result = new StringBuilder();
 		Code128Char tempChar = null;
-		int checksum = 0;
-		int positionMultiplier = 1;
-
+		int checksum = 0, positionMultiplier = 1;
 		// insert start code c and fnc1 identifiers
 		tempChar = codeCMap.get(START_CODE_C_CHARACTER);
 		checksum = tempChar.index;

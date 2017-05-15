@@ -91,7 +91,7 @@ public class CommandExecuter {
 
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
-			outCommandWrapper.setSenderID((c.login(login.getUserName(), login.getPassword())));
+			outCommandWrapper.setSenderID(c.login(login.getUserName(), login.getPassword()));
 
 			try {
 				outCommandWrapper.setData(c.getClientType(outCommandWrapper.getSenderID()));
@@ -148,7 +148,7 @@ public class CommandExecuter {
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 			//TODO Noam - change the calling of this command, all code should stay the same
-			outCommandWrapper.setSenderID((c.login(login.getUserName(), login.getPassword())));
+			outCommandWrapper.setSenderID(c.login(login.getUserName(), login.getPassword()));
 
 			try {
 				outCommandWrapper.setData(c.getClientType(outCommandWrapper.getSenderID()));
@@ -205,7 +205,7 @@ public class CommandExecuter {
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 			//TODO Noam - change the calling of this command, need to add CustomerProfile for login command here
-			outCommandWrapper.setSenderID((c.login(login.getUserName(), login.getPassword())));
+			outCommandWrapper.setSenderID(c.login(login.getUserName(), login.getPassword()));
 
 			try {
 				outCommandWrapper.setData(c.getClientType(outCommandWrapper.getSenderID()));
@@ -278,7 +278,7 @@ public class CommandExecuter {
 		log.info("Logout with User " + username + " finished");
 	}
 
-	private void updateProductsPictures(SQLDatabaseConnection c) {
+	private void updateProductsPictures(SQLDatabaseConnection __) {
 		LocalDate customerDate;
 		
 		log.info("Update products pictures command called with senderID " + inCommandWrapper.getSenderID());
@@ -308,7 +308,7 @@ public class CommandExecuter {
 					outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 				}
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization
-						.serialize(Packing.encode((new File(GuiCommonDefs.productsPicturesFolderZipFile)))));
+						.serialize(Packing.encode(new File(GuiCommonDefs.productsPicturesFolderZipFile))));
 			}
 		} catch (IOException e1) {
 			log.fatal("Failed to fecth date for Update products pictures command");

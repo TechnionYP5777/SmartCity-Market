@@ -113,12 +113,8 @@ public class ManageCatalogProductTab implements Initializable {
 				barcodeTextField.setText(newValue.replaceAll("[^\\d]", ""));
 			enableRunOperation();
 		});
-		productNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			enableRunOperation();
-		});
-		productDescriptionTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			enableRunOperation();
-		});
+		productNameTextField.textProperty().addListener((observable, oldValue, newValue) -> enableRunOperation());
+		productDescriptionTextField.textProperty().addListener((observable, oldValue, newValue) -> enableRunOperation());
 
 		createManufacturerMap();
 		productManufacturerCombo.getItems().addAll( manufacturars.keySet() /*
@@ -126,7 +122,7 @@ public class ManageCatalogProductTab implements Initializable {
 
 		productManufacturerCombo.valueProperty().addListener(new ChangeListener<String>() {
 			@Override
-			public void changed(@SuppressWarnings("rawtypes") ObservableValue ov, String t, String t1) {
+			public void changed(@SuppressWarnings("rawtypes") ObservableValue __, String s, String t1) {
 				enableRunOperation();
 			}
 		});
@@ -145,7 +141,7 @@ public class ManageCatalogProductTab implements Initializable {
 		// oldValue, newValue) -> {
 		// });
 		radioButtonContainerManageCatalogProduct.addRadioButtons(
-				(Arrays.asList((new RadioButton[] { addCatalogProductRadioButton, removeCatalogProductRadioButton }))));
+				Arrays.asList(new RadioButton[] { addCatalogProductRadioButton, removeCatalogProductRadioButton }));
 
 		RequiredFieldValidator validator = new RequiredFieldValidator();
 		validator.setMessage("Input Required");
@@ -154,9 +150,8 @@ public class ManageCatalogProductTab implements Initializable {
 		
 		barcodeTextField.getValidators().add(validator);
 		barcodeTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
-			if (!newVal) {
+			if (!newVal)
 				barcodeTextField.validate();
-			}
 		});
 		
 		RequiredFieldValidator validator2 = new RequiredFieldValidator();
@@ -166,9 +161,8 @@ public class ManageCatalogProductTab implements Initializable {
 		
 		productNameTextField.getValidators().add(validator2);
 		productNameTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
-			if (!newVal) {
+			if (!newVal)
 				productNameTextField.validate();
-			}
 		});
 		
 		RequiredFieldValidator validator3 = new RequiredFieldValidator();
@@ -178,9 +172,8 @@ public class ManageCatalogProductTab implements Initializable {
 		
 		productPriceTextField.getValidators().add(validator3);
 		productPriceTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
-			if (!newVal) {
+			if (!newVal)
 				productPriceTextField.validate();
-			}
 		});
 		
 		
@@ -199,9 +192,7 @@ public class ManageCatalogProductTab implements Initializable {
 		manufacturars = new HashMap<String, Manufacturer>();
 
 		try {
-			manager.getAllManufacturers().forEach(manufacturer -> {
-				manufacturars.put(manufacturer.getName(), manufacturer);
-			});
+			manager.getAllManufacturers().forEach(manufacturer -> manufacturars.put(manufacturer.getName(), manufacturer));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			log.fatal(e.getMessage());
 		}
@@ -211,9 +202,7 @@ public class ManageCatalogProductTab implements Initializable {
 	private void createIngredientMap() {
 		ingredients = new HashMap<String, Ingredient>();
 		try {
-			manager.getAllIngredients().forEach(ingredient -> {
-				ingredients.put(ingredient.getName(), ingredient);
-			});
+			manager.getAllIngredients().forEach(ingredient -> ingredients.put(ingredient.getName(), ingredient));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			log.fatal(e.getMessage());
 		}
@@ -239,16 +228,16 @@ public class ManageCatalogProductTab implements Initializable {
 
 		try {
 			if (addCatalogProductRadioButton.isSelected()) {
-				manager.addProductToCatalog((new CatalogProduct(Long.parseLong(barcodeTextField.getText()),
-						productNameTextField.getText(), new HashSet<Ingredient>(), getManufacturer(),
+				manager.addProductToCatalog(new CatalogProduct(Long.parseLong(barcodeTextField.getText()), productNameTextField.getText(),
+						new HashSet<Ingredient>(), getManufacturer(),
 						productDescriptionTextField.getText().isEmpty() ? "N/A" : productDescriptionTextField.getText(),
-						Double.parseDouble(productPriceTextField.getText()), "", new HashSet<Location>())));
+						Double.parseDouble(productPriceTextField.getText()), "", new HashSet<Location>()));
 
-				printToSuccessLog(("Added new product '" + productNameTextField.getText() + "' to catalog"));
+				printToSuccessLog("Added new product '" + productNameTextField.getText() + "' to catalog");
 			} else if (removeCatalogProductRadioButton.isSelected()) {
 				manager.removeProductFromCatalog(new SmartCode(Long.parseLong(barcodeTextField.getText()), null));
 
-				printToSuccessLog(("Remove product '" + productNameTextField.getText() + "' from catalog"));
+				printToSuccessLog("Remove product '" + productNameTextField.getText() + "' from catalog");
 			}
 		} catch (SMException e) {
 			e.showInfoToUser();
@@ -260,24 +249,20 @@ public class ManageCatalogProductTab implements Initializable {
 		String man = productManufacturerCombo.getValue();
 
 		switch (man) {
-		case "תנובה":
-			$ = new Manufacturer(1, man);
-			break;
-
-		case "מאפיות ברמן":
-			$ = new Manufacturer(2, man);
-			break;
-
-		case "עלית":
-			$ = new Manufacturer(3, man);
-			break;
-
 		case "אסם":
 			$ = new Manufacturer(4, man);
 			break;
-
 		case "בייגל-בייגל":
 			$ = new Manufacturer(5, man);
+			break;
+		case "מאפיות ברמן":
+			$ = new Manufacturer(2, man);
+			break;
+		case "עלית":
+			$ = new Manufacturer(3, man);
+			break;
+		case "תנובה":
+			$ = new Manufacturer(1, man);
 			break;
 		}
 		return $;

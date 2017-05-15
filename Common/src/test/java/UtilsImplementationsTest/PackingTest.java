@@ -7,7 +7,6 @@ import java.util.zip.ZipFile;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -43,13 +42,13 @@ public class PackingTest {
 
 	@AfterClass
 	public static void cleanup() {
-		if (!CLEAN_ALL){
+		if (CLEAN_ALL)
+			for (File file : (new File(unpackDirPath)).listFiles())
+				file.delete();
+		else {
 			File zipfileToDelete = new File(zipfileToPackPath);
 			zipfileToDelete.delete();
-			return;
 		}
-		for (File file : (new File(unpackDirPath)).listFiles())
-			file.delete();
 	}
 
 	@Test

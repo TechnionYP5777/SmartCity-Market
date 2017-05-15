@@ -9,9 +9,6 @@ package SMExceptions;
 
 public class SMException extends Exception{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6206029164886167974L;
 	
 	//currently no further logic in here.

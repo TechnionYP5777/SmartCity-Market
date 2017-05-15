@@ -319,8 +319,8 @@ public class Customer extends ACustomer implements ICustomer {
 
 		try {
 			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(id, CommandDescriptor.ADD_PRODUCT_TO_GROCERY_LIST,
-							Serialization.serialize(new ProductPackage(c, amount, null))).serialize()));
+					new CommandWrapper(id, CommandDescriptor.ADD_PRODUCT_TO_GROCERY_LIST,
+							Serialization.serialize(new ProductPackage(c, amount, null))).serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 
@@ -338,9 +338,8 @@ public class Customer extends ACustomer implements ICustomer {
 			throw new CriticalError();
 		}
 
-		ProductPackage productPackage1 = new ProductPackage(c, amount, null);
-		ProductPackage productPackage2 = new ProductPackage(c, amount, null);
-
+		ProductPackage productPackage1 = new ProductPackage(c, amount, null),
+				productPackage2 = new ProductPackage(c, amount, null);
 		groceryList.addProduct(productPackage1);
 
 		addProductToCacheAndUpdateCartData(productPackage2, catalogProduct);
@@ -359,8 +358,8 @@ public class Customer extends ACustomer implements ICustomer {
 
 		try {
 			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(id, CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST,
-							Serialization.serialize(new ProductPackage(c, amount, null))).serialize()));
+					new CommandWrapper(id, CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST,
+							Serialization.serialize(new ProductPackage(c, amount, null))).serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 
@@ -473,8 +472,8 @@ public class Customer extends ACustomer implements ICustomer {
 		/* first: getting the product from the server */
 		try {
 			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(id, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG, Serialization.serialize(c))
-							.serialize()));
+					new CommandWrapper(id, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG, Serialization.serialize(c))
+							.serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 
@@ -525,8 +524,8 @@ public class Customer extends ACustomer implements ICustomer {
 		/* first: getting the product from the server */
 		try {
 			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(id, CommandDescriptor.REGISTER_NEW_CUSTOMER, Serialization.serialize(p))
-							.serialize()));
+					new CommandWrapper(id, CommandDescriptor.REGISTER_NEW_CUSTOMER, Serialization.serialize(p))
+							.serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 
@@ -560,7 +559,7 @@ public class Customer extends ACustomer implements ICustomer {
 		/* first: getting the product from the server */
 		try {
 			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(id, CommandDescriptor.GET_ALL_INGREDIENTS).serialize()));
+					new CommandWrapper(id, CommandDescriptor.GET_ALL_INGREDIENTS).serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 
@@ -598,8 +597,8 @@ public class Customer extends ACustomer implements ICustomer {
 		/* first: getting the product from the server */
 		try {
 			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(id, CommandDescriptor.IS_FREE_CUSTOMER_NAME, Serialization.serialize(username))
-							.serialize()));
+					new CommandWrapper(id, CommandDescriptor.IS_FREE_CUSTOMER_NAME, Serialization.serialize(username))
+							.serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 

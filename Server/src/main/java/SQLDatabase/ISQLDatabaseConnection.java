@@ -120,7 +120,7 @@ public interface ISQLDatabaseConnection {
 
 	void setPasswordCustomer(String username, String newPassword) throws CriticalError, ClientNotExist;
 
-	void setSecurityQACustomer(String username, ForgotPasswordData forgotPasswordData) throws CriticalError, ClientNotExist;
+	void setSecurityQACustomer(String username, ForgotPasswordData d) throws CriticalError, ClientNotExist;
 
 	String getSecurityQuestionCustomer(String username) throws CriticalError, ClientNotExist;
 
@@ -138,7 +138,7 @@ public interface ISQLDatabaseConnection {
 
 	void removeCustomer(String username) throws CriticalError, ClientNotExist;
 
-	void addWorker(Integer sessionID, Login login, ForgotPasswordData security) throws CriticalError, ClientAlreadyExist, ClientNotConnected;
+	void addWorker(Integer sessionID, Login l, ForgotPasswordData security) throws CriticalError, ClientAlreadyExist, ClientNotConnected;
 
 	void removeWorker(Integer sessionID, String username) throws CriticalError, ClientNotExist, ClientNotConnected;
 

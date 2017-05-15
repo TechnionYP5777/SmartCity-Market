@@ -74,11 +74,11 @@ public class EmployeeGuiPreloader extends Preloader {
 	@Override
 	public void handleStateChangeNotification(StateChangeNotification info) {
 		switch (info.getType()) {
-		case BEFORE_LOAD:
-			System.out.println(EmployeeApplicationScreen.STEP() + "BEFORE_LOAD");
-			break;
 		case BEFORE_INIT:
 			System.out.println(EmployeeApplicationScreen.STEP() + "BEFORE_INIT");
+			break;
+		case BEFORE_LOAD:
+			System.out.println(EmployeeApplicationScreen.STEP() + "BEFORE_LOAD");
 			break;
 		case BEFORE_START:
 			System.out.println(EmployeeApplicationScreen.STEP() + "BEFORE_START");

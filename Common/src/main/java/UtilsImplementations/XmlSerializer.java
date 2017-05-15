@@ -37,26 +37,25 @@ public class XmlSerializer<IClass> implements IXmlSerializer<IClass> {
 	}
 	
 	@Override
-	public void serializeToFile(Object obj, String fileName) throws XmlException, IOException {
+	public void serializeToFile(Object o, String fileName) throws XmlException, IOException {
 		try {
 			File file = new File(fileName);
 		    if (!file.exists()) {
 		    	File parentFile = file.getParentFile();
-		    	if (parentFile != null) {
-		    		file.getParentFile().mkdirs();
-		    	}
+		    	if (parentFile != null)
+					file.getParentFile().mkdirs();
 		    	file.createNewFile();
 		    }
 		    
-			getMarshaller(obj).marshal(obj, file);
+			getMarshaller(o).marshal(o, file);
 		} 
 		catch (JAXBException e) {
 			throw new XmlException("Failed to serialize to file", e);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public IClass deserializeFromFile(String fileName) throws XmlException {
 		try {
 			Object retObj = getUnmarshaller(mClassType).unmarshal(new File(fileName));
@@ -68,19 +67,19 @@ public class XmlSerializer<IClass> implements IXmlSerializer<IClass> {
 	}
 
 	@Override
-	public String serializeToString(Object obj) throws XmlException {
+	public String serializeToString(Object o) throws XmlException {
 		try {
 			StringWriter sw = new StringWriter();
-			getMarshaller(obj).marshal(obj, sw);
-			return sw.toString();
+			getMarshaller(o).marshal(o, sw);
+			return sw + "";
 		}
 		catch (JAXBException e) {
 			throw new XmlException("Failed to serialize to string", e);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public IClass deserializeFromString(String content) throws XmlException {
 		try {	
 			StringReader sr = new StringReader(content);
@@ -92,8 +91,8 @@ public class XmlSerializer<IClass> implements IXmlSerializer<IClass> {
 		}
 	}
 	
-	private Marshaller getMarshaller(Object obj) throws JAXBException {
-		JAXBContext context = JAXBContext.newInstance(obj.getClass());
+	private Marshaller getMarshaller(Object o) throws JAXBException {
+		JAXBContext context = JAXBContext.newInstance(o.getClass());
 		Marshaller m = context.createMarshaller();
 	    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 	    return m;

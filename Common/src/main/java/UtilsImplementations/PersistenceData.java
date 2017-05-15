@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
  * @author Shimon Azulay
  * @since 2016-03-28*/
 
-@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
 public @interface PersistenceData {
 	String relativePath();
 }

@@ -25,7 +25,7 @@ public class SmartcodeParserTest {
 	public void testBarcode() {
 		SmartCode barcode = SmartcodeParser.formCode("7290000688077");
 
-		assertNotNull(barcode);
+		assert barcode != null;
 		assertNull(barcode.getExpirationDate());
 		assertEquals(7290000688077L, barcode.getBarcode());
 
@@ -35,7 +35,7 @@ public class SmartcodeParserTest {
 	public void testSmartode() {
 		SmartCode barcode = SmartcodeParser.formCode("]C117010203217290000688077");
 
-		assertNotNull(barcode);
+		assert barcode != null;
 		assertEquals(LocalDate.of(2001, 02, 03), barcode.getExpirationDate());
 		assertEquals(7290000688077L, barcode.getBarcode());
 

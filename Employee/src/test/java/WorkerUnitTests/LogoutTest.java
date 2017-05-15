@@ -45,8 +45,8 @@ public class LogoutTest {
 	public void logoutSuccessfulTest() {
 		try {
 			Mockito.when(
-					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
-							CommandDescriptor.LOGOUT, Serialization.serialize(null)).serialize())))
+					clientRequestHandler.sendRequestWithRespond(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT,
+							Serialization.serialize(null)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
 			
@@ -65,8 +65,8 @@ public class LogoutTest {
 	public void logoutNotConnectedTest() {
 		try {
 			Mockito.when(
-					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
-							CommandDescriptor.LOGOUT, Serialization.serialize(null)).serialize())))
+					clientRequestHandler.sendRequestWithRespond(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT,
+							Serialization.serialize(null)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException ¢) {
 			
@@ -89,8 +89,8 @@ public class LogoutTest {
 	public void logoutIllegalResultTest() {
 		try {
 			Mockito.when(
-					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
-							CommandDescriptor.LOGOUT, Serialization.serialize(null)).serialize())))
+					clientRequestHandler.sendRequestWithRespond(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT,
+							Serialization.serialize(null)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE).serialize());
 		} catch (IOException ¢) {
 			

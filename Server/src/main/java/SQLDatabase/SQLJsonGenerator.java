@@ -101,9 +101,9 @@ class SQLJsonGenerator {
 			// get product other details
 			String productManufacturerName = getStringFromResultset(product, ManufacturerTable.manufacturerNameCol);
 			int productManufacturerID = product.getInt(ManufacturerTable.manufacturerIDCol.getColumnNameSQL());
-			String productDescription = getStringFromResultset(product, ProductsCatalogTable.productDescriptionCol);
-			String productName = getStringFromResultset(product, ProductsCatalogTable.productNameCol);
-			String productPicture = getStringFromResultset(product, ProductsCatalogTable.productPictureCol);
+			String productDescription = getStringFromResultset(product, ProductsCatalogTable.productDescriptionCol),
+					productName = getStringFromResultset(product, ProductsCatalogTable.productNameCol),
+					productPicture = getStringFromResultset(product, ProductsCatalogTable.productPictureCol);
 			double productPrice = product.getDouble(ProductsCatalogTable.productPriceCol.getColumnNameSQL());
 
 			product.next();
@@ -182,13 +182,12 @@ class SQLJsonGenerator {
 			// get all customer ingredients
 			ingredients = createIngredientsListForCustomer(customerUsername, customerIngredients);
 
-			// get customer other details
-			String customeraddress = getStringFromResultset(customer, CustomersTable.customerAddressCol);
-			String customerCity = getStringFromResultset(customer, CustomersTable.customerCityCol);
-			String customerEmail = getStringFromResultset(customer, CustomersTable.customerEmailCol);
-			String customerFirstname = getStringFromResultset(customer, CustomersTable.customerFirstnameCol);
-			String customerLastname = getStringFromResultset(customer, CustomersTable.customerLastnameCol);
-			String customerPhonenumber = getStringFromResultset(customer, CustomersTable.customerPhonenumberCol);
+			String customeraddress = getStringFromResultset(customer, CustomersTable.customerAddressCol),
+					customerCity = getStringFromResultset(customer, CustomersTable.customerCityCol),
+					customerEmail = getStringFromResultset(customer, CustomersTable.customerEmailCol),
+					customerFirstname = getStringFromResultset(customer, CustomersTable.customerFirstnameCol),
+					customerLastname = getStringFromResultset(customer, CustomersTable.customerLastnameCol),
+					customerPhonenumber = getStringFromResultset(customer, CustomersTable.customerPhonenumberCol);
 			LocalDate customerBirthdate = customer.getDate(CustomersTable.customerBirthdateCol.getColumnNameSQL()).toLocalDate();
 
 			customer.next();
@@ -325,9 +324,8 @@ class SQLJsonGenerator {
 						String locationDescription = getStringFromResultset(productLocations,
 								LocationsTable.locationDescriptionCol);
 						String locationPlace = getStringFromResultset(productLocations, LocationsTable.placeInStoreCol);
-						int locationPointX = productLocations.getInt(LocationsTable.pointXCol.getColumnNameSQL());
-						int locationPointY = productLocations.getInt(LocationsTable.pointYCol.getColumnNameSQL());
-
+						int locationPointX = productLocations.getInt(LocationsTable.pointXCol.getColumnNameSQL()),
+								locationPointY = productLocations.getInt(LocationsTable.pointYCol.getColumnNameSQL());
 						// adding the location to set
 						$.add(new Location(locationPointX, locationPointY,
 								locationPlace == LOCATIONS_TABLE.VALUE_PLACE_STORE ? PlaceInMarket.STORE

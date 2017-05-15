@@ -54,11 +54,11 @@ public class XmlPersistentStore implements IPersistentStore {
 	
 	private String getXmlPath(Object requester, Class<?> objectType) {
 		PersistenceData persistenceData = getPersistenceDataAnnotation(objectType);
-		if (persistenceData != null)
-			return mAppDirectories.getFilePath(requester.getClass(), persistenceData.relativePath());
-		return mAppDirectories.getFilePath(getClass(),
-				(new File(requester.getClass().getPackage().getName(), objectType.getCanonicalName() + ".xml"))
-						.getPath());
+		return persistenceData != null
+				? mAppDirectories.getFilePath(requester.getClass(), persistenceData.relativePath())
+				: mAppDirectories.getFilePath(getClass(),
+						(new File(requester.getClass().getPackage().getName(), objectType.getCanonicalName() + ".xml"))
+								.getPath());
 	}
 	
 	private PersistenceData getPersistenceDataAnnotation(Class<?> objectType) {

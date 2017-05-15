@@ -23,12 +23,10 @@ public class XmlSerializerProvider implements IXmlSerializerProvider {
 	@Override
 	public <Type> IXmlSerializer<Type> getSerializer(Class<Type> serializedType) {
 		String serializedTypeName = serializedType.getName();
-		if (serializedType.isInterface() && !mSerializers.containsKey(serializedTypeName)) {
+		if (serializedType.isInterface() && !mSerializers.containsKey(serializedTypeName))
 			throw new RuntimeException("Interface is not registered: " + serializedTypeName);
-		}
-		if (!serializedType.isInterface() && !mSerializers.containsKey(serializedTypeName)) {
+		if (!serializedType.isInterface() && !mSerializers.containsKey(serializedTypeName))
 			mSerializers.put(serializedTypeName, new XmlSerializer<Type>(serializedType));
-		}
 		@SuppressWarnings("unchecked")
 		IXmlSerializer<Type> serializer = (IXmlSerializer<Type>) mSerializers.get(serializedTypeName);
 		return serializer;
@@ -38,9 +36,8 @@ public class XmlSerializerProvider implements IXmlSerializerProvider {
 	public <IClass, Impl extends IClass> void addSerializer(Class<IClass> typeInterface,
 			Class<Impl> typeImplementation) {
 		String typeInterfaceName = typeInterface.getName();
-		if (typeInterface.isInterface() && !mSerializers.containsKey(typeInterfaceName)) {
+		if (typeInterface.isInterface() && !mSerializers.containsKey(typeInterfaceName))
 			mSerializers.put(typeInterfaceName, new XmlSerializer<IClass>(typeImplementation));
-		}
 	}
 
 }

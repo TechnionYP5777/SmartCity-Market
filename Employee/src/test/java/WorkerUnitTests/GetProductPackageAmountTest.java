@@ -56,9 +56,8 @@ public class GetProductPackageAmountTest {
 		int retAmmount = 0; 
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
+							Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, "2").serialize());
 		} catch (IOException ¢) {
 			
@@ -80,9 +79,8 @@ public class GetProductPackageAmountTest {
 	public void GetProductPackageAmountInvalidParameterTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
+							Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER, "2").serialize());
 		} catch (IOException ¢) {
 			
@@ -106,9 +104,8 @@ public class GetProductPackageAmountTest {
 	public void GetProductPackageAmountEmployeeNotConnectedTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
+							Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED, "2").serialize());
 		} catch (IOException ¢) {
 			
@@ -133,9 +130,8 @@ public class GetProductPackageAmountTest {
 	public void GetProductPackageAmountProductPackageDoesNotExistTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
+							Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_DOES_NOT_EXIST, "2").serialize());
 		} catch (IOException ¢) {
 			
@@ -159,9 +155,8 @@ public class GetProductPackageAmountTest {
 	public void GetProductPackageAmountIllegalResultTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
+							Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE, "2").serialize());
 		} catch (IOException ¢) {
 			

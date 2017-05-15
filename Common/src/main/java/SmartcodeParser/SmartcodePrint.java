@@ -63,10 +63,8 @@ public class SmartcodePrint implements Printable{
 		int textHeight = 0;
 		String textToDisplay;
 		
-		//this are the sizes if the printing area (they will be surrounded with white padding) 
-		int barcodeWidth = lineWidth * SmartcodeGS1Code.length();
-		int barcodeHeight = barcodeTotalHeight - 2 * INNER_BARCODE_TOP_BOTTOM_PADDING;
-		
+		int barcodeWidth = lineWidth * SmartcodeGS1Code.length(),
+				barcodeHeight = barcodeTotalHeight - 2 * INNER_BARCODE_TOP_BOTTOM_PADDING;
 		barcodeTotalWidth = barcodeWidth + 2 * INNER_BARCODE_LEFT_RIGHT_PADDING;
 		
 		//create image to draw on
@@ -124,15 +122,13 @@ public class SmartcodePrint implements Printable{
         String SmartcodeGS1Code = SmartcodeParser.smartcodeToCode(smartcodeToPrint);
 		barcodeTotalWidth = 2 * INNER_BARCODE_LEFT_RIGHT_PADDING + lineWidth * SmartcodeGS1Code.length();
 		
-		int printAreaWidth = (int) (f.getImageableWidth() - leftSpace - rightSpace);
-		int printAreaHeight = (int) (f.getImageableHeight() - topSpace - bottomSpace);
-    	int smartcodesPerRow = printAreaWidth / (horizontalSpace + barcodeTotalWidth);
-    	int smartcodesPerCol = printAreaHeight / (verticalSpace + barcodeTotalHeight);
-    	
-    	int totalSmartcodesInPage = smartcodesPerCol * smartcodesPerRow;
-    	int totalPagesToPrint = (int) Math.ceil((float) count / totalSmartcodesInPage);
-    	
-        if (page > totalPagesToPrint - 1) /* We have only one page, and 'page' is zero-based */
+		int printAreaWidth = (int) (f.getImageableWidth() - leftSpace - rightSpace),
+				printAreaHeight = (int) (f.getImageableHeight() - topSpace - bottomSpace),
+				smartcodesPerRow = printAreaWidth / (horizontalSpace + barcodeTotalWidth),
+				smartcodesPerCol = printAreaHeight / (verticalSpace + barcodeTotalHeight),
+				totalSmartcodesInPage = smartcodesPerCol * smartcodesPerRow,
+				totalPagesToPrint = (int) Math.ceil((float) count / totalSmartcodesInPage);
+		if (page > totalPagesToPrint - 1) /* We have only one page, and 'page' is zero-based */
             return NO_SUCH_PAGE;
  
         int smartcodesForThisPage = totalSmartcodesInPage * (page + 1) <= count ?

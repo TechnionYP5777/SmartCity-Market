@@ -17,13 +17,13 @@ public interface IXmlSerializer<Type> {
 	/**
 	 * serializes an object to a file
 	 * 
-	 * @param obj the object to be serialized
+	 * @param o the object to be serialized
 	 * @param fileName the name of the file
 	 * 
 	 * @throws XmlException
 	 * @throws IOException
 	 */
-	void serializeToFile(Object obj, String fileName) throws XmlException, IOException;
+	void serializeToFile(Object o, String fileName) throws XmlException, IOException;
 	
 	/**
 	 * deserializes an object of type <Type> from a file
@@ -39,13 +39,13 @@ public interface IXmlSerializer<Type> {
 	/**
 	 * serializes an object to a string
 	 * 
-	 * @param obj the object to be serialized
+	 * @param o the object to be serialized
 	 * 
 	 * @return a string which represents the serialized object
 	 * 
 	 * @throws XmlException
 	 */
-	String serializeToString(Object obj) throws XmlException;
+	String serializeToString(Object o) throws XmlException;
 	
 	/**
 	 * deserializes an object of type <Type> to a string

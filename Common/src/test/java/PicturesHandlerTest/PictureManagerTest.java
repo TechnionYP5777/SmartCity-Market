@@ -14,13 +14,11 @@ public class PictureManagerTest {
 	@Test
 	public void testCurrentDateAndcheckIfMostUpdate() {
 		try {
-			LocalDate currentDate = PictureManager.getCurrentDate();
-			LocalDate newDate = LocalDate.now();
-			
-			assertTrue(PictureManager.checkIfMostUpdate(currentDate));
+			LocalDate currentDate = PictureManager.getCurrentDate(), newDate = LocalDate.now();
+			assert PictureManager.checkIfMostUpdate(currentDate);
 			
 			PictureManager.updateDate(newDate);
-			assertTrue(PictureManager.checkIfMostUpdate(newDate));
+			assert PictureManager.checkIfMostUpdate(newDate);
 			
 			/* returning original date */
 			PictureManager.updateDate(currentDate);

@@ -98,7 +98,7 @@ public class ManageEmployeesTab implements Initializable {
 	private boolean helpRetVal;
 
 	@FXML
-	void finishBtnPressed(ActionEvent event) {
+	void finishBtnPressed(ActionEvent __) {
 		try {
 			manager.registerNewWorker(new Login(userTxt.getText(), passTxt.getText()));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | WorkerAlreadyExists e) {
@@ -111,21 +111,15 @@ public class ManageEmployeesTab implements Initializable {
 	}
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL location, ResourceBundle __) {
 
-		userTxt.textProperty().addListener((observable, oldValue, newValue) -> {
-			enableFinishBtn();
-		});
+		userTxt.textProperty().addListener((observable, oldValue, newValue) -> enableFinishBtn());
 
-		passTxt.textProperty().addListener((observable, oldValue, newValue) -> {
-			enableFinishBtn();
-		});
+		passTxt.textProperty().addListener((observable, oldValue, newValue) -> enableFinishBtn());
 
-		securityAnswerTxt.textProperty().addListener((observable, oldValue, newValue) -> {
-			enableFinishBtn();
-		});
+		securityAnswerTxt.textProperty().addListener((observable, oldValue, newValue) -> enableFinishBtn());
 
-		radioBtnCont.addRadioButtons((Arrays.asList((new RadioButton[] { workerRadioBtn, managerRadioBtn }))));
+		radioBtnCont.addRadioButtons(Arrays.asList(new RadioButton[] { workerRadioBtn, managerRadioBtn }));
 
 		securityCombo.getItems().addAll("Q1", "Q2", "Q3", "Q4");
 
@@ -136,9 +130,8 @@ public class ManageEmployeesTab implements Initializable {
 
 		userTxt.getValidators().add(validator2);
 		userTxt.focusedProperty().addListener((o, oldVal, newVal) -> {
-			if (!newVal) {
+			if (!newVal)
 				userTxt.validate();
-			}
 		});
 
 		RequiredFieldValidator validator3 = new RequiredFieldValidator();
@@ -148,9 +141,8 @@ public class ManageEmployeesTab implements Initializable {
 
 		passTxt.getValidators().add(validator3);
 		passTxt.focusedProperty().addListener((o, oldVal, newVal) -> {
-			if (!newVal) {
+			if (!newVal)
 				passTxt.validate();
-			}
 		});
 
 		RequiredFieldValidator validator4 = new RequiredFieldValidator();
@@ -160,20 +152,16 @@ public class ManageEmployeesTab implements Initializable {
 
 		securityAnswerTxt.getValidators().add(validator4);
 		securityAnswerTxt.focusedProperty().addListener((o, oldVal, newVal) -> {
-			if (!newVal) {
+			if (!newVal)
 				securityAnswerTxt.validate();
-			}
 		});
 
 		createEmployeesList();
 
 		searchEmployee.textProperty().addListener(obs -> {
 			String filter = searchEmployee.getText();
-			if (filter == null || filter.length() == 0) {
-				filteredDataEmployees.setPredicate(s -> true);
-			} else {
-				filteredDataEmployees.setPredicate(s -> s.contains(filter));
-			}
+			filteredDataEmployees
+					.setPredicate(filter == null || filter.length() == 0 ? s -> true : s -> s.contains(filter));
 		});
 
 		employeesList.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
@@ -183,11 +171,10 @@ public class ManageEmployeesTab implements Initializable {
 				observable.set(selectedEmployees.contains(item));
 
 				observable.addListener((obs, wasSelected, isNowSelected) -> {
-					if (isNowSelected) {
+					if (isNowSelected)
 						selectedEmployees.add(item);
-					} else {
+					else
 						selectedEmployees.remove(item);
-					}
 					enableRemoveButton();
 
 				});
@@ -207,9 +194,8 @@ public class ManageEmployeesTab implements Initializable {
 	private boolean isConnectedManagerSelected() {
 		helpRetVal = false;
 		selectedEmployees.forEach(eml -> {
-			if (employeesInSystem.get(eml)) {
+			if (employeesInSystem.get(eml))
 				helpRetVal = true;
-			}
 		});
 		return helpRetVal;
 	}
@@ -247,7 +233,7 @@ public class ManageEmployeesTab implements Initializable {
 	}
 
 	@FXML
-	void removeBtnPressed(ActionEvent event) {
+	void removeBtnPressed(ActionEvent __) {
 		selectedEmployees.forEach(eml -> {
 			try {
 				manager.removeWorker(eml);

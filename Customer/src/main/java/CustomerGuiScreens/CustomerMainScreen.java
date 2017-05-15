@@ -139,15 +139,6 @@ public class CustomerMainScreen implements Initializable {
 			ProductInfoPaneVisibleMode m) {
 		updateProductInfoTexts(p, amount);
 		switch (m) {
-		case SCANNED_PRODUCT: {
-			removeAllButton.setDisable(true);
-			removeAllButton.setVisible(false);
-			addButton.setDisable(false);
-			addButton.setVisible(true);
-			removeButton.setDisable(false);
-			removeButton.setVisible(true);
-			break;
-		}
 		case PRESSED_PRODUCT: {
 			removeAllButton.setDisable(false);
 			removeAllButton.setVisible(true);
@@ -155,6 +146,15 @@ public class CustomerMainScreen implements Initializable {
 			addButton.setVisible(false);
 			removeButton.setDisable(true);
 			removeButton.setVisible(false);
+			break;
+		}
+		case SCANNED_PRODUCT: {
+			removeAllButton.setDisable(true);
+			removeAllButton.setVisible(false);
+			addButton.setDisable(false);
+			addButton.setVisible(true);
+			removeButton.setDisable(false);
+			removeButton.setVisible(true);
 			break;
 		}
 		}
@@ -165,7 +165,7 @@ public class CustomerMainScreen implements Initializable {
 		productNameLabel.setText(p.getName());
 		manufacturerLabel.setText(p.getManufacturer().getName());
 		priceLabel.setText(String.format("%1$.2f", p.getPrice()));
-		amountLabel.setText((amount + ""));
+		amountLabel.setText(amount + "");
 		descriptionTextArea.setText(p.getDescription());	
 		URL imageUrl = null;
 		try {
@@ -173,7 +173,7 @@ public class CustomerMainScreen implements Initializable {
 		} catch (MalformedURLException e) {
 			throw new RuntimeException();
 		}
-		productInfoImage.setImage((new Image(imageUrl + "", 290, 230, true, false)));
+		productInfoImage.setImage(new Image(imageUrl + "", 290, 230, true, false));
 	}
 
 	private void setAbilityAndVisibilityOfProductInfoPane(boolean visibilty) {
@@ -190,9 +190,7 @@ public class CustomerMainScreen implements Initializable {
 	private void syncListViewWithCart() {
 		HashMap<Long, CartProduct> shoppingList = customer.getCartProductCache();
 		productsObservableList.clear();
-		shoppingList.forEach((key,value) -> {
-			productsObservableList.add(value);
-		});
+		shoppingList.forEach((key, value) -> productsObservableList.add(value));
 		
 		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
 	}

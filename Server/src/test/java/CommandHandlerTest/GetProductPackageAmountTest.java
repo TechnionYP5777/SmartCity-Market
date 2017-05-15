@@ -47,9 +47,9 @@ public class GetProductPackageAmountTest {
 		CommandWrapper out;
 		
 		try {
-			(Mockito.when(!productPackage.getLocation().equals(PlaceInMarket.WAREHOUSE)
+			Mockito.when(!productPackage.getLocation().equals(PlaceInMarket.WAREHOUSE)
 					? sqlDatabaseConnection.getProductPackageAmonutOnShelves(senderID, productPackage)
-					: sqlDatabaseConnection.getProductPackageAmonutInWarehouse(senderID, productPackage)))
+					: sqlDatabaseConnection.getProductPackageAmonutInWarehouse(senderID, productPackage))
 							.thenReturn("");
 		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog e1) {
 			fail();

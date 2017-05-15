@@ -232,8 +232,8 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 		/* first: getting the product from the server */
 		try {
 			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(id, CommandDescriptor.REMOVE_CUSTOMER,
-						Serialization.serialize(customerProfile.getUserName())).serialize()));
+					new CommandWrapper(id, CommandDescriptor.REMOVE_CUSTOMER,
+							Serialization.serialize(customerProfile.getUserName())).serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 			
@@ -268,8 +268,8 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 		/* first: getting the product from the server */
 		try {
 			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(id, CommandDescriptor.UPDATE_CUSTOMER_PROFILE,
-						Serialization.serialize(p)).serialize()));
+					new CommandWrapper(id, CommandDescriptor.UPDATE_CUSTOMER_PROFILE, Serialization.serialize(p))
+							.serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 			

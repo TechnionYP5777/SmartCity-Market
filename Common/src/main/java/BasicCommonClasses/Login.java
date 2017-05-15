@@ -15,8 +15,8 @@ public class Login {
 		return forgotPasswordData;
 	}
 
-	public void setForgetPassword(ForgotPasswordData p) {
-		this.forgotPasswordData = p;
+	public void setForgetPassword(ForgotPasswordData d) {
+		this.forgotPasswordData = d;
 	}
 
 	ForgotPasswordData forgotPasswordData;

@@ -44,14 +44,8 @@ public class ViewCatalogProductTest {
 		CommandWrapper out;
 		
 		try {
-			Mockito.when(
-					sqlDatabaseConnection.getProductFromCatalog(senderID, smartCode.getBarcode()))
-					.thenReturn("");
-		} catch (CriticalError e) {
-			fail();
-		} catch (ProductNotExistInCatalog e) {
-			fail();
-		} catch (ClientNotConnected e) {
+			Mockito.when(sqlDatabaseConnection.getProductFromCatalog(senderID, smartCode.getBarcode())).thenReturn("");
+		} catch (ClientNotConnected | ProductNotExistInCatalog | CriticalError e) {
 			fail();
 		}
 		
@@ -70,14 +64,9 @@ public class ViewCatalogProductTest {
 		CommandWrapper out;
 		
 		try {
-			Mockito.when(
-					sqlDatabaseConnection.getProductFromCatalog(senderID, smartCode.getBarcode()))
+			Mockito.when(sqlDatabaseConnection.getProductFromCatalog(senderID, smartCode.getBarcode()))
 					.thenThrow(new CriticalError());
-		} catch (CriticalError e) {
-			fail();
-		} catch (ProductNotExistInCatalog e) {
-			fail();
-		} catch (ClientNotConnected e) {
+		} catch (ClientNotConnected | ProductNotExistInCatalog | CriticalError e) {
 			fail();
 		}
 		
@@ -112,14 +101,9 @@ public class ViewCatalogProductTest {
 		CommandWrapper out;
 		
 		try {
-			Mockito.when(
-					sqlDatabaseConnection.getProductFromCatalog(senderID, smartCode.getBarcode()))
+			Mockito.when(sqlDatabaseConnection.getProductFromCatalog(senderID, smartCode.getBarcode()))
 					.thenThrow(new ClientNotConnected());
-		} catch (CriticalError e) {
-			fail();
-		} catch (ClientNotConnected e) {
-			fail();
-		} catch (ProductNotExistInCatalog e) {
+		} catch (ProductNotExistInCatalog | ClientNotConnected | CriticalError e) {
 			fail();
 		}
 		
@@ -138,14 +122,9 @@ public class ViewCatalogProductTest {
 		CommandWrapper out;
 		
 		try {
-			Mockito.when(
-					sqlDatabaseConnection.getProductFromCatalog(senderID, smartCode.getBarcode()))
+			Mockito.when(sqlDatabaseConnection.getProductFromCatalog(senderID, smartCode.getBarcode()))
 					.thenThrow(new ProductNotExistInCatalog());
-		} catch (CriticalError e) {
-			fail();
-		} catch (ClientNotConnected e) {
-			fail();
-		} catch (ProductNotExistInCatalog e) {
+		} catch (ProductNotExistInCatalog | ClientNotConnected | CriticalError e) {
 			fail();
 		}
 		

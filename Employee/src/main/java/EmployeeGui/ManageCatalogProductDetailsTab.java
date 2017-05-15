@@ -129,7 +129,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	}
 
 	@FXML
-	void removeIngrPressed(ActionEvent event) {
+	void removeIngrPressed(ActionEvent __) {
 		selectedIngr.forEach(ing -> {
 			try {
 				manager.removeIngredient(ingredients.get(ing), false);
@@ -144,7 +144,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	}
 
 	@FXML
-	void removeManuPress(ActionEvent event) {
+	void removeManuPress(ActionEvent __) {
 		selectedManu.forEach(man -> {
 			try {
 				manager.removeManufacturer(manufacturars.get(man));
@@ -159,18 +159,14 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	}
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL location, ResourceBundle __) {
 
 		createManufacturerList();
 		createIngredientList();
 
 		filterManu.textProperty().addListener(obs -> {
 			String filter = filterManu.getText();
-			if (filter == null || filter.length() == 0) {
-				filteredDataManu.setPredicate(s -> true);
-			} else {
-				filteredDataManu.setPredicate(s -> s.contains(filter));
-			}
+			filteredDataManu.setPredicate(filter == null || filter.length() == 0 ? s -> true : s -> s.contains(filter));
 		});
 
 		manufacturerList.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
@@ -180,11 +176,10 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 				observable.set(selectedManu.contains(item));
 
 				observable.addListener((obs, wasSelected, isNowSelected) -> {
-					if (isNowSelected) {
+					if (isNowSelected)
 						selectedManu.add(item);
-					} else {
+					else
 						selectedManu.remove(item);
-					}
 					enableButtons();
 
 				});
@@ -194,11 +189,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 		filterIngr.textProperty().addListener(obs -> {
 			String filter = filterIngr.getText();
-			if (filter == null || filter.length() == 0) {
-				filteredDataIngr.setPredicate(s -> true);
-			} else {
-				filteredDataIngr.setPredicate(s -> s.contains(filter));
-			}
+			filteredDataIngr.setPredicate(filter == null || filter.length() == 0 ? s -> true : s -> s.contains(filter));
 		});
 
 		ingredientsList.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
@@ -207,11 +198,10 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 				BooleanProperty observable = new SimpleBooleanProperty();
 				observable.set(selectedIngr.contains(item));
 				observable.addListener((obs, wasSelected, isNowSelected) -> {
-					if (isNowSelected) {
+					if (isNowSelected)
 						selectedIngr.add(item);
-					} else {
+					else
 						selectedIngr.remove(item);
-					}
 					enableButtons();
 
 				});
@@ -224,7 +214,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		okNewManu = new JFXButton("Done!");
 		okNewManu.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent event) {
+			public void handle(ActionEvent __) {
 				addManuPressed();
 			}
 		});
@@ -237,16 +227,14 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		JFXPopup popup1 = new JFXPopup(manuContainer);
 		addManuBtn.setOnMouseClicked(e -> popup1.show(addManuBtn, PopupVPosition.TOP, PopupHPosition.LEFT));
 
-		newManu.textProperty().addListener((observable, oldValue, newValue) -> {
-			enableAddButtons();
-		});
+		newManu.textProperty().addListener((observable, oldValue, newValue) -> enableAddButtons());
 
 		Label lbl2 = new Label("Insert New Ingredient");
 		newIngr = new JFXTextField();
 		okNewIngr = new JFXButton("Done!");
 		okNewIngr.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent event) {
+			public void handle(ActionEvent __) {
 				addIngPressed();
 			}
 		});
@@ -259,9 +247,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		JFXPopup popup2 = new JFXPopup(ingrContainer);
 		addIngrBtn.setOnMouseClicked(e -> popup2.show(addIngrBtn, PopupVPosition.TOP, PopupHPosition.LEFT));
 
-		newIngr.textProperty().addListener((observable, oldValue, newValue) -> {
-			enableAddButtons();
-		});
+		newIngr.textProperty().addListener((observable, oldValue, newValue) -> enableAddButtons());
 
 		enableButtons();
 		enableAddButtons();
@@ -278,9 +264,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		manufacturars = new HashMap<String, Manufacturer>();
 
 		try {
-			manager.getAllManufacturers().forEach(manufacturer -> {
-				manufacturars.put(manufacturer.getName(), manufacturer);
-			});
+			manager.getAllManufacturers().forEach(manufacturer -> manufacturars.put(manufacturer.getName(), manufacturer));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			log.fatal(e.getMessage());
 			e.showInfoToUser();
@@ -302,9 +286,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	private void createIngredientList() {
 		ingredients = new HashMap<String, Ingredient>();
 		try {
-			manager.getAllIngredients().forEach(ingredient -> {
-				ingredients.put(ingredient.getName(), ingredient);
-			});
+			manager.getAllIngredients().forEach(ingredient -> ingredients.put(ingredient.getName(), ingredient));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			log.fatal(e.getMessage());
 			e.showInfoToUser();

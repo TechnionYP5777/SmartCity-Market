@@ -44,8 +44,7 @@ public class ResumeTest {
 		
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond((new CommandWrapper(CustomerDefs.loginCommandSenderId,
-						CommandDescriptor.LOAD_GROCERY_LIST).serialize())))
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOAD_GROCERY_LIST).serialize()))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(groceryList)).serialize());
 		} catch (IOException ¢) {
 			fail();
@@ -64,8 +63,7 @@ public class ResumeTest {
 		
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond((new CommandWrapper(CustomerDefs.loginCommandSenderId,
-						CommandDescriptor.LOAD_GROCERY_LIST).serialize())))
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOAD_GROCERY_LIST).serialize()))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR, Serialization.serialize(groceryList)).serialize());
 		} catch (IOException ¢) {
 			fail();
@@ -86,8 +84,7 @@ public class ResumeTest {
 		
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond((new CommandWrapper(CustomerDefs.loginCommandSenderId,
-						CommandDescriptor.LOAD_GROCERY_LIST).serialize())))
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOAD_GROCERY_LIST).serialize()))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED, Serialization.serialize(groceryList)).serialize());
 		} catch (IOException ¢) {
 			fail();

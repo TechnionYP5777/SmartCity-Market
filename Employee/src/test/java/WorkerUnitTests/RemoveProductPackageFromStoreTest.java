@@ -56,9 +56,9 @@ public class RemoveProductPackageFromStoreTest {
 	public void RemoveProductPackageFromStoreSuccesfulTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE, Serialization.serialize(pp))
+									.serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
 			
@@ -79,9 +79,9 @@ public class RemoveProductPackageFromStoreTest {
 	public void RemoveProductPackageFromStoreInvalidParamsTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE, Serialization.serialize(pp))
+									.serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException ¢) {
 			
@@ -106,9 +106,9 @@ public class RemoveProductPackageFromStoreTest {
 	public void RemoveProductPackageFromStoreEmployeeNotConnectedTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE, Serialization.serialize(pp))
+									.serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException ¢) {
 			
@@ -133,9 +133,9 @@ public class RemoveProductPackageFromStoreTest {
 	public void RemoveProductPackageFromStoreAmountBiggerThanAvailableTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE, Serialization.serialize(pp))
+									.serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE).serialize());
 		} catch (IOException ¢) {
 			
@@ -160,9 +160,9 @@ public class RemoveProductPackageFromStoreTest {
 	public void RemoveProductPackageFromStoreProductNotExistInCatalogTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE, Serialization.serialize(pp))
+									.serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
 		} catch (IOException ¢) {
 			
@@ -187,9 +187,9 @@ public class RemoveProductPackageFromStoreTest {
 	public void RemoveProductPackageFromStoreProductPackageDoesNotExistTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE, Serialization.serialize(pp))
+									.serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_DOES_NOT_EXIST).serialize());
 		} catch (IOException ¢) {
 			
@@ -214,9 +214,9 @@ public class RemoveProductPackageFromStoreTest {
 	public void RemoveProductPackageFromStoreIllegalResultTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE, Serialization.serialize(pp))
+									.serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE).serialize());
 		} catch (IOException ¢) {
 			

@@ -46,15 +46,14 @@ public class ViewProductFromCatalogTest {
 
 	@Test
 	public void ViewProductFromCatalogSuccessfulTest() {
-		CatalogProduct testCatalogProduct = null;
-		CatalogProduct catalogProduct = new CatalogProduct(1234567890, "name", null,
+		CatalogProduct testCatalogProduct = null, catalogProduct = new CatalogProduct(1234567890, "name", null,
 				new Manufacturer(1, "Manufacturer"), "description", 22.0, null, null);
 		CommandWrapper commandWrapper = new CommandWrapper(ResultDescriptor.SM_OK,
 				Serialization.serialize(catalogProduct));
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(new SmartCode(1234567890, null))).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(new SmartCode(1234567890, null))).serialize()))
 					.thenReturn(commandWrapper.serialize());
 		} catch (IOException ¢) {
 			
@@ -78,8 +77,8 @@ public class ViewProductFromCatalogTest {
 	public void ViewProductFromCatalogproductNotFoundTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(new SmartCode(1234567890, null))).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(new SmartCode(1234567890, null))).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
 		} catch (IOException ¢) {
 			
@@ -102,8 +101,8 @@ public class ViewProductFromCatalogTest {
 	public void ViewProductFromCatalogproductSenderIsNotConnectedTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(new SmartCode(1234567890, null))).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(new SmartCode(1234567890, null))).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException ¢) {
 			
@@ -126,8 +125,8 @@ public class ViewProductFromCatalogTest {
 	public void ViewProductFromCatalogproductIllegalResultTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
-							Serialization.serialize(new SmartCode(1234567890, null))).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
+							Serialization.serialize(new SmartCode(1234567890, null))).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE).serialize());
 		} catch (IOException ¢) {
 			

@@ -53,13 +53,9 @@ public class EmployeeLoginScreen implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(loginScreenPane);
-		userNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			enableLoginButtonCheck();
-		});
+		userNameTextField.textProperty().addListener((observable, oldValue, newValue) -> enableLoginButtonCheck());
 
-		passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
-			enableLoginButtonCheck();
-		});
+		passwordField.textProperty().addListener((observable, oldValue, newValue) -> enableLoginButtonCheck());
 		persistenceStore = InjectionFactory.getInstance(XmlPersistentStore.class);
 
 		restoreState();
@@ -103,7 +99,7 @@ public class EmployeeLoginScreen implements Initializable {
 	}
 
 	@FXML
-	void forgetPassPressed(MouseEvent event) {
+	void forgetPassPressed(MouseEvent __) {
 		// TODO call forget
 	}
 

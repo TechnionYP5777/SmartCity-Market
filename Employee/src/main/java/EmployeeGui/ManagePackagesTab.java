@@ -247,11 +247,11 @@ public class ManagePackagesTab implements Initializable {
 	
 
 		radioButtonContainerSmarcodeOperations.addRadioButtons(
-				(Arrays.asList((new RadioButton[] { printSmartCodeRadioButton, addPackageToStoreRadioButton,
-						removePackageFromStoreRadioButton, removePackageFromWarhouseRadioButton }))));
+				Arrays.asList(new RadioButton[] { printSmartCodeRadioButton, addPackageToStoreRadioButton,
+						removePackageFromStoreRadioButton, removePackageFromWarhouseRadioButton }));
 
 		radioButtonContainerBarcodeOperations
-				.addRadioButtons((Arrays.asList((new RadioButton[] { addPakageToWarhouseRadioButton }))));
+				.addRadioButtons(Arrays.asList(new RadioButton[] { addPakageToWarhouseRadioButton }));
 		resetParams();
 		showScanCodePane(true);
 
@@ -358,10 +358,9 @@ public class ManagePackagesTab implements Initializable {
 		getProductCatalog(barcodeTextField.getText());
 
 		int amountInStore = worker
-				.getProductPackageAmount(new ProductPackage(c, 1, new Location(0, 0, PlaceInMarket.STORE)));
-		int amountInWarehouse = worker
-				.getProductPackageAmount(new ProductPackage(c, 1, new Location(0, 0, PlaceInMarket.WAREHOUSE)));
-
+				.getProductPackageAmount(new ProductPackage(c, 1, new Location(0, 0, PlaceInMarket.STORE))),
+				amountInWarehouse = worker
+						.getProductPackageAmount(new ProductPackage(c, 1, new Location(0, 0, PlaceInMarket.WAREHOUSE)));
 		this.amountInStore = amountInStore;
 		this.amountInWarehouse = amountInWarehouse;
 
@@ -369,7 +368,7 @@ public class ManagePackagesTab implements Initializable {
 		showSmartCodeOperationsPane(true);
 
 		addProductParametersToQuickView(catalogProduct.getName(), barcodeTextField.getText(),
-				(c.getExpirationDate() + ""), Integer.toString(amountInStore), Integer.toString(amountInWarehouse));
+				c.getExpirationDate() + "", Integer.toString(amountInStore), Integer.toString(amountInWarehouse));
 		log.info("amount in store: " + amountInStore);
 		log.info("amount in werehouse: " + amountInWarehouse);
 		log.info("===============================smartcodeEntered======================================");
@@ -429,7 +428,7 @@ public class ManagePackagesTab implements Initializable {
 					// exec
 					worker.addProductToWarehouse(pp);
 
-					printToSuccessLog(("Added (" + amountVal + ") " + "product packages (" + pp + ") to warehouse"));
+					printToSuccessLog("Added (" + amountVal + ") " + "product packages (" + pp + ") to warehouse");
 
 					this.expirationDate = datePicker.getValue();
 					searchCodeButtonPressed(null);
@@ -439,14 +438,14 @@ public class ManagePackagesTab implements Initializable {
 				Location loc = new Location(0, 0, PlaceInMarket.STORE);
 				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
 				worker.placeProductPackageOnShelves(pp);
-				printToSuccessLog(("Added (" + amountVal + ") " + "product packages (" + pp + ") to store"));
+				printToSuccessLog("Added (" + amountVal + ") " + "product packages (" + pp + ") to store");
 				searchCodeButtonPressed(null);
 			} else if (removePackageFromStoreRadioButton.isSelected()) {
 				log.info("removePackageFromStoreRadioButton");
 				Location loc = new Location(0, 0, PlaceInMarket.STORE);
 				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
 				worker.removeProductPackageFromStore(pp);
-				printToSuccessLog(("Removed (" + amountVal + ") " + "product packages (" + pp + ") from store"));
+				printToSuccessLog("Removed (" + amountVal + ") " + "product packages (" + pp + ") from store");
 				searchCodeButtonPressed(null);
 			} else if (!removePackageFromWarhouseRadioButton.isSelected()) {
 				if (printSmartCodeRadioButton.isSelected())
@@ -456,7 +455,7 @@ public class ManagePackagesTab implements Initializable {
 				Location loc = new Location(0, 0, PlaceInMarket.WAREHOUSE);
 				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
 				worker.removeProductPackageFromStore(pp);
-				printToSuccessLog(("Removed (" + amountVal + ") " + "product packages (" + pp + ") from warehouse"));
+				printToSuccessLog("Removed (" + amountVal + ") " + "product packages (" + pp + ") from warehouse");
 				searchCodeButtonPressed(null);
 			}
 

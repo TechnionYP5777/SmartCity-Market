@@ -130,7 +130,8 @@ public class ServerWorkerRunnableTest {
 		}
 	}
 	
-	@Test public void ServerWorkerRunnableNullArguments () {
+	@Test
+	@SuppressWarnings("unused") public void ServerWorkerRunnableNullArguments () {
 		boolean success = false;
 		
 		try {
@@ -139,7 +140,7 @@ public class ServerWorkerRunnableTest {
 			success = true;
 		}
 		
-		assertTrue(success);
+		assert success;
 		success = false;
 		
 		try {
@@ -148,6 +149,6 @@ public class ServerWorkerRunnableTest {
 			success = true;
 		}
 			
-		assertTrue(success);
+		assert success;
 	}
 }

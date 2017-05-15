@@ -76,10 +76,6 @@ public abstract class AEmployee {
 			String $ = this.clientRequestHandler.sendRequestWithRespond(request);
 			terminateCommunication();
 			return $;
-		} catch (java.net.SocketTimeoutException e) {
-			log.fatal("Sending logout command to server encounter sever fault : " + e.getMessage());
-			terminateCommunication();
-			throw new ConnectionFailure();
 		} catch (IOException e) {
 			log.fatal("Sending logout command to server encounter sever fault : " + e.getMessage());
 			terminateCommunication();

@@ -110,37 +110,13 @@ public interface ICustomer {
 
 	CartProduct getCartProduct(SmartCode c);
 
-	/**
-	 * @throws CriticalError 
-	 * @throws CustomerNotConnected 
-	 * @throws ProductCatalogDoesNotExist
-	 */
 	CatalogProduct viewCatalogProduct(SmartCode c) throws CriticalError, CustomerNotConnected, ProductCatalogDoesNotExist;
 	
-	/**
-	 * @throws ProductNotInCart 
-	 * @throws CriticalError 
-	 * 
-	 */
 	void removeAllItemsOfCartProduct(SmartCode c) throws ProductNotInCart, CriticalError;
 	
-	/**
-	 * @throws InvalidParameter
-	 * @throws ProductNotInCart 
-	 * @throws CriticalError 
-	 * 
-	 */
 	void registerNewCustomer(CustomerProfile p) throws CriticalError, InvalidParameter, UsernameAlreadyExists;
 	
-	/**
-	 * @throws CriticalError 
-	 * 
-	 */
 	List<Ingredient> getAllIngredients() throws CriticalError;
 	
-	/**
-	 * @throws CriticalError 
-	 * 
-	 */
 	Boolean isFreeUsername(String username) throws CriticalError;
 }

@@ -42,18 +42,15 @@ public class CartProduct {
 		this.totalAmount = totalAmount;
 	}
 	
-	/**
-	 * @param p
-	 */
 	public void addProductPackage(ProductPackage p) {
 		SmartCode sc = p.getSmartCode();
 		ProductPackage inCartProductPackage = packages.get(sc);
-		if ( inCartProductPackage != null) {
+		if (inCartProductPackage == null)
+			packages.put(sc, p);
+		else {
 			inCartProductPackage.incrementAmount(p.getAmount());
 			packages.put(sc, inCartProductPackage);
 		}
-		else
-			packages.put(sc, p);
 		totalAmount += p.getAmount();
 	}
 	

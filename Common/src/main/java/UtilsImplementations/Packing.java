@@ -40,8 +40,7 @@ public class Packing {
 				if (!file.isFile())
 					continue;
 
-				String filename = file.getName();
-				String filepath = file.getAbsolutePath();
+				String filename = file.getName(), filepath = file.getAbsolutePath();
 				long filesize = file.length(); // size in bytes
 
 				log.info("Zipping and adding: " + filename + " into " + zipFilePath);

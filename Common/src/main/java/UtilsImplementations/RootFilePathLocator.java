@@ -15,7 +15,7 @@ public class RootFilePathLocator implements IFilePathLocator {
 	@Override
 	public String getFilePath(Class<?> bundleClass, String relativePath) {
 		Path currentRelativePath = Paths.get("");
-		String absolutePath = currentRelativePath.toAbsolutePath().toString();
+		String absolutePath = currentRelativePath.toAbsolutePath() + "";
 		File file = new File(absolutePath, relativePath);
 		return file.getPath();
 	}

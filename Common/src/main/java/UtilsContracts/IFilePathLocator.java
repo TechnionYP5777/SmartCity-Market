@@ -25,8 +25,8 @@ public interface IFilePathLocator {
 	 * @param relativeFilePath fileName from root directory 
 	 * @return
 	 */
-	public String getFilePath(String pluginId, String relativeFilePath);
+	String getFilePath(String pluginId, String relativeFilePath);
 	
-	public boolean isExists(Class<?> contextClass, String relativeFilePath);
-	public boolean isExists(String pluginId, String relativeFilePath);
+	boolean isExists(Class<?> contextClass, String relativeFilePath);
+	boolean isExists(String pluginId, String relativeFilePath);
 }

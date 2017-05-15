@@ -33,17 +33,17 @@ public class QuestionScreenController implements Initializable {
     private JFXButton prevBtn;
 
     @FXML
-    void nextBtnPressed(ActionEvent event) {
+    void nextBtnPressed(ActionEvent __) {
 
     }
 
     @FXML
-    void prevBtnPressed(ActionEvent event) {
+    void prevBtnPressed(ActionEvent __) {
 
     }
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL location, ResourceBundle __) {
 		
 		
 	}

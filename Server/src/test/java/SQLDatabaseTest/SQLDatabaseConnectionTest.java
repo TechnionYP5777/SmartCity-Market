@@ -77,9 +77,8 @@ public class SQLDatabaseConnectionTest {
 	public void teardown() {
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		ProductPackage productPackage = new ProductPackage(new SmartCode(barcodeDebug, date112000), 5,
-				locationWarehouse);
-		ProductPackage productPackage2 = new ProductPackage(new SmartCode(barcodeDebug, date232015), 5,
-				locationWarehouse);
+				locationWarehouse),
+				productPackage2 = new ProductPackage(new SmartCode(barcodeDebug, date232015), 5, locationWarehouse);
 		try {
 			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
 			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
@@ -188,9 +187,7 @@ public class SQLDatabaseConnectionTest {
 
 		try {
 			sqlConnection.getProductFromCatalog(session, 1234567890);
-		} catch (ProductNotExistInCatalog | CriticalError e) {
-			fail();
-		} catch (ClientNotConnected e) {
+		} catch (ClientNotConnected | ProductNotExistInCatalog | CriticalError e) {
 			fail();
 		}
 
@@ -224,9 +221,7 @@ public class SQLDatabaseConnectionTest {
 
 		try {
 			sqlConnection.getProductFromCatalog(session, 1234567890);
-		} catch (ProductNotExistInCatalog | CriticalError e) {
-			fail();
-		} catch (ClientNotConnected e) {
+		} catch (ClientNotConnected | ProductNotExistInCatalog | CriticalError e) {
 			fail();
 		}
 
@@ -587,10 +582,8 @@ public class SQLDatabaseConnectionTest {
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 
 		ProductPackage productPackage = new ProductPackage(new SmartCode(barcodeDebug, date112000), 5,
-				locationWarehouse);
-		ProductPackage productPackageShelf = new ProductPackage(new SmartCode(barcodeDebug, date112000), 2,
-				locationWarehouse);
-
+				locationWarehouse),
+				productPackageShelf = new ProductPackage(new SmartCode(barcodeDebug, date112000), 2, locationWarehouse);
 		try {
 			sqlConnection.addProductPackageToWarehouse(null, productPackage);
 			assertEquals("5", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
@@ -627,14 +620,14 @@ public class SQLDatabaseConnectionTest {
 		int session = 0;
 		try {
 			session = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
-			assertTrue(sqlConnection.isClientLoggedIn(session));
+			assert sqlConnection.isClientLoggedIn(session);
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
 			fail();
 		}
 
 		try {
 			sqlConnection.logout(session, ClientServerDefs.anonymousCustomerUsername);
-			assertFalse(sqlConnection.isClientLoggedIn(session));
+			assert !sqlConnection.isClientLoggedIn(session);
 		} catch (CriticalError | ClientNotConnected e) {
 			fail();
 		}
@@ -649,7 +642,7 @@ public class SQLDatabaseConnectionTest {
 
 		try {
 			session = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
-			assertTrue(sqlConnection.isClientLoggedIn(session));
+			assert sqlConnection.isClientLoggedIn(session);
 			assertEquals(new Gson().toJson(CLIENT_TYPE.CART), sqlConnection.getClientType(session));
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded
 				| ClientNotConnected e) {
@@ -658,7 +651,7 @@ public class SQLDatabaseConnectionTest {
 
 		try {
 			sqlConnection.logout(session, ClientServerDefs.anonymousCustomerUsername);
-			assertFalse(sqlConnection.isClientLoggedIn(session));
+			assert !sqlConnection.isClientLoggedIn(session);
 		} catch (CriticalError | ClientNotConnected e) {
 			fail();
 		}
@@ -684,8 +677,8 @@ public class SQLDatabaseConnectionTest {
 
 			list = Serialization.deserializeManufacturersHashSet(sqlConnection.getManufacturersList(null));
 
-			assertTrue(list.contains(new Manufacturer(1, "תנובה")));
-			assertTrue(list.contains(new Manufacturer(2, "מאפיות ברמן")));
+			assert list.contains(new Manufacturer(1, "תנובה"));
+			assert list.contains(new Manufacturer(2, "מאפיות ברמן"));
 		} catch (CriticalError | ClientNotConnected e) {
 			fail();
 		}
@@ -984,10 +977,8 @@ public class SQLDatabaseConnectionTest {
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 
 		ProductPackage productPackage = new ProductPackage(new SmartCode(barcodeDebug, date112000), 5,
-				locationWarehouse);
-		ProductPackage productPackageCart = new ProductPackage(new SmartCode(barcodeDebug, date112000), 2,
-				locationWarehouse);
-
+				locationWarehouse),
+				productPackageCart = new ProductPackage(new SmartCode(barcodeDebug, date112000), 2, locationWarehouse);
 		int cartSession = 0;
 
 		try {
@@ -1079,7 +1070,7 @@ public class SQLDatabaseConnectionTest {
 		int session = 0;
 		try {
 			session = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
-			assertTrue(sqlConnection.isClientLoggedIn(session));
+			assert sqlConnection.isClientLoggedIn(session);
 		} catch (AuthenticationError | CriticalError | ClientAlreadyConnected | NumberOfConnectionsExceeded e) {
 			fail();
 		}
@@ -1123,7 +1114,7 @@ public class SQLDatabaseConnectionTest {
 
 		try {
 			sqlConnection.logout(session, ClientServerDefs.anonymousCustomerUsername);
-			assertFalse(sqlConnection.isClientLoggedIn(session));
+			assert !sqlConnection.isClientLoggedIn(session);
 			assertEquals("5", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
 			sqlConnection.removeProductPackageFromShelves(null, productPackage);
 			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
@@ -1144,7 +1135,7 @@ public class SQLDatabaseConnectionTest {
 		int session = 0;
 		try {
 			session = sqlConnection.login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
-			assertTrue(sqlConnection.isClientLoggedIn(session));
+			assert sqlConnection.isClientLoggedIn(session);
 			sqlConnection.addProductPackageToWarehouse(null, productPackage);
 			sqlConnection.placeProductPackageOnShelves(null, productPackage);
 			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
@@ -1162,7 +1153,7 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.cartCheckout(session);
 			assertEquals("0", sqlConnection.getProductPackageAmonutInWarehouse(null, productPackage));
 			assertEquals("0", sqlConnection.getProductPackageAmonutOnShelves(null, productPackage));
-			assertFalse(sqlConnection.isClientLoggedIn(session));
+			assert !sqlConnection.isClientLoggedIn(session);
 		} catch (CriticalError | ClientNotConnected | GroceryListIsEmpty | ProductNotExistInCatalog e) {
 			fail();
 		}
@@ -1186,10 +1177,10 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		}
 		
-		assertNotNull(result);
+		assert result != null;
 		HashSet<Ingredient> set = Serialization.deserializeIngredientHashSet(result);
-		assertNotNull(set);
-		assertTrue(set.isEmpty());
+		assert set != null;
+		assert set.isEmpty();
 	}
 	
 	
@@ -1212,10 +1203,10 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		}
 		
-		assertNotNull(result);
+		assert result != null;
 		HashSet<Ingredient> set = Serialization.deserializeIngredientHashSet(result);
-		assertNotNull(set);	
-		assertTrue(set.contains(ingredient));
+		assert set != null;	
+		assert set.contains(ingredient);
 		
 		//test remove ingredient
 		try {
@@ -1226,10 +1217,10 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		}
 		
-		assertNotNull(result);
+		assert result != null;
 		set = Serialization.deserializeIngredientHashSet(result);
-		assertNotNull(set);
-		assertFalse(set.contains(ingredient));
+		assert set != null;
+		assert !set.contains(ingredient);
 	}
 	
 	@Test
@@ -1268,10 +1259,10 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		}
 		
-		assertNotNull(result);
+		assert result != null;
 		HashSet<Manufacturer> set = Serialization.deserializeManufacturersHashSet(result);
-		assertNotNull(set);	
-		assertTrue(set.contains(manufacturer));
+		assert set != null;	
+		assert set.contains(manufacturer);
 		
 		//test remove ingredient
 		try {
@@ -1282,10 +1273,10 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		}
 		
-		assertNotNull(result);
+		assert result != null;
 		set = Serialization.deserializeManufacturersHashSet(result);
-		assertNotNull(set);
-		assertFalse(set.contains(manufacturer));
+		assert set != null;
+		assert !set.contains(manufacturer);
 	}
 	
 	@Test
@@ -1322,10 +1313,10 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		}
 		
-		assertNotNull(result);
+		assert result != null;
 		HashMap<String, Boolean> map = Serialization.deserializeWorkersHashMap(result);
-		assertNotNull(map);	
-		assertTrue(map.containsKey(workerName));
+		assert map != null;	
+		assert map.containsKey(workerName);
 		assertEquals(false, map.get(workerName));
 		
 		//test remove worker
@@ -1338,10 +1329,10 @@ public class SQLDatabaseConnectionTest {
 		}
 		
 		
-		assertNotNull(result);
+		assert result != null;
 		map = Serialization.deserializeWorkersHashMap(result);
-		assertNotNull(map);	
-		assertFalse(map.containsKey(workerName));
+		assert map != null;	
+		assert !map.containsKey(workerName);
 
 	}
 	
@@ -1377,10 +1368,10 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		}
 		
-		assertNotNull(result);
+		assert result != null;
 		HashMap<String, Boolean> map = Serialization.deserializeWorkersHashMap(result);
-		assertNotNull(map);	
-		assertTrue(map.containsKey(workerName));
+		assert map != null;	
+		assert map.containsKey(workerName);
 		assertEquals(false, map.get(workerName));
 		
 		//test add again the same worker
@@ -1403,10 +1394,10 @@ public class SQLDatabaseConnectionTest {
 		}
 		
 		
-		assertNotNull(result);
+		assert result != null;
 		map = Serialization.deserializeWorkersHashMap(result);
-		assertNotNull(map);	
-		assertFalse(map.containsKey(workerName));
+		assert map != null;	
+		assert !map.containsKey(workerName);
 
 	}
 	

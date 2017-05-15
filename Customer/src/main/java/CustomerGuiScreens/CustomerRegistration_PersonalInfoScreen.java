@@ -74,68 +74,48 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 
     
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL location, ResourceBundle __) {
 		
 		AbstractApplicationScreen.fadeTransition(personalInfoScreenPane);
-		if (TempCustomerProfilePassingData.customerProfile == null)
-			TempCustomerProfilePassingData.customerProfile = InjectionFactory.getInstance(CustomerProfile.class);
-		else {
+		if (TempCustomerProfilePassingData.customerProfile != null)
 			updateFields();
-		}
+		else
+			TempCustomerProfilePassingData.customerProfile = InjectionFactory.getInstance(CustomerProfile.class);
 
 		userNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (validNewUserName(newValue))
 				TempCustomerProfilePassingData.customerProfile.setUserName(newValue);
-			else {
+			else
 				DialogMessagesService.showErrorDialog(GuiCommonDefs.registrationFieldFailureTitle, null,
 						GuiCommonDefs.registrationUsedUserName);
-			}
 				
 		});
 
-		passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
-			TempCustomerProfilePassingData.password = newValue;
-		});
+		passwordField.textProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.password = newValue);
 		
 		repeatPassField.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (!passwordField.getText().equals(newValue) && (newValue!= null && !newValue.equals(""))) {
+			if (passwordField.getText().equals(newValue) || newValue == null || "".equals(newValue))
+				nextButton.setDisable(false);
+			else {
 				DialogMessagesService.showErrorDialog(GuiCommonDefs.registrationFieldFailureTitle, null,
 						GuiCommonDefs.registrationWrongRepeatedPass);
 				nextButton.setDisable(true);
 			}
-
-			else {
-				nextButton.setDisable(false);
-			}
 		});
 		
-		firstNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			TempCustomerProfilePassingData.customerProfile.setFirstName(newValue);
-		});
+		firstNameTextField.textProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.customerProfile.setFirstName(newValue));
 		
-		lastNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			TempCustomerProfilePassingData.customerProfile.setLastName(newValue);
-		});
+		lastNameTextField.textProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.customerProfile.setLastName(newValue));
 		
-		phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			TempCustomerProfilePassingData.customerProfile.setPhoneNumber(newValue);
-		});
+		phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.customerProfile.setPhoneNumber(newValue));
 		
-		emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			TempCustomerProfilePassingData.customerProfile.setEmailAddress(newValue);
-		});		
+		emailTextField.textProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.customerProfile.setEmailAddress(newValue));		
 		
-		cityTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			TempCustomerProfilePassingData.customerProfile.setCity(newValue);
-		});
+		cityTextField.textProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.customerProfile.setCity(newValue));
 		
-		streetTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			TempCustomerProfilePassingData.customerProfile.setStreet(newValue);
-		});
+		streetTextField.textProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.customerProfile.setStreet(newValue));
 		
-		birthDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-			TempCustomerProfilePassingData.customerProfile.setBirthdate(newValue);
-		});
+		birthDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.customerProfile.setBirthdate(newValue));
 	}
 
 	private boolean validNewUserName(String username) {
@@ -179,18 +159,17 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 	}
 	
 	@FXML
-    void nextButtonPressed(ActionEvent event) {
+    void nextButtonPressed(ActionEvent __) {
 	  	if (checkFieldsVadility())
 			AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_IngredientsScreen.fxml");
   	}
 
 	private boolean checkFieldsVadility() {
-		if (!passwordField.getText().equals(repeatPassField.getText())) {
-			DialogMessagesService.showErrorDialog(GuiCommonDefs.registrationFieldFailureTitle, null,
-					GuiCommonDefs.registrationWrongRepeatedPass);
-			nextButton.setDisable(true);
-			return false;
-		}
-		return true;
+		if (passwordField.getText().equals(repeatPassField.getText()))
+			return true;
+		DialogMessagesService.showErrorDialog(GuiCommonDefs.registrationFieldFailureTitle, null,
+				GuiCommonDefs.registrationWrongRepeatedPass);
+		nextButton.setDisable(true);
+		return false;
 	}
 }

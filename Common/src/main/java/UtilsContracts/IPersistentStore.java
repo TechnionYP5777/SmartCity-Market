@@ -7,21 +7,7 @@ package UtilsContracts;
 
 public interface IPersistentStore {
 
-	/**
-	 * @param requester
-	 * @param objectToStore
-	 * 
-	 * @throws Exception
-	 */
 	void storeObject(Object requester, Object objectToStore) throws Exception;
 	
-	/**
-	 * @param requester
-	 * @param restoredType
-	 * 
-	 * @return
-	 * 
-	 * @throws Exception
-	 */
 	<TObject> TObject restoreObject(Object requester, Class<TObject> restoredType) throws Exception;
 }

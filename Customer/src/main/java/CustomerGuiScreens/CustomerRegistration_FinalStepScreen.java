@@ -55,23 +55,20 @@ public class CustomerRegistration_FinalStepScreen implements Initializable {
     private JFXTextArea termsTextArea;
     
     @FXML
-    void backButtonPressed(ActionEvent event) {
+    void backButtonPressed(ActionEvent __) {
 		AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_IngredientsScreen.fxml");
     }
 
     @Override
-   	public void initialize(URL location, ResourceBundle resources) {
+   	public void initialize(URL location, ResourceBundle __) {
    		AbstractApplicationScreen.fadeTransition(finalStepScreenPane);
    		loadTerms();
    		registerButton.setDisable(true);
    		final_acceptChecKBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
 			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				if (newValue) 
-					registerButton.setDisable(false);
-				else
-					registerButton.setDisable(true);
+			public void changed(ObservableValue<? extends Boolean> __, Boolean oldValue, Boolean newValue) {
+				registerButton.setDisable(!newValue);
 			}
    		
    		});
@@ -88,13 +85,12 @@ public class CustomerRegistration_FinalStepScreen implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	for (String line: lines ) {
-    		termsTextArea.appendText(line + "\n");
-    	}
+    	for (String line: lines )
+			termsTextArea.appendText(line + "\n");
 	}
 
 	@FXML
-    void registerButtonPressed(ActionEvent event) {
+    void registerButtonPressed(ActionEvent __) {
 		ICustomer customer = InjectionFactory.getInstance(Customer.class);
 		ICustomerProfile iProfile = TempCustomerProfilePassingData.customerProfile;
 		CustomerProfile profile = new CustomerProfile(iProfile.getUserName(),TempCustomerProfilePassingData.password, iProfile.getFirstName(),

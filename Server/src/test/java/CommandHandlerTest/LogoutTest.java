@@ -35,17 +35,14 @@ public class LogoutTest {
 	@Test
 	public void logoutSuccessfulTest() {
 		int senderID = 0;
-		String userName = "admin";
-		String command = new CommandWrapper(senderID, CommandDescriptor.LOGOUT,
+		String userName = "admin", command = new CommandWrapper(senderID, CommandDescriptor.LOGOUT,
 				new Gson().toJson(userName, String.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
 		
 		try {
 			Mockito.doNothing().when(sqlDatabaseConnection).logout(senderID, userName);
-		} catch (ClientNotConnected e) {
-			fail();
-		} catch (CriticalError e) {
+		} catch (CriticalError | ClientNotConnected e) {
 			fail();
 		}
 		
@@ -57,18 +54,14 @@ public class LogoutTest {
 	@Test
 	public void logoutWorkerNotConnectedTest() {
 		int senderID = 99999999;
-		String userName = "admin";
-		String command = new CommandWrapper(senderID, CommandDescriptor.LOGOUT,
+		String userName = "admin", command = new CommandWrapper(senderID, CommandDescriptor.LOGOUT,
 				new Gson().toJson(userName, String.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
 		
 		try {
-			Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection)
-					.logout(senderID, userName);
-		} catch (CriticalError e) {
-			fail();
-		} catch (ClientNotConnected e) {
+			Mockito.doThrow(new ClientNotConnected()).when(sqlDatabaseConnection).logout(senderID, userName);
+		} catch (ClientNotConnected | CriticalError e) {
 			fail();
 		}
 		
@@ -80,18 +73,14 @@ public class LogoutTest {
 	@Test
 	public void logoutCriticalErrorTest() {
 		int senderID = 0;
-		String userName = "unknown";
-		String command = new CommandWrapper(senderID, CommandDescriptor.LOGOUT,
+		String userName = "unknown", command = new CommandWrapper(senderID, CommandDescriptor.LOGOUT,
 				new Gson().toJson(userName, String.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
 		
 		try {
-			Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection)
-					.logout(senderID, userName);
-		} catch (CriticalError e) {
-			fail();
-		} catch (ClientNotConnected e) {
+			Mockito.doThrow(new CriticalError()).when(sqlDatabaseConnection).logout(senderID, userName);
+		} catch (ClientNotConnected | CriticalError e) {
 			fail();
 		}
 		

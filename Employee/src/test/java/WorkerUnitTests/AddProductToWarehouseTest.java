@@ -52,9 +52,8 @@ public class AddProductToWarehouseTest {
 	public void AddProductToWarehouseSuccessfulTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE, Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
 			
@@ -73,9 +72,8 @@ public class AddProductToWarehouseTest {
 	public void AddProductToWarehouseInvalidParameterTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE, Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException ¢) {
 			
@@ -98,9 +96,8 @@ public class AddProductToWarehouseTest {
 	public void AddProductToWarehouseEmployeeNotConnectedTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE, Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException ¢) {
 			
@@ -123,9 +120,8 @@ public class AddProductToWarehouseTest {
 	public void AddProductToWarehouseProductNotExistInCatalogTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE, Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
 		} catch (IOException ¢) {
 			
@@ -148,9 +144,8 @@ public class AddProductToWarehouseTest {
 	public void AddProductToWarehouseProductIllegalResultTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE, Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_STILL_FOR_SALE).serialize());
 		} catch (IOException ¢) {
 			

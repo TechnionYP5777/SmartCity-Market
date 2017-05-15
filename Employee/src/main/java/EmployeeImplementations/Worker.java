@@ -65,8 +65,8 @@ public class Worker extends AEmployee implements IWorker {
 			throws InvalidParameter, CriticalError, EmployeeAlreadyConnected, AuthenticationError, ConnectionFailure {
 		CommandWrapper $ = null;
 		log.info("Creating login command wrapper with username: " + username + " and password: " + password);
-		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(WorkerDefs.loginCommandSenderId,
-				CommandDescriptor.LOGIN_EMPLOYEE, Serialization.serialize(new Login(username, password))).serialize()));
+		String serverResponse = sendRequestWithRespondToServer(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.LOGIN_EMPLOYEE,
+				Serialization.serialize(new Login(username, password))).serialize());
 
 		try {
 			$ = getCommandWrapper(serverResponse);
@@ -145,8 +145,8 @@ public class Worker extends AEmployee implements IWorker {
 			throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ConnectionFailure {
 		log.info("Creating viewProductFromCatalog command wrapper with barcode: " + barcode);
 		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(getClientId(), CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
-						Serialization.serialize(new SmartCode(barcode, null))).serialize()));
+				new CommandWrapper(getClientId(), CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
+						Serialization.serialize(new SmartCode(barcode, null))).serialize());
 
 		CommandWrapper $ = getCommandWrapper(serverResponse);
 		try {
@@ -167,8 +167,8 @@ public class Worker extends AEmployee implements IWorker {
 	public void addProductToWarehouse(ProductPackage p)
 			throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog, ConnectionFailure {
 		log.info("Creating addProductToWarehouse command wrapper with product package: " + p);
-		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(getClientId(),
-				CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE, Serialization.serialize(p)).serialize()));
+		String serverResponse = sendRequestWithRespondToServer(new CommandWrapper(getClientId(), CommandDescriptor.ADD_PRODUCT_PACKAGE_TO_WAREHOUSE,
+				Serialization.serialize(p)).serialize());
 
 		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 		try {
@@ -189,8 +189,8 @@ public class Worker extends AEmployee implements IWorker {
 			throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
 			AmountBiggerThanAvailable, ProductPackageDoesNotExist, ConnectionFailure {
 		log.info("Creating placeProductPackageOnShelves command wrapper with product package: " + p);
-		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(getClientId(),
-				CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES, Serialization.serialize(p)).serialize()));
+		String serverResponse = sendRequestWithRespondToServer(new CommandWrapper(getClientId(), CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES,
+				Serialization.serialize(p)).serialize());
 
 		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 		try {
@@ -210,8 +210,8 @@ public class Worker extends AEmployee implements IWorker {
 			throws InvalidParameter, CriticalError, EmployeeNotConnected, ProductNotExistInCatalog,
 			AmountBiggerThanAvailable, ProductPackageDoesNotExist, ConnectionFailure {
 		log.info("Creating removeProductPackageFromStore command wrapper with product package: " + p);
-		String serverResponse = sendRequestWithRespondToServer((new CommandWrapper(getClientId(),
-				CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE, Serialization.serialize(p)).serialize()));
+		String serverResponse = sendRequestWithRespondToServer(new CommandWrapper(getClientId(), CommandDescriptor.REMOVE_PRODUCT_PACKAGE_FROM_STORE,
+				Serialization.serialize(p)).serialize());
 		
 		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
 		try {
@@ -231,8 +231,8 @@ public class Worker extends AEmployee implements IWorker {
 			ProductPackageDoesNotExist, ConnectionFailure {
 		log.info("Creating getProductPackageAmount command wrapper with product package: " + p);
 		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(getClientId(), CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT, Serialization.serialize(p))
-						.serialize()));
+				new CommandWrapper(getClientId(), CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
+						Serialization.serialize(p)).serialize());
 
 		CommandWrapper $ = getCommandWrapper(serverResponse);
 		try {

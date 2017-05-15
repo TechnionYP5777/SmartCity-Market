@@ -56,9 +56,8 @@ public class PlaceProductPackageOnShelvesTest {
 	public void PlaceProductPackageOnShelvesSuccesfulTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES, Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
 			
@@ -79,9 +78,8 @@ public class PlaceProductPackageOnShelvesTest {
 	public void PlaceProductPackageOnShelvesInvalidParamsTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES, Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_PARAMETER).serialize());
 		} catch (IOException ¢) {
 			
@@ -106,9 +104,8 @@ public class PlaceProductPackageOnShelvesTest {
 	public void PlaceProductPackageOnShelvesEmployeeNotConnectedTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES, Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException ¢) {
 			
@@ -133,9 +130,8 @@ public class PlaceProductPackageOnShelvesTest {
 	public void PlaceProductPackageOnShelvesAmountBiggerThanAvailableTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES, Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_AMOUNT_BIGGER_THEN_AVAILABLE).serialize());
 		} catch (IOException ¢) {
 			
@@ -160,9 +156,8 @@ public class PlaceProductPackageOnShelvesTest {
 	public void PlaceProductPackageOnShelvesProductNotExistInCatalogTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES, Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_CATALOG_PRODUCT_DOES_NOT_EXIST).serialize());
 		} catch (IOException ¢) {
 			
@@ -187,9 +182,8 @@ public class PlaceProductPackageOnShelvesTest {
 	public void PlaceProductPackageOnShelvesProductPackageDoesNotExistTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES, Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_PRODUCT_PACKAGE_DOES_NOT_EXIST).serialize());
 		} catch (IOException ¢) {
 			
@@ -214,9 +208,8 @@ public class PlaceProductPackageOnShelvesTest {
 	public void PlaceProductPackageOnShelvesIllegalResultTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					(new CommandWrapper(WorkerDefs.loginCommandSenderId, 
-							CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES,
-							Serialization.serialize(pp)).serialize())))
+					new CommandWrapper(WorkerDefs.loginCommandSenderId,
+							CommandDescriptor.PLACE_PRODUCT_PACKAGE_ON_SHELVES, Serialization.serialize(pp)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_MANUFACTURER_STILL_IN_USE).serialize());
 		} catch (IOException ¢) {
 			

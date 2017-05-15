@@ -29,17 +29,17 @@ public class UserNameScreenController implements Initializable {
     private JFXButton dismissBtn;
 
     @FXML
-    void dismissBtnPressed(ActionEvent event) {
+    void dismissBtnPressed(ActionEvent __) {
 
     }
 
     @FXML
-    void nextBtnPressed(ActionEvent event) {
+    void nextBtnPressed(ActionEvent __) {
 
     }
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL location, ResourceBundle __) {
 
 		
 	}

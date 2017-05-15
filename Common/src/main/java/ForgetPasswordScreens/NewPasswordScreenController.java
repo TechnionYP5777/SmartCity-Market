@@ -29,17 +29,17 @@ public class NewPasswordScreenController implements Initializable {
     private JFXButton prevBtn;
 
     @FXML
-    void finishBtnPressed(ActionEvent event) {
+    void finishBtnPressed(ActionEvent __) {
 
     }
 
     @FXML
-    void prevBtnPressed(ActionEvent event) {
+    void prevBtnPressed(ActionEvent __) {
 
     }
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL location, ResourceBundle __) {
 	
 		
 	}

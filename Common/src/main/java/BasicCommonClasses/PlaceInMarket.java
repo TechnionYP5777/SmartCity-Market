@@ -14,9 +14,12 @@ public enum PlaceInMarket {
 	@Override
 	public String toString() {
 		switch (this) {
-			case WAREHOUSE: return "WAREHOUSE";
-			case STORE: return "STORE";
-			default: return "";
+		case STORE:
+			return "STORE";
+		case WAREHOUSE:
+			return "WAREHOUSE";
+		default:
+			return "";
 		}
 	}
 }

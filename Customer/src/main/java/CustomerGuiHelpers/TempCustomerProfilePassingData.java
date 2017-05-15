@@ -9,6 +9,6 @@ import BasicCommonClasses.ICustomerProfile;
  * @since 2017-01-16 
  */
 public class TempCustomerProfilePassingData {
-	public static ICustomerProfile customerProfile = null;
-	public static String password = null;
+	public static ICustomerProfile customerProfile;
+	public static String password;
 }

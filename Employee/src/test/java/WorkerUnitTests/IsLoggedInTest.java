@@ -43,8 +43,7 @@ public class IsLoggedInTest {
 	public void isLoggedInSuccessfulTest() {		
 		try {
 			Mockito.when(
-					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
-							CommandDescriptor.IS_LOGGED_IN).serialize())))
+					clientRequestHandler.sendRequestWithRespond(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.IS_LOGGED_IN).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(answer)).serialize());
 		} catch (IOException ¢) {
 			
@@ -62,8 +61,7 @@ public class IsLoggedInTest {
 	public void isLoggedInCriticalErrorTest() {		
 		try {
 			Mockito.when(
-					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
-							CommandDescriptor.IS_LOGGED_IN).serialize())))
+					clientRequestHandler.sendRequestWithRespond(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.IS_LOGGED_IN).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR, Serialization.serialize(answer)).serialize());
 		} catch (IOException ¢) {
 			
@@ -83,8 +81,7 @@ public class IsLoggedInTest {
 	public void isLoggedInIllegalResultTest() {		
 		try {
 			Mockito.when(
-					clientRequestHandler.sendRequestWithRespond((new CommandWrapper(WorkerDefs.loginCommandSenderId,
-							CommandDescriptor.IS_LOGGED_IN).serialize())))
+					clientRequestHandler.sendRequestWithRespond(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.IS_LOGGED_IN).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INGREDIENT_STILL_IN_USE, Serialization.serialize(answer)).serialize());
 		} catch (IOException ¢) {
 			

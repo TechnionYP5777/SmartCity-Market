@@ -44,16 +44,8 @@ public class LoginTest {
 		CommandWrapper out;
 		
 		try {
-			Mockito.when(
-					sqlDatabaseConnection.login(login.getUserName(), login.getPassword()))
-					.thenReturn(senderID);
-		} catch (AuthenticationError e) {
-			fail();
-		} catch (CriticalError e) {
-			fail();
-		} catch (ClientAlreadyConnected e) {
-			fail();
-		} catch (NumberOfConnectionsExceeded e) {
+			Mockito.when(sqlDatabaseConnection.login(login.getUserName(), login.getPassword())).thenReturn(senderID);
+		} catch (NumberOfConnectionsExceeded | ClientAlreadyConnected | CriticalError | AuthenticationError e) {
 			fail();
 		}
 		
@@ -72,16 +64,9 @@ public class LoginTest {
 		CommandWrapper out;
 		
 		try {
-			Mockito.when(
-					sqlDatabaseConnection.login(login.getUserName(), login.getPassword()))
-			       .thenThrow(new AuthenticationError());
-		} catch (AuthenticationError e) {
-			fail();
-		} catch (CriticalError e) {
-			fail();
-		} catch (ClientAlreadyConnected e) {
-			fail();
-		} catch (NumberOfConnectionsExceeded e) {
+			Mockito.when(sqlDatabaseConnection.login(login.getUserName(), login.getPassword()))
+					.thenThrow(new AuthenticationError());
+		} catch (NumberOfConnectionsExceeded | ClientAlreadyConnected | CriticalError | AuthenticationError e) {
 			fail();
 		}
 		
@@ -99,16 +84,9 @@ public class LoginTest {
 		CommandWrapper out;
 		
 		try {
-			Mockito.when(
-					sqlDatabaseConnection.login(login.getUserName(), login.getPassword()))
-			       .thenThrow(new CriticalError());
-		} catch (AuthenticationError e) {
-			fail();
-		} catch (CriticalError e) {
-			fail();
-		} catch (ClientAlreadyConnected e) {
-			fail();
-		} catch (NumberOfConnectionsExceeded e) {
+			Mockito.when(sqlDatabaseConnection.login(login.getUserName(), login.getPassword()))
+					.thenThrow(new CriticalError());
+		} catch (NumberOfConnectionsExceeded | ClientAlreadyConnected | CriticalError | AuthenticationError e) {
 			fail();
 		}
 		
@@ -121,7 +99,7 @@ public class LoginTest {
 	public void loginInvalidUserNameTest() {
 		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER,
 				(new CommandExecuter(new CommandWrapper(0, CommandDescriptor.LOGIN,
-						new Gson().toJson((new Login("", "admin")), Login.class)).serialize()))
+						new Gson().toJson(new Login("", "admin"), Login.class)).serialize()))
 								.execute(sqlDatabaseConnection).getResultDescriptor());
 	}
 	
@@ -129,7 +107,7 @@ public class LoginTest {
 	public void loginInvalidPasswordTest() {
 		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER,
 				(new CommandExecuter(new CommandWrapper(0, CommandDescriptor.LOGIN,
-						new Gson().toJson((new Login("admin", "")), Login.class)).serialize()))
+						new Gson().toJson(new Login("admin", ""), Login.class)).serialize()))
 								.execute(sqlDatabaseConnection).getResultDescriptor());
 	}
 }
