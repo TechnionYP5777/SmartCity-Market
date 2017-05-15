@@ -179,7 +179,7 @@ public class Customer extends ACustomer implements ICustomer {
 	}
 
 	@Override
-	public void login(String username, String password) throws CriticalError, AuthenticationError {
+	public void login(String username, String password, boolean updateProductPictures) throws CriticalError, AuthenticationError {
 		CommandWrapper cmdwrppr = null;
 		String serverResponse = null;
 
@@ -216,7 +216,8 @@ public class Customer extends ACustomer implements ICustomer {
 			customerProfile = Serialization.deserialize(cmdwrppr.getData(), CustomerProfile.class);
 		
 		//check for new product pictures asynchronous
-		new UpdateProductPictures().start();
+		if (updateProductPictures)
+			new UpdateProductPictures().start();
 
 		log.info("Customer Login to server as succeed. Client id is: " + id);
 	}

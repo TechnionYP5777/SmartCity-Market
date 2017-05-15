@@ -56,7 +56,7 @@ public class LoginTest {
 			fail();
 		}
 		try {
-			customer.login("Guest", "Guest");
+			customer.login("Guest", "Guest", false);
 		} catch (CriticalError | AuthenticationError ¢) {
 			fail();
 		}
@@ -76,7 +76,7 @@ public class LoginTest {
 			fail();
 		}
 		try {
-			customer.login("Guest", "Guest");
+			customer.login("Guest", "Guest", false);
 		} catch (AuthenticationError ¢) {
 			fail();
 		} catch (CriticalError ¢) {
@@ -95,7 +95,7 @@ public class LoginTest {
 			fail();
 		}
 		try {
-			customer.login("Guest", "GuesT");
+			customer.login("Guest", "GuesT", false);
 		} catch (CriticalError ¢) {
 			fail();
 		} catch (AuthenticationError ¢) {
@@ -114,7 +114,7 @@ public class LoginTest {
 			fail();
 		}
 		try {
-			customer.login("Guesttt", "Guest");
+			customer.login("Guesttt", "Guest", false);
 		} catch (CriticalError ¢) {
 			fail();
 		} catch (AuthenticationError ¢) {

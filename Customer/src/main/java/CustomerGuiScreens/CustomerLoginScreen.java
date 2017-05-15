@@ -86,7 +86,7 @@ public class CustomerLoginScreen implements Initializable {
 				alert.showAndWait();
 				return;
 			}
-			customer.login(username, password);
+			customer.login(username, password, true);
 		} catch (CriticalError e) {
 			Alert alert = new Alert(AlertType.ERROR , "A problem had occured. Please Try again or let us know if it continues.");
 			alert.showAndWait();
@@ -113,7 +113,7 @@ public class CustomerLoginScreen implements Initializable {
 	private void guestLoginButtonPressed(ActionEvent __) {
 		ICustomer customer = InjectionFactory.getInstance(Customer.class);
 		try {
-			customer.login(guestLogin.getUserName(), guestLogin.getUserName());
+			customer.login(guestLogin.getUserName(), guestLogin.getUserName(), true);
 		} catch (CriticalError e) {
 			Alert alert = new Alert(AlertType.ERROR , "A problem had occured. Please Try again or let us know if it continues.");
 			alert.showAndWait();

@@ -40,10 +40,11 @@ public interface ICustomer {
 	
 	/**
 	 * login - the customer login to the server and gets it's own id;
+	 * @param updateProductPictures - when set true, UpdateProductPictures flow is activated. By default it should be false.
 	 * @throws CriticalError 
 	 * @throws AuthenticationError
 	 */
-	void login(String username, String password) throws CriticalError, AuthenticationError;
+	void login(String username, String password, boolean updateProductPictures) throws CriticalError, AuthenticationError;
 	
 	/**
 	 * logout - the customer logout from  the server. To use in the end of the shopping.
