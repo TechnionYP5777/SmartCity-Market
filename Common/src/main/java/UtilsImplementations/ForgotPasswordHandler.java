@@ -24,7 +24,7 @@ import UtilsContracts.IClientRequestHandler;
  *        used in Employee & Customer modules.
  */
 
-public class HandleForgottenPassword {
+public class ForgotPasswordHandler {
 
 	public static class NoSuchUserName extends SMException {
 		private static final long serialVersionUID = 2466826542889809933L;
@@ -40,7 +40,7 @@ public class HandleForgottenPassword {
 		private static final long serialVersionUID = -7126259923544905291L;
 	}
 
-	private static Logger log = Logger.getLogger(HandleForgottenPassword.class.getName());
+	private static Logger log = Logger.getLogger(ForgotPasswordHandler.class.getName());
 
 	private int senderId;
 	private IClientRequestHandler clientRequestHandler;
@@ -51,7 +51,7 @@ public class HandleForgottenPassword {
 	private String question;
 
 	@Inject
-	public HandleForgottenPassword(int senderId, IClientRequestHandler clientRequestHandler, int port, String host,
+	public ForgotPasswordHandler(int senderId, IClientRequestHandler clientRequestHandler, int port, String host,
 			int timeout) {
 		this.senderId = senderId;
 		this.clientRequestHandler = clientRequestHandler;
