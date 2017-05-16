@@ -17,7 +17,6 @@ import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import EmployeeContracts.IManager;
-import EmployeeDefs.WorkerDefs;
 import EmployeeDefs.AEmployeeException.AmountBiggerThanAvailable;
 import EmployeeDefs.AEmployeeException.AuthenticationError;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
@@ -52,7 +51,6 @@ public class Manager extends Worker implements IManager {
 	@Inject
 	public Manager(IClientRequestHandler clientRequestHandler) {
 		super(clientRequestHandler);
-		this.username = WorkerDefs.managerUsername;
 	}
 
 	@Override

@@ -49,12 +49,10 @@ import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 public class Worker extends AEmployee implements IWorker {
 	
 	protected ForgotPasswordHandler fpHandler;
-	protected String username;
 	
 	@Inject
 	public Worker(IClientRequestHandler clientRequestHandler) {
 		this.clientRequestHandler = clientRequestHandler;
-		this.username = WorkerDefs.workerUsername;
 	}
 
 	public CommandWrapper getCommandWrapper(String serverResponse) throws CriticalError {
