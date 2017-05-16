@@ -32,7 +32,10 @@ import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.IngredientStillInUse;
 import EmployeeDefs.WorkerDefs;
 import UtilsContracts.IClientRequestHandler;
+import UtilsImplementations.ForgotPasswordHandler;
 import UtilsImplementations.Serialization;
+import UtilsImplementations.ForgotPasswordHandler.NoSuchUserName;
+import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 
 /**
  * Worker - This class represent the worker functionality implementation.
@@ -44,10 +47,14 @@ import UtilsImplementations.Serialization;
 
 @Singleton
 public class Worker extends AEmployee implements IWorker {
-
+	
+	protected ForgotPasswordHandler fpHandler;
+	protected String username;
+	
 	@Inject
 	public Worker(IClientRequestHandler clientRequestHandler) {
 		this.clientRequestHandler = clientRequestHandler;
+		this.username = WorkerDefs.workerUsername;
 	}
 
 	public CommandWrapper getCommandWrapper(String serverResponse) throws CriticalError {
@@ -251,5 +258,33 @@ public class Worker extends AEmployee implements IWorker {
 	@Override
 	public Login getWorkerLoginDetails() {
 		return new Login(username, password);
+	}
+	
+	@Override
+	public String getForgotPasswordQuestion() throws NoSuchUserName {
+		fpHandler = new ForgotPasswordHandler(WorkerDefs.loginCommandSenderId,
+				clientRequestHandler, WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
+		try {
+			return fpHandler.getAuthenticationQuestion(username);
+		} catch (UtilsImplementations.ForgotPasswordHandler.CriticalError | WrongAnswer e) {
+			log.fatal(e + "");
+			log.fatal("Failed to get authentication question from server.");
+			return null;
+		}
+	}
+	
+	@Override
+	public boolean sendAnswerAndNewPassword(String ans, String pass) throws WrongAnswer, NoSuchUserName {
+		if (fpHandler == null){
+			log.error("Failed sending answer and new password. User must first get the authentication question.");
+			return false;
+		}
+		try {
+			return fpHandler.sendAnswerWithNewPassword(ans, pass);
+		} catch (UtilsImplementations.ForgotPasswordHandler.CriticalError e) {
+			log.fatal(e + "");
+			log.fatal("Failed to get authentication question from server.");
+			return false;
+		}
 	}
 }

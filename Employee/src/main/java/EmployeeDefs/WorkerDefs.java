@@ -12,4 +12,6 @@ public class WorkerDefs {
 	public static final int timeout = 3000;
 	public static final int shortTimeout = 10;
 	public static final int loginCommandSenderId = 0;
+	public static final String workerUsername = "worker";
+	public static final String managerUsername = "admin";
 }

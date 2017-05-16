@@ -11,6 +11,8 @@ import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductPackageDoesNotExist;
+import UtilsImplementations.ForgotPasswordHandler.NoSuchUserName;
+import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 import EmployeeDefs.AEmployeeException.EmployeeAlreadyConnected;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 
@@ -138,5 +140,9 @@ public interface IWorker {
 	 * @throws CriticalError 
 	 * @throws ConnectionFailure 
 	 */
-	boolean isLoggedIn() throws CriticalError, ConnectionFailure; 
+	boolean isLoggedIn() throws CriticalError, ConnectionFailure;
+
+	String getForgotPasswordQuestion() throws NoSuchUserName;
+
+	boolean sendAnswerAndNewPassword(String ans, String pass) throws WrongAnswer, NoSuchUserName; 
 }
