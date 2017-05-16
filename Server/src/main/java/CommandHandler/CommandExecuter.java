@@ -1431,7 +1431,8 @@ public class CommandExecuter {
 				+ (outCommandWrapper.getResultDescriptor() == ResultDescriptor.SM_OK ? " is" : " isn't") + " free");
 	}
 	
-	private void forgetPasswordGetQuestion(SQLDatabaseConnection c) {
+	private void forgetPasswordGetQuestion(SQLDatabaseConnection __) {
+		@SuppressWarnings("unused")
 		String username;
 		
 		log.info("Get question for forget password command called with from serderID " + inCommandWrapper.getSenderID() + " command called");
@@ -1452,7 +1453,8 @@ public class CommandExecuter {
 		log.info("Get question for forget password command system finished");
 	}
 	
-	private void forgetPasswordSendAnswerWithNewPassword(SQLDatabaseConnection c) {
+	private void forgetPasswordSendAnswerWithNewPassword(SQLDatabaseConnection __) {
+		@SuppressWarnings("unused")
 		Login login;
 		
 		log.info("Get question for forget password send answer command called with from serderID " + inCommandWrapper.getSenderID() + " command called");
