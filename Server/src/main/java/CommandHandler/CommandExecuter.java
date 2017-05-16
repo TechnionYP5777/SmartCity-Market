@@ -1426,8 +1426,51 @@ public class CommandExecuter {
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 		}
+
+		log.info("Is free customer username command system finished, username " + username
+				+ (outCommandWrapper.getResultDescriptor() == ResultDescriptor.SM_OK ? " is" : " isn't") + " free");
+	}
+	
+	private void forgetPasswordGetQuestion(SQLDatabaseConnection c) {
+		String username;
+		
+		log.info("Get question for forget password command called with from serderID " + inCommandWrapper.getSenderID() + " command called");
+		
+		try {
+			username = Serialization.deserialize(inCommandWrapper.getData(), String.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Get question for forget password command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+		
+		//TODO Noam - add here call for SQL
+		//TODO Noam - add to print the question
 				
-		log.info("Is free customer username command system finished, username " + username + " is free");
+		log.info("Get question for forget password command system finished");
+	}
+	
+	private void forgetPasswordSendAnswerWithNewPassword(SQLDatabaseConnection c) {
+		Login login;
+		
+		log.info("Get question for forget password send answer command called with from serderID " + inCommandWrapper.getSenderID() + " command called");
+		
+		try {
+			login = Serialization.deserialize(inCommandWrapper.getData(), Login.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Get question for forget password send answer command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+		
+		//TODO Noam - add here call for SQL
+		//TODO Noam - add to print the question
+				
+		log.info("Get question for forget password send answer command system finished");
 	}
 	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
@@ -1612,6 +1655,16 @@ public class CommandExecuter {
 			
 		case IS_FREE_CUSTOMER_NAME:
 			isFreeCustomerUsername(c);
+			
+			break;
+			
+		case FORGOT_PASSWORD_GET_QUESTION:
+			forgetPasswordGetQuestion(c);
+			
+			break;
+			
+		case FORGOT_PASSWORD_SEND_ANSWER_WITH_NEW_PASSWORD:
+			forgetPasswordSendAnswerWithNewPassword(c);
 			
 			break;
 			
