@@ -479,7 +479,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				return clientType != WORKERS_TABLE.VALUE_PRIVILEGE_MANAGER ? CLIENT_TYPE.WORKER : CLIENT_TYPE.MANAGER;
 			}
 			// CASE: none
-			log.info("getWorkerTypeByUsername: no such id!");
+			log.debug("getWorkerTypeByUsername: no such id!");
 			return null;
 		} catch (SQLException e) {
 			throw new CriticalError();
@@ -784,7 +784,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	private<T> void setValueToRegisteredClient(ClientsTable t,String username, DbColumn setColumn, T newValue) throws CriticalError {
 		
-		log.info("setValueoRegisteredClient: set: " + newValue + " to: " + setColumn.getColumnNameSQL() + " in table: " + t + " for user: " + username);
+		log.debug("setValueoRegisteredClient: set: " + newValue + " to: " + setColumn.getColumnNameSQL() + " in table: " + t + " for user: " + username);
 		PreparedStatement statement;
 		UpdateQuery updateQuery = generateUpdateQuery(t.table,
 				BinaryCondition.equalTo(t.usernameCol, PARAM_MARK));
@@ -820,7 +820,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@SuppressWarnings("unchecked")
 	private<E,T> T getValueForRegisteredClient(ClientsTable from, DbColumn selectColumn, E selectValue, DbColumn getColumn) throws CriticalError {
 
-		log.info("getValueForRegisteredClient: trying to get value from tabel " + from);
+		log.debug("getValueForRegisteredClient: trying to get value from tabel " + from);
 		
 		String query = generateSelectQuery1Table(from.table,
 				BinaryCondition.equalTo(selectColumn, PARAM_MARK));
@@ -837,7 +837,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				return null;
 			}
 			
-			log.info("getValueForRegisteredClient: value found");
+			log.debug("getValueForRegisteredClient: value found");
 			
 			//get the desired value
 			result.first();
@@ -917,7 +917,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 					.addColumn(CartsListTable.CartIDCol, PARAM_MARK)
 					.addColumn(CartsListTable.listIDCol, PARAM_MARK).validate() + "";
 
-			log.info("initiateNewGroceryList: run query: " + insertQuery);
+			log.debug("initiateNewGroceryList: run query: " + insertQuery);
 			getParameterizedQuery(insertQuery, sessionID, maxListID).executeUpdate();
 			
 		} catch (SQLException e) {
@@ -1113,7 +1113,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 				insertQuery.hashCode();
 
-				log.info("setNewAmountForStore: create new row amount to package: " + p + ", to place: " + placeCol);
+				log.debug("setNewAmountForStore: create new row amount to package: " + p + ", to place: " + placeCol);
 
 				statement = getParameterizedQuery(insertQuery, p.getSmartCode().getBarcode(), placeCol, newAmount);
 
@@ -1127,7 +1127,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 				deleteQuery.hashCode();
 
-				log.info("setNewAmountForStore: remove row to package: " + p + ", from place: " + placeCol);
+				log.debug("setNewAmountForStore: remove row to package: " + p + ", from place: " + placeCol);
 
 				statement = getParameterizedQuery(deleteQuery, p.getSmartCode().getBarcode(), placeCol);
 
@@ -1141,12 +1141,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 				updateQuery.addSetClause(ProductsPackagesTable.amountCol, newAmount).validate();
 
-				log.info("setNewAmountForStore: update row of package: " + p + ", of place: " + placeCol);
+				log.debug("setNewAmountForStore: update row of package: " + p + ", of place: " + placeCol);
 
 				statement = getParameterizedQuery(updateQuery + "", p.getSmartCode().getBarcode(), placeCol);
 			}
 
-			log.info("setNewAmountForStore : run query: " + statement);
+			log.debug("setNewAmountForStore : run query: " + statement);
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
@@ -1366,7 +1366,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		PreparedStatement statement = getParameterizedReadQuery(selectQuery, p.getSmartCode().getBarcode(), placeCol);
 
-		log.info("getAmountForStore: execute query: " + statement);
+		log.debug("getAmountForStore: execute query: " + statement);
 
 		ResultSet result = null;
 		try {
@@ -1406,7 +1406,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				BinaryCondition.equalTo(GroceriesListsTable.expirationDateCol, JdbcEscape.date(Date
 						.from(p.getSmartCode().getExpirationDate().atStartOfDay(ZoneId.systemDefault()).toInstant()))));
 
-		log.info("execute query: " + selectQuery);
+		log.debug("execute query: " + selectQuery);
 
 		PreparedStatement statement = getParameterizedReadQuery(selectQuery, p.getSmartCode().getBarcode(), listID);
 
@@ -1523,7 +1523,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	private void moveProductPackage(Integer sessionId, LOCATIONS_TYPES from, LOCATIONS_TYPES to,
 			ProductPackage packageToMove, int amount)
 			throws CriticalError, ProductPackageAmountNotMatch, ProductPackageNotExist {
-		log.info("moveProductPackage: want to move Amount " + amount + " of Pacakge " + packageToMove + " From: " + from
+		log.debug("moveProductPackage: want to move Amount " + amount + " of Pacakge " + packageToMove + " From: " + from
 				+ " To: " + to);
 
 		if (from != null)
@@ -1531,10 +1531,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			case STORE: {
 				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
 				if (currentAmount == 0) {
-					log.info("moveProductPackage: nothing to take from Store");
+					log.debug("moveProductPackage: nothing to take from Store");
 					throw new ProductPackageNotExist();
 				}
-				log.info("moveProductPackage: (from) Store have " + currentAmount + ", set to: "
+				log.debug("moveProductPackage: (from) Store have " + currentAmount + ", set to: "
 						+ (currentAmount - amount));
 				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE, currentAmount,
 						currentAmount - amount);
@@ -1543,10 +1543,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			case WAREHOUSE: {
 				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
 				if (currentAmount == 0) {
-					log.info("moveProductPackage: nothing to take from Warehouse");
+					log.debug("moveProductPackage: nothing to take from Warehouse");
 					throw new ProductPackageNotExist();
 				}
-				log.info("moveProductPackage: (from) Warehouse have " + currentAmount + ", set to: "
+				log.debug("moveProductPackage: (from) Warehouse have " + currentAmount + ", set to: "
 						+ (currentAmount - amount));
 				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE, currentAmount,
 						currentAmount - amount);
@@ -1559,10 +1559,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				}
 				int listID = getCartListId(sessionId), currentAmount = getAmountForCart(packageToMove, listID);
 				if (currentAmount == 0) {
-					log.info("moveProductPackage: nothing to take from Cart");
+					log.debug("moveProductPackage: nothing to take from Cart");
 					throw new ProductPackageNotExist();
 				}
-				log.info("moveProductPackage: (from) Cart have " + currentAmount + ", set to: "
+				log.debug("moveProductPackage: (from) Cart have " + currentAmount + ", set to: "
 						+ (currentAmount - amount));
 				setNewAmountForCart(packageToMove, listID, currentAmount, currentAmount - amount);
 				break;
@@ -1573,7 +1573,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			switch (to) {
 			case STORE: {
 				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
-				log.info("moveProductPackage: (to) Store have " + currentAmount + ", set to: "
+				log.debug("moveProductPackage: (to) Store have " + currentAmount + ", set to: "
 						+ (currentAmount + amount));
 				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE, currentAmount,
 						currentAmount + amount);
@@ -1581,7 +1581,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			}
 			case WAREHOUSE: {
 				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
-				log.info("moveProductPackage: (to) Warehouse have " + currentAmount + ", set to: "
+				log.debug("moveProductPackage: (to) Warehouse have " + currentAmount + ", set to: "
 						+ (currentAmount + amount));
 				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE, currentAmount,
 						currentAmount + amount);
@@ -1593,7 +1593,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 					return;
 				}
 				int listID = getCartListId(sessionId), currentAmount = getAmountForCart(packageToMove, listID);
-				log.info("moveProductPackage: (to) Cart have " + currentAmount + ", set to: "
+				log.debug("moveProductPackage: (to) Cart have " + currentAmount + ", set to: "
 						+ (currentAmount + amount));
 				setNewAmountForCart(packageToMove, listID, currentAmount, currentAmount + amount);
 				break;
@@ -1789,7 +1789,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public int login(String username, String password)
 			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
 
-		log.info("SQL Public login: Worker trying to connect as: " + username);
+		log.debug("SQL Public login: Worker trying to connect as: " + username);
 		try {
 			// START transaction
 			connectionStartTransaction();
@@ -1815,7 +1815,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public int loginCustomer(String username, String password)
 			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
-		log.info("SQL Public loginCustomer: Customer trying to connect as: " + username);
+		log.debug("SQL Public loginCustomer: Customer trying to connect as: " + username);
 		try {
 			// START transaction
 			connectionStartTransaction();
@@ -1841,7 +1841,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public int loginWorker(String username, String password)
 			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
-		log.info("SQL Public loginWorker: Customer trying to connect as: " + username);
+		log.debug("SQL Public loginWorker: Customer trying to connect as: " + username);
 		try {
 			// START transaction
 			connectionStartTransaction();
@@ -1866,7 +1866,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public String getClientType(Integer sessionID) throws ClientNotConnected, CriticalError {
 		validateSessionEstablished(sessionID);
 
-		log.info("SQL Public getClientType: Trying to get client type of: " + sessionID);
+		log.debug("SQL Public getClientType: Trying to get client type of: " + sessionID);
 
 		return new Gson().toJson(getClientTypeBySessionID(sessionID));
 
@@ -1875,7 +1875,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public boolean isCustomerUsernameAvailable(String username) throws  CriticalError {
 
-		log.info("SQL Public isCustomerUsernameAvailable: check availability of username: " + username);
+		log.debug("SQL Public isCustomerUsernameAvailable: check availability of username: " + username);
 
 		return !isCustomerExist(username);
 
@@ -1884,17 +1884,17 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public boolean isWorkerUsernameAvailable(String username) throws  CriticalError {
 
-		log.info("SQL Public isCustomerUsernameAvailable: check availability of username: " + username);
+		log.debug("SQL Public isCustomerUsernameAvailable: check availability of username: " + username);
 
 		return !isWorkerExist(username);
 	}
 	
 	@Override
 	public void registerCustomer(String username, String password) throws CriticalError, ClientAlreadyExist{
-		log.info("SQL Public registerCustomer: Customer trying to register with username: " + username);
+		log.debug("SQL Public registerCustomer: Customer trying to register with username: " + username);
 		
 		if (isCustomerExist(username)){
-			log.info("SQL Public registerCustomer: already exist customer with username: " + username);
+			log.debug("SQL Public registerCustomer: already exist customer with username: " + username);
 			throw new ClientAlreadyExist();
 		}
 		
@@ -1941,10 +1941,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	
 	@Override
 	public void setCustomerProfile(String username, CustomerProfile p) throws CriticalError, ClientNotExist, IngredientNotExist{
-		log.info("SQL Public setCustomerProfile: Customer set profile: " + p + " to username: " + username);
+		log.debug("SQL Public setCustomerProfile: Customer set profile: " + p + " to username: " + username);
 		
 		if (!isCustomerExist(username)){
-			log.info("SQL Public setCustomerProfile: no such customer with username: " + username);
+			log.debug("SQL Public setCustomerProfile: no such customer with username: " + username);
 			throw new ClientNotExist();
 		}
 		
@@ -1977,7 +1977,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			//updating ingredients of customer
 			setIngredientsForCustomer(username, p.getAllergens());
 			
-			log.info("SQL Public setCustomerProfile: Success setting profile for username: " + username);
+			log.debug("SQL Public setCustomerProfile: Success setting profile for username: " + username);
 
 			// END transaction
 			connectionCommitTransaction();
@@ -1996,10 +1996,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	
 	@Override
 	public void removeCustomer(String username) throws CriticalError, ClientNotExist{
-		log.info("SQL Public removeCustomer: Remove customer with username: " + username);
+		log.debug("SQL Public removeCustomer: Remove customer with username: " + username);
 		
 		if (!isCustomerExist(username)){
-			log.info("SQL Public removeCustomer: no such customer with username: " + username);
+			log.debug("SQL Public removeCustomer: no such customer with username: " + username);
 			throw new ClientNotExist();
 		}
 		
@@ -2012,21 +2012,21 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			
 			//Write part of transaction
 			if (customerSessionID != null){
-				log.info("SQL Public removeCustomer: user " + username + " connected! doing logout first");
+				log.debug("SQL Public removeCustomer: user " + username + " connected! doing logout first");
 				logoutAsCart(customerSessionID);
 			}
 			
-			log.info("SQL Public removeCustomer: remove user " + username + " from customers table and his ingredients");
+			log.debug("SQL Public removeCustomer: remove user " + username + " from customers table and his ingredients");
 			setIngredientsForCustomer(username, new HashSet<>());
 			removeRegisteredClient(new CustomersTable(), username);
 			
-			log.info("SQL Public removeCustomer: Success removing username: " + username);
+			log.debug("SQL Public removeCustomer: Success removing username: " + username);
 
 			// END transaction
 			connectionCommitTransaction();
 
 		} catch (SQLDatabaseException e) {
-			log.info("SQL Public removeCustomer: known error occured:" + e.getMessage());
+			log.debug("SQL Public removeCustomer: known error occured:" + e.getMessage());
 			connectionRollbackTransaction();
 			throw e;
 		} catch (SQLException e) {
@@ -2042,12 +2042,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	
 	@Override
 	public void addWorker(Integer sessionID, Login l, ForgotPasswordData security) throws CriticalError, ClientAlreadyExist, ClientNotConnected{
-		log.info("SQL Public addWorker: add new worker with username: " + l.getUserName());
+		log.debug("SQL Public addWorker: add new worker with username: " + l.getUserName());
 		
 		validateSessionEstablished(sessionID);
 		
 		if (isWorkerExist(l.getUserName())){
-			log.info("SQL Public addWorker: already exist worker with username: " + l.getUserName());
+			log.debug("SQL Public addWorker: already exist worker with username: " + l.getUserName());
 			throw new ClientAlreadyExist();
 		}
 		
@@ -2070,7 +2070,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			statement.executeUpdate();
 
-			log.info("SQL Public addWorker: worker " + l.getUserName() + "added successfuly");
+			log.debug("SQL Public addWorker: worker " + l.getUserName() + "added successfuly");
 			// END transaction
 			connectionCommitTransaction();
 
@@ -2089,18 +2089,18 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	
 	@Override
 	public void removeWorker(Integer sessionID, String username) throws CriticalError, ClientNotExist, ClientNotConnected{
-		log.info("SQL Public removeWorker: Remove worker with username: " + username);
+		log.debug("SQL Public removeWorker: Remove worker with username: " + username);
 		
 		validateSessionEstablished(sessionID);
 		
 		if (!isWorkerExist(username)){
-			log.info("SQL Public removeWorker: no such worker with username: " + username);
+			log.debug("SQL Public removeWorker: no such worker with username: " + username);
 			throw new ClientNotExist();
 		}
 		
 		//validate not deleting the admin
 		if (getWorkerTypeByUsername(username) == CLIENT_TYPE.MANAGER){
-			log.info("SQL Public removeWorker: cant remove the manager!");
+			log.debug("SQL Public removeWorker: cant remove the manager!");
 			throw new CriticalError();
 		}
 		
@@ -2113,20 +2113,20 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			
 			//Write part of transaction
 			if (workerSessionID != null){
-				log.info("SQL Public removeWorker: user " + username + " connected! doing logout first");
+				log.debug("SQL Public removeWorker: user " + username + " connected! doing logout first");
 				logoutAsWorker(workerSessionID, username);
 			}
 			
-			log.info("SQL Public removeWorker: remove user " + username + " from workers table");
+			log.debug("SQL Public removeWorker: remove user " + username + " from workers table");
 			removeRegisteredClient(new WorkersTable(), username);
 			
-			log.info("SQL Public removeWorker: Success removing username: " + username);
+			log.debug("SQL Public removeWorker: Success removing username: " + username);
 
 			// END transaction
 			connectionCommitTransaction();
 
 		} catch (SQLDatabaseException e) {
-			log.info("SQL Public removeCustomer: known error occured:" + e.getMessage());
+			log.debug("SQL Public removeCustomer: known error occured:" + e.getMessage());
 			connectionRollbackTransaction();
 			throw e;
 		} catch (SQLException e) {
@@ -2140,7 +2140,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	
 	@Override
 	public String getWorkersList(Integer sessionID) throws ClientNotConnected, CriticalError {
-		log.info("SQL Public getWorkersList: retreiving workers list");
+		log.debug("SQL Public getWorkersList: retreiving workers list");
 		HashMap<String, Boolean> result = new HashMap<>();
 		
 		validateSessionEstablished(sessionID);
@@ -2167,10 +2167,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	
 	@Override
 	public String getCustomerProfile(String username) throws CriticalError, ClientNotExist{
-		log.info("SQL Public getCustomerProfile: Customer get profile: for username: " + username);
+		log.debug("SQL Public getCustomerProfile: Customer get profile: for username: " + username);
 		
 		if (!isCustomerExist(username)){
-			log.info("SQL Public getCustomerProfile: no such customer with username: " + username);
+			log.debug("SQL Public getCustomerProfile: no such customer with username: " + username);
 			throw new ClientNotExist();
 		}
 		
@@ -2193,7 +2193,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			selectCustomerIngredientsResult = selectCustomerIngredientsStatement.executeQuery();
 
 			String result = SQLJsonGenerator.CostumerProfileToJson(selectCustomerResult, selectCustomerIngredientsResult);
-			log.info("SQL Public setCustomerProfile: Success getting profile for username: " + username);
+			log.debug("SQL Public setCustomerProfile: Success getting profile for username: " + username);
 			
 			return result;
 
@@ -2210,10 +2210,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	
 	@Override
 	public void setPasswordCustomer(String username, String newPassword) throws CriticalError, ClientNotExist{
-		log.info("SQL Public setPasswordCustomer: Customer: " + username + " sets password.");
+		log.debug("SQL Public setPasswordCustomer: Customer: " + username + " sets password.");
 		
 		if (!isCustomerExist(username)){
-			log.info("SQL Public setPasswordCustomer: no such customer with username: " + username);
+			log.debug("SQL Public setPasswordCustomer: no such customer with username: " + username);
 			throw new ClientNotExist();
 		}
 		
@@ -2225,7 +2225,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			//updating password
 			assignPasswordToRegisteredClient(new CustomersTable(), username, newPassword);
 
-			log.info("SQL Public setPasswordCustomer: Success setting password for username: " + username);
+			log.debug("SQL Public setPasswordCustomer: Success setting password for username: " + username);
 
 			// END transaction
 			connectionCommitTransaction();
@@ -2239,10 +2239,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	
 	@Override
 	public void setSecurityQACustomer(String username, ForgotPasswordData d) throws CriticalError, ClientNotExist{
-		log.info("SQL Public setSecurityQACustomer: Customer: " + username + " sets security Q&A.");
+		log.debug("SQL Public setSecurityQACustomer: Customer: " + username + " sets security Q&A.");
 		
 		if (!isCustomerExist(username)){
-			log.info("SQL Public setSecurityQACustomer: no such customer with username: " + username);
+			log.debug("SQL Public setSecurityQACustomer: no such customer with username: " + username);
 			throw new ClientNotExist();
 		}
 		
@@ -2254,7 +2254,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			//updating security question and answer
 			assignSecurityQAToRegisteredClient(new CustomersTable(), username, d);
 
-			log.info("SQL Public setSecurityQACustomer: Success setting ecurity Q&A for username: " + username);
+			log.debug("SQL Public setSecurityQACustomer: Success setting ecurity Q&A for username: " + username);
 
 			// END transaction
 			connectionCommitTransaction();
@@ -2268,10 +2268,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	
 	@Override
 	public String getSecurityQuestionCustomer(String username) throws CriticalError, ClientNotExist{
-		log.info("SQL Public getSecurityQuestionCustomer: Customer: " + username + " get security question.");
+		log.debug("SQL Public getSecurityQuestionCustomer: Customer: " + username + " get security question.");
 		
 		if (!isCustomerExist(username)){
-			log.info("SQL Public getSecurityQuestionCustomer: no such customer with username: " + username);
+			log.debug("SQL Public getSecurityQuestionCustomer: no such customer with username: " + username);
 			throw new ClientNotExist();
 		}
 		
@@ -2280,7 +2280,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			//Read part of transaction
 			String result = getSecurityQuestionForRegisteredClient(new CustomersTable(), username);
 
-			log.info("SQL Public getSecurityQuestionCustomer: the security question of user: " + username + " is: \n" + result);
+			log.debug("SQL Public getSecurityQuestionCustomer: the security question of user: " + username + " is: \n" + result);
 			return result;
 
 		} catch (SQLDatabaseException e) {
@@ -2290,10 +2290,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	
 	@Override
 	public boolean verifySecurityAnswerCustomer(String username, String givenAnswer) throws CriticalError, ClientNotExist{
-		log.info("SQL Public verifySecurityAnswerCustomer: Customer: " + username + " verify security answer.");
+		log.debug("SQL Public verifySecurityAnswerCustomer: Customer: " + username + " verify security answer.");
 		
 		if (!isCustomerExist(username)){
-			log.info("SQL Public verifySecurityAnswerCustomer: no such customer with username: " + username);
+			log.debug("SQL Public verifySecurityAnswerCustomer: no such customer with username: " + username);
 			throw new ClientNotExist();
 		}
 		
@@ -2302,7 +2302,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			//Read part of transaction
 			boolean result = verifySecurityAnswerForRegisteredClient(new CustomersTable(), username, givenAnswer);
 
-			log.info("SQL Public verifySecurityAnswerCustomer: result of verification for user: " + username + " is: " + result);
+			log.debug("SQL Public verifySecurityAnswerCustomer: result of verification for user: " + username + " is: " + result);
 			return result;
 
 		} catch (SQLDatabaseException e) {
@@ -2319,7 +2319,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void logout(Integer sessionID, String username) throws ClientNotConnected, CriticalError {
 
-		log.info("SQL Public workerLogout: Client " + username + " trying to logout (SESSION: " + sessionID + " )");
+		log.debug("SQL Public workerLogout: Client " + username + " trying to logout (SESSION: " + sessionID + " )");
 
 		validateSessionEstablished(sessionID);
 
@@ -2330,13 +2330,13 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// WRITE part of transaction
 			// determine the type of client
 			if (getClientTypeBySessionID(sessionID) == CLIENT_TYPE.CART) {
-				log.info("SQL Public workerLogout: logout as Cart");
+				log.debug("SQL Public workerLogout: logout as Cart");
 				logoutAsCart(sessionID);
 			} else if (getClientTypeBySessionID(sessionID) != CLIENT_TYPE.CUSTOMER) {
-				log.info("SQL Public workerLogout: logout as Worker/Manager");
+				log.debug("SQL Public workerLogout: logout as Worker/Manager");
 				logoutAsWorker(sessionID, username);
 			} else {
-				log.info("SQL Public workerLogout: logout as Customer");
+				log.debug("SQL Public workerLogout: logout as Customer");
 				logoutAsCart(sessionID);
 				setValueToRegisteredClient(new CustomersTable(), username, CustomersTable.customersessionIDCol, null);
 			}
@@ -2362,7 +2362,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public String getProductFromCatalog(Integer sessionID, long barcode)
 			throws ProductNotExistInCatalog, ClientNotConnected, CriticalError {
 
-		log.info("SQL Public getProductFromCatalog: Trying to get product: " + barcode + " (SESSION: " + sessionID
+		log.debug("SQL Public getProductFromCatalog: Trying to get product: " + barcode + " (SESSION: " + sessionID
 				+ " )");
 
 		validateSessionEstablished(sessionID);
@@ -2421,7 +2421,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public void addProductPackageToWarehouse(Integer sessionID, ProductPackage p)
 			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog {
 
-		log.info("SQL Public addProductPackageToWarehouse: with package " + p + " (SESSION: " + sessionID + " )");
+		log.debug("SQL Public addProductPackageToWarehouse: with package " + p + " (SESSION: " + sessionID + " )");
 
 		validateSessionEstablished(sessionID);
 
@@ -2459,7 +2459,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public void removeProductPackageFromWarehouse(Integer sessionID, ProductPackage p) throws CriticalError,
 			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
 
-		log.info("SQL Public removeProductPackageFromWarehouse: with package " + p + " (SESSION: " + sessionID + " )");
+		log.debug("SQL Public removeProductPackageFromWarehouse: with package " + p + " (SESSION: " + sessionID + " )");
 		validateSessionEstablished(sessionID);
 
 		try {
@@ -2492,7 +2492,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public void addProductToCatalog(Integer sessionID, CatalogProduct productToAdd) throws CriticalError,
 			ClientNotConnected, ProductAlreadyExistInCatalog, IngredientNotExist, ManufacturerNotExist {
 
-		log.info("SQL Public addProductToCatalog: Trying to add: " + productToAdd + " (SESSION: " + sessionID + " )");
+		log.debug("SQL Public addProductToCatalog: Trying to add: " + productToAdd + " (SESSION: " + sessionID + " )");
 		validateSessionEstablished(sessionID);
 
 		try {
@@ -2534,7 +2534,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public void removeProductFromCatalog(Integer sessionID, SmartCode productToRemove)
 			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog, ProductStillForSale {
 
-		log.info("SQL Public removeProductFromCatalog: Trying to remove: " + productToRemove.getBarcode()
+		log.debug("SQL Public removeProductFromCatalog: Trying to remove: " + productToRemove.getBarcode()
 				+ " (SESSION: " + sessionID + " )");
 
 		validateSessionEstablished(sessionID);
@@ -2591,7 +2591,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void editProductInCatalog(Integer sessionID, CatalogProduct productToUpdate) throws CriticalError,
 			ClientNotConnected, ProductNotExistInCatalog, IngredientNotExist, ManufacturerNotExist {
-		log.info("SQL Public editProductInCatalog: Trying to edit to: " + productToUpdate + " (SESSION: " + sessionID
+		log.debug("SQL Public editProductInCatalog: Trying to edit to: " + productToUpdate + " (SESSION: " + sessionID
 				+ " )");
 
 		validateSessionEstablished(sessionID);
@@ -2635,7 +2635,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void addProductToGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError,
 			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
-		log.info("SQL Public addProductToGroceryList: with parameter " + productToBuy + " (SESSION: " + cartID + " )");
+		log.debug("SQL Public addProductToGroceryList: with parameter " + productToBuy + " (SESSION: " + cartID + " )");
 
 		validateCartSessionEstablished(cartID);
 
@@ -2672,7 +2672,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void removeProductFromGroceryList(Integer cartID, ProductPackage productToBuy) throws CriticalError,
 			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
-		log.info("SQL Public removeProductFromGroceryList: with parameter " + productToBuy + " (SESSION: " + cartID
+		log.debug("SQL Public removeProductFromGroceryList: with parameter " + productToBuy + " (SESSION: " + cartID
 				+ " )");
 
 		validateCartSessionEstablished(cartID);
@@ -2710,7 +2710,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public void placeProductPackageOnShelves(Integer sessionID, ProductPackage p) throws CriticalError,
 			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
 
-		log.info("SQL Public placeProductPackageOnShelves: with parameter " + p + " (SESSION: " + sessionID + " )");
+		log.debug("SQL Public placeProductPackageOnShelves: with parameter " + p + " (SESSION: " + sessionID + " )");
 
 		validateSessionEstablished(sessionID);
 
@@ -2745,7 +2745,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void removeProductPackageFromShelves(Integer sessionID, ProductPackage p) throws CriticalError,
 			ClientNotConnected, ProductNotExistInCatalog, ProductPackageAmountNotMatch, ProductPackageNotExist {
-		log.info("SQL Public removeProductPackageFromShelves: with parameter " + p + " (SESSION: " + sessionID + " )");
+		log.debug("SQL Public removeProductPackageFromShelves: with parameter " + p + " (SESSION: " + sessionID + " )");
 
 		validateSessionEstablished(sessionID);
 
@@ -2780,7 +2780,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public String getProductPackageAmonutOnShelves(Integer sessionID, ProductPackage p)
 			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog {
-		log.info("SQL Public getProductPackageAmonutOnShelves: with parameter " + p + " (SESSION: " + sessionID + " )");
+		log.debug("SQL Public getProductPackageAmonutOnShelves: with parameter " + p + " (SESSION: " + sessionID + " )");
 
 		validateSessionEstablished(sessionID);
 
@@ -2797,7 +2797,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public String getProductPackageAmonutInWarehouse(Integer sessionID, ProductPackage p)
 			throws CriticalError, ClientNotConnected, ProductNotExistInCatalog {
-		log.info("SQL Public getProductPackageAmonutInWarehouse: with parameter " + p + " (SESSION: " + sessionID
+		log.debug("SQL Public getProductPackageAmonutInWarehouse: with parameter " + p + " (SESSION: " + sessionID
 				+ " )");
 
 		validateSessionEstablished(sessionID);
@@ -2812,7 +2812,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 */
 	@Override
 	public void cartCheckout(Integer cartID) throws CriticalError, ClientNotConnected, GroceryListIsEmpty {
-		log.info("SQL Public cartCheckout: of cart: " + cartID + " (SESSION: " + cartID + " )");
+		log.debug("SQL Public cartCheckout: of cart: " + cartID + " (SESSION: " + cartID + " )");
 
 		validateCartSessionEstablished(cartID);
 
@@ -2878,7 +2878,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void close() throws CriticalError {
 
-		log.info("SQL Public close.");
+		log.debug("SQL Public close.");
 		try {
 			connection.close();
 		} catch (SQLException e) {
@@ -2889,7 +2889,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public String addManufacturer(Integer sessionID, String manufacturerName) throws CriticalError, ClientNotConnected {
 
-		log.info("SQL Public addManufacturer: manufacturer name: " + manufacturerName + " (SESSION: " + sessionID
+		log.debug("SQL Public addManufacturer: manufacturer name: " + manufacturerName + " (SESSION: " + sessionID
 				+ " )");
 
 		validateSessionEstablished(sessionID);
@@ -2925,7 +2925,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void removeManufacturer(Integer sessionID, Manufacturer m)
 			throws CriticalError, ClientNotConnected, ManufacturerNotExist, ManufacturerStillUsed {
-		log.info("SQL Public removeManufacturer: manufacturer: " + m + " (SESSION: " + sessionID + " )");
+		log.debug("SQL Public removeManufacturer: manufacturer: " + m + " (SESSION: " + sessionID + " )");
 
 		validateSessionEstablished(sessionID);
 
@@ -2963,7 +2963,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void editManufacturer(Integer sessionID, Manufacturer newManufacturer)
 			throws CriticalError, ClientNotConnected, ManufacturerNotExist {
-		log.info("SQL Public editManufacturer: edit to manufacturer: " + newManufacturer + " (SESSION: " + sessionID
+		log.debug("SQL Public editManufacturer: edit to manufacturer: " + newManufacturer + " (SESSION: " + sessionID
 				+ " )");
 
 		validateSessionEstablished(sessionID);
@@ -3014,7 +3014,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public String addIngredient(Integer sessionID, String ingredientName) throws CriticalError, ClientNotConnected {
 
-		log.info("SQL Public addIngredient: ingredient name: " + ingredientName + " (SESSION: " + sessionID
+		log.debug("SQL Public addIngredient: ingredient name: " + ingredientName + " (SESSION: " + sessionID
 				+ " )");
 
 		validateSessionEstablished(sessionID);
@@ -3050,7 +3050,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void removeIngredient(Integer sessionID, Ingredient i)
 			throws CriticalError, ClientNotConnected, IngredientNotExist, IngredientStillUsed {
-		log.info("SQL Public removeIngredient: ingredient: " + i + " (SESSION: " + sessionID + " )");
+		log.debug("SQL Public removeIngredient: ingredient: " + i + " (SESSION: " + sessionID + " )");
 
 		validateSessionEstablished(sessionID);
 
@@ -3089,7 +3089,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public void editIngredient(Integer sessionID, Ingredient newIngredient)
 			throws CriticalError, ClientNotConnected, IngredientNotExist {
-		log.info("SQL Public editIngredient: edit to ingredient: " + newIngredient + " (SESSION: " + sessionID
+		log.debug("SQL Public editIngredient: edit to ingredient: " + newIngredient + " (SESSION: " + sessionID
 				+ " )");
 
 		validateSessionEstablished(sessionID);
@@ -3139,7 +3139,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	@Override
 	public void logoutAllUsers() throws CriticalError {
-		log.info("SQL Public logoutAllUsers.");
+		log.debug("SQL Public logoutAllUsers.");
 		// START transaction
 		connectionStartTransaction();
 
@@ -3187,20 +3187,20 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	@Override
 	public boolean isClientLoggedIn(Integer sessionID) throws CriticalError {
-		log.info("SQL Public isClientLoggedIn: sessionID: " + sessionID);
+		log.debug("SQL Public isClientLoggedIn: sessionID: " + sessionID);
 		return isSessionExist(sessionID);
 	}
 
 	@Override
 	public boolean isWorkerLoggedIn(String username) throws CriticalError {
-		log.info("SQL Public isWorkerLoggedIn: worker name: " + username);
+		log.debug("SQL Public isWorkerLoggedIn: worker name: " + username);
 		return isWorkerConnected(username);
 	}
 
 	@Override
 	public String cartRestoreGroceryList(Integer cartID) throws CriticalError, NoGroceryListToRestore {
 
-		log.info("SQL Public cartRestoreGroceryList: restore for cart: " + cartID + " (SESSION: " + cartID + " )");
+		log.debug("SQL Public cartRestoreGroceryList: restore for cart: " + cartID + " (SESSION: " + cartID + " )");
 
 		if (!isCartSessionEstablished(cartID))
 			throw new NoGroceryListToRestore();
@@ -3229,7 +3229,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 	@Override
 	public void clearGroceryListsHistory() throws CriticalError {
-		log.info("SQL Public clearGroceryListsHistory.");
+		log.debug("SQL Public clearGroceryListsHistory.");
 		// START transaction
 		connectionStartTransaction();
 

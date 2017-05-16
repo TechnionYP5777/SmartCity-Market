@@ -9,7 +9,7 @@ package SQLDatabase;
  */
 public class SQLDatabaseException extends Exception {
 
-	private static final long serialVersionUID = -7130378218981828335L;
+	private static final long serialVersionUID = -0x62F43136389826EFL;
 
 	/**
 	 * Thrown when Unexpected error occurred
@@ -18,7 +18,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class CriticalError extends SQLDatabaseException {
-		private static final long serialVersionUID = -4621040342204823754L;
+		private static final long serialVersionUID = -0x40213BB539DE38CAL;
 	}
 
 	/**
@@ -28,7 +28,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class ProductNotExistInCatalog extends SQLDatabaseException {
-		private static final long serialVersionUID = 3092110065622921929L;
+		private static final long serialVersionUID = 0x2AE961B8D3DD32C9L;
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class ProductAlreadyExistInCatalog extends SQLDatabaseException {
-		private static final long serialVersionUID = 3092110065622921929L;
+		private static final long serialVersionUID = 0x2AE961B8D3DD32C9L;
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class ProductStillForSale extends SQLDatabaseException {
-		private static final long serialVersionUID = 3092110065622921929L;
+		private static final long serialVersionUID = 0x2AE961B8D3DD32C9L;
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class ProductPackageNotExist extends SQLDatabaseException {
-		private static final long serialVersionUID = 3092110065622921929L;
+		private static final long serialVersionUID = 0x2AE961B8D3DD32C9L;
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class ProductPackageAmountNotMatch extends SQLDatabaseException {
-		private static final long serialVersionUID = 3092110065622921929L;
+		private static final long serialVersionUID = 0x2AE961B8D3DD32C9L;
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class ManufacturerNotExist extends SQLDatabaseException {
-		private static final long serialVersionUID = 3092110065622921929L;
+		private static final long serialVersionUID = 0x2AE961B8D3DD32C9L;
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class ManufacturerStillUsed extends SQLDatabaseException {
-		private static final long serialVersionUID = 3092110065622921929L;
+		private static final long serialVersionUID = 0x2AE961B8D3DD32C9L;
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class IngredientStillUsed extends SQLDatabaseException {
-		private static final long serialVersionUID = 3092110065622921929L;
+		private static final long serialVersionUID = 0x2AE961B8D3DD32C9L;
 	}
 	
 	/**
@@ -110,7 +110,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class IngredientNotExist extends SQLDatabaseException {
-		private static final long serialVersionUID = 3092110065622921929L;
+		private static final long serialVersionUID = 0x2AE961B8D3DD32C9L;
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class AuthenticationError extends SQLDatabaseException {
-		private static final long serialVersionUID = -3035025128800993047L;
+		private static final long serialVersionUID = -0x2A1E93463E913F17L;
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class ClientNotConnected extends SQLDatabaseException {
-		private static final long serialVersionUID = -4096975136661332560L;
+		private static final long serialVersionUID = -0x38DB612E1A4E6250L;
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class ClientAlreadyConnected extends SQLDatabaseException {
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 1;
 	}
 	
 	/**
@@ -150,7 +150,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class ClientAlreadyExist extends SQLDatabaseException {
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 1;
 	}
 	
 	/**
@@ -160,7 +160,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class ClientNotExist extends SQLDatabaseException {
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 1;
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class NoGroceryListToRestore extends SQLDatabaseException {
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 1;
 	}
 	
 	/**
@@ -180,7 +180,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class GroceryListIsEmpty extends SQLDatabaseException {
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 1;
 	}
 
 	/**
@@ -190,7 +190,7 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class NumberOfConnectionsExceeded extends SQLDatabaseException {
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 1;
 	}
 	
 	/**
@@ -200,6 +200,6 @@ public class SQLDatabaseException extends Exception {
 	 *
 	 */
 	public static class InvalidParameter extends SQLDatabaseException {
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 1;
 	}
 }

@@ -43,7 +43,7 @@ public class Packing {
 				String filename = file.getName(), filepath = file.getAbsolutePath();
 				long filesize = file.length(); // size in bytes
 
-				log.info("Zipping and adding: " + filename + " into " + zipFilePath);
+				log.debug("Zipping and adding: " + filename + " into " + zipFilePath);
 
 				FileInputStream fins = new FileInputStream(filepath);
 				origin = new BufferedInputStream(fins, bufferSize);
@@ -62,9 +62,9 @@ public class Packing {
 
 			out.close();
 			if (totEntries == 0)
-				log.info("Created zip " + zipFilePath + "has no entries.");
+				log.debug("Created zip " + zipFilePath + "has no entries.");
 
-			log.info("Successfully created zip " + zipFilePath);
+			log.debug("Successfully created zip " + zipFilePath);
 			return new ZipFile(zipFilePath);
 
 		} catch (Exception e) {
@@ -99,7 +99,7 @@ public class Packing {
 			ZipEntry entry;
 			for (Enumeration<? extends ZipEntry> e = zfile.entries(); e.hasMoreElements();) {
 				entry = e.nextElement();
-				log.info("Extracting: " + entry);
+				log.debug("Extracting: " + entry);
 				is = new BufferedInputStream(zfile.getInputStream(entry));
 				int count;
 				byte data[] = new byte[bufferSize];
