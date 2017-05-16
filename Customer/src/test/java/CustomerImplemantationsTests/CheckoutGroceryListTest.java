@@ -18,15 +18,16 @@ import ClientServerApi.ResultDescriptor;
 import CustomerContracts.ICustomer;
 import CustomerContracts.ACustomerExceptions.CriticalError;
 import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
+import CustomerContracts.ACustomerExceptions.GroceryListIsEmpty;
 import CustomerImplementations.Customer;
 import CustomerImplementations.CustomerDefs;
 import UtilsContracts.IClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 
-public class LogoutTest {
+public class CheckoutGroceryListTest {
 	private ICustomer customer;
-
+	
 	@Mock
 	private IClientRequestHandler clientRequestHandler;
 
@@ -37,35 +38,35 @@ public class LogoutTest {
 	}
 	
 	@Test
-	public void logoutSuccessfulTest() {
+	public void checkoutGroceryListSuccessfulTest() {	
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT).serialize()))
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST).serialize()))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
 			fail();
 		}
 		
 		try {
-			customer.logout();
-		} catch (CustomerNotConnected | CriticalError e) {			
+			customer.checkOutGroceryList();
+		} catch (CriticalError | CustomerNotConnected | GroceryListIsEmpty e) {
 			fail();
 		}
 	}
 	
 	@Test
-	public void logoutCriticalErrorTest() {
+	public void checkoutGroceryListCriticalErrorTest() {	
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT).serialize()))
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST).serialize()))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException ¢) {
 			fail();
 		}
 		
 		try {
-			customer.logout();
-		} catch (CustomerNotConnected e) {			
+			customer.checkOutGroceryList();
+		} catch (CustomerNotConnected | GroceryListIsEmpty e) {
 			fail();
 		} catch (CriticalError __) {
 			/* success */
@@ -73,18 +74,18 @@ public class LogoutTest {
 	}
 	
 	@Test
-	public void logoutCustomerNotConnectedTest() {
+	public void checkoutGroceryListCustomerNotConnectedTest() {	
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT).serialize()))
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST).serialize()))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
 		} catch (IOException ¢) {
 			fail();
 		}
 		
 		try {
-			customer.logout();
-		} catch (CriticalError e) {			
+			customer.checkOutGroceryList();
+		} catch (CriticalError | GroceryListIsEmpty e) {
 			fail();
 		} catch (CustomerNotConnected __) {
 			/* success */
@@ -92,18 +93,37 @@ public class LogoutTest {
 	}
 	
 	@Test
-	public void IllegalResultTest() {
+	public void checkoutGroceryListGroceryListIsEmptyTest() {	
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT).serialize()))
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST).serialize()))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_GROCERY_LIST_IS_EMPTY).serialize());
 		} catch (IOException ¢) {
 			fail();
 		}
 		
 		try {
-			customer.logout();
-		} catch (CustomerNotConnected e) {			
+			customer.checkOutGroceryList();
+		} catch (CriticalError | CustomerNotConnected e) {
+			fail();
+		} catch (GroceryListIsEmpty __) {
+			/* success */
+		}
+	}
+	
+	@Test
+	public void checkoutGroceryListIllegalResultTest() {	
+		try {
+			Mockito.when(
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST).serialize()))
+				.thenReturn(new CommandWrapper(ResultDescriptor.SM_FOROGT_PASSWORD_WRONG_ANSWER).serialize());
+		} catch (IOException ¢) {
+			fail();
+		}
+		
+		try {
+			customer.checkOutGroceryList();
+		} catch (GroceryListIsEmpty | CustomerNotConnected e) {
 			fail();
 		} catch (CriticalError __) {
 			/* success */

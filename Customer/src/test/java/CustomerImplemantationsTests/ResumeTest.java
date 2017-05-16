@@ -98,4 +98,25 @@ public class ResumeTest {
 			/* success */
 		}
 	}
+	
+	@Test
+	public void IllegalResultTest() {
+		GroceryList groceryList = new GroceryList();
+		
+		try {
+			Mockito.when(
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOAD_GROCERY_LIST).serialize()))
+				.thenReturn(new CommandWrapper(ResultDescriptor.SM_GROCERY_LIST_IS_EMPTY, Serialization.serialize(groceryList)).serialize());
+		} catch (IOException ¢) {
+			fail();
+		}
+		
+		try {
+			customer.resume(CustomerDefs.loginCommandSenderId);
+		} catch (CustomerNotConnected e1) {			
+			fail();
+		} catch (CriticalError __) {
+			/* success */
+		}
+	}
 }

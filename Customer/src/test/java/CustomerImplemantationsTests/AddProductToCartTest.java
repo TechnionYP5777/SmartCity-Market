@@ -78,13 +78,6 @@ public class AddProductToCartTest {
 				| InvalidParameter e1) {
 			fail();
 		}
-		
-		try {
-			customer.addProductToCart(sc, amount);
-		} catch (CriticalError | CustomerNotConnected | AmountBiggerThanAvailable | ProductPackageDoesNotExist
-				| InvalidParameter e) {
-			fail();
-		}
 	}
 	
 	@Test
@@ -233,6 +226,36 @@ public class AddProductToCartTest {
 				| ProductPackageDoesNotExist e) {
 			fail();
 		} catch (InvalidParameter __) {
+			/* success */
+		}
+	}
+	
+	@Test
+	public void IllegalResultTest() {	
+		try {
+			Mockito.when(
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.ADD_PRODUCT_TO_GROCERY_LIST,
+						Serialization.serialize(pp)).serialize()))
+				.thenReturn(new CommandWrapper(ResultDescriptor.SM_GROCERY_LIST_IS_EMPTY).serialize());
+		} catch (IOException ¢) {
+			fail();
+		}
+		
+		try {
+			Mockito.when(
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
+						Serialization.serialize(sc)).serialize()))
+				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(catalogProduct)).serialize());
+		} catch (IOException ¢) {
+			fail();
+		}
+		
+		try {
+			customer.addProductToCart(sc, amount);
+		} catch (InvalidParameter | CustomerNotConnected | AmountBiggerThanAvailable
+				| ProductPackageDoesNotExist e) {
+			fail();
+		} catch (CriticalError __) {
 			/* success */
 		}
 	}

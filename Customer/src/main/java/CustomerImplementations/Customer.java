@@ -348,7 +348,7 @@ public class Customer extends ACustomer implements ICustomer {
 	}
 
 	@Override
-	public void returnProductToShelf(SmartCode c, int amount) throws ProductNotInCart, AmountBiggerThanAvailable,
+	public void returnProductToShelf(SmartCode c, int amount) throws AmountBiggerThanAvailable,
 			ProductPackageDoesNotExist, CriticalError, CustomerNotConnected {
 		String serverResponse;
 

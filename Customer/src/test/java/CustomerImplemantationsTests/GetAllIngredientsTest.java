@@ -17,16 +17,15 @@ import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import CustomerContracts.ICustomer;
 import CustomerContracts.ACustomerExceptions.CriticalError;
-import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
 import CustomerImplementations.Customer;
 import CustomerImplementations.CustomerDefs;
 import UtilsContracts.IClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 
-public class LogoutTest {
+public class GetAllIngredientsTest {
 	private ICustomer customer;
-
+	
 	@Mock
 	private IClientRequestHandler clientRequestHandler;
 
@@ -37,75 +36,54 @@ public class LogoutTest {
 	}
 	
 	@Test
-	public void logoutSuccessfulTest() {
+	public void getAllIngredientsTestSuccessfulTest() {	
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT).serialize()))
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.GET_ALL_INGREDIENTS).serialize()))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
 			fail();
 		}
 		
 		try {
-			customer.logout();
-		} catch (CustomerNotConnected | CriticalError e) {			
+			customer.getAllIngredients();
+		} catch (CriticalError e) {
 			fail();
 		}
 	}
 	
 	@Test
-	public void logoutCriticalErrorTest() {
+	public void getAllIngredientsTestCriticalErrorTest() {	
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT).serialize()))
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.GET_ALL_INGREDIENTS).serialize()))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException ¢) {
 			fail();
 		}
 		
 		try {
-			customer.logout();
-		} catch (CustomerNotConnected e) {			
+			customer.getAllIngredients();
 			fail();
-		} catch (CriticalError __) {
+		} catch (CriticalError e) {
 			/* success */
 		}
 	}
 	
 	@Test
-	public void logoutCustomerNotConnectedTest() {
+	public void getAllIngredientsTestIllegalResultTest() {	
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT).serialize()))
-				.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
-		} catch (IOException ¢) {
-			fail();
-		}
-		
-		try {
-			customer.logout();
-		} catch (CriticalError e) {			
-			fail();
-		} catch (CustomerNotConnected __) {
-			/* success */
-		}
-	}
-	
-	@Test
-	public void IllegalResultTest() {
-		try {
-			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT).serialize()))
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.GET_ALL_INGREDIENTS).serialize()))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_GROCERY_LIST_IS_EMPTY).serialize());
 		} catch (IOException ¢) {
 			fail();
 		}
 		
 		try {
-			customer.logout();
-		} catch (CustomerNotConnected e) {			
+			customer.getAllIngredients();
 			fail();
-		} catch (CriticalError __) {
+		} catch (CriticalError e) {
 			/* success */
 		}
 	}

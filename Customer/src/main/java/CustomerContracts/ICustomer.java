@@ -85,7 +85,7 @@ public interface ICustomer {
 	 * @throws CustomerNotConnected 
 	 * @throws ProductPackageDoesNotExist 
 	 */
-	void returnProductToShelf(SmartCode c, int amount) throws CriticalError, CustomerNotConnected, ProductNotInCart, AmountBiggerThanAvailable, ProductPackageDoesNotExist;
+	void returnProductToShelf(SmartCode c, int amount) throws CriticalError, CustomerNotConnected, AmountBiggerThanAvailable, ProductPackageDoesNotExist;
 	
 	/**
 	 * getTotalSum - returns the total sum of the shopping

@@ -121,4 +121,23 @@ public class LoginTest {
 		/* Test Passed */
 		}
 	}
+	
+	@Test
+	public void IllegalResultTest() {
+		try {
+			Mockito.when(
+					clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOGIN_CUSTOMER,
+							Serialization.serialize(new Login("Guesttt", "Guest"))).serialize()))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_GROCERY_LIST_IS_EMPTY).serialize());
+		} catch (IOException ¢) {
+			fail();
+		}
+		try {
+			customer.login("Guesttt", "Guest", false);
+		} catch (AuthenticationError ¢) {
+			fail();
+		} catch (CriticalError ¢) {
+		/* Test Passed */
+		}
+	}
 }
