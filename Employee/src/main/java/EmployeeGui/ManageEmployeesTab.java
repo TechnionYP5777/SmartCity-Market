@@ -1,5 +1,7 @@
 package EmployeeGui;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -27,6 +29,7 @@ import EmployeeDefs.AEmployeeException.WorkerDoesNotExist;
 import EmployeeImplementations.Manager;
 import GuiUtils.RadioButtonEnabler;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.StackTraceUtil;
 import de.jensd.fx.glyphs.GlyphsBuilder;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -208,8 +211,10 @@ public class ManageEmployeesTab implements Initializable {
 
 		try {
 			employeesInSystem = manager.getAllWorkers();
+			// TODO 
+			throw new EmployeeNotConnected();
 		} catch (CriticalError | EmployeeNotConnected | ConnectionFailure e) {
-			log.debug(e.getStackTrace());
+			log.debug(StackTraceUtil.getStackTrace(e));
 			log.fatal(e.getMessage());
 			e.showInfoToUser();
 		}
