@@ -3,6 +3,7 @@ package CustomerImplemantationsTests;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
@@ -87,6 +88,25 @@ public class LogoutTest {
 		} catch (CriticalError e) {			
 			fail();
 		} catch (CustomerNotConnected __) {
+			/* success */
+		}
+	}
+	
+	@Test
+	public void logoutConnectionFailureTest() {
+		try {
+			Mockito.when(
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT).serialize()))
+			.thenThrow(new SocketTimeoutException());
+		} catch (IOException ¢) {
+			fail();
+		}
+		
+		try {
+			customer.logout();
+		} catch (CustomerNotConnected e) {			
+			fail();
+		} catch (CriticalError __) {
 			/* success */
 		}
 	}

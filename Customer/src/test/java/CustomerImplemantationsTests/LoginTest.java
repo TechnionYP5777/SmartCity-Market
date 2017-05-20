@@ -3,6 +3,7 @@ package CustomerImplemantationsTests;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
@@ -118,6 +119,25 @@ public class LoginTest {
 		} catch (CriticalError ¢) {
 			fail();
 		} catch (AuthenticationError ¢) {
+		/* Test Passed */
+		}
+	}
+	
+	@Test
+	public void ConnectionFailure() {
+		try {
+			Mockito.when(
+					clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOGIN_CUSTOMER,
+							Serialization.serialize(new Login("Guesttt", "Guest"))).serialize()))
+			.thenThrow(new SocketTimeoutException());
+		} catch (IOException ¢) {
+			fail();
+		}
+		try {
+			customer.login("Guesttt", "Guest", false);
+		} catch (AuthenticationError ¢) {
+			fail();
+		} catch (CriticalError ¢) {
 		/* Test Passed */
 		}
 	}

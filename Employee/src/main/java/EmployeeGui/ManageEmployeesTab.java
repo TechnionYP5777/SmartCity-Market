@@ -1,7 +1,5 @@
 package EmployeeGui;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;

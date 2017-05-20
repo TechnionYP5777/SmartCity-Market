@@ -3,6 +3,7 @@ package CustomerImplemantationsTests;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.time.LocalDate;
 
 import org.apache.log4j.PropertyConfigurator;
@@ -226,6 +227,36 @@ public class AddProductToCartTest {
 				| ProductPackageDoesNotExist e) {
 			fail();
 		} catch (InvalidParameter __) {
+			/* success */
+		}
+	}
+	
+	@Test
+	public void addProductToCartConnectionFailureTest() {	
+		try {
+			Mockito.when(
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.ADD_PRODUCT_TO_GROCERY_LIST,
+						Serialization.serialize(pp)).serialize()))
+			.thenThrow(new SocketTimeoutException());
+		} catch (IOException ¢) {
+			fail();
+		}
+		
+		try {
+			Mockito.when(
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
+						Serialization.serialize(sc)).serialize()))
+				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(catalogProduct)).serialize());
+		} catch (IOException ¢) {
+			fail();
+		}
+		
+		try {
+			customer.addProductToCart(sc, amount);
+		} catch (CustomerNotConnected | AmountBiggerThanAvailable | ProductPackageDoesNotExist
+				| InvalidParameter e) {
+			fail();
+		} catch (CriticalError __) {
 			/* success */
 		}
 	}

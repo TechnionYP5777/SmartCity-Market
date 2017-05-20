@@ -59,7 +59,7 @@ public abstract class ACustomer {
 	protected void resultDescriptorHandler(ResultDescriptor ¢) throws InvalidCommandDescriptor,
 		InvalidParameter, CriticalError, CustomerNotConnected, AmountBiggerThanAvailable,
 		ProductPackageDoesNotExist, GroceryListIsEmpty, AuthenticationError, ProductCatalogDoesNotExist,
-		UsernameAlreadyExists {
+		UsernameAlreadyExists, ForgotPasswordWrongAnswer {
 
 		switch (¢) {
 
@@ -122,6 +122,11 @@ public abstract class ACustomer {
 			log.fatal("Command execution failed, username alread exists in the system");
 			
 			throw new UsernameAlreadyExists();
+			
+		case SM_FOROGT_PASSWORD_WRONG_ANSWER:
+			log.fatal("Command execution failed, got wrong password for as answer");
+			
+			throw new ForgotPasswordWrongAnswer();
 			
 		//TODO - ADD MORE CASES RELEVANT FOR REGISTERED-CUSTOMERS
 		default:

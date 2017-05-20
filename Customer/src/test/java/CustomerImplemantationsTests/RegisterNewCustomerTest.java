@@ -3,6 +3,7 @@ package CustomerImplemantationsTests;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.time.LocalDate;
 import java.util.HashSet;
 
@@ -122,6 +123,26 @@ public class RegisterNewCustomerTest {
 		} catch (CriticalError | InvalidParameter e) {
 			fail();
 		} catch (UsernameAlreadyExists e) {
+			/* success */
+		}
+	}
+	
+	@Test
+	public void registerNewCustomerConnectionFailureTest() {	
+		try {
+			Mockito.when(
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.REGISTER_NEW_CUSTOMER,
+						Serialization.serialize(customerProfile)).serialize()))
+			.thenThrow(new SocketTimeoutException());
+		} catch (IOException ¢) {
+			fail();
+		}
+		
+		try {
+			customer.registerNewCustomer(customerProfile);
+		} catch (UsernameAlreadyExists | InvalidParameter e) {
+			fail();
+		} catch (CriticalError e) {
 			/* success */
 		}
 	}

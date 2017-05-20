@@ -59,7 +59,7 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | CriticalError | AmountBiggerThanAvailable | ProductPackageDoesNotExist
-				| GroceryListIsEmpty | ProductCatalogDoesNotExist | UsernameAlreadyExists ¢) {
+				| GroceryListIsEmpty | ProductCatalogDoesNotExist | UsernameAlreadyExists | ForgotPasswordWrongAnswer ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();
@@ -95,7 +95,7 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | CriticalError | AmountBiggerThanAvailable | ProductPackageDoesNotExist
-				| GroceryListIsEmpty | ProductCatalogDoesNotExist | UsernameAlreadyExists ¢) {
+				| GroceryListIsEmpty | ProductCatalogDoesNotExist | UsernameAlreadyExists | ForgotPasswordWrongAnswer ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();

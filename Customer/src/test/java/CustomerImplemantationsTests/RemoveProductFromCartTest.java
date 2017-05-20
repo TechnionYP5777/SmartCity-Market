@@ -3,6 +3,7 @@ package CustomerImplemantationsTests;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.time.LocalDate;
 
 import org.apache.log4j.PropertyConfigurator;
@@ -154,6 +155,26 @@ public class RemoveProductFromCartTest {
 		} catch (CustomerNotConnected | CriticalError | ProductPackageDoesNotExist e) {
 			fail();	
 		} catch (AmountBiggerThanAvailable e) {
+			/* success */
+		}
+	}
+	
+	@Test
+	public void removeProductFromCartConnectionFailureTest() {	
+		try {
+			Mockito.when(
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.REMOVE_PRODUCT_FROM_GROCERY_LIST,
+						Serialization.serialize(pp)).serialize()))
+			.thenThrow(new SocketTimeoutException());
+		} catch (IOException ¢) {
+			fail();
+		}
+		
+		try {
+			customer.returnProductToShelf(sc, amount);
+		} catch (CustomerNotConnected | AmountBiggerThanAvailable | ProductPackageDoesNotExist e) {
+			fail();	
+		} catch (CriticalError e) {
 			/* success */
 		}
 	}

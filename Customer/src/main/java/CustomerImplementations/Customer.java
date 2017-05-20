@@ -28,6 +28,7 @@ import PicturesHandler.PictureManager;
 import CustomerContracts.ACustomerExceptions.AmountBiggerThanAvailable;
 import CustomerContracts.ACustomerExceptions.AuthenticationError;
 import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
+import CustomerContracts.ACustomerExceptions.ForgotPasswordWrongAnswer;
 import CustomerContracts.ACustomerExceptions.CriticalError;
 import CustomerContracts.ACustomerExceptions.GroceryListIsEmpty;
 import CustomerContracts.ACustomerExceptions.InvalidCommandDescriptor;
@@ -145,7 +146,7 @@ public class Customer extends ACustomer implements ICustomer {
 				resultDescriptorHandler(resDesc);
 			} catch (InvalidCommandDescriptor | InvalidParameter | CustomerNotConnected | ProductCatalogDoesNotExist
 					| AmountBiggerThanAvailable | ProductPackageDoesNotExist | GroceryListIsEmpty
-					| UsernameAlreadyExists | CriticalError | AuthenticationError ¢) {
+					| UsernameAlreadyExists | CriticalError | AuthenticationError | ForgotPasswordWrongAnswer ¢) {
 				log.fatal("Critical bug: this command result isn't supposed to return here");
 
 				throw new RuntimeException();
@@ -205,7 +206,7 @@ public class Customer extends ACustomer implements ICustomer {
 			resultDescriptorHandler(cmdwrppr.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter | CustomerNotConnected | ProductCatalogDoesNotExist
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | GroceryListIsEmpty
-				| UsernameAlreadyExists ¢) {
+				| UsernameAlreadyExists | ForgotPasswordWrongAnswer ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();
@@ -244,7 +245,7 @@ public class Customer extends ACustomer implements ICustomer {
 		try {
 			resultDescriptorHandler(getCommandWrapper(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter | ProductCatalogDoesNotExist | AmountBiggerThanAvailable
-				| ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
+				| ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists | ForgotPasswordWrongAnswer ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();
@@ -282,7 +283,7 @@ public class Customer extends ACustomer implements ICustomer {
 			id = _id;
 			groceryList = Serialization.deserialize($.getData(), GroceryList.class);
 		} catch (InvalidCommandDescriptor | InvalidParameter | ProductCatalogDoesNotExist | AmountBiggerThanAvailable
-				| ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
+				| ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists | ForgotPasswordWrongAnswer ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();
@@ -332,7 +333,7 @@ public class Customer extends ACustomer implements ICustomer {
 		try {
 			resultDescriptorHandler(getCommandWrapper(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | ProductCatalogDoesNotExist | GroceryListIsEmpty | AuthenticationError
-				| UsernameAlreadyExists ¢) {
+				| UsernameAlreadyExists | ForgotPasswordWrongAnswer ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();
@@ -371,7 +372,7 @@ public class Customer extends ACustomer implements ICustomer {
 		try {
 			resultDescriptorHandler(getCommandWrapper(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter | ProductCatalogDoesNotExist | GroceryListIsEmpty
-				| AuthenticationError | UsernameAlreadyExists ¢) {
+				| AuthenticationError | UsernameAlreadyExists | ForgotPasswordWrongAnswer ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();
@@ -438,7 +439,7 @@ public class Customer extends ACustomer implements ICustomer {
 		try {
 			resultDescriptorHandler(getCommandWrapper(serverResponse).getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter | AmountBiggerThanAvailable | ProductPackageDoesNotExist
-				| AuthenticationError | ProductCatalogDoesNotExist | UsernameAlreadyExists ¢) {
+				| AuthenticationError | ProductCatalogDoesNotExist | UsernameAlreadyExists | ForgotPasswordWrongAnswer ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();
@@ -487,7 +488,7 @@ public class Customer extends ACustomer implements ICustomer {
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | InvalidParameter | CriticalError | AmountBiggerThanAvailable
-				| ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists ¢) {
+				| ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists | ForgotPasswordWrongAnswer ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();
@@ -539,7 +540,7 @@ public class Customer extends ACustomer implements ICustomer {
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | CriticalError | AmountBiggerThanAvailable | ProductPackageDoesNotExist
-				| GroceryListIsEmpty | AuthenticationError | CustomerNotConnected | ProductCatalogDoesNotExist ¢) {
+				| GroceryListIsEmpty | AuthenticationError | CustomerNotConnected | ProductCatalogDoesNotExist | ForgotPasswordWrongAnswer ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();
@@ -574,7 +575,7 @@ public class Customer extends ACustomer implements ICustomer {
 			resultDescriptorHandler(commandWrapper.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | CriticalError | AmountBiggerThanAvailable | ProductPackageDoesNotExist
 				| GroceryListIsEmpty | AuthenticationError | CustomerNotConnected | ProductCatalogDoesNotExist
-				| InvalidParameter | UsernameAlreadyExists ¢) {
+				| InvalidParameter | UsernameAlreadyExists | ForgotPasswordWrongAnswer ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();
@@ -615,7 +616,7 @@ public class Customer extends ACustomer implements ICustomer {
 			isFree = false;
 		} catch (InvalidCommandDescriptor | CriticalError | AmountBiggerThanAvailable | ProductPackageDoesNotExist
 				| GroceryListIsEmpty | AuthenticationError | CustomerNotConnected | ProductCatalogDoesNotExist
-				| InvalidParameter ¢) {
+				| InvalidParameter | ForgotPasswordWrongAnswer ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();

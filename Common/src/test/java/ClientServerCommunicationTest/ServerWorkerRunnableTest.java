@@ -131,7 +131,7 @@ public class ServerWorkerRunnableTest {
 	}
 	
 	@Test
-	@SuppressWarnings("unused") public void ServerWorkerRunnableNullArguments () {
+	public void ServerWorkerRunnableNullArguments () {
 		boolean success = false;
 		
 		try {

@@ -3,6 +3,7 @@ package CustomerImplemantationsTests;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
@@ -36,7 +37,7 @@ public class GetAllIngredientsTest {
 	}
 	
 	@Test
-	public void getAllIngredientsTestSuccessfulTest() {	
+	public void getAllIngredientsSuccessfulTest() {	
 		try {
 			Mockito.when(
 				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.GET_ALL_INGREDIENTS).serialize()))
@@ -53,11 +54,29 @@ public class GetAllIngredientsTest {
 	}
 	
 	@Test
-	public void getAllIngredientsTestCriticalErrorTest() {	
+	public void getAllIngredientsCriticalErrorTest() {	
 		try {
 			Mockito.when(
 				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.GET_ALL_INGREDIENTS).serialize()))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
+		} catch (IOException ¢) {
+			fail();
+		}
+		
+		try {
+			customer.getAllIngredients();
+			fail();
+		} catch (CriticalError e) {
+			/* success */
+		}
+	}
+	
+	@Test
+	public void getAllIngredientsConnectionFailureTest() {	
+		try {
+			Mockito.when(
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.GET_ALL_INGREDIENTS).serialize()))
+			.thenThrow(new SocketTimeoutException());
 		} catch (IOException ¢) {
 			fail();
 		}

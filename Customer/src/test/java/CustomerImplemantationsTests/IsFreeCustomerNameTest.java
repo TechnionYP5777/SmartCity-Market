@@ -3,6 +3,7 @@ package CustomerImplemantationsTests;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
@@ -64,6 +65,25 @@ public class IsFreeCustomerNameTest {
 					clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.IS_FREE_CUSTOMER_NAME
 							,Serialization.serialize(username)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
+		} catch (IOException ¢) {
+			fail();
+		}
+		
+		try {
+			customer.isFreeUsername(username);
+			fail();
+		} catch (CriticalError e) {
+			/* success */
+		}
+	}
+	
+	@Test
+	public void isFreeCustomerNameConnectionFailureTest() {	
+		try {
+			Mockito.when(
+					clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.IS_FREE_CUSTOMER_NAME
+							,Serialization.serialize(username)).serialize()))
+			.thenThrow(new SocketTimeoutException());
 		} catch (IOException ¢) {
 			fail();
 		}

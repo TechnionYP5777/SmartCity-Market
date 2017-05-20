@@ -3,6 +3,7 @@ package CustomerImplemantationsTests;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
@@ -95,6 +96,25 @@ public class ResumeTest {
 		} catch (CriticalError e1) {			
 			fail();
 		} catch (CustomerNotConnected __) {
+			/* success */
+		}
+	}
+	
+	@Test
+	public void resumeConnectionFailureTest() {		
+		try {
+			Mockito.when(
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.LOAD_GROCERY_LIST).serialize()))
+			.thenThrow(new SocketTimeoutException());
+		} catch (IOException ¢) {
+			fail();
+		}
+		
+		try {
+			customer.resume(CustomerDefs.loginCommandSenderId);
+		} catch (CustomerNotConnected e1) {			
+			fail();
+		} catch (CriticalError __) {
 			/* success */
 		}
 	}

@@ -3,6 +3,7 @@ package CustomerImplemantationsTests;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
@@ -107,6 +108,25 @@ public class CheckoutGroceryListTest {
 		} catch (CriticalError | CustomerNotConnected e) {
 			fail();
 		} catch (GroceryListIsEmpty __) {
+			/* success */
+		}
+	}
+	
+	@Test
+	public void checkoutGroceryListConnectionFailureTest() {	
+		try {
+			Mockito.when(
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST).serialize()))
+			.thenThrow(new SocketTimeoutException());
+		} catch (IOException ¢) {
+			fail();
+		}
+		
+		try {
+			customer.checkOutGroceryList();
+		} catch (GroceryListIsEmpty | CustomerNotConnected e) {
+			fail();
+		} catch (CriticalError __) {
 			/* success */
 		}
 	}
