@@ -209,8 +209,6 @@ public class ManageEmployeesTab implements Initializable {
 
 		try {
 			employeesInSystem = manager.getAllWorkers();
-			// TODO 
-			throw new EmployeeNotConnected();
 		} catch (CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			log.debug(StackTraceUtil.getStackTrace(e));
 			log.fatal(e.getMessage());

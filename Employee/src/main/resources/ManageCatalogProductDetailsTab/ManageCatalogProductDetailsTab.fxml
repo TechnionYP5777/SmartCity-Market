@@ -9,34 +9,36 @@
 
 <HBox spacing="15.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductDetailsTab">
    <children>
-      <VBox>
+      <VBox spacing="10.0">
          <children>
             <Label text="Manage Manufacturers" />
             <HBox spacing="10.0">
                <children>
-                  <JFXListView fx:id="manufacturerList" minHeight="500.0" minWidth="250.0"/>
-                  <VBox>
+                  <JFXListView fx:id="manufacturerList" minHeight="500.0" minWidth="250.0" />
+                  <VBox spacing="10.0">
                      <children>
                         <JFXButton fx:id="addManuBtn" text="Add Manufacturer" />
                         <JFXButton fx:id="removeManuBtn" onAction="#removeManuPress" text="Remove Manufacturer" />
                         <JFXTextField fx:id="filterManu" promptText="Search Manufacturer" />
+                        <JFXButton fx:id="renameManu" text="Rename" />
                      </children>
                   </VBox>
                </children>
             </HBox>
          </children>
       </VBox>
-      <VBox>
+      <VBox spacing="10.0">
          <children>
             <Label text="Manage Ingredients" />
             <HBox spacing="10.0">
                <children>
                   <JFXListView fx:id="ingredientsList" minHeight="500.0" minWidth="250.0" />
-                  <VBox>
+                  <VBox spacing="10.0">
                      <children>
                         <JFXButton fx:id="addIngrBtn" text="Add Ingredient" />
                         <JFXButton fx:id="removeIngrBtn" onAction="#removeIngrPressed" text="Remove Ingredient" />
                         <JFXTextField fx:id="filterIngr" promptText="Search Ingredient" />
+                        <JFXButton fx:id="renameIngr" text="Rename" />
                      </children>
                   </VBox>
                </children>
