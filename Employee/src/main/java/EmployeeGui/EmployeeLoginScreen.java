@@ -14,6 +14,7 @@ import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IManager;
 import EmployeeImplementations.Manager;
 import GuiUtils.AbstractApplicationScreen;
+import GuiUtils.ForgetPasswordUtil;
 import SMExceptions.SMException;
 import UtilsContracts.IPersistentStore;
 import UtilsImplementations.InjectionFactory;
@@ -100,7 +101,11 @@ public class EmployeeLoginScreen implements Initializable {
 
 	@FXML
 	void forgetPassPressed(MouseEvent __) {
-		// TODO call forget
+		try {
+			ForgetPasswordUtil.start();
+		} catch (Exception e) {
+			// TODO
+		}
 	}
 
 	private void enableLoginButtonCheck() {
