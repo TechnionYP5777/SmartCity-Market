@@ -314,7 +314,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		JFXPopup popup3 = new JFXPopup(renameManuContainer);
 		renameManu.setOnMouseClicked(e -> popup3.show(renameManu, PopupVPosition.TOP, PopupHPosition.LEFT));
 
-		newManu.textProperty().addListener((observable, oldValue, newValue) -> enableAddButtons());
+		renameManuLbl.textProperty().addListener((observable, oldValue, newValue) -> enableAddButtons());
 		
 		Label lbl4 = new Label("Rename Selected Ingredient");
 		renameIngrLbl = new JFXTextField();
