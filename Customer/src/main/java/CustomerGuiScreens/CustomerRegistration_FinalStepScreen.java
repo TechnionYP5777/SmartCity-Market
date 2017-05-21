@@ -13,7 +13,6 @@ import com.jfoenix.controls.JFXTextArea;
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.ICustomerProfile;
 import CustomerContracts.ICustomer;
-import CustomerGuiHelpers.CustomerGuiExceptionsHandler;
 import CustomerGuiHelpers.TempCustomerProfilePassingData;
 import CustomerImplementations.Customer;
 import GuiUtils.AbstractApplicationScreen;
@@ -100,7 +99,7 @@ public class CustomerRegistration_FinalStepScreen implements Initializable {
 			customer.registerNewCustomer(profile);
 			AbstractApplicationScreen.setScene("/CustomerLoginScreen/CustomerLoginScreen.fxml");
 		} catch (SMException e) {
-			CustomerGuiExceptionsHandler.handle(e);	
+			e.showInfoToUser();
 		}
 		
 	}

@@ -15,7 +15,6 @@ import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.SmartCode;
 import CustomerContracts.ICustomer;
-import CustomerGuiHelpers.CustomerGuiExceptionsHandler;
 import CustomerGuiHelpers.CustomerProductCellFormat;
 import CustomerGuiHelpers.TempCustomerPassingData;
 import GuiUtils.AbstractApplicationScreen;
@@ -204,10 +203,10 @@ public class CustomerMainScreen implements Initializable {
 		try {
 			customer.logout();
 		} catch (SMException e) {
+			e.showInfoToUser();
 			Platform.exit();
 			System.exit(0);
 		}
-		
 		TempCustomerPassingData.customer = null;
 		AbstractApplicationScreen.setScene("/CustomerWelcomeScreen/CustomerWelcomeScreen.fxml");
 	}
@@ -273,7 +272,7 @@ public class CustomerMainScreen implements Initializable {
 		try {
 			customer.checkOutGroceryList();
 		} catch (SMException e) {
-			CustomerGuiExceptionsHandler.handle(e);	
+			e.showInfoToUser();
 		}
 		
 		TempCustomerPassingData.customer =  null;
@@ -289,7 +288,7 @@ public class CustomerMainScreen implements Initializable {
 		try {
 			customer.addProductToCart(scannedSmartCode, 1);
 		} catch (SMException e) {
-			CustomerGuiExceptionsHandler.handle(e);	
+			e.showInfoToUser();
 			return;
 		}	
 		updateCartProductsInfo();
@@ -300,7 +299,7 @@ public class CustomerMainScreen implements Initializable {
 		try {
 			customer.returnProductToShelf(scannedSmartCode, 1);
 		} catch (SMException e) {
-			CustomerGuiExceptionsHandler.handle(e);	
+			e.showInfoToUser();
 			return;
 		}
 		updateCartProductsInfo();
@@ -311,7 +310,7 @@ public class CustomerMainScreen implements Initializable {
 		try {
 			customer.removeAllItemsOfCartProduct(scannedSmartCode);
 		} catch (SMException e) {
-			CustomerGuiExceptionsHandler.handle(e);	
+			e.showInfoToUser();
 			return;
 		}
 		updateCartProductsInfo();
@@ -328,7 +327,7 @@ public class CustomerMainScreen implements Initializable {
 			try {
 				catalogProduct = customer.viewCatalogProduct(scannedSmartCode);
 			} catch (SMException e) {
-				CustomerGuiExceptionsHandler.handle(e);
+				e.showInfoToUser();
 				return;
 			}
 			amount = 0;

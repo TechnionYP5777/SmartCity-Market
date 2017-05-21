@@ -9,6 +9,7 @@ import CustomerGuiHelpers.TempCustomerPassingData;
 import CustomerImplementations.Customer;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.CommonExceptions.CriticalError;
+import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -87,13 +88,8 @@ public class CustomerLoginScreen implements Initializable {
 				return;
 			}
 			customer.login(username, password, true);
-		} catch (CriticalError e) {
-			Alert alert = new Alert(AlertType.ERROR , "A problem had occured. Please Try again or let us know if it continues.");
-			alert.showAndWait();
-			return;
-		} catch (AuthenticationError e) {
-			Alert alert = new Alert(AlertType.ERROR , "Wrong user name or password.");
-			alert.showAndWait();
+		} catch (SMException e) {
+			e.showInfoToUser();
 			return;
 		}
 		catch (Exception e) {
@@ -114,13 +110,8 @@ public class CustomerLoginScreen implements Initializable {
 		ICustomer customer = InjectionFactory.getInstance(Customer.class);
 		try {
 			customer.login(guestLogin.getUserName(), guestLogin.getUserName(), true);
-		} catch (CriticalError e) {
-			Alert alert = new Alert(AlertType.ERROR , "A problem had occured. Please Try again or let us know if it continues.");
-			alert.showAndWait();
-			return;
-		} catch (AuthenticationError e) {
-			Alert alert = new Alert(AlertType.ERROR , "Wrong user name or password.");
-			alert.showAndWait();
+		} catch (SMException e) {
+			e.showInfoToUser();
 			return;
 		}
 		catch (Exception e) {

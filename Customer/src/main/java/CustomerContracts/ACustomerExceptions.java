@@ -1,5 +1,7 @@
 package CustomerContracts;
 
+import CommonDefs.GuiCommonDefs;
+import GuiUtils.DialogMessagesService;
 import SMExceptions.SMException;
 
 /**
@@ -17,6 +19,12 @@ public class ACustomerExceptions extends SMException {
 	 */
 	public static class InvalidCommandDescriptor extends ACustomerExceptions {
 		private static final long serialVersionUID = 0x523B9E9024F512E7L;
+		
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.criticalErrorTitle, null,
+					GuiCommonDefs.criticalErrorMsg);
+		}
 	}
 	
 	/**
@@ -24,6 +32,12 @@ public class ACustomerExceptions extends SMException {
 	 */
 	public static class InvalidParameter extends ACustomerExceptions {
 		private static final long serialVersionUID = -0x698DD29CB29AF18EL;
+		
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.criticalErrorTitle, null,
+					GuiCommonDefs.criticalErrorMsg);
+		}
 	}
 	
 	/**
@@ -31,6 +45,12 @@ public class ACustomerExceptions extends SMException {
 	 */
 	public static class AuthenticationError extends ACustomerExceptions {
 		private static final long serialVersionUID = -0x64FE89BEAE615D83L;
+		
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.loginFailureDialogTitle, null,
+					GuiCommonDefs.criticalErrorMsg);
+		}
 	}
 	
 	/**
@@ -38,6 +58,12 @@ public class ACustomerExceptions extends SMException {
 	 */
 	public static class CustomerNotConnected extends ACustomerExceptions {
 		private static final long serialVersionUID = 0x4156FFA9E1980971L;
+		
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.loginFailureDialogTitle, null,
+					GuiCommonDefs.criticalErrorMsg);
+		}
 	}
 
 	/**
@@ -45,6 +71,12 @@ public class ACustomerExceptions extends SMException {
 	 */
 	public static class ProductNotInCart extends ACustomerExceptions {
 		private static final long serialVersionUID = -0x1CD88A909A88D7D9L;
+		
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, null,
+					GuiCommonDefs.productNotInCartMsg);
+		}
 	}
 
 	/**
@@ -53,6 +85,12 @@ public class ACustomerExceptions extends SMException {
 	public static class AmountBiggerThanAvailable extends ACustomerExceptions {
 
 		private static final long serialVersionUID = 0x1A89F7BDE622A286L;
+		
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.notEnoughAmountInStore, null,
+					GuiCommonDefs.productCapacityIsNotEnoughMsg);
+		}
 	}
 	
 	/**
@@ -60,6 +98,12 @@ public class ACustomerExceptions extends SMException {
 	 */
 	public static class ProductPackageDoesNotExist extends ACustomerExceptions {
 		private static final long serialVersionUID = -0x5F9E0DB543A6BE52L;
+		
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, null,
+					GuiCommonDefs.productNotExistsInCatalogMsg);
+		}
 	}
 	
 	/**
@@ -67,6 +111,12 @@ public class ACustomerExceptions extends SMException {
 	 */
 	public static class GroceryListIsEmpty extends ACustomerExceptions {
 		private static final long serialVersionUID = 0xD91EC150B7D29E0L;
+		
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.purchaseOperationFailureTitle, null,
+					GuiCommonDefs.groceryListIseEmptyMsg);
+		}
 	}
 	
 	/**
@@ -74,6 +124,12 @@ public class ACustomerExceptions extends SMException {
 	 */
 	public static class ProductCatalogDoesNotExist extends ACustomerExceptions {
 		private static final long serialVersionUID = 0x428D025BC11F7278L;
+		
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, null,
+					GuiCommonDefs.productNotExistsInCatalogMsg);
+		}
 	}
 	
 	/**
@@ -81,6 +137,12 @@ public class ACustomerExceptions extends SMException {
 	 */
 	public static class UsernameAlreadyExists extends ACustomerExceptions {
 		private static final long serialVersionUID = 0x7B732DCB4926401DL;
+		
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.registrationFieldFailureTitle, null,
+					GuiCommonDefs.registrationUsedUserName);
+		}
 	}
 	
 	/**
@@ -88,5 +150,11 @@ public class ACustomerExceptions extends SMException {
 	 */
 	public static class ForgotPasswordWrongAnswer extends ACustomerExceptions {
 		private static final long serialVersionUID = 0x267A53FF357E07A6L;
+		
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.registrationFieldFailureTitle, null,
+					GuiCommonDefs.registrationWrongRepeatedPass);
+		}
 	}
 }

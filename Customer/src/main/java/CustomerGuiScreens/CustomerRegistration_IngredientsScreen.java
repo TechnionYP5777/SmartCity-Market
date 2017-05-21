@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 
 import BasicCommonClasses.Ingredient;
 import CustomerContracts.ICustomer;
-import CustomerGuiHelpers.CustomerGuiExceptionsHandler;
 import CustomerGuiHelpers.TempCustomerProfilePassingData;
 import CustomerImplementations.Customer;
 import GuiUtils.AbstractApplicationScreen;
@@ -51,7 +50,7 @@ public class CustomerRegistration_IngredientsScreen implements Initializable {
 		try {
 			ingredientsObservableList.addAll(customer.getAllIngredients());
     	} catch (SMException e) {
-			CustomerGuiExceptionsHandler.handle(e);	
+    		e.showInfoToUser();
     	}
 		ingredientsCheckListView.setItems(ingredientsObservableList);
 

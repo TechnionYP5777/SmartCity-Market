@@ -11,7 +11,6 @@ import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.ICustomerProfile;
 import CommonDefs.GuiCommonDefs;
 import CustomerContracts.ICustomer;
-import CustomerGuiHelpers.CustomerGuiExceptionsHandler;
 import CustomerGuiHelpers.TempCustomerProfilePassingData;
 import CustomerImplementations.Customer;
 import GuiUtils.AbstractApplicationScreen;
@@ -124,7 +123,7 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		try {
 			res= customer.isFreeUsername(username);
 		} catch (SMException e) {
-			CustomerGuiExceptionsHandler.handle(e);	
+			e.showInfoToUser();
 		}
 		return res;
 	}
