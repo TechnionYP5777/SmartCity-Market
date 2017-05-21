@@ -9,7 +9,6 @@ import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.SmartCode;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
-import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ManfacturerStillInUse;
 import EmployeeDefs.AEmployeeException.ParamIDAlreadyExists;
@@ -19,6 +18,7 @@ import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductStillForSale;
 import EmployeeDefs.AEmployeeException.WorkerAlreadyExists;
 import EmployeeDefs.AEmployeeException.WorkerDoesNotExist;
+import SMExceptions.CommonExceptions.CriticalError;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.IngredientStillInUse;
 

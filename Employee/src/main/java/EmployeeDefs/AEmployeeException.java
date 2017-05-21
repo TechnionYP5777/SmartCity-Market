@@ -41,20 +41,6 @@ public class AEmployeeException extends SMException {
 
 	}
 	
-	/**
-	 * Thrown when unexpected error occurred
-	 *
-	 */
-	public static class CriticalError extends AEmployeeException {
-
-		private static final long serialVersionUID = -1281316098307233162L;
-		
-		@Override
-		public void showInfoToUser() {
-			DialogMessagesService.showErrorDialog(GuiCommonDefs.criticalErrorTitle, GuiCommonDefs.unexpectedFailureMsg,
-					GuiCommonDefs.criticalErrorMsg);
-		}
-	}
 	
 	/**
 	 * Thrown when worker try to do operation before connecting

@@ -18,7 +18,7 @@ import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Manufacturer;
 import EmployeeContracts.IManager;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
-import EmployeeDefs.AEmployeeException.CriticalError;
+import SMExceptions.CommonExceptions.CriticalError;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.IngredientStillInUse;
 import EmployeeDefs.AEmployeeException.InvalidParameter;

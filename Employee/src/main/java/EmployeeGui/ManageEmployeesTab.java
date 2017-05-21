@@ -19,7 +19,7 @@ import com.jfoenix.validation.RequiredFieldValidator;
 import BasicCommonClasses.Login;
 import EmployeeContracts.IManager;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
-import EmployeeDefs.AEmployeeException.CriticalError;
+import SMExceptions.CommonExceptions.CriticalError;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.WorkerAlreadyExists;

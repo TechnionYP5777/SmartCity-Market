@@ -23,7 +23,7 @@ import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.SmartCode;
 import EmployeeContracts.IManager;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
-import EmployeeDefs.AEmployeeException.CriticalError;
+import SMExceptions.CommonExceptions.CriticalError;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeImplementations.Manager;

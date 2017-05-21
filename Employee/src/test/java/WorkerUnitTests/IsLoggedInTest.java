@@ -17,9 +17,9 @@ import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import EmployeeContracts.IWorker;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
-import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Worker;
+import SMExceptions.CommonExceptions.CriticalError;
 import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
 

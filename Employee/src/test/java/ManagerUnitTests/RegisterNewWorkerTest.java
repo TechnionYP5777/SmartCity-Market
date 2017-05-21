@@ -18,12 +18,12 @@ import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import EmployeeContracts.IManager;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
-import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.WorkerAlreadyExists;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Manager;
+import SMExceptions.CommonExceptions.CriticalError;
 import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
 

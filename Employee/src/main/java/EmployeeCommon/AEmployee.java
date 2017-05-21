@@ -13,7 +13,6 @@ import EmployeeDefs.AEmployeeException;
 import EmployeeDefs.AEmployeeException.AmountBiggerThanAvailable;
 import EmployeeDefs.AEmployeeException.AuthenticationError;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
-import EmployeeDefs.AEmployeeException.CriticalError;
 import EmployeeDefs.AEmployeeException.InvalidCommandDescriptor;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ManfacturerStillInUse;
@@ -26,6 +25,7 @@ import EmployeeDefs.AEmployeeException.ProductStillForSale;
 import EmployeeDefs.AEmployeeException.WorkerAlreadyExists;
 import EmployeeDefs.AEmployeeException.WorkerDoesNotExist;
 import PicturesHandler.PictureManager;
+import SMExceptions.CommonExceptions.CriticalError;
 import EmployeeDefs.AEmployeeException.EmployeeAlreadyConnected;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.IngredientStillInUse;
@@ -124,7 +124,7 @@ public abstract class AEmployee {
 		case SM_ERR:
 			log.fatal("Command execution failed, critical error");
 
-			throw new AEmployeeException.CriticalError();
+			throw new CriticalError();
 
 		case SM_SENDER_IS_NOT_CONNECTED:
 			log.fatal("Command execution failed, worker not connected");
@@ -199,7 +199,7 @@ public abstract class AEmployee {
 		default:
 			log.fatal("Command execution failed, failed to parse result description");
 
-			throw new AEmployeeException.CriticalError();
+			throw new CriticalError();
 		}
 	}
 	
