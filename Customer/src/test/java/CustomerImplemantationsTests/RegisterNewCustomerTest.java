@@ -22,7 +22,7 @@ import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import CustomerContracts.ICustomer;
-import CustomerContracts.ACustomerExceptions.CriticalError;
+import SMExceptions.CommonExceptions.CriticalError;
 import CustomerContracts.ACustomerExceptions.InvalidParameter;
 import CustomerContracts.ACustomerExceptions.UsernameAlreadyExists;
 import CustomerImplementations.Customer;

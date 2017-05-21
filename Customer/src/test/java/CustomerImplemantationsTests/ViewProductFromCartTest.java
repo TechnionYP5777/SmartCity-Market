@@ -23,7 +23,7 @@ import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import CustomerContracts.ICustomer;
 import CustomerContracts.ACustomerExceptions.AmountBiggerThanAvailable;
-import CustomerContracts.ACustomerExceptions.CriticalError;
+import SMExceptions.CommonExceptions.CriticalError;
 import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
 import CustomerContracts.ACustomerExceptions.InvalidParameter;
 import CustomerContracts.ACustomerExceptions.ProductPackageDoesNotExist;

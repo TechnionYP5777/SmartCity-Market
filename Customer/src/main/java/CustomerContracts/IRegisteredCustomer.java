@@ -4,6 +4,7 @@ import BasicCommonClasses.CustomerProfile;
 import CustomerContracts.ACustomerExceptions.*;
 import UtilsImplementations.ForgotPasswordHandler.NoSuchUserName;
 import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
+import SMExceptions.CommonExceptions.CriticalError;
 
 /**
  * IRegisteredCustomer - This interface is the contract for RegisteredCustomer

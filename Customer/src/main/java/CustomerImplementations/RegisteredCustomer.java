@@ -14,6 +14,7 @@ import UtilsImplementations.ForgotPasswordHandler;
 import UtilsImplementations.ForgotPasswordHandler.NoSuchUserName;
 import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 import UtilsImplementations.Serialization;
+import SMExceptions.CommonExceptions.CriticalError;;
 
 /**
  * This class represents a registered customer and holds all it's
@@ -112,7 +113,7 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 				clientRequestHandler, CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
 		try {
 			return fpHandler.getAuthenticationQuestion(customerProfile.getUserName());
-		} catch (UtilsImplementations.ForgotPasswordHandler.CriticalError | WrongAnswer e) {
+		} catch (CriticalError | WrongAnswer e) {
 			log.fatal(e + "");
 			log.fatal("Failed to get authentication question from server.");
 			return null;
@@ -127,7 +128,7 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 		}
 		try {
 			return fpHandler.sendAnswerWithNewPassword(ans, pass);
-		} catch (UtilsImplementations.ForgotPasswordHandler.CriticalError e) {
+		} catch (CriticalError e) {
 			log.fatal(e + "");
 			log.fatal("Failed to get authentication question from server.");
 			return false;

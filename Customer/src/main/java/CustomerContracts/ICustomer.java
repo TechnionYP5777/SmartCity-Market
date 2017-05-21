@@ -11,13 +11,13 @@ import BasicCommonClasses.SmartCode;
 import CustomerContracts.ACustomerExceptions.AmountBiggerThanAvailable;
 import CustomerContracts.ACustomerExceptions.AuthenticationError;
 import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
-import CustomerContracts.ACustomerExceptions.CriticalError;
 import CustomerContracts.ACustomerExceptions.GroceryListIsEmpty;
 import CustomerContracts.ACustomerExceptions.InvalidParameter;
 import CustomerContracts.ACustomerExceptions.ProductCatalogDoesNotExist;
 import CustomerContracts.ACustomerExceptions.ProductNotInCart;
 import CustomerContracts.ACustomerExceptions.ProductPackageDoesNotExist;
 import CustomerContracts.ACustomerExceptions.UsernameAlreadyExists;
+import SMExceptions.CommonExceptions.CriticalError;
 
 /**
  * ICustomer - This interface is the contract for Customer Type.

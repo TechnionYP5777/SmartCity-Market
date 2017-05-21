@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import BasicCommonClasses.CustomerProfile;
 import ClientServerApi.ResultDescriptor;
 import CustomerContracts.ACustomerExceptions.*;
+import SMExceptions.CommonExceptions.CriticalError;
 import UtilsContracts.IClientRequestHandler;
 
 /**

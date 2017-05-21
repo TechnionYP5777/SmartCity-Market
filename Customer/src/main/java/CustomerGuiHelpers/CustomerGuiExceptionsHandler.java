@@ -4,6 +4,7 @@ import CommonDefs.GuiCommonDefs;
 import CustomerContracts.ACustomerExceptions.*;
 import GuiUtils.DialogMessagesService;
 import GuiUtils.GuiExceptionHandler;
+import SMExceptions.CommonExceptions.CriticalError;
 import SMExceptions.SMException;
 
 /**

@@ -5,10 +5,10 @@ import java.util.ResourceBundle;
 
 import CustomerContracts.ICustomer;
 import CustomerContracts.ACustomerExceptions.AuthenticationError;
-import CustomerContracts.ACustomerExceptions.CriticalError;
 import CustomerGuiHelpers.TempCustomerPassingData;
 import CustomerImplementations.Customer;
 import GuiUtils.AbstractApplicationScreen;
+import SMExceptions.CommonExceptions.CriticalError;
 import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

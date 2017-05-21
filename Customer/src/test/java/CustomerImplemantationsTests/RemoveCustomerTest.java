@@ -18,7 +18,7 @@ import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import CustomerContracts.ACustomerExceptions.AuthenticationError;
-import CustomerContracts.ACustomerExceptions.CriticalError;
+import SMExceptions.CommonExceptions.CriticalError;
 import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
 import CustomerContracts.ACustomerExceptions.InvalidParameter;
 import CustomerImplementations.CustomerDefs;

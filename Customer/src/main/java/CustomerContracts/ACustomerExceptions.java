@@ -27,13 +27,6 @@ public class ACustomerExceptions extends SMException {
 	}
 	
 	/**
-	 * Thrown when unexpected error occurred
-	 */
-	public static class CriticalError extends ACustomerExceptions {
-		private static final long serialVersionUID = -0xE10F81C67CDFF9DL;
-	}
-	
-	/**
 	 * Thrown when try to login with wrong user id or password.
 	 */
 	public static class AuthenticationError extends ACustomerExceptions {

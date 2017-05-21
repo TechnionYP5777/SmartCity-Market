@@ -12,6 +12,7 @@ import BasicCommonClasses.Login;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
+import SMExceptions.CommonExceptions.CriticalError;
 import SMExceptions.SMException;
 import UtilsContracts.IClientRequestHandler;
 
@@ -34,10 +35,6 @@ public class ForgotPasswordHandler {
 	public static class WrongAnswer extends SMException {
 		private static final long serialVersionUID = 6436535079238432387L;
 
-	}
-
-	public static class CriticalError extends SMException {
-		private static final long serialVersionUID = -7126259923544905291L;
 	}
 
 	private static Logger log = Logger.getLogger(ForgotPasswordHandler.class.getName());

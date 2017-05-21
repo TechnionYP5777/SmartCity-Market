@@ -20,7 +20,7 @@ import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import CustomerContracts.ICustomer;
 import CustomerContracts.ACustomerExceptions.AuthenticationError;
-import CustomerContracts.ACustomerExceptions.CriticalError;
+import SMExceptions.CommonExceptions.CriticalError;
 import CustomerImplementations.Customer;
 import CustomerImplementations.CustomerDefs;
 import UtilsContracts.IClientRequestHandler;

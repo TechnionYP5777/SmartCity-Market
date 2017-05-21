@@ -37,6 +37,7 @@ import UtilsImplementations.Serialization;
 import UtilsImplementations.ForgotPasswordHandler.NoSuchUserName;
 import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 
+
 /**
  * Worker - This class represent the worker functionality implementation.
  * 
@@ -264,7 +265,7 @@ public class Worker extends AEmployee implements IWorker {
 				clientRequestHandler, WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		try {
 			return fpHandler.getAuthenticationQuestion(username);
-		} catch (UtilsImplementations.ForgotPasswordHandler.CriticalError | WrongAnswer e) {
+		} catch (CriticalError | WrongAnswer e) {
 			log.fatal(e + "");
 			log.fatal("Failed to get authentication question from server.");
 			return null;
@@ -279,7 +280,7 @@ public class Worker extends AEmployee implements IWorker {
 		}
 		try {
 			return fpHandler.sendAnswerWithNewPassword(ans, pass);
-		} catch (UtilsImplementations.ForgotPasswordHandler.CriticalError e) {
+		} catch (CriticalError e) {
 			log.fatal(e + "");
 			log.fatal("Failed to get authentication question from server.");
 			return false;

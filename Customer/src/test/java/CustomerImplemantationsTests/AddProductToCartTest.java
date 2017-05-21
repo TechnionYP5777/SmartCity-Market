@@ -23,12 +23,12 @@ import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import CustomerContracts.ICustomer;
 import CustomerContracts.ACustomerExceptions.AmountBiggerThanAvailable;
-import CustomerContracts.ACustomerExceptions.CriticalError;
 import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
 import CustomerContracts.ACustomerExceptions.InvalidParameter;
 import CustomerContracts.ACustomerExceptions.ProductPackageDoesNotExist;
 import CustomerImplementations.Customer;
 import CustomerImplementations.CustomerDefs;
+import SMExceptions.CommonExceptions.CriticalError;
 import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
 
