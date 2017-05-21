@@ -10,8 +10,10 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
 import CommonDefs.CLIENT_TYPE;
+import EmployeeCommon.AEmployee;
 import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IManager;
+import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Manager;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.ForgetPasswordUtil;
@@ -102,7 +104,9 @@ public class EmployeeLoginScreen implements Initializable {
 	@FXML
 	void forgetPassPressed(MouseEvent __) {
 		try {
-			ForgetPasswordUtil.start();
+			IManager employee = InjectionFactory.getInstance(Manager.class);
+			ForgetPasswordUtil.start(WorkerDefs.loginCommandSenderId, ((AEmployee) employee).getClientRequestHandler(),
+					WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		} catch (Exception e) {
 			// TODO
 		}

@@ -270,5 +270,9 @@ public abstract class AEmployee {
 			log.info("Successfully updated product pictures");
 		}
 	}
+	
+	public IClientRequestHandler getClientRequestHandler() {
+		return clientRequestHandler;	
+	}
 
 }

@@ -5,8 +5,6 @@ import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
 
-import com.google.inject.Inject;
-
 import BasicCommonClasses.ForgotPasswordData;
 import BasicCommonClasses.Login;
 import ClientServerApi.CommandDescriptor;
@@ -47,7 +45,6 @@ public class ForgotPasswordHandler {
 	private String username;
 	private String question;
 
-	@Inject
 	public ForgotPasswordHandler(int senderId, IClientRequestHandler clientRequestHandler, int port, String host,
 			int timeout) {
 		this.senderId = senderId;
