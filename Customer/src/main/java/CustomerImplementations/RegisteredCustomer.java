@@ -127,7 +127,10 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 			return false;
 		}
 		try {
-			return fpHandler.sendAnswerWithNewPassword(ans, pass);
+			boolean res = fpHandler.sendAnswerWithNewPassword(ans, pass);
+			if (res)
+				fpHandler = null; //init fp handler for next usage if needed
+			return res;
 		} catch (CriticalError e) {
 			log.fatal(e + "");
 			log.fatal("Failed to get authentication question from server.");
