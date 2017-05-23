@@ -340,7 +340,7 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public List<Ingredient> getAllIngredients()
-			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure {
+			throws InvalidParameter, CriticalError, ConnectionFailure {
 		log.info("Creating getAllIngredients command wrapper");
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(getClientId(), CommandDescriptor.GET_ALL_INGREDIENTS, Serialization.serialize("")))
@@ -352,7 +352,7 @@ public class Manager extends Worker implements IManager {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
-			    | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
+			    | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse | EmployeeNotConnected ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();

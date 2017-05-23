@@ -17,7 +17,6 @@ import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import EmployeeContracts.IManager;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
-import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Manager;
@@ -55,7 +54,7 @@ public class GetAllIngredientsTest {
 		
 		try {
 			manager.getAllIngredients();
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
+		} catch (InvalidParameter | CriticalError | ConnectionFailure e) {
 			fail();
 		}
 	}
@@ -74,34 +73,13 @@ public class GetAllIngredientsTest {
 		
 		try {
 			manager.getAllIngredients();
-		} catch (InvalidParameter | EmployeeNotConnected | ConnectionFailure e1) {
+		} catch (InvalidParameter | ConnectionFailure e1) {
 			fail();
 		} catch (CriticalError e) {
 			/* success */
 		}
 	}
-	
-	@Test
-	public void GetAllIngredientsEmployeeNotConnectedTest() {
-		try {
-			Mockito.when(clientRequestHandler.sendRequestWithRespond(
-					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.GET_ALL_INGREDIENTS,
-							Serialization.serialize("")).serialize()))
-			.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
-		} catch (IOException e) {
-			
-			fail();
-		}
 		
-		try {
-			manager.getAllIngredients();
-		} catch (InvalidParameter | CriticalError | ConnectionFailure e1) {
-			fail();
-		} catch (EmployeeNotConnected e) {
-			/* success */
-		}
-	}
-	
 	@Test
 	public void GetAllIngredientsIllegalResultTest() {
 		try {
@@ -116,7 +94,7 @@ public class GetAllIngredientsTest {
 		
 		try {
 			manager.getAllIngredients();
-		} catch (InvalidParameter | EmployeeNotConnected | ConnectionFailure e1) {
+		} catch (InvalidParameter | ConnectionFailure e1) {
 			fail();
 		} catch (CriticalError e) {
 			/* success */

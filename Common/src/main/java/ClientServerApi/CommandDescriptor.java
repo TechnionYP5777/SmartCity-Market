@@ -472,7 +472,6 @@ public enum CommandDescriptor {
 	 * 			SM_OK,
 	 * 		
 	 * 		failure:
-	 * 			SM_SENDER_IS_NOT_CONNECTED,
 	 *	 		SM_INVALID_PARAMETER,
 	 *
 	 *	 ***** NOTES *****

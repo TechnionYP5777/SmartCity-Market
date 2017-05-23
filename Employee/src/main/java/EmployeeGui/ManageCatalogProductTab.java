@@ -203,7 +203,7 @@ public class ManageCatalogProductTab implements Initializable {
 		ingredients = new HashMap<String, Ingredient>();
 		try {
 			manager.getAllIngredients().forEach(ingredient -> ingredients.put(ingredient.getName(), ingredient));
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
+		} catch (InvalidParameter | CriticalError | ConnectionFailure e) {
 			log.fatal(e.getMessage());
 		}
 	}

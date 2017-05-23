@@ -178,13 +178,12 @@ public interface IManager extends IWorker {
 	 * 
 	 * @param void
 	 * @return List of Ingredient
-	 * @throws EmployeeNotConnected 
 	 * @throws CriticalError 
 	 * @throws UnknownSenderID 
 	 * @throws InvalidParameter 
 	 * @throws ConnectionFailure 
 	 */
-	List<Ingredient> getAllIngredients() throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure;
+	List<Ingredient> getAllIngredients() throws InvalidParameter, CriticalError, ConnectionFailure;
 
 	/**
 	 * Manager edit Manufacturer.
