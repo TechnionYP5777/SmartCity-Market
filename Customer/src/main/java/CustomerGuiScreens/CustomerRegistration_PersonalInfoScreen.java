@@ -92,16 +92,6 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 
 		passwordField.textProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.password = newValue);
 		
-		repeatPassField.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (passwordField.getText().equals(newValue) || newValue == null || "".equals(newValue))
-				nextButton.setDisable(false);
-			else {
-				DialogMessagesService.showErrorDialog(GuiCommonDefs.registrationFieldFailureTitle, null,
-						GuiCommonDefs.registrationWrongRepeatedPass);
-				nextButton.setDisable(true);
-			}
-		});
-		
 		firstNameTextField.textProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.customerProfile.setFirstName(newValue));
 		
 		lastNameTextField.textProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.customerProfile.setLastName(newValue));
@@ -168,7 +158,6 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 			return true;
 		DialogMessagesService.showErrorDialog(GuiCommonDefs.registrationFieldFailureTitle, null,
 				GuiCommonDefs.registrationWrongRepeatedPass);
-		nextButton.setDisable(true);
 		return false;
 	}
 }
