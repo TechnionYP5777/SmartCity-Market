@@ -96,6 +96,15 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
       </GridPane>
+      <VBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
+         <children>
+            <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#cancelButtonPressed" text="Cancel">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </VBox>
    </children>
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="1613.0" minWidth="10.0" prefWidth="1446.0" />

@@ -19,3 +19,10 @@
 	-fx-border-radius: 8px;
 	-fx-text-fill: WHITE;
 }
+
+#cancelButton {
+	-jfx-button-type: RAISED;
+	-fx-background-color: BLACK;
+	-fx-border-radius: 8px;
+	-fx-text-fill: WHITE;
+}

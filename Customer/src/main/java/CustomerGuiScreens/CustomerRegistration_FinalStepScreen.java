@@ -101,6 +101,14 @@ public class CustomerRegistration_FinalStepScreen implements Initializable {
 		} catch (SMException e) {
 			e.showInfoToUser();
 		}
-		
+		TempCustomerProfilePassingData.clear();
 	}
+	
+	@FXML
+    void cancelButtonPressed(ActionEvent __) {
+		TempCustomerProfilePassingData.clear();
+		AbstractApplicationScreen.setScene("/CustomerLoginScreen/CustomerLoginScreen.fxml");
+	}
+	
+	
 }

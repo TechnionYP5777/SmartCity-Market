@@ -136,5 +136,14 @@
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
          </padding>
       </VBox>
+      <VBox alignment="CENTER_LEFT" GridPane.columnIndex="2">
+         <children>
+            <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#cancelButtonPressed" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </VBox>
    </children>
 </GridPane>

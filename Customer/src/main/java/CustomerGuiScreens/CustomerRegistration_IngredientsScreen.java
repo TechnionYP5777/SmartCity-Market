@@ -88,5 +88,11 @@ public class CustomerRegistration_IngredientsScreen implements Initializable {
 		updateCurrentChosenIngredients();
     	AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_FinalStepScreen.fxml");
     }
+    
+	@FXML
+    void cancelButtonPressed(ActionEvent __) {
+		TempCustomerProfilePassingData.clear();
+		AbstractApplicationScreen.setScene("/CustomerLoginScreen/CustomerLoginScreen.fxml");
+	}
 }
 

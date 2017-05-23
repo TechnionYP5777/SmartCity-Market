@@ -152,7 +152,14 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 	  	if (checkFieldsVadility())
 			AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_IngredientsScreen.fxml");
   	}
+	
+	@FXML
+    void cancelButtonPressed(ActionEvent __) {
+		TempCustomerProfilePassingData.clear();
+		AbstractApplicationScreen.setScene("/CustomerLoginScreen/CustomerLoginScreen.fxml");
+	}
 
+	
 	private boolean checkFieldsVadility() {
 		if (passwordField.getText().equals(repeatPassField.getText()))
 			return true;
