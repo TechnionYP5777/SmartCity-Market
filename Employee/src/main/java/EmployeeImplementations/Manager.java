@@ -32,6 +32,7 @@ import EmployeeDefs.AEmployeeException.ProductPackageDoesNotExist;
 import EmployeeDefs.AEmployeeException.ProductStillForSale;
 import EmployeeDefs.AEmployeeException.WorkerAlreadyExists;
 import EmployeeDefs.AEmployeeException.WorkerDoesNotExist;
+import EmployeeDefs.WorkerDefs;
 import EmployeeDefs.AEmployeeException.EmployeeAlreadyConnected;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.IngredientStillInUse;
@@ -51,6 +52,7 @@ public class Manager extends Worker implements IManager {
 	@Inject
 	public Manager(IClientRequestHandler clientRequestHandler) {
 		super(clientRequestHandler);
+		this.username = WorkerDefs.managerDefaultUsername;
 	}
 
 	@Override

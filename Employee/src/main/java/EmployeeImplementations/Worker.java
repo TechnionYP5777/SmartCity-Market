@@ -54,6 +54,7 @@ public class Worker extends AEmployee implements IWorker {
 	@Inject
 	public Worker(IClientRequestHandler clientRequestHandler) {
 		this.clientRequestHandler = clientRequestHandler;
+		this.username = WorkerDefs.workerDefaultUsername;
 	}
 
 	public CommandWrapper getCommandWrapper(String serverResponse) throws CriticalError {
@@ -288,5 +289,10 @@ public class Worker extends AEmployee implements IWorker {
 			log.fatal("Failed to get authentication question from server.");
 			return false;
 		}
+	}
+	
+	@Override
+	public String getUsername(){
+		return username;
 	}
 }

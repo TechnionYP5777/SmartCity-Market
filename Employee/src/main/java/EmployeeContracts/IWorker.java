@@ -144,5 +144,7 @@ public interface IWorker {
 
 	String getForgotPasswordQuestion() throws NoSuchUserName;
 
-	boolean sendAnswerAndNewPassword(String ans, String pass) throws WrongAnswer, NoSuchUserName; 
+	boolean sendAnswerAndNewPassword(String ans, String pass) throws WrongAnswer, NoSuchUserName;
+
+	String getUsername(); 
 }

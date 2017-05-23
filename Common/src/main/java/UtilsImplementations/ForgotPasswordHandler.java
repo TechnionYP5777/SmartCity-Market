@@ -122,7 +122,7 @@ public class ForgotPasswordHandler {
 		resultDescriptorHandler(cmdwrppr.getResultDescriptor());
 
 		log.info("Successfully returned authentication question from server for username: " + username);
-		return question = Serialization.deserialize(cmdwrppr.getData(), String.class);
+		return question = cmdwrppr.getData();
 	}
 
 	public boolean sendAnswerWithNewPassword(String ans, String pass) throws CriticalError, WrongAnswer, NoSuchUserName {
