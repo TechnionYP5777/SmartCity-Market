@@ -46,6 +46,16 @@ public class ForgotPasswordHandler {
 	private String question;
 
 	public ForgotPasswordHandler(int senderId, IClientRequestHandler clientRequestHandler, int port, String host,
+			int timeout, String username) {
+		this.senderId = senderId;
+		this.clientRequestHandler = clientRequestHandler;
+		this.port = port;
+		this.host = host;
+		this.timeout = timeout;
+		this.username = username;
+	}
+	
+	public ForgotPasswordHandler(int senderId, IClientRequestHandler clientRequestHandler, int port, String host,
 			int timeout) {
 		this.senderId = senderId;
 		this.clientRequestHandler = clientRequestHandler;
@@ -109,8 +119,6 @@ public class ForgotPasswordHandler {
 	}
 
 	public String getAuthenticationQuestion(String username) throws CriticalError, WrongAnswer, NoSuchUserName {
-		if (username == null || username.isEmpty())
-			throw new CriticalError();
 		this.username = username;
 		CommandWrapper cmdwrppr = null;
 		log.info("Creating 'get authentication question' command wrapper for username: " + username);
@@ -125,14 +133,12 @@ public class ForgotPasswordHandler {
 		return question = cmdwrppr.getData();
 	}
 
-	public boolean sendAnswerWithNewPassword(String ans, String pass) throws CriticalError, WrongAnswer, NoSuchUserName {
-		if (username == null || question == null)
-			throw new CriticalError();
+	public boolean sendAnswerWithNewPassword(String ans, String newPass) throws CriticalError, WrongAnswer, NoSuchUserName {
 		CommandWrapper cmdwrppr = null;
 		log.info("Creating 'send answer and password' command wrapper for username: " + username);
 
 		ForgotPasswordData forgotPassData = new ForgotPasswordData(question, ans);
-		Login ansAndPassContainer = new Login(username, pass, forgotPassData);
+		Login ansAndPassContainer = new Login(username, newPass, forgotPassData);
 
 		String serverResponse = sendRequestWithRespondToServer(
 				new CommandWrapper(senderId, CommandDescriptor.FORGOT_PASSWORD_SEND_ANSWER_WITH_NEW_PASSWORD,

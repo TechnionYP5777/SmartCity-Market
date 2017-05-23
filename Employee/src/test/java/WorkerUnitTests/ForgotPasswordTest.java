@@ -12,6 +12,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import BasicCommonClasses.ForgotPasswordData;
+import BasicCommonClasses.Login;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
@@ -20,6 +22,7 @@ import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Worker;
 import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.ForgotPasswordHandler.NoSuchUserName;
+import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 import UtilsImplementations.Serialization;
 
 /**
@@ -33,6 +36,9 @@ import UtilsImplementations.Serialization;
 public class ForgotPasswordTest {
 	private IWorker worker;
 	private static String authQuestion = String.valueOf("what is the color of your car?");
+	private static String authQuestionAnswer = String.valueOf("green");
+	private static String newPass = String.valueOf("1234");
+
 
 	@Mock
 	private IClientRequestHandler clientRequestHandler;
@@ -59,6 +65,45 @@ public class ForgotPasswordTest {
 			fail();
 		}
 		assert(question.equals(authQuestion));
+	}
+	
+	@Test
+	public void sendWrongAnswerWithNewPassword(){
+		ForgotPasswordData forgotPassData = new ForgotPasswordData(null, authQuestionAnswer + "bla");
+		Login ansAndPassContainer = new Login(worker.getUsername(), newPass, forgotPassData);
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(new CommandWrapper(WorkerDefs.loginCommandSenderId,
+					CommandDescriptor.FORGOT_PASSWORD_SEND_ANSWER_WITH_NEW_PASSWORD, Serialization.serialize(ansAndPassContainer)).serialize()))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_FOROGT_PASSWORD_WRONG_ANSWER, null).serialize());
+		} catch (IOException ¢) {
+			fail();
+		}
+		try {
+			worker.sendAnswerAndNewPassword(authQuestionAnswer + "bla", newPass);
+		} catch (WrongAnswer e) {
+			return; //success
+		} catch (NoSuchUserName e) {
+			fail();
+		}
+		fail();
+	}
+	
+	@Test
+	public void sendCorrectAnswerWithNewPassword(){
+		ForgotPasswordData forgotPassData = new ForgotPasswordData(null, authQuestionAnswer);
+		Login ansAndPassContainer = new Login(worker.getUsername(), newPass, forgotPassData);
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(new CommandWrapper(WorkerDefs.loginCommandSenderId,
+					CommandDescriptor.FORGOT_PASSWORD_SEND_ANSWER_WITH_NEW_PASSWORD, Serialization.serialize(ansAndPassContainer)).serialize()))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(true)).serialize());
+		} catch (IOException ¢) {
+			fail();
+		}
+		try {
+			worker.sendAnswerAndNewPassword(authQuestionAnswer, newPass);
+		} catch (NoSuchUserName | WrongAnswer e) {
+			fail();
+		}
 	}
 
 }

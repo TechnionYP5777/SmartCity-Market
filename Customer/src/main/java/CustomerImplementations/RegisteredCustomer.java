@@ -14,7 +14,7 @@ import UtilsImplementations.ForgotPasswordHandler;
 import UtilsImplementations.ForgotPasswordHandler.NoSuchUserName;
 import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 import UtilsImplementations.Serialization;
-import SMExceptions.CommonExceptions.CriticalError;;
+import SMExceptions.CommonExceptions.CriticalError;
 
 /**
  * This class represents a registered customer and holds all it's
@@ -33,6 +33,8 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 	@Inject
 	public RegisteredCustomer(IClientRequestHandler clientRequestHandler) {
 		super(clientRequestHandler);
+		fpHandler = new ForgotPasswordHandler(CustomerDefs.loginCommandSenderId, clientRequestHandler,
+				CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
 	}
 
 	@Override
@@ -60,7 +62,8 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | CriticalError | AmountBiggerThanAvailable | ProductPackageDoesNotExist
-				| GroceryListIsEmpty | ProductCatalogDoesNotExist | UsernameAlreadyExists | ForgotPasswordWrongAnswer ¢) {
+				| GroceryListIsEmpty | ProductCatalogDoesNotExist | UsernameAlreadyExists
+				| ForgotPasswordWrongAnswer ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();
@@ -96,7 +99,8 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 		try {
 			resultDescriptorHandler($.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | CriticalError | AmountBiggerThanAvailable | ProductPackageDoesNotExist
-				| GroceryListIsEmpty | ProductCatalogDoesNotExist | UsernameAlreadyExists | ForgotPasswordWrongAnswer ¢) {
+				| GroceryListIsEmpty | ProductCatalogDoesNotExist | UsernameAlreadyExists
+				| ForgotPasswordWrongAnswer ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();
@@ -109,8 +113,6 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 
 	@Override
 	public String getForgotPasswordQuestion() throws NoSuchUserName {
-		fpHandler = new ForgotPasswordHandler(CustomerDefs.loginCommandSenderId,
-				clientRequestHandler, CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
 		try {
 			return fpHandler.getAuthenticationQuestion(customerProfile.getUserName());
 		} catch (CriticalError | WrongAnswer e) {
@@ -119,17 +121,13 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 			return null;
 		}
 	}
-	
+
 	@Override
 	public boolean sendAnswerAndNewPassword(String ans, String pass) throws WrongAnswer, NoSuchUserName {
-		if (fpHandler == null){
-			log.error("Failed sending answer and new password. User must first get the authentication question.");
-			return false;
-		}
 		try {
 			boolean res = fpHandler.sendAnswerWithNewPassword(ans, pass);
 			if (res)
-				fpHandler = null; //init fp handler for next usage if needed
+				fpHandler = null; // init fp handler for next usage if needed
 			return res;
 		} catch (CriticalError e) {
 			log.fatal(e + "");

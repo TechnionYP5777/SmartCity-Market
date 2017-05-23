@@ -55,6 +55,8 @@ public class Worker extends AEmployee implements IWorker {
 	public Worker(IClientRequestHandler clientRequestHandler) {
 		this.clientRequestHandler = clientRequestHandler;
 		this.username = WorkerDefs.workerDefaultUsername;
+		fpHandler = new ForgotPasswordHandler(WorkerDefs.loginCommandSenderId,
+				clientRequestHandler, WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout, username);
 	}
 
 	public CommandWrapper getCommandWrapper(String serverResponse) throws CriticalError {
@@ -262,8 +264,6 @@ public class Worker extends AEmployee implements IWorker {
 	
 	@Override
 	public String getForgotPasswordQuestion() throws NoSuchUserName {
-		fpHandler = new ForgotPasswordHandler(WorkerDefs.loginCommandSenderId,
-				clientRequestHandler, WorkerDefs.port, WorkerDefs.host, WorkerDefs.timeout);
 		try {
 			return fpHandler.getAuthenticationQuestion(username);
 		} catch (CriticalError | WrongAnswer e) {
@@ -275,10 +275,6 @@ public class Worker extends AEmployee implements IWorker {
 	
 	@Override
 	public boolean sendAnswerAndNewPassword(String ans, String pass) throws WrongAnswer, NoSuchUserName {
-		if (fpHandler == null){
-			log.error("Failed sending answer and new password. User must first get the authentication question.");
-			return false;
-		}
 		try {
 			boolean res = fpHandler.sendAnswerWithNewPassword(ans, pass);
 			if (res)
