@@ -1785,6 +1785,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * @see SQLDatabase.ISQLDatabaseConnection#WorkerLogin(java.lang.String,
 	 * java.lang.String)
 	 */
+	@Deprecated
 	@Override
 	public int login(String username, String password)
 			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded {
@@ -2169,6 +2170,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	public String getCustomerProfile(String username) throws CriticalError, ClientNotExist{
 		log.debug("SQL Public getCustomerProfile: Customer get profile: for username: " + username);
 		
+		//case of guest login
+		boolean isGuest = ClientServerDefs.anonymousCustomerUsername.equals(username);
+		if (isGuest)
+			return Serialization.serialize(new CustomerProfile(username));
+		
+		//case of registered client
 		if (!isCustomerExist(username)){
 			log.debug("SQL Public getCustomerProfile: no such customer with username: " + username);
 			throw new ClientNotExist();

@@ -36,6 +36,7 @@ import SQLDatabase.SQLDatabaseException.ClientNotExist;
  */
 public interface ISQLDatabaseConnection {
 
+	@Deprecated
 	int login(String username, String password)
 			throws AuthenticationError, ClientAlreadyConnected, CriticalError, NumberOfConnectionsExceeded;
 	

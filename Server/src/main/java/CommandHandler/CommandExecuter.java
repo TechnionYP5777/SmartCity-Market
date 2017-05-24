@@ -66,6 +66,7 @@ public class CommandExecuter {
 	}
 
 	//TODO Aviad - remove login command and splitting login command finished
+	@Deprecated
 	private void loginCommand(SQLDatabaseConnection c) {
 		Login login = null;
 
@@ -147,8 +148,7 @@ public class CommandExecuter {
 
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
-			//TODO Noam - change the calling of this command, all code should stay the same
-			outCommandWrapper.setSenderID(c.login(login.getUserName(), login.getPassword()));
+			outCommandWrapper.setSenderID(c.loginWorker(login.getUserName(), login.getPassword()));
 
 			try {
 				outCommandWrapper.setData(c.getClientType(outCommandWrapper.getSenderID()));
@@ -204,13 +204,13 @@ public class CommandExecuter {
 
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
-			//TODO Noam - change the calling of this command, need to add CustomerProfile for login command here
-			outCommandWrapper.setSenderID(c.login(login.getUserName(), login.getPassword()));
+			int senderID = c.loginCustomer(login.getUserName(), login.getPassword());
+			outCommandWrapper.setSenderID(senderID);
 
 			try {
-				outCommandWrapper.setData(c.getClientType(outCommandWrapper.getSenderID()));
-			} catch (ClientNotConnected e) {
-				log.fatal("Client is not connected for sender ID " + outCommandWrapper.getSenderID());
+				outCommandWrapper.setData(c.getCustomerProfile(login.getUserName()));
+			} catch (ClientNotExist e) {
+				log.fatal("Client is not exist with username: " + outCommandWrapper.getSenderID());
 			}
 
 			log.info("Login command succeded with sender ID " + outCommandWrapper.getSenderID() + " with client type "
