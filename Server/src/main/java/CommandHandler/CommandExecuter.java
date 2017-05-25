@@ -1431,7 +1431,7 @@ public class CommandExecuter {
 				+ (outCommandWrapper.getResultDescriptor() == ResultDescriptor.SM_OK ? " is" : " isn't") + " free");
 	}
 	
-	private void forgetPasswordGetQuestion(SQLDatabaseConnection __) {
+	private void forgetPasswordGetQuestion(SQLDatabaseConnection c) {
 		@SuppressWarnings("unused")
 		String username;
 		
@@ -1447,13 +1447,26 @@ public class CommandExecuter {
 			return;
 		}
 		
-		//TODO Noam - add here call for SQL
-		//TODO Noam - add to print the question
+		try {
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, c.getSecurityQuestionCustomer(username));
+			
+			log.info("Get question for forget password command for user: " + username + "succeded. the question is: " + outCommandWrapper.getData());
+		} catch (CriticalError e) {
+			log.fatal("Get question for forget password command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+		} catch (ClientNotExist e) {
+			log.info("Get question for forget password command failed, client is not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST);
+		}
+		
 				
 		log.info("Get question for forget password command system finished");
 	}
 	
-	private void forgetPasswordSendAnswerWithNewPassword(SQLDatabaseConnection __) {
+	private void forgetPasswordSendAnswerWithNewPassword(SQLDatabaseConnection c) {
 		@SuppressWarnings("unused")
 		Login login;
 		
@@ -1469,8 +1482,31 @@ public class CommandExecuter {
 			return;
 		}
 		
-		//TODO Noam - add here call for SQL
-		//TODO Noam - add to print the question
+		boolean goodAnswer;
+		try {
+			goodAnswer = c.verifySecurityAnswerCustomer(login.getUserName(), login.getForgetPassword().getAnswer());
+			
+			if (!goodAnswer) {
+				log.info("the anwser is incorrect.");
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_FOROGT_PASSWORD_WRONG_ANSWER,
+						Serialization.serialize(false));
+			} else {
+				log.info("the anwser is correct");
+				c.setPasswordCustomer(login.getUserName(), login.getPassword());
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(true));
+				log.info("the anwser is correct. password changed succesfully.");
+			}
+			
+		} catch (CriticalError e) {
+			log.fatal("Get question for forget password send answer command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientNotExist e) {
+			log.info("Get question for forget password send answer command failed, client is not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST);
+		}
+
 				
 		log.info("Get question for forget password send answer command system finished");
 	}

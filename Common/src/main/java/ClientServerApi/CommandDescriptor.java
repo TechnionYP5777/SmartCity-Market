@@ -156,6 +156,7 @@ public enum CommandDescriptor {
 	 * 		
 	 * 		failure:
 	 * 			SM_FOROGT_PASSWORD_WRONG_ANSWER,
+	 * 			SM_USERNAME_DOES_NOT_EXIST
 	 *			SM_ERR,
 	 */
 	FORGOT_PASSWORD_SEND_ANSWER_WITH_NEW_PASSWORD,
