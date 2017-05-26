@@ -30,13 +30,13 @@ import UtilsImplementations.StackTraceUtil;
  */
 public class ForgetPasswordUtil {
 
-	static public ForgotPasswordHandler forgotPasswordHandler;
+	public static ForgotPasswordHandler forgotPasswordHandler;
 	public static Logger log = Logger.getLogger(ForgetPasswordUtil.class.getName());
 	public static String question = "";
 
-	public static void start(int senderId, IClientRequestHandler clientRequestHandler, int port, String host,
+	public static void start(int senderId, IClientRequestHandler h, int port, String host,
 			int timeout) throws Exception {
-		forgotPasswordHandler = new ForgotPasswordHandler(senderId, clientRequestHandler, port, host, timeout);
+		forgotPasswordHandler = new ForgotPasswordHandler(senderId, h, port, host, timeout);
 		Stage stage = new Stage();
 		stage.setTitle("Restore Password Wizard");
 		stage.setScene(new Scene(new SurveyWizard(stage), 400, 250));
@@ -60,15 +60,13 @@ class Wizard extends StackPane {
 	}
 
 	void nextPage() {
-		if (hasNextPage()) {
+		if (hasNextPage())
 			navTo(curPageIdx + 1);
-		}
 	}
 
 	void priorPage() {
-		if (hasPriorPage()) {
+		if (hasPriorPage())
 			navTo(history.pop(), false);
-		}
 	}
 
 	boolean hasNextPage() {
@@ -82,11 +80,8 @@ class Wizard extends StackPane {
 	void navTo(int nextPageIdx, boolean pushHistory) {
 		if (nextPageIdx < 0 || nextPageIdx >= pages.size())
 			return;
-		if (curPageIdx != UNDEFINED) {
-			if (pushHistory) {
-				history.push(curPageIdx);
-			}
-		}
+		if (curPageIdx != UNDEFINED && pushHistory)
+			history.push(curPageIdx);
 
 		WizardPage nextPage = pages.get(nextPageIdx);
 		curPageIdx = nextPageIdx;
@@ -100,12 +95,9 @@ class Wizard extends StackPane {
 	}
 
 	void navTo(String id) {
-		if (id == null) {
-			return;
-		}
-
-		pages.stream().filter(page -> id.equals(page.getId())).findFirst()
-				.ifPresent(page -> navTo(pages.indexOf(page)));
+		if (id != null)
+			pages.stream().filter(page -> id.equals(page.getId())).findFirst()
+					.ifPresent(page -> navTo(pages.indexOf(page)));
 	}
 
 	public void finish() {
@@ -179,13 +171,11 @@ abstract class WizardPage extends VBox {
 	}
 
 	public void manageButtons() {
-		if (!hasPriorPage()) {
+		if (!hasPriorPage())
 			priorButton.setDisable(true);
-		}
 
-		if (!hasNextPage()) {
+		if (!hasNextPage())
 			nextButton.setDisable(true);
-		}
 	}
 }
 
@@ -202,10 +192,9 @@ class SurveyWizard extends Wizard {
 
 	public void finish() {
 		System.out.println("Had complaint? " + SurveyData.instance.hasComplaints.get());
-		if (SurveyData.instance.hasComplaints.get()) {
+		if (SurveyData.instance.hasComplaints.get())
 			System.out.println("Complaints: " + (SurveyData.instance.complaints.get().isEmpty() ? "No Details"
 					: "\n" + SurveyData.instance.complaints.get()));
-		}
 		owner.close();
 	}
 
@@ -243,9 +232,7 @@ class UserNameScreen extends WizardPage {
 	Parent getContent() {
 		usernameField = new JFXTextField();
 
-		usernameField.textProperty().addListener((observable, oldValue, newValue) -> {
-			nextButton.setDisable(newValue.isEmpty());
-		});
+		usernameField.textProperty().addListener((observable, oldValue, newValue) -> nextButton.setDisable(newValue.isEmpty()));
 
 		VBox vbox = new VBox(5, new Label("Enter Username"), usernameField);
 		vbox.setAlignment(Pos.CENTER);
@@ -258,7 +245,7 @@ class UserNameScreen extends WizardPage {
 			ForgetPasswordUtil.question = ForgetPasswordUtil.forgotPasswordHandler.getAuthenticationQuestion(usernameField.getText());
 		} catch (CriticalError | WrongAnswer | NoSuchUserName e) {
 			e.showInfoToUser();
-			ForgetPasswordUtil.log.fatal(e.toString());
+			ForgetPasswordUtil.log.fatal(e + "");
 			ForgetPasswordUtil.log.debug(StackTraceUtil.getStackTrace(e));
 			return;
 		}
@@ -284,13 +271,9 @@ class QuestionScreen extends WizardPage {
 
 		answerField = new JFXTextField();
 		newPassword = new JFXPasswordField();
-		answerField.textProperty().addListener((observable, oldValue, newValue) -> {
-			enableNext();
-		});
+		answerField.textProperty().addListener((observable, oldValue, newValue) -> enableNext());
 		
-		newPassword.textProperty().addListener((observable, oldValue, newValue) -> {
-			enableNext();
-		});
+		newPassword.textProperty().addListener((observable, oldValue, newValue) -> enableNext());
 
 		question = new Label(ForgetPasswordUtil.question);
 
@@ -309,7 +292,7 @@ class QuestionScreen extends WizardPage {
 			ForgetPasswordUtil.forgotPasswordHandler.sendAnswerWithNewPassword(answerField.getText(), newPassword.getText());
 		} catch (CriticalError | WrongAnswer | NoSuchUserName e) {
 			e.showInfoToUser();
-			ForgetPasswordUtil.log.fatal(e.toString());
+			ForgetPasswordUtil.log.fatal(e + "");
 			ForgetPasswordUtil.log.debug(StackTraceUtil.getStackTrace(e));
 			return;
 		}

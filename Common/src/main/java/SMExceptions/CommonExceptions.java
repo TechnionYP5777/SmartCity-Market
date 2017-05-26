@@ -11,9 +11,6 @@ import GuiUtils.DialogMessagesService;
  */
 public class CommonExceptions extends SMException {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6485599202576614258L;
 
 	/**

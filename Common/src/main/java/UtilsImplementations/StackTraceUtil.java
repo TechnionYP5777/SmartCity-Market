@@ -5,13 +5,11 @@ import java.io.StringWriter;
 
 public class StackTraceUtil {
 
-	static public String getStackTrace(Exception e) {
-		
+	public static String getStackTrace(Exception x) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
-		e.printStackTrace(pw);
-		return sw.toString();
-		
+		x.printStackTrace(pw);
+		return sw + "";
 	}
 	
 }
