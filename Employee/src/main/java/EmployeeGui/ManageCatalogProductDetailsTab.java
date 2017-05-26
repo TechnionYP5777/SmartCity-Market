@@ -130,7 +130,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			manager.editIngredient(new Ingredient(id, renameIngrLbl.getText()));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e) {
 			log.debug(StackTraceUtil.getStackTrace(e));
-			log.fatal(e.getMessage());
+			log.fatal(e);
 			e.showInfoToUser();
 		}
 		selectedIngr.clear();
@@ -143,8 +143,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
     	try {
 			manager.editManufacturer(new Manufacturer(id, renameManuLbl.getText()));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e) {
+			log.fatal(e);
 			log.debug(StackTraceUtil.getStackTrace(e));
-			log.fatal(e.getMessage());
 			e.showInfoToUser();
 		}
     	selectedManu.clear();
@@ -155,7 +155,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		try {
 			manager.addIngredient(new Ingredient(0, newIngr.getText()));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
-			log.fatal(e.getMessage());
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 		}
 		selectedIngr.clear();
@@ -166,7 +167,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		try {
 			manager.addManufacturer(new Manufacturer(0, newManu.getText()));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
-			log.fatal(e.getMessage());
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 		}
 		selectedManu.clear();
@@ -180,7 +182,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 				manager.removeIngredient(ingredients.get(ing), false);
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist
 					| IngredientStillInUse e) {
-				log.fatal(e.getMessage());
+				log.fatal(e);
+				log.debug(StackTraceUtil.getStackTrace(e));
 				e.showInfoToUser();
 			}
 		});
@@ -195,7 +198,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 				manager.removeManufacturer(manufacturars.get(man));
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist
 					| ManfacturerStillInUse e) {
-				log.fatal(e.getMessage());
+				log.fatal(e);
+				log.debug(StackTraceUtil.getStackTrace(e));
 				e.showInfoToUser();
 			}
 		});
@@ -356,7 +360,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		try {
 			manager.getAllManufacturers().forEach(manufacturer -> manufacturars.put(manufacturer.getName(), manufacturer));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
-			log.fatal(e.getMessage());
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 		}
 
@@ -378,7 +383,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		try {
 			manager.getAllIngredients().forEach(ingredient -> ingredients.put(ingredient.getName(), ingredient));
 		} catch (InvalidParameter | CriticalError | ConnectionFailure e) {
-			log.fatal(e.getMessage());
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 		}
 

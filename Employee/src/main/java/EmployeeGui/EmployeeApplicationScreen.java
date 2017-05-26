@@ -10,6 +10,7 @@ import EmployeeDI.EmployeeDiConfigurator;
 import GuiUtils.AbstractApplicationScreen;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.StackTraceUtil;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
@@ -52,7 +53,8 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 			});
 
 		} catch (Exception e) {
-			log.fatal(e.getMessage());
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 		}
 	}
 

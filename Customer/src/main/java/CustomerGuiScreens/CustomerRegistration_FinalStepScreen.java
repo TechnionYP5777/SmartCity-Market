@@ -6,6 +6,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextArea;
@@ -19,6 +21,7 @@ import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.TextFileReader;
 import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.StackTraceUtil;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -35,6 +38,8 @@ import javafx.scene.layout.GridPane;
  * @since 2017-04
  */
 public class CustomerRegistration_FinalStepScreen implements Initializable {
+	
+	protected static Logger log = Logger.getLogger(CustomerRegistration_FinalStepScreen.class.getName());
 
 	private static String termsFilePath = "src/main/resources/CustomerRegistrationScreens/terms.txt";
 	
@@ -81,8 +86,8 @@ public class CustomerRegistration_FinalStepScreen implements Initializable {
     	try {
 			lines = reader.read(new File(termsFilePath));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 		}
     	for (String line: lines )
 			termsTextArea.appendText(line + "\n");
@@ -99,6 +104,8 @@ public class CustomerRegistration_FinalStepScreen implements Initializable {
 			customer.registerNewCustomer(profile);
 			AbstractApplicationScreen.setScene("/CustomerLoginScreen/CustomerLoginScreen.fxml");
 		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 		}
 		TempCustomerProfilePassingData.clear();

@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
 
 import com.google.common.eventbus.Subscribe;
 import com.jfoenix.controls.JFXListView;
@@ -23,6 +24,7 @@ import UtilsContracts.IBarcodeEventHandler;
 import UtilsContracts.SmartcodeScanEvent;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.StackTraceUtil;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -56,6 +58,8 @@ import javafx.util.Callback;
  * @since 2017-01-11
  */
 public class CustomerMainScreen implements Initializable {
+	
+	protected static Logger log = Logger.getLogger(CustomerMainScreen.class.getName());
 	
 	Stage primeStage = CustomerApplicationScreen.stage;
 
@@ -203,6 +207,8 @@ public class CustomerMainScreen implements Initializable {
 		try {
 			customer.logout();
 		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 			Platform.exit();
 			System.exit(0);
@@ -272,6 +278,8 @@ public class CustomerMainScreen implements Initializable {
 		try {
 			customer.checkOutGroceryList();
 		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 		}
 		
@@ -288,6 +296,8 @@ public class CustomerMainScreen implements Initializable {
 		try {
 			customer.addProductToCart(scannedSmartCode, 1);
 		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 			return;
 		}	
@@ -299,6 +309,8 @@ public class CustomerMainScreen implements Initializable {
 		try {
 			customer.returnProductToShelf(scannedSmartCode, 1);
 		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 			return;
 		}
@@ -310,6 +322,8 @@ public class CustomerMainScreen implements Initializable {
 		try {
 			customer.removeAllItemsOfCartProduct(scannedSmartCode);
 		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 			return;
 		}
@@ -327,6 +341,8 @@ public class CustomerMainScreen implements Initializable {
 			try {
 				catalogProduct = customer.viewCatalogProduct(scannedSmartCode);
 			} catch (SMException e) {
+				log.fatal(e);
+				log.debug(StackTraceUtil.getStackTrace(e));
 				e.showInfoToUser();
 				return;
 			}

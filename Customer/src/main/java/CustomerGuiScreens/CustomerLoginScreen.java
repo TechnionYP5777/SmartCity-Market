@@ -3,6 +3,8 @@ package CustomerGuiScreens;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
 import CustomerContracts.ICustomer;
 import CustomerGuiHelpers.TempCustomerPassingData;
 import CustomerImplementations.Customer;
@@ -10,6 +12,7 @@ import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
 import UtilsContracts.IForgotPasswordHandler;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.StackTraceUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -35,6 +38,8 @@ import com.jfoenix.controls.JFXButton;
  * @since 2017-01-16
  */
 public class CustomerLoginScreen implements Initializable {
+	
+	protected static Logger log = Logger.getLogger(CustomerLoginScreen.class.getName());
 
 	private String username = "";
 	private String password = "";
@@ -90,6 +95,8 @@ public class CustomerLoginScreen implements Initializable {
 			}
 			customer.login(username, password, true);
 		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 			return;
 		} catch (Exception e) {
@@ -111,6 +118,8 @@ public class CustomerLoginScreen implements Initializable {
 		try {
 			customer.login(guestLogin.getUserName(), guestLogin.getUserName(), true);
 		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 			return;
 		} catch (Exception e) {

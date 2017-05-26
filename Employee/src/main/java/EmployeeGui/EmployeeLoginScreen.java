@@ -20,6 +20,7 @@ import SMExceptions.SMException;
 import UtilsContracts.IForgotPasswordHandler;
 import UtilsContracts.IPersistentStore;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.StackTraceUtil;
 import UtilsImplementations.XmlPersistentStore;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -74,7 +75,8 @@ public class EmployeeLoginScreen implements Initializable {
 					persistenceStore.restoreObject(new EmployeeUsers(), EmployeeUsers.class).users);
 
 		} catch (Exception e) {
-			log.fatal(e.getMessage());
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 		}
 	}
 
@@ -92,6 +94,8 @@ public class EmployeeLoginScreen implements Initializable {
 		try {
 			employeeType = employee.login(userNameTextField.getText(), passwordField.getText(), true);
 		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 			return;
 		}
@@ -107,7 +111,9 @@ public class EmployeeLoginScreen implements Initializable {
 			IForgotPasswordHandler forgot = InjectionFactory.getInstance(Worker.class);
 			ForgetPasswordUtil.start(forgot);
 		} catch (Exception e) {
-			// TODO
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
+			//TODO
 		}
 	}
 

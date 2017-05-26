@@ -9,6 +9,7 @@ import CustomerImplementations.Customer;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.StackTraceUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +21,7 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
 import org.controlsfx.control.CheckListView;
 
 /**
@@ -30,6 +32,8 @@ import org.controlsfx.control.CheckListView;
  * @since 2017-04
  */
 public class CustomerRegistration_IngredientsScreen implements Initializable {
+	
+	protected static Logger log = Logger.getLogger(CustomerRegistration_IngredientsScreen.class.getName());
 
 	@FXML
 	private GridPane ingredientsScreenPane;
@@ -50,7 +54,9 @@ public class CustomerRegistration_IngredientsScreen implements Initializable {
 		try {
 			ingredientsObservableList.addAll(customer.getAllIngredients());
     	} catch (SMException e) {
-    		e.showInfoToUser();
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
+			e.showInfoToUser();
     	}
 		ingredientsCheckListView.setItems(ingredientsObservableList);
 

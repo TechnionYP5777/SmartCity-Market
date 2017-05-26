@@ -33,6 +33,7 @@ import UtilsContracts.BarcodeScanEvent;
 import UtilsContracts.IBarcodeEventHandler;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.StackTraceUtil;
 import de.jensd.fx.glyphs.GlyphsBuilder;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -194,7 +195,9 @@ public class ManageCatalogProductTab implements Initializable {
 		try {
 			manager.getAllManufacturers().forEach(manufacturer -> manufacturars.put(manufacturer.getName(), manufacturer));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
-			log.fatal(e.getMessage());
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
+			e.showInfoToUser();
 		}
 
 	}
@@ -204,7 +207,9 @@ public class ManageCatalogProductTab implements Initializable {
 		try {
 			manager.getAllIngredients().forEach(ingredient -> ingredients.put(ingredient.getName(), ingredient));
 		} catch (InvalidParameter | CriticalError | ConnectionFailure e) {
-			log.fatal(e.getMessage());
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
+			e.showInfoToUser();
 		}
 	}
 
@@ -240,6 +245,8 @@ public class ManageCatalogProductTab implements Initializable {
 				printToSuccessLog("Remove product '" + productNameTextField.getText() + "' from catalog");
 			}
 		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 		}
 	}

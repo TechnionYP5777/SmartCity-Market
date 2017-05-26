@@ -35,6 +35,7 @@ import UtilsContracts.IBarcodeEventHandler;
 import UtilsContracts.SmartcodeScanEvent;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.StackTraceUtil;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -389,6 +390,8 @@ public class ManagePackagesTab implements Initializable {
 			this.expirationDate = expirationDate;
 
 		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 			return;
 		}
@@ -460,6 +463,8 @@ public class ManagePackagesTab implements Initializable {
 			}
 
 		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 		}
 		log.info("===============================runTheOperationButtonPressed======================================");

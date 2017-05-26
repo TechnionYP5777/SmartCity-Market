@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
 import CommonDefs.CLIENT_TYPE;
 import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IWorker;
@@ -12,6 +14,7 @@ import EmployeeImplementations.Manager;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.StackTraceUtil;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -36,6 +39,8 @@ import javafx.stage.Stage;
  */
 
 public class EmployeeMenuScreen implements Initializable {
+	
+	protected static Logger log = Logger.getLogger(EmployeeMenuScreen.class.getName());
 
 	@FXML
 	GridPane workerMenuScreenPane;
@@ -106,6 +111,8 @@ public class EmployeeMenuScreen implements Initializable {
 				Platform.exit();
 				System.exit(0);
 			} catch (SMException e) {
+				log.fatal(e);
+				log.debug(StackTraceUtil.getStackTrace(e));
 				e.showInfoToUser();
 				Platform.exit();
 				System.exit(0);
@@ -136,6 +143,8 @@ public class EmployeeMenuScreen implements Initializable {
 			if (worker.isLoggedIn())
 				worker.logout();
 		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 		}
 		AbstractApplicationScreen.setScene("/EmployeeLoginScreen/EmployeeLoginScreen.fxml");

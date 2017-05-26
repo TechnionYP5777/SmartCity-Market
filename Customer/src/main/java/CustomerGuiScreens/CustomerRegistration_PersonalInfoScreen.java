@@ -3,9 +3,10 @@ package CustomerGuiScreens;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
@@ -20,6 +21,7 @@ import GuiUtils.DialogMessagesService;
 import GuiUtils.SecurityQuestions;
 import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.StackTraceUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -35,6 +37,8 @@ import javafx.scene.layout.GridPane;
  * @since 2017-04
  */
 public class CustomerRegistration_PersonalInfoScreen implements Initializable {
+	
+	protected static Logger log = Logger.getLogger(CustomerRegistration_PersonalInfoScreen.class.getName());
 	
 	@FXML
 	private GridPane personalInfoScreenPane; 
@@ -129,6 +133,8 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		try {
 			res= customer.isFreeUsername(username);
 		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 		}
 		return res;
