@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
@@ -15,6 +17,7 @@ import CustomerGuiHelpers.TempCustomerProfilePassingData;
 import CustomerImplementations.Customer;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
+import GuiUtils.SecurityQuestions;
 import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
@@ -69,18 +72,26 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
     @FXML
     private DatePicker birthDatePicker;
     
+    @FXML
+    private JFXComboBox<String> securityQuestionComboBox;
+    
+    @FXML
+    private JFXTextField securityAnswerTextField;
+    
     ICustomerProfile customerProfile ;
-
+    
+    ICustomer customer;
     
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		
 		AbstractApplicationScreen.fadeTransition(personalInfoScreenPane);
-		if (TempCustomerProfilePassingData.customerProfile != null)
-			updateFields();
-		else
-			TempCustomerProfilePassingData.customerProfile = InjectionFactory.getInstance(CustomerProfile.class);
-
+		
+		updateFields();
+		
+		
+		customer = InjectionFactory.getInstance(Customer.class);	
+		
 		userNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (validNewUserName(newValue))
 				TempCustomerProfilePassingData.customerProfile.setUserName(newValue);
@@ -105,10 +116,15 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		streetTextField.textProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.customerProfile.setStreet(newValue));
 		
 		birthDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.customerProfile.setBirthdate(newValue));
+	 
+		//TODO lior - change to ForgotPasswordData
+		securityQuestionComboBox.valueProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.sequrityQuestion = newValue);
+		
+		securityAnswerTextField.textProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.sequrityAnswer = newValue);
+	
 	}
 
 	private boolean validNewUserName(String username) {
-		ICustomer customer = InjectionFactory.getInstance(Customer.class);	
 		Boolean res = false;
 		try {
 			res= customer.isFreeUsername(username);
@@ -119,6 +135,13 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 	}
 
 	private void updateFields() {
+		getSecurityQuestions();
+		if (TempCustomerProfilePassingData.customerProfile == null) {
+			TempCustomerProfilePassingData.customerProfile = InjectionFactory.getInstance(CustomerProfile.class);
+			return;
+		}
+		//else
+		
 		if (TempCustomerProfilePassingData.customerProfile.getUserName() != null)
 			userNameTextField.setText(TempCustomerProfilePassingData.customerProfile.getUserName());
 		if (TempCustomerProfilePassingData.password != null) {
@@ -145,8 +168,18 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		
 		if (TempCustomerProfilePassingData.customerProfile.getBirthdate() != null)
 			birthDatePicker.valueProperty().setValue(TempCustomerProfilePassingData.customerProfile.getBirthdate());
+		
+		if (TempCustomerProfilePassingData.sequrityQuestion!= null);
+			securityQuestionComboBox.setValue(TempCustomerProfilePassingData.sequrityQuestion);
+			
+		if (TempCustomerProfilePassingData.sequrityAnswer!= null)
+			securityAnswerTextField.setText(TempCustomerProfilePassingData.sequrityAnswer);
 	}
 	
+	private void getSecurityQuestions() {
+		securityQuestionComboBox.getItems().addAll(SecurityQuestions.getQuestions());
+	}
+
 	@FXML
     void nextButtonPressed(ActionEvent __) {
 	  	if (checkFieldsVadility())

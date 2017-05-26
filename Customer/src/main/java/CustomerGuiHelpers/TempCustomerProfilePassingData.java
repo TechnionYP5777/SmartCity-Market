@@ -11,8 +11,12 @@ import BasicCommonClasses.ICustomerProfile;
 public class TempCustomerProfilePassingData {
 	public static ICustomerProfile customerProfile;
 	public static String password;
+	public static String sequrityQuestion;
+	public static String sequrityAnswer;
 	public static void clear() {
 		customerProfile = null;
 		password = null;
+		sequrityQuestion = null;
+		sequrityAnswer = null;
 	}
 }

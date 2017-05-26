@@ -40,6 +40,8 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           	<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          	<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             
@@ -99,7 +101,16 @@
                   <DatePicker fx:id="birthDatePicker" />
                </children>
             </HBox>
-            
+            <VBox alignment="CENTER" GridPane.rowIndex="10">
+               <children>
+                  <JFXComboBox fx:id="securityQuestionComboBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Security Question" GridPane.rowIndex="10" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" GridPane.rowIndex="11">
+               <children>
+                  <JFXTextField fx:id="securityAnswerTextField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Security Answer" />
+               </children>
+            </VBox>
             
          </children>
       </GridPane>
