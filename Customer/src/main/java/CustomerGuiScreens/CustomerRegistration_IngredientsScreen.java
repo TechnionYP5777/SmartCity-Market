@@ -95,4 +95,3 @@ public class CustomerRegistration_IngredientsScreen implements Initializable {
 		AbstractApplicationScreen.setScene("/CustomerLoginScreen/CustomerLoginScreen.fxml");
 	}
 }
-

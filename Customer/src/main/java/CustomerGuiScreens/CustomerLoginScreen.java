@@ -4,11 +4,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import CustomerContracts.ICustomer;
-import CustomerContracts.ACustomerExceptions.AuthenticationError;
 import CustomerGuiHelpers.TempCustomerPassingData;
+import CustomerImplementations.ACustomer;
 import CustomerImplementations.Customer;
+import CustomerImplementations.CustomerDefs;
 import GuiUtils.AbstractApplicationScreen;
-import SMExceptions.CommonExceptions.CriticalError;
 import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
@@ -16,9 +16,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 
+import GuiUtils.ForgetPasswordUtil;
 
 import com.jfoenix.controls.JFXTextField;
 
@@ -129,4 +131,15 @@ public class CustomerLoginScreen implements Initializable {
 		AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_PersonalInfoScreen.fxml");
 	}
 	
+	@FXML
+	private void forgotPassButtonPressed(ActionEvent __) {
+		
+			try {
+				ICustomer customer = InjectionFactory.getInstance(Customer.class);
+				ForgetPasswordUtil.start(CustomerDefs.loginCommandSenderId, ((ACustomer) customer).getClientRequestHandler(),
+						CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
+			} catch (Exception e) {
+				// TODO
+			}
+	}
 }

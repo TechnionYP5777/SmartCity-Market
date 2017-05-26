@@ -156,5 +156,11 @@ public abstract class ACustomer {
 			return false;
 		return true;
 	}
+	
+	
+	public IClientRequestHandler getClientRequestHandler() {
+		return clientRequestHandler;	
+	}
+
 
 }

@@ -8,9 +8,7 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXPasswordField?>
-<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -24,7 +22,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="loginScreenPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@./CustomerLoginScreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerLoginScreen">
+<GridPane fx:id="loginScreenPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@./CustomerLoginScreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerLoginScreen">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="531.0" minWidth="10.0" prefWidth="441.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="944.0" minWidth="555.0" prefWidth="669.0" />
@@ -41,19 +39,16 @@
          <children>
             <VBox prefHeight="84.0" prefWidth="896.0">
                <children>
-                  <Label fx:id="WelcomeLbl" alignment="CENTER_LEFT" text="Welcome!" textFill="#7c0f0f" wrapText="true">
+                  <Label alignment="CENTER_LEFT" text="Welcome!" textFill="#7c0f0f" wrapText="true">
                      <font>
                         <Font name="Garuda" size="48.0" />
                      </font>
                   </Label>
-                  <Label fx:id="pleaseLoginLbl" text="Please Login">
+                  <Label text="Please Login">
                      <font>
                         <Font size="22.0" />
                      </font></Label>
                </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
             </VBox>
             <Separator>
                <opaqueInsets>
@@ -80,17 +75,11 @@
                <font>
                   <Font name="Lucida Bright Regular" size="22.0" />
                </font>
-               <VBox.margin>
-                  <Insets right="15.0" />
-               </VBox.margin>
             </JFXTextField>
             <JFXPasswordField fx:id="passwordField" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Password">
                <font>
                   <Font name="Lucida Bright Regular" size="22.0" />
                </font>
-               <VBox.margin>
-                  <Insets right="15.0" />
-               </VBox.margin>
                <padding>
                   <Insets top="13.0" />
                </padding>
@@ -106,10 +95,11 @@
                <children>
                   <VBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
-                        <JFXButton fx:id="forgotPassButton" alignment="CENTER" contentDisplay="RIGHT" ripplerFill="#2b1c65" text="I forgot my password" textFill="#0502c3">
+                        <JFXButton fx:id="forgotPassButton" alignment="CENTER" contentDisplay="RIGHT" onAction="#forgotPassButtonPressed" ripplerFill="#2b1c65" text="I forgot my password" textFill="#0502c3">
                            <font>
                               <Font name="System Bold" size="16.0" />
-                           </font></JFXButton>
+                           </font>
+                        </JFXButton>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" />
                      </children>
                   </VBox>
@@ -124,19 +114,24 @@
                </children>
             </GridPane>
          </children>
-         <GridPane.margin>
-            <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
-         </GridPane.margin>
-      </VBox>
-      <VBox prefHeight="224.0" prefWidth="415.0">
-         <children>
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonPressed" prefHeight="60.0" prefWidth="60.0" />
-         </children>
-         <GridPane.margin>
-            <Insets left="30.0" />
-         </GridPane.margin>
          <padding>
-            <Insets left="30.0" top="30.0" />
+            <Insets left="30.0" />
+         </padding>
+      </VBox>
+      <VBox alignment="CENTER" spacing="20.0">
+         <children>
+            <VBox>
+               <children>
+                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonPressed" prefHeight="80.0" prefWidth="80.0">
+                     <padding>
+                        <Insets left="13.0" right="13.0" />
+                     </padding>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
       </VBox>
       <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
@@ -157,9 +152,7 @@
                      </font>
                   </Label>
                </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
+             
             </VBox>
             <JFXButton fx:id="registerButton" buttonType="RAISED" onAction="#registerButtonPressed" ripplerFill="#0502c3" text="Register">
                <font>
@@ -177,9 +170,6 @@
                </font>
             </JFXButton>
          </children>
-         <GridPane.margin>
-            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-         </GridPane.margin>
       </VBox>
    </children>
 </GridPane>
