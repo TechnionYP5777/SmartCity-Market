@@ -16,7 +16,6 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
-import com.google.gson.Gson;
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
 import com.healthmarketscience.sqlbuilder.CreateTableQuery;
 import com.healthmarketscience.sqlbuilder.CustomCondition;
@@ -1869,7 +1868,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		log.debug("SQL Public getClientType: Trying to get client type of: " + sessionID);
 
-		return new Gson().toJson(getClientTypeBySessionID(sessionID));
+		return Serialization.serialize(getClientTypeBySessionID(sessionID));
 
 	}
 	
@@ -2791,7 +2790,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		validateSessionEstablished(sessionID);
 
-		return new Gson().toJson(getAmountForStore(p, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE));
+		return Serialization.serialize(getAmountForStore(p, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE));
 	}
 
 	/*
@@ -2809,7 +2808,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		validateSessionEstablished(sessionID);
 
-		return new Gson().toJson(getAmountForStore(p, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE));
+		return Serialization.serialize(getAmountForStore(p, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE));
 	}
 
 	/*
@@ -2926,7 +2925,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			connectionEndTransaction();
 		}
 
-		return new Gson().toJson(new Manufacturer($, manufacturerName));
+		return Serialization.serialize(new Manufacturer($, manufacturerName));
 	}
 
 	@Override
