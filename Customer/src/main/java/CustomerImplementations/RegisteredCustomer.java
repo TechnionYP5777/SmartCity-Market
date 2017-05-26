@@ -10,9 +10,6 @@ import ClientServerApi.CommandWrapper;
 import CustomerContracts.ACustomerExceptions.*;
 import CustomerContracts.IRegisteredCustomer;
 import UtilsContracts.IClientRequestHandler;
-import UtilsImplementations.ForgotPasswordHandler;
-import UtilsImplementations.ForgotPasswordHandler.NoSuchUserName;
-import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 import UtilsImplementations.Serialization;
 import SMExceptions.CommonExceptions.CriticalError;
 
@@ -28,13 +25,9 @@ import SMExceptions.CommonExceptions.CriticalError;
  */
 public class RegisteredCustomer extends Customer implements IRegisteredCustomer {
 
-	protected ForgotPasswordHandler fpHandler;
-
 	@Inject
 	public RegisteredCustomer(IClientRequestHandler clientRequestHandler) {
 		super(clientRequestHandler);
-		fpHandler = new ForgotPasswordHandler(CustomerDefs.loginCommandSenderId, clientRequestHandler,
-				CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
 	}
 
 	@Override
@@ -109,30 +102,5 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 		customerProfile = p;
 
 		log.info("updateCustomerProfile command succeed.");
-	}
-
-	@Override
-	public String getForgotPasswordQuestion() throws NoSuchUserName {
-		try {
-			return fpHandler.getAuthenticationQuestion(customerProfile.getUserName());
-		} catch (CriticalError | WrongAnswer e) {
-			log.fatal(e + "");
-			log.fatal("Failed to get authentication question from server.");
-			return null;
-		}
-	}
-
-	@Override
-	public boolean sendAnswerAndNewPassword(String ans, String pass) throws WrongAnswer, NoSuchUserName {
-		try {
-			boolean res = fpHandler.sendAnswerWithNewPassword(ans, pass);
-			if (res)
-				fpHandler = null; // init fp handler for next usage if needed
-			return res;
-		} catch (CriticalError e) {
-			log.fatal(e + "");
-			log.fatal("Failed to get authentication question from server.");
-			return false;
-		}
 	}
 }

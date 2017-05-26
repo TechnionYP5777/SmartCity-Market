@@ -5,6 +5,7 @@ import ClientServerCommunication.ClientRequestHandler;
 import CustomerContracts.ICustomer;
 import CustomerImplementations.Customer;
 import UtilsContracts.IClientRequestHandler;
+import UtilsContracts.IForgotPasswordHandler;
 
 /**
  * CustomerDiConfigurator - This class the dependencies configurator for Customer business logic 
@@ -18,6 +19,7 @@ public class CustomerDiConfigurator extends AbstractModule {
  protected void configure() {
 	  this.
     bind(ICustomer.class).to(Customer.class);
+	bind(IForgotPasswordHandler.class).to(Customer.class);
 	bind(IClientRequestHandler.class).to(ClientRequestHandler.class);
   }
 }

@@ -21,6 +21,7 @@ import EmployeeContracts.IWorker;
 import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Worker;
 import UtilsContracts.IClientRequestHandler;
+import UtilsContracts.IForgotPasswordHandler;
 import UtilsImplementations.ForgotPasswordHandler.NoSuchUserName;
 import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 import UtilsImplementations.Serialization;
@@ -60,7 +61,7 @@ public class ForgotPasswordTest {
 		}
 		String question = null;
 		try {
-			question = worker.getForgotPasswordQuestion();
+			question = ((IForgotPasswordHandler)worker).getForgotPasswordQuestion();
 		} catch (NoSuchUserName e) {
 			fail();
 		}
@@ -79,7 +80,7 @@ public class ForgotPasswordTest {
 			fail();
 		}
 		try {
-			worker.sendAnswerAndNewPassword(authQuestionAnswer + "bla", newPass);
+			((IForgotPasswordHandler)worker).sendAnswerAndNewPassword(authQuestionAnswer + "bla", newPass);
 		} catch (WrongAnswer e) {
 			return; //success
 		} catch (NoSuchUserName e) {
@@ -100,7 +101,7 @@ public class ForgotPasswordTest {
 			fail();
 		}
 		try {
-			worker.sendAnswerAndNewPassword(authQuestionAnswer, newPass);
+			((IForgotPasswordHandler)worker).sendAnswerAndNewPassword(authQuestionAnswer, newPass);
 		} catch (NoSuchUserName | WrongAnswer e) {
 			fail();
 		}

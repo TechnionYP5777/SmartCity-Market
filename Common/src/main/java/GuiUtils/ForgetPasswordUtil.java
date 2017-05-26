@@ -15,9 +15,7 @@ import org.apache.log4j.Logger;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
-import SMExceptions.CommonExceptions.CriticalError;
-import UtilsContracts.IClientRequestHandler;
-import UtilsImplementations.ForgotPasswordHandler;
+import UtilsContracts.IForgotPasswordHandler;
 import UtilsImplementations.ForgotPasswordHandler.NoSuchUserName;
 import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 import UtilsImplementations.StackTraceUtil;
@@ -30,13 +28,12 @@ import UtilsImplementations.StackTraceUtil;
  */
 public class ForgetPasswordUtil {
 
-	public static ForgotPasswordHandler forgotPasswordHandler;
+	public static IForgotPasswordHandler forgotPasswordHandler;
 	public static Logger log = Logger.getLogger(ForgetPasswordUtil.class.getName());
 	public static String question = "";
 
-	public static void start(int senderId, IClientRequestHandler h, int port, String host,
-			int timeout) throws Exception {
-		forgotPasswordHandler = new ForgotPasswordHandler(senderId, h, port, host, timeout);
+	public static void start(IForgotPasswordHandler forgotPasswordHandler) throws Exception {
+		ForgetPasswordUtil.forgotPasswordHandler = forgotPasswordHandler;
 		Stage stage = new Stage();
 		stage.setTitle("Restore Password Wizard");
 		stage.setScene(new Scene(new SurveyWizard(stage), 400, 250));
@@ -242,10 +239,10 @@ class UserNameScreen extends WizardPage {
 
 	void nextPage() {
 		try {
-			ForgetPasswordUtil.question = ForgetPasswordUtil.forgotPasswordHandler.getAuthenticationQuestion(usernameField.getText());
-		} catch (CriticalError | WrongAnswer | NoSuchUserName e) {
+			ForgetPasswordUtil.question = ForgetPasswordUtil.forgotPasswordHandler.getForgotPasswordQuestion();
+		} catch (NoSuchUserName e) {
 			e.showInfoToUser();
-			ForgetPasswordUtil.log.fatal(e + "");
+			ForgetPasswordUtil.log.fatal(e.toString());
 			ForgetPasswordUtil.log.debug(StackTraceUtil.getStackTrace(e));
 			return;
 		}
@@ -289,10 +286,10 @@ class QuestionScreen extends WizardPage {
 	
 	void nextPage() {
 		try {
-			ForgetPasswordUtil.forgotPasswordHandler.sendAnswerWithNewPassword(answerField.getText(), newPassword.getText());
-		} catch (CriticalError | WrongAnswer | NoSuchUserName e) {
+			ForgetPasswordUtil.forgotPasswordHandler.sendAnswerAndNewPassword(answerField.getText(), newPassword.getText());
+		} catch (WrongAnswer | NoSuchUserName e) {
 			e.showInfoToUser();
-			ForgetPasswordUtil.log.fatal(e + "");
+			ForgetPasswordUtil.log.fatal(e.toString());
 			ForgetPasswordUtil.log.debug(StackTraceUtil.getStackTrace(e));
 			return;
 		}

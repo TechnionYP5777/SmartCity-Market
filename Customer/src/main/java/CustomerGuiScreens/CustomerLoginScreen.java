@@ -5,18 +5,16 @@ import java.util.ResourceBundle;
 
 import CustomerContracts.ICustomer;
 import CustomerGuiHelpers.TempCustomerPassingData;
-import CustomerImplementations.ACustomer;
 import CustomerImplementations.Customer;
-import CustomerImplementations.CustomerDefs;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
+import UtilsContracts.IForgotPasswordHandler;
 import UtilsImplementations.InjectionFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 
@@ -30,7 +28,6 @@ import ClientServerApi.ClientServerDefs;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXButton;
 
-
 /**
  * CartLogiScreen - Controller for customer login screen
  * 
@@ -38,10 +35,11 @@ import com.jfoenix.controls.JFXButton;
  * @since 2017-01-16
  */
 public class CustomerLoginScreen implements Initializable {
-	
+
 	private String username = "";
 	private String password = "";
-	private static Login guestLogin = new Login(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerUsername);
+	private static Login guestLogin = new Login(ClientServerDefs.anonymousCustomerUsername,
+			ClientServerDefs.anonymousCustomerUsername);
 	@FXML
 	private GridPane loginScreenPane;
 	@FXML
@@ -52,13 +50,13 @@ public class CustomerLoginScreen implements Initializable {
 	private JFXTextField userNameTextField;
 	@FXML
 	private JFXPasswordField passwordField;
-	
+
 	@FXML
 	private JFXButton registerButton;
-	
+
 	@FXML
 	private JFXButton guestLoginButton;
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(loginScreenPane);
@@ -84,8 +82,9 @@ public class CustomerLoginScreen implements Initializable {
 	private void loginButtonPressed(ActionEvent __) {
 		ICustomer customer = InjectionFactory.getInstance(Customer.class);
 		try {
-			if (username.equals(guestLogin.getUserName()) ) {
-				Alert alert = new Alert(AlertType.ERROR , String.format("The user: \"{0}\" can access only as a guest user.", username));
+			if (username.equals(guestLogin.getUserName())) {
+				Alert alert = new Alert(AlertType.ERROR,
+						String.format("The user: \"{0}\" can access only as a guest user.", username));
 				alert.showAndWait();
 				return;
 			}
@@ -93,9 +92,8 @@ public class CustomerLoginScreen implements Initializable {
 		} catch (SMException e) {
 			e.showInfoToUser();
 			return;
-		}
-		catch (Exception e) {
-			Alert alert = new Alert(AlertType.ERROR , e + "");
+		} catch (Exception e) {
+			Alert alert = new Alert(AlertType.ERROR, e + "");
 			alert.showAndWait();
 			return;
 		}
@@ -106,7 +104,7 @@ public class CustomerLoginScreen implements Initializable {
 	private void enableLoginButtonCheck() {
 		loginButton.setDisable(username.isEmpty() || password.isEmpty());
 	}
-	
+
 	@FXML
 	private void guestLoginButtonPressed(ActionEvent __) {
 		ICustomer customer = InjectionFactory.getInstance(Customer.class);
@@ -115,31 +113,28 @@ public class CustomerLoginScreen implements Initializable {
 		} catch (SMException e) {
 			e.showInfoToUser();
 			return;
-		}
-		catch (Exception e) {
-			Alert alert = new Alert(AlertType.ERROR , e + "");
+		} catch (Exception e) {
+			Alert alert = new Alert(AlertType.ERROR, e + "");
 			alert.showAndWait();
 			return;
 		}
 		TempCustomerPassingData.customer = customer;
 		AbstractApplicationScreen.setScene("/CustomerMainScreen/CustomerMainScreen.fxml");
 	}
-	
+
 	@FXML
 	private void registerButtonPressed(ActionEvent __) {
-		
+
 		AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_PersonalInfoScreen.fxml");
 	}
-	
+
 	@FXML
 	private void forgotPassButtonPressed(ActionEvent __) {
-		
-			try {
-				ICustomer customer = InjectionFactory.getInstance(Customer.class);
-				ForgetPasswordUtil.start(CustomerDefs.loginCommandSenderId, ((ACustomer) customer).getClientRequestHandler(),
-						CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
-			} catch (Exception e) {
-				// TODO
-			}
+		try {
+			IForgotPasswordHandler forgot = InjectionFactory.getInstance(Customer.class);
+			ForgetPasswordUtil.start(forgot);
+		} catch (Exception e) {
+			// TODO
+		}
 	}
 }

@@ -38,7 +38,11 @@ import CustomerContracts.ACustomerExceptions.ProductNotInCart;
 import CustomerContracts.ACustomerExceptions.ProductPackageDoesNotExist;
 import CustomerContracts.ACustomerExceptions.UsernameAlreadyExists;
 import UtilsContracts.IClientRequestHandler;
+import UtilsContracts.IForgotPasswordHandler;
+import UtilsImplementations.ForgotPasswordHandler;
 import UtilsImplementations.Serialization;
+import UtilsImplementations.ForgotPasswordHandler.NoSuchUserName;
+import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 
 /**
  * Customer class represents shopping customer in the SmartMarket.
@@ -46,11 +50,16 @@ import UtilsImplementations.Serialization;
  * @author Lior Ben Ami, Aviad Cohen
  * @since 2017-01-02
  */
-public class Customer extends ACustomer implements ICustomer {
+public class Customer extends ACustomer implements ICustomer, IForgotPasswordHandler {
+	
+	protected ForgotPasswordHandler fpHandler;
+	
 	@Inject
 	public Customer(IClientRequestHandler clientRequestHandler) {
 		this.clientRequestHandler = clientRequestHandler;
 		this.customerProfile = null; // as long as customer is not logged in
+		fpHandler = new ForgotPasswordHandler(CustomerDefs.loginCommandSenderId, clientRequestHandler,
+				CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
 	}
 
 	GroceryList groceryList = new GroceryList();
@@ -625,5 +634,30 @@ public class Customer extends ACustomer implements ICustomer {
 		log.info("isFreeUsername command succeed.");
 
 		return isFree;
+	}
+	
+	@Override
+	public String getForgotPasswordQuestion() throws NoSuchUserName {
+		try {
+			return fpHandler.getAuthenticationQuestion(customerProfile.getUserName());
+		} catch (CriticalError | WrongAnswer e) {
+			log.fatal(e + "");
+			log.fatal("Failed to get authentication question from server.");
+			return null;
+		}
+	}
+
+	@Override
+	public boolean sendAnswerAndNewPassword(String ans, String pass) throws WrongAnswer, NoSuchUserName {
+		try {
+			boolean res = fpHandler.sendAnswerWithNewPassword(ans, pass);
+			if (res)
+				fpHandler = null; // init fp handler for next usage if needed
+			return res;
+		} catch (CriticalError e) {
+			log.fatal(e + "");
+			log.fatal("Failed to get authentication question from server.");
+			return false;
+		}
 	}
 }

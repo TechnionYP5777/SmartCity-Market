@@ -32,6 +32,7 @@ import EmployeeDefs.AEmployeeException.IngredientStillInUse;
 import EmployeeDefs.WorkerDefs;
 import SMExceptions.CommonExceptions.CriticalError;
 import UtilsContracts.IClientRequestHandler;
+import UtilsContracts.IForgotPasswordHandler;
 import UtilsImplementations.ForgotPasswordHandler;
 import UtilsImplementations.Serialization;
 import UtilsImplementations.ForgotPasswordHandler.NoSuchUserName;
@@ -47,7 +48,7 @@ import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
  */
 
 @Singleton
-public class Worker extends AEmployee implements IWorker {
+public class Worker extends AEmployee implements IWorker, IForgotPasswordHandler {
 	
 	protected ForgotPasswordHandler fpHandler;
 	

@@ -10,6 +10,7 @@ import EmployeeContracts.IWorker;
 import EmployeeImplementations.Manager;
 import EmployeeImplementations.Worker;
 import UtilsContracts.IClientRequestHandler;
+import UtilsContracts.IForgotPasswordHandler;
 
 /**
  * EmployeeDiConfigurator - This class the dependencies configurator for Employee
@@ -24,6 +25,7 @@ public class EmployeeDiConfigurator extends AbstractModule {
 		  this.
 	    bind(IWorker.class).to(Worker.class);
 		bind(IManager.class).to(Manager.class);
+		bind(IForgotPasswordHandler.class).to(Worker.class);
 		bind(IEmployeeScreensParameterService.class).to(EmployeeScreensParameterService.class);	
 		bind(IClientRequestHandler.class).to(ClientRequestHandler.class);
 	  }

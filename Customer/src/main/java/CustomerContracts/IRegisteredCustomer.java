@@ -2,8 +2,6 @@ package CustomerContracts;
 
 import BasicCommonClasses.CustomerProfile;
 import CustomerContracts.ACustomerExceptions.*;
-import UtilsImplementations.ForgotPasswordHandler.NoSuchUserName;
-import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 import SMExceptions.CommonExceptions.CriticalError;
 
 /**
@@ -37,9 +35,4 @@ public interface IRegisteredCustomer extends ICustomer {
 	 * @throws CriticalError
 	 */
 	void updateCustomerProfile(CustomerProfile p) throws CustomerNotConnected, InvalidParameter, AuthenticationError, CriticalError;
-
-	String getForgotPasswordQuestion() throws NoSuchUserName;
-
-	boolean sendAnswerAndNewPassword(String ans, String pass) throws WrongAnswer, NoSuchUserName;
-	
 }
