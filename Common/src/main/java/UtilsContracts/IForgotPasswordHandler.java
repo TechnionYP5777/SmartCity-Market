@@ -9,7 +9,7 @@ import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 
 public interface IForgotPasswordHandler {
 	
-	String getForgotPasswordQuestion() throws NoSuchUserName;
+	String getForgotPasswordQuestion(String user) throws NoSuchUserName;
 
 	boolean sendAnswerAndNewPassword(String ans, String pass) throws WrongAnswer, NoSuchUserName;
 

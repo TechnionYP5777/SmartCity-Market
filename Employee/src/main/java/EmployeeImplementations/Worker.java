@@ -264,9 +264,9 @@ public class Worker extends AEmployee implements IWorker, IForgotPasswordHandler
 	}
 	
 	@Override
-	public String getForgotPasswordQuestion() throws NoSuchUserName {
+	public String getForgotPasswordQuestion(String user) throws NoSuchUserName {
 		try {
-			return fpHandler.getAuthenticationQuestion(username);
+			return fpHandler.getAuthenticationQuestion(user);
 		} catch (CriticalError | WrongAnswer e) {
 			log.fatal(e + "");
 			log.fatal("Failed to get authentication question from server.");

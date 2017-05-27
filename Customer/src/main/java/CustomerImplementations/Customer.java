@@ -637,9 +637,9 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 	}
 	
 	@Override
-	public String getForgotPasswordQuestion() throws NoSuchUserName {
+	public String getForgotPasswordQuestion(String user) throws NoSuchUserName {
 		try {
-			return fpHandler.getAuthenticationQuestion(customerProfile.getUserName());
+			return fpHandler.getAuthenticationQuestion(user);
 		} catch (CriticalError | WrongAnswer e) {
 			log.fatal(e + "");
 			log.fatal("Failed to get authentication question from server.");

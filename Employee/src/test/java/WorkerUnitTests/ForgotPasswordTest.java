@@ -39,6 +39,7 @@ public class ForgotPasswordTest {
 	private static String authQuestion = String.valueOf("what is the color of your car?");
 	private static String authQuestionAnswer = String.valueOf("green");
 	private static String newPass = String.valueOf("1234");
+	private static String username = String.valueOf("user");
 
 
 	@Mock
@@ -61,7 +62,8 @@ public class ForgotPasswordTest {
 		}
 		String question = null;
 		try {
-			question = ((IForgotPasswordHandler)worker).getForgotPasswordQuestion();
+			// TODO Check this username 
+			question = ((IForgotPasswordHandler)worker).getForgotPasswordQuestion(username);
 		} catch (NoSuchUserName e) {
 			fail();
 		}

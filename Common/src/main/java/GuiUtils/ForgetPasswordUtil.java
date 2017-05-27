@@ -239,10 +239,10 @@ class UserNameScreen extends WizardPage {
 
 	void nextPage() {
 		try {
-			ForgetPasswordUtil.question = ForgetPasswordUtil.forgotPasswordHandler.getForgotPasswordQuestion();
+			ForgetPasswordUtil.question = ForgetPasswordUtil.forgotPasswordHandler.getForgotPasswordQuestion(usernameField.getText());
 		} catch (NoSuchUserName e) {
 			e.showInfoToUser();
-			ForgetPasswordUtil.log.fatal(e.toString());
+			ForgetPasswordUtil.log.fatal(e);
 			ForgetPasswordUtil.log.debug(StackTraceUtil.getStackTrace(e));
 			return;
 		}
