@@ -3,12 +3,6 @@
    -fx-background-size: cover;
 }
 
-.label {
-    -fx-font-family: "serif";
-    -fx-text-fill: midnightblue;
-    -fx-opacity: 1;
-
-}
 
 #backButton {
 	-fx-background-image: url("home.png");
@@ -33,6 +27,7 @@
 
 #WelcomeLbl {
 	-fx-font-size: 100;
+	-fx-text-fill: midnightblue;
 }
 
 #pleaseLoginLbl {
@@ -44,31 +39,17 @@
 	-fx-font-size: 15;
 }
 
-
-.JFXButton {
-    -fx-background-color: rgba(63, 191, 191,0.7);
-    -fx-text-fill: #E1F5FE;
-    -fx-font-family: "serif";
-    -fx-font-size: 20px;
+.thisJFXButton {
+	-fx-font-size: 20px;
 }
 
-.JFXButton:hover{
-    -fx-background-color: rgba(170, 237, 237,0.7);
-}
-
-
-.JFXTextField {
+.thisJFXTextField {
 	-fx-font-size: 20;
-	-fx-prompt-text-fill: indigo;
-	-fx-text-fill: indigo;
 }
 
-.JFXPasswordField {
+.thisJFXPasswordField {
 	-fx-font-size: 20;
-	-fx-prompt-text-fill: indigo;
-	-fx-text-fill: indigo;
 }
-
 
 
 

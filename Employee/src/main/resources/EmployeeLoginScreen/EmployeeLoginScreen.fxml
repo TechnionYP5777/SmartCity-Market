@@ -3,6 +3,8 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import java.lang.String?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -17,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="loginScreenPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@EmployeeLoginScreen.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeLoginScreen">
+<GridPane fx:id="loginScreenPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeLoginScreen">
    <columnConstraints>
       <ColumnConstraints hgrow="ALWAYS" />
       <ColumnConstraints hgrow="SOMETIMES" />
@@ -62,8 +64,16 @@
                   </Lighting>
                </effect>
             </Separator>
-            <JFXTextField fx:id="userNameTextField" onAction="#loginButtonPressed" promptText="User Name" styleClass="JFXTextField" />
-            <JFXPasswordField fx:id="passwordField" onAction="#loginButtonPressed" promptText="Password" styleClass="JFXPasswordField" />
+            <JFXTextField fx:id="userNameTextField" onAction="#loginButtonPressed" promptText="User Name">
+               <styleClass>
+                  <String fx:value="thisJFXTextField" />
+                  <String fx:value="JFXTextField" />
+               </styleClass></JFXTextField>
+            <JFXPasswordField fx:id="passwordField" onAction="#loginButtonPressed" promptText="Password">
+               <styleClass>
+                  <String fx:value="JFXPasswordField" />
+                  <String fx:value="thisJFXPasswordField" />
+               </styleClass></JFXPasswordField>
             <GridPane>
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -88,7 +98,11 @@
                         </Label>
                      </children>
                   </VBox>
-                  <JFXButton fx:id="loginButton" onAction="#loginButtonPressed" styleClass="JFXButton" text="Login" GridPane.columnIndex="1" />
+                  <JFXButton fx:id="loginButton" onAction="#loginButtonPressed" text="Login" GridPane.columnIndex="1">
+                     <styleClass>
+                        <String fx:value="JFXButton" />
+                        <String fx:value="thisJFXButton" />
+                     </styleClass></JFXButton>
                </children>
             </GridPane>
          </children>
@@ -113,4 +127,8 @@
          </padding>
       </VBox>
    </children>
+   <stylesheets>
+      <URL value="@EmployeeLoginScreen.css" />
+      <URL value="@../../../../../Common/src/main/resources/projectCss/projectCss.css" />
+   </stylesheets>
 </GridPane>

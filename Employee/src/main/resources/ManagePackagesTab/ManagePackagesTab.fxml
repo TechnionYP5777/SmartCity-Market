@@ -5,6 +5,7 @@
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -18,28 +19,28 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="rootPane" spacing="10.0" stylesheets="@ManagePackages.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManagePackagesTab">
+<VBox fx:id="rootPane" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManagePackagesTab">
 	<children>
 		<VBox alignment="CENTER" spacing="20.0">
 			<children>
             <HBox alignment="TOP_CENTER" spacing="20.0">
                <children>
-                  <JFXTextField fx:id="barcodeTextField" onAction="#searchCodeButtonPressed" prefHeight="24.0" prefWidth="196.0" promptText="Type Or Scan Product Code..." />
-      				<Button fx:id="searchCodeButton" mnemonicParsing="false" onAction="#searchCodeButtonPressed" prefHeight="26.0" prefWidth="26.0" />
+                  <JFXTextField fx:id="barcodeTextField" onAction="#searchCodeButtonPressed" prefHeight="24.0" prefWidth="196.0" promptText="Type Or Scan Product Code..." styleClass="JFXTextField" />
+      				<Button fx:id="searchCodeButton" mnemonicParsing="false" onAction="#searchCodeButtonPressed" prefHeight="26.0" prefWidth="26.0" styleClass="thisSearchCodeButton" />
                </children>
             </HBox>
 			</children>
 		</VBox>
       <HBox alignment="CENTER">
          <children>
-            <JFXButton fx:id="showDatePickerBtn" stylesheets="@ManagePackages.css" text="Show Date Picker" />
+            <JFXButton fx:id="showDatePickerBtn" styleClass="JFXButton" text="Show Date Picker" />
          </children>
       </HBox>
 		<StackPane>
 			<children>
 				<VBox fx:id="productAfterScanPane" spacing="5.0">
 					<children>
-						<Label fx:id="productQuickViewlbl" styleClass="ourlabel" text="Product Quick View" textFill="#191970">
+						<Label fx:id="productQuickViewlbl" styleClass="thisHeaderLables" text="Product Quick View" textFill="#191970">
 							<font>
 								<Font name="Serif Regular" size="27.0" />
 							</font>
@@ -123,7 +124,7 @@
 										<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 									</padding>
 								</HBox>
-								<Button fx:id="showMoreDetailsButton" mnemonicParsing="false" onAction="#showMoreDetailsButtonPressed" prefHeight="26.0" prefWidth="169.0" styleClass="ourButton" text="Show more details" GridPane.rowIndex="5" />
+								<Button fx:id="showMoreDetailsButton" mnemonicParsing="false" onAction="#showMoreDetailsButtonPressed" prefHeight="26.0" prefWidth="169.0" styleClass="JFXButton" text="Show more details" GridPane.rowIndex="5" />
 								<HBox alignment="CENTER_LEFT">
 									<children>
 										<Label fx:id="barcodeLbl" text="Barcode:" textFill="WHITE" />
@@ -144,26 +145,26 @@
 						</GridPane>
 						<StackPane>
 							<children>
-								<VBox fx:id="smartcodeOperationsPane" spacing="15.0">
+								<VBox fx:id="smartcodeOperationsPane" spacing="15.0" visible="false">
 									<children>
-										<Label fx:id="chooseOprationForSmartCodeLbl" text="Choose operation for smartcode" textFill="#191970">
+										<Label fx:id="chooseOprationForSmartCodeLbl" styleClass="thisHeaderLables" text="Choose operation for smartcode" textFill="#191970">
 											<font>
 												<Font name="Serif Regular" size="27.0" />
 											</font>
 										</Label>
 										<Separator />
-                              <JFXRadioButton fx:id="printSmartCodeRadioButton" onAction="#radioButtonHandling" text="Print smart code" />
-                              <JFXRadioButton fx:id="addPackageToStoreRadioButton" onAction="#radioButtonHandling" selected="true" text="Add package to store" />
-                              <JFXRadioButton fx:id="removePackageFromStoreRadioButton" onAction="#radioButtonHandling" text="Remove package from store" />
-                              <JFXRadioButton fx:id="removePackageFromWarhouseRadioButton" onAction="#radioButtonHandling" text="Remove package from warehouse" />
+                              <JFXRadioButton fx:id="printSmartCodeRadioButton" onAction="#radioButtonHandling" styleClass="JFXRadioButton" text="Print smart code" />
+                              <JFXRadioButton fx:id="addPackageToStoreRadioButton" onAction="#radioButtonHandling" selected="true" styleClass="JFXRadioButton" text="Add package to store" />
+                              <JFXRadioButton fx:id="removePackageFromStoreRadioButton" onAction="#radioButtonHandling" styleClass="JFXRadioButton" text="Remove package from store" />
+                              <JFXRadioButton fx:id="removePackageFromWarhouseRadioButton" onAction="#radioButtonHandling" styleClass="JFXRadioButton" text="Remove package from warehouse" />
 									</children>
 									<padding>
 										<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 									</padding>
 								</VBox>
-								<VBox fx:id="barcodeOperationsPane" spacing="15.0" visible="false">
+								<VBox fx:id="barcodeOperationsPane" spacing="15.0">
 									<children>
-										<Label fx:id="chooseOperationForBarcodeLbl" text="Choose operation for barcode" textFill="#191970">
+										<Label fx:id="chooseOperationForBarcodeLbl" styleClass="thisHeaderLables" text="Choose operation for barcode" textFill="#191970">
 											<font>
 												<Font name="Serif Regular" size="27.0" />
 											</font>
@@ -171,10 +172,10 @@
 										<Separator />
 										<HBox spacing="20.0">
 											<children>
-                                    <JFXRadioButton fx:id="addPakageToWarhouseRadioButton" onAction="#radioButtonHandlingBarcode" selected="true" text="Add package to warehouse" />
-												<Label fx:id="expirationDateLabel" text="Expiration Date:" textFill="WHITE" />
-                                    <JFXDatePicker fx:id="datePicker" />
-                                    <JFXCheckBox fx:id="printTheSmartCodeCheckBox" text="Print the smart code" />
+                                    <JFXRadioButton fx:id="addPakageToWarhouseRadioButton" onAction="#radioButtonHandlingBarcode" selected="true" styleClass="JFXRadioButton" text="Add package to warehouse" />
+												<Label fx:id="expirationDateLabel" styleClass="experationDate" text="Expiration Date:" textFill="WHITE" />
+                                    <JFXDatePicker fx:id="datePicker" styleClass="JFXDatePicker" />
+                                    <JFXCheckBox fx:id="printTheSmartCodeCheckBox" checkedColor="#75d9cf" styleClass="JFXCheckBox" text="Print the smart code" />
 											</children>
 										</HBox>
 									</children>
@@ -188,7 +189,7 @@
 							<children>
 												<Label fx:id="amountLbl" text="Amount:" textFill="WHITE" />
 												<Spinner fx:id="editPackagesAmountSpinner" editable="true" initialValue="1" max="10000" min="1" />
-								<Button fx:id="runTheOperationButton" mnemonicParsing="false" onAction="#runTheOperationButtonPressed" prefHeight="26.0" prefWidth="166.0" styleClass="ourButton" text="Run the operation" />
+								<Button fx:id="runTheOperationButton" mnemonicParsing="false" onAction="#runTheOperationButtonPressed" prefHeight="26.0" prefWidth="166.0" styleClass="JFXButton" text="Run the operation" />
 							</children>
 						</VBox>
 					</children>
@@ -207,4 +208,8 @@
 	<padding>
 		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 	</padding>
+   <stylesheets>
+      <URL value="@ManagePackages.css" />
+      <URL value="@../../../../../Common/src/main/resources/projectCss/projectCss.css" />
+   </stylesheets>
 </VBox>
