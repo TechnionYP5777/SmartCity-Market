@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
@@ -61,8 +62,8 @@
                   </Lighting>
                </effect>
             </Separator>
-            <JFXTextField fx:id="userNameTextField" onAction="#loginButtonPressed" promptText="User Name" />
-            <JFXPasswordField fx:id="passwordField" onAction="#loginButtonPressed" promptText="Password" />
+            <JFXTextField fx:id="userNameTextField" onAction="#loginButtonPressed" promptText="User Name" styleClass="JFXTextField" />
+            <JFXPasswordField fx:id="passwordField" onAction="#loginButtonPressed" promptText="Password" styleClass="JFXPasswordField" />
             <GridPane>
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -87,10 +88,7 @@
                         </Label>
                      </children>
                   </VBox>
-                  <Button fx:id="loginButton" mnemonicParsing="false" onAction="#loginButtonPressed" text="Login" GridPane.columnIndex="1">
-                     <GridPane.margin>
-                        <Insets top="5.0" />
-                     </GridPane.margin></Button>
+                  <JFXButton fx:id="loginButton" onAction="#loginButtonPressed" styleClass="JFXButton" text="Login" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>
