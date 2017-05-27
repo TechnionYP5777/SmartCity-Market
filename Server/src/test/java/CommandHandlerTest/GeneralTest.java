@@ -24,7 +24,7 @@ public class GeneralTest {
 	@Test
 	public void sqlDatabaseConnectionNullTest() {
 		assertEquals(ResultDescriptor.SM_ERR,
-				new CommandExecuter(new CommandWrapper(0, CommandDescriptor.LOGIN,
+				new CommandExecuter(new CommandWrapper(0, CommandDescriptor.LOGIN_CUSTOMER,
 						new Gson().toJson(new Login("admin", "admin"), Login.class)).serialize()).execute(null).getResultDescriptor());
 	}
 }

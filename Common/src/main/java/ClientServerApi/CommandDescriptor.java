@@ -36,26 +36,6 @@ public enum CommandDescriptor {
 
 	/******************************************** Connection **********************************************/
 
-	//TODO Aviad - remove old LOGIN command after finishing splitting to two commands
-	/**
-	 * Description: Client login command to get in the system and receive unique sender id from server.
-	 * param1: Login.
-	 * retval: CLIENT_TYPE.
-	 *
-	 * result_codes:
-	 * 		success:
-	 * 			SM_OK,
-	 * 		
-	 * 		failure:
-	 *			SM_SENDER_IS_ALREADY_CONNECTED,
-	 *			SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD,
-	 *
-	 *	 ***** NOTES *****
-	 * 	1. The sender ID returns in senderId field.
-	 *  2. Customer use username & password (use "Customer" on both).
-	 */
-	LOGIN,
-
 	/**
 	 * Description: Employee login command to get into the system and receive unique sender id from server.
 	 * param1: Login.

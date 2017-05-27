@@ -1471,7 +1471,7 @@ public class CommandExecuter {
 			return new CommandWrapper(ResultDescriptor.SM_ERR);
 		}
 
-		if ((inCommandWrapper.getCommandDescriptor() != CommandDescriptor.LOGIN)
+		if ((inCommandWrapper.getCommandDescriptor() != CommandDescriptor.LOGIN_CUSTOMER || inCommandWrapper.getCommandDescriptor() != CommandDescriptor.LOGIN_EMPLOYEE)
 				&& (inCommandWrapper.getSenderID() < 0)) {
 			log.info("Command failed, senderID can't be negative");
 

@@ -55,7 +55,7 @@ public class ForgotPasswordTest {
 	public void getAuthQuestionTest() {
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(new CommandWrapper(WorkerDefs.loginCommandSenderId,
-					CommandDescriptor.FORGOT_PASSWORD_GET_QUESTION, Serialization.serialize(worker.getUsername())).serialize()))
+					CommandDescriptor.FORGOT_PASSWORD_GET_QUESTION, Serialization.serialize(username)).serialize()))
 					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK, authQuestion).serialize());
 		} catch (IOException ¢) {
 			fail();

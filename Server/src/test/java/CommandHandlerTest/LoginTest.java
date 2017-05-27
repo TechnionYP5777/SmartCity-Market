@@ -26,6 +26,9 @@ import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 @RunWith(MockitoJUnitRunner.class)
 public class LoginTest {
 		
+	private static int EMPLOYEE_SENDER_ID = 0;
+	private static int CUSTOMER_SENDER_ID = 1;
+	
 	@Mock
 	private SQLDatabaseConnection sqlDatabaseConnection;
 
@@ -35,36 +38,53 @@ public class LoginTest {
 	}
 	
 	@Test
-	public void loginSuccessfulTest() {
-		int senderID = 0;
+	public void loginEmployeeSuccessfulTest() {
 		Login login = new Login("admin", "admin");
-		String command = new CommandWrapper(0, CommandDescriptor.LOGIN,
+		String command = new CommandWrapper(0, CommandDescriptor.LOGIN_EMPLOYEE,
 				new Gson().toJson(login, Login.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
 		
 		try {
-			Mockito.when(sqlDatabaseConnection.login(login.getUserName(), login.getPassword())).thenReturn(senderID);
+			Mockito.when(sqlDatabaseConnection.loginWorker(login.getUserName(), login.getPassword())).thenReturn(EMPLOYEE_SENDER_ID);
 		} catch (NumberOfConnectionsExceeded | ClientAlreadyConnected | CriticalError | AuthenticationError e) {
 			fail();
 		}
 		
 		out = commandExecuter.execute(sqlDatabaseConnection);
 		
-		assertEquals(senderID, out.getSenderID());
 		assertEquals(ResultDescriptor.SM_OK, out.getResultDescriptor());
 	}
 	
 	@Test
-	public void loginUsernameDoesNotExistWrongPasswordTest() {
-		Login login = new Login("unknown", "unknown");
-		String command = new CommandWrapper(0, CommandDescriptor.LOGIN,
+	public void loginCustomerSuccessfulTest() {
+		Login login = new Login("admin", "admin");
+		String command = new CommandWrapper(0, CommandDescriptor.LOGIN_EMPLOYEE,
 				new Gson().toJson(login, Login.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
 		
 		try {
-			Mockito.when(sqlDatabaseConnection.login(login.getUserName(), login.getPassword()))
+			Mockito.when(sqlDatabaseConnection.loginCustomer(login.getUserName(), login.getPassword())).thenReturn(CUSTOMER_SENDER_ID);
+		} catch (NumberOfConnectionsExceeded | ClientAlreadyConnected | CriticalError | AuthenticationError e) {
+			fail();
+		}
+		
+		out = commandExecuter.execute(sqlDatabaseConnection);
+		
+		assertEquals(ResultDescriptor.SM_OK, out.getResultDescriptor());
+	}
+	
+	@Test
+	public void loginEmployeeUsernameDoesNotExistWrongPasswordTest() {
+		Login login = new Login("unknown", "unknown");
+		String command = new CommandWrapper(0, CommandDescriptor.LOGIN_EMPLOYEE,
+				new Gson().toJson(login, Login.class)).serialize();
+		CommandExecuter commandExecuter = new CommandExecuter(command);
+		CommandWrapper out;
+		
+		try {
+			Mockito.when(sqlDatabaseConnection.loginWorker(login.getUserName(), login.getPassword()))
 					.thenThrow(new AuthenticationError());
 		} catch (NumberOfConnectionsExceeded | ClientAlreadyConnected | CriticalError | AuthenticationError e) {
 			fail();
@@ -76,15 +96,55 @@ public class LoginTest {
 	}
 	
 	@Test
-	public void loginCriticalErrorTest() {
+	public void loginCustomerUsernameDoesNotExistWrongPasswordTest() {
 		Login login = new Login("unknown", "unknown");
-		String command = new CommandWrapper(0, CommandDescriptor.LOGIN,
+		String command = new CommandWrapper(0, CommandDescriptor.LOGIN_CUSTOMER,
 				new Gson().toJson(login, Login.class)).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
 		
 		try {
-			Mockito.when(sqlDatabaseConnection.login(login.getUserName(), login.getPassword()))
+			Mockito.when(sqlDatabaseConnection.loginCustomer(login.getUserName(), login.getPassword()))
+					.thenThrow(new AuthenticationError());
+		} catch (NumberOfConnectionsExceeded | ClientAlreadyConnected | CriticalError | AuthenticationError e) {
+			fail();
+		}
+		
+		out = commandExecuter.execute(sqlDatabaseConnection);
+		
+		assertEquals(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST_WRONG_PASSWORD, out.getResultDescriptor());
+	}
+	
+	@Test
+	public void loginEmployeeCriticalErrorTest() {
+		Login login = new Login("unknown", "unknown");
+		String command = new CommandWrapper(0, CommandDescriptor.LOGIN_EMPLOYEE,
+				new Gson().toJson(login, Login.class)).serialize();
+		CommandExecuter commandExecuter = new CommandExecuter(command);
+		CommandWrapper out;
+		
+		try {
+			Mockito.when(sqlDatabaseConnection.loginWorker(login.getUserName(), login.getPassword()))
+					.thenThrow(new CriticalError());
+		} catch (NumberOfConnectionsExceeded | ClientAlreadyConnected | CriticalError | AuthenticationError e) {
+			fail();
+		}
+		
+		out = commandExecuter.execute(sqlDatabaseConnection);
+		
+		assertEquals(ResultDescriptor.SM_ERR, out.getResultDescriptor());
+	}
+	
+	@Test
+	public void loginCustomerCriticalErrorTest() {
+		Login login = new Login("unknown", "unknown");
+		String command = new CommandWrapper(0, CommandDescriptor.LOGIN_CUSTOMER,
+				new Gson().toJson(login, Login.class)).serialize();
+		CommandExecuter commandExecuter = new CommandExecuter(command);
+		CommandWrapper out;
+		
+		try {
+			Mockito.when(sqlDatabaseConnection.loginCustomer(login.getUserName(), login.getPassword()))
 					.thenThrow(new CriticalError());
 		} catch (NumberOfConnectionsExceeded | ClientAlreadyConnected | CriticalError | AuthenticationError e) {
 			fail();
@@ -98,7 +158,7 @@ public class LoginTest {
 	@Test
 	public void loginInvalidUserNameTest() {
 		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER,
-				(new CommandExecuter(new CommandWrapper(0, CommandDescriptor.LOGIN,
+				(new CommandExecuter(new CommandWrapper(0, CommandDescriptor.LOGIN_CUSTOMER,
 						new Gson().toJson(new Login("", "admin"), Login.class)).serialize()))
 								.execute(sqlDatabaseConnection).getResultDescriptor());
 	}
@@ -106,7 +166,7 @@ public class LoginTest {
 	@Test
 	public void loginInvalidPasswordTest() {
 		assertEquals(ResultDescriptor.SM_INVALID_PARAMETER,
-				(new CommandExecuter(new CommandWrapper(0, CommandDescriptor.LOGIN,
+				(new CommandExecuter(new CommandWrapper(0, CommandDescriptor.LOGIN_EMPLOYEE,
 						new Gson().toJson(new Login("admin", ""), Login.class)).serialize()))
 								.execute(sqlDatabaseConnection).getResultDescriptor());
 	}
