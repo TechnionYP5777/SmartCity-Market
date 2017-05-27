@@ -103,12 +103,12 @@ public class CustomerRegistration_FinalStepScreen implements Initializable {
 		try {
 			customer.registerNewCustomer(profile);
 			AbstractApplicationScreen.setScene("/CustomerLoginScreen/CustomerLoginScreen.fxml");
+			TempCustomerProfilePassingData.clear();
 		} catch (SMException e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 		}
-		TempCustomerProfilePassingData.clear();
 	}
 	
 	@FXML
