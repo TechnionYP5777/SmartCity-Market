@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.paint.*?>
-<?import com.jfoenix.controls.*?>
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import com.jfoenix.controls.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -16,17 +11,19 @@
 <?import javafx.scene.effect.Light.Distant?>
 <?import javafx.scene.effect.Lighting?>
 <?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="loginScreenPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@./CustomerLoginScreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerLoginScreen">
+<GridPane fx:id="loginScreenPane" alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerLoginScreen">
    <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="531.0" minWidth="10.0" prefWidth="441.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="944.0" minWidth="555.0" prefWidth="669.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="900.0" minWidth="799.0" prefWidth="799.0" />
+      <ColumnConstraints hgrow="SOMETIMES" percentWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0" />
+      <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0" />
+      <ColumnConstraints hgrow="SOMETIMES" percentWidth="10.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints vgrow="SOMETIMES" />
@@ -68,7 +65,7 @@
                   </Lighting>
                </effect>
             </Separator>
-            <JFXTextField fx:id="userNameTextField" promptText="User Name">
+            <JFXTextField fx:id="userNameTextField" promptText="User Name" styleClass="JFXTextField">
                <padding>
                   <Insets top="13.0" />
                </padding>
@@ -76,7 +73,7 @@
                   <Font name="Lucida Bright Regular" size="22.0" />
                </font>
             </JFXTextField>
-            <JFXPasswordField fx:id="passwordField" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Password">
+            <JFXPasswordField fx:id="passwordField" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Password" styleClass="JFXPasswordField">
                <font>
                   <Font name="Lucida Bright Regular" size="22.0" />
                </font>
@@ -105,7 +102,7 @@
                   </VBox>
                   <VBox alignment="CENTER_RIGHT" GridPane.columnIndex="1">
                      <children>
-                        <JFXButton fx:id="loginButton" alignment="CENTER_RIGHT" buttonType="RAISED" onAction="#loginButtonPressed" ripplerFill="#0502c3" text="Login" GridPane.columnIndex="1">
+                        <JFXButton fx:id="loginButton" alignment="CENTER_RIGHT" onAction="#loginButtonPressed" ripplerFill="#0502c3" styleClass="JFXButton" text="Login" GridPane.columnIndex="1">
                            <font>
                               <Font size="18.0" />
                            </font></JFXButton>
@@ -118,28 +115,24 @@
             <Insets left="30.0" />
          </padding>
       </VBox>
-      <VBox alignment="CENTER" spacing="20.0">
+      <VBox alignment="CENTER_LEFT">
          <children>
-            <VBox>
-               <children>
-                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonPressed" prefHeight="80.0" prefWidth="80.0">
-                     <padding>
-                        <Insets left="13.0" right="13.0" />
-                     </padding>
-                  </Button>
-               </children>
-            </VBox>
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonPressed" prefHeight="80.0" prefWidth="80.0">
+               <padding>
+                  <Insets left="13.0" right="13.0" />
+               </padding>
+            </Button>
          </children>
          <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </VBox>
-      <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+      <VBox alignment="CENTER_RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="2">
          <children>
             <Button fx:id="settingsButton" mnemonicParsing="false" prefHeight="81.0" prefWidth="80.0" />
          </children>
          <padding>
-            <Insets bottom="30.0" right="30.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </VBox>
       <VBox alignment="CENTER" blendMode="MULTIPLY" spacing="15.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
@@ -154,7 +147,7 @@
                </children>
              
             </VBox>
-            <JFXButton fx:id="registerButton" buttonType="RAISED" onAction="#registerButtonPressed" ripplerFill="#0502c3" text="Register">
+            <JFXButton fx:id="registerButton" onAction="#registerButtonPressed" ripplerFill="#0502c3" styleClass="JFXButton" text="Register">
                <font>
                   <Font size="18.0" />
                </font>
@@ -164,7 +157,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <JFXButton fx:id="guestLoginButton" buttonType="RAISED" onAction="#guestLoginButtonPressed" text="Enter As A Guest">
+            <JFXButton fx:id="guestLoginButton" onAction="#guestLoginButtonPressed" styleClass="JFXButton" text="Enter As A Guest">
                <font>
                   <Font size="16.0" />
                </font>
@@ -172,4 +165,8 @@
          </children>
       </VBox>
    </children>
+   <stylesheets>
+      <URL value="@CustomerLoginScreen.css" />
+      <URL value="@../ProjectCss/projectCss.css" />
+   </stylesheets>
 </GridPane>
