@@ -32,7 +32,7 @@
 		</VBox>
       <HBox alignment="CENTER">
          <children>
-            <JFXButton fx:id="showDatePickerBtn" text="Show Date Picker" />
+            <JFXButton fx:id="showDatePickerBtn" stylesheets="@ManagePackages.css" text="Show Date Picker" />
          </children>
       </HBox>
 		<StackPane>
