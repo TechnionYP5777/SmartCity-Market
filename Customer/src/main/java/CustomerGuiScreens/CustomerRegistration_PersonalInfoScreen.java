@@ -26,6 +26,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListCell;
 import javafx.scene.layout.GridPane;
 
 
@@ -123,6 +124,23 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 	 
 		//TODO lior - change to ForgotPasswordData
 		securityQuestionComboBox.valueProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.sequrityQuestion = newValue);
+		
+		
+		securityQuestionComboBox.setButtonCell(new ListCell<String>(){
+
+	        @Override
+	        protected void updateItem(String item, boolean empty) {
+	            super.updateItem(item, empty); 
+	            if(empty || item==null){
+	                setStyle(null);
+	            	setText(null);
+	            } else {
+	                setStyle("-fx-text-fill: #4d4d4d");
+	                setText(item.toString());
+	            }
+	        }
+
+	    });
 		
 		securityAnswerTextField.textProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.sequrityAnswer = newValue);
 	

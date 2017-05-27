@@ -25,3 +25,7 @@
 	-fx-background-radius: 16px, 0 ;
 	-fx-background-color: rgba(255,255,255,0.2);
 }
+
+.text-field {
+	-fx-prompt-text-fill:  #4d4d4d;
+}
