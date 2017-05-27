@@ -196,6 +196,7 @@ public class CustomerMainScreen implements Initializable {
 		shoppingList.forEach((key, value) -> productsObservableList.add(value));
 		
 		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
+		productsListView.setItems(filteredProductList);
 	}
 	
 	private void logoutAndExit() {
