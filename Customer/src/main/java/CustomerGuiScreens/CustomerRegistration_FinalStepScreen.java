@@ -13,6 +13,7 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextArea;
 
 import BasicCommonClasses.CustomerProfile;
+import BasicCommonClasses.ForgotPasswordData;
 import BasicCommonClasses.ICustomerProfile;
 import CustomerContracts.ICustomer;
 import CustomerGuiHelpers.TempCustomerProfilePassingData;
@@ -99,7 +100,7 @@ public class CustomerRegistration_FinalStepScreen implements Initializable {
 		ICustomerProfile iProfile = TempCustomerProfilePassingData.customerProfile;
 		CustomerProfile profile = new CustomerProfile(iProfile.getUserName(),TempCustomerProfilePassingData.password, iProfile.getFirstName(),
 				iProfile.getLastName(), iProfile.getPhoneNumber(), iProfile.getEmailAddress(), iProfile.getCity(), iProfile.getStreet(), 
-				iProfile.getBirthdate(), iProfile.getAllergens(), null);
+				iProfile.getBirthdate(), iProfile.getAllergens(), new ForgotPasswordData(TempCustomerProfilePassingData.sequrityQuestion, TempCustomerProfilePassingData.sequrityAnswer));
 		try {
 			customer.registerNewCustomer(profile);
 			AbstractApplicationScreen.setScene("/CustomerLoginScreen/CustomerLoginScreen.fxml");

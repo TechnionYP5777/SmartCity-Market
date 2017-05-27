@@ -122,9 +122,7 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		
 		birthDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.customerProfile.setBirthdate(newValue));
 	 
-		//TODO lior - change to ForgotPasswordData
 		securityQuestionComboBox.valueProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.sequrityQuestion = newValue);
-		
 		
 		securityQuestionComboBox.setButtonCell(new ListCell<String>(){
 
@@ -143,7 +141,6 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 	    });
 		
 		securityAnswerTextField.textProperty().addListener((observable, oldValue, newValue) -> TempCustomerProfilePassingData.sequrityAnswer = newValue);
-	
 	}
 
 	private boolean validNewUserName(String username) {
