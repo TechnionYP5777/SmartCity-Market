@@ -210,6 +210,6 @@
 	</padding>
    <stylesheets>
       <URL value="@ManagePackages.css" />
-      <URL value="@../../../../../Common/src/main/resources/projectCss/projectCss.css" />
+      <URL value="@../ProjectCss/projectCss.css" />
    </stylesheets>
 </VBox>

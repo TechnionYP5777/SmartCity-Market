@@ -1,7 +1,3 @@
-.root {
-   -fx-background-image: url("back.jpg");
-   -fx-background-size: cover;
-}
 
 .radio-button { 
 	-fx-font-family: "serif";

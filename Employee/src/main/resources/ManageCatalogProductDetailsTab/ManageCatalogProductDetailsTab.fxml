@@ -48,11 +48,11 @@
          </children>
       </VBox>
    </children>
-   <stylesheets>
-      <URL value="@ManageCatalogProductDetailsTab.css" />
-      <URL value="@../../../../../Common/src/main/resources/projectCss/projectCss.css" />
-   </stylesheets>
    <padding>
       <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
    </padding>
+   <stylesheets>
+      <URL value="@ManageCatalogProductDetailsTab.css" />
+      <URL value="@../ProjectCss/projectCss.css" />
+   </stylesheets>
 </HBox>

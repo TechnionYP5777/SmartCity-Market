@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import com.sun.javafx.application.LauncherImpl;
 
+import UtilsImplementations.StackTraceUtil;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.application.Application;
@@ -60,6 +61,7 @@ public abstract class AbstractApplicationScreen extends Application {
 			parent = FXMLLoader.load(AbstractApplicationScreen.class.getResource(sceneName));
 		} catch (IOException e) {
 			log.fatal(e.getMessage());
+			log.fatal(StackTraceUtil.getStackTrace(e));
 			return;
 		}
 		Scene scene = new Scene(parent);

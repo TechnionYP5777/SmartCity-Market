@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.controlsfx.control.CheckComboBox;
 
 import com.google.common.eventbus.Subscribe;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
@@ -43,7 +44,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
@@ -82,7 +82,7 @@ public class ManageCatalogProductTab implements Initializable {
 	private JFXTextField productDescriptionTextField;
 
 	@FXML
-	private ComboBox<String> productManufacturerCombo;
+	private JFXComboBox<String> productManufacturerCombo;
 
 	@FXML
 	private CheckComboBox<String> ingridientsCombo;

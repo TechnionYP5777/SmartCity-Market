@@ -129,6 +129,6 @@
    </children>
    <stylesheets>
       <URL value="@EmployeeLoginScreen.css" />
-      <URL value="@../../../../../Common/src/main/resources/projectCss/projectCss.css" />
+      <URL value="@../ProjectCss/projectCss.css" />
    </stylesheets>
 </GridPane>
