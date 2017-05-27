@@ -157,4 +157,9 @@ public class ACustomerExceptions extends SMException {
 					GuiCommonDefs.registrationWrongRepeatedPass);
 		}
 	}
+
+	@Override
+	public void showInfoToUser() {
+		/* empty print */
+	}
 }

@@ -641,7 +641,7 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 		try {
 			return fpHandler.getAuthenticationQuestion(user);
 		} catch (CriticalError | WrongAnswer e) {
-			log.fatal(e + "");
+			log.fatal(e);
 			log.fatal("Failed to get authentication question from server.");
 			return null;
 		}
@@ -655,7 +655,7 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 				fpHandler = null; // init fp handler for next usage if needed
 			return res;
 		} catch (CriticalError e) {
-			log.fatal(e + "");
+			log.fatal(e);
 			log.fatal("Failed to get authentication question from server.");
 			return false;
 		}

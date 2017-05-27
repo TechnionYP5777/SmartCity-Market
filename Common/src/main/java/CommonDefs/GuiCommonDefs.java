@@ -91,8 +91,12 @@ public class GuiCommonDefs {
 	
 	public static final String manuIsInUse = "The manufacturer is still in use.";
 	
+	public static final String usernameDoesNotExist = "The username doesn't exist in the system.";
 	
+	public static final String wrongAnswerGiven = "The answer is wrong, please try again.";
 	
+	public static final String emptyAllergensSet = "No allergens to remove.";
+
 	
 	public static String productsPicturesFolderPath = String.valueOf("../Common/src/main/resources/ProductsPictures");
 	

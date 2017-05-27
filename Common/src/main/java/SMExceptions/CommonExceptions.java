@@ -11,7 +11,7 @@ import GuiUtils.DialogMessagesService;
  */
 public class CommonExceptions extends SMException {
 	
-	private static final long serialVersionUID = -6485599202576614258L;
+	private static final long serialVersionUID = -0x5A017A1CD122C372L;
 
 	/**
 	 * Thrown when unexpected error occurred
@@ -19,13 +19,18 @@ public class CommonExceptions extends SMException {
 	 */
 	public static class CriticalError extends CommonExceptions {
 
-		private static final long serialVersionUID = -1281316098307233162L;
+		private static final long serialVersionUID = -0x11C82633E497958AL;
 		
 		@Override
 		public void showInfoToUser() {
 			DialogMessagesService.showErrorDialog(GuiCommonDefs.criticalErrorTitle, GuiCommonDefs.unexpectedFailureMsg,
 					GuiCommonDefs.criticalErrorMsg);
 		}
+	}
+
+	@Override
+	public void showInfoToUser() {
+		/* empty print */
 	}
 
 }

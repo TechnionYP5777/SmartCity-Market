@@ -8,6 +8,11 @@ package SMExceptions;
 
 public class NotImplementedError extends SMException {
 
-	private static final long serialVersionUID = -4265323783375415676L;
+	private static final long serialVersionUID = -0x3B317961E01DE97CL;
+
+	@Override
+	public void showInfoToUser() {
+		/* empty print */
+	}
 
 }

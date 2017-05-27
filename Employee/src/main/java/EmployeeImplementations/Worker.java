@@ -268,7 +268,7 @@ public class Worker extends AEmployee implements IWorker, IForgotPasswordHandler
 		try {
 			return fpHandler.getAuthenticationQuestion(user);
 		} catch (CriticalError | WrongAnswer e) {
-			log.fatal(e + "");
+			log.fatal(e);
 			log.fatal("Failed to get authentication question from server.");
 			return null;
 		}
@@ -282,7 +282,7 @@ public class Worker extends AEmployee implements IWorker, IForgotPasswordHandler
 				fpHandler = null; //init fp handler for next usage if needed
 			return res;
 		} catch (CriticalError e) {
-			log.fatal(e + "");
+			log.fatal(e);
 			log.fatal("Failed to get authentication question from server.");
 			return false;
 		}

@@ -10,6 +10,8 @@ import BasicCommonClasses.Login;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
+import CommonDefs.GuiCommonDefs;
+import GuiUtils.DialogMessagesService;
 import SMExceptions.CommonExceptions.CriticalError;
 import SMExceptions.SMException;
 import UtilsContracts.IClientRequestHandler;
@@ -26,12 +28,24 @@ import UtilsContracts.IClientRequestHandler;
 public class ForgotPasswordHandler {
 
 	public static class NoSuchUserName extends SMException {
-		private static final long serialVersionUID = 2466826542889809933L;
+		private static final long serialVersionUID = 0x223BEDABC373B80DL;
+
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.ganeralDialogTitle, GuiCommonDefs.unexpectedFailureMsg,
+					GuiCommonDefs.usernameDoesNotExist);
+		}
 
 	}
 
 	public static class WrongAnswer extends SMException {
-		private static final long serialVersionUID = 6436535079238432387L;
+		private static final long serialVersionUID = 0x59532A8D6658F683L;
+
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.ganeralDialogTitle, GuiCommonDefs.unexpectedFailureMsg,
+					GuiCommonDefs.wrongAnswerGiven);			
+		}
 
 	}
 

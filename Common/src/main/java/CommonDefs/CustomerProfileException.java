@@ -1,5 +1,6 @@
 package CommonDefs;
 
+import GuiUtils.DialogMessagesService;
 import SMExceptions.SMException;
 
 /**
@@ -10,14 +11,20 @@ import SMExceptions.SMException;
  */
 public class CustomerProfileException extends SMException {
 
-	private static final long serialVersionUID = 6779023320480887717L;
+	private static final long serialVersionUID = 0x5E13EDCB0D5A33A5L;
 
 	public static class InvalidParameter extends SMException{
 
 		/**
 		 * Thrown when one of the parameters is illegal.
 		 */
-		private static final long serialVersionUID = -5251005203195795887L;
+		private static final long serialVersionUID = -0x48DF51694A3699AFL;
+
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.criticalErrorTitle, GuiCommonDefs.unexpectedFailureMsg,
+					GuiCommonDefs.invalidParamFailureMsg);
+		}
 		
 	}
 	
@@ -26,8 +33,19 @@ public class CustomerProfileException extends SMException {
 		/**
 		 * Thrown when trying to remove ingredients from empty list
 		 */
-		private static final long serialVersionUID = -6872408915951218105L;
+		private static final long serialVersionUID = -0x5F5FB37F5A7FEDB9L;
 
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.criticalErrorTitle, GuiCommonDefs.unexpectedFailureMsg,
+					GuiCommonDefs.emptyAllergensSet);
+		}
+
+	}
+
+	@Override
+	public void showInfoToUser() {
+		/* empty print */
 	}
 	
 }

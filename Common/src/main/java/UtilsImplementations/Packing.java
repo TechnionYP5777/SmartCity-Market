@@ -11,6 +11,7 @@ import java.util.Base64;
 
 import org.apache.log4j.Logger;
 
+import SMExceptions.PackUnpackException;
 import SMExceptions.SMException;
 
 /**
@@ -77,7 +78,7 @@ public class Packing {
 	public static void unpack(ZipFile zfile, String unpackPath) throws SMException {
 		if (zfile == null || unpackPath == null || unpackPath.isEmpty()) {
 			log.fatal("unpacking failed due to invalid parameter.");
-			throw new SMException();
+			throw new PackUnpackException();
 		}
 
 		File unpackDir;
@@ -85,12 +86,12 @@ public class Packing {
 			unpackDir = new File(unpackPath);
 		} catch (Exception e) {
 			log.error(e + "");
-			throw new SMException();
+			throw new PackUnpackException();
 		}
 
 		if (!unpackDir.isDirectory()) {
 			log.error("Unpacking failed: Unpack path must be a directory");
-			throw new SMException();
+			throw new PackUnpackException();
 		}
 
 		try {

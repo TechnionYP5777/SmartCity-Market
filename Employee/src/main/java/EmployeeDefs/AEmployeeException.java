@@ -14,7 +14,7 @@ public class AEmployeeException extends SMException {
 	
 	
 
-	private static final long serialVersionUID = 8663454971017928972L;
+	private static final long serialVersionUID = 0x783AC6652B1DA10CL;
 
 	/**
 	 * Thrown when invalid (unsupported) command was sent by worker.
@@ -22,7 +22,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class InvalidCommandDescriptor extends AEmployeeException {
 
-		private static final long serialVersionUID = -6013813473192780331L;
+		private static final long serialVersionUID = -0x53755B7DC71D222BL;
 	}
 	
 	/**
@@ -31,7 +31,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class InvalidParameter extends AEmployeeException {
 
-		private static final long serialVersionUID = 6423454812287539804L;
+		private static final long serialVersionUID = 0x5924B21E6D2C1A5CL;
 		
 		@Override
 		public void showInfoToUser() {
@@ -48,7 +48,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class EmployeeNotConnected extends AEmployeeException {
 
-		private static final long serialVersionUID = 736110846693773042L;	
+		private static final long serialVersionUID = 0xA3730EA3C7E8EF2L;	
 		
 		@Override
 		public void showInfoToUser() {
@@ -63,7 +63,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class EmployeeAlreadyConnected extends AEmployeeException {
 
-		private static final long serialVersionUID = -4880371025977064054L;
+		private static final long serialVersionUID = -0x43BA8F973F78BA76L;
 		
 		@Override
 		public void showInfoToUser() {
@@ -78,7 +78,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class AuthenticationError extends AEmployeeException {
 
-		private static final long serialVersionUID = -3035025128800993047L;
+		private static final long serialVersionUID = -0x2A1E93463E913F17L;
 			
 		@Override
 		public void showInfoToUser() {
@@ -93,7 +93,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class ProductNotExistInCatalog extends AEmployeeException {
 
-		private static final long serialVersionUID = -1218770191837502028L;
+		private static final long serialVersionUID = -0x10E9F1083B4F1A4CL;
 		
 		@Override
 		public void showInfoToUser() {
@@ -108,7 +108,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class ProductAlreadyExistInCatalog extends AEmployeeException {
 
-		private static final long serialVersionUID = 231336810775816368L;
+		private static final long serialVersionUID = 0x335DF9A8DC3A8B0L;
 		
 		@Override
 		public void showInfoToUser() {	
@@ -123,7 +123,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class ProductStillForSale extends AEmployeeException {
 
-		private static final long serialVersionUID = -6441045369608147333L;
+		private static final long serialVersionUID = -0x596330A335AB1185L;
 		
 		@Override
 		public void showInfoToUser() {	
@@ -138,7 +138,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class AmountBiggerThanAvailable extends AEmployeeException {
 
-		private static final long serialVersionUID = -6977996976396033467L;
+		private static final long serialVersionUID = -0x60D6D3476DD5DDBBL;
 			
 		@Override
 		public void showInfoToUser() {	
@@ -153,7 +153,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class ProductPackageDoesNotExist extends AEmployeeException {
 
-		private static final long serialVersionUID = -1086760036316621806L;
+		private static final long serialVersionUID = -0xF14F27EC0BE2BEEL;
 		
 		@Override
 		public void showInfoToUser() {	
@@ -169,7 +169,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class ConnectionFailure extends AEmployeeException {
 
-		private static final long serialVersionUID = -7116035947026187101L;
+		private static final long serialVersionUID = -0x62C13CFDCF68035DL;
 
 		@Override
 		public void showInfoToUser() {	
@@ -185,7 +185,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class WorkerAlreadyExists extends AEmployeeException {
 
-		private static final long serialVersionUID = 1110701675869392627L;
+		private static final long serialVersionUID = 0xF6A014A19A04EF3L;
 		
 		@Override
 		public void showInfoToUser() {
@@ -200,7 +200,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class WorkerDoesNotExist extends AEmployeeException {
 
-		private static final long serialVersionUID = -5920340047010353992L;
+		private static final long serialVersionUID = -0x522945E7CB925348L;
 		
 		@Override
 		public void showInfoToUser() {
@@ -215,7 +215,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class ParamIDAlreadyExists extends AEmployeeException {
 
-		private static final long serialVersionUID = -3169770231713956064L;
+		private static final long serialVersionUID = -0x2BFD493B48EB00E0L;
 		
 		@Override
 		public void showInfoToUser() {
@@ -230,7 +230,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class ParamIDDoesNotExist extends AEmployeeException {
 
-		private static final long serialVersionUID = -4286591069692064061L;
+		private static final long serialVersionUID = -0x3B7D07DDD65B713DL;
 		
 		@Override
 		public void showInfoToUser() {
@@ -245,7 +245,7 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class IngredientStillInUse extends AEmployeeException {
 
-		private static final long serialVersionUID = -1228674600657566979L;
+		private static final long serialVersionUID = -0x110D210A1CBD3D03L;
 		
 		@Override
 		public void showInfoToUser() {
@@ -260,12 +260,17 @@ public class AEmployeeException extends SMException {
 	 */
 	public static class ManfacturerStillInUse extends AEmployeeException {
 
-		private static final long serialVersionUID = 907342426645603127L;
+		private static final long serialVersionUID = 0xC97872135DA2337L;
 		
 		@Override
 		public void showInfoToUser() {
 			DialogMessagesService.showErrorDialog(GuiCommonDefs.managerOprDialofTitle, null, 
 					GuiCommonDefs.manuIsInUse);
 		}
+	}
+
+	@Override
+	public void showInfoToUser() {
+		/* empty print */
 	}
 }

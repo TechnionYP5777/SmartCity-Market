@@ -7,9 +7,9 @@ package SMExceptions;
  * @since  2017-01-02
  */
 
-public class SMException extends Exception{
+public abstract class SMException extends Exception{
 
-	private static final long serialVersionUID = 6206029164886167974L;
+	private static final long serialVersionUID = 0x56203EA4FEC111A6L;
 	
 	//currently no further logic in here.
 	//if you find something common between all module-base-exception add this here.
@@ -17,7 +17,5 @@ public class SMException extends Exception{
 	/**
 	 * Should be implement if you want to show the info to the user by using the dialog service 
 	 */
-	public void showInfoToUser() {
-		// Default implementation is empty
-	}
+	public abstract void showInfoToUser();
 }

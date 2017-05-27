@@ -132,6 +132,9 @@ public enum CommandDescriptor {
 	 * Description: Returns the authentication question the user entered when he signed up.
 	 * param1: String username.
 	 * retval: String (the question).
+	 * 
+	 * For Employee - send senderID 0
+	 * For Customer - send senderID 1
 	 *
 	 * result_codes:
 	 * 		success:
@@ -149,6 +152,9 @@ public enum CommandDescriptor {
 	 * 				else, return false.
 	 * param1: Login. (for holding the answer and new password) 
 	 * retval: Boolean.
+	 *
+	 * For Employee - send senderID 0
+	 * For Customer - send senderID 1
 	 *
 	 * result_codes:
 	 * 		success:

@@ -1389,7 +1389,13 @@ public class CommandExecuter {
 		}
 		
 		try {
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, c.getSecurityQuestionCustomer(username));
+			if (inCommandWrapper.getSenderID() == 0) {
+				/* Command sent from employee */
+				//TODO Moan call getSecurityQuestionEmployee here 				
+			} else {
+				/* Command sent from customer */
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, c.getSecurityQuestionCustomer(username));	
+			}
 			
 			log.info("Get question for forget password command for user: " + username + "succeded. the question is: " + outCommandWrapper.getData());
 		} catch (CriticalError e) {
@@ -1424,7 +1430,14 @@ public class CommandExecuter {
 		
 		boolean goodAnswer;
 		try {
-			goodAnswer = c.verifySecurityAnswerCustomer(login.getUserName(), login.getForgetPassword().getAnswer());
+			if (inCommandWrapper.getSenderID() == 0) {
+				/* Command sent from employee */
+				//TODO Moan call verifySecurityAnswerEmployee here 		
+				goodAnswer = false;
+			} else {
+				/* Command sent from customer */
+				goodAnswer = c.verifySecurityAnswerCustomer(login.getUserName(), login.getForgetPassword().getAnswer());
+			}
 			
 			if (!goodAnswer) {
 				log.info("the anwser is incorrect.");
