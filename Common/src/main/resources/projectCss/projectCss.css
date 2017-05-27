@@ -46,6 +46,11 @@
 	-fx-text-fill: #164F4F;
 }
 
+.JFXComboBox {
+	-fx-font-family: "serif";
+	-fx-text-fill: #164F4F;
+}
+
 
 
 
