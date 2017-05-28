@@ -14,6 +14,7 @@ import org.junit.Test;
 import com.google.gson.Gson;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.ForgotPasswordData;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
@@ -1451,10 +1452,50 @@ public class SQLDatabaseConnectionTest {
 			try {
 				sqlConnection.removeCustomer(customerName);
 			} catch (CriticalError | ClientNotExist e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	@Test
+	public void testCutomerCanSetProfile() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		CustomerProfile p = new CustomerProfile(customerName, customerName, "name", "last", "number", "email", "city", "street",
+				date112000,new HashSet<>(),new ForgotPasswordData("question", "answer"));
+		CustomerProfile result = null;
+		
+		//test add worker
+		try {
+			
+			sqlConnection.registerCustomer(customerName, customerName);
+			
+		} catch (CriticalError | ClientAlreadyExist e) {
+			fail();
+		}
+		
+		try {
+			sqlConnection.setCustomerProfile(customerName, p);
+			result = Serialization.deserialize(sqlConnection.getCustomerProfile(customerName), CustomerProfile.class);
+
+		} catch (CriticalError | ClientNotExist | IngredientNotExist e1) {
+			fail();
+		} finally{
+			try {
+				sqlConnection.removeCustomer(customerName);
+			} catch (CriticalError | ClientNotExist e) {
+				e.printStackTrace();
+			}
+		}
+		
+		assertEquals(p.getBirthdate(), result.getBirthdate());
+		assertEquals(p.getCity(), result.getCity());
+		assertEquals(p.getEmailAddress(), result.getEmailAddress());
+		assertEquals(p.getFirstName(), result.getFirstName());
+		assertEquals(p.getLastName(), result.getLastName());
+		assertEquals(p.getPhoneNumber(), result.getPhoneNumber());
+		assertEquals(p.getStreet(), result.getStreet());
+		assertEquals(p.getUserName(), result.getUserName());
 	}
 	
 }

@@ -1972,8 +1972,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 						JdbcEscape.date(Date.from(p.getBirthdate()
 						.atStartOfDay(ZoneId.systemDefault()).toInstant()))).validate();
 
-			statement = getParameterizedQuery(updateQuery + "", username, 
-					p.getStreet(), p.getCity(), p.getEmailAddress(), p.getFirstName(), p.getLastName(), p.getPhoneNumber());
+			//note: the username is in the end because the structure of set clause
+			statement = getParameterizedQuery(updateQuery + "", 
+					p.getStreet(), p.getCity(), p.getEmailAddress(), p.getFirstName(), p.getLastName(), p.getPhoneNumber(), username);
  
 			statement.executeUpdate();
 
@@ -2188,11 +2189,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		try {		
 			
 			String selectCustomerQuery = generateSelectQuery1Table(CustomersTable.customertable,
-					BinaryCondition.equalTo(CustomersTable.customerusernameCol, PARAM_MARK)),
-					selectCustomerIngredientsQuery = generateSelectInnerJoinWithQuery2Tables(
-							CustomersIngredientsTable.table, IngredientsTable.table,
-							CustomersIngredientsTable.ingredientIDCol, CustomersIngredientsTable.customerUsernameCol,
-							BinaryCondition.equalTo(CustomersTable.customerusernameCol, PARAM_MARK));
+					BinaryCondition.equalTo(CustomersTable.customerusernameCol, PARAM_MARK));
+					
+			String selectCustomerIngredientsQuery = generateSelectInnerJoinWithQuery2Tables(
+					CustomersIngredientsTable.table, IngredientsTable.table,
+					CustomersIngredientsTable.ingredientIDCol, CustomersIngredientsTable.customerUsernameCol,
+					BinaryCondition.equalTo(CustomersIngredientsTable.customerUsernameCol, PARAM_MARK));
 			
 			selectCustomerStatement = getParameterizedQuery(selectCustomerQuery + "", username);
 			selectCustomerIngredientsStatement = getParameterizedQuery(selectCustomerIngredientsQuery + "", username);
