@@ -1284,6 +1284,38 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
+	public void testEditManufacturer() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String manufacturerName = "manydebug";
+		String result = null;
+		Manufacturer manufacturer = null;
+		
+		try {
+			String tempID = sqlConnection.addManufacturer(null, manufacturerName);
+			manufacturer = Serialization.deserialize(tempID, Manufacturer.class);
+			manufacturer.setName("newManufacturer");
+			sqlConnection.editManufacturer(null, manufacturer);
+			
+			result = sqlConnection.getManufacturersList(null);
+		} catch (CriticalError | ClientNotConnected | ManufacturerNotExist e) {
+			fail();
+		}
+		
+		assert result != null;
+		HashSet<Manufacturer> set = Serialization.deserializeManufacturersHashSet(result);
+		assert set != null;	
+		assert set.contains(manufacturer);
+		
+		try {
+			sqlConnection.removeManufacturer(null, manufacturer);
+		} catch (CriticalError | ClientNotConnected | ManufacturerNotExist | ManufacturerStillUsed e) {
+			fail();
+		}
+
+	}
+	
+	@Test
 	public void testCantRemoveNotExistedManufacturer() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();

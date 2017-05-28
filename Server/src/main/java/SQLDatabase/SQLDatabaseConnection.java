@@ -2993,7 +2993,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			updateQuery.addSetClause(ManufacturerTable.manufacturerNameCol, PARAM_MARK).validate();
 
-			getParameterizedQuery(updateQuery + "", newManufacturer.getId(), newManufacturer.getName()).executeUpdate();
+			//note: the id is last because in the query the order of paramerters is: set newValue and then Where ManufacturerID 
+			getParameterizedQuery(updateQuery + "", newManufacturer.getName(), newManufacturer.getId()).executeUpdate();
 
 			// END transaction
 			connectionCommitTransaction();
