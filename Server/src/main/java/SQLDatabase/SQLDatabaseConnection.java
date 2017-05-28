@@ -3120,7 +3120,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			updateQuery.addSetClause(IngredientsTable.ingredientNameCol, PARAM_MARK).validate();
 
-			getParameterizedQuery(updateQuery + "", newIngredient.getId(), newIngredient.getName()).executeUpdate();
+			//note: the id is last because in the query the order of paramerters is: set newValue and then Where IngredientID 
+			getParameterizedQuery(updateQuery + "", newIngredient.getName(), newIngredient.getId()).executeUpdate();
 
 			// END transaction
 			connectionCommitTransaction();
