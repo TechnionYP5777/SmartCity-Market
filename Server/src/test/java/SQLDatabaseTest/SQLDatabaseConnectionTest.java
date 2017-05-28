@@ -1428,4 +1428,33 @@ public class SQLDatabaseConnectionTest {
 		}
 	}
 	
+	@Test
+	public void testCutomerCanLoginLogout() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		//test add worker
+		try {
+			
+			sqlConnection.registerCustomer(customerName, customerName);
+			
+		} catch (CriticalError | ClientAlreadyExist e) {
+			fail();
+		}
+		
+		try {
+			int sessionID = sqlConnection.loginCustomer(customerName, customerName);
+			sqlConnection.logout(sessionID, customerName);
+		} catch (AuthenticationError | ClientAlreadyConnected | CriticalError | NumberOfConnectionsExceeded | ClientNotConnected e1) {
+			fail();
+		} finally{
+			try {
+				sqlConnection.removeCustomer(customerName);
+			} catch (CriticalError | ClientNotExist e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 }
