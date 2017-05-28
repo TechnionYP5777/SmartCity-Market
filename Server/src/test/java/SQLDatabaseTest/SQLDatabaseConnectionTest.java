@@ -1316,6 +1316,24 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
+	public void testCantEditNotExistedManufacturer() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String manufacturerName = "manydebug";
+		Manufacturer manufacturer = new Manufacturer(999,manufacturerName);
+		
+			try {
+				sqlConnection.editManufacturer(null, manufacturer);
+				fail();
+			} catch (CriticalError | ClientNotConnected e) {
+				fail();
+			} catch (ManufacturerNotExist e) {
+			} 
+		
+
+	}
+	
+	@Test
 	public void testCantRemoveNotExistedManufacturer() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
