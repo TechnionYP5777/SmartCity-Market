@@ -1411,7 +1411,6 @@ public class SQLDatabaseConnectionTest {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		
-		//test add worker
 		try {
 			
 			sqlConnection.registerCustomer(customerName, customerName);
@@ -1434,7 +1433,6 @@ public class SQLDatabaseConnectionTest {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		
-		//test add worker
 		try {
 			
 			sqlConnection.registerCustomer(customerName, customerName);
@@ -1458,6 +1456,34 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
+	public void testNotExistedCutomerCantLogin() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			sqlConnection.loginCustomer(customerName, customerName);
+			fail();
+		} catch (ClientAlreadyConnected | CriticalError | NumberOfConnectionsExceeded e1) {
+			fail();
+		} catch (AuthenticationError e){
+		}
+	}
+	
+	@Test
+	public void testNotExistedCutomerCantLogout() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		int sessionID = 34624;
+		
+		try{
+			sqlConnection.logout(sessionID, customerName);
+		} catch (CriticalError e1) {
+			fail();
+		} catch (ClientNotConnected e){
+		}
+	}
+	
+	@Test
 	public void testCutomerCanSetProfile() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
@@ -1465,7 +1491,6 @@ public class SQLDatabaseConnectionTest {
 				date112000,new HashSet<>(),new ForgotPasswordData("question", "answer"));
 		CustomerProfile result = null;
 		
-		//test add worker
 		try {
 			
 			sqlConnection.registerCustomer(customerName, customerName);
@@ -1496,6 +1521,206 @@ public class SQLDatabaseConnectionTest {
 		assertEquals(p.getPhoneNumber(), result.getPhoneNumber());
 		assertEquals(p.getStreet(), result.getStreet());
 		assertEquals(p.getUserName(), result.getUserName());
+	}
+	
+	@Test
+	public void testCutomerCanSetSecurityQA() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		ForgotPasswordData p = new ForgotPasswordData("question", "answer");
+		String result = null;
+		
+		try {
+			
+			sqlConnection.registerCustomer(customerName, customerName);
+			
+		} catch (CriticalError | ClientAlreadyExist e) {
+			fail();
+		}
+		
+		try {
+			sqlConnection.setSecurityQACustomer(customerName, p);
+			result = sqlConnection.getSecurityQuestionCustomer(customerName);
+			assertTrue(sqlConnection.verifySecurityAnswerCustomer(customerName, "answer"));
+			assertEquals("question", result);
+		} catch (CriticalError | ClientNotExist e1) {
+			fail();
+		} finally{
+			try {
+				sqlConnection.removeCustomer(customerName);
+			} catch (CriticalError | ClientNotExist e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	@Test
+	public void testCutomerCanSetPassword() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			
+			sqlConnection.registerCustomer(customerName, customerName);
+			
+		} catch (CriticalError | ClientAlreadyExist e) {
+			fail();
+		}
+		
+		try {
+			sqlConnection.setPasswordCustomer(customerName, "newPass");
+		} catch (CriticalError | ClientNotExist e1) {
+			fail();
+		} finally{
+			try {
+				sqlConnection.removeCustomer(customerName);
+			} catch (CriticalError | ClientNotExist e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	@Test
+	public void testCutomerCanLoginWithNewPassword() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			
+			sqlConnection.registerCustomer(customerName, customerName);
+			
+		} catch (CriticalError | ClientAlreadyExist e) {
+			fail();
+		}
+		
+		try {
+			sqlConnection.setPasswordCustomer(customerName, "newPass");
+			
+			//try to login with new password
+			int sessionID = sqlConnection.loginCustomer(customerName, "newPass");
+			sqlConnection.logout(sessionID, customerName);
+		} catch (CriticalError | ClientNotExist | AuthenticationError | ClientAlreadyConnected | NumberOfConnectionsExceeded | ClientNotConnected e1) {
+			fail();
+		} finally{
+			try {
+				sqlConnection.removeCustomer(customerName);
+			} catch (CriticalError | ClientNotExist e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
+	}
+	
+	@Test
+	public void testCantSetProfileToNotExistedCustomer() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		CustomerProfile p = new CustomerProfile(customerName, customerName, "name", "last", "number", "email", "city", "street",
+				date112000,new HashSet<>(),new ForgotPasswordData("question", "answer"));
+		
+		try {
+			sqlConnection.setCustomerProfile(customerName, p);
+			fail();
+
+		} catch (CriticalError | IngredientNotExist e1) {
+			fail();
+		} catch (ClientNotExist e2){
+		}
+		
+	}
+	
+	@Test
+	public void testCantGetProfileToNotExistedCustomer() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			
+			Serialization.deserialize(sqlConnection.getCustomerProfile(customerName), CustomerProfile.class);
+			fail();
+		} catch (CriticalError e1) {
+			fail();
+		} catch (ClientNotExist e2){
+		}
+		
+	}
+	
+	@Test
+	public void testCantSetSecurityQAToNotExistedCutomer() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		ForgotPasswordData p = new ForgotPasswordData("question", "answer");
+		
+		try {
+			sqlConnection.setSecurityQACustomer(customerName, p);
+			fail();
+		} catch (CriticalError e1) {
+			fail();
+		} catch (ClientNotExist e2){
+		}
+		
+	}
+	
+	@Test
+	public void testCantGetSecurityQusetionOfNotExistedCutomer() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			sqlConnection.getSecurityQuestionCustomer(customerName);
+			fail();
+		} catch (CriticalError e1) {
+			fail();
+		} catch (ClientNotExist e2){
+		}
+		
+	}
+	
+	@Test
+	public void testCantVerifySecurityAnswerOfNotExistedCutomer() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			sqlConnection.verifySecurityAnswerCustomer(customerName, "answer");
+			fail();
+		} catch (CriticalError e1) {
+			fail();
+		} catch (ClientNotExist e2){
+		}
+		
+	}
+	
+	@Test
+	public void testCantSetPasswordToNotExistedCutomer() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			sqlConnection.setPasswordCustomer(customerName, "newPass");
+		} catch (CriticalError e1) {
+			fail();
+		} catch (ClientNotExist e2){
+		}
+		
+	}
+	
+	@Test
+	public void testCantRemoveNotExistedCutomer() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			sqlConnection.removeCustomer(customerName);
+		} catch (CriticalError e1) {
+			fail();
+		} catch (ClientNotExist e2){
+		}
+		
 	}
 	
 }
