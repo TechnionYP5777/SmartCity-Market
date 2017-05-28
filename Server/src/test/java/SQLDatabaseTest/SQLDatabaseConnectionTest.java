@@ -1227,6 +1227,38 @@ public class SQLDatabaseConnectionTest {
 		assert !set.contains(ingredient);
 	}
 	
+	
+	public void testEditIngredient() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String manufacturerName = "manydebug";
+		String result = null;
+		Manufacturer manufacturer = null;
+		
+		try {
+			String tempID = sqlConnection.addManufacturer(null, manufacturerName);
+			manufacturer = Serialization.deserialize(tempID, Manufacturer.class);
+			manufacturer.setName("newManufacturer");
+			sqlConnection.editManufacturer(null, manufacturer);
+			
+			result = sqlConnection.getManufacturersList(null);
+		} catch (CriticalError | ClientNotConnected | ManufacturerNotExist e) {
+			fail();
+		}
+		
+		assert result != null;
+		HashSet<Manufacturer> set = Serialization.deserializeManufacturersHashSet(result);
+		assert set != null;	
+		assert set.contains(manufacturer);
+		
+		try {
+			sqlConnection.removeManufacturer(null, manufacturer);
+		} catch (CriticalError | ClientNotConnected | ManufacturerNotExist | ManufacturerStillUsed e) {
+			fail();
+		}
+
+	}
+	
 	@Test
 	public void testCantRemoveNotExistedIngredient() {
 
@@ -1238,6 +1270,24 @@ public class SQLDatabaseConnectionTest {
 			sqlConnection.removeIngredient(null, ingredient);
 			fail();
 		} catch (CriticalError | ClientNotConnected | IngredientStillUsed e) {
+			fail();
+		} catch (IngredientNotExist e){
+		}
+		
+
+	}
+	
+	@Test
+	public void testCantEditNotExistedIngredient() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String ingredientName = "glotendebug";
+		Ingredient ingredient = new Ingredient(999,ingredientName);
+		
+		try {
+			sqlConnection.editIngredient(null, ingredient);
+			fail();
+		} catch (CriticalError | ClientNotConnected e) {
 			fail();
 		} catch (IngredientNotExist e){
 		}
