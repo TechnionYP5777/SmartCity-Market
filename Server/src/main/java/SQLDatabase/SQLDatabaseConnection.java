@@ -1891,7 +1891,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	
 	@Override
 	public void registerCustomer(String username, String password) throws CriticalError, ClientAlreadyExist{
-		log.debug("SQL Public registerCustomer: Customer trying to register with username: " + username);
+ 		log.debug("SQL Public registerCustomer: Customer trying to register with username: " + username);
 		
 		if (isCustomerExist(username)){
 			log.debug("SQL Public registerCustomer: already exist customer with username: " + username);
@@ -1906,6 +1906,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			
 			//Write part of transaction
 			String insertCustomerQuery = new InsertQuery(CustomersTable.customertable)
+					.addColumn(CustomersTable.customerIDCol, PARAM_MARK)
 					.addColumn(CustomersTable.customerusernameCol, PARAM_MARK)
 					.addColumn(CustomersTable.customerpasswordCol, PARAM_MARK)
 					.addColumn(CustomersTable.customerAddressCol, PARAM_MARK)
@@ -1918,7 +1919,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 					.addColumn(CustomersTable.customersecurityAnswerCol, PARAM_MARK)
 					.addColumn(CustomersTable.customersecurityQuestionCol, PARAM_MARK).validate() + "";
 
-			statement = getParameterizedQuery(insertCustomerQuery, username, password,
+			statement = getParameterizedQuery(insertCustomerQuery, 0, username, password,
 					"", "", "", "", "", 0, "", "", "");
 
 			statement.executeUpdate();
@@ -1932,6 +1933,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			throw e;
 		} catch (SQLException e) {
 			connectionRollbackTransaction();
+			log.debug(e.getStackTrace());
+			log.fatal(e.getMessage());
 			throw new CriticalError();
 		} finally {
 			connectionEndTransaction();

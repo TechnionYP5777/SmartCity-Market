@@ -51,6 +51,9 @@ import SQLDatabase.SQLDatabaseException.ClientNotExist;
 public class SQLDatabaseConnectionTest {
 
 	final long barcodeDebug = 423324;
+	final String workerName = "workdebug";
+	final String customerName = "customerdebug";
+	
 	final LocalDate date112000 = LocalDate.of(2000, 1, 1);
 	final LocalDate date232015 = LocalDate.of(2015, 3, 2);
 	final Location locationWarehouse = new Location(0, 0, PlaceInMarket.WAREHOUSE);
@@ -1301,7 +1304,6 @@ public class SQLDatabaseConnectionTest {
 	public void testAddRemoveWorker() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		final String workerName = "workdebug";
 		String result = null;
 		
 		//test add worker
@@ -1340,7 +1342,6 @@ public class SQLDatabaseConnectionTest {
 	public void testCantRemoveNotExistedWorker() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		final String workerName = "workdebug";
 		
 		try {
 			sqlConnection.removeWorker(null, workerName);
@@ -1356,7 +1357,7 @@ public class SQLDatabaseConnectionTest {
 	public void testCantAddWorkerAlreadyExisted() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		final String workerName = "workdebug";
+		
 		String result = null;
 		
 		//test add worker
@@ -1401,5 +1402,30 @@ public class SQLDatabaseConnectionTest {
 
 	}
 	
+	/*
+	 * test customer operations
+	 */
+	@Test
+	public void testCanRegisterAndRemoveCutomer() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		//test add worker
+		try {
+			
+			sqlConnection.registerCustomer(customerName, customerName);
+			
+		} catch (CriticalError | ClientAlreadyExist e) {
+			fail();
+		}
+		
+		try {
+			
+			sqlConnection.removeCustomer(customerName);
+			
+		} catch (CriticalError |ClientNotExist e) {
+			fail();
+		}
+	}
 	
 }
