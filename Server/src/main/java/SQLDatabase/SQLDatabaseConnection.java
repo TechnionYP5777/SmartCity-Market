@@ -1016,7 +1016,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			UpdateQuery updateQuery = generateUpdateQuery(WorkersTable.workertable,
 					BinaryCondition.equalTo(WorkersTable.workerusernameCol, PARAM_MARK));
 
-			updateQuery.addSetClause(WorkersTable.workersessionIDCol, null).validate();
+			updateQuery.addSetClause(WorkersTable.workersessionIDCol, SqlObject.NULL_VALUE).validate();
 
 			statement = getParameterizedQuery(updateQuery + "", username);
 
@@ -2993,7 +2993,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			updateQuery.addSetClause(ManufacturerTable.manufacturerNameCol, PARAM_MARK).validate();
 
-			//note: the id is last because in the query the order of paramerters is: set newValue and then Where ManufacturerID 
+			//note: the id is last because in the query the order of parameters is: set newValue and then Where ManufacturerID 
 			getParameterizedQuery(updateQuery + "", newManufacturer.getName(), newManufacturer.getId()).executeUpdate();
 
 			// END transaction
@@ -3120,7 +3120,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			updateQuery.addSetClause(IngredientsTable.ingredientNameCol, PARAM_MARK).validate();
 
-			//note: the id is last because in the query the order of paramerters is: set newValue and then Where IngredientID 
+			//note: the id is last because in the query the order of parameters is: set newValue and then Where IngredientID 
 			getParameterizedQuery(updateQuery + "", newIngredient.getName(), newIngredient.getId()).executeUpdate();
 
 			// END transaction
