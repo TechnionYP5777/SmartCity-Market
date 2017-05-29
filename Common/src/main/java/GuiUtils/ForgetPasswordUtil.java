@@ -187,6 +187,7 @@ class SurveyWizard extends Wizard {
 		this.owner = owner;
 	}
 
+	@Override
 	public void finish() {
 		System.out.println("Had complaint? " + SurveyData.instance.hasComplaints.get());
 		if (SurveyData.instance.hasComplaints.get())
@@ -195,6 +196,7 @@ class SurveyWizard extends Wizard {
 		owner.close();
 	}
 
+	@Override
 	public void cancel() {
 		System.out.println("Cancelled");
 		owner.close();
@@ -226,6 +228,7 @@ class UserNameScreen extends WizardPage {
 
 	}
 
+	@Override
 	Parent getContent() {
 		usernameField = new JFXTextField();
 
@@ -237,6 +240,7 @@ class UserNameScreen extends WizardPage {
 
 	}
 
+	@Override
 	void nextPage() {
 		try {
 			ForgetPasswordUtil.question = ForgetPasswordUtil.forgotPasswordHandler.getForgotPasswordQuestion(usernameField.getText());
@@ -262,6 +266,7 @@ class QuestionScreen extends WizardPage {
 	private JFXPasswordField newPassword;
 	private Label question;
 
+	@Override
 	Parent getContent() {
 		nextButton.setDisable(true);
 		finishButton.setDisable(true);
@@ -284,6 +289,7 @@ class QuestionScreen extends WizardPage {
 		nextButton.setDisable(answerField.getText().isEmpty() || newPassword.getText().isEmpty());
 	}
 	
+	@Override
 	void nextPage() {
 		try {
 			ForgetPasswordUtil.forgotPasswordHandler.sendAnswerAndNewPassword(answerField.getText(), newPassword.getText());
@@ -305,6 +311,7 @@ class GettingPasswordScreen extends WizardPage {
 	public GettingPasswordScreen() {
 		super("GettingPasswordScreen");
 	}
+	@Override
 	Parent getContent() {
 		VBox vbox = new VBox(5, new Label("Thanks!\nPassword restored successfully!"));
 		vbox.setAlignment(Pos.CENTER);
