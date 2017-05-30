@@ -1,19 +1,36 @@
-.root {
-   -fx-background-image: url("family.jpg");
-   -fx-background-size: cover;
-   
+
+.WelcomeLbl {
+	-fx-font-size: 100;
+	-fx-text-fill: midnightblue;
 }
 
-#backButton {
-	-fx-background-image: url("home.png");
-	-fx-background-size: cover;
-    -fx-background-color: transparent;
+.pleaseLoginLbl {
+ 	-fx-font-size: 30;
+ 	-fx-text-fill: indigo;
 }
 
-#settingsButton {
-	-fx-background-image: url("setting.png");
-	-fx-background-size: cover;
-    -fx-background-color: transparent;
+.forgotPassLbl {
+	-fx-font-size: 15;
 }
- 
+
+.JFXButton {
+	-fx-font-size: 20px;
+}
+
+.JFXTextField {
+	-fx-font-size: 20;
+}
+
+.JFXPasswordField {
+	-fx-font-size: 20;
+}
+
+.forgotPassLbl {
+	-fx-text-fill: blue;
+	-fx-font-size: 15;
+}
+
+
+
+
 

@@ -19,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 import GuiUtils.ForgetPasswordUtil;
@@ -136,14 +137,15 @@ public class CustomerLoginScreen implements Initializable {
 
 		AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_PersonalInfoScreen.fxml");
 	}
-
-	@FXML
-	private void forgotPassButtonPressed(ActionEvent __) {
+	
+	
+   @FXML
+    void forgotPassButtonPressed(MouseEvent event) {
 		try {
 			IForgotPasswordHandler forgot = InjectionFactory.getInstance(Customer.class);
 			ForgetPasswordUtil.start(forgot);
 		} catch (Exception e) {
 			// TODO
 		}
-	}
+    }
 }

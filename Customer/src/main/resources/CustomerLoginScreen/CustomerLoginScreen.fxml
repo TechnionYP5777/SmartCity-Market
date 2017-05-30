@@ -11,14 +11,13 @@
 <?import javafx.scene.effect.Light.Distant?>
 <?import javafx.scene.effect.Lighting?>
 <?import javafx.scene.effect.Shadow?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="loginScreenPane" alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerLoginScreen">
+<GridPane fx:id="loginScreenPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerLoginScreen">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" percentWidth="10.0" />
       <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0" />
@@ -36,12 +35,9 @@
          <children>
             <VBox prefHeight="84.0" prefWidth="896.0">
                <children>
-                  <Label alignment="CENTER_LEFT" text="Welcome!" textFill="#7c0f0f" wrapText="true">
-                     <font>
-                        <Font name="Garuda" size="48.0" />
-                     </font>
+                  <Label alignment="CENTER_LEFT" styleClass="WelcomeLbl" text="Welcome!" textFill="#7c0f0f" wrapText="true">
                   </Label>
-                  <Label text="Please Login">
+                  <Label styleClass="pleaseLoginLbl" text="Please Login">
                      <font>
                         <Font size="22.0" />
                      </font></Label>
@@ -69,14 +65,8 @@
                <padding>
                   <Insets top="13.0" />
                </padding>
-               <font>
-                  <Font name="Lucida Bright Regular" size="22.0" />
-               </font>
             </JFXTextField>
             <JFXPasswordField fx:id="passwordField" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Password" styleClass="JFXPasswordField">
-               <font>
-                  <Font name="Lucida Bright Regular" size="22.0" />
-               </font>
                <padding>
                   <Insets top="13.0" />
                </padding>
@@ -92,20 +82,14 @@
                <children>
                   <VBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
-                        <JFXButton fx:id="forgotPassButton" alignment="CENTER" contentDisplay="RIGHT" onAction="#forgotPassButtonPressed" ripplerFill="#2b1c65" text="I forgot my password" textFill="#0502c3">
-                           <font>
-                              <Font name="System Bold" size="16.0" />
-                           </font>
-                        </JFXButton>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                        <Label onMouseClicked="#forgotPassButtonPressed" text="I forgot my password" underline="true" />
+                        
                      </children>
                   </VBox>
                   <VBox alignment="CENTER_RIGHT" GridPane.columnIndex="1">
                      <children>
-                        <JFXButton fx:id="loginButton" alignment="CENTER_RIGHT" onAction="#loginButtonPressed" ripplerFill="#0502c3" styleClass="JFXButton" text="Login" GridPane.columnIndex="1">
-                           <font>
-                              <Font size="18.0" />
-                           </font></JFXButton>
+                        <JFXButton fx:id="loginButton" alignment="CENTER_RIGHT" onAction="#loginButtonPressed" styleClass="JFXButton" text="Login" GridPane.columnIndex="1">
+                  </JFXButton>
                      </children>
                   </VBox>
                </children>
@@ -139,7 +123,7 @@
          <children>
             <VBox alignment="CENTER" prefHeight="84.0" prefWidth="896.0">
                <children>
-                  <Label fx:id="WelcomeLbl1" alignment="CENTER_LEFT" text="Not Registered Yet?" textFill="#510d0d" wrapText="true">
+                  <Label alignment="CENTER_LEFT" text="Not Registered Yet?" textFill="#510d0d" wrapText="true">
                      <font>
                         <Font name="Garuda" size="34.0" />
                      </font>
@@ -147,26 +131,17 @@
                </children>
              
             </VBox>
-            <JFXButton fx:id="registerButton" onAction="#registerButtonPressed" ripplerFill="#0502c3" styleClass="JFXButton" text="Register">
-               <font>
-                  <Font size="18.0" />
-               </font>
+            <JFXButton fx:id="registerButton" onAction="#registerButtonPressed" styleClass="JFXButton" text="Register">
             </JFXButton>
             <Label text="OR">
-               <font>
-                  <Font size="24.0" />
-               </font>
             </Label>
             <JFXButton fx:id="guestLoginButton" onAction="#guestLoginButtonPressed" styleClass="JFXButton" text="Enter As A Guest">
-               <font>
-                  <Font size="16.0" />
-               </font>
             </JFXButton>
          </children>
       </VBox>
    </children>
    <stylesheets>
-      <URL value="@CustomerLoginScreen.css" />
       <URL value="@../ProjectCss/projectCss.css" />
+      <URL value="@CustomerLoginScreen.css" />
    </stylesheets>
 </GridPane>

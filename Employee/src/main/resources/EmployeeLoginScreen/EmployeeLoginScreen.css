@@ -34,6 +34,11 @@
 
 #forgotPassLbl {
 	-fx-font-size: 15;
+	-fx-text-fill: blue;
+}
+
+.forgotPassLbl {
+
 }
 
 .thisJFXButton {
