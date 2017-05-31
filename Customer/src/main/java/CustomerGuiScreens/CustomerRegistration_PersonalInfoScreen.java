@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RequiredFieldValidator;
 
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.ICustomerProfile;
@@ -24,6 +25,9 @@ import GuiUtils.SecurityQuestions;
 import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
 import UtilsImplementations.StackTraceUtil;
+import de.jensd.fx.glyphs.GlyphsBuilder;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -51,9 +55,6 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 
 	@FXML
 	private JFXPasswordField passwordField;
-
-	@FXML
-	private JFXPasswordField repeatPassField;
 
 	@FXML
 	private JFXTextField firstNameTextField;
@@ -89,13 +90,18 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 
 	ICustomer customer;
 
+	RequiredFieldValidator userValidator1;
+
+	RequiredFieldValidator userValidator2;
+
 	private void enableNextButton() {
 		nextButton.setDisable(userNameTextField.getText().isEmpty() || passwordField.getText().isEmpty()
-				|| repeatPassField.getText().isEmpty() || firstNameTextField.getText().isEmpty()
-				|| lastNameTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty()
-				|| emailTextField.getText().isEmpty() || cityTextField.getText().isEmpty()
-				|| streetTextField.getText().isEmpty() || securityAnswerTextField.getText().isEmpty()
-				|| securityQuestionComboBox.getSelectionModel().getSelectedItem().toString().isEmpty());
+				|| firstNameTextField.getText().isEmpty() || lastNameTextField.getText().isEmpty()
+				|| phoneNumberTextField.getText().isEmpty() || emailTextField.getText().isEmpty()
+				|| cityTextField.getText().isEmpty() || streetTextField.getText().isEmpty()
+				|| securityAnswerTextField.getText().isEmpty()
+				|| securityQuestionComboBox.getSelectionModel().getSelectedItem().toString().isEmpty()
+				|| !validNewUserName(userNameTextField.getText()));
 	}
 
 	@Override
@@ -116,10 +122,42 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 
 		});
 
+		userValidator1 = new RequiredFieldValidator();
+		userValidator1.setMessage("Input Required");
+		userValidator1.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING)
+				.size("1em").styleClass("error").build());
+
+		userValidator2 = new RequiredFieldValidator();
+		userValidator2.setMessage("Username Already Exists");
+		userValidator2.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING)
+				.size("1em").styleClass("error").build());
+
+		userNameTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				userNameTextField.getValidators().add(userValidator1);
+				userNameTextField.validate();
+			} else if (!validNewUserName(userNameTextField.getText())) {
+				userNameTextField.getValidators().add(userValidator2);
+				userNameTextField.validate();
+			}
+
+		});
+
 		passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
 			TempCustomerProfilePassingData.password = newValue;
 			enableNextButton();
+		});
 
+		RequiredFieldValidator userValidator3 = new RequiredFieldValidator();
+		userValidator3.setMessage("Input Required");
+		userValidator3.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING)
+				.size("1em").styleClass("error").build());
+		passwordField.getValidators().add(userValidator3);
+
+		passwordField.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				passwordField.validate();
+			}
 		});
 
 		firstNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -127,9 +165,33 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 			enableNextButton();
 		});
 
+		RequiredFieldValidator val4 = new RequiredFieldValidator();
+		val4.setMessage("Input Required");
+		val4.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
+				.styleClass("error").build());
+		firstNameTextField.getValidators().add(val4);
+
+		firstNameTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				firstNameTextField.validate();
+			}
+		});
+
 		lastNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			TempCustomerProfilePassingData.customerProfile.setLastName(newValue);
 			enableNextButton();
+		});
+
+		RequiredFieldValidator val5 = new RequiredFieldValidator();
+		val5.setMessage("Input Required");
+		val5.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
+				.styleClass("error").build());
+		lastNameTextField.getValidators().add(val5);
+
+		lastNameTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				lastNameTextField.validate();
+			}
 		});
 
 		phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -141,9 +203,33 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 			enableNextButton();
 		});
 
+		RequiredFieldValidator val6 = new RequiredFieldValidator();
+		val6.setMessage("Input Required");
+		val6.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
+				.styleClass("error").build());
+		phoneNumberTextField.getValidators().add(val6);
+
+		phoneNumberTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				phoneNumberTextField.validate();
+			}
+		});
+
 		emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			TempCustomerProfilePassingData.customerProfile.setEmailAddress(newValue);
 			enableNextButton();
+		});
+
+		RequiredFieldValidator val9 = new RequiredFieldValidator();
+		val9.setMessage("Input Required");
+		val9.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
+				.styleClass("error").build());
+		emailTextField.getValidators().add(val9);
+
+		emailTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				emailTextField.validate();
+			}
 		});
 
 		cityTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -151,9 +237,33 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 			enableNextButton();
 		});
 
+		RequiredFieldValidator val10 = new RequiredFieldValidator();
+		val10.setMessage("Input Required");
+		val10.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
+				.styleClass("error").build());
+		cityTextField.getValidators().add(val10);
+
+		cityTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				cityTextField.validate();
+			}
+		});
+
 		streetTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			TempCustomerProfilePassingData.customerProfile.setStreet(newValue);
 			enableNextButton();
+		});
+
+		RequiredFieldValidator val7 = new RequiredFieldValidator();
+		val7.setMessage("Input Required");
+		val7.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
+				.styleClass("error").build());
+		streetTextField.getValidators().add(val7);
+
+		streetTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				streetTextField.validate();
+			}
 		});
 
 		birthDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -185,13 +295,25 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 			enableNextButton();
 		});
 
+		RequiredFieldValidator val8 = new RequiredFieldValidator();
+		val8.setMessage("Input Required");
+		val8.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
+				.styleClass("error").build());
+		securityAnswerTextField.getValidators().add(val8);
+
+		securityAnswerTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				securityAnswerTextField.validate();
+			}
+		});
+
 		birthDatePicker.setValue(LocalDate.now());
 
 		enableNextButton();
 
 	}
 
-	private boolean validNewUserName(String username) {
+	boolean validNewUserName(String username) {
 		Boolean res = false;
 		try {
 			res = customer.isFreeUsername(username);
@@ -215,7 +337,6 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 			userNameTextField.setText(TempCustomerProfilePassingData.customerProfile.getUserName());
 		if (TempCustomerProfilePassingData.password != null) {
 			passwordField.setText(TempCustomerProfilePassingData.password);
-			repeatPassField.setText(TempCustomerProfilePassingData.password);
 		}
 		if (TempCustomerProfilePassingData.customerProfile.getFirstName() != null)
 			firstNameTextField.setText(TempCustomerProfilePassingData.customerProfile.getFirstName());
@@ -252,23 +373,13 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 
 	@FXML
 	void nextButtonPressed(ActionEvent __) {
-		if (checkFieldsVadility())
-			AbstractApplicationScreen
-					.setScene("/CustomerRegistrationScreens/CustomerRegistration_IngredientsScreen.fxml");
+		AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_IngredientsScreen.fxml");
 	}
 
 	@FXML
 	void cancelButtonPressed(ActionEvent __) {
 		TempCustomerProfilePassingData.clear();
 		AbstractApplicationScreen.setScene("/CustomerLoginScreen/CustomerLoginScreen.fxml");
-	}
-
-	private boolean checkFieldsVadility() {
-		if (passwordField.getText().equals(repeatPassField.getText()))
-			return true;
-		DialogMessagesService.showErrorDialog(GuiCommonDefs.registrationFieldFailureTitle, null,
-				GuiCommonDefs.registrationWrongRepeatedPass);
-		return false;
 	}
 
 }
