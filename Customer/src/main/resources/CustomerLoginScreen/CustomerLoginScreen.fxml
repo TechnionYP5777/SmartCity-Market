@@ -6,6 +6,7 @@
 <?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -88,6 +89,10 @@
                               <String fx:value="label" />
                               <String fx:value="forgotPassLbl" />
                            </styleClass>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                     
                         </Label>
                         
                      </children>
@@ -107,11 +112,7 @@
       </VBox>
       <VBox alignment="CENTER_LEFT">
          <children>
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonPressed" prefHeight="80.0" prefWidth="80.0">
-               <padding>
-                  <Insets left="13.0" right="13.0" />
-               </padding>
-            </Button>
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonPressed" />
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -119,7 +120,7 @@
       </VBox>
       <VBox alignment="CENTER_RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="2">
          <children>
-            <Button fx:id="settingsButton" mnemonicParsing="false" prefHeight="81.0" prefWidth="80.0" />
+            <Button fx:id="settingsButton" mnemonicParsing="false" />
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

@@ -46,7 +46,7 @@
                   <Label styleClass="headerTerms" text="Smart Market terms of use:" />
                </children>
             </VBox>
-            <JFXTextArea fx:id="termsTextArea" />
+            <JFXTextArea fx:id="termsTextArea" prefHeight="600.0" />
             <VBox>
                <children>
                   <JFXCheckBox fx:id="final_acceptChecKBox" text="I’ve read and accept the terms">
