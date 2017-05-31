@@ -31,7 +31,7 @@
       <RowConstraints vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <VBox alignment="CENTER" blendMode="MULTIPLY" spacing="15.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <VBox fx:id="inputGridPane" alignment="CENTER" blendMode="MULTIPLY" spacing="15.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
             <VBox>
                <children>

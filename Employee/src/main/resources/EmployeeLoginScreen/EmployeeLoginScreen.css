@@ -1,4 +1,11 @@
-
+.root {
+   -fx-background-image: url("background1.jpg");
+   -fx-background-position: center;
+   -fx-background-repeat: no-repeat;
+   -fx-background-size: cover;
+   -fx-background-color: white;
+   
+}
 
 
 #backButton {
@@ -37,10 +44,6 @@
 	-fx-text-fill: blue;
 }
 
-.forgotPassLbl {
-
-}
-
 .thisJFXButton {
 	-fx-font-size: 20px;
 }
@@ -51,6 +54,11 @@
 
 .thisJFXPasswordField {
 	-fx-font-size: 20;
+}
+
+#inputGridPane {
+	-fx-background-radius: 16px, 0 ;
+	-fx-background-color: rgba(255,255,255,0.2);
 }
 
 

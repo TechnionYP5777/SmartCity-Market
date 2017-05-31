@@ -119,29 +119,21 @@
       </GridPane>
       <VBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2">
          <children>
-            <JFXButton fx:id="nextButton" buttonType="RAISED" onAction="#nextButtonPressed" styleClass="JFXButton" text="Next" GridPane.columnIndex="1" GridPane.rowIndex="3">
-               <font>
-                  <Font size="15.0" />
-               </font></JFXButton>
+            <JFXButton fx:id="nextButton"  onAction="#nextButtonPressed" styleClass="JFXButton" text="Next" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            </JFXButton>
          </children>
       </VBox>
       <VBox alignment="CENTER_LEFT" spacing="15.0">
          <children>
             <VBox>
                <children>
-                  <Label maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Registration" textFill="#120e8d6e" underline="true" wrapText="true">
-                     <font>
-                        <Font size="46.0" />
-                     </font>
+                  <Label maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="header" text="Registration" underline="true" wrapText="true">
                   </Label>
                </children>
             </VBox>
             <VBox>
                <children>
-                  <Label text="Personal Info" textFill="#3569c3">
-                     <font>
-                        <Font size="34.0" />
-                     </font>
+                  <Label styleClass="subHeader" text="Personal Info" >
                   </Label>
                </children>
             </VBox>
@@ -152,10 +144,7 @@
       </VBox>
       <VBox alignment="CENTER" GridPane.rowIndex="2">
          <children>
-            <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#cancelButtonPressed" styleClass="JFXButton" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="3">
-               <font>
-                  <Font size="15.0" />
-               </font>
+            <JFXButton fx:id="cancelButton"  onAction="#cancelButtonPressed" styleClass="JFXButton" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="3">
             </JFXButton>
          </children>
       </VBox>
@@ -163,5 +152,6 @@
    <stylesheets>
       <URL value="@../ProjectCss/projectCss.css" />
       <URL value="@PersonalInfoScreen.css" />
+      <URL value="@registration.css" />
    </stylesheets>
 </GridPane>

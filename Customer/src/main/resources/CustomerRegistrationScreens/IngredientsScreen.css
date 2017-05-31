@@ -6,23 +6,3 @@
    -fx-background-color: white;
 }
 
-#nextButton {
-	-jfx-button-type: RAISED;
-	-fx-background-color: #00FFCC;
-	-fx-border-radius: 8px;
-	-fx-text-fill: WHITE;
-}
-
-#backButton {
-	-jfx-button-type: RAISED;
-	-fx-background-color: #FF3300;
-	-fx-border-radius: 8px;
-	-fx-text-fill: WHITE;
-}
-
-#cancelButton {
-	-jfx-button-type: RAISED;
-	-fx-background-color: BLACK;
-	-fx-border-radius: 8px;
-	-fx-text-fill: WHITE;
-}
