@@ -36,6 +36,7 @@ import javafx.scene.layout.GridPane;
  * personal info.
  * 
  * @author Lior Ben Ami
+ * @author Shimon Azulay
  * @since 2017-04
  */
 public class CustomerRegistration_PersonalInfoScreen implements Initializable {
@@ -87,16 +88,15 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 	ICustomerProfile customerProfile;
 
 	ICustomer customer;
-	
+
 	private void enableNextButton() {
 		nextButton.setDisable(userNameTextField.getText().isEmpty() || passwordField.getText().isEmpty()
 				|| repeatPassField.getText().isEmpty() || firstNameTextField.getText().isEmpty()
 				|| lastNameTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty()
 				|| emailTextField.getText().isEmpty() || cityTextField.getText().isEmpty()
-				|| streetTextField.getText().isEmpty() || securityAnswerTextField.getText().isEmpty() || 
-				securityQuestionComboBox.getSelectionModel().getSelectedItem().toString().isEmpty());
+				|| streetTextField.getText().isEmpty() || securityAnswerTextField.getText().isEmpty()
+				|| securityQuestionComboBox.getSelectionModel().getSelectedItem().toString().isEmpty());
 	}
-
 
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
@@ -133,6 +133,10 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		});
 
 		phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.matches("\\d*")) {
+				phoneNumberTextField.setText(newValue.replaceAll("[^\\d]", ""));
+				return;
+			}
 			TempCustomerProfilePassingData.customerProfile.setPhoneNumber(newValue);
 			enableNextButton();
 		});
@@ -180,12 +184,11 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 			TempCustomerProfilePassingData.sequrityAnswer = newValue;
 			enableNextButton();
 		});
-		
-		
+
 		birthDatePicker.setValue(LocalDate.now());
-		
+
 		enableNextButton();
-		
+
 	}
 
 	private boolean validNewUserName(String username) {
