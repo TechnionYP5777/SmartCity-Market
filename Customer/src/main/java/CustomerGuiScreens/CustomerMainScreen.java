@@ -41,7 +41,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -55,6 +54,7 @@ import javafx.util.Callback;
  * 
  * @author Lior Ben Ami
  * @author Aviad Cohen
+ * @author Shimon Azulay
  * @since 2017-01-11
  */
 public class CustomerMainScreen implements Initializable {
@@ -94,7 +94,7 @@ public class CustomerMainScreen implements Initializable {
 	Label amountLabel;
 
 	@FXML
-	TextArea descriptionTextArea;
+	Label descriptionTextArea;
 
 	@FXML
 	Button addButton;
@@ -256,7 +256,6 @@ public class CustomerMainScreen implements Initializable {
 		productsListView.setExpanded(true);
 		
 		setAbilityAndVisibilityOfProductInfoPane(false);
-		descriptionTextArea.setEditable(false);
 		productsNumberTextField.setEditable(false);
 		totalSumTextField.setEditable(false);
 
