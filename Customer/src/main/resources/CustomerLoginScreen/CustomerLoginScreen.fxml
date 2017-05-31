@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -82,7 +83,12 @@
                <children>
                   <VBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
-                        <Label onMouseClicked="#forgotPassButtonPressed" text="I forgot my password" underline="true" />
+                        <Label onMouseClicked="#forgotPassButtonPressed" text="I forgot my password" underline="true">
+                           <styleClass>
+                              <String fx:value="label" />
+                              <String fx:value="forgotPassLbl" />
+                           </styleClass>
+                        </Label>
                         
                      </children>
                   </VBox>

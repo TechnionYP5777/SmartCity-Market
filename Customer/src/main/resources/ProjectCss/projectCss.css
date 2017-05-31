@@ -49,6 +49,7 @@
 .JFXComboBox {
 	-fx-font-family: "serif";
 	-fx-text-fill: #164F4F;
+	-fx-prompt-text-fill: #164F4F;
 }
 
 

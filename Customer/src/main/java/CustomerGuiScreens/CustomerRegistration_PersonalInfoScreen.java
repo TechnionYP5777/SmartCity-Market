@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
@@ -25,7 +26,6 @@ import UtilsImplementations.StackTraceUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.GridPane;
 
@@ -75,7 +75,7 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
     private JFXTextField streetTextField;
     
     @FXML
-    private DatePicker birthDatePicker;
+    private JFXDatePicker birthDatePicker;
     
     @FXML
     private JFXComboBox<String> securityQuestionComboBox;
