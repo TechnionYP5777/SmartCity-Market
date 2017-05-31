@@ -7,30 +7,10 @@
    
 }
 
-#nextButton {
-	-jfx-button-type: RAISED;
-	-fx-background-color: #00FFCC;
-	-fx-border-radius: 8px;
-	-fx-text-fill: WHITE;
+.headerTerms {
+	-fx-font-size: 20;	
 }
 
-#backButton {
-	-jfx-button-type: RAISED;
-	-fx-background-color: #FF3300;
-	-fx-border-radius: 8px;
-	-fx-text-fill: WHITE;
-}
-
-#registerButton {
-	-jfx-button-type: RAISED;
-	-fx-background-color: #00FFCC;
-	-fx-border-radius: 8px;
-	-fx-text-fill: WHITE;
-}
-
-#cancelButton {
-	-jfx-button-type: RAISED;
-	-fx-background-color: BLACK;
-	-fx-border-radius: 8px;
-	-fx-text-fill: WHITE;
+.readCheckBox {
+	-fx-font-size: 15;
 }
