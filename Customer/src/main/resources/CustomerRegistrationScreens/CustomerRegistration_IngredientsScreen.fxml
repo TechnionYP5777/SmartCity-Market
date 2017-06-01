@@ -77,7 +77,7 @@
    <rowConstraints>
       <RowConstraints percentHeight="20.0" vgrow="SOMETIMES" />
       <RowConstraints percentHeight="70.0" vgrow="SOMETIMES" />
-      <RowConstraints vgrow="SOMETIMES" />
+      <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <stylesheets>
       <URL value="@../ProjectCss/projectCss.css" />

@@ -119,9 +119,6 @@
          </padding>
       </VBox>
       <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
-         <children>
-            <Button fx:id="settingsButton" mnemonicParsing="false" prefHeight="81.0" prefWidth="80.0" />
-         </children>
          <padding>
             <Insets bottom="30.0" right="30.0" />
          </padding>

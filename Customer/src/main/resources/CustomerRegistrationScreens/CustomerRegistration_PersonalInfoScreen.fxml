@@ -14,16 +14,16 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane alignment="CENTER" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerRegistration_PersonalInfoScreen">
+<GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerRegistration_PersonalInfoScreen">
   <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" percentWidth="30.0" />
     <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0" />
     <ColumnConstraints hgrow="SOMETIMES" percentWidth="30.0" />
   </columnConstraints>
   <rowConstraints>
-      <RowConstraints vgrow="SOMETIMES" />
-    <RowConstraints vgrow="SOMETIMES" />
-    <RowConstraints vgrow="SOMETIMES" />
+      <RowConstraints percentHeight="20.0" vgrow="SOMETIMES" />
+    <RowConstraints percentHeight="70.0" vgrow="SOMETIMES" />
+    <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
       <GridPane fx:id="inputGridPane" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -50,7 +50,7 @@
                   <JFXTextField fx:id="userNameTextField" alignment="CENTER" maxWidth="300.0" promptText="User Name" styleClass="JFXTextField" />
                </children>
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </VBox>
             <VBox alignment="CENTER" GridPane.rowIndex="1">
@@ -58,7 +58,7 @@
                   <JFXPasswordField fx:id="passwordField" alignment="CENTER" maxWidth="300.0" promptText="Password" styleClass="JFXTextField" />
                </children>
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </VBox>
             <VBox alignment="CENTER" GridPane.rowIndex="2">
@@ -66,7 +66,7 @@
                   <JFXTextField fx:id="firstNameTextField" alignment="CENTER" maxWidth="300.0" promptText="First Name" styleClass="JFXTextField" />
                </children>
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </VBox>
             <VBox alignment="CENTER" GridPane.rowIndex="3">
@@ -74,7 +74,7 @@
                   <JFXTextField fx:id="lastNameTextField" alignment="CENTER" maxWidth="300.0" promptText="Last Name" styleClass="JFXTextField" />
                </children>
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </VBox>
             
@@ -83,7 +83,7 @@
                   <JFXTextField fx:id="phoneNumberTextField" alignment="CENTER" maxWidth="300.0" promptText="Phone Number" styleClass="JFXTextField" />
                </children>
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </VBox>
             <VBox alignment="CENTER" GridPane.rowIndex="5">
@@ -91,7 +91,7 @@
                   <JFXTextField fx:id="emailTextField" alignment="CENTER" maxWidth="300.0" promptText="Email" styleClass="JFXTextField" />
                </children>
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </VBox>
             <VBox alignment="CENTER" GridPane.rowIndex="6">
@@ -99,7 +99,7 @@
                   <JFXTextField fx:id="cityTextField" alignment="CENTER" maxWidth="300.0" promptText="City" styleClass="JFXTextField" />
                </children>
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </VBox>
             <VBox alignment="CENTER" GridPane.rowIndex="7">
@@ -107,7 +107,7 @@
                   <JFXTextField fx:id="streetTextField" alignment="CENTER" maxWidth="300.0" promptText="Street" styleClass="JFXTextField" />
                </children>
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </VBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="8">
@@ -137,7 +137,7 @@
                   <JFXTextField fx:id="securityAnswerTextField" alignment="CENTER" maxWidth="300.0" promptText="Security Answer" styleClass="JFXTextField" />
                </children>
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </VBox>
             
