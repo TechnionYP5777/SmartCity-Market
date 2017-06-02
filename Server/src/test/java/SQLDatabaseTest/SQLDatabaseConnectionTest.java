@@ -1504,11 +1504,162 @@ public class SQLDatabaseConnectionTest {
 
 	}
 	
+	@Test
+	public void testWorkerCanSetSecurityQA() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		ForgotPasswordData p = new ForgotPasswordData("question", "answer");
+		String result = null;
+		
+		try {
+			
+			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgotPasswordData("", ""));
+			
+		} catch (CriticalError | ClientAlreadyExist | ClientNotConnected e) {
+			fail();
+		}
+		
+		try {
+			sqlConnection.setSecurityQAWorker(workerName, p);
+			result = sqlConnection.getSecurityQuestionWorker(workerName);
+			assertTrue(sqlConnection.verifySecurityAnswerWorker(workerName, "answer"));
+			assertEquals("question", result);
+		} catch (CriticalError | ClientNotExist e1) {
+			fail();
+		} finally{
+			try {
+				sqlConnection.removeWorker(null, workerName);
+			} catch (CriticalError | ClientNotExist | ClientNotConnected e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	@Test
+	public void testWorkerCanSetPassword() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			
+			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgotPasswordData("", ""));
+			
+		} catch (CriticalError | ClientAlreadyExist | ClientNotConnected e) {
+			fail();
+		}
+		
+		try {
+			sqlConnection.setPasswordWorker(workerName, "newPass");
+		} catch (CriticalError | ClientNotExist e1) {
+			fail();
+		} finally{
+			try {
+				sqlConnection.removeWorker(null, workerName);
+			} catch (CriticalError | ClientNotExist | ClientNotConnected e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	@Test
+	public void testWorkerCanLoginWithNewPassword() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			
+			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgotPasswordData("", ""));
+			
+		} catch (CriticalError | ClientAlreadyExist | ClientNotConnected e) {
+			fail();
+		}
+		
+		try {
+			sqlConnection.setPasswordWorker(workerName, "newPass");
+			
+			//try to login with new password
+			int sessionID = sqlConnection.loginWorker(workerName, "newPass");
+			sqlConnection.logout(sessionID, workerName);
+		} catch (CriticalError | ClientNotExist | AuthenticationError | ClientAlreadyConnected | NumberOfConnectionsExceeded | ClientNotConnected e1) {
+			fail();
+		} finally{
+			try {
+				sqlConnection.removeWorker(null, workerName);
+			} catch (CriticalError | ClientNotExist | ClientNotConnected e) {
+				e.printStackTrace();
+			}
+		}		
+		
+	}
+	
+	@Test
+	public void testCantSetSecurityQAToNotExistedWorker() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		ForgotPasswordData p = new ForgotPasswordData("question", "answer");
+		
+		try {
+			sqlConnection.setSecurityQAWorker(workerName, p);
+			fail();
+		} catch (CriticalError e1) {
+			fail();
+		} catch (ClientNotExist e2){
+		}
+		
+	}
+	
+	@Test
+	public void testCantGetSecurityQusetionOfNotExistedWorker() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			sqlConnection.getSecurityQuestionWorker(workerName);
+			fail();
+		} catch (CriticalError e1) {
+			fail();
+		} catch (ClientNotExist e2){
+		}
+		
+	}
+	
+	@Test
+	public void testCantVerifySecurityAnswerOfNotExistedWorker() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			sqlConnection.verifySecurityAnswerWorker(workerName, "answer");
+			fail();
+		} catch (CriticalError e1) {
+			fail();
+		} catch (ClientNotExist e2){
+		}
+		
+	}
+	
+	@Test
+	public void testCantSetPasswordToNotExistedWorker() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			sqlConnection.setPasswordWorker(workerName, "newPass");
+		} catch (CriticalError e1) {
+			fail();
+		} catch (ClientNotExist e2){
+		}
+		
+	}
+	
+	
 	/*
 	 * test customer operations
 	 */
 	@Test
-	public void testCanRegisterAndRemoveCutomer() {
+	public void testCanRegisterAndRemoveCustomer() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		
@@ -1530,7 +1681,7 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
-	public void testCutomerCanLoginLogout() {
+	public void testCustomerCanLoginLogout() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		
@@ -1557,7 +1708,7 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
-	public void testNotExistedCutomerCantLogin() {
+	public void testNotExistedCustomerCantLogin() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		
@@ -1571,7 +1722,7 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
-	public void testNotExistedCutomerCantLogout() {
+	public void testNotExistedCustomerCantLogout() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		int sessionID = 34624;
@@ -1585,7 +1736,7 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
-	public void testCutomerCanSetProfile() {
+	public void testCustomerCanSetProfile() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		CustomerProfile p = new CustomerProfile(customerName, customerName, "name", "last", "number", "email", "city", "street",
@@ -1625,7 +1776,7 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
-	public void testCutomerCanSetSecurityQA() {
+	public void testCustomerCanSetSecurityQA() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		ForgotPasswordData p = new ForgotPasswordData("question", "answer");
@@ -1657,7 +1808,7 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
-	public void testCutomerCanSetPassword() {
+	public void testCustomerCanSetPassword() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		
@@ -1684,7 +1835,7 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
-	public void testCutomerCanLoginWithNewPassword() {
+	public void testCustomerCanLoginWithNewPassword() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		
@@ -1751,7 +1902,7 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
-	public void testCantSetSecurityQAToNotExistedCutomer() {
+	public void testCantSetSecurityQAToNotExistedCustomer() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		ForgotPasswordData p = new ForgotPasswordData("question", "answer");
@@ -1767,7 +1918,7 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
-	public void testCantGetSecurityQusetionOfNotExistedCutomer() {
+	public void testCantGetSecurityQusetionOfNotExistedCustomer() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		
@@ -1782,7 +1933,7 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
-	public void testCantVerifySecurityAnswerOfNotExistedCutomer() {
+	public void testCantVerifySecurityAnswerOfNotExistedCustomer() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		
@@ -1797,7 +1948,7 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
-	public void testCantSetPasswordToNotExistedCutomer() {
+	public void testCantSetPasswordToNotExistedCustomer() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		
@@ -1811,7 +1962,7 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
-	public void testCantRemoveNotExistedCutomer() {
+	public void testCantRemoveNotExistedCustomer() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 		
