@@ -1389,12 +1389,15 @@ public class CommandExecuter {
 		}
 		
 		try {
+			
 			if (inCommandWrapper.getSenderID() == 0) {
 				/* Command sent from employee */
-				//TODO Moan call getSecurityQuestionEmployee here 				
+				String SecurityQuestion = c.getSecurityQuestionWorker(username);
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, SecurityQuestion);			
 			} else {
 				/* Command sent from customer */
-				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, c.getSecurityQuestionCustomer(username));	
+				String SecurityQuestion = c.getSecurityQuestionCustomer(username);
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, SecurityQuestion);	
 			}
 			
 			log.info("Get question for forget password command for user: " + username + "succeded. the question is: " + outCommandWrapper.getData());
@@ -1430,14 +1433,11 @@ public class CommandExecuter {
 		
 		boolean goodAnswer;
 		try {
-			if (inCommandWrapper.getSenderID() == 0) {
-				/* Command sent from employee */
-				//TODO Moan call verifySecurityAnswerEmployee here 		
-				goodAnswer = false;
-			} else {
-				/* Command sent from customer */
-				goodAnswer = c.verifySecurityAnswerCustomer(login.getUserName(), login.getForgetPassword().getAnswer());
-			}
+			goodAnswer = inCommandWrapper.getSenderID() == 0 ?
+					/* Command sent from employee */
+					c.verifySecurityAnswerWorker(login.getUserName(), login.getForgetPassword().getAnswer()) 
+					/* Command sent from customer */
+					: c.verifySecurityAnswerCustomer(login.getUserName(), login.getForgetPassword().getAnswer()); 
 			
 			if (!goodAnswer) {
 				log.info("the anwser is incorrect.");
