@@ -2,6 +2,7 @@ package GuiUtils;
 
 import javafx.beans.property.*;
 import javafx.collections.*;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -26,14 +27,13 @@ import UtilsImplementations.StackTraceUtil;
  * @author Shimon Azulay
  * @since 20.5.17
  */
-public class ForgetPasswordUtil {
+public class ForgetPasswordWizard {
 
 	public static IForgotPasswordHandler forgotPasswordHandler;
-	public static Logger log = Logger.getLogger(ForgetPasswordUtil.class.getName());
-	public static String question = "";
+	public static Logger log = Logger.getLogger(ForgetPasswordWizard.class.getName());
 
 	public static void start(IForgotPasswordHandler forgotPasswordHandler) throws Exception {
-		ForgetPasswordUtil.forgotPasswordHandler = forgotPasswordHandler;
+		ForgetPasswordWizard.forgotPasswordHandler = forgotPasswordHandler;
 		Stage stage = new Stage();
 		stage.setTitle("Restore Password Wizard");
 		stage.setScene(new Scene(new SurveyWizard(stage), 400, 250));
@@ -222,7 +222,7 @@ class UserNameScreen extends WizardPage {
 
 	public UserNameScreen() {
 		super("UserNameScreen");
-		
+
 		nextButton.setDisable(true);
 		finishButton.setDisable(true);
 
@@ -232,7 +232,8 @@ class UserNameScreen extends WizardPage {
 	Parent getContent() {
 		usernameField = new JFXTextField();
 
-		usernameField.textProperty().addListener((observable, oldValue, newValue) -> nextButton.setDisable(newValue.isEmpty()));
+		usernameField.textProperty()
+				.addListener((observable, oldValue, newValue) -> nextButton.setDisable(newValue.isEmpty()));
 
 		VBox vbox = new VBox(5, new Label("Enter Username"), usernameField);
 		vbox.setAlignment(Pos.CENTER);
@@ -243,11 +244,12 @@ class UserNameScreen extends WizardPage {
 	@Override
 	void nextPage() {
 		try {
-			ForgetPasswordUtil.question = ForgetPasswordUtil.forgotPasswordHandler.getForgotPasswordQuestion(usernameField.getText());
+			QuestionScreen.question.setText(
+					ForgetPasswordWizard.forgotPasswordHandler.getForgotPasswordQuestion(usernameField.getText()));
 		} catch (NoSuchUserName e) {
 			e.showInfoToUser();
-			ForgetPasswordUtil.log.fatal(e);
-			ForgetPasswordUtil.log.debug(StackTraceUtil.getStackTrace(e));
+			ForgetPasswordWizard.log.fatal(e);
+			ForgetPasswordWizard.log.debug(StackTraceUtil.getStackTrace(e));
 			return;
 		}
 		super.nextPage();
@@ -264,7 +266,8 @@ class QuestionScreen extends WizardPage {
 
 	private JFXTextField answerField;
 	private JFXPasswordField newPassword;
-	private Label question;
+	static public Label question;
+	private Label passwordLbl;
 
 	@Override
 	Parent getContent() {
@@ -272,36 +275,54 @@ class QuestionScreen extends WizardPage {
 		finishButton.setDisable(true);
 
 		answerField = new JFXTextField();
+		answerField.setPromptText("Answer the security question");
 		newPassword = new JFXPasswordField();
-		answerField.textProperty().addListener((observable, oldValue, newValue) -> enableNext());
-		
+		newPassword.setPromptText("New password field");
+		answerField.textProperty().addListener((observable, oldValue, newValue) ->{  
+			enableNext();
+			enableNewPasswordField();		
+		});
+
 		newPassword.textProperty().addListener((observable, oldValue, newValue) -> enableNext());
 
-		question = new Label(ForgetPasswordUtil.question);
-
-		VBox vbox = new VBox(5, new Label("Please answer the following question:"), question, answerField, new Label("Choose new password:"), newPassword);
+		question = new Label("");
+		passwordLbl = new Label("Choose new password:");
+		
+		passwordLbl.setDisable(true);
+		newPassword.setDisable(true);
+		
+		VBox vbox = new VBox(5, new Label("Please answer the following question:"), question, answerField,
+				new Separator(Orientation.HORIZONTAL), passwordLbl, newPassword);
+		vbox.setSpacing(5);
 		vbox.setAlignment(Pos.CENTER);
 
 		return vbox;
 	}
 	
+	private void enableNewPasswordField() {
+		newPassword.setDisable(answerField.getText().isEmpty());
+		passwordLbl.setDisable(answerField.getText().isEmpty());
+		
+	}
+
 	private void enableNext() {
 		nextButton.setDisable(answerField.getText().isEmpty() || newPassword.getText().isEmpty());
 	}
-	
+
 	@Override
 	void nextPage() {
 		try {
-			ForgetPasswordUtil.forgotPasswordHandler.sendAnswerAndNewPassword(answerField.getText(), newPassword.getText());
+			ForgetPasswordWizard.forgotPasswordHandler.sendAnswerAndNewPassword(answerField.getText(),
+					newPassword.getText());
 		} catch (WrongAnswer | NoSuchUserName e) {
 			e.showInfoToUser();
-			ForgetPasswordUtil.log.fatal(e.toString());
-			ForgetPasswordUtil.log.debug(StackTraceUtil.getStackTrace(e));
+			ForgetPasswordWizard.log.fatal(e.toString());
+			ForgetPasswordWizard.log.debug(StackTraceUtil.getStackTrace(e));
 			return;
 		}
 		super.nextPage();
 	}
-	
+
 }
 
 /**
@@ -311,6 +332,7 @@ class GettingPasswordScreen extends WizardPage {
 	public GettingPasswordScreen() {
 		super("GettingPasswordScreen");
 	}
+
 	@Override
 	Parent getContent() {
 		VBox vbox = new VBox(5, new Label("Thanks!\nPassword restored successfully!"));

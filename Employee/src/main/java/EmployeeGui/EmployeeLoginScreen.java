@@ -15,7 +15,7 @@ import EmployeeContracts.IManager;
 import EmployeeImplementations.Manager;
 import EmployeeImplementations.Worker;
 import GuiUtils.AbstractApplicationScreen;
-import GuiUtils.ForgetPasswordUtil;
+import GuiUtils.ForgetPasswordWizard;
 import SMExceptions.SMException;
 import UtilsContracts.IForgotPasswordHandler;
 import UtilsContracts.IPersistentStore;
@@ -109,7 +109,7 @@ public class EmployeeLoginScreen implements Initializable {
 	void forgetPassPressed(MouseEvent __) {
 		try {
 			IForgotPasswordHandler forgot = InjectionFactory.getInstance(Worker.class);
-			ForgetPasswordUtil.start(forgot);
+			ForgetPasswordWizard.start(forgot);
 		} catch (Exception e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.getStackTrace(e));

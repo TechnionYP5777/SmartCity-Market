@@ -22,7 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
-import GuiUtils.ForgetPasswordUtil;
+import GuiUtils.ForgetPasswordWizard;
 
 import com.jfoenix.controls.JFXTextField;
 
@@ -143,7 +143,7 @@ public class CustomerLoginScreen implements Initializable {
     void forgotPassButtonPressed(MouseEvent event) {
 		try {
 			IForgotPasswordHandler forgot = InjectionFactory.getInstance(Customer.class);
-			ForgetPasswordUtil.start(forgot);
+			ForgetPasswordWizard.start(forgot);
 		} catch (Exception e) {
 			// TODO
 		}
