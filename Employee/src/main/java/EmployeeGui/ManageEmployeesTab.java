@@ -16,6 +16,7 @@ import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 
+import BasicCommonClasses.ForgotPasswordData;
 import BasicCommonClasses.Login;
 import EmployeeContracts.IManager;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
@@ -26,6 +27,7 @@ import EmployeeDefs.AEmployeeException.WorkerAlreadyExists;
 import EmployeeDefs.AEmployeeException.WorkerDoesNotExist;
 import EmployeeImplementations.Manager;
 import GuiUtils.RadioButtonEnabler;
+import GuiUtils.SecurityQuestions;
 import UtilsImplementations.InjectionFactory;
 import UtilsImplementations.StackTraceUtil;
 import de.jensd.fx.glyphs.GlyphsBuilder;
@@ -33,6 +35,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -101,7 +104,8 @@ public class ManageEmployeesTab implements Initializable {
 	@FXML
 	void finishBtnPressed(ActionEvent __) {
 		try {
-			manager.registerNewWorker(new Login(userTxt.getText(), passTxt.getText()));
+			manager.registerNewWorker(new Login(userTxt.getText(), passTxt.getText(), new ForgotPasswordData(
+					securityCombo.getSelectionModel().getSelectedItem(), securityAnswerTxt.getText())));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | WorkerAlreadyExists e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.getStackTrace(e));
@@ -122,7 +126,7 @@ public class ManageEmployeesTab implements Initializable {
 
 		radioBtnCont.addRadioButtons(Arrays.asList(new RadioButton[] { workerRadioBtn, managerRadioBtn }));
 
-		securityCombo.getItems().addAll("Q1", "Q2", "Q3", "Q4");
+		securityCombo.getItems().addAll(SecurityQuestions.getQuestions());
 
 		RequiredFieldValidator validator2 = new RequiredFieldValidator();
 		validator2.setMessage("Input Required");
@@ -183,6 +187,14 @@ public class ManageEmployeesTab implements Initializable {
 			}
 		}));
 
+		securityCombo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				enableFinishBtn();
+			}
+		});
+
 		enableFinishBtn();
 		enableRemoveButton();
 	}
@@ -223,8 +235,10 @@ public class ManageEmployeesTab implements Initializable {
 	}
 
 	private void enableFinishBtn() {
-		finishBtn.setDisable(
-				userTxt.getText().isEmpty() || passTxt.getText().isEmpty() || securityAnswerTxt.getText().isEmpty());
+		finishBtn.setDisable(userTxt.getText().isEmpty() || passTxt.getText().isEmpty()
+				|| securityCombo.getSelectionModel().getSelectedItem() == null
+				|| securityCombo.getSelectionModel().getSelectedItem().isEmpty()
+				|| securityAnswerTxt.getText().isEmpty());
 	}
 
 	@FXML

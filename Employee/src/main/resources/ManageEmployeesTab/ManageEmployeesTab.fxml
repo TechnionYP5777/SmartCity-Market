@@ -50,7 +50,7 @@
                </children>
             </HBox>
             <JFXTextField fx:id="securityAnswerTxt" prefWidth="300.0" promptText="Security Question Answer" styleClass="JFXTextField" />
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" visible="false">
                <children>
                   <JFXRadioButton fx:id="workerRadioBtn" onAction="#radioButtonHandling" selected="true" styleClass="JFXRadioButton" text="Worker" />
                   <JFXRadioButton fx:id="managerRadioBtn" onAction="#radioButtonHandling" styleClass="JFXRadioButton" text="Manager" />
