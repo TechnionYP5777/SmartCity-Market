@@ -1335,6 +1335,23 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
+	public void testGetManufacturersList() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		String result = null;
+		
+		try {		
+			result = sqlConnection.getManufacturersList(null);
+		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		}
+		
+		assert result != null;
+		HashSet<Manufacturer> set = Serialization.deserializeManufacturersHashSet(result);
+		assert set != null;	
+	}
+	
+	@Test
 	public void testEditManufacturer() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
@@ -1437,6 +1454,25 @@ public class SQLDatabaseConnectionTest {
 		map = Serialization.deserializeWorkersHashMap(result);
 		assert map != null;	
 		assert !map.containsKey(workerName);
+
+	}
+	
+	@Test
+	public void testGetWorkersList() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		String result = null;
+		
+		//test add worker
+		try {
+			result = sqlConnection.getWorkersList(null);
+		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		}
+		
+		assert result != null;
+		HashMap<String, Boolean> map = Serialization.deserializeWorkersHashMap(result);
+		assert map != null;	
 
 	}
 	
