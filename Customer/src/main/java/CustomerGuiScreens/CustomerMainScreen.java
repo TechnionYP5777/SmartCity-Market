@@ -44,6 +44,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -97,10 +98,10 @@ public class CustomerMainScreen implements Initializable {
 	Label descriptionTextArea;
 
 	@FXML
-	Button addButton;
+	ImageView addButton;
 
 	@FXML
-	Button removeButton;
+	ImageView removeButton;
 
 	@FXML
 	Button removeAllButton;
@@ -267,7 +268,7 @@ public class CustomerMainScreen implements Initializable {
 	}
 
 	@FXML
-	public void purchaseButtonPressed(ActionEvent __) {
+	public void purchaseButtonPressed(MouseEvent event) {
 		Alert alert = new Alert(AlertType.NONE, "Checkout grocery list?", ButtonType.YES, ButtonType.NO);
 		
 		alert.setTitle("Checkout and Payment");
@@ -288,11 +289,11 @@ public class CustomerMainScreen implements Initializable {
 	}
 
 	@FXML
-	public void cancelButtonPressed(ActionEvent __) {
+	public void cancelButtonPressed(MouseEvent event) {
 		logoutAndExit();
 	}
 
-	public void addButtonPressed(ActionEvent __) {
+	public void addButtonPressed(MouseEvent __) {
 		try {
 			customer.addProductToCart(scannedSmartCode, 1);
 		} catch (SMException e) {
@@ -305,7 +306,7 @@ public class CustomerMainScreen implements Initializable {
 		setAbilityAndVisibilityOfProductInfoPane(false);
 	}
 
-	public void removeButtonPressed(ActionEvent __) {
+	public void removeButtonPressed(MouseEvent __) {
 		try {
 			customer.returnProductToShelf(scannedSmartCode, 1);
 		} catch (SMException e) {

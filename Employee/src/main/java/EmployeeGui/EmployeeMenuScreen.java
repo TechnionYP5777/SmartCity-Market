@@ -18,7 +18,6 @@ import UtilsImplementations.StackTraceUtil;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -26,6 +25,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -39,7 +39,7 @@ import javafx.stage.Stage;
  */
 
 public class EmployeeMenuScreen implements Initializable {
-	
+
 	protected static Logger log = Logger.getLogger(EmployeeMenuScreen.class.getName());
 
 	@FXML
@@ -58,13 +58,13 @@ public class EmployeeMenuScreen implements Initializable {
 
 	@FXML
 	Tab manageCatalogProductTab;
-	
+
 	@FXML
 	Tab manageCatalogProductDetailsTab;
-	
+
 	@FXML
-	Tab manageEmployeesTab; 
-	
+	Tab manageEmployeesTab;
+
 	@FXML
 	Button logout;
 
@@ -78,7 +78,7 @@ public class EmployeeMenuScreen implements Initializable {
 			tabsPane.getTabs().remove(manageCatalogProductTab);
 			tabsPane.getTabs().remove(manageCatalogProductDetailsTab);
 			tabsPane.getTabs().remove(manageEmployeesTab);
-			
+
 		}
 
 		tabsPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
@@ -86,23 +86,22 @@ public class EmployeeMenuScreen implements Initializable {
 		tabsPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
 			@Override
 			public void changed(ObservableValue<? extends Tab> ov, Tab __, Tab t1) {
-//				if (t1 == managePackagesTab) {
-//					FXMLLoader loader = new FXMLLoader(
-//							getClass().getResource("/ManagePackagesTab/ManagePackagesTab.fxml"));
-//					try {
-//						loader.load();
-//					} catch (IOException e) {
-//					}
-//					ITabPaneHandler ctrl = loader.getController();
-//					ctrl.tabSelected();
-//				}
+				// if (t1 == managePackagesTab) {
+				// FXMLLoader loader = new FXMLLoader(
+				// getClass().getResource("/ManagePackagesTab/ManagePackagesTab.fxml"));
+				// try {
+				// loader.load();
+				// } catch (IOException e) {
+				// }
+				// ITabPaneHandler ctrl = loader.getController();
+				// ctrl.tabSelected();
+				// }
 			}
 		});
 
 		worker = InjectionFactory.getInstance(Manager.class);
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
 
-		
 		// defining behavior when stage/window is closed.
 		primeStage.setOnCloseRequest(event -> {
 			try {
@@ -138,7 +137,7 @@ public class EmployeeMenuScreen implements Initializable {
 	}
 
 	@FXML
-	private void logoutButtonPressed(ActionEvent __) {
+	private void logoutButtonPressed(MouseEvent event) {
 		try {
 			if (worker.isLoggedIn())
 				worker.logout();

@@ -18,7 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
@@ -39,7 +39,7 @@ import com.jfoenix.controls.JFXButton;
  * @since 2017-01-16
  */
 public class CustomerLoginScreen implements Initializable {
-	
+
 	protected static Logger log = Logger.getLogger(CustomerLoginScreen.class.getName());
 
 	private String username = "";
@@ -48,12 +48,13 @@ public class CustomerLoginScreen implements Initializable {
 			ClientServerDefs.anonymousCustomerUsername);
 	@FXML
 	private GridPane loginScreenPane;
+	
 	@FXML
 	private JFXButton loginButton;
-	@FXML
-	private Button backButton;
+
 	@FXML
 	private JFXTextField userNameTextField;
+	
 	@FXML
 	private JFXPasswordField passwordField;
 
@@ -62,6 +63,9 @@ public class CustomerLoginScreen implements Initializable {
 
 	@FXML
 	private JFXButton guestLoginButton;
+
+	@FXML
+	private ImageView icon;
 
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
@@ -80,7 +84,7 @@ public class CustomerLoginScreen implements Initializable {
 	}
 
 	@FXML
-	private void backButtonPressed(ActionEvent __) {
+	private void backButtonPressed(MouseEvent event) {
 		AbstractApplicationScreen.setScene("/CustomerWelcomeScreen/CustomerWelcomeScreen.fxml");
 	}
 
@@ -137,15 +141,14 @@ public class CustomerLoginScreen implements Initializable {
 
 		AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_PersonalInfoScreen.fxml");
 	}
-	
-	
-   @FXML
-    void forgotPassButtonPressed(MouseEvent event) {
+
+	@FXML
+	void forgotPassButtonPressed(MouseEvent event) {
 		try {
 			IForgotPasswordHandler forgot = InjectionFactory.getInstance(Customer.class);
 			ForgetPasswordWizard.start(forgot);
 		} catch (Exception e) {
 			// TODO
 		}
-    }
+	}
 }

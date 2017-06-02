@@ -19,13 +19,15 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 
 
 <GridPane fx:id="workerMenuScreenPane" maxHeight="-Infinity"
 	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-	prefHeight="1080.0" prefWidth="1920.0" 
-	xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="EmployeeGui.EmployeeMenuScreen" stylesheets="@EmployeeMenuScreen.css">
+	prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.111"
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeMenuScreen"
+	stylesheets="@EmployeeMenuScreen.css">
 	<columnConstraints>
 		<ColumnConstraints hgrow="ALWAYS" />
 	</columnConstraints>
@@ -55,11 +57,9 @@
 							source="/ManageCatalogProductDetailsTab/ManageCatalogProductDetailsTab.fxml" />
 					</content>
 				</Tab>
-				 <Tab fx:id="manageEmployeesTab" closable="true"
-					text="Manage Employees">
+				<Tab fx:id="manageEmployeesTab" closable="true" text="Manage Employees">
 					<content>
-						<fx:include
-							source="/ManageEmployeesTab/ManageEmployeesTab.fxml" />
+						<fx:include source="/ManageEmployeesTab/ManageEmployeesTab.fxml" />
 					</content>
 				</Tab>
 			</tabs>
@@ -74,20 +74,29 @@
 			<children>
 				<VBox spacing="15.0">
 					<children>
-								<HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
-									<children>
-									<Button fx:id="logout" mnemonicParsing="false" onAction="#logoutButtonPressed" />									</children>
-									<padding>
-										<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-									</padding>
-								</HBox>	
+						<HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
+							<children>
+								<ImageView fitHeight="80.0" fitWidth="80.0"
+									onMouseClicked="#logoutButtonPressed" pickOnBounds="true"
+									preserveRatio="true" styleClass="icon">
+									<image>
+										<Image url="@logout.png" />
+									</image>
+								</ImageView>
+							</children>
+							<padding>
+								<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+							</padding>
+						</HBox>
 						<VBox spacing="5.0">
 							<children>
-								<Label fx:id="recentActivityLbl" text="Recent Activity" textFill="#5518b9" />
+								<Label fx:id="recentActivityLbl" text="Recent Activity"
+									textFill="#5518b9" />
 								<TextArea fx:id="successLogArea" opacity="0.75">
-                           <font>
-                              <Font name="Serif Regular" size="13.0" />
-                           </font></TextArea>
+									<font>
+										<Font name="Serif Regular" size="13.0" />
+									</font>
+								</TextArea>
 							</children>
 						</VBox>
 					</children>

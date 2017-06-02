@@ -12,6 +12,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -27,7 +29,11 @@
             <HBox alignment="TOP_CENTER" spacing="20.0">
                <children>
                   <JFXTextField fx:id="barcodeTextField" onAction="#searchCodeButtonPressed" prefHeight="24.0" prefWidth="196.0" promptText="Type Or Scan Product Code..." styleClass="JFXTextField" />
-      				<Button fx:id="searchCodeButton" mnemonicParsing="false" onAction="#searchCodeButtonPressed" prefHeight="26.0" prefWidth="26.0" styleClass="thisSearchCodeButton" />
+                  <ImageView fx:id="searchCodeButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#searchCodeButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                     <image>
+                        <Image url="@search.png" />
+                     </image>
+                  </ImageView>
                </children>
             </HBox>
 			</children>
@@ -200,7 +206,7 @@
 				</VBox>
 				<VBox fx:id="scanOrTypeCodePane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
 					<children>
-						<Label fx:id="pleaseScanLbl" styleClass="waintingForScanLable" text="Please Type Or Scan Barcode/SmartCode" />
+						<Label fx:id="pleaseScanLbl" styleClass="waintingForScanLable" text="Waiting For Barcode/SmartCode Scan" />
                   <JFXSpinner />
 					</children>
 				</VBox>

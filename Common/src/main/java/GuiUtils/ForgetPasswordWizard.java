@@ -234,7 +234,7 @@ class UserNameScreen extends WizardPage {
 
 		usernameField.textProperty()
 				.addListener((observable, oldValue, newValue) -> nextButton.setDisable(newValue.isEmpty()));
-
+		
 		VBox vbox = new VBox(5, new Label("Enter Username"), usernameField);
 		vbox.setAlignment(Pos.CENTER);
 		return vbox;
@@ -290,6 +290,7 @@ class QuestionScreen extends WizardPage {
 		
 		passwordLbl.setDisable(true);
 		newPassword.setDisable(true);
+		
 		
 		VBox vbox = new VBox(5, new Label("Please answer the following question:"), question, answerField,
 				new Separator(Orientation.HORIZONTAL), passwordLbl, newPassword);

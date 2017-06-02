@@ -49,6 +49,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -144,7 +145,7 @@ public class ManagePackagesTab implements Initializable {
 	JFXButton showDatePickerBtn;
 
 	@FXML
-	Button searchCodeButton;
+	ImageView searchCodeButton;
 	
 	@FXML
     private JFXListView<String> employeesList;
@@ -377,7 +378,7 @@ public class ManagePackagesTab implements Initializable {
 	}
 
 	@FXML
-	private void searchCodeButtonPressed(ActionEvent __) {
+	private void searchCodeButtonPressed(MouseEvent event) {
 		try {
 			LocalDate expirationDate = this.expirationDate != null ? this.expirationDate
 					: datePickerForSmartCode.getValue();

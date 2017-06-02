@@ -52,7 +52,13 @@
 	-fx-prompt-text-fill: #164F4F;
 }
 
+.icon {
+	-fx-effect: dropshadow(three-pass-box , azure , 50, 0.7 , 0 , 0);
+}
 
+.icon:hover {
+	-fx-effect: dropshadow(three-pass-box , #d2f2e8 , 50, 0.7 , 0 , 0);
+}
 
 
 
