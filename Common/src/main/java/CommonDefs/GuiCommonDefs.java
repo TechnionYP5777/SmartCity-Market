@@ -33,6 +33,8 @@ public class GuiCommonDefs {
 
 	public static final String productOperationFailureTitle = "Product operation failure!";
 	
+	public static final String customerFailure = "Customer failure!";
+	
 	public static final String criticalErrorTitle = "INTERNAL ERROR! Please contact a the supermarket management";
 	
 	public static final String scanFailureDialogTitle = "Scan failure!";
@@ -44,6 +46,8 @@ public class GuiCommonDefs {
 	
 	//final public static String userAlreadyConnectedFailureMessage = "The user is already connected.";
 	//TODO : (by idan to shimon) i think this case is for critical error, what do you say?
+	
+	public static final String userIsNotConnected = "The user is not connected.";
 	
 	public static final String invalidParamFailureMsg = "One or more inserted parameters are invalid.";
 	

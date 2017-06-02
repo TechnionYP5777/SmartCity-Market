@@ -49,7 +49,7 @@ public class ACustomerExceptions extends SMException {
 		@Override
 		public void showInfoToUser() {
 			DialogMessagesService.showErrorDialog(GuiCommonDefs.loginFailureDialogTitle, null,
-					GuiCommonDefs.criticalErrorMsg);
+					GuiCommonDefs.invalidParamFailureMsg);
 		}
 	}
 	
@@ -61,8 +61,8 @@ public class ACustomerExceptions extends SMException {
 		
 		@Override
 		public void showInfoToUser() {
-			DialogMessagesService.showErrorDialog(GuiCommonDefs.loginFailureDialogTitle, null,
-					GuiCommonDefs.criticalErrorMsg);
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.customerFailure, null,
+					GuiCommonDefs.userIsNotConnected);
 		}
 	}
 
