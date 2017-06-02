@@ -2143,6 +2143,108 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 	
 	@Override
+	public void setPasswordWorker(String username, String newPassword) throws CriticalError, ClientNotExist{
+		log.debug("SQL Public setPasswordWorker: Worker: " + username + " sets password.");
+		
+		if (!isWorkerExist(username)){
+			log.debug("SQL Public setPasswordWorker: no such worker with username: " + username);
+			throw new ClientNotExist();
+		}
+		
+		try {		
+			// START transaction
+			connectionStartTransaction();
+			
+			//Write part of transaction
+			//updating password
+			assignPasswordToRegisteredClient(new WorkersTable(), username, newPassword);
+
+			log.debug("SQL Public setPasswordWorker: Success setting password for username: " + username);
+
+			// END transaction
+			connectionCommitTransaction();
+		} catch (SQLDatabaseException e) {
+			connectionRollbackTransaction();
+			throw e;
+		} finally {
+			connectionEndTransaction();
+		}
+	}
+	
+	@Override
+	public void setSecurityQAWorker(String username, ForgotPasswordData d) throws CriticalError, ClientNotExist{
+		log.debug("SQL Public setSecurityQAWorker: Worker: " + username + " sets security Q&A.");
+		
+		if (!isWorkerExist(username)){
+			log.debug("SQL Public setSecurityQAWorker: no such worker with username: " + username);
+			throw new ClientNotExist();
+		}
+		
+		try {		
+			// START transaction
+			connectionStartTransaction();
+			
+			//Write part of transaction
+			//updating security question and answer
+			assignSecurityQAToRegisteredClient(new WorkersTable(), username, d);
+
+			log.debug("SQL Public setSecurityQAWorker: Success setting ecurity Q&A for username: " + username);
+
+			// END transaction
+			connectionCommitTransaction();
+		} catch (SQLDatabaseException e) {
+			connectionRollbackTransaction();
+			throw e;
+		} finally {
+			connectionEndTransaction();
+		}
+	}
+	
+	@Override
+	public String getSecurityQuestionWorker(String username) throws CriticalError, ClientNotExist{
+		log.debug("SQL Public getSecurityQuestionWorker: Worker: " + username + " get security question.");
+		
+		if (!isWorkerExist(username)){
+			log.debug("SQL Public getSecurityQuestionWorker: no such worker with username: " + username);
+			throw new ClientNotExist();
+		}
+		
+		try {
+			
+			//Read part of transaction
+			String result = getSecurityQuestionForRegisteredClient(new WorkersTable(), username);
+
+			log.debug("SQL Public getSecurityQuestionWorker: the security question of user: " + username + " is: \n" + result);
+			return result;
+
+		} catch (SQLDatabaseException e) {
+			throw e;
+		}
+	}
+	
+	@Override
+	public boolean verifySecurityAnswerWorker(String username, String givenAnswer) throws CriticalError, ClientNotExist{
+		log.debug("SQL Public verifySecurityAnswerWorker: Worker: " + username + " verify security answer.");
+		
+		if (!isWorkerExist(username)){
+			log.debug("SQL Public verifySecurityAnswerWorker: no such worker with username: " + username);
+			throw new ClientNotExist();
+		}
+		
+		try {
+			
+			//Read part of transaction
+			boolean result = verifySecurityAnswerForRegisteredClient(new WorkersTable(), username, givenAnswer);
+
+			log.debug("SQL Public verifySecurityAnswerWorker: result of verification for user: " + username + " is: " + result);
+			return result;
+
+		} catch (SQLDatabaseException e) {
+			throw e;
+		}
+	}
+	
+	@Override
 	public String getWorkersList(Integer sessionID) throws ClientNotConnected, CriticalError {
 		log.debug("SQL Public getWorkersList: retreiving workers list");
 		HashMap<String, Boolean> result = new HashMap<>();

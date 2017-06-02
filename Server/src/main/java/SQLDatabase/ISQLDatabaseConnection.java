@@ -149,4 +149,12 @@ public interface ISQLDatabaseConnection {
 
 	boolean isWorkerUsernameAvailable(String username) throws CriticalError;
 
+	void setPasswordWorker(String username, String newPassword) throws CriticalError, ClientNotExist;
+
+	void setSecurityQAWorker(String username, ForgotPasswordData d) throws CriticalError, ClientNotExist;
+
+	String getSecurityQuestionWorker(String username) throws CriticalError, ClientNotExist;
+
+	boolean verifySecurityAnswerWorker(String username, String givenAnswer) throws CriticalError, ClientNotExist;
+
 }
