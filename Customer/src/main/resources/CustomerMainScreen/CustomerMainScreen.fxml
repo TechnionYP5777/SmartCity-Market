@@ -7,6 +7,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -30,15 +31,16 @@
           <RowConstraints percentHeight="20.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <HBox alignment="CENTER" GridPane.columnIndex="1">
+            <VBox alignment="TOP_CENTER" spacing="25.0" GridPane.columnIndex="1">
                <children>
-               	  <JFXListView fx:id="productsListView" editable="true" style="-fx-background-color: TRANSPARENT;" verticalGap="10.0">
-               	  <padding>
-                       <Insets bottom="10.0" left="45.0" right="40.0" top="130.0" />
-                  </padding>
-                  </JFXListView>
+                  <Label fx:id="yourListHeader" styleClass="header" text="Your Grocery List" />
+                  <Separator prefWidth="200.0" />
+               	  <JFXListView fx:id="productsListView" editable="true" style="-fx-background-color: TRANSPARENT;" verticalGap="10.0" />
                </children>
-            </HBox>
+               <padding>
+                  <Insets top="20.0" />
+               </padding>
+            </VBox>
             <VBox spacing="10.0">
                <children>
                   <Label styleClass="header" text="Customer Dashboard" />
@@ -146,7 +148,7 @@
                         </HBox>
                         <VBox spacing="20.0" GridPane.rowIndex="5">
                            <children>
-                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                              <HBox alignment="CENTER_LEFT" spacing="40.0">
                                  <children>
                                     <ImageView fx:id="addButton" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#addButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                                        <image>

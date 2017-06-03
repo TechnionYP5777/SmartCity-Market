@@ -112,6 +112,9 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	@FXML
 	JFXTextField searchField;
 
+	@FXML
+	Label yourListHeader;
+
 	SmartCode scannedSmartCode;
 
 	CatalogProduct catalogProduct;
@@ -158,12 +161,20 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			removeAllButton.setVisible(false);
 			addButton.setDisable(false);
 			addButton.setVisible(true);
-			removeButton.setDisable(false);
-			removeButton.setVisible(true);
+			enableRemoveButton();
 			break;
 		}
 		}
 		setAbilityAndVisibilityOfProductInfoPane(true);
+	}
+
+	private void enableRemoveButton() {
+		boolean flag = customer.getCartProductCache().isEmpty() ? false
+				: customer.getCartProductCache().get(scannedSmartCode.getBarcode()).getPackages()
+						.containsKey(scannedSmartCode);
+		removeButton.setDisable(!flag);
+		removeButton.setVisible(flag);
+
 	}
 
 	private void updateProductInfoTexts(CatalogProduct p, Integer amount) {
@@ -260,6 +271,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		logoutAndExit();
 	}
 
+	@FXML
 	public void addButtonPressed(MouseEvent __) {
 		try {
 			customer.addProductToCart(scannedSmartCode, 1);
@@ -273,6 +285,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		setAbilityAndVisibilityOfProductInfoPane(false);
 	}
 
+	@FXML
 	public void removeButtonPressed(MouseEvent __) {
 		try {
 			customer.returnProductToShelf(scannedSmartCode, 1);
@@ -286,6 +299,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		setAbilityAndVisibilityOfProductInfoPane(false);
 	}
 
+	@FXML
 	public void removeAllButtonPressed(ActionEvent __) {
 		try {
 			customer.removeAllItemsOfCartProduct(scannedSmartCode);

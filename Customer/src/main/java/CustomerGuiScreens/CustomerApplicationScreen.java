@@ -49,8 +49,7 @@ public class CustomerApplicationScreen extends AbstractApplicationScreen {
 					e.showInfoToUser();
 					Platform.exit();
 					System.exit(0);
-				}
-				
+				}				
 			});
 			
 			stage.show();

@@ -13,7 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 
 /**
  * CustomerProductCellFormat - This class will format the cell content
@@ -38,11 +37,11 @@ public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 	
 		//vbox
 		Label productName = new Label("Name: " + item.getCatalogProduct().getName());
-		productName.setFont(new Font(20));
+		//productName.setFont(new Font(20));
 		Label productAmount = new Label("Amount: " + item.getTotalAmount());
-		productAmount.setFont(new Font(20));
+		//productAmount.setFont(new Font(20));
 		Label productPrice = new Label("Price: " + Double.valueOf(item.getCatalogProduct().getPrice()) + " nis");
-		productPrice.setFont(new Font(20));
+		//productPrice.setFont(new Font(20));
 	    vbx.getChildren().addAll(productName, productAmount, productPrice);
 	    vbx.setAlignment(Pos.CENTER_LEFT);	    
 
