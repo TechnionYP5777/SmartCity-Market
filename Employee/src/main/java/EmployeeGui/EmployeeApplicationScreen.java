@@ -11,7 +11,6 @@ import GuiUtils.AbstractApplicationScreen;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
 import UtilsImplementations.StackTraceUtil;
-import javafx.application.Platform;
 import javafx.stage.Stage;
 
 /**
@@ -46,11 +45,6 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 			stage.setMaximized(true);
 				
 			stage.show();
-
-			stage.setOnCloseRequest(event -> {
-				Platform.exit();
-				System.exit(0);
-			});
 
 		} catch (Exception e) {
 			log.fatal(e);

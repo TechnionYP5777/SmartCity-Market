@@ -7,7 +7,6 @@ import CustomerImplementations.CustomerDefs;
 import GuiUtils.AbstractApplicationScreen;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
-import javafx.application.Platform;
 import javafx.stage.Stage;
 
 /**
@@ -33,13 +32,7 @@ public class CustomerApplicationScreen extends AbstractApplicationScreen {
 			stage.setTitle("Smart Market Beta");
 			stage.setMaximized(true);
 			stage.show();
-			
-			stage.setOnCloseRequest(event -> 
-				{
-					Platform.exit();
-					System.exit(0);
-				}
-			);
+
 			
 		} catch (Exception ¢) {
 			throw new RuntimeException();

@@ -3,6 +3,7 @@ package CustomerGuiScreens;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
@@ -354,6 +355,10 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	@Override
 	public void onNo() {
 		// Nothing to do
-
 	}
+	
+    @FXML
+    void forceScanProduct(ActionEvent event) {
+    	smartcodeScanned(new SmartcodeScanEvent(new SmartCode(1234567890, LocalDate.now())));
+    }
 }
