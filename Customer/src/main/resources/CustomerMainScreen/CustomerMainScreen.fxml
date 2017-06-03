@@ -8,7 +8,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -17,7 +16,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerMainScreen">
    <children>
@@ -40,14 +38,22 @@
                <padding>
                   <Insets top="20.0" />
                </padding>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
             </VBox>
-            <VBox spacing="10.0">
+            <VBox spacing="25.0">
                <children>
-                  <Label styleClass="header" text="Customer Dashboard" />
+                  <HBox alignment="CENTER">
+                     <children>
+                        <Label styleClass="header" text="Product Info" />
+                     </children>
+                  </HBox>
+                  <Separator />
                   <GridPane fx:id="productInfoPane">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="60.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="35.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="65.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints vgrow="SOMETIMES" />
@@ -63,7 +69,7 @@
                               <Insets left="50.0" />
                            </HBox.margin>
                            <children>
-                              <Label fx:id="amountLabel" text="N/A" />
+                              <Label fx:id="amountLabel" styleClass="thisLabels" text="N/A" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -74,7 +80,7 @@
                               <Insets left="5.0" />
                            </HBox.margin>
                            <children>
-                              <Label text="Amount:" />
+                              <Label styleClass="thisLabels" text="Amount:" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -85,7 +91,7 @@
                               <Insets left="5.0" />
                            </HBox.margin>
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" text="Price:" />
+                              <Label alignment="CENTER" contentDisplay="CENTER" styleClass="thisLabels" text="Price:" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -96,7 +102,7 @@
                               <Insets left="69.0" />
                            </HBox.margin>
                            <children>
-                              <Label fx:id="priceLabel" text="N/A" />
+                              <Label fx:id="priceLabel" styleClass="thisLabels" text="N/A" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -107,7 +113,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                            <children>
-                              <Label fx:id="productNameLabel" text="N/A" />
+                              <Label fx:id="productNameLabel" styleClass="thisLabels" text="N/A" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -118,7 +124,7 @@
                               <Insets left="19.0" />
                            </HBox.margin>
                            <children>
-                              <Label fx:id="manufacturerLabel" text="N/A" />
+                              <Label fx:id="manufacturerLabel" styleClass="thisLabels" text="N/A" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -129,7 +135,7 @@
                               <Insets left="5.0" />
                            </HBox.margin>
                            <children>
-                              <Label text="Manufacturer:" />
+                              <Label styleClass="thisLabels" text="Manufacturer:" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -140,7 +146,7 @@
                               <Insets left="26.0" />
                            </HBox.margin>
                            <children>
-                              <Label fx:id="descriptionTextArea" text="N/A" />
+                              <Label fx:id="descriptionTextArea" styleClass="thisLabels" text="N/A" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -170,7 +176,7 @@
                         </VBox>
                         <HBox alignment="CENTER_LEFT" GridPane.rowIndex="4">
                            <children>
-                              <Label contentDisplay="CENTER" prefHeight="24.0" prefWidth="143.0" text="Description:" />
+                              <Label contentDisplay="CENTER" styleClass="thisLabels" text="Expiration Date:" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -178,7 +184,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT">
                            <children>
-                              <Label text="Product Name:" />
+                              <Label styleClass="thisLabels" text="Product Name:" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -189,15 +195,18 @@
                   </GridPane>
                </children>
                <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
                </padding>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
             </VBox>
             <VBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
                <children>
                   <GridPane>
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="20.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="80.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="60.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints vgrow="SOMETIMES" />
@@ -206,7 +215,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT">
                            <children>
-                              <Label text="Total items in cart:" />
+                              <Label styleClass="thisLabels" text="Total items in cart:" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -214,7 +223,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
                            <children>
-                              <Label text="Total:" />
+                              <Label styleClass="thisLabels" text="Total:" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -222,11 +231,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
                            <children>
-                              <TextField fx:id="productsNumberTextField">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </TextField>
+                              <Label fx:id="productsNumberTextField" styleClass="thisLabels" text="0" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -234,11 +239,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
-                              <TextField fx:id="totalSumTextField">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </TextField>
+                              <Label fx:id="totalSumTextField" styleClass="thisLabels" text="0.00" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

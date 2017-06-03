@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
  * CustomerProductCellFormat - This class will format the cell content
  * 
  * @author aviad
+ * @author shimon Azulay
  * @since 2017-01-28
  */
 public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
@@ -37,10 +38,13 @@ public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 	
 		//vbox
 		Label productName = new Label("Name: " + item.getCatalogProduct().getName());
+		productName.getStyleClass().add("thisListLabel");
 		//productName.setFont(new Font(20));
 		Label productAmount = new Label("Amount: " + item.getTotalAmount());
+		productAmount.getStyleClass().add("thisListLabel");
 		//productAmount.setFont(new Font(20));
 		Label productPrice = new Label("Price: " + Double.valueOf(item.getCatalogProduct().getPrice()) + " nis");
+		productPrice.getStyleClass().add("thisListLabel");
 		//productPrice.setFont(new Font(20));
 	    vbx.getChildren().addAll(productName, productAmount, productPrice);
 	    vbx.setAlignment(Pos.CENTER_LEFT);	    

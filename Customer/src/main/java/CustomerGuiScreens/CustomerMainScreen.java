@@ -74,10 +74,10 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	JFXListView<CartProduct> productsListView;
 
 	@FXML
-	TextField productsNumberTextField;
+	Label productsNumberTextField;
 
 	@FXML
-	TextField totalSumTextField;
+	Label totalSumTextField;
 
 	@FXML
 	GridPane productInfoPane;
@@ -182,7 +182,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		manufacturerLabel.setText(p.getManufacturer().getName());
 		priceLabel.setText(String.format("%1$.2f", p.getPrice()));
 		amountLabel.setText(amount + "");
-		descriptionTextArea.setText(p.getDescription());
+		descriptionTextArea.setText(scannedSmartCode.getExpirationDate().toString());
 		URL imageUrl = null;
 		try {
 			imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI()
@@ -256,8 +256,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		productsListView.setExpanded(true);
 
 		setAbilityAndVisibilityOfProductInfoPane(false);
-		productsNumberTextField.setEditable(false);
-		totalSumTextField.setEditable(false);
 	}
 
 	@FXML
