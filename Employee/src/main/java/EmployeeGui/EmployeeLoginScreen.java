@@ -81,7 +81,7 @@ public class EmployeeLoginScreen implements Initializable {
 	}
 
 	@FXML
-	private void backButtonPressed(ActionEvent __) {
+	private void backButtonPressed(MouseEvent __) {
 		AbstractApplicationScreen.setScene("/EmployeeMainScreen/EmployeeMainScreen.fxml");
 	}
 

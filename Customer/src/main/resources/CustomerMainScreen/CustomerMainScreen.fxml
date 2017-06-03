@@ -243,7 +243,7 @@
       <HBox alignment="BOTTOM_CENTER" prefHeight="157.0" prefWidth="483.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
             <JFXTextField fx:id="searchField" promptText="Search Product" styleClass="JFXTextField" />
-            <ImageView fitHeight="80.0" fitWidth="80.0" onMouseClicked="#cancelButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+            <ImageView fitHeight="60.0" fitWidth="60.0" onMouseClicked="#cancelButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                <image>
                   <Image url="@logout.png" />
                </image>

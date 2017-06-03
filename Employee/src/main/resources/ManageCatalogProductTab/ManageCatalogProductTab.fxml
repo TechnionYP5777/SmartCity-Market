@@ -16,149 +16,154 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.CheckComboBox?>
 
-<VBox fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductTab">
-	<children>
-		<Label styleClass="chooseOprationHeader" text="Choose operation:" />
-      <JFXRadioButton fx:id="addCatalogProductRadioButton" onAction="#addCatalogProductRadioButtonPressed" selected="true" styleClass="JFXRadioButton" text="Add Catalog Product" />
-      <JFXRadioButton fx:id="removeCatalogProductRadioButton" onAction="#removeCatalogProductRadioButtonPressed" styleClass="JFXRadioButton" text="Remove Catalog Product" />
-		<Separator />
-		<GridPane>
-			<columnConstraints>
-				<ColumnConstraints hgrow="SOMETIMES" percentWidth="15.0" />
-				<ColumnConstraints hgrow="SOMETIMES" />
-			</columnConstraints>
-			<rowConstraints>
-				<RowConstraints vgrow="SOMETIMES" />
-			</rowConstraints>
-			<children>
-				<HBox alignment="CENTER_LEFT">
-					<children>
-						<Label text="Barcode:" />
-					</children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-				</HBox>
-				<HBox GridPane.columnIndex="1">
-					<children>
-                  <JFXTextField fx:id="barcodeTextField" promptText="Required Field" styleClass="JFXTextField" />
-					</children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-				</HBox>
-			</children>
-		</GridPane>
-		<StackPane>
-			<children>
-				<GridPane fx:id="addCatalogProductParamPane">
-					<columnConstraints>
-						<ColumnConstraints hgrow="SOMETIMES" percentWidth="15.0" />
-						<ColumnConstraints hgrow="SOMETIMES" />
-					</columnConstraints>
-					<rowConstraints>
-						<RowConstraints vgrow="SOMETIMES" />
-						<RowConstraints vgrow="SOMETIMES" />
-						<RowConstraints vgrow="SOMETIMES" />
-						<RowConstraints vgrow="SOMETIMES" />
-                  <RowConstraints vgrow="SOMETIMES" />
-					</rowConstraints>
-					<children>
-						<HBox>
-							<children>
-								<Label text="Product Name:" />
-							</children>
-							<padding>
-								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-							</padding>
-						</HBox>
-						<HBox GridPane.rowIndex="1">
-							<children>
-								<Label text="Product Description:" />
-							</children>
-							<padding>
-								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-							</padding>
-						</HBox>
-						<HBox GridPane.rowIndex="2">
-							<children>
-								<Label text="Product manufacturer:" />
-							</children>
-							<padding>
-								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-							</padding>
-						</HBox>
-						<HBox GridPane.rowIndex="3">
-							<children>
-								<Label text="Product Price:" />
-							</children>
-							<padding>
-								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-							</padding>
-						</HBox>
-						<HBox GridPane.columnIndex="1">
-							<padding>
-								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-							</padding>
-							<children>
-                        <JFXTextField fx:id="productNameTextField" promptText="Required Field" styleClass="JFXTextField" />
-							</children>
-						</HBox>
-						<HBox styleClass="JFXTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
-							<padding>
-								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-							</padding>
-							<children>
-                        <JFXTextField fx:id="productDescriptionTextField" promptText="Optional" styleClass="JFXTextField" />
-							</children>
-						</HBox>
-						<HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
-							<padding>
-								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-							</padding>
-                     <children>
-                        <JFXComboBox fx:id="productManufacturerCombo" prefWidth="155.0" styleClass="JFXComboBox" />
-                     </children>
-						</HBox>
-						<HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
-							<padding>
-								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-							</padding>
-							<children>
-                        <JFXTextField fx:id="productPriceTextField" promptText="Required Field" styleClass="JFXTextField" />
-							</children>
-						</HBox>
-                  <HBox GridPane.rowIndex="4">
-                     <children>
-                        <Label text="Ingridients:" />
-                     </children>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductTab">
+   <children>
+      <VBox fx:id="rootPane" spacing="15.0">
+      	<children>
+      		<Label styleClass="chooseOprationHeader" text="Choose operation:" />
+            <JFXRadioButton fx:id="addCatalogProductRadioButton" onAction="#addCatalogProductRadioButtonPressed" selected="true" styleClass="JFXRadioButton" text="Add Catalog Product" />
+            <JFXRadioButton fx:id="removeCatalogProductRadioButton" onAction="#removeCatalogProductRadioButtonPressed" styleClass="JFXRadioButton" text="Remove Catalog Product" />
+      		<Separator />
+      		<GridPane>
+      			<columnConstraints>
+      				<ColumnConstraints hgrow="SOMETIMES" percentWidth="15.0" />
+      				<ColumnConstraints hgrow="SOMETIMES" />
+      			</columnConstraints>
+      			<rowConstraints>
+      				<RowConstraints vgrow="SOMETIMES" />
+      			</rowConstraints>
+      			<children>
+      				<HBox alignment="CENTER_LEFT">
+      					<children>
+      						<Label text="Barcode:" />
+      					</children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
-                  </HBox>
-                  <HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
+      				</HBox>
+      				<HBox GridPane.columnIndex="1">
+      					<children>
+                        <JFXTextField fx:id="barcodeTextField" promptText="Required Field" styleClass="JFXTextField" />
+      					</children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
-                     <children>
-                        <CheckComboBox fx:id="ingridientsCombo" prefWidth="155.0" styleClass="JFXComboBox" />
-                     </children>
-                  </HBox>
-					</children>
-				</GridPane>
-			</children>
-		</StackPane>
-		<HBox alignment="CENTER_LEFT">
-			<children>
-				<Button fx:id="runTheOperationButton" mnemonicParsing="false" onAction="#runTheOperationButtonPressed" styleClass="JFXButton" text="Run The Operation" />
-			</children>
-		</HBox>
-	</children>
-	<padding>
-		<Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-	</padding>
+      				</HBox>
+      			</children>
+      		</GridPane>
+      		<StackPane>
+      			<children>
+      				<GridPane fx:id="addCatalogProductParamPane">
+      					<columnConstraints>
+      						<ColumnConstraints hgrow="SOMETIMES" percentWidth="15.0" />
+      						<ColumnConstraints hgrow="SOMETIMES" />
+      					</columnConstraints>
+      					<rowConstraints>
+      						<RowConstraints vgrow="SOMETIMES" />
+      						<RowConstraints vgrow="SOMETIMES" />
+      						<RowConstraints vgrow="SOMETIMES" />
+      						<RowConstraints vgrow="SOMETIMES" />
+                        <RowConstraints vgrow="SOMETIMES" />
+      					</rowConstraints>
+      					<children>
+      						<HBox>
+      							<children>
+      								<Label text="Product Name:" />
+      							</children>
+      							<padding>
+      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      							</padding>
+      						</HBox>
+      						<HBox GridPane.rowIndex="1">
+      							<children>
+      								<Label text="Product Description:" />
+      							</children>
+      							<padding>
+      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      							</padding>
+      						</HBox>
+      						<HBox GridPane.rowIndex="2">
+      							<children>
+      								<Label text="Product manufacturer:" />
+      							</children>
+      							<padding>
+      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      							</padding>
+      						</HBox>
+      						<HBox GridPane.rowIndex="3">
+      							<children>
+      								<Label text="Product Price:" />
+      							</children>
+      							<padding>
+      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      							</padding>
+      						</HBox>
+      						<HBox GridPane.columnIndex="1">
+      							<padding>
+      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      							</padding>
+      							<children>
+                              <JFXTextField fx:id="productNameTextField" promptText="Required Field" styleClass="JFXTextField" />
+      							</children>
+      						</HBox>
+      						<HBox styleClass="JFXTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      							<padding>
+      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      							</padding>
+      							<children>
+                              <JFXTextField fx:id="productDescriptionTextField" promptText="Optional" styleClass="JFXTextField" />
+      							</children>
+      						</HBox>
+      						<HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+      							<padding>
+      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      							</padding>
+                           <children>
+                              <JFXComboBox fx:id="productManufacturerCombo" prefWidth="155.0" styleClass="JFXComboBox" />
+                           </children>
+      						</HBox>
+      						<HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
+      							<padding>
+      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      							</padding>
+      							<children>
+                              <JFXTextField fx:id="productPriceTextField" promptText="Required Field" styleClass="JFXTextField" />
+      							</children>
+      						</HBox>
+                        <HBox GridPane.rowIndex="4">
+                           <children>
+                              <Label text="Ingridients:" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                           <children>
+                              <CheckComboBox fx:id="ingridientsCombo" prefWidth="155.0" styleClass="JFXComboBox" />
+                           </children>
+                        </HBox>
+      					</children>
+      				</GridPane>
+      			</children>
+      		</StackPane>
+      		<HBox alignment="CENTER_LEFT">
+      			<children>
+      				<Button fx:id="runTheOperationButton" mnemonicParsing="false" onAction="#runTheOperationButtonPressed" styleClass="JFXButton" text="Run The Operation" />
+      			</children>
+      		</HBox>
+      	</children>
+      	<padding>
+      		<Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+      	</padding>
+      </VBox>
+   </children>
    <stylesheets>
       <URL value="@ManageCatalogProductTab.css" />
       <URL value="@../ProjectCss/projectCss.css" />
    </stylesheets>
-</VBox>
+</StackPane>

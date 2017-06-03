@@ -1,9 +1,14 @@
 package GuiUtils;
 
-
-
-import javafx.scene.control.Alert;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 
 /**
  * Use this class to create GUI Error, info, confirmation GUI dialogs.
@@ -29,11 +34,33 @@ public class DialogMessagesService {
 	}
 
 	private static void alertCreator(AlertType t, String title, String header, String content) {
-				
-		Alert alert = new Alert(t);
-		alert.setTitle(title);
-		alert.setHeaderText(header);
-		alert.setContentText(content);
-		alert.showAndWait();
+		JFXDialogLayout dialogContent = new JFXDialogLayout();
+		dialogContent.setHeading(new Text(title), new Text(header));
+		dialogContent.setBody(new Text(content));
+		
+		JFXButton close = new JFXButton("Close");
+		close.getStyleClass().add("JFXButton");
+		
+		dialogContent.setActions(close);
+		
+		JFXDialog dialog = new JFXDialog((StackPane) AbstractApplicationScreen.stage.getScene().getRoot(),
+				dialogContent, JFXDialog.DialogTransition.CENTER);
+
+		close.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+				dialog.close();			
+			}
+		});
+		
+		dialog.show();
+
+		// Alert alert = new Alert(t);
+		// alert.initModality(Modality.WINDOW_MODAL);
+		// alert.setTitle(title);
+		// alert.setHeaderText(header);
+		// alert.setContentText(content);
+		// alert.show();
 	}
 }

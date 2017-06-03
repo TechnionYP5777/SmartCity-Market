@@ -17,114 +17,123 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="loginScreenPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeLoginScreen">
-   <columnConstraints>
-      <ColumnConstraints hgrow="ALWAYS" percentWidth="10.0" />
-      <ColumnConstraints hgrow="SOMETIMES" percentWidth="80.0" />
-      <ColumnConstraints hgrow="ALWAYS" percentWidth="10.0" />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints percentHeight="20.0" vgrow="SOMETIMES" />
-      <RowConstraints percentHeight="80.0" vgrow="SOMETIMES" />
-   </rowConstraints>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeLoginScreen">
    <children>
-      <VBox fx:id="inputGridPane" alignment="CENTER" blendMode="MULTIPLY" spacing="15.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <GridPane fx:id="loginScreenPane" alignment="CENTER">
+         <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="80.0" />
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints percentHeight="80.0" vgrow="SOMETIMES" />
+         </rowConstraints>
          <children>
-            <VBox>
+            <VBox fx:id="inputGridPane" alignment="CENTER" blendMode="MULTIPLY" spacing="15.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <Label fx:id="WelcomeLbl" alignment="CENTER_LEFT" text="Welcome!" textFill="#510d0d" wrapText="true">
-                     <font>
-                        <Font name="Garuda" size="34.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="pleaseLoginLbl" text="Please Login" />
-               </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </VBox>
-            <Separator>
-               <opaqueInsets>
-                  <Insets left="30.0" right="30.0" />
-               </opaqueInsets>
-               <padding>
-                  <Insets bottom="10.0" />
-               </padding>
-               <effect>
-                  <Lighting>
-                     <bumpInput>
-                        <Shadow />
-                     </bumpInput>
-                     <light>
-                        <Light.Distant />
-                     </light>
-                  </Lighting>
-               </effect>
-            </Separator>
-            <JFXTextField fx:id="userNameTextField" onAction="#loginButtonPressed" promptText="User Name">
-               <styleClass>
-                  <String fx:value="thisJFXTextField" />
-                  <String fx:value="JFXTextField" />
-               </styleClass></JFXTextField>
-            <JFXPasswordField fx:id="passwordField" onAction="#loginButtonPressed" promptText="Password">
-               <styleClass>
-                  <String fx:value="JFXPasswordField" />
-                  <String fx:value="thisJFXPasswordField" />
-               </styleClass></JFXPasswordField>
-            <GridPane>
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <VBox spacing="5.0">
+                  <VBox>
                      <children>
-                        <Label fx:id="forgotPassLbl" onMouseClicked="#forgetPassPressed" text="I forgot my password" textFill="#1009ee" underline="true">
+                        <Label fx:id="WelcomeLbl" alignment="CENTER_LEFT" text="Welcome!" textFill="#510d0d" wrapText="true">
                            <font>
-                              <Font name="Lucida Bright Regular" size="14.0" />
+                              <Font name="Garuda" size="34.0" />
                            </font>
-                           <padding>
-                              <Insets left="5.0" />
-                           </padding>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
                         </Label>
+                        <Label fx:id="pleaseLoginLbl" text="Please Login" />
                      </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </VBox>
-                  <JFXButton fx:id="loginButton" onAction="#loginButtonPressed" text="Login" GridPane.columnIndex="1">
+                  <Separator>
+                     <opaqueInsets>
+                        <Insets left="30.0" right="30.0" />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
+                     <effect>
+                        <Lighting>
+                           <bumpInput>
+                              <Shadow />
+                           </bumpInput>
+                           <light>
+                              <Light.Distant />
+                           </light>
+                        </Lighting>
+                     </effect>
+                  </Separator>
+                  <JFXTextField fx:id="userNameTextField" onAction="#loginButtonPressed" promptText="User Name">
                      <styleClass>
-                        <String fx:value="JFXButton" />
-                        <String fx:value="thisJFXButton" />
-                     </styleClass></JFXButton>
+                        <String fx:value="thisJFXTextField" />
+                        <String fx:value="JFXTextField" />
+                     </styleClass>
+                  </JFXTextField>
+                  <JFXPasswordField fx:id="passwordField" onAction="#loginButtonPressed" promptText="Password">
+                     <styleClass>
+                        <String fx:value="JFXPasswordField" />
+                        <String fx:value="thisJFXPasswordField" />
+                     </styleClass>
+                  </JFXPasswordField>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label fx:id="forgotPassLbl" onMouseClicked="#forgetPassPressed" text="I forgot my password" textFill="#1009ee" underline="true">
+                                 <font>
+                                    <Font name="Lucida Bright Regular" size="14.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <JFXButton fx:id="loginButton" onAction="#loginButtonPressed" text="Login" GridPane.columnIndex="1">
+                           <styleClass>
+                              <String fx:value="JFXButton" />
+                              <String fx:value="thisJFXButton" />
+                           </styleClass>
+                        </JFXButton>
+                     </children>
+                  </GridPane>
                </children>
-            </GridPane>
+               <GridPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </GridPane.margin>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <ImageView fitHeight="80.0" fitWidth="80.0" onMouseClicked="#backButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                     <image>
+                        <Image url="@back.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets left="30.0" top="30.0" />
+               </padding>
+            </VBox>
          </children>
-         <GridPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </GridPane.margin>
-      </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0">
-         <children>
-            <ImageView fitHeight="80.0" fitWidth="80.0" onMouseClicked="#backButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-               <image>
-                  <Image url="@back.png" />
-               </image>
-            </ImageView>
-         </children>
-         <padding>
-            <Insets left="30.0" top="30.0" />
-         </padding>
-      </VBox>
+      </GridPane>
    </children>
    <stylesheets>
       <URL value="@EmployeeLoginScreen.css" />
       <URL value="@../ProjectCss/projectCss.css" />
    </stylesheets>
-</GridPane>
+</StackPane>
