@@ -35,7 +35,7 @@ public class DialogMessagesService {
 
 	private static void alertCreator(AlertType t, String title, String header, String content) {
 		JFXDialogLayout dialogContent = new JFXDialogLayout();
-		dialogContent.setHeading(new Text(title), new Text(header));
+		dialogContent.setHeading(new Text(title + "\n" + header));
 		dialogContent.setBody(new Text(content));
 		
 		JFXButton close = new JFXButton("Close");

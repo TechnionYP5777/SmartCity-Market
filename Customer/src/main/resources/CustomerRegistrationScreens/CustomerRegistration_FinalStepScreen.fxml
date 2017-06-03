@@ -11,75 +11,82 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerRegistration_FinalStepScreen">
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerRegistration_FinalStepScreen">
    <children>
-      <VBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2">
+      <GridPane>
          <children>
-            <JFXButton fx:id="registerButton" buttonType="RAISED" onAction="#registerButtonPressed" styleClass="JFXButton" text="Register" />
-         </children></VBox>
-      <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
-         <children>
-            <VBox>
+            <VBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <children>
-                  <Label styleClass="header" text="Registration" underline="true" />
+                  <JFXButton fx:id="registerButton" buttonType="RAISED" onAction="#registerButtonPressed" styleClass="JFXButton" text="Register" />
                </children>
             </VBox>
-            <VBox>
+            <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
                <children>
-                  <Label styleClass="subHeader" text="Final Step" />
+                  <VBox>
+                     <children>
+                        <Label styleClass="header" text="Registration" underline="true" />
+                     </children>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Label styleClass="subHeader" text="Final Step" />
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="15.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="40.0" right="40.0" />
+               </GridPane.margin>
+               <children>
+                  <VBox>
+                     <children>
+                        <Label styleClass="headerTerms" text="Smart Market terms of use:" />
+                     </children>
+                  </VBox>
+                  <JFXTextArea fx:id="termsTextArea" prefHeight="600.0" />
+                  <VBox>
+                     <children>
+                        <JFXCheckBox fx:id="final_acceptChecKBox" text="I’ve read and accept the terms">
+                           <styleClass>
+                              <String fx:value="JFXCheckBox" />
+                              <String fx:value="readCheckBox" />
+                           </styleClass>
+                        </JFXCheckBox>
+                     </children>
+                  </VBox>
                </children>
             </VBox>
+            <VBox alignment="CENTER_LEFT" GridPane.columnIndex="2" />
+            <HBox alignment="CENTER" spacing="100.0" GridPane.rowIndex="2">
+               <children>
+                  <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#cancelButtonPressed" styleClass="JFXButton" text="Cancel" />
+                  <JFXButton fx:id="backButton" onAction="#backButtonPressed" styleClass="JFXButton" text="Back" />
+               </children>
+            </HBox>
          </children>
-         <padding>
-            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-         </padding>
-      </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0" spacing="15.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-         <GridPane.margin>
-            <Insets left="40.0" right="40.0" />
-         </GridPane.margin>
-         <children>
-            <VBox>
-               <children>
-                  <Label styleClass="headerTerms" text="Smart Market terms of use:" />
-               </children>
-            </VBox>
-            <JFXTextArea fx:id="termsTextArea" prefHeight="600.0" />
-            <VBox>
-               <children>
-                  <JFXCheckBox fx:id="final_acceptChecKBox" text="I’ve read and accept the terms">
-                     <styleClass>
-                        <String fx:value="JFXCheckBox" />
-                        <String fx:value="readCheckBox" />
-                     </styleClass>
-                  </JFXCheckBox>
-               </children>
-            </VBox>
-         </children>
-      </VBox>
-      <VBox alignment="CENTER_LEFT" GridPane.columnIndex="2" />
-      <HBox alignment="CENTER" spacing="100.0" GridPane.rowIndex="2">
-         <children>
-            <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#cancelButtonPressed" styleClass="JFXButton" text="Cancel" />
-            <JFXButton fx:id="backButton" onAction="#backButtonPressed" styleClass="JFXButton" text="Back" />
-         </children>
-      </HBox>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="20.0" />
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="60.0" />
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="20.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints percentHeight="70.0" vgrow="SOMETIMES" />
+            <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+      </GridPane>
    </children>
-   <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" percentWidth="20.0" />
-      <ColumnConstraints hgrow="SOMETIMES" percentWidth="60.0" />
-      <ColumnConstraints hgrow="SOMETIMES" percentWidth="20.0" />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints percentHeight="20.0" vgrow="SOMETIMES" />
-      <RowConstraints percentHeight="70.0" vgrow="SOMETIMES" />
-      <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
-   </rowConstraints>
    <stylesheets>
       <URL value="@registration.css" />
-      <URL value="@../ProjectCss/projectCss.css" />
       <URL value="@FinalStepScreen.css" />
+      <URL value="@../ProjectCss/projectCss.css" />
    </stylesheets>
-</GridPane>
+</StackPane>

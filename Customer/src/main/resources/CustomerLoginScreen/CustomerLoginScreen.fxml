@@ -17,133 +17,141 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="loginScreenPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerLoginScreen">
-   <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" percentWidth="10.0" />
-      <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0" />
-      <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0" />
-      <ColumnConstraints hgrow="SOMETIMES" percentWidth="10.0" />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints percentHeight="20.0" vgrow="SOMETIMES" />
-      <RowConstraints percentHeight="80.0" vgrow="SOMETIMES" />
-   </rowConstraints>
 
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerLoginScreen">
    <children>
-      <VBox alignment="CENTER" blendMode="MULTIPLY" spacing="20.0" GridPane.columnIndex="1" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
+      <GridPane fx:id="loginScreenPane" alignment="CENTER">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0" />
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0" />
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints percentHeight="80.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+      
          <children>
-            <VBox prefHeight="84.0" prefWidth="896.0">
+            <VBox alignment="CENTER" blendMode="MULTIPLY" spacing="20.0" GridPane.columnIndex="1" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
                <children>
-                  <Label alignment="CENTER_LEFT" styleClass="WelcomeLbl" text="Welcome!" textFill="#7c0f0f" wrapText="true">
-                  </Label>
-                  <Label styleClass="pleaseLoginLbl" text="Please Login">
-                     <font>
-                        <Font size="22.0" />
-                     </font></Label>
-               </children>
-            </VBox>
-            <Separator>
-               <opaqueInsets>
-                  <Insets left="30.0" right="30.0" />
-               </opaqueInsets>
-               <padding>
-                  <Insets bottom="10.0" />
-               </padding>
-               <effect>
-                  <Lighting>
-                     <bumpInput>
-                        <Shadow />
-                     </bumpInput>
-                     <light>
-                        <Light.Distant />
-                     </light>
-                  </Lighting>
-               </effect>
-            </Separator>
-            <JFXTextField fx:id="userNameTextField" promptText="User Name" styleClass="JFXTextField">
-               <padding>
-                  <Insets top="13.0" />
-               </padding>
-            </JFXTextField>
-            <JFXPasswordField fx:id="passwordField" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Password" styleClass="JFXPasswordField">
-               <padding>
-                  <Insets top="13.0" />
-               </padding>
-            </JFXPasswordField>
-            <GridPane>
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <VBox alignment="CENTER_LEFT" spacing="5.0">
+                  <VBox prefHeight="84.0" prefWidth="896.0">
                      <children>
-                        <Label onMouseClicked="#forgotPassButtonPressed" text="I forgot my password" underline="true">
-                           <styleClass>
-                              <String fx:value="label" />
-                              <String fx:value="forgotPassLbl" />
-                           </styleClass>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                     
+                        <Label alignment="CENTER_LEFT" styleClass="WelcomeLbl" text="Welcome!" textFill="#7c0f0f" wrapText="true">
+                  </Label>
+                        <Label styleClass="pleaseLoginLbl" text="Please Login">
+                           <font>
+                              <Font size="22.0" />
+                           </font>
                         </Label>
-                        
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER_RIGHT" GridPane.columnIndex="1">
+                  <Separator>
+                     <opaqueInsets>
+                        <Insets left="30.0" right="30.0" />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
+                     <effect>
+                        <Lighting>
+                           <bumpInput>
+                              <Shadow />
+                           </bumpInput>
+                           <light>
+                              <Light.Distant />
+                           </light>
+                        </Lighting>
+                     </effect>
+                  </Separator>
+                  <JFXTextField fx:id="userNameTextField" promptText="User Name" styleClass="JFXTextField">
+                     <padding>
+                        <Insets top="13.0" />
+                     </padding>
+                  </JFXTextField>
+                  <JFXPasswordField fx:id="passwordField" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Password" styleClass="JFXPasswordField">
+                     <padding>
+                        <Insets top="13.0" />
+                     </padding>
+                  </JFXPasswordField>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
                      <children>
-                        <JFXButton fx:id="loginButton" alignment="CENTER_RIGHT" onAction="#loginButtonPressed" styleClass="JFXButton" text="Login" GridPane.columnIndex="1">
+                        <VBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <Label onMouseClicked="#forgotPassButtonPressed" text="I forgot my password" underline="true">
+                                 <styleClass>
+                                    <String fx:value="label" />
+                                    <String fx:value="forgotPassLbl" />
+                                 </styleClass>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                           
+                              </Label>
+                              
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER_RIGHT" GridPane.columnIndex="1">
+                           <children>
+                              <JFXButton fx:id="loginButton" alignment="CENTER_RIGHT" onAction="#loginButtonPressed" styleClass="JFXButton" text="Login" GridPane.columnIndex="1">
                   </JFXButton>
+                           </children>
+                        </VBox>
                      </children>
-                  </VBox>
+                  </GridPane>
                </children>
-            </GridPane>
-         </children>
-         <padding>
-            <Insets left="30.0" />
-         </padding>
-      </VBox>
-      <VBox alignment="CENTER">
-         <children>
-            <ImageView fx:id="icon" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#backButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-               <image>
-                  <Image url="@back.png" />
-               </image></ImageView>
-         </children>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-      </VBox>
-      <VBox alignment="CENTER" blendMode="MULTIPLY" spacing="15.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-         <children>
-            <VBox alignment="CENTER" prefHeight="84.0" prefWidth="896.0">
-               <children>
-                  <Label alignment="CENTER_LEFT" text="Not Registered Yet?" textFill="#510d0d" wrapText="true">
-                     <font>
-                        <Font name="Garuda" size="34.0" />
-                     </font>
-                  </Label>
-               </children>
-             
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
             </VBox>
-            <JFXButton fx:id="registerButton" onAction="#registerButtonPressed" styleClass="JFXButton" text="Register">
+            <VBox alignment="CENTER">
+               <children>
+                  <ImageView fx:id="icon" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#backButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                     <image>
+                        <Image url="@back.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
+            <VBox alignment="CENTER" blendMode="MULTIPLY" spacing="15.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="84.0" prefWidth="896.0">
+                     <children>
+                        <Label alignment="CENTER_LEFT" text="Not Registered Yet?" textFill="#510d0d" wrapText="true">
+                           <font>
+                              <Font name="Garuda" size="34.0" />
+                           </font>
+                        </Label>
+                     </children>
+                   
+                  </VBox>
+                  <JFXButton fx:id="registerButton" onAction="#registerButtonPressed" styleClass="JFXButton" text="Register">
             </JFXButton>
-            <Label text="OR">
+                  <Label text="OR">
             </Label>
-            <JFXButton fx:id="guestLoginButton" onAction="#guestLoginButtonPressed" styleClass="JFXButton" text="Enter As A Guest">
+                  <JFXButton fx:id="guestLoginButton" onAction="#guestLoginButtonPressed" styleClass="JFXButton" text="Enter As A Guest">
             </JFXButton>
+               </children>
+            </VBox>
          </children>
-      </VBox>
+      </GridPane>
    </children>
    <stylesheets>
-      <URL value="@../ProjectCss/projectCss.css" />
       <URL value="@CustomerLoginScreen.css" />
+      <URL value="@../ProjectCss/projectCss.css" />
    </stylesheets>
-</GridPane>
+</StackPane>
