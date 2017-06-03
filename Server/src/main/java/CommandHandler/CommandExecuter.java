@@ -1445,7 +1445,15 @@ public class CommandExecuter {
 						Serialization.serialize(false));
 			} else {
 				log.info("the anwser is correct");
-				c.setPasswordCustomer(login.getUserName(), login.getPassword());
+				
+				if (inCommandWrapper.getSenderID() == 0) {
+					/* Command sent from employee */
+					c.setPasswordWorker(login.getUserName(), login.getPassword());
+				} else {
+					/* Command sent from customer */
+					c.setPasswordCustomer(login.getUserName(), login.getPassword());
+				}
+				
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(true));
 				log.info("the anwser is correct. password changed succesfully.");
 			}
