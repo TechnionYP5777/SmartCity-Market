@@ -84,7 +84,7 @@ public class CustomerLoginScreen implements Initializable {
 	}
 
 	@FXML
-	private void backButtonPressed(MouseEvent event) {
+	private void backButtonPressed(MouseEvent __) {
 		AbstractApplicationScreen.setScene("/CustomerWelcomeScreen/CustomerWelcomeScreen.fxml");
 	}
 
@@ -105,7 +105,7 @@ public class CustomerLoginScreen implements Initializable {
 			return;
 		} catch (Exception e) {
 			DialogMessagesService.showErrorDialog(
-					e.toString(), null, "");
+					e + "", null, "");
 			return;
 		}
 		TempCustomerPassingData.customer = customer;
@@ -128,7 +128,7 @@ public class CustomerLoginScreen implements Initializable {
 			return;
 		} catch (Exception e) {
 			DialogMessagesService.showErrorDialog(
-					e.toString(), null, "");
+					e + "", null, "");
 			return;
 		}
 		TempCustomerPassingData.customer = customer;
@@ -142,7 +142,7 @@ public class CustomerLoginScreen implements Initializable {
 	}
 
 	@FXML
-	void forgotPassButtonPressed(MouseEvent event) {
+	void forgotPassButtonPressed(MouseEvent __) {
 		try {
 			IForgotPasswordHandler forgot = InjectionFactory.getInstance(Customer.class);
 			ForgetPasswordWizard.start(forgot);

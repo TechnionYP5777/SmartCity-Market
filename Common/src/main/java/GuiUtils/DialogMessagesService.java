@@ -32,13 +32,9 @@ public class DialogMessagesService {
 	}
 
 	public static void showConfirmationDialog(String title, String header, String content,
-			IConfiramtionDialog confiramtionDialog) {
+			IConfiramtionDialog d) {
 		JFXDialogLayout dialogContent = new JFXDialogLayout();
-		if (header == null) {
-			dialogContent.setHeading(new Text(title));
-		} else {
-			dialogContent.setHeading(new Text(title + "\n" + header));
-		}
+		dialogContent.setHeading(new Text(header == null ? title : title + "\n" + header));
 
 		dialogContent.setBody(new Text(content));
 
@@ -56,22 +52,22 @@ public class DialogMessagesService {
 		yes.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
-			public void handle(ActionEvent event) {
+			public void handle(ActionEvent __) {
 
 				dialog.close();
 
-				confiramtionDialog.onYes();
+				d.onYes();
 			}
 		});
 
 		no.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
-			public void handle(ActionEvent event) {
+			public void handle(ActionEvent __) {
 
 				dialog.close();
 
-				confiramtionDialog.onNo();
+				d.onNo();
 			}
 		});
 
@@ -80,11 +76,7 @@ public class DialogMessagesService {
 
 	private static void alertCreator(String title, String header, String content) {
 		JFXDialogLayout dialogContent = new JFXDialogLayout();
-		if (header == null) {
-			dialogContent.setHeading(new Text(title));
-		} else {
-			dialogContent.setHeading(new Text(title + "\n" + header));
-		}
+		dialogContent.setHeading(new Text(header == null ? title : title + "\n" + header));
 
 		dialogContent.setBody(new Text(content));
 
@@ -99,7 +91,7 @@ public class DialogMessagesService {
 		close.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
-			public void handle(ActionEvent event) {
+			public void handle(ActionEvent __) {
 				dialog.close();
 			}
 		});

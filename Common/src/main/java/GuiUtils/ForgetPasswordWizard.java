@@ -32,8 +32,8 @@ public class ForgetPasswordWizard {
 	public static IForgotPasswordHandler forgotPasswordHandler;
 	public static Logger log = Logger.getLogger(ForgetPasswordWizard.class.getName());
 
-	public static void start(IForgotPasswordHandler forgotPasswordHandler) throws Exception {
-		ForgetPasswordWizard.forgotPasswordHandler = forgotPasswordHandler;
+	public static void start(IForgotPasswordHandler h) throws Exception {
+		ForgetPasswordWizard.forgotPasswordHandler = h;
 		Stage stage = new Stage();
 		stage.setTitle("Restore Password Wizard");
 		stage.setScene(new Scene(new SurveyWizard(stage), 400, 250));
@@ -266,7 +266,7 @@ class QuestionScreen extends WizardPage {
 
 	private JFXTextField answerField;
 	private JFXPasswordField newPassword;
-	static public Label question;
+	public static Label question;
 	private Label passwordLbl;
 
 	@Override
@@ -317,7 +317,7 @@ class QuestionScreen extends WizardPage {
 					newPassword.getText());
 		} catch (WrongAnswer | NoSuchUserName e) {
 			e.showInfoToUser();
-			ForgetPasswordWizard.log.fatal(e.toString());
+			ForgetPasswordWizard.log.fatal(e + "");
 			ForgetPasswordWizard.log.debug(StackTraceUtil.getStackTrace(e));
 			return;
 		}

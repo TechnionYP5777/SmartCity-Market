@@ -378,7 +378,7 @@ public class ManagePackagesTab implements Initializable {
 	}
 
 	@FXML
-	private void searchCodeButtonPressed(MouseEvent event) {
+	private void searchCodeButtonPressed(MouseEvent __) {
 		try {
 			LocalDate expirationDate = this.expirationDate != null ? this.expirationDate
 					: datePickerForSmartCode.getValue();

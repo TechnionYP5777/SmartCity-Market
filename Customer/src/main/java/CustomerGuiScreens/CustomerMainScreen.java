@@ -41,7 +41,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -147,6 +146,14 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	private void updateProductInfoPaine(CatalogProduct p, Integer amount, ProductInfoPaneVisibleMode m) {
 		updateProductInfoTexts(p, amount);
 		switch (m) {
+		case SCANNED_PRODUCT: {
+			removeAllButton.setDisable(true);
+			removeAllButton.setVisible(false);
+			addButton.setDisable(false);
+			addButton.setVisible(true);
+			enableRemoveButton();
+			break;
+		}
 		case PRESSED_PRODUCT: {
 			removeAllButton.setDisable(false);
 			removeAllButton.setVisible(true);
@@ -156,22 +163,13 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			removeButton.setVisible(false);
 			break;
 		}
-		case SCANNED_PRODUCT: {
-			removeAllButton.setDisable(true);
-			removeAllButton.setVisible(false);
-			addButton.setDisable(false);
-			addButton.setVisible(true);
-			enableRemoveButton();
-			break;
-		}
 		}
 		setAbilityAndVisibilityOfProductInfoPane(true);
 	}
 
 	private void enableRemoveButton() {
-		boolean flag = customer.getCartProductCache().isEmpty() ? false
-				: customer.getCartProductCache().get(scannedSmartCode.getBarcode()).getPackages()
-						.containsKey(scannedSmartCode);
+		boolean flag = !customer.getCartProductCache().isEmpty() && customer.getCartProductCache().get(scannedSmartCode.getBarcode())
+				.getPackages().containsKey(scannedSmartCode);
 		removeButton.setDisable(!flag);
 		removeButton.setVisible(flag);
 
@@ -182,7 +180,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		manufacturerLabel.setText(p.getManufacturer().getName());
 		priceLabel.setText(String.format("%1$.2f", p.getPrice()));
 		amountLabel.setText(amount + "");
-		descriptionTextArea.setText(scannedSmartCode.getExpirationDate().toString());
+		descriptionTextArea.setText(scannedSmartCode.getExpirationDate() + "");
 		URL imageUrl = null;
 		try {
 			imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI()
@@ -259,13 +257,13 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	}
 
 	@FXML
-	public void purchaseButtonPressed(MouseEvent event) {
+	public void purchaseButtonPressed(MouseEvent __) {
 		flag = false;
 		DialogMessagesService.showConfirmationDialog("Checkout grocery list?", null, "", this);
 	}
 
 	@FXML
-	public void cancelButtonPressed(MouseEvent event) {
+	public void cancelButtonPressed(MouseEvent __) {
 		logoutAndExit();
 	}
 
@@ -347,11 +345,11 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	@Override
 	public void onYes() {
 		try {
-			if (flag) {
+			if (flag) 
 				customer.logout();
-			} else {
+			else 
 				customer.checkOutGroceryList();
-			}
+			
 		} catch (SMException e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.getStackTrace(e));
@@ -370,7 +368,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	}
 
 	@FXML
-	void forceScanProduct(ActionEvent event) {
+	void forceScanProduct(ActionEvent __) {
 		smartcodeScanned(new SmartcodeScanEvent(new SmartCode(1234567890, LocalDate.now())));
 	}
 }

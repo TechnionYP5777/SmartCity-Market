@@ -1446,13 +1446,13 @@ public class CommandExecuter {
 			} else {
 				log.info("the anwser is correct");
 				
-				if (inCommandWrapper.getSenderID() == 0) {
+				if (inCommandWrapper.getSenderID() == 0) 
 					/* Command sent from employee */
 					c.setPasswordWorker(login.getUserName(), login.getPassword());
-				} else {
+				else 
 					/* Command sent from customer */
 					c.setPasswordCustomer(login.getUserName(), login.getPassword());
-				}
+				
 				
 				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(true));
 				log.info("the anwser is correct. password changed succesfully.");

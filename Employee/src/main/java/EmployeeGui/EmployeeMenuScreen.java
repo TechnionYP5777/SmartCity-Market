@@ -120,7 +120,7 @@ public class EmployeeMenuScreen  implements Initializable {
 	}
 
 	@FXML
-	private void logoutButtonPressed(MouseEvent event) {
+	private void logoutButtonPressed(MouseEvent __) {
 		try {
 			if (worker.isLoggedIn())
 				worker.logout();

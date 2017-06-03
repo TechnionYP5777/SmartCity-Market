@@ -26,7 +26,7 @@ import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 @RunWith(MockitoJUnitRunner.class)
 public class LoginTest {
 		
-	private static int EMPLOYEE_SENDER_ID = 0;
+	private static int EMPLOYEE_SENDER_ID; //( = 0)
 	private static int CUSTOMER_SENDER_ID = 1;
 	
 	@Mock

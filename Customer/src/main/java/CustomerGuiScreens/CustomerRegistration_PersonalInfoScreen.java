@@ -100,7 +100,7 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 				|| phoneNumberTextField.getText().isEmpty() || emailTextField.getText().isEmpty()
 				|| cityTextField.getText().isEmpty() || streetTextField.getText().isEmpty()
 				|| securityAnswerTextField.getText().isEmpty()
-				|| securityQuestionComboBox.getSelectionModel().getSelectedItem().toString().isEmpty()
+				|| (securityQuestionComboBox.getSelectionModel().getSelectedItem() + "").isEmpty()
 				|| !validNewUserName(userNameTextField.getText()));
 	}
 
@@ -155,9 +155,8 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		passwordField.getValidators().add(userValidator3);
 
 		passwordField.focusedProperty().addListener((o, oldVal, newVal) -> {
-			if (!newVal) {
+			if (!newVal)
 				passwordField.validate();
-			}
 		});
 
 		firstNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -172,9 +171,8 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		firstNameTextField.getValidators().add(val4);
 
 		firstNameTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
-			if (!newVal) {
+			if (!newVal)
 				firstNameTextField.validate();
-			}
 		});
 
 		lastNameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -189,9 +187,8 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		lastNameTextField.getValidators().add(val5);
 
 		lastNameTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
-			if (!newVal) {
+			if (!newVal)
 				lastNameTextField.validate();
-			}
 		});
 
 		phoneNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -210,9 +207,8 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		phoneNumberTextField.getValidators().add(val6);
 
 		phoneNumberTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
-			if (!newVal) {
+			if (!newVal)
 				phoneNumberTextField.validate();
-			}
 		});
 
 		emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -227,9 +223,8 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		emailTextField.getValidators().add(val9);
 
 		emailTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
-			if (!newVal) {
+			if (!newVal)
 				emailTextField.validate();
-			}
 		});
 
 		cityTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -244,9 +239,8 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		cityTextField.getValidators().add(val10);
 
 		cityTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
-			if (!newVal) {
+			if (!newVal)
 				cityTextField.validate();
-			}
 		});
 
 		streetTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -261,9 +255,8 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		streetTextField.getValidators().add(val7);
 
 		streetTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
-			if (!newVal) {
+			if (!newVal)
 				streetTextField.validate();
-			}
 		});
 
 		birthDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -281,11 +274,11 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 			@Override
 			protected void updateItem(String item, boolean empty) {
 				super.updateItem(item, empty);
-				if (empty || item == null) {
+				if (!empty && item != null)
+					setText(item + "");
+				else {
 					setStyle(null);
 					setText(null);
-				} else {
-					setText(item.toString());
 				}
 			}
 		});
@@ -302,9 +295,8 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		securityAnswerTextField.getValidators().add(val8);
 
 		securityAnswerTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
-			if (!newVal) {
+			if (!newVal)
 				securityAnswerTextField.validate();
-			}
 		});
 
 		birthDatePicker.setValue(LocalDate.now());
@@ -335,9 +327,9 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 
 		if (TempCustomerProfilePassingData.customerProfile.getUserName() != null)
 			userNameTextField.setText(TempCustomerProfilePassingData.customerProfile.getUserName());
-		if (TempCustomerProfilePassingData.password != null) {
+		if (TempCustomerProfilePassingData.password != null)
 			passwordField.setText(TempCustomerProfilePassingData.password);
-		}
+		
 		if (TempCustomerProfilePassingData.customerProfile.getFirstName() != null)
 			firstNameTextField.setText(TempCustomerProfilePassingData.customerProfile.getFirstName());
 
