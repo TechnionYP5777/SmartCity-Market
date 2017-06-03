@@ -19,8 +19,10 @@ import CustomerContracts.ICustomer;
 import CustomerGuiHelpers.CustomerProductCellFormat;
 import CustomerGuiHelpers.TempCustomerPassingData;
 import GuiUtils.AbstractApplicationScreen;
+import GuiUtils.DialogMessagesService;
 import SMExceptions.SMException;
 import UtilsContracts.IBarcodeEventHandler;
+import UtilsContracts.IConfiramtionDialog;
 import UtilsContracts.SmartcodeScanEvent;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
@@ -34,10 +36,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -50,18 +49,18 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 /**
- * CustomerMainScreen - Controller for main screen which holds the main operations
- * available for customer during shopping.
+ * CustomerMainScreen - Controller for main screen which holds the main
+ * operations available for customer during shopping.
  * 
  * @author Lior Ben Ami
  * @author Aviad Cohen
  * @author Shimon Azulay
  * @since 2017-01-11
  */
-public class CustomerMainScreen implements Initializable {
-	
+public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
+
 	protected static Logger log = Logger.getLogger(CustomerMainScreen.class.getName());
-	
+
 	Stage primeStage = CustomerApplicationScreen.stage;
 
 	ICustomer customer;
@@ -108,39 +107,40 @@ public class CustomerMainScreen implements Initializable {
 
 	@FXML
 	ImageView productInfoImage;
-	
+
 	@FXML
 	JFXTextField searchField;
-	
+
 	SmartCode scannedSmartCode;
-	
+
 	CatalogProduct catalogProduct;
-	
+
 	ObservableList<CartProduct> productsObservableList = FXCollections.<CartProduct>observableArrayList();
-	
+
 	FilteredList<CartProduct> filteredProductList;
 
 	// Lock smartCodeLocker;
 
+	boolean flag = true;
+
 	IBarcodeEventHandler barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
 
 	/**
-	 * the productInfoPane has three visible mode: 
-	 * 0 - Invisible (default) 
-	 * 1 - SCANNED_PRODUCT: when the pane present scanned product info and actions 
-	 * 2 - PRESSED_PRODUCT: when the pane present pressed (on the listView Cell) product info and actions
+	 * the productInfoPane has three visible mode: 0 - Invisible (default) 1 -
+	 * SCANNED_PRODUCT: when the pane present scanned product info and actions 2
+	 * - PRESSED_PRODUCT: when the pane present pressed (on the listView Cell)
+	 * product info and actions
 	 */
 	private enum ProductInfoPaneVisibleMode {
 		SCANNED_PRODUCT, PRESSED_PRODUCT
 	}
 
 	private void addOrRemoveScannedProduct(CatalogProduct p, Integer amount) {
-		
+
 		updateProductInfoPaine(p, amount, ProductInfoPaneVisibleMode.SCANNED_PRODUCT);
 	}
 
-	private void updateProductInfoPaine(CatalogProduct p, Integer amount,
-			ProductInfoPaneVisibleMode m) {
+	private void updateProductInfoPaine(CatalogProduct p, Integer amount, ProductInfoPaneVisibleMode m) {
 		updateProductInfoTexts(p, amount);
 		switch (m) {
 		case PRESSED_PRODUCT: {
@@ -164,16 +164,17 @@ public class CustomerMainScreen implements Initializable {
 		}
 		setAbilityAndVisibilityOfProductInfoPane(true);
 	}
-	
+
 	private void updateProductInfoTexts(CatalogProduct p, Integer amount) {
 		productNameLabel.setText(p.getName());
 		manufacturerLabel.setText(p.getManufacturer().getName());
 		priceLabel.setText(String.format("%1$.2f", p.getPrice()));
 		amountLabel.setText(amount + "");
-		descriptionTextArea.setText(p.getDescription());	
+		descriptionTextArea.setText(p.getDescription());
 		URL imageUrl = null;
 		try {
-			imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI().toURL();
+			imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI()
+					.toURL();
 		} catch (MalformedURLException e) {
 			throw new RuntimeException();
 		}
@@ -190,106 +191,71 @@ public class CustomerMainScreen implements Initializable {
 		productsNumberTextField.setText(customer.getCartProductsNum() + "");
 		totalSumTextField.setText(String.format("%.2f", customer.getTotalSum()));
 	}
-	
+
 	private void syncListViewWithCart() {
 		HashMap<Long, CartProduct> shoppingList = customer.getCartProductCache();
 		productsObservableList.clear();
 		shoppingList.forEach((key, value) -> productsObservableList.add(value));
-		
+
 		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
 		productsListView.setItems(filteredProductList);
 	}
-	
+
 	private void logoutAndExit() {
-		Alert alert = new Alert(AlertType.NONE, "Already leaving?", ButtonType.YES, ButtonType.NO);
-		
-		alert.setTitle("Cancel shopping");
-		if (alert.showAndWait().isPresent() && alert.getResult() == ButtonType.NO)
-			return;
-		try {
-			customer.logout();
-		} catch (SMException e) {
-			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
-			e.showInfoToUser();
-			Platform.exit();
-			System.exit(0);
-		}
-		TempCustomerPassingData.customer = null;
-		AbstractApplicationScreen.setScene("/CustomerWelcomeScreen/CustomerWelcomeScreen.fxml");
+		flag = true;
+		DialogMessagesService.showConfirmationDialog("Already Leaving?", null, "", this);
 	}
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(customerMainScreenPane);
 		barcodeEventHandler.register(this);
 		customer = TempCustomerPassingData.customer;
-		
-	    filteredProductList = new FilteredList<>(productsObservableList, s -> true);
 
-	    searchField.textProperty().addListener(obs->{
-	        String filter = searchField.getText(); 
-	        
-	        filteredProductList.setPredicate((filter == null || filter.length() == 0) ? s -> true :
-	        																			s -> s.getCatalogProduct().getName().contains(filter));
-	    });
-		
+		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
+
+		searchField.textProperty().addListener(obs -> {
+			String filter = searchField.getText();
+
+			filteredProductList.setPredicate((filter == null || filter.length() == 0) ? s -> true
+					: s -> s.getCatalogProduct().getName().contains(filter));
+		});
+
 		productsListView.setItems(filteredProductList);
 		productsListView.setCellFactory(new Callback<ListView<CartProduct>, ListCell<CartProduct>>() {
-			
+
 			@Override
 			public ListCell<CartProduct> call(ListView<CartProduct> __) {
 				return new CustomerProductCellFormat();
 			}
 		});
-		
+
 		productsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CartProduct>() {
-		   
+
 			@Override
-			public void changed(ObservableValue<? extends CartProduct> __, CartProduct oldValue,
-					CartProduct newValue) {
-		    	updateProductInfoPaine(newValue.getCatalogProduct(), newValue.getTotalAmount(), ProductInfoPaneVisibleMode.PRESSED_PRODUCT);
-				
+			public void changed(ObservableValue<? extends CartProduct> __, CartProduct oldValue, CartProduct newValue) {
+				updateProductInfoPaine(newValue.getCatalogProduct(), newValue.getTotalAmount(),
+						ProductInfoPaneVisibleMode.PRESSED_PRODUCT);
+
 			}
 		});
-		
+
 		productsListView.depthProperty().set(1);
 		productsListView.setExpanded(true);
-		
+
 		setAbilityAndVisibilityOfProductInfoPane(false);
 		productsNumberTextField.setEditable(false);
 		totalSumTextField.setEditable(false);
-
-		// defining behavior when stage/window is closed.
-		primeStage.setOnCloseRequest(event -> {
-			event.consume();
-			logoutAndExit();
-		} );
 	}
 
 	@FXML
 	public void purchaseButtonPressed(MouseEvent event) {
-		Alert alert = new Alert(AlertType.NONE, "Checkout grocery list?", ButtonType.YES, ButtonType.NO);
-		
-		alert.setTitle("Checkout and Payment");
-		alert.showAndWait();
-		if (alert.getResult() == ButtonType.NO)
-			return;
-		
-		try {
-			customer.checkOutGroceryList();
-		} catch (SMException e) {
-			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
-			e.showInfoToUser();
-		}
-		
-		TempCustomerPassingData.customer =  null;
-		AbstractApplicationScreen.setScene("/CustomerWelcomeScreen/CustomerWelcomeScreen.fxml");
+		flag = false;
+		DialogMessagesService.showConfirmationDialog("Checkout grocery list?", null, "", this);
 	}
 
 	@FXML
-	public void cancelButtonPressed(MouseEvent event) {
+	public void cancelButtonPressed(MouseEvent event) {		
 		logoutAndExit();
 	}
 
@@ -301,7 +267,7 @@ public class CustomerMainScreen implements Initializable {
 			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 			return;
-		}	
+		}
 		updateCartProductsInfo();
 		setAbilityAndVisibilityOfProductInfoPane(false);
 	}
@@ -349,20 +315,45 @@ public class CustomerMainScreen implements Initializable {
 			}
 			amount = 0;
 		}
-		
-		
-		Platform.runLater(new Runnable() {	
+
+		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				addOrRemoveScannedProduct(catalogProduct, amount);	
+				addOrRemoveScannedProduct(catalogProduct, amount);
 			}
 		});
 	}
-	
+
 	@Subscribe
 	public void smartcodeScanned(SmartcodeScanEvent ¢) {
 		SmartCode smartCode = ¢.getSmarCode();
 		scannedSmartCode = smartCode;
 		smartcodeScannedHandler();
+	}
+
+	@Override
+	public void onYes() {
+		try {
+			if (flag) {
+				customer.logout();
+			} else {
+				customer.checkOutGroceryList();
+			}
+		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
+			e.showInfoToUser();
+			Platform.exit();
+			System.exit(0);
+		}
+		TempCustomerPassingData.customer = null;
+		AbstractApplicationScreen.setScene("/CustomerWelcomeScreen/CustomerWelcomeScreen.fxml");
+
+	}
+
+	@Override
+	public void onNo() {
+		// Nothing to do
+
 	}
 }

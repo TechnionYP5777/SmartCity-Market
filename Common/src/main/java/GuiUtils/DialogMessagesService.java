@@ -2,13 +2,15 @@ package GuiUtils;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
+
+import UtilsContracts.IConfiramtionDialog;
 
 /**
  * Use this class to create GUI Error, info, confirmation GUI dialogs.
@@ -22,45 +24,86 @@ import com.jfoenix.controls.JFXDialogLayout;
 public class DialogMessagesService {
 
 	public static void showInfoDialog(String title, String header, String content) {
-		alertCreator(AlertType.INFORMATION, title, header, content);
+		alertCreator(title, header, content);
 	}
 
 	public static void showErrorDialog(String title, String header, String content) {
-		alertCreator(AlertType.ERROR, title, header, content);
+		alertCreator(title, header, content);
 	}
 
-	public static void showConfirmationDialog(String title, String header, String content) {
-		alertCreator(AlertType.CONFIRMATION, title, header, content);
-	}
-
-	private static void alertCreator(AlertType t, String title, String header, String content) {
+	public static void showConfirmationDialog(String title, String header, String content,
+			IConfiramtionDialog confiramtionDialog) {
 		JFXDialogLayout dialogContent = new JFXDialogLayout();
-		dialogContent.setHeading(new Text(title + "\n" + header));
+		if (header == null) {
+			dialogContent.setHeading(new Text(title));
+		} else {
+			dialogContent.setHeading(new Text(title + "\n" + header));
+		}
+
 		dialogContent.setBody(new Text(content));
-		
+
+		JFXButton yes = new JFXButton("Yes");
+		yes.getStyleClass().add("JFXButton");
+
+		JFXButton no = new JFXButton("No");
+		no.getStyleClass().add("JFXButton");
+
+		dialogContent.setActions(yes, new Label("   "), no);
+
+		JFXDialog dialog = new JFXDialog((StackPane) AbstractApplicationScreen.stage.getScene().getRoot(),
+				dialogContent, JFXDialog.DialogTransition.CENTER);
+
+		yes.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				dialog.close();
+
+				confiramtionDialog.onYes();
+			}
+		});
+
+		no.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				dialog.close();
+
+				confiramtionDialog.onNo();
+			}
+		});
+
+		dialog.show();
+	}
+
+	private static void alertCreator(String title, String header, String content) {
+		JFXDialogLayout dialogContent = new JFXDialogLayout();
+		if (header == null) {
+			dialogContent.setHeading(new Text(title));
+		} else {
+			dialogContent.setHeading(new Text(title + "\n" + header));
+		}
+
+		dialogContent.setBody(new Text(content));
+
 		JFXButton close = new JFXButton("Close");
 		close.getStyleClass().add("JFXButton");
-		
+
 		dialogContent.setActions(close);
-		
+
 		JFXDialog dialog = new JFXDialog((StackPane) AbstractApplicationScreen.stage.getScene().getRoot(),
 				dialogContent, JFXDialog.DialogTransition.CENTER);
 
 		close.setOnAction(new EventHandler<ActionEvent>() {
-			
+
 			@Override
 			public void handle(ActionEvent event) {
-				dialog.close();			
+				dialog.close();
 			}
 		});
-		
-		dialog.show();
 
-		// Alert alert = new Alert(t);
-		// alert.initModality(Modality.WINDOW_MODAL);
-		// alert.setTitle(title);
-		// alert.setHeaderText(header);
-		// alert.setContentText(content);
-		// alert.show();
+		dialog.show();
 	}
 }

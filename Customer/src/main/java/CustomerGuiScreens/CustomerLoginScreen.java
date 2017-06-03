@@ -9,6 +9,7 @@ import CustomerContracts.ICustomer;
 import CustomerGuiHelpers.TempCustomerPassingData;
 import CustomerImplementations.Customer;
 import GuiUtils.AbstractApplicationScreen;
+import GuiUtils.DialogMessagesService;
 import SMExceptions.SMException;
 import UtilsContracts.IForgotPasswordHandler;
 import UtilsImplementations.InjectionFactory;
@@ -16,8 +17,6 @@ import UtilsImplementations.StackTraceUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -36,6 +35,7 @@ import com.jfoenix.controls.JFXButton;
  * CartLogiScreen - Controller for customer login screen
  * 
  * @author Lior Ben Ami
+ * @author Shimon Azulay
  * @since 2017-01-16
  */
 public class CustomerLoginScreen implements Initializable {
@@ -48,13 +48,13 @@ public class CustomerLoginScreen implements Initializable {
 			ClientServerDefs.anonymousCustomerUsername);
 	@FXML
 	private GridPane loginScreenPane;
-	
+
 	@FXML
 	private JFXButton loginButton;
 
 	@FXML
 	private JFXTextField userNameTextField;
-	
+
 	@FXML
 	private JFXPasswordField passwordField;
 
@@ -93,9 +93,8 @@ public class CustomerLoginScreen implements Initializable {
 		ICustomer customer = InjectionFactory.getInstance(Customer.class);
 		try {
 			if (username.equals(guestLogin.getUserName())) {
-				Alert alert = new Alert(AlertType.ERROR,
-						String.format("The user: \"{0}\" can access only as a guest user.", username));
-				alert.showAndWait();
+				DialogMessagesService.showErrorDialog(
+						String.format("The user: \"{0}\" can access only as a guest user.", username), null, "");
 				return;
 			}
 			customer.login(username, password, true);
@@ -105,8 +104,8 @@ public class CustomerLoginScreen implements Initializable {
 			e.showInfoToUser();
 			return;
 		} catch (Exception e) {
-			Alert alert = new Alert(AlertType.ERROR, e + "");
-			alert.showAndWait();
+			DialogMessagesService.showErrorDialog(
+					e.toString(), null, "");
 			return;
 		}
 		TempCustomerPassingData.customer = customer;
@@ -128,8 +127,8 @@ public class CustomerLoginScreen implements Initializable {
 			e.showInfoToUser();
 			return;
 		} catch (Exception e) {
-			Alert alert = new Alert(AlertType.ERROR, e + "");
-			alert.showAndWait();
+			DialogMessagesService.showErrorDialog(
+					e.toString(), null, "");
 			return;
 		}
 		TempCustomerPassingData.customer = customer;

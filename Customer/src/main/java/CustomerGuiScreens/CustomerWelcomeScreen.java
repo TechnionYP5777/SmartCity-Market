@@ -15,6 +15,7 @@ import javafx.scene.layout.StackPane;
  * all action of this scene should be here.
  * 
  * @author Lior Ben Ami
+ * @author Shimon Azulay
  * @since 2017-01-16 */
 public class CustomerWelcomeScreen implements Initializable {
 
