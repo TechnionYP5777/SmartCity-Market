@@ -102,7 +102,7 @@ public class ACustomerExceptions extends SMException {
 		@Override
 		public void showInfoToUser() {
 			DialogMessagesService.showErrorDialog(GuiCommonDefs.productOperationFailureTitle, null,
-					GuiCommonDefs.productNotExistsInCatalogMsg);
+					GuiCommonDefs.productPackageDoesNotExistMsg);
 		}
 	}
 	
