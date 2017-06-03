@@ -15,7 +15,6 @@ import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
 import UtilsImplementations.InjectionFactory;
 import UtilsImplementations.StackTraceUtil;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -37,8 +36,8 @@ import javafx.stage.Stage;
  * @author Shimon Azulay
  * @since 2016-12-27
  */
-
-public class EmployeeMenuScreen implements Initializable {
+// 
+public class EmployeeMenuScreen  implements Initializable {
 
 	protected static Logger log = Logger.getLogger(EmployeeMenuScreen.class.getName());
 
@@ -102,22 +101,6 @@ public class EmployeeMenuScreen implements Initializable {
 		worker = InjectionFactory.getInstance(Manager.class);
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);
 
-		// defining behavior when stage/window is closed.
-		primeStage.setOnCloseRequest(event -> {
-			try {
-				if (worker.isLoggedIn())
-					worker.logout();
-				Platform.exit();
-				System.exit(0);
-			} catch (SMException e) {
-				log.fatal(e);
-				log.debug(StackTraceUtil.getStackTrace(e));
-				e.showInfoToUser();
-				Platform.exit();
-				System.exit(0);
-			}
-		});
-
 		// setting success log and it's listener
 		successLogArea.setEditable(false);
 		successLogArea.textProperty().addListener(new ChangeListener<Object>() {
@@ -148,5 +131,4 @@ public class EmployeeMenuScreen implements Initializable {
 		}
 		AbstractApplicationScreen.setScene("/EmployeeLoginScreen/EmployeeLoginScreen.fxml");
 	}
-
 }

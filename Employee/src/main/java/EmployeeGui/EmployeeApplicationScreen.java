@@ -6,11 +6,15 @@ import com.sun.javafx.application.LauncherImpl;
 import CommonDI.CommonDiConfigurator;
 import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeCommon.IEmployeeScreensParameterService;
+import EmployeeContracts.IWorker;
 import EmployeeDI.EmployeeDiConfigurator;
+import EmployeeImplementations.Worker;
 import GuiUtils.AbstractApplicationScreen;
+import SMExceptions.SMException;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
 import UtilsImplementations.StackTraceUtil;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 /**
@@ -24,7 +28,7 @@ import javafx.stage.Stage;
 public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 
 	BarcodeEventHandler barcodeEventHandler;
-	
+
 	static boolean show;
 
 	@Override
@@ -32,10 +36,10 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 		try {
 			stage = primaryStage;
 			InjectionFactory.createInjector(new EmployeeDiConfigurator(), new CommonDiConfigurator());
-			
+
 			IEmployeeScreensParameterService employeeScreensParameterService = InjectionFactory
 					.getInstance(EmployeeScreensParameterService.class);
-			
+
 			employeeScreensParameterService.setNotShowMainScreenVideo(show);
 			barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
 			barcodeEventHandler.initializeHandler();
@@ -43,7 +47,24 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 			setScene("/EmployeeMainScreen/EmployeeMainScreen.fxml");
 			stage.setTitle("Smart Market Beta");
 			stage.setMaximized(true);
-				
+
+			stage.setOnCloseRequest(event -> {
+				try {
+					IWorker worker = InjectionFactory.getInstance(Worker.class);
+					if (worker.isLoggedIn())
+						worker.logout();
+					event.consume();
+					Platform.exit();
+					System.exit(0);
+				} catch (SMException e) {
+					log.fatal(e);
+					log.debug(StackTraceUtil.getStackTrace(e));
+					e.showInfoToUser();
+					Platform.exit();
+					System.exit(0);
+				}
+			});
+
 			stage.show();
 
 		} catch (Exception e) {
@@ -53,7 +74,7 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 	}
 
 	public static void main(String[] args) {
-			
+
 		if (args.length == 0)
 			show = true;
 		else {

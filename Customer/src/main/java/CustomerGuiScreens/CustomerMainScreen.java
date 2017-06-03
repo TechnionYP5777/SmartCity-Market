@@ -256,7 +256,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	}
 
 	@FXML
-	public void cancelButtonPressed(MouseEvent event) {		
+	public void cancelButtonPressed(MouseEvent event) {
 		logoutAndExit();
 	}
 
@@ -356,9 +356,9 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	public void onNo() {
 		// Nothing to do
 	}
-	
-    @FXML
-    void forceScanProduct(ActionEvent event) {
-    	smartcodeScanned(new SmartcodeScanEvent(new SmartCode(1234567890, LocalDate.now())));
-    }
+
+	@FXML
+	void forceScanProduct(ActionEvent event) {
+		smartcodeScanned(new SmartcodeScanEvent(new SmartCode(1234567890, LocalDate.now())));
+	}
 }

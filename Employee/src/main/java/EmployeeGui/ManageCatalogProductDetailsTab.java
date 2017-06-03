@@ -66,12 +66,12 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 	@FXML
 	private JFXListView<String> ingredientsList;
-	
-    @FXML
-    private JFXButton renameManu;
-    
-    @FXML
-    private JFXButton renameIngr;
+
+	@FXML
+	private JFXButton renameManu;
+
+	@FXML
+	private JFXButton renameIngr;
 
 	@FXML
 	private JFXButton addManuBtn;
@@ -114,19 +114,18 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	JFXButton okNewManu;
 
 	JFXButton okNewIngr;
-	
+
 	JFXTextField renameManuLbl;
 
 	JFXTextField renameIngrLbl;
-	
+
 	JFXButton okRenameIngr;
-	
+
 	JFXButton okRenameManu;
-	
-  
-    void renameIngrPressed() {
-      	long id = ingredients.get(selectedIngr.iterator().next()).getId();
-    	try {
+
+	void renameIngrPressed() {
+		long id = ingredients.get(selectedIngr.iterator().next()).getId();
+		try {
 			manager.editIngredient(new Ingredient(id, renameIngrLbl.getText()));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e) {
 			log.debug(StackTraceUtil.getStackTrace(e));
@@ -135,21 +134,25 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		}
 		selectedIngr.clear();
 		createIngredientList();
-    }
+		enableButtons();
+		enableAddButtons();
 
+	}
 
-    void renameManuPressed() {
-    	long id = manufacturars.get(selectedManu.iterator().next()).getId();
-    	try {
+	void renameManuPressed() {
+		long id = manufacturars.get(selectedManu.iterator().next()).getId();
+		try {
 			manager.editManufacturer(new Manufacturer(id, renameManuLbl.getText()));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 		}
-    	selectedManu.clear();
+		selectedManu.clear();
 		createManufacturerList();
-    }
+		enableButtons();
+		enableAddButtons();
+	}
 
 	void addIngPressed() {
 		try {
@@ -161,6 +164,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		}
 		selectedIngr.clear();
 		createIngredientList();
+		enableButtons();
+		enableAddButtons();
 	}
 
 	void addManuPressed() {
@@ -173,6 +178,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		}
 		selectedManu.clear();
 		createManufacturerList();
+		enableButtons();
+		enableAddButtons();
 	}
 
 	@FXML
@@ -189,6 +196,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		});
 		selectedIngr.clear();
 		createIngredientList();
+		enableButtons();
+		enableAddButtons();
 	}
 
 	@FXML
@@ -205,6 +214,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		});
 		selectedManu.clear();
 		createManufacturerList();
+		enableButtons();
+		enableAddButtons();
 	}
 
 	@Override
@@ -297,9 +308,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		addIngrBtn.setOnMouseClicked(e -> popup2.show(addIngrBtn, PopupVPosition.TOP, PopupHPosition.LEFT));
 
 		newIngr.textProperty().addListener((observable, oldValue, newValue) -> enableAddButtons());
-		
-		
-		
+
 		Label lbl3 = new Label("Rename Selected Manufacturar");
 		renameManuLbl = new JFXTextField();
 		okRenameManu = new JFXButton("Done!");
@@ -319,7 +328,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		renameManu.setOnMouseClicked(e -> popup3.show(renameManu, PopupVPosition.TOP, PopupHPosition.LEFT));
 
 		renameManuLbl.textProperty().addListener((observable, oldValue, newValue) -> enableAddButtons());
-		
+
 		Label lbl4 = new Label("Rename Selected Ingredient");
 		renameIngrLbl = new JFXTextField();
 		okRenameIngr = new JFXButton("Done!");
@@ -339,8 +348,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		renameIngr.setOnMouseClicked(e -> popup4.show(renameIngr, PopupVPosition.TOP, PopupHPosition.LEFT));
 
 		renameIngrLbl.textProperty().addListener((observable, oldValue, newValue) -> enableAddButtons());
-		
-		
+
 		enableButtons();
 		enableAddButtons();
 
@@ -358,7 +366,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		manufacturars = new HashMap<String, Manufacturer>();
 
 		try {
-			manager.getAllManufacturers().forEach(manufacturer -> manufacturars.put(manufacturer.getName(), manufacturer));
+			manager.getAllManufacturers()
+					.forEach(manufacturer -> manufacturars.put(manufacturer.getName(), manufacturer));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.getStackTrace(e));
@@ -405,11 +414,9 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		removeManuBtn.setDisable(selectedManu.isEmpty());
 		addIngrBtn.setDisable(!selectedIngr.isEmpty());
 		removeIngrBtn.setDisable(selectedIngr.isEmpty());
-		renameManu.setDisable(selectedManu.isEmpty() || selectedManu.size() > 1 );
-		renameIngr.setDisable(selectedIngr.isEmpty() || selectedIngr.size() > 1 );
+		renameManu.setDisable(selectedManu.isEmpty() || selectedManu.size() > 1);
+		renameIngr.setDisable(selectedIngr.isEmpty() || selectedIngr.size() > 1);
 
 	}
-	
-
 
 }

@@ -2,11 +2,16 @@ package CustomerGuiScreens;
 
 import org.apache.log4j.PropertyConfigurator;
 
+import CustomerContracts.ICustomer;
 import CustomerDI.CustomerDiConfigurator;
+import CustomerImplementations.Customer;
 import CustomerImplementations.CustomerDefs;
 import GuiUtils.AbstractApplicationScreen;
+import SMExceptions.SMException;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.StackTraceUtil;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 /**
@@ -31,6 +36,23 @@ public class CustomerApplicationScreen extends AbstractApplicationScreen {
 			setScene("/CustomerWelcomeScreen/CustomerWelcomeScreen.fxml");
 			stage.setTitle("Smart Market Beta");
 			stage.setMaximized(true);
+			
+			stage.setOnCloseRequest(event -> { 
+				try {
+					ICustomer customer = InjectionFactory.getInstance(Customer.class);
+					customer.logout();
+					Platform.exit();
+					System.exit(0);
+				} catch (SMException e) {
+					log.fatal(e);
+					log.debug(StackTraceUtil.getStackTrace(e));
+					e.showInfoToUser();
+					Platform.exit();
+					System.exit(0);
+				}
+				
+			});
+			
 			stage.show();
 
 			

@@ -10,7 +10,6 @@ import UtilsImplementations.StackTraceUtil;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.application.Preloader;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -90,11 +89,7 @@ public abstract class AbstractApplicationScreen extends Application {
 			}
 		});
 
-		stage.setOnCloseRequest(event -> {
-			event.consume();
-			Platform.exit();
-			System.exit(0);
-		});
+	
 	}
 
 	public static void fadeTransition(Node n) {
