@@ -1228,6 +1228,51 @@ public class SQLDatabaseConnectionTest {
 	}
 	
 	@Test
+	public void testAddRemoveTwoIngredients() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String ingredientName = "glotendebug";
+		final String ingredientName2 = "glotendebug2";
+		String result = null;
+		Ingredient ingredient = null;
+		Ingredient ingredient2 = null;
+		
+		//test add ingredient
+		try {
+			String tempID = sqlConnection.addIngredient(null, ingredientName);
+			String tempID2 = sqlConnection.addIngredient(null, ingredientName2);
+			ingredient = Serialization.deserialize(tempID, Ingredient.class);
+			ingredient2 = Serialization.deserialize(tempID2, Ingredient.class);
+			
+			result = sqlConnection.getIngredientsList();
+		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		}
+		
+		assert result != null;
+		HashSet<Ingredient> set = Serialization.deserializeIngredientHashSet(result);
+		assert set != null;	
+		assert set.contains(ingredient);
+		assert set.contains(ingredient2);
+		
+		//test remove ingredient
+		try {
+			sqlConnection.removeIngredient(null, ingredient);
+			sqlConnection.removeIngredient(null, ingredient2);
+			
+			result = sqlConnection.getIngredientsList();
+		} catch (CriticalError | ClientNotConnected | IngredientNotExist | IngredientStillUsed e) {
+			fail();
+		}
+		
+		assert result != null;
+		set = Serialization.deserializeIngredientHashSet(result);
+		assert set != null;
+		assert !set.contains(ingredient);
+		assert !set.contains(ingredient2);
+	}
+	
+	@Test
 	public void testEditIngredient() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
@@ -1332,6 +1377,51 @@ public class SQLDatabaseConnectionTest {
 		set = Serialization.deserializeManufacturersHashSet(result);
 		assert set != null;
 		assert !set.contains(manufacturer);
+	}
+	
+	@Test
+	public void testAddRemoveTwoManufacturers() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String manufacturerName = "manydebug";
+		final String manufacturerName2 = "manydebug";
+		String result = null;
+		Manufacturer manufacturer = null;
+		Manufacturer manufacturer2 = null;
+		
+		//test add ingredient
+		try {
+			String tempID = sqlConnection.addManufacturer(null, manufacturerName);
+			manufacturer = Serialization.deserialize(tempID, Manufacturer.class);
+			String tempID2 = sqlConnection.addManufacturer(null, manufacturerName2);
+			manufacturer2 = Serialization.deserialize(tempID2, Manufacturer.class);
+			
+			result = sqlConnection.getManufacturersList(null);
+		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		}
+		
+		assert result != null;
+		HashSet<Manufacturer> set = Serialization.deserializeManufacturersHashSet(result);
+		assert set != null;	
+		assert set.contains(manufacturer);
+		assert set.contains(manufacturer2);
+		
+		//test remove ingredient
+		try {
+			sqlConnection.removeManufacturer(null, manufacturer);
+			sqlConnection.removeManufacturer(null, manufacturer2);
+			
+			result = sqlConnection.getManufacturersList(null);
+		} catch (CriticalError | ClientNotConnected | ManufacturerNotExist | ManufacturerStillUsed e) {
+			fail();
+		}
+		
+		assert result != null;
+		set = Serialization.deserializeManufacturersHashSet(result);
+		assert set != null;
+		assert !set.contains(manufacturer);
+		assert !set.contains(manufacturer2);
 	}
 	
 	@Test

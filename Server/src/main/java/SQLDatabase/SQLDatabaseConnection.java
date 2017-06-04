@@ -282,11 +282,12 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		PreparedStatement statement = null;
 		ResultSet result = null, maxIDResult = null;
+		int retID;
 		try {
 			statement = getParameterizedReadQuery(selectId, t.getName());
 
 			result = statement.executeQuery();
-			int retID;
+			
 
 			if (!isResultSetEmpty(result)) {
 				// return id from free_ids_table
@@ -305,7 +306,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				maxIDResult = getParameterizedReadQuery(maxIDQuery).executeQuery();
 
 				// if the table is empty - return 1
-				if (isResultSetEmpty(result))
+				if (isResultSetEmpty(maxIDResult))
 					retID = 1;
 				else {
 					maxIDResult.first();
@@ -319,7 +320,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			closeResources(statement, result, maxIDResult);
 		}
 
-		return 0;
+		return retID;
 
 	}
 
