@@ -142,7 +142,7 @@ public class SQLDatabaseConnectionTest {
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
 
 		HashSet<Ingredient> ingredients = new HashSet<Ingredient>();
-		ingredients.add(new Ingredient(1, "חלב"));
+		ingredients.add(new Ingredient(1, "חלב-לקטוז"));
 		HashSet<Location> locations = new HashSet<Location>();
 		// locations.add(new Location(1, 1, PlaceInMarket.STORE));
 		String milkImage = "";
