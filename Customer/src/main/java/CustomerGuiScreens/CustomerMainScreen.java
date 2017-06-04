@@ -4,7 +4,10 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
@@ -15,12 +18,14 @@ import com.jfoenix.controls.JFXTextField;
 
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.SmartCode;
 import CustomerContracts.ICustomer;
 import CustomerGuiHelpers.CustomerProductCellFormat;
 import CustomerGuiHelpers.TempCustomerPassingData;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
+import SMExceptions.CommonExceptions.CriticalError;
 import SMExceptions.SMException;
 import UtilsContracts.IBarcodeEventHandler;
 import UtilsContracts.IConfiramtionDialog;
@@ -139,7 +144,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	}
 
 	private void addOrRemoveScannedProduct(CatalogProduct p, Integer amount) {
-
 		updateProductInfoPaine(p, amount, ProductInfoPaneVisibleMode.SCANNED_PRODUCT);
 	}
 
@@ -318,6 +322,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		} else {
 			try {
 				catalogProduct = customer.viewCatalogProduct(scannedSmartCode);
+				checkIngredients(catalogProduct);
 			} catch (SMException e) {
 				log.fatal(e);
 				log.debug(StackTraceUtil.getStackTrace(e));
@@ -326,13 +331,25 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			}
 			amount = 0;
 		}
-
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				addOrRemoveScannedProduct(catalogProduct, amount);
 			}
 		});
+	}
+
+	private void checkIngredients(CatalogProduct catalogProduct) throws CriticalError  {
+		ArrayList<String> markedIngredients = new ArrayList<String>();
+		HashSet<Ingredient> productIngredients = catalogProduct.getIngredients();
+		for (Ingredient ingredient: customer.getAllIngredients()) {
+			if (productIngredients.contains(ingredient))
+				markedIngredients.add(ingredient.getName());
+		}
+		if (!markedIngredients.isEmpty()) {
+			String alert = "This product contins some of your marked Ingredients:\n" + markedIngredients.toString();
+			DialogMessagesService.showConfirmationDialog("Marked Ingredients Alert", null, alert, this);
+		}
 	}
 
 	@Subscribe
