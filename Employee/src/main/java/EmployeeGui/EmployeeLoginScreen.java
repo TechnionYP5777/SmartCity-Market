@@ -121,6 +121,24 @@ public class EmployeeLoginScreen implements Initializable {
 		loginButton.setDisable(userNameTextField.getText().isEmpty() || passwordField.getText().isEmpty());
 	}
 	
+
+    @FXML
+    void loginAsAdmin(ActionEvent event) {
+		IManager employee = InjectionFactory.getInstance(Manager.class);
+		CLIENT_TYPE employeeType = null;
+		try {
+			employeeType = employee.login("admin", "admin", true);
+		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
+			e.showInfoToUser();
+			return;
+		}
+		InjectionFactory.getInstance(EmployeeScreensParameterService.class).setClientType(employeeType);
+
+		AbstractApplicationScreen.setScene("/EmployeeMenuScreen/EmployeeMenuScreen.fxml");
+    }
+	
   
 
 }

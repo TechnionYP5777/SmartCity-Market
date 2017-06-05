@@ -392,4 +392,10 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	void forceScanProduct(ActionEvent __) {
 		smartcodeScanned(new SmartcodeScanEvent(new SmartCode(1234567890, LocalDate.now())));
 	}
+	
+
+	@FXML
+	void forceScanProduct2(ActionEvent __) {
+		smartcodeScanned(new SmartcodeScanEvent(new SmartCode(423324, LocalDate.now())));
+	}
 }

@@ -1,2 +1,4 @@
 *.log
 *spartan.xml
+Server/src/main/resources/SQLDatabase/SQLdatabase.properties
+Server/src/main/resources/SQLDatabase/SQLdatabase.script

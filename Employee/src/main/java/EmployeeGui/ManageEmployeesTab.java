@@ -43,9 +43,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.util.Callback;
 
@@ -171,23 +174,42 @@ public class ManageEmployeesTab implements Initializable {
 					.setPredicate(filter == null || filter.length() == 0 ? s -> true : s -> s.contains(filter));
 		});
 
-		employeesList.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
-			@Override
-			public ObservableValue<Boolean> call(String item) {
-				BooleanProperty observable = new SimpleBooleanProperty();
-				observable.set(selectedEmployees.contains(item));
+//		employeesList.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
+//			@Override
+//			public ObservableValue<Boolean> call(String item) {
+//				BooleanProperty observable = new SimpleBooleanProperty();
+//				observable.set(selectedEmployees.contains(item));
+//
+//				observable.addListener((obs, wasSelected, isNowSelected) -> {
+//					if (isNowSelected)
+//						selectedEmployees.add(item);
+//					else
+//						selectedEmployees.remove(item);
+//					enableRemoveButton();
+//
+//				});
+//				return observable;
+//			}
+//		}));
+		
+		
+		employeesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		
+		employeesList.setOnMouseClicked(new EventHandler<Event>() {
 
-				observable.addListener((obs, wasSelected, isNowSelected) -> {
-					if (isNowSelected)
-						selectedEmployees.add(item);
-					else
-						selectedEmployees.remove(item);
-					enableRemoveButton();
+            @Override
+            public void handle(Event event) {
+                ObservableList<String> selectedItems =  employeesList.getSelectionModel().getSelectedItems();
+              
+                selectedEmployees.clear();
+                selectedEmployees.addAll(selectedItems);
+                enableRemoveButton();
+            }
 
-				});
-				return observable;
-			}
-		}));
+        });
+		
+		employeesList.depthProperty().set(1);
+		employeesList.setExpanded(true);
 
 		securityCombo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 
@@ -254,7 +276,7 @@ public class ManageEmployeesTab implements Initializable {
 		DialogMessagesService.showConfirmationDialog("Remove Selected Employees", null, "Are You Sure?",
 				new removeEmployeesHandler());
 	}
-	
+
 	void removeEmployeesHandle() {
 		selectedEmployees.forEach(eml -> {
 			try {
@@ -269,7 +291,7 @@ public class ManageEmployeesTab implements Initializable {
 		createEmployeesList();
 		enableRemoveButton();
 	}
-	
+
 	class removeEmployeesHandler implements IConfiramtionDialog {
 
 		@Override
@@ -278,9 +300,9 @@ public class ManageEmployeesTab implements Initializable {
 		}
 
 		@Override
-		public void onNo() {	
+		public void onNo() {
 		}
-		
+
 	}
 
 }
