@@ -120,5 +120,7 @@ public class EmployeeLoginScreen implements Initializable {
 	private void enableLoginButtonCheck() {
 		loginButton.setDisable(userNameTextField.getText().isEmpty() || passwordField.getText().isEmpty());
 	}
+	
+  
 
 }

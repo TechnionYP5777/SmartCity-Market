@@ -50,6 +50,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -146,31 +148,30 @@ public class ManagePackagesTab implements Initializable {
 
 	@FXML
 	ImageView searchCodeButton;
-	
+
 	@FXML
-    private JFXListView<String> employeesList;
+	private JFXListView<String> employeesList;
 
-    @FXML
-    private StackPane stackPane;
+	@FXML
+	private StackPane stackPane;
 
-    @FXML
-    private VBox waitingPane;
+	@FXML
+	private VBox waitingPane;
 
-    @FXML
-    private VBox detailsPane;
+	@FXML
+	private VBox detailsPane;
 
-    @FXML
-    private Label emplyeeTitleLbl;
+	@FXML
+	private Label emplyeeTitleLbl;
 
-    @FXML
-    private Label emplyeeNameLbl;
+	@FXML
+	private Label emplyeeNameLbl;
 
-    @FXML
-    private Label employeeUser;
+	@FXML
+	private Label employeeUser;
 
-    @FXML
-    private JFXButton removeBtn;
-
+	@FXML
+	private JFXButton removeBtn;
 
 	RadioButtonEnabler radioButtonContainerSmarcodeOperations = new RadioButtonEnabler();
 
@@ -201,7 +202,6 @@ public class ManagePackagesTab implements Initializable {
 			searchCodeButton.setDisable(newValue.isEmpty());
 		});
 		editPackagesAmountSpinner.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
-		
 
 		editPackagesAmountSpinner.valueProperty().addListener((obs, oldValue, newValue) -> {
 			if (newValue == null || newValue < 1)
@@ -234,19 +234,18 @@ public class ManagePackagesTab implements Initializable {
 		};
 		datePicker.setDayCellFactory(dayCellFactory);
 		datePicker.setValue(LocalDate.now());
-		
+
 		VBox vbox = new VBox();
 		vbox.setPadding(new Insets(10, 50, 50, 50));
 		vbox.setSpacing(10);
-		
+
 		datePickerForSmartCode = new JFXDatePicker();
 		Label lbl = new Label("Choose Date");
 		vbox.getChildren().addAll(lbl, datePickerForSmartCode);
-		
+
 		JFXPopup popup = new JFXPopup(vbox);
-		showDatePickerBtn.setOnMouseClicked(e -> popup.show(showDatePickerBtn, PopupVPosition.TOP, PopupHPosition.LEFT));
-		
-	
+		showDatePickerBtn
+				.setOnMouseClicked(e -> popup.show(showDatePickerBtn, PopupVPosition.TOP, PopupHPosition.LEFT));
 
 		radioButtonContainerSmarcodeOperations.addRadioButtons(
 				Arrays.asList(new RadioButton[] { printSmartCodeRadioButton, addPackageToStoreRadioButton,
@@ -515,6 +514,15 @@ public class ManagePackagesTab implements Initializable {
 				searchCodeButtonPressed(null);
 			}
 		});
+
+	}
+
+	@FXML
+	void enterSearchPressed(KeyEvent event) {
+		 if (event.getCode().equals(KeyCode.ENTER))
+         {
+			 searchCodeButtonPressed(null);
+         }
 
 	}
 }

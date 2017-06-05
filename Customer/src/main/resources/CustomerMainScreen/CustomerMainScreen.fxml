@@ -262,7 +262,7 @@
                         <Image url="@checkout.png" />
                      </image>
                   </ImageView>
-                  <JFXButton onAction="#forceScanProduct" styleClass="JFXButton" text="scan" />
+                  <JFXButton disable="true" onAction="#forceScanProduct" styleClass="JFXButton" text="scan" visible="false" />
                </children>
                <padding>
                   <Insets bottom="20.0" right="1.0" top="20.0" />

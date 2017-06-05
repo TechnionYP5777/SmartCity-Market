@@ -30,7 +30,7 @@
       			<children>
                   <HBox alignment="TOP_CENTER" spacing="20.0">
                      <children>
-                        <JFXTextField fx:id="barcodeTextField" onAction="#searchCodeButtonPressed" prefHeight="24.0" prefWidth="196.0" promptText="Type Or Scan Product Code..." styleClass="JFXTextField" />
+                        <JFXTextField fx:id="barcodeTextField" onAction="#searchCodeButtonPressed" onKeyPressed="#enterSearchPressed" prefHeight="24.0" prefWidth="196.0" promptText="Type Or Scan Product Code..." styleClass="JFXTextField" />
                         <ImageView fx:id="searchCodeButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#searchCodeButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                            <image>
                               <Image url="@search.png" />
