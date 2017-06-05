@@ -347,8 +347,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 				markedIngredients.add(ingredient.getName());
 		}
 		if (!markedIngredients.isEmpty()) {
-			String alert = "This product contins some of your marked Ingredients:\n" + markedIngredients.toString();
-			DialogMessagesService.showConfirmationDialog("Marked Ingredients Alert", null, alert, this);
+			String alert = "This product contains some of your marked Ingredients:\n" + markedIngredients.toString();
+			DialogMessagesService.showInfoDialog("Marked Ingredients Alert", null, alert);
 		}
 	}
 
