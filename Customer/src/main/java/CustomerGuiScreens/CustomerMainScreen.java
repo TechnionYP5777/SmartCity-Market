@@ -322,7 +322,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		} else {
 			try {
 				catalogProduct = customer.viewCatalogProduct(scannedSmartCode);
-				checkIngredients(catalogProduct);
+				//checkIngredients(catalogProduct);
 			} catch (SMException e) {
 				log.fatal(e);
 				log.debug(StackTraceUtil.getStackTrace(e));
