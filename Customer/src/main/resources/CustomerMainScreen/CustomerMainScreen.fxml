@@ -249,7 +249,7 @@
                   </GridPane>
                </children>
             </VBox>
-            <HBox alignment="BOTTOM_CENTER" prefHeight="157.0" prefWidth="483.0" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <HBox alignment="BOTTOM_CENTER" prefHeight="157.0" prefWidth="483.0" spacing="40.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <JFXTextField fx:id="searchField" promptText="Search Product" styleClass="JFXTextField" />
                   <ImageView fitHeight="60.0" fitWidth="60.0" onMouseClicked="#cancelButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">

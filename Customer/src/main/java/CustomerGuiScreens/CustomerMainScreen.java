@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
@@ -172,8 +171,13 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	}
 
 	private void enableRemoveButton() {
-		boolean flag = !customer.getCartProductCache().isEmpty() && customer.getCartProductCache().get(scannedSmartCode.getBarcode())
-				.getPackages().containsKey(scannedSmartCode);
+		boolean flag = false;
+		if (!customer.getCartProductCache().isEmpty()) {
+			if (customer.getCartProductCache().get(scannedSmartCode.getBarcode()) != null) {
+				flag = customer.getCartProductCache().get(scannedSmartCode.getBarcode())
+					.getPackages().containsKey(scannedSmartCode);
+			}
+		}
 		removeButton.setDisable(!flag);
 		removeButton.setVisible(flag);
 
