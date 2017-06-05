@@ -1,4 +1,4 @@
-.root {
+.background {
    -fx-background-image: url("background1.jpg");
    -fx-background-position: center;
    -fx-background-repeat: no-repeat;
@@ -7,6 +7,14 @@
    
 }
 
+
+.loginBackground {
+   -fx-background-position: center;
+   -fx-background-repeat: no-repeat;
+   -fx-background-size: cover;
+   -fx-background-color: blue;
+   
+}
 
 #backButton {
 	-fx-background-image: url("home.png");
