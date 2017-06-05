@@ -12,7 +12,9 @@ import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IWorker;
 import EmployeeImplementations.Manager;
 import GuiUtils.AbstractApplicationScreen;
+import GuiUtils.DialogMessagesService;
 import SMExceptions.SMException;
+import UtilsContracts.IConfiramtionDialog;
 import UtilsImplementations.InjectionFactory;
 import UtilsImplementations.StackTraceUtil;
 import javafx.beans.value.ChangeListener;
@@ -36,8 +38,8 @@ import javafx.stage.Stage;
  * @author Shimon Azulay
  * @since 2016-12-27
  */
-// 
-public class EmployeeMenuScreen  implements Initializable {
+//
+public class EmployeeMenuScreen implements Initializable {
 
 	protected static Logger log = Logger.getLogger(EmployeeMenuScreen.class.getName());
 
@@ -121,6 +123,10 @@ public class EmployeeMenuScreen  implements Initializable {
 
 	@FXML
 	private void logoutButtonPressed(MouseEvent __) {
+		DialogMessagesService.showConfirmationDialog("Logout", null, "Are You Sure?", new LogoutHandler());
+	}
+
+	void logoutHandle() {
 		try {
 			if (worker.isLoggedIn())
 				worker.logout();
@@ -130,5 +136,18 @@ public class EmployeeMenuScreen  implements Initializable {
 			e.showInfoToUser();
 		}
 		AbstractApplicationScreen.setScene("/EmployeeLoginScreen/EmployeeLoginScreen.fxml");
+	}
+
+	class LogoutHandler implements IConfiramtionDialog {
+
+		@Override
+		public void onYes() {
+			logoutHandle();
+		}
+
+		@Override
+		public void onNo() {
+		}
+
 	}
 }

@@ -52,8 +52,8 @@
                   <Separator />
                   <GridPane fx:id="productInfoPane">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="35.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="65.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="45.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="55.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints vgrow="SOMETIMES" />
@@ -80,7 +80,7 @@
                               <Insets left="5.0" />
                            </HBox.margin>
                            <children>
-                              <Label styleClass="thisLabels" text="Amount:" />
+                              <Label styleClass="thisLabels" text="Amount In Grocery List:" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -91,7 +91,7 @@
                               <Insets left="5.0" />
                            </HBox.margin>
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" styleClass="thisLabels" text="Price:" />
+                              <Label alignment="CENTER" contentDisplay="CENTER" styleClass="thisLabels" text="Price (Nis):" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -168,7 +168,7 @@
                                     </ImageView>
                                  </children>
                               </HBox>
-                              <Button fx:id="removeAllButton" mnemonicParsing="false" onAction="#removeAllButtonPressed" styleClass="JFXButton" text="Remove all items!" />
+                              <Button fx:id="removeAllButton" mnemonicParsing="false" onAction="#removeAllButtonPressed" styleClass="JFXButton" text="Remove products from the list" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -205,8 +205,8 @@
                <children>
                   <GridPane>
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="60.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="35.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="65.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints vgrow="SOMETIMES" />
@@ -223,7 +223,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
                            <children>
-                              <Label styleClass="thisLabels" text="Total:" />
+                              <Label styleClass="thisLabels" text="Total Price (Nis):" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -262,7 +262,7 @@
                         <Image url="@checkout.png" />
                      </image>
                   </ImageView>
-                  <JFXButton disable="true" onAction="#forceScanProduct" styleClass="JFXButton" text="scan" visible="false" />
+                  <JFXButton onAction="#forceScanProduct" styleClass="JFXButton" text="scan" />
                </children>
                <padding>
                   <Insets bottom="20.0" right="1.0" top="20.0" />

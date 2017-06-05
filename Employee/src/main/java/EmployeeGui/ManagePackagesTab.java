@@ -253,6 +253,7 @@ public class ManagePackagesTab implements Initializable {
 
 		radioButtonContainerBarcodeOperations
 				.addRadioButtons(Arrays.asList(new RadioButton[] { addPakageToWarhouseRadioButton }));
+
 		resetParams();
 		showScanCodePane(true);
 
@@ -335,6 +336,13 @@ public class ManagePackagesTab implements Initializable {
 		smartcodeOperationsPane.setVisible(show);
 		barcodeOperationsPane.setVisible(!show);
 		(!show ? barcodeOperationsPane : smartcodeOperationsPane).toFront();
+
+		if (show) {
+			runTheOprBtnTxt((JFXRadioButton) radioButtonContainerSmarcodeOperations.getSelected());
+		} else {
+			runTheOprBtnTxt((JFXRadioButton) radioButtonContainerBarcodeOperations.getSelected());
+		}
+
 	}
 
 	private void getProductCatalog(String barcode) throws SMException {
@@ -403,12 +411,14 @@ public class ManagePackagesTab implements Initializable {
 	private void radioButtonHandling(ActionEvent ¢) {
 		radioButtonContainerSmarcodeOperations.selectRadioButton((RadioButton) ¢.getSource());
 		enableRunTheOperationButton();
+		runTheOprBtnTxt((JFXRadioButton) ¢.getSource());
 	}
 
 	@FXML
 	private void radioButtonHandlingBarcode(ActionEvent ¢) {
 		radioButtonContainerBarcodeOperations.selectRadioButton((RadioButton) ¢.getSource());
 		enableRunTheOperationButton();
+		runTheOprBtnTxt((JFXRadioButton) ¢.getSource());
 	}
 
 	@FXML
@@ -482,8 +492,8 @@ public class ManagePackagesTab implements Initializable {
 			DialogMessagesService.showInfoDialog(catalogProduct.getName(),
 					"Description: " + catalogProduct.getDescription(),
 					"Barcode: " + catalogProduct.getBarcode() + "\n" + "Manufacturer: "
-							+ catalogProduct.getManufacturer().getName() + "\n" + "Price: "
-							+ catalogProduct.getPrice());
+							+ catalogProduct.getManufacturer().getName() + "\n" + "Price: " + catalogProduct.getPrice()
+							+ " Nis");
 
 	}
 
@@ -519,10 +529,13 @@ public class ManagePackagesTab implements Initializable {
 
 	@FXML
 	void enterSearchPressed(KeyEvent event) {
-		 if (event.getCode().equals(KeyCode.ENTER))
-         {
-			 searchCodeButtonPressed(null);
-         }
+		if (event.getCode().equals(KeyCode.ENTER)) {
+			searchCodeButtonPressed(null);
+		}
 
+	}
+
+	private void runTheOprBtnTxt(JFXRadioButton btn) {
+		runTheOperationButton.setText(btn.getText());
 	}
 }

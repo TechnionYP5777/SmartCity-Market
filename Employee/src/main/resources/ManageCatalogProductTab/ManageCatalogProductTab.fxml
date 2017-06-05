@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -15,7 +15,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.CheckComboBox?>
-
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductTab">
    <children>
@@ -93,7 +92,7 @@
       						</HBox>
       						<HBox GridPane.rowIndex="3">
       							<children>
-      								<Label text="Product Price:" />
+      								<Label text="Product Price (Nis):" />
       							</children>
       							<padding>
       								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -153,7 +152,7 @@
       		</StackPane>
       		<HBox alignment="CENTER_LEFT">
       			<children>
-      				<Button fx:id="runTheOperationButton" mnemonicParsing="false" onAction="#runTheOperationButtonPressed" styleClass="JFXButton" text="Run The Operation" />
+                  <JFXButton fx:id="runTheOperationButton" onAction="#runTheOperationButtonPressed" styleClass="JFXButton" />
       			</children>
       		</HBox>
       	</children>

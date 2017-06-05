@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.controlsfx.control.CheckComboBox;
 
 import com.google.common.eventbus.Subscribe;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
@@ -28,10 +29,12 @@ import SMExceptions.CommonExceptions.CriticalError;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeImplementations.Manager;
+import GuiUtils.DialogMessagesService;
 import GuiUtils.RadioButtonEnabler;
 import SMExceptions.SMException;
 import UtilsContracts.BarcodeScanEvent;
 import UtilsContracts.IBarcodeEventHandler;
+import UtilsContracts.IConfiramtionDialog;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
 import UtilsImplementations.StackTraceUtil;
@@ -43,7 +46,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
@@ -57,7 +59,7 @@ import javafx.scene.layout.VBox;
  * @since 2017-01-04
  */
 public class ManageCatalogProductTab implements Initializable {
-	
+
 	static Logger log = Logger.getLogger(ManageCatalogProductTab.class.getName());
 
 	@FXML
@@ -98,13 +100,17 @@ public class ManageCatalogProductTab implements Initializable {
 	private HashMap<String, Ingredient> ingredients;
 
 	@FXML
-	private Button runTheOperationButton;
+	private JFXButton runTheOperationButton;
 
 	IManager manager = InjectionFactory.getInstance(Manager.class);
 
 	IBarcodeEventHandler barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
 
 	RadioButtonEnabler radioButtonContainerManageCatalogProduct = new RadioButtonEnabler();
+
+	private String addProductTxt = "Add Product";
+
+	private String removeProductTxt = "Remove Product";
 
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
@@ -115,11 +121,15 @@ public class ManageCatalogProductTab implements Initializable {
 			enableRunOperation();
 		});
 		productNameTextField.textProperty().addListener((observable, oldValue, newValue) -> enableRunOperation());
-		productDescriptionTextField.textProperty().addListener((observable, oldValue, newValue) -> enableRunOperation());
+		productDescriptionTextField.textProperty()
+				.addListener((observable, oldValue, newValue) -> enableRunOperation());
 
 		createManufacturerMap();
-		productManufacturerCombo.getItems().addAll( manufacturars.keySet() /*
-				"תנובה", "מאפיות ברמן", "עלית", "אסם", "בייגל-בייגל"*/);
+		productManufacturerCombo.getItems()
+				.addAll(manufacturars.keySet() /*
+												 * "תנובה", "מאפיות ברמן",
+												 * "עלית", "אסם", "בייגל-בייגל"
+												 */);
 
 		productManufacturerCombo.valueProperty().addListener(new ChangeListener<String>() {
 			@Override
@@ -135,8 +145,11 @@ public class ManageCatalogProductTab implements Initializable {
 		});
 
 		createIngredientMap();
-		ingridientsCombo.getItems().addAll(ingredients.keySet()/* "תנובה", "מאפיות ברמן", "עלית", "אסם",
-				"בייגל-בייגל"*/);
+		ingridientsCombo.getItems()
+				.addAll(ingredients.keySet()/*
+											 * "תנובה", "מאפיות ברמן", "עלית",
+											 * "אסם", "בייגל-בייגל"
+											 */);
 
 		// productLocationTextField.textProperty().addListener((observable,
 		// oldValue, newValue) -> {
@@ -148,38 +161,42 @@ public class ManageCatalogProductTab implements Initializable {
 		validator.setMessage("Input Required");
 		validator.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
 				.styleClass("error").build());
-		
+
 		barcodeTextField.getValidators().add(validator);
 		barcodeTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
 			if (!newVal)
 				barcodeTextField.validate();
 		});
-		
+
 		RequiredFieldValidator validator2 = new RequiredFieldValidator();
 		validator2.setMessage("Input Required");
 		validator2.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
 				.styleClass("error").build());
-		
+
 		productNameTextField.getValidators().add(validator2);
 		productNameTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
 			if (!newVal)
 				productNameTextField.validate();
 		});
-		
+
 		RequiredFieldValidator validator3 = new RequiredFieldValidator();
 		validator3.setMessage("Input Required");
 		validator3.setIcon(GlyphsBuilder.create(FontAwesomeIconView.class).glyph(FontAwesomeIcon.WARNING).size("1em")
 				.styleClass("error").build());
-		
+
 		productPriceTextField.getValidators().add(validator3);
 		productPriceTextField.focusedProperty().addListener((o, oldVal, newVal) -> {
 			if (!newVal)
 				productPriceTextField.validate();
 		});
-		
-		
+
+		changeRunOprBtnTxt();
 
 		enableRunOperation();
+	}
+
+	private void changeRunOprBtnTxt() {
+		runTheOperationButton.setText(addCatalogProductRadioButton.isSelected() ? addProductTxt : removeProductTxt);
 	}
 
 	private void enableRunOperation() {
@@ -193,7 +210,8 @@ public class ManageCatalogProductTab implements Initializable {
 		manufacturars = new HashMap<String, Manufacturer>();
 
 		try {
-			manager.getAllManufacturers().forEach(manufacturer -> manufacturars.put(manufacturer.getName(), manufacturer));
+			manager.getAllManufacturers()
+					.forEach(manufacturer -> manufacturars.put(manufacturer.getName(), manufacturer));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.getStackTrace(e));
@@ -218,6 +236,7 @@ public class ManageCatalogProductTab implements Initializable {
 		radioButtonContainerManageCatalogProduct.selectRadioButton(addCatalogProductRadioButton);
 		addCatalogProductParamPane.setVisible(true);
 		enableRunOperation();
+		changeRunOprBtnTxt();
 
 	}
 
@@ -226,6 +245,7 @@ public class ManageCatalogProductTab implements Initializable {
 		radioButtonContainerManageCatalogProduct.selectRadioButton(removeCatalogProductRadioButton);
 		addCatalogProductParamPane.setVisible(false);
 		enableRunOperation();
+		changeRunOprBtnTxt();
 	}
 
 	@FXML
@@ -233,22 +253,65 @@ public class ManageCatalogProductTab implements Initializable {
 
 		try {
 			if (addCatalogProductRadioButton.isSelected()) {
-				manager.addProductToCatalog(new CatalogProduct(Long.parseLong(barcodeTextField.getText()), productNameTextField.getText(),
-						new HashSet<Ingredient>(), getManufacturer(),
+				manager.addProductToCatalog(new CatalogProduct(Long.parseLong(barcodeTextField.getText()),
+						productNameTextField.getText(), new HashSet<Ingredient>(), getManufacturer(),
 						productDescriptionTextField.getText().isEmpty() ? "N/A" : productDescriptionTextField.getText(),
 						Double.parseDouble(productPriceTextField.getText()), "", new HashSet<Location>()));
 
 				printToSuccessLog("Added new product '" + productNameTextField.getText() + "' to catalog");
-			} else if (removeCatalogProductRadioButton.isSelected()) {
-				manager.removeProductFromCatalog(new SmartCode(Long.parseLong(barcodeTextField.getText()), null));
 
-				printToSuccessLog("Remove product '" + productNameTextField.getText() + "' from catalog");
+				cleanFields();
+
+			} else if (removeCatalogProductRadioButton.isSelected()) {
+
+				DialogMessagesService.showConfirmationDialog("Remove Catalog Product", null, "Are You Sure?",
+						new removeProductHandler());
 			}
+
 		} catch (SMException e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 		}
+	}
+
+	void removeProductHandle() {
+		try {
+
+			manager.removeProductFromCatalog(new SmartCode(Long.parseLong(barcodeTextField.getText()), null));
+
+			printToSuccessLog("Remove product '" + productNameTextField.getText() + "' from catalog");
+
+			cleanFields();
+
+		} catch (SMException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
+			e.showInfoToUser();
+		}
+	}
+
+	class removeProductHandler implements IConfiramtionDialog {
+
+		@Override
+		public void onYes() {
+			removeProductHandle();
+		}
+
+		@Override
+		public void onNo() {
+		}
+
+	}
+
+	private void cleanFields() {
+		barcodeTextField.setText("");
+		productDescriptionTextField.setText("");
+		productNameTextField.setText("");
+		productPriceTextField.setText("");
+		productManufacturerCombo.getSelectionModel().clearSelection();
+		// TODO
+		// Clear the ingredients
 	}
 
 	private Manufacturer getManufacturer() {

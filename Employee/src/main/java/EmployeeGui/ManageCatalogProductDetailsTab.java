@@ -19,6 +19,7 @@ import BasicCommonClasses.Manufacturer;
 import EmployeeContracts.IManager;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import SMExceptions.CommonExceptions.CriticalError;
+import UtilsContracts.IConfiramtionDialog;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.IngredientStillInUse;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
@@ -26,6 +27,7 @@ import EmployeeDefs.AEmployeeException.ManfacturerStillInUse;
 import EmployeeDefs.AEmployeeException.ParamIDAlreadyExists;
 import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
 import EmployeeImplementations.Manager;
+import GuiUtils.DialogMessagesService;
 import UtilsImplementations.InjectionFactory;
 import UtilsImplementations.StackTraceUtil;
 import javafx.beans.property.BooleanProperty;
@@ -39,8 +41,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
@@ -115,6 +119,14 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 	JFXButton okNewIngr;
 
+	JFXButton closeNewManu;
+
+	JFXButton closeNewIngr;
+
+	JFXButton closeRenameManu;
+
+	JFXButton closeRenameIngr;
+
 	JFXTextField renameManuLbl;
 
 	JFXTextField renameIngrLbl;
@@ -122,6 +134,14 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	JFXButton okRenameIngr;
 
 	JFXButton okRenameManu;
+
+	JFXPopup popupNewManu;
+
+	JFXPopup popupNewIngr;
+
+	JFXPopup popupRenameManu;
+
+	JFXPopup popupRenameIngr;
 
 	void renameIngrPressed() {
 		long id = ingredients.get(selectedIngr.iterator().next()).getId();
@@ -184,6 +204,11 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 	@FXML
 	void removeIngrPressed(ActionEvent __) {
+		DialogMessagesService.showConfirmationDialog("Remove Ingredients", null, "Are You Sure?",
+				new removeIngrHandler());
+	}
+
+	private void removeIngrHandle() {
 		selectedIngr.forEach(ing -> {
 			try {
 				manager.removeIngredient(ingredients.get(ing), false);
@@ -202,6 +227,11 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 	@FXML
 	void removeManuPress(ActionEvent __) {
+		DialogMessagesService.showConfirmationDialog("Remove Manufacturers", null, "Are You Sure?",
+				new removeManuHandler());
+	}
+
+	private void removeManuHandle() {
 		selectedManu.forEach(man -> {
 			try {
 				manager.removeManufacturer(manufacturars.get(man));
@@ -272,80 +302,153 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		Label lbl1 = new Label("Insert New Manufacturar");
 		newManu = new JFXTextField();
 		okNewManu = new JFXButton("Done!");
+		closeNewManu = new JFXButton("Close");
+		okNewManu.getStyleClass().add("JFXButton");
+		closeNewManu.getStyleClass().add("JFXButton");
 		okNewManu.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent __) {
 				addManuPressed();
+				popupNewManu.hide();
 			}
 		});
 
+		closeNewManu.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent __) {
+				popupNewManu.hide();
+			}
+		});
+		HBox manubtnContanier = new HBox();
+		manubtnContanier.getChildren().addAll(okNewManu, closeNewManu);
+		manubtnContanier.setSpacing(10);
+		manubtnContanier.setAlignment(Pos.CENTER);
 		VBox manuContainer = new VBox();
-		manuContainer.getChildren().addAll(lbl1, newManu, okNewManu);
+		manuContainer.getChildren().addAll(lbl1, newManu, manubtnContanier);
 		manuContainer.setPadding(new Insets(10, 50, 50, 50));
 		manuContainer.setSpacing(10);
 
-		JFXPopup popup1 = new JFXPopup(manuContainer);
-		addManuBtn.setOnMouseClicked(e -> popup1.show(addManuBtn, PopupVPosition.TOP, PopupHPosition.LEFT));
+		popupNewManu = new JFXPopup(manuContainer);
+		addManuBtn.setOnMouseClicked(e -> {
+			newManu.setText("");
+			popupNewManu.show(addManuBtn, PopupVPosition.TOP, PopupHPosition.LEFT);
+		});
 
 		newManu.textProperty().addListener((observable, oldValue, newValue) -> enableAddButtons());
 
 		Label lbl2 = new Label("Insert New Ingredient");
 		newIngr = new JFXTextField();
 		okNewIngr = new JFXButton("Done!");
+		closeNewIngr = new JFXButton("Close");
+		closeNewIngr.getStyleClass().add("JFXButton");
+		okNewIngr.getStyleClass().add("JFXButton");
 		okNewIngr.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent __) {
 				addIngPressed();
+				popupNewIngr.hide();
 			}
 		});
 
+		closeNewIngr.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent __) {
+				popupNewIngr.hide();
+			}
+		});
+
+		HBox ingrbtnContanier = new HBox();
+		ingrbtnContanier.getChildren().addAll(okNewIngr, closeNewIngr);
+		ingrbtnContanier.setSpacing(10);
+		ingrbtnContanier.setAlignment(Pos.CENTER);
 		VBox ingrContainer = new VBox();
-		ingrContainer.getChildren().addAll(lbl2, newIngr, okNewIngr);
+		ingrContainer.getChildren().addAll(lbl2, newIngr, ingrbtnContanier);
 		ingrContainer.setPadding(new Insets(10, 50, 50, 50));
 		ingrContainer.setSpacing(10);
 
-		JFXPopup popup2 = new JFXPopup(ingrContainer);
-		addIngrBtn.setOnMouseClicked(e -> popup2.show(addIngrBtn, PopupVPosition.TOP, PopupHPosition.LEFT));
+		popupNewIngr = new JFXPopup(ingrContainer);
+		addIngrBtn.setOnMouseClicked(e -> {
+			newIngr.setText("");
+			popupNewIngr.show(addIngrBtn, PopupVPosition.TOP, PopupHPosition.LEFT);
+		});
 
 		newIngr.textProperty().addListener((observable, oldValue, newValue) -> enableAddButtons());
 
 		Label lbl3 = new Label("Rename Selected Manufacturar");
 		renameManuLbl = new JFXTextField();
 		okRenameManu = new JFXButton("Done!");
+		closeRenameManu = new JFXButton("Close");
+		closeRenameManu.getStyleClass().add("JFXButton");
+		okRenameManu.getStyleClass().add("JFXButton");
 		okRenameManu.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent __) {
 				renameManuPressed();
+				popupRenameManu.hide();
 			}
 		});
 
+		closeRenameManu.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent __) {
+				popupRenameManu.hide();
+			}
+		});
+
+		HBox manuRenamebtnContanier = new HBox();
+		manuRenamebtnContanier.getChildren().addAll(okRenameManu, closeRenameManu);
+		manuRenamebtnContanier.setSpacing(10);
+		manuRenamebtnContanier.setAlignment(Pos.CENTER);
+
 		VBox renameManuContainer = new VBox();
-		renameManuContainer.getChildren().addAll(lbl3, renameManuLbl, okRenameManu);
+		renameManuContainer.getChildren().addAll(lbl3, renameManuLbl, manuRenamebtnContanier);
 		renameManuContainer.setPadding(new Insets(10, 50, 50, 50));
 		renameManuContainer.setSpacing(10);
 
-		JFXPopup popup3 = new JFXPopup(renameManuContainer);
-		renameManu.setOnMouseClicked(e -> popup3.show(renameManu, PopupVPosition.TOP, PopupHPosition.LEFT));
+		popupRenameManu = new JFXPopup(renameManuContainer);
+		renameManu.setOnMouseClicked(e -> {
+			renameManuLbl.setText("");
+			popupRenameManu.show(renameManu, PopupVPosition.TOP, PopupHPosition.LEFT);
+		});
 
 		renameManuLbl.textProperty().addListener((observable, oldValue, newValue) -> enableAddButtons());
 
 		Label lbl4 = new Label("Rename Selected Ingredient");
 		renameIngrLbl = new JFXTextField();
 		okRenameIngr = new JFXButton("Done!");
+		closeRenameIngr = new JFXButton("Close");
+		closeRenameIngr.getStyleClass().add("JFXButton");
+		okRenameIngr.getStyleClass().add("JFXButton");
 		okRenameIngr.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent __) {
 				renameIngrPressed();
+				popupRenameIngr.hide();
 			}
 		});
 
+		closeRenameIngr.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent __) {
+				popupRenameIngr.hide();
+			}
+		});
+
+		HBox ingrRenamebtnContanier = new HBox();
+		ingrRenamebtnContanier.getChildren().addAll(okRenameIngr, closeRenameIngr);
+		ingrRenamebtnContanier.setSpacing(10);
+		ingrRenamebtnContanier.setAlignment(Pos.CENTER);
+
 		VBox renameIngrContainer = new VBox();
-		renameIngrContainer.getChildren().addAll(lbl4, renameIngrLbl, okRenameIngr);
+		renameIngrContainer.getChildren().addAll(lbl4, renameIngrLbl, ingrRenamebtnContanier);
 		renameIngrContainer.setPadding(new Insets(10, 50, 50, 50));
 		renameIngrContainer.setSpacing(10);
 
-		JFXPopup popup4 = new JFXPopup(renameIngrContainer);
-		renameIngr.setOnMouseClicked(e -> popup4.show(renameIngr, PopupVPosition.TOP, PopupHPosition.LEFT));
+		popupRenameIngr = new JFXPopup(renameIngrContainer);
+		renameIngr.setOnMouseClicked(e -> {
+			renameIngrLbl.setText("");
+			popupRenameIngr.show(renameIngr, PopupVPosition.TOP, PopupHPosition.LEFT);
+		});
 
 		renameIngrLbl.textProperty().addListener((observable, oldValue, newValue) -> enableAddButtons());
 
@@ -416,6 +519,32 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		removeIngrBtn.setDisable(selectedIngr.isEmpty());
 		renameManu.setDisable(selectedManu.isEmpty() || selectedManu.size() > 1);
 		renameIngr.setDisable(selectedIngr.isEmpty() || selectedIngr.size() > 1);
+
+	}
+
+	class removeManuHandler implements IConfiramtionDialog {
+
+		@Override
+		public void onYes() {
+			removeManuHandle();
+		}
+
+		@Override
+		public void onNo() {
+		}
+
+	}
+
+	class removeIngrHandler implements IConfiramtionDialog {
+
+		@Override
+		public void onYes() {
+			removeIngrHandle();
+		}
+
+		@Override
+		public void onNo() {
+		}
 
 	}
 

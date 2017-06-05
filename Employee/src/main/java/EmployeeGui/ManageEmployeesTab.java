@@ -21,11 +21,13 @@ import BasicCommonClasses.Login;
 import EmployeeContracts.IManager;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import SMExceptions.CommonExceptions.CriticalError;
+import UtilsContracts.IConfiramtionDialog;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.WorkerAlreadyExists;
 import EmployeeDefs.AEmployeeException.WorkerDoesNotExist;
 import EmployeeImplementations.Manager;
+import GuiUtils.DialogMessagesService;
 import GuiUtils.RadioButtonEnabler;
 import GuiUtils.SecurityQuestions;
 import UtilsImplementations.InjectionFactory;
@@ -249,6 +251,11 @@ public class ManageEmployeesTab implements Initializable {
 
 	@FXML
 	void removeBtnPressed(ActionEvent __) {
+		DialogMessagesService.showConfirmationDialog("Remove Selected Employees", null, "Are You Sure?",
+				new removeEmployeesHandler());
+	}
+	
+	void removeEmployeesHandle() {
 		selectedEmployees.forEach(eml -> {
 			try {
 				manager.removeWorker(eml);
@@ -261,6 +268,19 @@ public class ManageEmployeesTab implements Initializable {
 		});
 		createEmployeesList();
 		enableRemoveButton();
+	}
+	
+	class removeEmployeesHandler implements IConfiramtionDialog {
+
+		@Override
+		public void onYes() {
+			removeEmployeesHandle();
+		}
+
+		@Override
+		public void onNo() {	
+		}
+		
 	}
 
 }

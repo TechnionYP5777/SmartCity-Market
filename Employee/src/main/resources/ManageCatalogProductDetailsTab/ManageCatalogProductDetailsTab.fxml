@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.ManageCatalogProductDetailsTab">
    <children>
       <HBox spacing="100.0">
@@ -23,10 +22,10 @@
                         <JFXListView fx:id="manufacturerList" minHeight="500.0" minWidth="250.0" />
                         <VBox spacing="10.0">
                            <children>
-                              <JFXButton fx:id="addManuBtn" prefWidth="170.0" styleClass="JFXButton" text="Add Manufacturer" />
-                              <JFXButton fx:id="removeManuBtn" onAction="#removeManuPress" prefWidth="170.0" styleClass="JFXButton" text="Remove Manufacturer" />
+                              <JFXButton fx:id="addManuBtn" prefWidth="175.0" styleClass="JFXButton" text="Add Manufacturer" />
+                              <JFXButton fx:id="removeManuBtn" onAction="#removeManuPress" prefWidth="175.0" styleClass="JFXButton" text="Remove Manufacturers" />
                               <JFXTextField fx:id="filterManu" promptText="Search Manufacturer" styleClass="JFXTextField" />
-                              <JFXButton fx:id="renameManu" prefWidth="170.0" styleClass="JFXButton" text="Rename" />
+                              <JFXButton fx:id="renameManu" prefWidth="175.0" styleClass="JFXButton" text="Rename" />
                            </children>
                         </VBox>
                      </children>
@@ -41,10 +40,53 @@
                         <JFXListView fx:id="ingredientsList" minHeight="500.0" minWidth="250.0" />
                         <VBox spacing="10.0">
                            <children>
-                              <JFXButton fx:id="addIngrBtn" prefWidth="170.0" styleClass="JFXButton" text="Add Ingredient" />
-                              <JFXButton fx:id="removeIngrBtn" onAction="#removeIngrPressed" prefWidth="170.0" styleClass="JFXButton" text="Remove Ingredient" />
+                              <JFXButton fx:id="addIngrBtn" prefWidth="175.0" styleClass="JFXButton" text="Add Ingredient" />
+                              <JFXButton fx:id="removeIngrBtn" onAction="#removeIngrPressed" prefWidth="175.0" styleClass="JFXButton" text="Remove Ingredients" />
                               <JFXTextField fx:id="filterIngr" promptText="Search Ingredient" styleClass="JFXTextField" />
-                              <JFXButton fx:id="renameIngr" prefWidth="170.0" styleClass="JFXButton" text="Rename" />
+                              <JFXButton fx:id="renameIngr" prefWidth="175.0" styleClass="JFXButton" text="Rename" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </padding>
+      </HBox>
+      <HBox layoutX="10.0" layoutY="10.0" spacing="100.0">
+         <children>
+            <VBox spacing="10.0">
+               <children>
+                  <Label styleClass="headers" text="Manage Manufacturers" />
+                  <HBox spacing="10.0">
+                     <children>
+                        <JFXListView fx:id="manufacturerList1" minHeight="500.0" minWidth="250.0" />
+                        <VBox spacing="10.0">
+                           <children>
+                              <JFXButton fx:id="addManuBtn1" prefWidth="175.0" styleClass="JFXButton" text="Add Manufacturer" />
+                              <JFXButton fx:id="removeManuBtn1" onAction="#removeManuPress" prefWidth="175.0" styleClass="JFXButton" text="Remove Manufacturers" />
+                              <JFXTextField fx:id="filterManu1" promptText="Search Manufacturer" styleClass="JFXTextField" />
+                              <JFXButton fx:id="renameManu1" prefWidth="175.0" styleClass="JFXButton" text="Rename" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox spacing="10.0">
+               <children>
+                  <Label styleClass="headers" text="Manage Ingredients" />
+                  <HBox spacing="10.0">
+                     <children>
+                        <JFXListView fx:id="ingredientsList1" minHeight="500.0" minWidth="250.0" />
+                        <VBox spacing="10.0">
+                           <children>
+                              <JFXButton fx:id="addIngrBtn1" prefWidth="175.0" styleClass="JFXButton" text="Add Ingredient" />
+                              <JFXButton fx:id="removeIngrBtn1" onAction="#removeIngrPressed" prefWidth="175.0" styleClass="JFXButton" text="Remove Ingredients" />
+                              <JFXTextField fx:id="filterIngr1" promptText="Search Ingredient" styleClass="JFXTextField" />
+                              <JFXButton fx:id="renameIngr1" prefWidth="175.0" styleClass="JFXButton" text="Rename" />
                            </children>
                         </VBox>
                      </children>
