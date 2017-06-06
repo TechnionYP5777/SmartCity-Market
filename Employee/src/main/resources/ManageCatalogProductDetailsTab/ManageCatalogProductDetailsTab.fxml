@@ -19,7 +19,7 @@
                   <Label styleClass="headers" text="Manage Manufacturers" />
                   <HBox spacing="10.0">
                      <children>
-                        <JFXListView fx:id="manufacturerList" minHeight="500.0" minWidth="250.0" />
+                        <JFXListView fx:id="manufacturerList" minHeight="500.0" minWidth="250.0" style="-fx-background-color: transparent;" verticalGap="10.0" />
                         <VBox spacing="10.0">
                            <children>
                               <JFXButton fx:id="addManuBtn" prefWidth="175.0" styleClass="JFXButton" text="Add Manufacturer" />
@@ -37,7 +37,7 @@
                   <Label styleClass="headers" text="Manage Ingredients" />
                   <HBox spacing="10.0">
                      <children>
-                        <JFXListView fx:id="ingredientsList" minHeight="500.0" minWidth="250.0" />
+                        <JFXListView fx:id="ingredientsList" minHeight="500.0" minWidth="250.0" style="-fx-background-color: transparent;" verticalGap="10.0" />
                         <VBox spacing="10.0">
                            <children>
                               <JFXButton fx:id="addIngrBtn" prefWidth="175.0" styleClass="JFXButton" text="Add Ingredient" />

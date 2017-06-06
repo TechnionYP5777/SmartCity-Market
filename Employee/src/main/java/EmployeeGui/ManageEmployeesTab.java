@@ -35,22 +35,20 @@ import UtilsImplementations.StackTraceUtil;
 import de.jensd.fx.glyphs.GlyphsBuilder;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.cell.CheckBoxListCell;
-import javafx.util.Callback;
+import javafx.scene.input.MouseEvent;
 
 /**
  * ManageEmployeesTab - manages the employee tab
@@ -166,7 +164,6 @@ public class ManageEmployeesTab implements Initializable {
 				securityAnswerTxt.validate();
 		});
 
-		createEmployeesList();
 
 		searchEmployee.textProperty().addListener(obs -> {
 			String filter = searchEmployee.getText();
@@ -174,41 +171,70 @@ public class ManageEmployeesTab implements Initializable {
 					.setPredicate(filter == null || filter.length() == 0 ? s -> true : s -> s.contains(filter));
 		});
 
-//		employeesList.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
-//			@Override
-//			public ObservableValue<Boolean> call(String item) {
-//				BooleanProperty observable = new SimpleBooleanProperty();
-//				observable.set(selectedEmployees.contains(item));
-//
-//				observable.addListener((obs, wasSelected, isNowSelected) -> {
-//					if (isNowSelected)
-//						selectedEmployees.add(item);
-//					else
-//						selectedEmployees.remove(item);
-//					enableRemoveButton();
-//
-//				});
-//				return observable;
-//			}
-//		}));
-		
-		
+		// employeesList.setCellFactory(CheckBoxListCell.forListView(new
+		// Callback<String, ObservableValue<Boolean>>() {
+		// @Override
+		// public ObservableValue<Boolean> call(String item) {
+		// BooleanProperty observable = new SimpleBooleanProperty();
+		// observable.set(selectedEmployees.contains(item));
+		//
+		// observable.addListener((obs, wasSelected, isNowSelected) -> {
+		// if (isNowSelected)
+		// selectedEmployees.add(item);
+		// else
+		// selectedEmployees.remove(item);
+		// enableRemoveButton();
+		//
+		// });
+		// return observable;
+		// }
+		// }));
+
 		employeesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		
-		employeesList.setOnMouseClicked(new EventHandler<Event>() {
 
-            @Override
-            public void handle(Event event) {
-                ObservableList<String> selectedItems =  employeesList.getSelectionModel().getSelectedItems();
-              
-                selectedEmployees.clear();
-                selectedEmployees.addAll(selectedItems);
-                enableRemoveButton();
-            }
+		// for multiple selection
+		employeesList.addEventFilter(MouseEvent.MOUSE_PRESSED, evt -> {
+			Node node = evt.getPickResult().getIntersectedNode();
 
-        });
-		
-		employeesList.depthProperty().set(1);
+			// go up from the target node until a list cell is found or it's
+			// clear
+			// it was not a cell that was clicked
+			while (node != null && node != employeesList && !(node instanceof ListCell)) {
+				node = node.getParent();
+			}
+
+			// if is part of a cell or the cell,
+			// handle event instead of using standard handling
+			if (node instanceof ListCell) {
+				// prevent further handling
+				evt.consume();
+
+				ListCell<?> cell = (ListCell<?>) node;
+				ListView<?> lv = cell.getListView();
+
+				// focus the listview
+				lv.requestFocus();
+
+				if (!cell.isEmpty()) {
+					// handle selection for non-empty cells
+					int index = cell.getIndex();
+					if (cell.isSelected()) {
+						lv.getSelectionModel().clearSelection(index);
+					} else {
+						lv.getSelectionModel().select(index);
+					}
+				}
+
+				ObservableList<String> selectedItems = employeesList.getSelectionModel().getSelectedItems();
+
+				selectedEmployees.clear();
+				selectedEmployees.addAll(selectedItems);
+				enableRemoveButton();
+
+			}
+		});
+
+		employeesList.setDepth(1);
 		employeesList.setExpanded(true);
 
 		securityCombo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -218,6 +244,8 @@ public class ManageEmployeesTab implements Initializable {
 				enableFinishBtn();
 			}
 		});
+		
+		createEmployeesList();
 
 		enableFinishBtn();
 		enableRemoveButton();

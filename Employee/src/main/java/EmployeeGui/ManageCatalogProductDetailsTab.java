@@ -30,9 +30,6 @@ import EmployeeImplementations.Manager;
 import GuiUtils.DialogMessagesService;
 import UtilsImplementations.InjectionFactory;
 import UtilsImplementations.StackTraceUtil;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -42,11 +39,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 /**
  * ManageCatalogProductDetailsTab - This class is the controller for the Manage
@@ -259,45 +259,83 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			filteredDataManu.setPredicate(filter == null || filter.length() == 0 ? s -> true : s -> s.contains(filter));
 		});
 
-		manufacturerList.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
-			@Override
-			public ObservableValue<Boolean> call(String item) {
-				BooleanProperty observable = new SimpleBooleanProperty();
-				observable.set(selectedManu.contains(item));
 
-				observable.addListener((obs, wasSelected, isNowSelected) -> {
-					if (isNowSelected)
-						selectedManu.add(item);
-					else
-						selectedManu.remove(item);
-					enableButtons();
+		manufacturerList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-				});
-				return observable;
+		// for multiple selection
+		manufacturerList.addEventFilter(MouseEvent.MOUSE_PRESSED, evt -> {
+			Node node = evt.getPickResult().getIntersectedNode();
+			while (node != null && node != manufacturerList && !(node instanceof ListCell)) {
+				node = node.getParent();
 			}
-		}));
+			if (node instanceof ListCell) {
+				evt.consume();
+				ListCell<?> cell = (ListCell<?>) node;
+				ListView<?> lv = cell.getListView();
+				lv.requestFocus();
+				if (!cell.isEmpty()) {
+					int index = cell.getIndex();
+					if (cell.isSelected()) {
+						lv.getSelectionModel().clearSelection(index);
+					} else {
+						lv.getSelectionModel().select(index);
+					}
+				}
+
+				ObservableList<String> selectedItems = manufacturerList.getSelectionModel().getSelectedItems();
+
+				selectedManu.clear();
+				selectedManu.addAll(selectedItems);
+				enableButtons();
+
+			}
+		});
+
+		manufacturerList.setDepth(1);
+		manufacturerList.setExpanded(true);
 
 		filterIngr.textProperty().addListener(obs -> {
 			String filter = filterIngr.getText();
 			filteredDataIngr.setPredicate(filter == null || filter.length() == 0 ? s -> true : s -> s.contains(filter));
 		});
 
-		ingredientsList.setCellFactory(CheckBoxListCell.forListView(new Callback<String, ObservableValue<Boolean>>() {
-			@Override
-			public ObservableValue<Boolean> call(String item) {
-				BooleanProperty observable = new SimpleBooleanProperty();
-				observable.set(selectedIngr.contains(item));
-				observable.addListener((obs, wasSelected, isNowSelected) -> {
-					if (isNowSelected)
-						selectedIngr.add(item);
-					else
-						selectedIngr.remove(item);
-					enableButtons();
 
-				});
-				return observable;
+		ingredientsList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+		// for multiple selection
+		ingredientsList.addEventFilter(MouseEvent.MOUSE_PRESSED, evt -> {
+			Node node = evt.getPickResult().getIntersectedNode();
+			while (node != null && node != ingredientsList && !(node instanceof ListCell)) {
+				node = node.getParent();
 			}
-		}));
+			if (node instanceof ListCell) {
+				evt.consume();
+
+				ListCell<?> cell = (ListCell<?>) node;
+				ListView<?> lv = cell.getListView();
+
+				lv.requestFocus();
+
+				if (!cell.isEmpty()) {
+					int index = cell.getIndex();
+					if (cell.isSelected()) {
+						lv.getSelectionModel().clearSelection(index);
+					} else {
+						lv.getSelectionModel().select(index);
+					}
+				}
+
+				ObservableList<String> selectedItems = ingredientsList.getSelectionModel().getSelectedItems();
+
+				selectedIngr.clear();
+				selectedIngr.addAll(selectedItems);
+				enableButtons();
+
+			}
+		});
+
+		ingredientsList.setDepth(1);
+		ingredientsList.setExpanded(true);
 
 		Label lbl1 = new Label("Insert New Manufacturar");
 		newManu = new JFXTextField();
