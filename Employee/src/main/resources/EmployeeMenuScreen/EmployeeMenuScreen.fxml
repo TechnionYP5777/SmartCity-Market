@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXTabPane?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
 
 <StackPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
 	minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
-	prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="EmployeeGui.EmployeeMenuScreen">
+	prefWidth="1280.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.111"
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeMenuScreen">
 	<children>
 		<GridPane fx:id="workerMenuScreenPane" alignment="CENTER">
 			<columnConstraints>
@@ -31,45 +30,13 @@
 				<RowConstraints percentHeight="25.0" vgrow="ALWAYS" />
 			</rowConstraints>
 			<children>
-				<TabPane fx:id="tabsPane">
-					<tabs>
-						<Tab fx:id="managePackagesTab" closable="false" text="Manage Packages">
-							<content>
-								<fx:include source="/ManagePackagesTab/ManagePackagesTab.fxml" />
-							</content>
-						</Tab>
-						<Tab fx:id="manageCatalogProductTab" closable="true"
-							text="Manage Catalog Products">
-							<content>
-								<fx:include
-									source="/ManageCatalogProductTab/ManageCatalogProductTab.fxml" />
-							</content>
-						</Tab>
-						<Tab fx:id="manageCatalogProductDetailsTab" closable="true"
-							text="Manage Catalog Product Details">
-							<content>
-								<fx:include
-									source="/ManageCatalogProductDetailsTab/ManageCatalogProductDetailsTab.fxml" />
-							</content>
-						</Tab>
-						<Tab fx:id="manageEmployeesTab" closable="true" text="Manage Employees">
-							<content>
-								<fx:include source="/ManageEmployeesTab/ManageEmployeesTab.fxml" />
-							</content>
-						</Tab>
-					</tabs>
-
-				</TabPane>
 				<VBox spacing="15.0" GridPane.rowIndex="1">
 					<children>
 						<VBox spacing="5.0">
 							<children>
-								<Label fx:id="recentActivityLbl" text="Recent Activity"
-									textFill="#5518b9" />
+								<Label fx:id="recentActivityLbl" text="Recent Activity" />
 								<TextArea fx:id="successLogArea" opacity="0.75">
-									<font>
-										<Font name="Serif Regular" size="13.0" />
-									</font>
+
 								</TextArea>
 							</children>
 						</VBox>
@@ -91,6 +58,38 @@
 					<padding>
 						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 					</padding>
+				</VBox>
+				<VBox prefHeight="200.0" prefWidth="100.0">
+					<children>
+						<JFXTabPane fx:id="tabsPane">
+							<tabs>
+								<Tab fx:id="managePackagesTab" closable="false" text="Manage Packages">
+									<content>
+										<fx:include source="/ManagePackagesTab/ManagePackagesTab.fxml" />
+									</content>
+								</Tab>
+								<Tab fx:id="manageCatalogProductTab" closable="true"
+									text="Manage Catalog Products">
+									<content>
+										<fx:include
+											source="/ManageCatalogProductTab/ManageCatalogProductTab.fxml" />
+									</content>
+								</Tab>
+								<Tab fx:id="manageCatalogProductDetailsTab" closable="true"
+									text="Manage Catalog Product Details">
+									<content>
+										<fx:include
+											source="/ManageCatalogProductDetailsTab/ManageCatalogProductDetailsTab.fxml" />
+									</content>
+								</Tab>
+								<Tab fx:id="manageEmployeesTab" closable="true" text="Manage Employees">
+									<content>
+										<fx:include source="/ManageEmployeesTab/ManageEmployeesTab.fxml" />
+									</content>
+								</Tab>
+							</tabs>
+						</JFXTabPane>
+					</children>
 				</VBox>
 			</children>
 		</GridPane>

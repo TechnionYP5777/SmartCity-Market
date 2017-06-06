@@ -1,3 +1,10 @@
+.background {
+   -fx-background-position: center;
+   -fx-background-repeat: no-repeat;
+   -fx-background-size: cover;
+   -fx-background-color: white;
+   
+}
 
 .radio-button { 
 	-fx-font-family: "serif";
@@ -13,7 +20,7 @@
 }
 
 #logout:hover {
-	-fx-effect: dropshadow(three-pass-box , cornflowerblue  , 50, 0.7 , 0 , 0);
+	-fx-effect: dropshadow(three-pass-box , cornflowerblue  , 50.0, 0.7 , 0.0 , 0.0);
 }
 
 .radio-button .dot {
@@ -29,49 +36,6 @@
 	-fx-font-weight: bold;	
 }
 
-.tab-header-area .tab-header-background {
-    -fx-opacity: 0.5;
-}
-
-.tab-pane
-{
-    -fx-tab-min-width:90px;
-}
-
-.tab{
-    -fx-background-insets: 0 1 0 1,0,0;
-}
-.tab-pane .tab
-{
-    -fx-background-color: #e6e6e6;
-
-}
-
-.tab-pane .tab:selected
-{
-    -fx-background-color: #3c3c3c;
-}
-
-.tab .tab-label { 
-    -fx-alignment: CENTER;
-    -fx-text-fill: #828282;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-}
-
-.tab:selected .tab-label { 
-    -fx-alignment: CENTER;
-    -fx-text-fill: white;
-}
-
-#recentActivityLbl {
-	-fx-font-size: 20;
-	-fx-font-family: "serif";
-    -fx-text-fill: floralwhite;
-    -fx-opacity: 1.0;
-    -fx-font-weight: bold;	
-	
-}
 
 
 

@@ -38,13 +38,13 @@
                         </ImageView>
                      </children>
                   </HBox>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <JFXButton fx:id="showDatePickerBtn" styleClass="JFXButton" text="Add Date To Barcode" />
+                     </children>
+                  </HBox>
       			</children>
       		</VBox>
-            <HBox alignment="CENTER">
-               <children>
-                  <JFXButton fx:id="showDatePickerBtn" styleClass="JFXButton" text="Show Date Picker" />
-               </children>
-            </HBox>
       		<StackPane>
       			<children>
       				<VBox fx:id="productAfterScanPane" spacing="5.0">

@@ -7,6 +7,8 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import com.jfoenix.controls.JFXTabPane;
+
 import CommonDefs.CLIENT_TYPE;
 import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeContracts.IWorker;
@@ -52,7 +54,7 @@ public class EmployeeMenuScreen implements Initializable {
 	Stage primeStage = EmployeeApplicationScreen.stage;
 
 	@FXML
-	TabPane tabsPane;
+	JFXTabPane tabsPane;
 
 	@FXML
 	Tab managePackagesTab;
