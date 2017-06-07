@@ -6,8 +6,11 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 import CustomerContracts.ICustomer;
+import CustomerContracts.IRegisteredCustomer;
 import CustomerGuiHelpers.TempCustomerPassingData;
+import CustomerGuiHelpers.TempRegisteredCustomerPassingData;
 import CustomerImplementations.Customer;
+import CustomerImplementations.RegisteredCustomer;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
 import SMExceptions.SMException;
@@ -90,14 +93,14 @@ public class CustomerLoginScreen implements Initializable {
 
 	@FXML
 	private void loginButtonPressed(ActionEvent __) {
-		ICustomer customer = InjectionFactory.getInstance(Customer.class);
+		IRegisteredCustomer regCustomer = InjectionFactory.getInstance(RegisteredCustomer.class);
 		try {
 			if (username.equals(guestLogin.getUserName())) {
 				DialogMessagesService.showErrorDialog(
 						String.format("The user: \"{0}\" can access only as a guest user.", username), null, "");
 				return;
 			}
-			customer.login(username, password, true);
+			regCustomer.login(username, password, true);
 		} catch (SMException e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.getStackTrace(e));
@@ -108,7 +111,8 @@ public class CustomerLoginScreen implements Initializable {
 					e + "", null, "");
 			return;
 		}
-		TempCustomerPassingData.customer = customer;
+		TempRegisteredCustomerPassingData.regCustomer = regCustomer;
+		TempCustomerPassingData.customer = null;
 		AbstractApplicationScreen.setScene("/CustomerMainScreen/CustomerMainScreen.fxml");
 	}
 
@@ -132,6 +136,7 @@ public class CustomerLoginScreen implements Initializable {
 			return;
 		}
 		TempCustomerPassingData.customer = customer;
+		TempRegisteredCustomerPassingData.regCustomer = null;
 		AbstractApplicationScreen.setScene("/CustomerMainScreen/CustomerMainScreen.fxml");
 	}
 

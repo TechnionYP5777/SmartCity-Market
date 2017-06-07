@@ -22,6 +22,7 @@ import BasicCommonClasses.SmartCode;
 import CustomerContracts.ICustomer;
 import CustomerGuiHelpers.CustomerProductCellFormat;
 import CustomerGuiHelpers.TempCustomerPassingData;
+import CustomerGuiHelpers.TempRegisteredCustomerPassingData;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
 import SMExceptions.CommonExceptions.CriticalError;
@@ -172,12 +173,10 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	private void enableRemoveButton() {
 		boolean flag = false;
-		if (!customer.getCartProductCache().isEmpty()) {
-			if (customer.getCartProductCache().get(scannedSmartCode.getBarcode()) != null) {
-				flag = customer.getCartProductCache().get(scannedSmartCode.getBarcode())
-					.getPackages().containsKey(scannedSmartCode);
-			}
-		}
+		if (!customer.getCartProductCache().isEmpty()
+				&& customer.getCartProductCache().get(scannedSmartCode.getBarcode()) != null)
+			flag = customer.getCartProductCache().get(scannedSmartCode.getBarcode()).getPackages()
+					.containsKey(scannedSmartCode);
 		removeButton.setDisable(!flag);
 		removeButton.setVisible(flag);
 
@@ -228,7 +227,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(customerMainScreenPane);
 		barcodeEventHandler.register(this);
-		customer = TempCustomerPassingData.customer;
+		customer = TempCustomerPassingData.customer != null ? TempCustomerPassingData.customer
+				: TempRegisteredCustomerPassingData.regCustomer;
 
 		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
 
