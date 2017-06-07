@@ -17,9 +17,10 @@ import javafx.scene.layout.VBox;
 /**
  * CustomerProductCellFormat - This class will format the cell content
  * 
+ * @author idan atias
  * @author aviad
  * @author shimon Azulay
- * @since 2017-01-28
+ * @since 2017-01-22
  */
 public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 
