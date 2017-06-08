@@ -1,6 +1,9 @@
 package CustomerContracts;
 
+import java.util.HashSet;
+
 import BasicCommonClasses.CustomerProfile;
+import BasicCommonClasses.Ingredient;
 import CustomerContracts.ACustomerExceptions.*;
 import SMExceptions.CommonExceptions.CriticalError;
 
@@ -10,6 +13,7 @@ import SMExceptions.CommonExceptions.CriticalError;
  * 
  * @author idan atias
  * @author Aviad Cohen
+ * @author Lior Ben Ami
  * @since 2017-01-04
  *
  */
@@ -35,4 +39,10 @@ public interface IRegisteredCustomer extends ICustomer {
 	 * @throws CriticalError
 	 */
 	void updateCustomerProfile(CustomerProfile p) throws CustomerNotConnected, InvalidParameter, AuthenticationError, CriticalError;
+	
+	/**
+	 * getCustomerAlergans - returns the customer allergens
+	 * 
+	 */
+	HashSet<Ingredient> getCustomerAllergens();
 }

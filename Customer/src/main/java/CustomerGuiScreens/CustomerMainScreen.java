@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
@@ -20,9 +21,11 @@ import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.SmartCode;
 import CustomerContracts.ICustomer;
+import CustomerContracts.IRegisteredCustomer;
 import CustomerGuiHelpers.CustomerProductCellFormat;
 import CustomerGuiHelpers.TempCustomerPassingData;
-//import CustomerGuiHelpers.TempRegisteredCustomerPassingData;
+import CustomerGuiHelpers.TempRegisteredCustomerPassingData;
+import CustomerGuiHelpers.TempRegisteredCustomerPassingData;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
 import SMExceptions.CommonExceptions.CriticalError;
@@ -227,8 +230,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(customerMainScreenPane);
 		barcodeEventHandler.register(this);
-//		customer = TempCustomerPassingData.customer != null ? TempCustomerPassingData.customer
-//				: TempRegisteredCustomerPassingData.regCustomer;
+		customer = TempCustomerPassingData.customer != null ? TempCustomerPassingData.customer
+				: TempRegisteredCustomerPassingData.regCustomer;
 
 		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
 
@@ -327,7 +330,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			try {
 				catalogProduct = customer.viewCatalogProduct(scannedSmartCode);
 				//checkIngredients(catalogProduct);
-				if (TempCustomerPassingData.isRegistered)
+				if (TempCustomerPassingData.customer == null)
 					checkIngredients(catalogProduct);
 			} catch (SMException e) {
 				log.fatal(e);
@@ -348,10 +351,10 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	private void checkIngredients(CatalogProduct catalogProduct) throws CriticalError  {
 		ArrayList<String> markedIngredients = new ArrayList<String>();
 		HashSet<Ingredient> productIngredients = catalogProduct.getIngredients();
-		for (Ingredient ingredient: customer.getAllIngredients()) {
+		HashSet<Ingredient> customerAllergens = ((IRegisteredCustomer)customer).getCustomerAllergens();
+		for (Ingredient ingredient:  customerAllergens) 
 			if (productIngredients.contains(ingredient))
 				markedIngredients.add(ingredient.getName());
-		}
 		if (!markedIngredients.isEmpty()) {
 			String alert = "This product contains some of your marked Ingredients:\n" + markedIngredients.toString();
 			DialogMessagesService.showInfoDialog("Marked Ingredients Alert", null, alert);
@@ -381,8 +384,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			System.exit(0);
 		}
 		TempCustomerPassingData.customer = null;
+		TempRegisteredCustomerPassingData.regCustomer = null;
 		AbstractApplicationScreen.setScene("/CustomerWelcomeScreen/CustomerWelcomeScreen.fxml");
-
 	}
 
 	@Override

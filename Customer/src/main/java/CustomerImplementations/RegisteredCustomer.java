@@ -1,10 +1,12 @@
 package CustomerImplementations;
 
 import java.net.SocketTimeoutException;
+import java.util.HashSet;
 
 import com.google.inject.Inject;
 
 import BasicCommonClasses.CustomerProfile;
+import BasicCommonClasses.Ingredient;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import CustomerContracts.ACustomerExceptions.*;
@@ -102,5 +104,9 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 		customerProfile = p;
 
 		log.info("updateCustomerProfile command succeed.");
+	}
+	
+	public HashSet<Ingredient> getCustomerAllergens() {
+		return customerProfile.getAllergens();
 	}
 }
