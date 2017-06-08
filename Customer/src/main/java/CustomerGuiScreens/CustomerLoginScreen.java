@@ -106,6 +106,12 @@ public class CustomerLoginScreen implements Initializable {
 			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
 			return;
+		} catch (RuntimeException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
+			DialogMessagesService.showErrorDialog(				
+					"Runtime Error" , null, "Please check the connection with the sever");
+			return;
 		} catch (Exception e) {
 			DialogMessagesService.showErrorDialog(
 					e + "", null, "");
@@ -113,8 +119,6 @@ public class CustomerLoginScreen implements Initializable {
 		}
 		TempRegisteredCustomerPassingData.regCustomer = regCustomer;
 		TempCustomerPassingData.customer = null;
-		//TempCustomerPassingData.customer = regCustomer;
-		//TempCustomerPassingData.isRegistered = true;
 		AbstractApplicationScreen.setScene("/CustomerMainScreen/CustomerMainScreen.fxml");
 	}
 
@@ -131,6 +135,12 @@ public class CustomerLoginScreen implements Initializable {
 			log.fatal(e);
 			log.debug(StackTraceUtil.getStackTrace(e));
 			e.showInfoToUser();
+			return;
+		} catch (RuntimeException e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
+			DialogMessagesService.showErrorDialog(				
+					"Runtime Error" , null, "Please check the connection with the sever");
 			return;
 		} catch (Exception e) {
 			DialogMessagesService.showErrorDialog(
@@ -154,7 +164,8 @@ public class CustomerLoginScreen implements Initializable {
 			IForgotPasswordHandler forgot = InjectionFactory.getInstance(Customer.class);
 			ForgetPasswordWizard.start(forgot);
 		} catch (Exception e) {
-			// TODO
-		}
+			DialogMessagesService.showErrorDialog(
+					e + "", null, "");
+			return;		}
 	}
 }
