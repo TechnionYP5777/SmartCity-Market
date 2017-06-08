@@ -11,4 +11,5 @@ import CustomerContracts.ICustomer;
  */
 public class TempCustomerPassingData {
 	public static ICustomer customer;
+	public static boolean isRegistered;
 }

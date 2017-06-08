@@ -111,8 +111,10 @@ public class CustomerLoginScreen implements Initializable {
 					e + "", null, "");
 			return;
 		}
-		TempRegisteredCustomerPassingData.regCustomer = regCustomer;
+		//TempRegisteredCustomerPassingData.regCustomer = regCustomer;
 		TempCustomerPassingData.customer = null;
+		TempCustomerPassingData.customer = regCustomer;
+		TempCustomerPassingData.isRegistered = true;
 		AbstractApplicationScreen.setScene("/CustomerMainScreen/CustomerMainScreen.fxml");
 	}
 
@@ -136,7 +138,10 @@ public class CustomerLoginScreen implements Initializable {
 			return;
 		}
 		TempCustomerPassingData.customer = customer;
-		TempRegisteredCustomerPassingData.regCustomer = null;
+
+		//TempRegisteredCustomerPassingData.regCustomer = null;
+
+		TempCustomerPassingData.isRegistered = false;
 		AbstractApplicationScreen.setScene("/CustomerMainScreen/CustomerMainScreen.fxml");
 	}
 

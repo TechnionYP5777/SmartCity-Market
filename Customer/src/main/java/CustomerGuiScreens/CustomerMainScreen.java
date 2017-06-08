@@ -22,7 +22,7 @@ import BasicCommonClasses.SmartCode;
 import CustomerContracts.ICustomer;
 import CustomerGuiHelpers.CustomerProductCellFormat;
 import CustomerGuiHelpers.TempCustomerPassingData;
-import CustomerGuiHelpers.TempRegisteredCustomerPassingData;
+//import CustomerGuiHelpers.TempRegisteredCustomerPassingData;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
 import SMExceptions.CommonExceptions.CriticalError;
@@ -227,8 +227,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(customerMainScreenPane);
 		barcodeEventHandler.register(this);
-		customer = TempCustomerPassingData.customer != null ? TempCustomerPassingData.customer
-				: TempRegisteredCustomerPassingData.regCustomer;
+//		customer = TempCustomerPassingData.customer != null ? TempCustomerPassingData.customer
+//				: TempRegisteredCustomerPassingData.regCustomer;
 
 		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
 
@@ -327,6 +327,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			try {
 				catalogProduct = customer.viewCatalogProduct(scannedSmartCode);
 				//checkIngredients(catalogProduct);
+				if (TempCustomerPassingData.isRegistered)
+					checkIngredients(catalogProduct);
 			} catch (SMException e) {
 				log.fatal(e);
 				log.debug(StackTraceUtil.getStackTrace(e));
