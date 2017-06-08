@@ -71,7 +71,7 @@ public enum CommandDescriptor {
 	 * 	1. The sender ID returns in senderId field.
 	 *  2. For Guest login use Guest as username & password (use "Guest" on both).
 	 *  3. "Guest" will be saved username, the clients can't register with this username.
-	 *  4. For Guest, the server will return CustomerProfile with only username and password (TODO - AVIAD: why password?) (other attributes will be null).
+	 *  4. For Guest, the server will return CustomerProfile with only username and password
 	 */
 	LOGIN_CUSTOMER,
 	
@@ -654,4 +654,59 @@ public enum CommandDescriptor {
 	 * 1. Only Manager can remove ingredient.
 	 */
 	FORCE_REMOVE_INGREDIENT,
+	
+	/**
+	 * Description: Create new sale in the system.
+	 * param1: Sale.
+	 * retval: Integer - sale ids.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can create sales.
+	 */
+	CREATE_NEW_SALE,
+	
+	/**
+	 * Description: remove sale from the system.
+	 * param1: Integer.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *			PARAM_ID_IS_NOT_EXIST,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can create sales.
+	 */
+	REMOVE_SALE,
+	
+	/**
+	 * Description: remove sale from the system.
+	 * param1: void.
+	 * retval: List of sales.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can create sales.
+	 */
+	GET_ALL_SALES,
 }

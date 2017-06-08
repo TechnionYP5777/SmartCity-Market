@@ -2,6 +2,7 @@ package EmployeeImplementations;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -13,6 +14,7 @@ import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
+import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
@@ -388,5 +390,79 @@ public class Manager extends Worker implements IManager {
 		log.info("getAllWorkers command succeed.");
 		
 		return new Gson().fromJson(commandDescriptor.getData(), new TypeToken<HashMap<String, Boolean>>(){}.getType());
+	}
+
+	@Override
+	public Sale createNewSale(Sale sale)
+			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure {
+		log.info("Creating createNewSale command wrapper with Sale: " + sale);
+		String serverResponse = sendRequestWithRespondToServer(
+				(new CommandWrapper(getClientId(), CommandDescriptor.CREATE_NEW_SALE, Serialization.serialize(sale)))
+						.serialize());
+
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
+
+		try {
+			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
+				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
+			    | WorkerAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse |
+			    ParamIDAlreadyExists ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			
+			throw new CriticalError();
+		}
+
+		log.info("createNewSale command succeed.");
+		
+		return Serialization.deserialize(commandDescriptor.getData(), Sale.class);
+	}
+
+	@Override
+	public void removeSale(Integer saleID)
+			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist {
+		log.info("Creating removeSale command wrapper with Sale id: " + saleID);
+		String serverResponse = sendRequestWithRespondToServer(
+				(new CommandWrapper(getClientId(), CommandDescriptor.REMOVE_SALE, Serialization.serialize(saleID)))
+						.serialize());
+
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
+
+		try {
+			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
+				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
+			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			
+			throw new CriticalError();
+		}
+
+		log.info("removeSale command succeed.");
+	}
+
+	@Override
+	public Map<Integer, Sale> getAllSales()
+			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure {
+		log.info("Creating getAllSales command wrapper");
+		String serverResponse = sendRequestWithRespondToServer(
+				(new CommandWrapper(getClientId(), CommandDescriptor.GET_ALL_SALES, Serialization.serialize("")))
+						.serialize());
+
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
+
+		try {
+			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
+				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
+			    | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse |
+			    InvalidParameter ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			
+			throw new CriticalError();		}
+		
+		log.info("getAllSales command succeed.");
+		
+		return new Gson().fromJson(commandDescriptor.getData(), new TypeToken<HashMap<String, Sale>>(){}.getType());
 	}
 }

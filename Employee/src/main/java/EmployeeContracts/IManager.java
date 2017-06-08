@@ -7,6 +7,7 @@ import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
+import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
@@ -223,4 +224,41 @@ public interface IManager extends IWorker {
 	 * @throws ConnectionFailure 
 	 */
 	Map<String, Boolean> getAllWorkers() throws CriticalError, EmployeeNotConnected, ConnectionFailure;
+	
+	/**
+	 * Manager creates new sale..
+	 * 
+	 * @param sale - sale to create
+	 * @return Integer - Sale with ID
+	 * @throws EmployeeNotConnected 
+	 * @throws InvalidParameter 
+	 * @throws CriticalError 
+	 * @throws ConnectionFailure 
+	 */
+	Sale createNewSale(Sale sale) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure;
+	
+	/**
+	 * Manager removes sale..
+	 * 
+	 * @param sale - sale to create
+	 * @return Integer - Sale with ID
+	 * @throws EmployeeNotConnected 
+	 * @throws InvalidParameter 
+	 * @throws CriticalError 
+	 * @throws ConnectionFailure 
+	 * @throws ParamIDDoesNotExist 
+	 */
+	void removeSale(Integer saleID) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist;
+	
+	/**
+	 * Manager get all sales.
+	 * 
+	 * @param void
+	 * @return Map<Integer, Sale> 
+	 * @throws EmployeeNotConnected 
+	 * @throws InvalidParameter 
+	 * @throws CriticalError 
+	 * @throws ConnectionFailure 
+	 */
+	Map<Integer, Sale> getAllSales() throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure;
 }

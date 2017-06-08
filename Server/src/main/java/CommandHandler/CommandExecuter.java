@@ -14,6 +14,7 @@ import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
+import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
 import ClientServerApi.ClientServerDefs;
 import ClientServerApi.CommandDescriptor;
@@ -1472,6 +1473,58 @@ public class CommandExecuter {
 		log.info("Get question for forget password send answer command system finished");
 	}
 	
+	private void createNewSale(SQLDatabaseConnection c) {
+		Sale sale = null;
+
+		log.info("Create new sale from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			sale = Serialization.deserialize(inCommandWrapper.getData(), Sale.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Create new sale command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to create new sale " + sale + " to system");
+
+		//TODO Noam - call sql here
+
+		log.info("Create new sale " + sale + " to system finished");
+	}
+	
+	private void removeSale(SQLDatabaseConnection c) {
+		Integer saleID = null;
+
+		log.info("Remove sale from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			saleID = Serialization.deserialize(inCommandWrapper.getData(), Integer.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Remove Sale command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to remove sale with id " + saleID + " from system");
+
+		//TODO Noam - call SQL here
+
+		log.info("Remove Sale " + saleID + " from system finished");
+	}
+	
+	private void getAllSales(SQLDatabaseConnection c) {
+		log.info("Get all sales from serderID " + inCommandWrapper.getSenderID() + " command called");
+		
+		//TODO Noam - call sql here
+				
+		log.info("Get all sales from system finished");
+	}
+	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
 			log.fatal("Failed to get SQL Database Connection");
@@ -1660,6 +1713,21 @@ public class CommandExecuter {
 		case FORGOT_PASSWORD_SEND_ANSWER_WITH_NEW_PASSWORD:
 			forgetPasswordSendAnswerWithNewPassword(c);
 			
+			break;
+			
+		case CREATE_NEW_SALE:
+			createNewSale(c);
+
+			break;
+			
+		case REMOVE_SALE:
+			removeSale(c);
+
+			break;
+			
+		case GET_ALL_SALES:
+			getAllSales(c);
+
 			break;
 			
 		default:
