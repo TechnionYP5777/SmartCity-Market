@@ -693,7 +693,7 @@ public enum CommandDescriptor {
 	REMOVE_SALE,
 	
 	/**
-	 * Description: remove sale from the system.
+	 * Description: get all sales in the system.
 	 * param1: void.
 	 * retval: List of sales.
 	 *
@@ -709,4 +709,59 @@ public enum CommandDescriptor {
 	 * 1. Only Manager can create sales.
 	 */
 	GET_ALL_SALES,
+	
+	/**
+	 * Description: Create new group sale in the system.
+	 * param1: GroupBuying.
+	 * retval: Integer - group buying id.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can create sales.
+	 */
+	CREATE_NEW_GROUP_BUYING,
+	
+	/**
+	 * Description: remove sale from the system.
+	 * param1: Integer.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *			PARAM_ID_IS_NOT_EXIST,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can create sales.
+	 */
+	REMOVE_GROUP_BUYING,
+	
+	/**
+	 * Description: get all group buying in the system.
+	 * param1: void.
+	 * retval: List of GroupBuying.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can create sales.
+	 */
+	GET_ALL_GROUP_BUYING,
 }

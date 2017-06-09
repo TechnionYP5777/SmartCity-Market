@@ -1,5 +1,7 @@
 package BasicCommonClasses;
 
+import org.joda.time.LocalDate;
+
 /**
  * Sale - This class represents a sale.
  * 
@@ -10,7 +12,25 @@ public class Sale {
 	Integer id;
 	CatalogProduct product;
 	Double discount;
+	LocalDate startTime;
+	LocalDate endTime;
 	
+	public LocalDate getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(LocalDate startTime) {
+		this.startTime = startTime;
+	}
+
+	public LocalDate getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(LocalDate endTime) {
+		this.endTime = endTime;
+	}
+
 	public enum SaleType {
 		OnePlusOneDiscount,
 		FixedDiscount,

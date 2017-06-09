@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
+import BasicCommonClasses.GroupBuying;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
@@ -1525,6 +1526,58 @@ public class CommandExecuter {
 		log.info("Get all sales from system finished");
 	}
 	
+	private void createNewGroupBuying(SQLDatabaseConnection c) {
+		GroupBuying groupBuying = null;
+
+		log.info("Create new group buying from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			groupBuying = Serialization.deserialize(inCommandWrapper.getData(), GroupBuying.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Create new sale command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to create new group buying " + groupBuying + " to system");
+
+		//TODO Noam - call sql here
+
+		log.info("Create new group buying " + groupBuying + " to system finished");
+	}
+	
+	private void removeGroupBuying(SQLDatabaseConnection c) {
+		Integer id = null;
+
+		log.info("Remove group buying from serderID " + inCommandWrapper.getSenderID() + " command called");
+
+		try {
+			id = Serialization.deserialize(inCommandWrapper.getData(), Integer.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Remove Sale command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+
+		log.info("Trying to remove group id with id " + id + " from system");
+
+		//TODO Noam - call SQL here
+
+		log.info("Remove group id " + id + " from system finished");
+	}
+	
+	private void getAllGroupBuying(SQLDatabaseConnection c) {
+		log.info("Get all group buying from serderID " + inCommandWrapper.getSenderID() + " command called");
+		
+		//TODO Noam - call sql here
+				
+		log.info("Get all group buying from system finished");
+	}
+	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
 			log.fatal("Failed to get SQL Database Connection");
@@ -1727,6 +1780,21 @@ public class CommandExecuter {
 			
 		case GET_ALL_SALES:
 			getAllSales(c);
+
+			break;
+			
+		case CREATE_NEW_GROUP_BUYING:
+			createNewGroupBuying(c);
+
+			break;
+			
+		case REMOVE_GROUP_BUYING:
+			removeGroupBuying(c);
+
+			break;
+			
+		case GET_ALL_GROUP_BUYING:
+			getAllGroupBuying(c);
 
 			break;
 			
