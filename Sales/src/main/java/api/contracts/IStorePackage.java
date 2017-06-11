@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 import api.types.Place;
 
-public interface IStorePackage {
+public interface IStorePackage<P extends IProduct> {
 	
-	IProduct getProduct();
+	P getProduct();
 	
 	int getAmount();
 	

@@ -7,7 +7,7 @@ public interface IProduct {
 	
 	String getName();
 	
-	String getManufacturer();
+	IManufacturer getManufacturer();
 	
 	/**
 	 * return number between 0 to 1 that represent the distance from given product,
