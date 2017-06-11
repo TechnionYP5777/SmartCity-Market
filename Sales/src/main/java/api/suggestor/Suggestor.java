@@ -30,6 +30,7 @@ public class Suggestor {
 	 *            types under {@link api.types.sales})
 	 */
 	public static ASale suggestSale(IGroceryList currentGrocery, IGroceryProduct purchasedProduct) {
+		@SuppressWarnings("unused")
 		StoreData currentData = storeData;
 		
 		return null;
@@ -46,6 +47,7 @@ public class Suggestor {
 	 * @return same sale if agreed, another suggest or null if not.
 	 */
 	public static ASale examineOffer(IGroceryList currentGrocery, ASale purchasedProduct) {
+		@SuppressWarnings("unused")
 		StoreData currentData = storeData;
 		
 		return null;

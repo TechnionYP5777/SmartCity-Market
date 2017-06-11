@@ -10,8 +10,8 @@ public interface IGroceryList {
 	
 	LocalDate getPurchaseDate();
 	
-	Set<? extends IProduct> getProductsList();
+	Set<? extends IGroceryProduct> getProductsList();
 	
-	Set<? extends ASale> getSalesList();
+	Set<ASale> getSalesList();
 }
 

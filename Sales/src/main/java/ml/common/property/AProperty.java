@@ -40,7 +40,7 @@ public abstract class AProperty {
 		return true;
 	}
 
-	public ADeductionRule getDeducer() {
+	public ADeductionRule getDeductionRule() {
 		return deducer;
 	}
 	

@@ -3,7 +3,7 @@ package api.types;
 import java.util.List;
 
 import api.contracts.IGroceryList;
-import api.contracts.IStorePackage;;
+import api.contracts.IStorePackage;
 
 public class StoreData {
 	
