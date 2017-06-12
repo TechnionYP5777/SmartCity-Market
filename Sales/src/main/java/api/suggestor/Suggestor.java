@@ -10,17 +10,20 @@ import api.types.StoreData;
 import api.types.sales.ASale;
 
 public class Suggestor {
-	private volatile static StoreData<? extends IProduct> storeData;
+	private volatile static StoreData storeData;
 
-	@SuppressWarnings("unchecked")
-	public static<P extends IProduct, T extends IGroceryPackage<P>> void updateHistory(List<? extends IGroceryList<T>> history) {
-		storeData = new StoreData<P>(history, (List<? extends IStorePackage<P>>) storeData.getStock());
+	public static void updateHistory(List<? extends IGroceryList> history) {
+		storeData = new StoreData(history, storeData.getStock(), storeData.getCatalog());
 	}
 
-	@SuppressWarnings("unchecked")
-	public static<P extends IProduct> void updateStock(List<? extends IStorePackage<P>> stock) {
-		storeData = new StoreData<P>((List<? extends IGroceryList<? extends IGroceryPackage<P>>>) storeData.getHistory(), stock);
+	public static void updateStock(List<? extends IStorePackage> stock) {
+		storeData = new StoreData(storeData.getHistory(), stock, storeData.getCatalog());
 	}
+	
+	public static void updateCatalog(List<? extends IProduct> catalog) {
+		storeData = new StoreData(storeData.getHistory(), storeData.getStock(), catalog);
+	}
+
 
 	/**
 	 * try to generate offer for customer
@@ -32,10 +35,9 @@ public class Suggestor {
 	 * @return sale if succeeded, null otherwise (note: the sale must be one of the
 	 *            types under {@link api.types.sales})
 	 */
-	public static<P extends IProduct> ASale suggestSale(IGroceryList<? extends IGroceryPackage<P>> currentGrocery,
-			IGroceryPackage<P> purchasedProduct) {
+	public static ASale suggestSale(IGroceryList currentGrocery, IGroceryPackage purchasedProduct) {
 		@SuppressWarnings("unused")
-		StoreData<?> currentData = storeData;
+		StoreData currentData = storeData;
 		
 		return null;
 	}
@@ -50,10 +52,9 @@ public class Suggestor {
 	 *            types under {@link api.types.sales})
 	 * @return same sale if agreed, another suggest or null if not.
 	 */
-	public static ASale examineOffer(IGroceryList<? extends IGroceryPackage<? extends IProduct>> currentGrocery,
-			ASale purchasedProduct) {
+	public static ASale examineOffer(IGroceryList currentGrocery, ASale purchasedProduct) {
 		@SuppressWarnings("unused")
-		StoreData<?> currentData = storeData;
+		StoreData currentData = storeData;
 		
 		return null;
 	}

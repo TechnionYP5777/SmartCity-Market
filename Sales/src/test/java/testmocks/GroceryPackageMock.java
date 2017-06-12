@@ -2,7 +2,7 @@ package testmocks;
 
 import api.contracts.IGroceryPackage;
 
-public class GroceryPackageMock implements IGroceryPackage<ProductMock> {
+public class GroceryPackageMock implements IGroceryPackage {
 
 	ProductMock product;
 	int amount;

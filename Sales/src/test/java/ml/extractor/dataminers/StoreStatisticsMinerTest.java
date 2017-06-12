@@ -18,14 +18,13 @@ import ml.common.property.basicproperties.storestatistics.MostPopularProduct;
 import testmocks.DBMock;
 import testmocks.GroceryListMock;
 import testmocks.GroceryPackageMock;
-import testmocks.ProductMock;
 import testmocks.StorePackageMock;
 
 public class StoreStatisticsMinerTest {
 
 	private static List<GroceryListMock> history = new ArrayList<>();
 	private static List<StorePackageMock> stock = new ArrayList<>();
-	private static StoreData<ProductMock> sd = new StoreData<ProductMock>(history, stock);
+	private static StoreData sd = new StoreData(history, stock, DBMock.getCatalog());
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {

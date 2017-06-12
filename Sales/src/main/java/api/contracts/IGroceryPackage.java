@@ -1,7 +1,7 @@
 package api.contracts;
 
-public interface IGroceryPackage<P extends IProduct> {
-	P getProduct();
+public interface IGroceryPackage {
+	IProduct getProduct();
 	
 	int getAmount();
 }

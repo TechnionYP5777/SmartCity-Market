@@ -17,8 +17,8 @@ import ml.common.property.basicproperties.storestatistics.MostPopularProduct;
 
 public class StoreStatisticsMiner extends AMiner {
 
-	public StoreStatisticsMiner(InputPreferences inputPreferences, StoreData<? extends IProduct> storeDate,
-			IGroceryPackage<? extends IProduct> purchasedProduct) {
+	public StoreStatisticsMiner(InputPreferences inputPreferences, StoreData storeDate,
+			IGroceryPackage purchasedProduct) {
 		super(inputPreferences, storeDate, purchasedProduct);
 	}
 
@@ -39,7 +39,7 @@ public class StoreStatisticsMiner extends AMiner {
 	private Set<? extends ABasicProperty> extractMostPopularProducts() {
 		
 		Map<? extends IProduct, Long> productsCount = getHistory().stream().flatMap(g -> g.getProductsList().stream())
-			.collect(Collectors.groupingBy(g -> ((IGroceryPackage<? extends IProduct>)g).getProduct(), 
+			.collect(Collectors.groupingBy(g -> ((IGroceryPackage)g).getProduct(), 
 					Collectors.counting()));
 		
 		List<MostPopularProduct> ProductsOrederdByPopularity = productsCount.entrySet().stream().sorted(new Comparator<Entry<? extends IProduct, Long>>() {

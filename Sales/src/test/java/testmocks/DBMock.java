@@ -1,6 +1,8 @@
 package testmocks;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import api.preferences.InputPreferences;
@@ -18,6 +20,10 @@ public class DBMock {
 	
 	public static ProductMock getProduct(long barcode){
 		return productCatalog.get(barcode);
+	}
+	
+	public static List<ProductMock> getCatalog(){
+		return new ArrayList<>(productCatalog.values());
 	}
 	
 	public static InputPreferences getInputPref(){

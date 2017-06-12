@@ -5,10 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import api.contracts.IGroceryList;
-import api.contracts.IGroceryPackage;
 import api.types.sales.ASale;
 
-public class GroceryListMock implements IGroceryList<GroceryPackageMock> {
+public class GroceryListMock implements IGroceryList {
 
 	String buyerName;
 	LocalDate purchaseDate;

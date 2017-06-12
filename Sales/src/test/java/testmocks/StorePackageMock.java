@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import api.contracts.IStorePackage;
 import api.types.Place;
 
-public class StorePackageMock implements IStorePackage<ProductMock> {
+public class StorePackageMock implements IStorePackage {
 
 	ProductMock product;
 	int amount;

@@ -5,12 +5,12 @@ import java.util.Set;
 
 import api.types.sales.ASale;
 
-public interface IGroceryList<T extends IGroceryPackage<? extends IProduct> > {
+public interface IGroceryList {
 	String getBuyer();
 	
 	LocalDate getPurchaseDate();
 	
-	Set<T> getProductsList();
+	Set<? extends IGroceryPackage> getProductsList();
 	
 	Set<ASale> getSalesList();
 }
