@@ -176,6 +176,9 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 	void addIngPressed() {
 		try {
+			if (ingredients.containsKey(newIngr.getText())) {
+				throw new ParamIDAlreadyExists();
+			}
 			manager.addIngredient(new Ingredient(0, newIngr.getText()));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
 			log.fatal(e);
@@ -190,6 +193,9 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 	void addManuPressed() {
 		try {
+			if (manufacturars.containsKey(newManu.getText())) {
+				throw new ParamIDAlreadyExists();
+			}
 			manager.addManufacturer(new Manufacturer(0, newManu.getText()));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
 			log.fatal(e);
@@ -259,7 +265,6 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			filteredDataManu.setPredicate(filter == null || filter.length() == 0 ? s -> true : s -> s.contains(filter));
 		});
 
-
 		manufacturerList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 		// for multiple selection
@@ -298,7 +303,6 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			String filter = filterIngr.getText();
 			filteredDataIngr.setPredicate(filter == null || filter.length() == 0 ? s -> true : s -> s.contains(filter));
 		});
-
 
 		ingredientsList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 

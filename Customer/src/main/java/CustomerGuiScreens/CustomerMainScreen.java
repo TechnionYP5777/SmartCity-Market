@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
@@ -24,7 +23,6 @@ import CustomerContracts.ICustomer;
 import CustomerContracts.IRegisteredCustomer;
 import CustomerGuiHelpers.CustomerProductCellFormat;
 import CustomerGuiHelpers.TempCustomerPassingData;
-import CustomerGuiHelpers.TempRegisteredCustomerPassingData;
 import CustomerGuiHelpers.TempRegisteredCustomerPassingData;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;

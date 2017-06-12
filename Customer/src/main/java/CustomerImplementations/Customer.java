@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Singleton;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
@@ -50,6 +52,8 @@ import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
  * @author Lior Ben Ami, Aviad Cohen
  * @since 2017-01-02
  */
+
+@Singleton
 public class Customer extends ACustomer implements ICustomer, IForgotPasswordHandler {
 	
 	protected ForgotPasswordHandler fpHandler;
