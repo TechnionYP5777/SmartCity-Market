@@ -144,6 +144,7 @@
                            </padding>
                            <children>
                               <CheckComboBox fx:id="ingridientsCombo" prefWidth="155.0" styleClass="JFXComboBox" />
+                              <JFXButton fx:id="ingrChooser" styleClass="JFXButton" text="Click To Choose Ingredients" />
                            </children>
                         </HBox>
       					</children>

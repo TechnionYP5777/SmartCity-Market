@@ -14,8 +14,12 @@ import org.controlsfx.control.CheckComboBox;
 import com.google.common.eventbus.Subscribe;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXPopup.PopupHPosition;
+import com.jfoenix.controls.JFXPopup.PopupVPosition;
 import com.jfoenix.validation.RequiredFieldValidator;
 
 import BasicCommonClasses.CatalogProduct;
@@ -48,12 +52,25 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
@@ -77,6 +94,9 @@ public class ManageCatalogProductTab implements Initializable {
 	private JFXRadioButton removeCatalogProductRadioButton;
 
 	@FXML
+	private JFXButton ingrChooser;
+
+	@FXML
 	private JFXTextField barcodeTextField;
 
 	@FXML
@@ -93,6 +113,16 @@ public class ManageCatalogProductTab implements Initializable {
 
 	@FXML
 	private CheckComboBox<String> ingridientsCombo;
+
+	JFXListView<String> ingredientList;
+
+	JFXPopup popupIngr;
+
+	ObservableList<String> dataIngr;
+
+	FilteredList<String> filteredDataIngr;
+
+	HashSet<String> selectedIngr = new HashSet<String>();
 
 	@FXML
 	private JFXTextField productPriceTextField;
@@ -116,7 +146,7 @@ public class ManageCatalogProductTab implements Initializable {
 	private String addProductTxt = "Add Product";
 
 	private String removeProductTxt = "Remove Product";
-	
+
 	IEventBus eventBus;
 
 	@Override
@@ -149,12 +179,77 @@ public class ManageCatalogProductTab implements Initializable {
 			enableRunOperation();
 		});
 
-		createIngredientMap();
-		ingridientsCombo.getItems().addAll(ingredients.keySet());
+		Label lbl = new Label("Choose Ingredients");
+		JFXTextField searchIngr = new JFXTextField();
+		JFXButton done = new JFXButton("Done!");
+		searchIngr.getStyleClass().add("JFXTextField");
+		done.getStyleClass().add("JFXButton");
+		done.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent __) {
+				popupIngr.hide();
+			}
+		});
+
+		ingredientList = new JFXListView<String>();
+		ingredientList.setMaxHeight(100);
+
+		HBox manubtnContanier = new HBox();
+		manubtnContanier.getChildren().addAll(done, searchIngr);
+		manubtnContanier.setSpacing(10);
+		manubtnContanier.setAlignment(Pos.CENTER);
+		VBox manuContainer = new VBox();
+		manuContainer.getChildren().addAll(lbl, ingredientList, manubtnContanier);
+		manuContainer.setPadding(new Insets(10, 50, 50, 50));
+		manuContainer.setSpacing(10);
+
+		popupIngr = new JFXPopup(manuContainer);
+		ingrChooser.setOnMouseClicked(e -> {
+			popupIngr.show(ingrChooser, PopupVPosition.TOP, PopupHPosition.LEFT);
+		});
+
+		ingredientList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+		// for multiple selection
+		ingredientList.addEventFilter(MouseEvent.MOUSE_PRESSED, evt -> {
+			Node node = evt.getPickResult().getIntersectedNode();
+			while (node != null && node != ingredientList && !(node instanceof ListCell)) {
+				node = node.getParent();
+			}
+			if (node instanceof ListCell) {
+				evt.consume();
+
+				ListCell<?> cell = (ListCell<?>) node;
+				ListView<?> lv = cell.getListView();
+
+				lv.requestFocus();
+
+				if (!cell.isEmpty()) {
+					int index = cell.getIndex();
+					if (cell.isSelected()) {
+						lv.getSelectionModel().clearSelection(index);
+					} else {
+						lv.getSelectionModel().select(index);
+					}
+				}
+
+				ObservableList<String> selectedItems = ingredientList.getSelectionModel().getSelectedItems();
+
+				selectedIngr.clear();
+				selectedIngr.addAll(selectedItems);
+
+			}
+		});
+
+		ingredientList.setDepth(1);
+		ingredientList.setExpanded(true);
+
+		createIngredientList();
 
 		// productLocationTextField.textProperty().addListener((observable,
 		// oldValue, newValue) -> {
 		// });
+
 		radioButtonContainerManageCatalogProduct.addRadioButtons(
 				Arrays.asList(new RadioButton[] { addCatalogProductRadioButton, removeCatalogProductRadioButton }));
 
@@ -196,6 +291,27 @@ public class ManageCatalogProductTab implements Initializable {
 		enableRunOperation();
 	}
 
+	private void createIngredientList() {
+		ingredients = new HashMap<String, Ingredient>();
+		try {
+			manager.getAllIngredients().forEach(ingredient -> ingredients.put(ingredient.getName(), ingredient));
+		} catch (InvalidParameter | CriticalError | ConnectionFailure e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.getStackTrace(e));
+			e.showInfoToUser();
+		}
+
+		dataIngr = FXCollections.observableArrayList();
+
+		dataIngr.setAll(ingredients.keySet());
+
+		filteredDataIngr = new FilteredList<>(dataIngr, s -> true);
+
+		ingredientList.setItems(filteredDataIngr);
+
+		selectedIngr.clear();
+	}
+
 	private void changeRunOprBtnTxt() {
 		runTheOperationButton.setText(addCatalogProductRadioButton.isSelected() ? addProductTxt : removeProductTxt);
 	}
@@ -218,17 +334,6 @@ public class ManageCatalogProductTab implements Initializable {
 			e.showInfoToUser();
 		}
 
-	}
-
-	private void createIngredientMap() {
-		ingredients = new HashMap<String, Ingredient>();
-		try {
-			manager.getAllIngredients().forEach(ingredient -> ingredients.put(ingredient.getName(), ingredient));
-		} catch (InvalidParameter | CriticalError | ConnectionFailure e) {
-			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
-			e.showInfoToUser();
-		}
 	}
 
 	@FXML
@@ -255,7 +360,7 @@ public class ManageCatalogProductTab implements Initializable {
 			if (addCatalogProductRadioButton.isSelected()) {
 				manager.addProductToCatalog(
 						new CatalogProduct(Long.parseLong(barcodeTextField.getText()), productNameTextField.getText(),
-								new HashSet<Ingredient>(), manufacturars.get(productManufacturerCombo.getValue()),
+								getSelectedIngr(), manufacturars.get(productManufacturerCombo.getValue()),
 								productDescriptionTextField.getText().isEmpty() ? "N/A"
 										: productDescriptionTextField.getText(),
 								Double.parseDouble(productPriceTextField.getText()), "", new HashSet<Location>()));
@@ -277,9 +382,19 @@ public class ManageCatalogProductTab implements Initializable {
 		}
 	}
 
+	HashSet<Ingredient> tempIngr;
+
+	private HashSet<Ingredient> getSelectedIngr() {
+		tempIngr = new HashSet<Ingredient>();
+		selectedIngr.forEach(ingr -> {
+			tempIngr.add(ingredients.get(ingr));
+		});
+		return tempIngr;
+	}
+
 	void removeProductHandle() {
 		try {
-			
+
 			manager.removeProductFromCatalog(new SmartCode(Long.parseLong(barcodeTextField.getText()), null));
 			eventBus.post(new CatalogProductEvent());
 			printToSuccessLog("Remove product '" + productNameTextField.getText() + "' from catalog");
@@ -325,16 +440,13 @@ public class ManageCatalogProductTab implements Initializable {
 	public void barcodeScanned(BarcodeScanEvent ¢) {
 		barcodeTextField.setText(Long.toString(¢.getBarcode()));
 	}
-	
+
 	@Subscribe
 	public void onIngredientEvent(IngredientEvent event) {
-		createIngredientMap();
-		ingridientsCombo.getItems().clear();
-		ingridientsCombo.getItems().addAll(ingredients.keySet());
+		createIngredientList();
 		enableRunOperation();
 	}
-	
-	
+
 	@Subscribe
 	public void onManufacturerEvent(ManufacturerEvent event) {
 		createManufacturerMap();
@@ -342,6 +454,5 @@ public class ManageCatalogProductTab implements Initializable {
 		productManufacturerCombo.getItems().addAll(manufacturars.keySet());
 		enableRunOperation();
 	}
-	
 
 }

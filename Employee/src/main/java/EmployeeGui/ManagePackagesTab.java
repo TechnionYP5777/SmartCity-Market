@@ -514,7 +514,8 @@ public class ManagePackagesTab implements Initializable {
 
 		ingr = "";
 		ingerdients.forEach(ing -> {
-			ingr.concat(ing.getName() + "\n");
+			String temp = ing.getName() + "\n";
+			ingr += temp;
 		});
 		return ingr;
 	}
