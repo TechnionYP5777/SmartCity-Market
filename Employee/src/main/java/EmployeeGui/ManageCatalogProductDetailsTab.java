@@ -20,15 +20,19 @@ import EmployeeContracts.IManager;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import SMExceptions.CommonExceptions.CriticalError;
 import UtilsContracts.IConfiramtionDialog;
+import UtilsContracts.IEventBus;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.IngredientStillInUse;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ManfacturerStillInUse;
 import EmployeeDefs.AEmployeeException.ParamIDAlreadyExists;
 import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
+import EmployeeGuiContracts.IngredientEvent;
+import EmployeeGuiContracts.ManufacturerEvent;
 import EmployeeImplementations.Manager;
 import GuiUtils.DialogMessagesService;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.ProjectEventBus;
 import UtilsImplementations.StackTraceUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -142,9 +146,12 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	JFXPopup popupRenameManu;
 
 	JFXPopup popupRenameIngr;
+	
+	IEventBus eventBus;
 
 	void renameIngrPressed() {
 		long id = ingredients.get(selectedIngr.iterator().next()).getId();
+		eventBus.post(new IngredientEvent());
 		try {
 			manager.editIngredient(new Ingredient(id, renameIngrLbl.getText()));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e) {
@@ -163,6 +170,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		long id = manufacturars.get(selectedManu.iterator().next()).getId();
 		try {
 			manager.editManufacturer(new Manufacturer(id, renameManuLbl.getText()));
+			eventBus.post(new ManufacturerEvent());
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.getStackTrace(e));
@@ -180,6 +188,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 				throw new ParamIDAlreadyExists();
 			}
 			manager.addIngredient(new Ingredient(0, newIngr.getText()));
+			eventBus.post(new IngredientEvent());
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.getStackTrace(e));
@@ -197,6 +206,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 				throw new ParamIDAlreadyExists();
 			}
 			manager.addManufacturer(new Manufacturer(0, newManu.getText()));
+			eventBus.post(new ManufacturerEvent());
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.getStackTrace(e));
@@ -218,6 +228,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		selectedIngr.forEach(ing -> {
 			try {
 				manager.removeIngredient(ingredients.get(ing), false);
+				eventBus.post(new IngredientEvent());
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist
 					| IngredientStillInUse e) {
 				log.fatal(e);
@@ -241,6 +252,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		selectedManu.forEach(man -> {
 			try {
 				manager.removeManufacturer(manufacturars.get(man));
+				eventBus.post(new ManufacturerEvent());
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist
 					| ManfacturerStillInUse e) {
 				log.fatal(e);
@@ -256,6 +268,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
+		
+		eventBus = InjectionFactory.getInstance(ProjectEventBus.class);
 
 		createManufacturerList();
 		createIngredientList();

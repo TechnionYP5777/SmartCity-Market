@@ -25,6 +25,7 @@ import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import EmployeeContracts.IWorker;
+import EmployeeGuiContracts.CatalogProductEvent;
 import EmployeeImplementations.Manager;
 import GuiUtils.DialogMessagesService;
 import GuiUtils.RadioButtonEnabler;
@@ -32,9 +33,11 @@ import SMExceptions.SMException;
 import SmartcodeParser.SmartcodePrint;
 import UtilsContracts.BarcodeScanEvent;
 import UtilsContracts.IBarcodeEventHandler;
+import UtilsContracts.IEventBus;
 import UtilsContracts.SmartcodeScanEvent;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.ProjectEventBus;
 import UtilsImplementations.StackTraceUtil;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -190,9 +193,13 @@ public class ManagePackagesTab implements Initializable {
 	IWorker worker = InjectionFactory.getInstance(Manager.class);
 
 	JFXDatePicker datePickerForSmartCode;
+	
+	IEventBus eventBus;
 
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
+		eventBus = InjectionFactory.getInstance(ProjectEventBus.class);
+		eventBus.register(this);
 		barcodeEventHandler.register(this);
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (!newValue.matches("\\d*"))
@@ -525,6 +532,11 @@ public class ManagePackagesTab implements Initializable {
 			}
 		});
 
+	}
+	
+	@Subscribe
+	public void onCatalogProductEvent(CatalogProductEvent event) { 
+		mouseClikedOnBarcodeField(null);
 	}
 
 	@FXML

@@ -165,4 +165,7 @@
       <URL value="@ManageCatalogProductTab.css" />
       <URL value="@../ProjectCss/projectCss.css" />
    </stylesheets>
+   <padding>
+      <Insets top="100.0" />
+   </padding>
 </StackPane>

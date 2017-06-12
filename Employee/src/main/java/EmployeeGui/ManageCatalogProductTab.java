@@ -28,6 +28,9 @@ import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import SMExceptions.CommonExceptions.CriticalError;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
+import EmployeeGuiContracts.CatalogProductEvent;
+import EmployeeGuiContracts.IngredientEvent;
+import EmployeeGuiContracts.ManufacturerEvent;
 import EmployeeImplementations.Manager;
 import GuiUtils.DialogMessagesService;
 import GuiUtils.RadioButtonEnabler;
@@ -35,8 +38,10 @@ import SMExceptions.SMException;
 import UtilsContracts.BarcodeScanEvent;
 import UtilsContracts.IBarcodeEventHandler;
 import UtilsContracts.IConfiramtionDialog;
+import UtilsContracts.IEventBus;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
+import UtilsImplementations.ProjectEventBus;
 import UtilsImplementations.StackTraceUtil;
 import de.jensd.fx.glyphs.GlyphsBuilder;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -111,9 +116,13 @@ public class ManageCatalogProductTab implements Initializable {
 	private String addProductTxt = "Add Product";
 
 	private String removeProductTxt = "Remove Product";
+	
+	IEventBus eventBus;
 
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
+		eventBus = InjectionFactory.getInstance(ProjectEventBus.class);
+		eventBus.register(this);
 		barcodeEventHandler.register(this);
 		barcodeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (!newValue.matches("\\d*"))
@@ -198,7 +207,6 @@ public class ManageCatalogProductTab implements Initializable {
 	}
 
 	private void createManufacturerMap() {
-
 		manufacturars = new HashMap<String, Manufacturer>();
 
 		try {
@@ -271,9 +279,9 @@ public class ManageCatalogProductTab implements Initializable {
 
 	void removeProductHandle() {
 		try {
-
+			
 			manager.removeProductFromCatalog(new SmartCode(Long.parseLong(barcodeTextField.getText()), null));
-
+			eventBus.post(new CatalogProductEvent());
 			printToSuccessLog("Remove product '" + productNameTextField.getText() + "' from catalog");
 
 			cleanFields();
@@ -316,7 +324,24 @@ public class ManageCatalogProductTab implements Initializable {
 	@Subscribe
 	public void barcodeScanned(BarcodeScanEvent ¢) {
 		barcodeTextField.setText(Long.toString(¢.getBarcode()));
-
 	}
+	
+	@Subscribe
+	public void onIngredientEvent(IngredientEvent event) {
+		createIngredientMap();
+		ingridientsCombo.getItems().clear();
+		ingridientsCombo.getItems().addAll(ingredients.keySet());
+		enableRunOperation();
+	}
+	
+	
+	@Subscribe
+	public void onManufacturerEvent(ManufacturerEvent event) {
+		createManufacturerMap();
+		productManufacturerCombo.getItems().clear();
+		productManufacturerCombo.getItems().addAll(manufacturars.keySet());
+		enableRunOperation();
+	}
+	
 
 }

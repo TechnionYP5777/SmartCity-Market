@@ -73,4 +73,7 @@
       <URL value="@../ProjectCss/projectCss.css" />
       <URL value="@ManageEmployeesTab.css" />
    </stylesheets>
+   <padding>
+      <Insets top="100.0" />
+   </padding>
 </StackPane>
