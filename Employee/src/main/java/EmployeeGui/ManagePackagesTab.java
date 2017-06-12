@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
@@ -20,6 +21,7 @@ import com.jfoenix.controls.JFXPopup.PopupHPosition;
 import com.jfoenix.controls.JFXPopup.PopupVPosition;
 
 import BasicCommonClasses.CatalogProduct;
+import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
@@ -193,7 +195,7 @@ public class ManagePackagesTab implements Initializable {
 	IWorker worker = InjectionFactory.getInstance(Manager.class);
 
 	JFXDatePicker datePickerForSmartCode;
-	
+
 	IEventBus eventBus;
 
 	@Override
@@ -496,12 +498,25 @@ public class ManagePackagesTab implements Initializable {
 	private void showMoreDetailsButtonPressed(ActionEvent __) {
 
 		if (catalogProduct != null)
-			DialogMessagesService.showInfoDialog(catalogProduct.getName(),
-					"Description: " + catalogProduct.getDescription(),
-					"Barcode: " + catalogProduct.getBarcode() + "\n" + "Manufacturer: "
-							+ catalogProduct.getManufacturer().getName() + "\n" + "Price: " + catalogProduct.getPrice()
-							+ " Nis");
+			DialogMessagesService.showInfoDialog(catalogProduct.getName(), null,
+					"Barcode: " + catalogProduct.getBarcode() + "\n" + "Description: " + catalogProduct.getDescription()
+							+ "\n" + "Manufacturer: " + catalogProduct.getManufacturer().getName() + "\n"
+							+ "Ingredients: " + getIngredients() + "Price: " + catalogProduct.getPrice() + " Nis");
 
+	}
+
+	String ingr = "";
+
+	private String getIngredients() {
+		HashSet<Ingredient> ingerdients = catalogProduct.getIngredients();
+		if (ingerdients == null || ingerdients.isEmpty())
+			return "N/A\n";
+
+		ingr = "";
+		ingerdients.forEach(ing -> {
+			ingr.concat(ing.getName() + "\n");
+		});
+		return ingr;
 	}
 
 	@Subscribe
@@ -533,9 +548,9 @@ public class ManagePackagesTab implements Initializable {
 		});
 
 	}
-	
+
 	@Subscribe
-	public void onCatalogProductEvent(CatalogProductEvent event) { 
+	public void onCatalogProductEvent(CatalogProductEvent event) {
 		mouseClikedOnBarcodeField(null);
 	}
 
