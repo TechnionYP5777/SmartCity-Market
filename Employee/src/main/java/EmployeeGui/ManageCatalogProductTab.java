@@ -125,11 +125,7 @@ public class ManageCatalogProductTab implements Initializable {
 				.addListener((observable, oldValue, newValue) -> enableRunOperation());
 
 		createManufacturerMap();
-		productManufacturerCombo.getItems()
-				.addAll(manufacturars.keySet() /*
-												 * "תנובה", "מאפיות ברמן",
-												 * "עלית", "אסם", "בייגל-בייגל"
-												 */);
+		productManufacturerCombo.getItems().addAll(manufacturars.keySet());
 
 		productManufacturerCombo.valueProperty().addListener(new ChangeListener<String>() {
 			@Override
@@ -145,11 +141,7 @@ public class ManageCatalogProductTab implements Initializable {
 		});
 
 		createIngredientMap();
-		ingridientsCombo.getItems()
-				.addAll(ingredients.keySet()/*
-											 * "תנובה", "מאפיות ברמן", "עלית",
-											 * "אסם", "בייגל-בייגל"
-											 */);
+		ingridientsCombo.getItems().addAll(ingredients.keySet());
 
 		// productLocationTextField.textProperty().addListener((observable,
 		// oldValue, newValue) -> {
@@ -253,10 +245,12 @@ public class ManageCatalogProductTab implements Initializable {
 
 		try {
 			if (addCatalogProductRadioButton.isSelected()) {
-				manager.addProductToCatalog(new CatalogProduct(Long.parseLong(barcodeTextField.getText()),
-						productNameTextField.getText(), new HashSet<Ingredient>(), getManufacturer(),
-						productDescriptionTextField.getText().isEmpty() ? "N/A" : productDescriptionTextField.getText(),
-						Double.parseDouble(productPriceTextField.getText()), "", new HashSet<Location>()));
+				manager.addProductToCatalog(
+						new CatalogProduct(Long.parseLong(barcodeTextField.getText()), productNameTextField.getText(),
+								new HashSet<Ingredient>(), manufacturars.get(productManufacturerCombo.getValue()),
+								productDescriptionTextField.getText().isEmpty() ? "N/A"
+										: productDescriptionTextField.getText(),
+								Double.parseDouble(productPriceTextField.getText()), "", new HashSet<Location>()));
 
 				printToSuccessLog("Added new product '" + productNameTextField.getText() + "' to catalog");
 
@@ -312,30 +306,6 @@ public class ManageCatalogProductTab implements Initializable {
 		productManufacturerCombo.getSelectionModel().clearSelection();
 		// TODO
 		// Clear the ingredients
-	}
-
-	private Manufacturer getManufacturer() {
-		Manufacturer $ = null;
-		String man = productManufacturerCombo.getValue();
-
-		switch (man) {
-		case "אסם":
-			$ = new Manufacturer(4, man);
-			break;
-		case "בייגל-בייגל":
-			$ = new Manufacturer(5, man);
-			break;
-		case "מאפיות ברמן":
-			$ = new Manufacturer(2, man);
-			break;
-		case "עלית":
-			$ = new Manufacturer(3, man);
-			break;
-		case "תנובה":
-			$ = new Manufacturer(1, man);
-			break;
-		}
-		return $;
 	}
 
 	private void printToSuccessLog(String msg) {
