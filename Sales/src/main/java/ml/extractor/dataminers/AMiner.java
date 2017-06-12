@@ -17,13 +17,17 @@ public abstract class AMiner {
 
 	InputPreferences inputPreferences;
 	
-	IGroceryPackage purchasedProduct;
+	IGroceryPackage currentProduct;
 	
-	public AMiner(InputPreferences inputPreferences, StoreData storeDate, IGroceryPackage purchasedProduct) {
+	IGroceryList currentGrocery;
+	
+	public AMiner(InputPreferences inputPreferences, StoreData storeDate, IGroceryList currentGrocery,
+			IGroceryPackage currentProduct) {
 		super();
 		this.storeDate = storeDate;
 		this.inputPreferences = inputPreferences;
-		this.purchasedProduct = purchasedProduct;
+		this.currentProduct = currentProduct;
+		this.currentGrocery = currentGrocery;
 	}
 	
 	public abstract Set<? extends ABasicProperty> extractProperties();
@@ -34,7 +38,7 @@ public abstract class AMiner {
 	}
 
 	public IGroceryPackage getPurchasedProduct() {
-		return purchasedProduct;
+		return currentProduct;
 	}
 	
 	public List<? extends IGroceryList> getHistory() {
@@ -47,6 +51,10 @@ public abstract class AMiner {
 	
 	public List<? extends IProduct> getCatalog() {
 		return storeDate.getCatalog();
+	}
+
+	public IGroceryList getCurrentGrocery() {
+		return currentGrocery;
 	}
 	
 }

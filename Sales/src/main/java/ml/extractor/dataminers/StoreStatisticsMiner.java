@@ -8,18 +8,19 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import api.contracts.IGroceryList;
 import api.contracts.IGroceryPackage;
 import api.contracts.IProduct;
 import api.preferences.InputPreferences;
 import api.types.StoreData;
 import ml.common.property.basicproperties.ABasicProperty;
-import ml.common.property.basicproperties.storestatistics.MostPopularProduct;
+import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
 
 public class StoreStatisticsMiner extends AMiner {
 
 	public StoreStatisticsMiner(InputPreferences inputPreferences, StoreData storeDate,
-			IGroceryPackage purchasedProduct) {
-		super(inputPreferences, storeDate, purchasedProduct);
+			IGroceryList currentGrocery, IGroceryPackage currentProduct) {
+		super(inputPreferences, storeDate, currentGrocery, currentProduct);
 	}
 
 	@Override
@@ -33,7 +34,7 @@ public class StoreStatisticsMiner extends AMiner {
 	
 	/**
 	 * this methods generate property of the most popular items
-	 * (the number of top popular item declared in {@link MostPopularProduct}
+	 * (the number of top popular item declared in {@link MostPopularProductProperty}
 	 * @return
 	 */
 	private Set<? extends ABasicProperty> extractMostPopularProducts() {
@@ -42,20 +43,20 @@ public class StoreStatisticsMiner extends AMiner {
 			.collect(Collectors.groupingBy(g -> ((IGroceryPackage)g).getProduct(), 
 					Collectors.counting()));
 		
-		List<MostPopularProduct> ProductsOrederdByPopularity = productsCount.entrySet().stream().sorted(new Comparator<Entry<? extends IProduct, Long>>() {
+		List<MostPopularProductProperty> ProductsOrederdByPopularity = productsCount.entrySet().stream().sorted(
+				new Comparator<Entry<? extends IProduct, Long>>() {
 
 			@Override
 			public int compare(Entry<? extends IProduct, Long> arg0, Entry<? extends IProduct, Long> arg1) {
 				return Long.compare(arg1.getValue(), arg0.getValue());
 			}
-		})
-				.map(e -> {
+		}).map(e -> {
 				Entry<? extends IProduct, Long> entry = e;
-				return new MostPopularProduct(entry.getValue(), entry.getKey());
+				return new MostPopularProductProperty(entry.getKey(), entry.getValue());
 		})
 				.collect(Collectors.toList());
 
-		return new HashSet<>(ProductsOrederdByPopularity.subList(0, MostPopularProduct.numOfTop));
+		return new HashSet<>(ProductsOrederdByPopularity.subList(0, MostPopularProductProperty.numOfTop));
 		
 	}
 	

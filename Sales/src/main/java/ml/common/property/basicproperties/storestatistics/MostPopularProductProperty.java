@@ -10,7 +10,7 @@ import ml.deducer.deductionrules.ADeductionRule;
  * @author noam
  *
  */
-public class MostPopularProduct extends ABasicProperty  {
+public class MostPopularProductProperty extends ABasicProperty  {
 
 	public static int numOfTop = 50;
 	
@@ -18,13 +18,13 @@ public class MostPopularProduct extends ABasicProperty  {
 	IProduct product;
 	
 	
-	public MostPopularProduct(long amount, IProduct product) {
+	public MostPopularProductProperty(IProduct product, long amount) {
 		super();
 		this.amount = amount;
 		this.product = product;
 	}
 	
-	public MostPopularProduct(long amount, IProduct product, ADeductionRule rule) {
+	public MostPopularProductProperty(IProduct product, long amount, ADeductionRule rule) {
 		super(rule);
 		this.amount = amount;
 		this.product = product;
@@ -54,7 +54,7 @@ public class MostPopularProduct extends ABasicProperty  {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		MostPopularProduct other = (MostPopularProduct) obj;
+		MostPopularProductProperty other = (MostPopularProductProperty) obj;
 		if (product == null) {
 			if (other.product != null)
 				return false;

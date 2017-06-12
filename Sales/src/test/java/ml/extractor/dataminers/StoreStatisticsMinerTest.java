@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import api.types.StoreData;
 import ml.common.property.basicproperties.ABasicProperty;
-import ml.common.property.basicproperties.storestatistics.MostPopularProduct;
+import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
 import testmocks.DBMock;
 import testmocks.GroceryListMock;
 import testmocks.GroceryPackageMock;
@@ -50,14 +50,14 @@ public class StoreStatisticsMinerTest {
 
 	@Test
 	public void test50MostPopularProperty() {
-		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryPackageMock(DBMock.getProduct(1)))
-				.extractProperties();
+		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), sd,
+				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
 		
 		long numOfRightAmount = result.stream()
-				.filter(p -> p instanceof MostPopularProduct & ((MostPopularProduct)p).getAmount() == 2).count();
+				.filter(p -> p instanceof MostPopularProductProperty & ((MostPopularProductProperty)p).getAmount() == 2).count();
 		
 		for (long i=1; i <= 50; i++)
-			assertTrue("validate product: " + i, result.contains(new MostPopularProduct(2, DBMock.getProduct(i))));
+			assertTrue(result.contains(new MostPopularProductProperty(DBMock.getProduct(i), 2)));
 		
 		assertEquals(50, numOfRightAmount);
 		
@@ -65,7 +65,8 @@ public class StoreStatisticsMinerTest {
 
 	@Test
 	public void testStoreStatisticsMiner() {
-		new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryPackageMock(DBMock.getProduct(1)));
+		new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
+				new GroceryPackageMock(DBMock.getProduct(1)));
 	}
 
 }

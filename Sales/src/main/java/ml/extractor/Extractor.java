@@ -17,7 +17,7 @@ public class Extractor {
 			IGroceryList currentGrocery, IGroceryPackage currentProduct){
 		Set<ABasicProperty> result = new HashSet<>();
 		
-		result.addAll(new StoreStatisticsMiner(inputPreferences, storeData, currentProduct).extractProperties());
+		result.addAll(new StoreStatisticsMiner(inputPreferences, storeData, currentGrocery, currentProduct).extractProperties());
 		
 		return result;
 
