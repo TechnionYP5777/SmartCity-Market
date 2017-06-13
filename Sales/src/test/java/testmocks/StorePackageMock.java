@@ -20,6 +20,14 @@ public class StorePackageMock implements IStorePackage {
 		this.place = place;
 	}
 	
+	public StorePackageMock(long barcode){
+		super();
+		this.product = new ProductMock(barcode);
+		this.amount = -1;
+		this.expirationDate = null;
+		this.place = null;
+	}
+
 	@Override
 	public ProductMock getProduct() {
 		return product;
@@ -33,6 +41,10 @@ public class StorePackageMock implements IStorePackage {
 	@Override
 	public LocalDate getExpirationDate() {
 		return expirationDate;
+	}
+
+	public void setExpirationDate(LocalDate expirationDate) {
+		this.expirationDate = expirationDate;
 	}
 
 	@Override
