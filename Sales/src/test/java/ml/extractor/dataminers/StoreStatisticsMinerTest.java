@@ -22,6 +22,12 @@ import testmocks.GroceryListMock;
 import testmocks.GroceryPackageMock;
 import testmocks.StorePackageMock;
 
+/**
+ * @author noam yefet
+ * @author idan atias
+ *
+ * @since Jun 11, 2017
+ */
 public class StoreStatisticsMinerTest {
 
 	private static List<GroceryListMock> history = new ArrayList<>();

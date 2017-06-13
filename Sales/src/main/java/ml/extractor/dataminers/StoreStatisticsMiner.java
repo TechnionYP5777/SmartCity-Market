@@ -20,6 +20,13 @@ import ml.common.property.basicproperties.ABasicProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireStorePackageProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
 
+/**
+ * 
+ * @author noam yefet
+ * @author idan atias
+ *
+ * @since Jun 11, 2017
+ */
 public class StoreStatisticsMiner extends AMiner {
 
 	public StoreStatisticsMiner(InputPreferences inputPreferences, StoreData storeDate, IGroceryList currentGrocery,
