@@ -74,7 +74,7 @@ public class StoreStatisticsMinerTest {
 				new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
 
 		long numOfRightAmount = result.stream().filter(
-				p -> p instanceof MostPopularProductProperty & ((MostPopularProductProperty) p).getAmount() == 2)
+				p -> p instanceof MostPopularProductProperty && ((MostPopularProductProperty) p).getAmount() == 2)
 				.count();
 
 		for (long i = 1; i <= 50; i++)
