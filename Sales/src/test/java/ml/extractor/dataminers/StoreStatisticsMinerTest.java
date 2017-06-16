@@ -17,6 +17,7 @@ import api.contracts.IStorePackage;
 import api.types.StoreData;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireStorePackageProperty;
+import ml.common.property.basicproperties.storestatistics.MostPopularManufacturerProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
 import testmocks.DBMock;
 import testmocks.GroceryListMock;
@@ -38,11 +39,11 @@ public class StoreStatisticsMinerTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 
-		// test50MostPopularProperty
+		// test50MostPopularProperty & testMostPopularManufacturersProperty
 		for (long i = 1; i <= DBMock.NUM_OF_PRODUCTS; i++)
 			history.add(new GroceryListMock("alice").addProdcut(DBMock.getProduct(i)));
 
-		for (long i = 1; i <= 50; i++)
+		for (long i = 1; i <= MostPopularProductProperty.numOfTop; i++)
 			history.add(new GroceryListMock("bob").addProdcut(DBMock.getProduct(i)));
 
 		// testAboutToExpireProperty
@@ -68,7 +69,7 @@ public class StoreStatisticsMinerTest {
 	}
 
 	@Test
-	public void test50MostPopularProperty() {
+	public void test50MostPopularProductsProperty() {
 		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
 				new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
 
@@ -76,10 +77,10 @@ public class StoreStatisticsMinerTest {
 				p -> p instanceof MostPopularProductProperty && ((MostPopularProductProperty) p).getAmount() == 2)
 				.count();
 
-		for (long i = 1; i <= 50; i++)
+		for (long i = 1; i <= MostPopularProductProperty.numOfTop; i++)
 			assertTrue(result.contains(new MostPopularProductProperty(DBMock.getProduct(i), 2)));
 
-		assertEquals(50, numOfRightAmount);
+		assertEquals(MostPopularProductProperty.numOfTop, numOfRightAmount);
 
 	}
 
@@ -101,6 +102,22 @@ public class StoreStatisticsMinerTest {
 				 assertTrue(result.contains(new AboutToExpireStorePackageProperty(spm)));
 		}
 
+	}
+	
+	@Test
+	public void testMostPopularManufacturersProperty() {
+		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
+				new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+		
+		int expectedAmountOfMostPopularManufacturer = 3;
+		long numOfRightAmount = result.stream().filter(
+				p -> p instanceof MostPopularManufacturerProperty && ((MostPopularManufacturerProperty) p).getAmount() == expectedAmountOfMostPopularManufacturer)
+				.count();
+
+		assertEquals(MostPopularManufacturerProperty.numOfTop, numOfRightAmount);
+		
+		for (long i = 1; i <= numOfRightAmount; i++)
+			assertTrue(result.contains(new MostPopularManufacturerProperty(DBMock.getProduct(i).getManufacturer(), expectedAmountOfMostPopularManufacturer)));
 	}
 
 	@SuppressWarnings("unused")

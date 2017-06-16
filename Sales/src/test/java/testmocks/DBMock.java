@@ -14,7 +14,7 @@ public class DBMock {
 	
 	static {
 		for (long i=1; i<=NUM_OF_PRODUCTS; i++){
-			productCatalog.put(i, new ProductMock(i).setName("" + i).setPrice(i + 0.5));
+			productCatalog.put(i, new ProductMock(i).setName("" + i).setPrice(i + 0.5).setManufacturer(new ManufacturerMock("man_" + ((i+1) % 75) )));
 		}
 	}
 	
