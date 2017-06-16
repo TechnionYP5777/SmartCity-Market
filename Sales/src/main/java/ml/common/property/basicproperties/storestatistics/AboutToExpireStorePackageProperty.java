@@ -1,5 +1,8 @@
 package ml.common.property.basicproperties.storestatistics;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 import api.contracts.IStorePackage;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.deducer.deductionrules.ADeductionRule;
@@ -19,15 +22,15 @@ public class AboutToExpireStorePackageProperty extends ABasicProperty {
 	int diff; //holds the diff (in days) between the current date and the product's E.D (the ABS value)
 	IStorePackage storePackage;
 
-	public AboutToExpireStorePackageProperty(IStorePackage storePackage, int diff) {
+	public AboutToExpireStorePackageProperty(IStorePackage storePackage) {
 		super();
-		this.diff = diff;
+		this.diff = Period.between(LocalDate.now(), storePackage.getExpirationDate()).getDays();
 		this.storePackage = storePackage;
 	}
 	
-	public AboutToExpireStorePackageProperty(IStorePackage storePackage, int diff, ADeductionRule rule) {
+	public AboutToExpireStorePackageProperty(IStorePackage storePackage, ADeductionRule rule) {
 		super(rule);
-		this.diff = diff;
+		this.diff = Period.between(LocalDate.now(), storePackage.getExpirationDate()).getDays();
 		this.storePackage = storePackage;
 	}
 

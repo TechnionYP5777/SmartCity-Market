@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import api.contracts.IStorePackage;
 import api.types.StoreData;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireStorePackageProperty;
@@ -46,12 +47,10 @@ public class StoreStatisticsMinerTest {
 
 		// testAboutToExpireProperty
 		for (long i = 1; i <= DBMock.NUM_OF_PRODUCTS; i++) {
-			StorePackageMock spm = new StorePackageMock(i);
 			if (i <= DBMock.NUM_OF_PRODUCTS - AboutToExpireStorePackageProperty.numOfTop)
-				spm.setExpirationDate(LocalDate.MAX); // far E.D
+				stock.add(new StorePackageMock(i, LocalDate.MAX)); // far E.D
 			else
-				spm.setExpirationDate(LocalDate.now()); // close E.D
-			stock.add(spm);
+				stock.add(new StorePackageMock(i, LocalDate.now())); // close E.D
 		}
 
 	}
@@ -93,12 +92,15 @@ public class StoreStatisticsMinerTest {
 				.filter(p -> p instanceof AboutToExpireStorePackageProperty).count();
 
 		assertEquals(AboutToExpireStorePackageProperty.numOfTop, totalAboutToExpireStorePackages);
+		
+		for (IStorePackage spm : stock) {
+		    long currSpmBarcode = spm.getProduct().getBarcode();
+			 if (currSpmBarcode <= DBMock.NUM_OF_PRODUCTS - AboutToExpireStorePackageProperty.numOfTop)
+				 assertFalse(result.contains(new AboutToExpireStorePackageProperty(spm)));
+			 else
+				 assertTrue(result.contains(new AboutToExpireStorePackageProperty(spm)));
+		}
 
-		// for (long i = DBMock.NUM_OF_PRODUCTS -
-		// AboutToExpireStorePackageProperty.numOfTop; i <=
-		// DBMock.NUM_OF_PRODUCTS; i++)
-		// assertTrue(result.contains(new AboutToExpireStorePackageProperty(new
-		// ISt)));
 	}
 
 	@SuppressWarnings("unused")

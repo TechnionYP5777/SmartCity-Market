@@ -106,8 +106,7 @@ public class StoreStatisticsMiner extends AMiner {
 					})
 					.map(sp -> {
 					IStorePackage storePackage = sp;
-					int diff = Period.between(currentDate, storePackage.getExpirationDate()).getDays();
-					return new AboutToExpireStorePackageProperty(storePackage, diff);
+					return new AboutToExpireStorePackageProperty(storePackage);
 					})
 					.collect(Collectors.toList());
 
