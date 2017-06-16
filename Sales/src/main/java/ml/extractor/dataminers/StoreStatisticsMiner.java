@@ -12,12 +12,14 @@ import java.time.LocalDate;
 
 import api.contracts.IGroceryList;
 import api.contracts.IGroceryPackage;
+import api.contracts.IManufacturer;
 import api.contracts.IProduct;
 import api.contracts.IStorePackage;
 import api.preferences.InputPreferences;
 import api.types.StoreData;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireStorePackageProperty;
+import ml.common.property.basicproperties.storestatistics.MostPopularManufacturerProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
 
 /**
@@ -40,6 +42,7 @@ public class StoreStatisticsMiner extends AMiner {
 
 		result.addAll(extractMostPopularProducts());
 		result.addAll(extractAboutToExpireStorePackages());
+		result.addAll(extractMostPopularManufacturers());
 
 		return result;
 	}
@@ -111,6 +114,36 @@ public class StoreStatisticsMiner extends AMiner {
 					.collect(Collectors.toList());
 
 		return new HashSet<>(storePackagesOrderedByDiff.subList(0, AboutToExpireStorePackageProperty.numOfTop));
+	}
+	
+	/**
+	 * this methods generate property of the most popular manufactures (the number of
+	 * top manufactures declared in {@link MostPopularManufacturerProperty}
+	 * 
+	 * @return
+	 */
+	private Set<? extends ABasicProperty> extractMostPopularManufacturers() {
+
+		Map<? extends IManufacturer, Long> manufacturersCount = 
+				getHistory()
+					.stream()
+					.flatMap(gl -> gl.getProductsList().stream())
+					.map(gp -> gp.getProduct())
+					.collect(Collectors.groupingBy(p -> p.getManufacturer(), Collectors.counting()));
+
+		List<MostPopularManufacturerProperty> manufacturersOrederdByPopularity = manufacturersCount.entrySet().stream()
+				.sorted(new Comparator<Entry<? extends IManufacturer, Long>>() {
+
+					@Override
+					public int compare(Entry<? extends IManufacturer, Long> arg0, Entry<? extends IManufacturer, Long> arg1) {
+						return Long.compare(arg1.getValue(), arg0.getValue());
+					}
+				}).map(e -> {
+					Entry<? extends IManufacturer, Long> entry = e;
+					return new MostPopularManufacturerProperty(entry.getKey(), entry.getValue());
+				}).collect(Collectors.toList());
+
+		return new HashSet<>(manufacturersOrederdByPopularity.subList(0, MostPopularManufacturerProperty.numOfTop));
 	}
 
 }
