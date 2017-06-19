@@ -1,12 +1,19 @@
 package CustomerGuiScreens;
 
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import org.apache.log4j.PropertyConfigurator;
 
+import CommonDefs.GuiCommonDefs;
 import CustomerContracts.ICustomer;
 import CustomerDI.CustomerDiConfigurator;
 import CustomerImplementations.Customer;
 import CustomerImplementations.CustomerDefs;
 import GuiUtils.AbstractApplicationScreen;
+import GuiUtils.DialogMessagesService;
 import SMExceptions.SMException;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
@@ -66,6 +73,17 @@ public class CustomerApplicationScreen extends AbstractApplicationScreen {
 	}
 
 	public static void main(String[] args) {
+		
+		try {
+			Path path = FileSystems.getDefault().getPath("../log4j.properties");
+			Files.deleteIfExists(path);
+		} catch (IOException x) {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.logFilePermissionsHeader, null,
+					GuiCommonDefs.logFilePermissions);
+			log.fatal(x);
+			StackTraceUtil.stackTraceToStr(x);	
+		}
+		
 		/* Setting log properties */
 		PropertyConfigurator.configure("../log4j.properties");
 		

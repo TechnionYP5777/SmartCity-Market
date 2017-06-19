@@ -100,7 +100,10 @@ public class GuiCommonDefs {
 	public static final String wrongAnswerGiven = "The answer is wrong, please try again.";
 	
 	public static final String emptyAllergensSet = "No allergens to remove.";
-
+	
+	public static final String logFilePermissionsHeader = "File Error";
+	
+	public static final String logFilePermissions = "Could not delete old log file. Please delete it manually and restart the application";
 	
 	public static String productsPicturesFolderPath = String.valueOf("../Common/src/main/resources/ProductsPictures");
 	

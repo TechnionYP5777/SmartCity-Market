@@ -1,15 +1,22 @@
 package EmployeeGui;
 
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import org.apache.log4j.PropertyConfigurator;
 import com.sun.javafx.application.LauncherImpl;
 
 import CommonDI.CommonDiConfigurator;
+import CommonDefs.GuiCommonDefs;
 import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeCommon.IEmployeeScreensParameterService;
 import EmployeeContracts.IWorker;
 import EmployeeDI.EmployeeDiConfigurator;
 import EmployeeImplementations.Worker;
 import GuiUtils.AbstractApplicationScreen;
+import GuiUtils.DialogMessagesService;
 import SMExceptions.SMException;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
@@ -84,6 +91,15 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 		}
 
 		/* Setting log properties */
+		try {
+			Path path = FileSystems.getDefault().getPath("../log4j.properties");
+			Files.deleteIfExists(path);
+		} catch (IOException x) {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.logFilePermissionsHeader, null,
+					GuiCommonDefs.logFilePermissions);
+			log.fatal(x);
+			StackTraceUtil.stackTraceToStr(x);	
+		}
 		PropertyConfigurator.configure("../log4j.properties");
 
 		/* lunching program with preloader */
