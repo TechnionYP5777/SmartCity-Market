@@ -249,7 +249,7 @@ class UserNameScreen extends WizardPage {
 		} catch (NoSuchUserName e) {
 			e.showInfoToUser();
 			ForgetPasswordWizard.log.fatal(e);
-			ForgetPasswordWizard.log.debug(StackTraceUtil.getStackTrace(e));
+			ForgetPasswordWizard.log.debug(StackTraceUtil.stackTraceToStr(e));
 			return;
 		}
 		super.nextPage();
@@ -318,7 +318,7 @@ class QuestionScreen extends WizardPage {
 		} catch (WrongAnswer | NoSuchUserName e) {
 			e.showInfoToUser();
 			ForgetPasswordWizard.log.fatal(e + "");
-			ForgetPasswordWizard.log.debug(StackTraceUtil.getStackTrace(e));
+			ForgetPasswordWizard.log.debug(StackTraceUtil.stackTraceToStr(e));
 			return;
 		}
 		super.nextPage();

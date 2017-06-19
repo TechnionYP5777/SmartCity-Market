@@ -76,7 +76,7 @@ public class EmployeeLoginScreen implements Initializable {
 
 		} catch (Exception e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 		}
 	}
 
@@ -95,7 +95,7 @@ public class EmployeeLoginScreen implements Initializable {
 			employeeType = employee.login(userNameTextField.getText(), passwordField.getText(), true);
 		} catch (SMException e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 			return;
 		}
@@ -112,7 +112,7 @@ public class EmployeeLoginScreen implements Initializable {
 			ForgetPasswordWizard.start(forgot);
 		} catch (Exception e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			//TODO
 		}
 	}
@@ -130,7 +130,7 @@ public class EmployeeLoginScreen implements Initializable {
 			employeeType = employee.login("admin", "admin", true);
 		} catch (SMException e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 			return;
 		}

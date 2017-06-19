@@ -55,7 +55,7 @@ public class CustomerRegistration_IngredientsScreen implements Initializable {
 			ingredientsObservableList.addAll(customer.getAllIngredients());
     	} catch (SMException e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
     	}
 		ingredientsCheckListView.setItems(ingredientsObservableList);

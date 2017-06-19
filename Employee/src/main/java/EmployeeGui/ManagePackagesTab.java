@@ -408,7 +408,7 @@ public class ManagePackagesTab implements Initializable {
 
 		} catch (SMException e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 			return;
 		}
@@ -483,7 +483,7 @@ public class ManagePackagesTab implements Initializable {
 
 		} catch (SMException e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 		}
 		log.info("===============================runTheOperationButtonPressed======================================");

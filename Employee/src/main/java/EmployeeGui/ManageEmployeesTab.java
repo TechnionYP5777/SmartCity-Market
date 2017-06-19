@@ -111,7 +111,7 @@ public class ManageEmployeesTab implements Initializable {
 					securityCombo.getSelectionModel().getSelectedItem(), securityAnswerTxt.getText())));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | WorkerAlreadyExists e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 		}
 		createEmployeesList();
@@ -275,7 +275,7 @@ public class ManageEmployeesTab implements Initializable {
 			employeesInSystem = manager.getAllWorkers();
 		} catch (CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 		}
 
@@ -312,7 +312,7 @@ public class ManageEmployeesTab implements Initializable {
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure
 					| WorkerDoesNotExist e) {
 				log.fatal(e);
-				log.debug(StackTraceUtil.getStackTrace(e));
+				log.debug(StackTraceUtil.stackTraceToStr(e));
 				e.showInfoToUser();
 			}
 		});

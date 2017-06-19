@@ -7,8 +7,7 @@ import java.net.UnknownHostException;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import ClientServerCommunication.ProcessRequest;
 import ClientServerCommunication.ServerWorkerRunnable;
@@ -22,7 +21,7 @@ import ClientServerCommunication.ServerWorkerRunnable;
 public class ThreadPooledServer implements Runnable{
 
 	private static final int backlog = 50;
-	private static final Logger LOGGER = Logger.getLogger(ThreadPooledServer.class.getName());
+	static Logger log = Logger.getLogger(ThreadPooledServer.class.getName());
 	
 	private int serverPort;
 	private ServerSocket serverSocket;
@@ -60,7 +59,7 @@ public class ThreadPooledServer implements Runnable{
         
         threadPool = Executors.newFixedThreadPool(numOfThreads);
         
-        LOGGER.log(Level.FINE, "Server initialized successfully with " + numOfThreads + " threads, port number " + serverPort);
+        log.info("Server initialized successfully with " + numOfThreads + " threads, port number " + serverPort);
 	}
 
     public ThreadPooledServer(int serverPort, int numOfThreads, ProcessRequest processRequest) throws UnknownHostException {
@@ -78,7 +77,7 @@ public class ThreadPooledServer implements Runnable{
     @Override
 	public void run(){
         synchronized(this){
-            LOGGER.log(Level.FINE, "Server starts running");
+        	log.info("Server starts running");
         }
         
         openServerSocket();
@@ -90,12 +89,12 @@ public class ThreadPooledServer implements Runnable{
             	/* Accepts new client request */
                 clientSocket = this.serverSocket.accept();
                 
-                LOGGER.log(Level.FINE, "Server accepted client request on port " + clientSocket.getPort());
+                log.info("Server accepted client request on port " + clientSocket.getPort());
             } catch (IOException e) {
                 if (!isStopped)
 					throw new RuntimeException("Server failed to accept client connection", e);
                 
-                LOGGER.log(Level.FINE, "Server got interrupt, stop receiving client requests");
+                log.info("Server got interrupt, stop receiving client requests");
 				break;
             }
              
@@ -104,12 +103,12 @@ public class ThreadPooledServer implements Runnable{
             this.threadPool.execute(
                 new ServerWorkerRunnable(clientSocket, processRequest));
             
-            LOGGER.log(Level.FINE, "Server added client request on port " + clientSocket.getPort() + " to execution pool");
+            log.info("Server added client request on port " + clientSocket.getPort() + " to execution pool");
         }
         
         this.threadPool.shutdown();
         
-        LOGGER.log(Level.FINE, "Server shuted down successfully");
+        log.info("Server shuted down successfully");
     }
 
     /**
@@ -124,7 +123,7 @@ public class ThreadPooledServer implements Runnable{
             throw new RuntimeException("Server failed to close socket", e);
         }
         
-        LOGGER.log(Level.FINE, "Server closed socket succesfully");
+        log.info("Server closed socket succesfully");
     }
 
     /**
@@ -133,7 +132,7 @@ public class ThreadPooledServer implements Runnable{
      */
     public synchronized boolean isStopped(){
     	String state = (isStopped ? "" : "no ") + "running";
-        LOGGER.log(Level.FINE, "Server is currently " + state);
+    	log.info("Server is currently " + state);
         
         return isStopped;
     }
@@ -148,6 +147,6 @@ public class ThreadPooledServer implements Runnable{
             throw new RuntimeException("Server failed to open port " + serverPort, e);
         }
         
-        LOGGER.log(Level.FINE, "Server opened socket on port " + serverPort + " successfully");
+        log.info("Server opened socket on port " + serverPort + " successfully");
     }
 }

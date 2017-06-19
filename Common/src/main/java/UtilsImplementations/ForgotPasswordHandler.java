@@ -84,7 +84,6 @@ public class ForgotPasswordHandler {
 			clientRequestHandler.createSocket(port, host, timeout);
 		} catch (UnknownHostException | RuntimeException e) {
 			log.fatal("Creating communication with the server encounter severe fault: " + e.getMessage());
-
 			throw new CriticalError();
 		}
 	}

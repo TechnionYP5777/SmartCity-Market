@@ -103,12 +103,12 @@ public class CustomerLoginScreen implements Initializable {
 			regCustomer.login(username, password, true);
 		} catch (SMException e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 			return;
 		} catch (RuntimeException e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			DialogMessagesService.showErrorDialog(				
 					"Runtime Error" , null, "Please check the connection with the sever");
 			return;
@@ -133,12 +133,12 @@ public class CustomerLoginScreen implements Initializable {
 			customer.login(guestLogin.getUserName(), guestLogin.getUserName(), true);
 		} catch (SMException e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 			return;
 		} catch (RuntimeException e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			DialogMessagesService.showErrorDialog(				
 					"Runtime Error" , null, "Please check the connection with the sever");
 			return;

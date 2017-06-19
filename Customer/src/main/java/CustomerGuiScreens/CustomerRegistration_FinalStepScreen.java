@@ -88,7 +88,7 @@ public class CustomerRegistration_FinalStepScreen implements Initializable {
 			lines = reader.read(new File(termsFilePath));
 		} catch (IOException e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 		}
     	for (String line: lines )
 			termsTextArea.appendText(line + "\n");
@@ -107,7 +107,7 @@ public class CustomerRegistration_FinalStepScreen implements Initializable {
 			TempCustomerProfilePassingData.clear();
 		} catch (SMException e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 		}
 	}

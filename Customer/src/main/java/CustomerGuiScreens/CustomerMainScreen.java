@@ -282,7 +282,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			customer.addProductToCart(scannedSmartCode, 1);
 		} catch (SMException e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 			return;
 		}
@@ -296,7 +296,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			customer.returnProductToShelf(scannedSmartCode, 1);
 		} catch (SMException e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 			return;
 		}
@@ -310,7 +310,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			customer.removeAllItemsOfCartProduct(scannedSmartCode);
 		} catch (SMException e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 			return;
 		}
@@ -332,7 +332,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 					checkIngredients(catalogProduct);
 			} catch (SMException e) {
 				log.fatal(e);
-				log.debug(StackTraceUtil.getStackTrace(e));
+				log.debug(StackTraceUtil.stackTraceToStr(e));
 				e.showInfoToUser();
 				return;
 			}
@@ -376,7 +376,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			
 		} catch (SMException e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 			Platform.exit();
 			System.exit(0);

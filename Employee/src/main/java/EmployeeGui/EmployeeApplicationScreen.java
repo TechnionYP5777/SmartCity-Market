@@ -58,7 +58,7 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 					System.exit(0);
 				} catch (SMException e) {
 					log.fatal(e);
-					log.debug(StackTraceUtil.getStackTrace(e));
+					log.debug(StackTraceUtil.stackTraceToStr(e));
 					e.showInfoToUser();
 					Platform.exit();
 					System.exit(0);
@@ -69,7 +69,7 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 
 		} catch (Exception e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 		}
 	}
 

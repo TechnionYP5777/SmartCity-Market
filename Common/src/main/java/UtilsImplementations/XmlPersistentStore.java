@@ -44,8 +44,8 @@ public class XmlPersistentStore implements IPersistentStore {
 		mXmlSerializerProvider.addSerializer(restoredType, restoredType);
 		String path = getXmlPath(requester, restoredType);
 		if (!(new File(path).exists())) {
-			log.debug("Configuration file doesn't exist: " + path);
-			log.debug("Stack trace : \n" + Arrays.toString(Thread.currentThread().getStackTrace()));
+			log.fatal("Configuration file doesn't exist: " + path);
+			log.fatal("Stack trace : \n" + Arrays.toString(Thread.currentThread().getStackTrace()));
 			throw new FileNotFoundException();
 		}
 		

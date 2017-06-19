@@ -155,7 +155,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		try {
 			manager.editIngredient(new Ingredient(id, renameIngrLbl.getText()));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e) {
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			log.fatal(e);
 			e.showInfoToUser();
 		}
@@ -173,7 +173,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			eventBus.post(new ManufacturerEvent());
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 		}
 		selectedManu.clear();
@@ -191,7 +191,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			eventBus.post(new IngredientEvent());
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 		}
 		selectedIngr.clear();
@@ -209,7 +209,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			eventBus.post(new ManufacturerEvent());
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 		}
 		selectedManu.clear();
@@ -232,7 +232,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist
 					| IngredientStillInUse e) {
 				log.fatal(e);
-				log.debug(StackTraceUtil.getStackTrace(e));
+				log.debug(StackTraceUtil.stackTraceToStr(e));
 				e.showInfoToUser();
 			}
 		});
@@ -256,7 +256,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist
 					| ManfacturerStillInUse e) {
 				log.fatal(e);
-				log.debug(StackTraceUtil.getStackTrace(e));
+				log.debug(StackTraceUtil.stackTraceToStr(e));
 				e.showInfoToUser();
 			}
 		});
@@ -529,7 +529,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 					.forEach(manufacturer -> manufacturars.put(manufacturer.getName(), manufacturer));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 		}
 
@@ -552,7 +552,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 			manager.getAllIngredients().forEach(ingredient -> ingredients.put(ingredient.getName(), ingredient));
 		} catch (InvalidParameter | CriticalError | ConnectionFailure e) {
 			log.fatal(e);
-			log.debug(StackTraceUtil.getStackTrace(e));
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 		}
 

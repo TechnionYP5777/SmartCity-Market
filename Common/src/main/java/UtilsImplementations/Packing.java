@@ -44,7 +44,7 @@ public class Packing {
 				String filename = file.getName(), filepath = file.getAbsolutePath();
 				long filesize = file.length(); // size in bytes
 
-				log.debug("Zipping and adding: " + filename + " into " + zipFilePath);
+				log.info("Zipping and adding: " + filename + " into " + zipFilePath);
 
 				FileInputStream fins = new FileInputStream(filepath);
 				origin = new BufferedInputStream(fins, bufferSize);
@@ -63,14 +63,14 @@ public class Packing {
 
 			out.close();
 			if (totEntries == 0)
-				log.debug("Created zip " + zipFilePath + "has no entries.");
+				log.info("Created zip " + zipFilePath + "has no entries.");
 
-			log.debug("Successfully created zip " + zipFilePath);
+			log.info("Successfully created zip " + zipFilePath);
 			return new ZipFile(zipFilePath);
 
 		} catch (Exception e) {
-			log.error("Failed to pack files into " + zipFilePath);
-			log.error(e + "");
+			log.fatal("Failed to pack files into " + zipFilePath);
+			log.fatal(e + "");
 			return null;
 		}
 	}
@@ -85,12 +85,12 @@ public class Packing {
 		try {
 			unpackDir = new File(unpackPath);
 		} catch (Exception e) {
-			log.error(e + "");
+			log.fatal(e + "");
 			throw new PackUnpackException();
 		}
 
 		if (!unpackDir.isDirectory()) {
-			log.error("Unpacking failed: Unpack path must be a directory");
+			log.fatal("Unpacking failed: Unpack path must be a directory");
 			throw new PackUnpackException();
 		}
 
@@ -100,7 +100,7 @@ public class Packing {
 			ZipEntry entry;
 			for (Enumeration<? extends ZipEntry> e = zfile.entries(); e.hasMoreElements();) {
 				entry = e.nextElement();
-				log.debug("Extracting: " + entry);
+				log.info("Extracting: " + entry);
 				is = new BufferedInputStream(zfile.getInputStream(entry));
 				int count;
 				byte data[] = new byte[bufferSize];
@@ -116,8 +116,9 @@ public class Packing {
 				is.close();
 			}
 		} catch (Exception e) {
-			log.error(e + "");
-			log.error("Failed extracting zipfile " + zfile + " into " + unpackDir.getAbsolutePath());
+			log.fatal(e + "");
+			log.fatal("Failed extracting zipfile " + zfile + " into " + unpackDir.getAbsolutePath());
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 		}
 	}
 
@@ -130,8 +131,9 @@ public class Packing {
 			encodedfile = Base64.getEncoder().encodeToString(bytes) + "";
 			fileInputStreamReader.close();
 		} catch (Exception e) {
-			log.error(e + "");
-			log.error("Failed encoding file " + f);
+			log.fatal(e + "");
+			log.fatal("Failed encoding file " + f);
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			return null;
 		}
 		return encodedfile;
@@ -155,8 +157,9 @@ public class Packing {
 			return new File(resPath);
 
 		} catch (Exception e) {
-			log.error(e + "");
-			log.error("Failed decoding string into " + resPath);
+			log.fatal(e + "");
+			log.fatal("Failed decoding string into " + resPath);
+			log.debug(StackTraceUtil.stackTraceToStr(e));
 			return null;
 		}
 
