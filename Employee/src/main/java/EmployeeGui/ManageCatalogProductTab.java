@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
-import org.controlsfx.control.CheckComboBox;
 
 import com.google.common.eventbus.Subscribe;
 import com.jfoenix.controls.JFXButton;
@@ -111,9 +110,6 @@ public class ManageCatalogProductTab implements Initializable {
 	@FXML
 	private JFXComboBox<String> productManufacturerCombo;
 
-	@FXML
-	private CheckComboBox<String> ingridientsCombo;
-
 	JFXListView<String> ingredientList;
 
 	JFXPopup popupIngr;
@@ -181,6 +177,7 @@ public class ManageCatalogProductTab implements Initializable {
 
 		Label lbl = new Label("Choose Ingredients");
 		JFXTextField searchIngr = new JFXTextField();
+		searchIngr.setPromptText("Search Ingredient");
 		JFXButton done = new JFXButton("Done!");
 		searchIngr.getStyleClass().add("JFXTextField");
 		done.getStyleClass().add("JFXButton");

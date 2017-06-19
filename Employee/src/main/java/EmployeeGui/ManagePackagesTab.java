@@ -83,7 +83,7 @@ public class ManagePackagesTab implements Initializable {
 	VBox scanOrTypeCodePane;
 
 	@FXML
-	VBox productAfterScanPane;
+	HBox productAfterScanPane;
 
 	@FXML
 	VBox smartcodeOperationsPane;
