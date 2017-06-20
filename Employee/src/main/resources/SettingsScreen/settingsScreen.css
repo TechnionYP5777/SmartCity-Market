@@ -1,0 +1,9 @@
+.header {
+	-fx-font-size: 70;
+	-fx-text-fill: midnightblue;
+}
+
+.labelFont {
+	-fx-font-size: 30;
+	-fx-text-fill: midnightblue;
+}
