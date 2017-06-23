@@ -16,6 +16,7 @@ import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.GroceryList;
+import BasicCommonClasses.GroupBuying;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.ProductPackage;
@@ -700,5 +701,41 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 		log.info("getSalesForProduct command succeed.");
 
 		return new Gson().fromJson(commandWrapper.getData(), new TypeToken<List<Sale>>() {}.getType());
+	}
+
+	@Override
+	public List<GroupBuying> getAllGroupBuying() throws CriticalError, CustomerNotConnected {
+		String serverResponse;
+
+		log.info("Creating getAllGroupBuying command wrapper");
+
+		establishCommunication(CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
+
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					new CommandWrapper(id, CommandDescriptor.GET_ALL_GROUP_BUYING).serialize());
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+
+			throw new CriticalError();
+		}
+
+		terminateCommunication();
+
+		CommandWrapper commandWrapper = getCommandWrapper(serverResponse);
+
+		try {
+			resultDescriptorHandler(commandWrapper.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | CriticalError | AmountBiggerThanAvailable | ProductPackageDoesNotExist
+				| GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists | ForgotPasswordWrongAnswer |
+				InvalidParameter | ProductCatalogDoesNotExist ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+
+			throw new CriticalError();
+		}
+
+		log.info("getAllGroupBuying command succeed.");
+
+		return new Gson().fromJson(commandWrapper.getData(), new TypeToken<List<GroupBuying>>() {}.getType());
 	}
 }

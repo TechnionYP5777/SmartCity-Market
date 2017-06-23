@@ -6,6 +6,7 @@ import java.util.List;
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
+import BasicCommonClasses.GroupBuying;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
@@ -123,4 +124,5 @@ public interface ICustomer {
 	
 	List<Sale> getSalesForProduct(Long barcode) throws CriticalError, CustomerNotConnected, InvalidParameter, ProductCatalogDoesNotExist;
 
+	List<GroupBuying> getAllGroupBuying() throws CriticalError, CustomerNotConnected;
 }
