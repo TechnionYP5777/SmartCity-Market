@@ -738,4 +738,39 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 
 		return new Gson().fromJson(commandWrapper.getData(), new TypeToken<List<GroupBuying>>() {}.getType());
 	}
+
+	@Override
+	public void applyGroupBuyingSale(int saleID) throws CriticalError, CustomerNotConnected, InvalidParameter {
+		String serverResponse;
+
+		log.info("Creating applyGroupBuyingSale command wrapper to customer with saleID: " + saleID);
+
+		establishCommunication(CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
+
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					new CommandWrapper(id, CommandDescriptor.APPLY_GROUP_BUYING_SALE, Serialization.serialize(saleID))
+							.serialize());
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+
+			throw new CriticalError();
+		}
+
+		terminateCommunication();
+
+		CommandWrapper $ = getCommandWrapper(serverResponse);
+
+		try {
+			resultDescriptorHandler($.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | CriticalError | AmountBiggerThanAvailable | ProductPackageDoesNotExist
+				| GroceryListIsEmpty | AuthenticationError | ProductCatalogDoesNotExist | ForgotPasswordWrongAnswer
+				| UsernameAlreadyExists ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+
+			throw new CriticalError();
+		}
+
+		log.info("applyGroupBuyingSale command succeed.");
+	}
 }

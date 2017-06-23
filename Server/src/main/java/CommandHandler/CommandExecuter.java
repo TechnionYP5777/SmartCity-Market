@@ -1598,6 +1598,26 @@ public class CommandExecuter {
 		log.info("Get sales for product command system finished for barcode " + barcode);
 	}
 	
+	private void applyGroupBuyingSale(SQLDatabaseConnection c) {
+		Integer saleID;
+		
+		log.info("Apply group buying sale command called with from serderID " + inCommandWrapper.getSenderID() + " command called");
+		
+		try {
+			saleID = Serialization.deserialize(inCommandWrapper.getData(), Integer.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Is free customer username command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+		
+		//TODO Noam - call SQL here
+
+		log.info("Apply group buying sale command system finished for barcode " + saleID);
+	}
+	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
 			log.fatal("Failed to get SQL Database Connection");
@@ -1822,6 +1842,11 @@ public class CommandExecuter {
 			getSalesForProduct(c);
 			
 			break;
+			
+		case APPLY_GROUP_BUYING_SALE:
+			applyGroupBuyingSale(c);
+			
+			break;	
 			
 		default:
 			try {

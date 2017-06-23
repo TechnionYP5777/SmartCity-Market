@@ -779,7 +779,24 @@ public enum CommandDescriptor {
 	 *			PARAM_ID_IS_NOT_EXIST,
 	 *
 	 *	 ***** NOTES *****
-	 * 1. Only Manager can create sales.
 	 */
 	GET_SALES_FOR_PRODUCT,
+	
+	/**
+	 * Description: if customer want to use group buying sale / remove himself from sale he sends this command.
+	 * param1: int saleID - group buying sale id to enable / disable
+	 * retval: List of sales.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *			PARAM_ID_IS_NOT_EXIST,
+	 *
+	 *	 ***** NOTES *****
+	 */
+	APPLY_GROUP_BUYING_SALE,
 }
