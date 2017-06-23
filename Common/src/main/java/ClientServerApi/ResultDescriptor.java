@@ -229,7 +229,7 @@ public enum ResultDescriptor {
 	 * 
 	 * How to fix:
 	 * 1. Tell the manager that the given ingredient still used in products or in customers profiles
-	 * 		a. Remove the Ingredient anyway and remove all existing occurences in the system.
+	 * 		a. Remove the Ingredient anyway and remove all existing occurrences in the system.
 	 * 		b. Abort operation.
 	 * 
 	 */

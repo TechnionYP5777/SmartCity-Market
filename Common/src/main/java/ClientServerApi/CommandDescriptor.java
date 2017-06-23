@@ -519,6 +519,115 @@ public enum CommandDescriptor {
 	 */
 	GET_ALL_MANUFACTURERS,
 	
+	/**
+	 * Description: Create new sale in the system.
+	 * param1: Sale.
+	 * retval: Integer - sale ids.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can create sales.
+	 */
+	CREATE_NEW_SALE,
+	
+	/**
+	 * Description: remove sale from the system.
+	 * param1: Integer.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *			PARAM_ID_IS_NOT_EXIST,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can create sales.
+	 */
+	REMOVE_SALE,
+	
+	/**
+	 * Description: get all sales in the system.
+	 * param1: void.
+	 * retval: List of sales.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can create sales.
+	 */
+	GET_ALL_SALES,
+	
+	/**
+	 * Description: Create new group sale in the system.
+	 * param1: GroupBuying.
+	 * retval: Integer - group buying id.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can create sales.
+	 */
+	CREATE_NEW_GROUP_BUYING,
+	
+	/**
+	 * Description: remove sale from the system.
+	 * param1: Integer.
+	 * retval: void.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *			PARAM_ID_IS_NOT_EXIST,
+	 *
+	 *	 ***** NOTES *****
+	 * 1. Only Manager can create sales.
+	 */
+	REMOVE_GROUP_BUYING,
+	
+	/**
+	 * Description: get all group buying in the system.
+	 * param1: void.
+	 * retval: List of GroupBuying.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *
+	 *	 ***** NOTES *****
+	 */
+	GET_ALL_GROUP_BUYING,
+	
 	/********************************** Customer commands **********************************/
 
 	/**
@@ -654,47 +763,10 @@ public enum CommandDescriptor {
 	 * 1. Only Manager can remove ingredient.
 	 */
 	FORCE_REMOVE_INGREDIENT,
-	
+		
 	/**
-	 * Description: Create new sale in the system.
-	 * param1: Sale.
-	 * retval: Integer - sale ids.
-	 *
-	 * result_codes:
-	 * 		success:
-	 * 			SM_OK,
-	 * 		
-	 * 		failure:
-	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *	 		SM_INVALID_PARAMETER,
-	 *
-	 *	 ***** NOTES *****
-	 * 1. Only Manager can create sales.
-	 */
-	CREATE_NEW_SALE,
-	
-	/**
-	 * Description: remove sale from the system.
-	 * param1: Integer.
-	 * retval: void.
-	 *
-	 * result_codes:
-	 * 		success:
-	 * 			SM_OK,
-	 * 		
-	 * 		failure:
-	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *	 		SM_INVALID_PARAMETER,
-	 *			PARAM_ID_IS_NOT_EXIST,
-	 *
-	 *	 ***** NOTES *****
-	 * 1. Only Manager can create sales.
-	 */
-	REMOVE_SALE,
-	
-	/**
-	 * Description: get all sales in the system.
-	 * param1: void.
+	 * Description: get all sales which relevant for the product.
+	 * param1: barcode.
 	 * retval: List of sales.
 	 *
 	 * result_codes:
@@ -704,64 +776,10 @@ public enum CommandDescriptor {
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
 	 *	 		SM_INVALID_PARAMETER,
-	 *
-	 *	 ***** NOTES *****
-	 * 1. Only Manager can create sales.
-	 */
-	GET_ALL_SALES,
-	
-	/**
-	 * Description: Create new group sale in the system.
-	 * param1: GroupBuying.
-	 * retval: Integer - group buying id.
-	 *
-	 * result_codes:
-	 * 		success:
-	 * 			SM_OK,
-	 * 		
-	 * 		failure:
-	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *	 		SM_INVALID_PARAMETER,
-	 *
-	 *	 ***** NOTES *****
-	 * 1. Only Manager can create sales.
-	 */
-	CREATE_NEW_GROUP_BUYING,
-	
-	/**
-	 * Description: remove sale from the system.
-	 * param1: Integer.
-	 * retval: void.
-	 *
-	 * result_codes:
-	 * 		success:
-	 * 			SM_OK,
-	 * 		
-	 * 		failure:
-	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *	 		SM_INVALID_PARAMETER,
 	 *			PARAM_ID_IS_NOT_EXIST,
 	 *
 	 *	 ***** NOTES *****
 	 * 1. Only Manager can create sales.
 	 */
-	REMOVE_GROUP_BUYING,
-	
-	/**
-	 * Description: get all group buying in the system.
-	 * param1: void.
-	 * retval: List of GroupBuying.
-	 *
-	 * result_codes:
-	 * 		success:
-	 * 			SM_OK,
-	 * 		
-	 * 		failure:
-	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *	 		SM_INVALID_PARAMETER,
-	 *
-	 *	 ***** NOTES *****
-	 * 1. Only Manager can create sales.
-	 */
-	GET_ALL_GROUP_BUYING,
+	GET_SALES_FOR_PRODUCT,
 }

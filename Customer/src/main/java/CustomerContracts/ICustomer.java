@@ -7,6 +7,7 @@ import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.Ingredient;
+import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
 import CustomerContracts.ACustomerExceptions.AmountBiggerThanAvailable;
 import CustomerContracts.ACustomerExceptions.AuthenticationError;
@@ -119,4 +120,7 @@ public interface ICustomer {
 	List<Ingredient> getAllIngredients() throws CriticalError;
 	
 	Boolean isFreeUsername(String username) throws CriticalError;
+	
+	List<Sale> getSalesForProduct(Long barcode) throws CriticalError, CustomerNotConnected, InvalidParameter, ProductCatalogDoesNotExist;
+
 }

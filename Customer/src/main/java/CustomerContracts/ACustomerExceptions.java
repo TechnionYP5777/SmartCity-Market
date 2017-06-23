@@ -157,6 +157,20 @@ public class ACustomerExceptions extends SMException {
 					GuiCommonDefs.registrationWrongRepeatedPass);
 		}
 	}
+	
+	/**
+	 * Thrown when trying to get sale with invalid barcode
+	 */
+	public static class ProductBarcodeDoesntExist extends ACustomerExceptions {
+		
+		private static final long serialVersionUID = 0x2E79624F772ACDD2L;
+
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.registrationFieldFailureTitle, null,
+					GuiCommonDefs.productNotExistsInCatalogMsg);
+		}
+	}
 
 	@Override
 	public void showInfoToUser() {

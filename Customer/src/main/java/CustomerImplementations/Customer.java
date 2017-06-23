@@ -19,6 +19,7 @@ import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.ProductPackage;
+import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
@@ -663,5 +664,41 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 			log.fatal("Failed to get authentication question from server.");
 			return false;
 		}
+	}
+
+	@Override
+	public List<Sale> getSalesForProduct(Long barcode)
+			throws CriticalError, CustomerNotConnected, InvalidParameter, ProductCatalogDoesNotExist {
+		String serverResponse;
+
+		log.info("Creating getSalesForProduct command wrapper");
+
+		establishCommunication(CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
+
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					new CommandWrapper(id, CommandDescriptor.GET_SALES_FOR_PRODUCT).serialize());
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+
+			throw new CriticalError();
+		}
+
+		terminateCommunication();
+
+		CommandWrapper commandWrapper = getCommandWrapper(serverResponse);
+
+		try {
+			resultDescriptorHandler(commandWrapper.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | CriticalError | AmountBiggerThanAvailable | ProductPackageDoesNotExist
+				| GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists | ForgotPasswordWrongAnswer ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+
+			throw new CriticalError();
+		}
+
+		log.info("getSalesForProduct command succeed.");
+
+		return new Gson().fromJson(commandWrapper.getData(), new TypeToken<List<Sale>>() {}.getType());
 	}
 }
