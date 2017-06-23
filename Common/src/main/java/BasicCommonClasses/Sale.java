@@ -14,7 +14,16 @@ public class Sale {
 	Double discount;
 	LocalDate startTime;
 	LocalDate endTime;
+	SaleType type;
 	
+	public SaleType getType() {
+		return type;
+	}
+
+	public void setType(SaleType type) {
+		this.type = type;
+	}
+
 	public LocalDate getStartTime() {
 		return startTime;
 	}
@@ -33,7 +42,6 @@ public class Sale {
 
 	public enum SaleType {
 		OnePlusOneDiscount,
-		FixedDiscount,
 		PercentageDiscount,
 	}
 	
