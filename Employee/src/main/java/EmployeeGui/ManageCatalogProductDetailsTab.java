@@ -62,7 +62,7 @@ import javafx.scene.layout.VBox;
 
 public class ManageCatalogProductDetailsTab implements Initializable {
 
-	static Logger log = Logger.getLogger(ManagePackagesTab.class.getName());
+	static Logger log = Logger.getLogger(ManageCatalogProductDetailsTab.class.getName());
 
 	IManager manager = InjectionFactory.getInstance(Manager.class);
 

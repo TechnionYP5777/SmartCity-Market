@@ -87,6 +87,11 @@
 										<fx:include source="/ManageEmployeesTab/ManageEmployeesTab.fxml" />
 									</content>
 								</Tab>
+								<Tab fx:id="manageSalesTab" closable="true" text="Manage Sales">
+									<content>
+										<fx:include source="/ManageSalesTab/ManageSalesTab.fxml" />
+									</content>
+								</Tab>
 							</tabs>
 						</JFXTabPane>
 					</children>
