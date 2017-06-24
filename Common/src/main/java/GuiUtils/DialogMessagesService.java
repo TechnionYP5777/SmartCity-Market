@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 
 import UtilsContracts.IConfiramtionDialog;
+import UtilsContracts.IConfiramtionWithAbortDialog;
 
 /**
  * Use this class to create GUI Error, info, confirmation GUI dialogs.
@@ -29,6 +30,36 @@ public class DialogMessagesService {
 
 	public static void showErrorDialog(String title, String header, String content) {
 		alertCreator(title, header, content);
+	}
+	
+	
+	public static void showConfirmationWithAbortDialog(String title, String header, String content,
+			IConfiramtionWithAbortDialog d) {
+		JFXDialogLayout dialogContent = new JFXDialogLayout();
+		dialogContent.setHeading(new Text(header == null ? title : title + "\n" + header));
+
+		dialogContent.setBody(new Text(content));
+
+		JFXButton abort = new JFXButton("Abort");
+		abort.getStyleClass().add("JFXButton");
+
+		dialogContent.setActions(abort);
+
+		JFXDialog dialog = new JFXDialog((StackPane) AbstractApplicationScreen.stage.getScene().getRoot(),
+				dialogContent, JFXDialog.DialogTransition.CENTER);
+
+		abort.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent __) {
+
+				dialog.close();
+
+				d.abort();
+			}
+		});
+
+		dialog.show();
 	}
 
 	public static void showConfirmationDialog(String title, String header, String content,

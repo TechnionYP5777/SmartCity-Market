@@ -7,18 +7,25 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
 import com.google.common.eventbus.Subscribe;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
+import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
+import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
+import CustomerContracts.ACustomerExceptions.InvalidParameter;
+import CustomerContracts.ACustomerExceptions.ProductCatalogDoesNotExist;
 import CustomerContracts.ICustomer;
 import CustomerContracts.IRegisteredCustomer;
 import CustomerGuiHelpers.CustomerProductCellFormat;
@@ -30,6 +37,7 @@ import SMExceptions.CommonExceptions.CriticalError;
 import SMExceptions.SMException;
 import UtilsContracts.IBarcodeEventHandler;
 import UtilsContracts.IConfiramtionDialog;
+import UtilsContracts.IConfiramtionWithAbortDialog;
 import UtilsContracts.SmartcodeScanEvent;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
@@ -51,6 +59,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -119,6 +129,21 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	@FXML
 	Label yourListHeader;
+	
+	@FXML
+	JFXCheckBox offerSalesChk;
+	
+	@FXML
+	JFXComboBox<String> salesCombo;
+	
+	@FXML
+	VBox salesPane;
+	
+	@FXML
+	VBox noSalesPane;
+	
+	@FXML
+	StackPane stackPaneSalesPane;
 
 	SmartCode scannedSmartCode;
 
@@ -169,7 +194,58 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			break;
 		}
 		}
+		showSalePane(p);
 		setAbilityAndVisibilityOfProductInfoPane(true);
+	}
+	
+	private void showSalePane(CatalogProduct p) {
+		try {
+			List<Sale> sales = customer.getSalesForProduct(p.getBarcode());
+			salesCombo.getItems().clear();
+			
+			sales.forEach(sale -> {
+				if (sale.getType().equals(Sale.SaleType.PercentageDiscount)) {
+					salesCombo.getItems().add(sale.getDiscount() + " % Discount");
+				} else if (sale.getType().equals(Sale.SaleType.OnePlusOneDiscount)) {
+					salesCombo.getItems().add("1 + 1");
+				} 
+				// TODO group sale
+			});			
+		} catch (CriticalError | CustomerNotConnected | InvalidParameter | ProductCatalogDoesNotExist e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.stackTraceToStr(e));
+			e.showInfoToUser();
+		}
+		
+		if (salesCombo.getItems().isEmpty()) {
+			noSalesPane.setVisible(true);
+			salesPane.setVisible(false);
+			noSalesPane.toFront();
+		} else {
+			noSalesPane.setVisible(false);
+			salesPane.setVisible(true);
+			salesPane.toFront();
+			salesCombo.getItems().add("None");
+		}
+	}
+	
+	private void saleSelectionChanged() {
+		if (salesCombo.getItems().equals("1 + 1")) {
+			DialogMessagesService.showConfirmationWithAbortDialog("1 + 1 Sale", null, "Please Scan One More Product",
+					new onePlusOnePopup());
+		} 
+		// TODO add case for group - open popup 
+	}
+	
+	class onePlusOnePopup implements IConfiramtionWithAbortDialog {
+
+		@Override
+		public void abort() {
+			// TODO Handle abort
+			
+		}
+
+
 	}
 
 	private void enableRemoveButton() {
@@ -261,7 +337,16 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 		productsListView.depthProperty().set(1);
 		productsListView.setExpanded(true);
-
+		
+		
+		salesCombo.valueProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(@SuppressWarnings("rawtypes") ObservableValue __, String s, String t1) {
+				saleSelectionChanged();
+			}
+		});
+		
+		
 		setAbilityAndVisibilityOfProductInfoPane(false);
 	}
 
