@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.time.Period;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ import api.preferences.InputPreferences;
 import api.types.StoreData;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireStorePackageProperty;
+import ml.common.property.basicproperties.storestatistics.HealthyRatedProductProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularManufacturerProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
 
@@ -31,9 +33,9 @@ import ml.common.property.basicproperties.storestatistics.MostPopularProductProp
  */
 public class StoreStatisticsMiner extends AMiner {
 
-	public StoreStatisticsMiner(InputPreferences inputPreferences, StoreData storeDate, IGroceryList currentGrocery,
+	public StoreStatisticsMiner(InputPreferences inputPreferences, StoreData storeData, IGroceryList currentGrocery,
 			IGroceryPackage currentProduct) {
-		super(inputPreferences, storeDate, currentGrocery, currentProduct);
+		super(inputPreferences, storeData, currentGrocery, currentProduct);
 	}
 
 	@Override
@@ -43,7 +45,8 @@ public class StoreStatisticsMiner extends AMiner {
 		result.addAll(extractMostPopularProducts());
 		result.addAll(extractAboutToExpireStorePackages());
 		result.addAll(extractMostPopularManufacturers());
-
+		result.addAll(extractHealthyRatedProducts());
+		
 		return result;
 	}
 
@@ -144,6 +147,21 @@ public class StoreStatisticsMiner extends AMiner {
 				}).collect(Collectors.toList());
 
 		return new HashSet<>(manufacturersOrederdByPopularity.subList(0, MostPopularManufacturerProperty.numOfTop));
+	}
+	
+	
+	/**
+	 * This method returns set of healthy rated products as defined in {@link HealthyRatedProductProperty}
+	 *
+	 */
+	private Set<? extends ABasicProperty> extractHealthyRatedProducts(){
+		Set<HealthyRatedProductProperty> healthyRatedProducts = 
+				getCatalog()
+				.stream()
+				.filter(p -> HealthyRatedProductProperty.isProductRatedHealthy(p))
+				.map(p -> new HealthyRatedProductProperty(p))
+				.collect(Collectors.toSet());
+		return healthyRatedProducts;
 	}
 
 }

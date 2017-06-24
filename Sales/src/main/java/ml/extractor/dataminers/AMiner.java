@@ -13,7 +13,7 @@ import ml.common.property.basicproperties.ABasicProperty;
 
 public abstract class AMiner {
 
-	StoreData storeDate;
+	StoreData storeData;
 
 	InputPreferences inputPreferences;
 	
@@ -21,10 +21,10 @@ public abstract class AMiner {
 	
 	IGroceryList currentGrocery;
 	
-	public AMiner(InputPreferences inputPreferences, StoreData storeDate, IGroceryList currentGrocery,
+	public AMiner(InputPreferences inputPreferences, StoreData storeData, IGroceryList currentGrocery,
 			IGroceryPackage currentProduct) {
 		super();
-		this.storeDate = storeDate;
+		this.storeData = storeData;
 		this.inputPreferences = inputPreferences;
 		this.currentProduct = currentProduct;
 		this.currentGrocery = currentGrocery;
@@ -42,15 +42,15 @@ public abstract class AMiner {
 	}
 	
 	public List<? extends IGroceryList> getHistory() {
-		return storeDate.getHistory();
+		return storeData.getHistory();
 	}
 	
 	public List<? extends IStorePackage> getStock() {
-		return storeDate.getStock();
+		return storeData.getStock();
 	}
 	
 	public List<? extends IProduct> getCatalog() {
-		return storeDate.getCatalog();
+		return storeData.getCatalog();
 	}
 
 	public IGroceryList getCurrentGrocery() {
