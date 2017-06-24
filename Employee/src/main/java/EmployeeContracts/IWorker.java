@@ -1,5 +1,7 @@
 package EmployeeContracts;
 
+import java.util.HashSet;
+
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.ProductPackage;
@@ -140,5 +142,17 @@ public interface IWorker {
 	 */
 	boolean isLoggedIn() throws CriticalError, ConnectionFailure;
 
-	String getUsername(); 
+	String getUsername();
+	
+	
+	/**
+	 * worker get all expired product packages.
+	 * 
+	 * @return expiredProductPackages 
+	 * @throws ConnectionFailure 
+	 * @throws CriticalError 
+	 * @throws EmployeeNotConnected 
+	 * @throws InvalidParameter 
+	 */
+	HashSet<ProductPackage> getAllExpiredProductPackages() throws ConnectionFailure, CriticalError, InvalidParameter, EmployeeNotConnected; 
 }

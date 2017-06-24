@@ -628,6 +628,21 @@ public enum CommandDescriptor {
 	 */
 	GET_ALL_GROUP_BUYING,
 	
+	/**
+	 * Description: get all expired product packages in the system
+	 * param1: void.
+	 * retval: List of product packages.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		
+	 */
+	GET_ALL_EXPIRED_PRODUCT_PACKAGES,
+	
 	/********************************** Customer commands **********************************/
 
 	/**

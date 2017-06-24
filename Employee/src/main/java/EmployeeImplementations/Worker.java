@@ -1,10 +1,16 @@
 package EmployeeImplementations;
 
+import java.util.HashSet;
+import java.util.List;
+
 import javax.inject.Singleton;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Login;
+import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandDescriptor;
@@ -292,4 +298,28 @@ public class Worker extends AEmployee implements IWorker, IForgotPasswordHandler
 	public String getUsername(){
 		return username;
 	}
+	
+	@Override
+	public HashSet<ProductPackage> getAllExpiredProductPackages() throws ConnectionFailure, CriticalError, InvalidParameter, EmployeeNotConnected {
+		log.info("Creating getAllExpiredProductPackages command wrapper.");
+		String serverResponse = sendRequestWithRespondToServer(
+				(new CommandWrapper(getClientId(), CommandDescriptor.GET_ALL_EXPIRED_PRODUCT_PACKAGES)).serialize());
+		
+		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
+
+		try {
+			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
+				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
+			    | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+			
+			throw new CriticalError();
+		}
+		
+		log.info("getAllExpiredProductPackages command succeed.");
+		
+		return new Gson().fromJson(commandDescriptor.getData(), new TypeToken<HashSet<ProductPackage>>(){}.getType());
+	}
+	
 }
