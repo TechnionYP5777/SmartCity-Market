@@ -1,5 +1,6 @@
 package testmocks;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import api.contracts.IProduct;
@@ -11,7 +12,7 @@ public class ProductMock implements IProduct {
 	String name;
 	ManufacturerMock manufacturer;
 	double price;
-	Set<IngredientMock> ingredients;
+	Set<IngredientMock> ingredients = new HashSet<>();
 	
 	public ProductMock(long barcode) {
 		super();

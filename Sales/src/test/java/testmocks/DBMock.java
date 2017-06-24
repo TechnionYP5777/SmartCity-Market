@@ -17,25 +17,25 @@ public class DBMock {
 			productCatalog.put(i, new ProductMock(i)
 					.setName("" + i)
 					.setPrice(i + 0.5)
-					.setManufacturer(new ManufacturerMock("man_" + ((i+1) % 75) )))
-					.addIngredients(getFakeIngredientName(i));
+					.setManufacturer(new ManufacturerMock("man_" + ((i+1) % 75) ))
+					.addIngredients(DBMock.getFakeIngredientName(i)));
 		}
 	}
 
 	private static String getFakeIngredientName(long i){
 		switch ((int)i % 5) {
 			case 0:
-				return "beans";
+				return String.valueOf("beans");
 			case 1:
-				return "corn";
+				return String.valueOf("corn");
 			case 2:
-				return "rice";
+				return String.valueOf("rice");
 			case 3:
-				return "rice";
+				return String.valueOf("rice");
 			case 4:
-				return "this_is_junk";
+				return String.valueOf("junk");
 			default:
-				return "this_too";
+				return String.valueOf("wont get here");
 		}
 	}
 	

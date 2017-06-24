@@ -20,7 +20,13 @@ import ml.deducer.deductionrules.ADeductionRule;
  */
 public class HealthyRatedProductProperty extends ABasicProperty {
 
-	private static List<String> healthyRatedIngredientsNames = new ArrayList<>(Arrays.asList("rice", "corn", "beans"));
+	private static List<String> healthyRatedIngredientsNames = 
+			new ArrayList<>
+				(Arrays.asList(
+						String.valueOf("rice"),
+						String.valueOf("corn"),
+						String.valueOf("beans")));
+
 	private static int intersectionSizeToBeRatedHealthy = 1;
 	
 	IProduct product;
@@ -48,5 +54,30 @@ public class HealthyRatedProductProperty extends ABasicProperty {
 
 	public IProduct getProduct(){
 		return product;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((product == null) ? 0 : product.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HealthyRatedProductProperty other = (HealthyRatedProductProperty) obj;
+		if (product == null) {
+			if (other.product != null)
+				return false;
+		} else if (!product.equals(other.product))
+			return false;
+		return true;
 	}
 }

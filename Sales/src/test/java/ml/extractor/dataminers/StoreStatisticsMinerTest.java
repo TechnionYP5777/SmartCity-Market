@@ -17,6 +17,7 @@ import api.contracts.IStorePackage;
 import api.types.StoreData;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireStorePackageProperty;
+import ml.common.property.basicproperties.storestatistics.HealthyRatedProductProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularManufacturerProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
 import testmocks.DBMock;
@@ -118,6 +119,21 @@ public class StoreStatisticsMinerTest {
 		
 		for (long i = 1; i <= numOfRightAmount; i++)
 			assertTrue(result.contains(new MostPopularManufacturerProperty(DBMock.getProduct(i).getManufacturer(), expectedAmountOfMostPopularManufacturer)));
+	}
+	
+	@Test
+	public void testHealthyRatedProductProperty(){
+		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
+				new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+		
+		int expectedAmountOfHealthyRatedProductProperties = (int) (DBMock.NUM_OF_PRODUCTS * 0.8);
+		long numOfHealthyRatedProductProperties = 
+				result
+				.stream()
+				.filter(p -> p instanceof HealthyRatedProductProperty)
+				.count();
+
+		assertEquals(expectedAmountOfHealthyRatedProductProperties, numOfHealthyRatedProductProperties);
 	}
 
 	@SuppressWarnings("unused")
