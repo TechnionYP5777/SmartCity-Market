@@ -14,7 +14,28 @@ public class DBMock {
 	
 	static {
 		for (long i=1; i<=NUM_OF_PRODUCTS; i++){
-			productCatalog.put(i, new ProductMock(i).setName("" + i).setPrice(i + 0.5).setManufacturer(new ManufacturerMock("man_" + ((i+1) % 75) )));
+			productCatalog.put(i, new ProductMock(i)
+					.setName("" + i)
+					.setPrice(i + 0.5)
+					.setManufacturer(new ManufacturerMock("man_" + ((i+1) % 75) )))
+					.addIngredients(getFakeIngredientName(i));
+		}
+	}
+
+	private static String getFakeIngredientName(long i){
+		switch ((int)i % 5) {
+			case 0:
+				return "beans";
+			case 1:
+				return "corn";
+			case 2:
+				return "rice";
+			case 3:
+				return "rice";
+			case 4:
+				return "this_is_junk";
+			default:
+				return "this_too";
 		}
 	}
 	
