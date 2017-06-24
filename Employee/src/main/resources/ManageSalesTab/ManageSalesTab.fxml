@@ -10,6 +10,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Spinner?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -18,7 +20,7 @@
    <children>
       <HBox alignment="CENTER" spacing="50.0">
          <children>
-            <VBox alignment="TOP_CENTER">
+            <VBox alignment="TOP_CENTER" prefHeight="640.0" prefWidth="385.0" spacing="20.0">
                <children>
                   <VBox alignment="CENTER">
                      <children>
@@ -26,11 +28,20 @@
                         <Label text="Scan Barcode Any Time You Like" />
                      </children>
                   </VBox>
-                  <JFXTextField fx:id="barcodeField" promptText="Or Insert Barcode Manually" styleClass="JFXTextField" />
-                  <VBox fx:id="scannedProductPane">
+                  <HBox spacing="10.0">
+                     <children>
+                        <JFXTextField fx:id="barcodeField" prefHeight="24.0" prefWidth="195.0" promptText="Or Insert Barcode Manually" styleClass="JFXTextField" />
+                        <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#searchClicked" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@search.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <VBox fx:id="scannedProductPane" spacing="10.0">
                      <children>
                         <Label text="Scanned Product" />
-                        <HBox>
+                        <HBox spacing="10.0">
                            <children>
                               <Label text="Product Name:" />
                               <Label fx:id="productNamelbl" text="N/A" />
@@ -38,24 +49,30 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox fx:id="chooseSalePane">
+                  <VBox fx:id="chooseSalePane" spacing="10.0">
                      <children>
                         <Label text="Choose Sale" />
-                        <HBox>
+                        <HBox spacing="10.0">
                            <children>
                               <Label text="Sale Type" />
                               <JFXComboBox fx:id="saleTypeCombo" styleClass="JFXComboBox" />
+                              <HBox fx:id="discountPane" spacing="5.0">
+                                 <children>
+                                    <Label text="Discount:" />
+                                    <Spinner fx:id="discountAmount" editable="true" prefHeight="26.0" prefWidth="100.0" />
+                                 </children>
+                              </HBox>
                            </children>
                         </HBox>
-                        <VBox>
+                        <VBox spacing="10.0">
                            <children>
                               <JFXCheckBox fx:id="groupSaleChk" onMouseClicked="#groupSaleChkPressed" styleClass="JFXCheckBox" text="Group Sale" />
                               <VBox fx:id="minBuyPane">
                                  <children>
                                     <Label text="Min Buy" />
-                                    <HBox alignment="CENTER">
+                                    <HBox alignment="CENTER_LEFT">
                                        <children>
-                                          <Spinner fx:id="minAmount" prefHeight="26.0" prefWidth="97.0" />
+                                          <Spinner fx:id="minAmount" editable="true" prefHeight="26.0" prefWidth="100.0" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -66,6 +83,9 @@
                   </VBox>
                   <JFXButton fx:id="addProductSale" styleClass="JFXButton" text="Add Product Sale" />
                </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
             </VBox>
             <VBox spacing="10.0">
                <children>

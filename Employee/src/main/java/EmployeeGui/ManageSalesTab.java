@@ -31,6 +31,8 @@ import UtilsImplementations.InjectionFactory;
 import UtilsImplementations.ProjectEventBus;
 import UtilsImplementations.StackTraceUtil;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -44,6 +46,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Spinner;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class ManageSalesTab implements Initializable {
@@ -56,6 +59,9 @@ public class ManageSalesTab implements Initializable {
 
     @FXML
     private VBox chooseSalePane;
+    
+    @FXML
+    private HBox discountPane;
     
     @FXML
     private Label productNamelbl;
@@ -71,6 +77,9 @@ public class ManageSalesTab implements Initializable {
 
     @FXML
     private Spinner<Integer> minAmount;
+    
+    @FXML
+    private Spinner<Integer> discountAmount;
 
     @FXML
     private JFXButton addProductSale;
@@ -131,7 +140,18 @@ public class ManageSalesTab implements Initializable {
     
     @FXML
     void groupSaleChkPressed(MouseEvent event) {
+    	enablePanes();
+    }
+    
+    private void enablePanes() {
     	minBuyPane.setDisable(!groupSaleChk.isSelected());
+    	discountPane.setVisible(saleTypeCombo.getSelectionModel().getSelectedItem().equals("% discount"));
+    	chooseSalePane.setDisable(currentCatalogProduct == null);
+    }
+    
+    @FXML
+    void searchClicked(MouseEvent event) {
+    	showProductDetails();
     }
 
 
@@ -221,9 +241,10 @@ public class ManageSalesTab implements Initializable {
 
 		groupList.setDepth(1);
 		groupList.setExpanded(true);
+		
 
 		
-		minAmount.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
+	//	minAmount.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
 
 		minAmount.valueProperty().addListener((obs, oldValue, newValue) -> {
 			if (newValue == null || newValue < 1)
@@ -238,16 +259,42 @@ public class ManageSalesTab implements Initializable {
 			}
 		});
 		
+		//discountAmount.getValueFactory().setValue(1);
+		
+		discountAmount.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
+
+		discountAmount.valueProperty().addListener((obs, oldValue, newValue) -> {
+			if (newValue == null || newValue < 1 || newValue > 100)
+				discountAmount.getValueFactory().setValue(oldValue);
+			enableAddSaleButton();
+		});
+
+		discountAmount.focusedProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue != null && !newValue) {
+				discountAmount.increment(0);
+				enableAddSaleButton();
+			}
+		});
+		
 		createSingleList();
 		createGroupList();
 		createTypesCombo();
 		enableAddSaleButton();
 		enableRemoveButtons();
+		enablePanes();
 	}
 	
 	private void createTypesCombo() {
 		saleTypeCombo.getItems().addAll("1+1", "% discount");
 		saleTypeCombo.getSelectionModel().select(0);
+		
+		saleTypeCombo.valueProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(@SuppressWarnings("rawtypes") ObservableValue __, String s, String t1) {
+				enablePanes();
+			}
+		});
+		
 	}
 	
 	private void createSingleList() {
@@ -395,7 +442,12 @@ public class ManageSalesTab implements Initializable {
 	private void showProductDetails() {
 		try {
 			currentCatalogProduct = manager.viewProductFromCatalog(Long.parseLong(barcodeField.getText()));
-			productNamelbl.setText(currentCatalogProduct.getName());			
+			productNamelbl.setText(currentCatalogProduct.getName());
+			
+			enableAddSaleButton();
+			enableRemoveButtons();
+			enablePanes();
+			
 		} catch (SMException e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.stackTraceToStr(e));
