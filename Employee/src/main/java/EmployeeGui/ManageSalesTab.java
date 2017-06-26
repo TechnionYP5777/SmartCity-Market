@@ -276,8 +276,9 @@ public class ManageSalesTab implements Initializable {
 			}
 		});
 		
-		createSingleList();
-		createGroupList();
+		//TODO enable this functions when server supports commands
+		//createSingleList();
+		//createGroupList();
 		createTypesCombo();
 		enableAddSaleButton();
 		enableRemoveButtons();
