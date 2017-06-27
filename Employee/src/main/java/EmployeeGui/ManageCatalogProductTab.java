@@ -25,6 +25,7 @@ import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
 import BasicCommonClasses.Manufacturer;
+import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.SmartCode;
 import EmployeeContracts.IManager;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
@@ -56,6 +57,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -271,7 +273,12 @@ public class ManageCatalogProductTab implements Initializable {
 		ImageView locationMap = new ImageView("/ManageCatalogProductTab/storeMap.png");
 		locationMap.setFitHeight(400);
 		locationMap.setFitWidth(400);
-		
+		locationMap.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+			int xLocation = (int) e.getX(), yLocation = (int) e.getY();
+			chosenLocation = new Location(xLocation, yLocation, PlaceInMarket.STORE);
+			locationLbl.setText(xLocation + ", " + yLocation);
+		});
+
 		VBox locationContainer = new VBox();
 		locationContainer.getChildren().addAll(lbl1, locationMap, close);
 		locationContainer.setPadding(new Insets(10, 10, 10, 10));
