@@ -19,7 +19,11 @@ import com.jfoenix.controls.JFXTextField;
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
+import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
+import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
+import CustomerContracts.ACustomerExceptions.InvalidParameter;
+import CustomerContracts.ACustomerExceptions.ProductCatalogDoesNotExist;
 import CustomerContracts.ICustomer;
 import CustomerContracts.IRegisteredCustomer;
 import CustomerGuiHelpers.CustomerProductCellFormat;
@@ -207,7 +211,15 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		priceLabel.setText(String.format("%1$.2f", p.getPrice()));
 		amountLabel.setText(amount + "");
 		descriptionTextArea.setText(scannedSmartCode.getExpirationDate() + "");
-		saleLbl.setText(""); // TODO
+		Sale sale = new Sale();	
+		try {
+			sale = customer.getSaleForProduct(p.getBarcode());
+		} catch (CriticalError | CustomerNotConnected | InvalidParameter | ProductCatalogDoesNotExist e1) {
+			log.fatal(e1);
+			log.debug(StackTraceUtil.stackTraceToStr(e1));
+			e1.showInfoToUser();
+		}
+		saleLbl.setText(sale.getSaleAsString());
 		URL imageUrl = null;
 		try {
 			imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI()

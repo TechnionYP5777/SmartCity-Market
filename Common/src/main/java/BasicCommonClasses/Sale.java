@@ -58,7 +58,7 @@ public class Sale {
 		this.price = price;
 	}
 	
-	String getSaleAsString() {
+	public String getSaleAsString() {
 		return id == -1 ? "No sale avaiable for this item"
 				: "Great Sale: Buy " + amountOfProducts + " In " + price + " NIS";
 	}
