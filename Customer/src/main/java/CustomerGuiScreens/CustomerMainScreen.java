@@ -13,18 +13,13 @@ import org.apache.log4j.Logger;
 
 import com.google.common.eventbus.Subscribe;
 import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
 
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
-import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
-import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
-import CustomerContracts.ACustomerExceptions.InvalidParameter;
-import CustomerContracts.ACustomerExceptions.ProductCatalogDoesNotExist;
 import CustomerContracts.ICustomer;
 import CustomerContracts.IRegisteredCustomer;
 import CustomerGuiHelpers.CustomerProductCellFormat;
@@ -58,8 +53,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -107,6 +100,9 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	@FXML
 	Label amountLabel;
+	
+	@FXML
+	Label saleLbl;
 
 	@FXML
 	Label descriptionTextArea;
@@ -132,18 +128,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	@FXML
 	JFXCheckBox offerSalesChk;
 	
-	@FXML
-	JFXComboBox<String> salesCombo;
-	
-	@FXML
-	VBox salesPane;
-	
-	@FXML
-	VBox noSalesPane;
-	
-	@FXML
-	StackPane stackPaneSalesPane;
-
 	SmartCode scannedSmartCode;
 
 	CatalogProduct catalogProduct;
@@ -193,55 +177,14 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			break;
 		}
 		}
-		showSalePane(p);
 		setAbilityAndVisibilityOfProductInfoPane(true);
 	}
-	
-	private void showSalePane(CatalogProduct p) {
-		try {
-			Sale sale = customer.getSaleForProduct(p.getBarcode());
-			salesCombo.getItems().clear();
-			
-			//TODO Shimon continue from here
-//			sales.forEach(sale -> {
-//				if (sale.getType().equals(Sale.SaleType.PercentageDiscount)) {
-//					salesCombo.getItems().add(sale.getDiscount() + " % Discount");
-//				} else if (sale.getType().equals(Sale.SaleType.OnePlusOneDiscount)) {
-//					salesCombo.getItems().add("1 + 1");
-//				} 
-//			});			
-		} catch (CriticalError | CustomerNotConnected | InvalidParameter | ProductCatalogDoesNotExist e) {
-			log.fatal(e);
-			log.debug(StackTraceUtil.stackTraceToStr(e));
-			e.showInfoToUser();
-		}
 		
-		if (salesCombo.getItems().isEmpty()) {
-			noSalesPane.setVisible(true);
-			salesPane.setVisible(false);
-			noSalesPane.toFront();
-		} else {
-			noSalesPane.setVisible(false);
-			salesPane.setVisible(true);
-			salesPane.toFront();
-			salesCombo.getItems().add("None");
-		}
-	}
-	
-	private void saleSelectionChanged() {
-		if (salesCombo.getItems().equals("1 + 1")) {
-			DialogMessagesService.showConfirmationWithAbortDialog("1 + 1 Sale", null, "Please Scan One More Product",
-					new onePlusOnePopup());
-		} 
-		// TODO add case for group - open popup 
-	}
-	
 	class onePlusOnePopup implements IConfiramtionWithAbortDialog {
 
 		@Override
 		public void abort() {
-			// TODO Handle abort
-			
+			// TODO Handle abort			
 		}
 
 
@@ -264,6 +207,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		priceLabel.setText(String.format("%1$.2f", p.getPrice()));
 		amountLabel.setText(amount + "");
 		descriptionTextArea.setText(scannedSmartCode.getExpirationDate() + "");
+		saleLbl.setText(""); // TODO
 		URL imageUrl = null;
 		try {
 			imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI()
@@ -336,14 +280,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 		productsListView.depthProperty().set(1);
 		productsListView.setExpanded(true);
-		
-		
-		salesCombo.valueProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(@SuppressWarnings("rawtypes") ObservableValue __, String s, String t1) {
-				saleSelectionChanged();
-			}
-		});
 		
 		
 		setAbilityAndVisibilityOfProductInfoPane(false);
