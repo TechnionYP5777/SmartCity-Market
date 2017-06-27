@@ -154,6 +154,8 @@ public class ManageCatalogProductTab implements Initializable {
 
 	IEventBus eventBus;
 
+	private Location chosenLocation;
+
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		eventBus = InjectionFactory.getInstance(ProjectEventBus.class);
@@ -265,9 +267,9 @@ public class ManageCatalogProductTab implements Initializable {
 				popupLocation.hide();
 			}
 		});
-		ImageView locationMap = new ImageView("/ManageCatalogProductTab/storeMap.jpg");
-		locationMap.setFitHeight(300);
-		locationMap.setFitWidth(300);
+		ImageView locationMap = new ImageView("/ManageCatalogProductTab/storeMap.png");
+		locationMap.setFitHeight(400);
+		locationMap.setFitWidth(400);
 		
 		VBox locationContainer = new VBox();
 		locationContainer.getChildren().addAll(lbl1, locationMap, close);
