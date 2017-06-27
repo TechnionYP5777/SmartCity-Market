@@ -60,6 +60,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -277,9 +278,9 @@ public class ManageCatalogProductTab implements Initializable {
 		locationContainer.setSpacing(10);
 
 		popupLocation = new JFXPopup(locationContainer);
-		locationChooser.setOnMouseClicked(e -> {
-			popupLocation.show(locationChooser, PopupVPosition.BOTTOM, PopupHPosition.LEFT);
-		});
+		popupLocation.setOnShowing(e -> rootPane.getScene().setCursor(Cursor.CROSSHAIR));
+		popupLocation.setOnHidden(e -> rootPane.getScene().setCursor(Cursor.DEFAULT));
+		locationChooser.setOnMouseClicked(e -> popupLocation.show(locationChooser, PopupVPosition.BOTTOM, PopupHPosition.LEFT));
 		
 
 		radioButtonContainerManageCatalogProduct.addRadioButtons(
