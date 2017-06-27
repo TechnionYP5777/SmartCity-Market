@@ -1545,7 +1545,13 @@ public class CommandExecuter {
 		log.info("Get sale for product command system finished for barcode " + barcode);
 	}
 	
-
+	private void getAllExpiredProductPackages(SQLDatabaseConnection c) {
+		log.info("Get all expired product packages from serderID " + inCommandWrapper.getSenderID() + " command called");
+		
+		//TODO Noam - call sql here
+				
+		log.info("Get all expired product packages from system finished");
+	}
 	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
@@ -1756,6 +1762,11 @@ public class CommandExecuter {
 			getSaleForProduct(c);
 			
 			break;	
+			
+		case GET_ALL_EXPIRED_PRODUCT_PACKAGES:
+			getAllExpiredProductPackages(c);
+			
+			break;		
 			
 		default:
 			try {
