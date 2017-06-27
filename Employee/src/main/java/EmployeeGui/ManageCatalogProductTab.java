@@ -67,6 +67,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -109,6 +110,9 @@ public class ManageCatalogProductTab implements Initializable {
 
 	@FXML
 	private JFXComboBox<String> productManufacturerCombo;
+	
+	@FXML 
+	private JFXButton locationChooser;
 
 	JFXListView<String> ingredientList;
 
@@ -122,6 +126,9 @@ public class ManageCatalogProductTab implements Initializable {
 
 	@FXML
 	private JFXTextField productPriceTextField;
+	
+	@FXML
+	private Label locationLbl;
 
 	// @FXML
 	// private JFXTextField productLocationTextField;
@@ -132,6 +139,8 @@ public class ManageCatalogProductTab implements Initializable {
 
 	@FXML
 	private JFXButton runTheOperationButton;
+	
+	JFXPopup popupLocation;
 
 	IManager manager = InjectionFactory.getInstance(Manager.class);
 
@@ -246,6 +255,30 @@ public class ManageCatalogProductTab implements Initializable {
 		// productLocationTextField.textProperty().addListener((observable,
 		// oldValue, newValue) -> {
 		// });
+		
+		Label lbl1 = new Label("Choose Location");
+		JFXButton close = new JFXButton("Close");
+		close.getStyleClass().add("JFXTextField");
+		close.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent __) {
+				popupLocation.hide();
+			}
+		});
+		ImageView locationMap = new ImageView("/ManageCatalogProductTab/storeMap.jpg");
+		locationMap.setFitHeight(300);
+		locationMap.setFitWidth(300);
+		
+		VBox locationContainer = new VBox();
+		locationContainer.getChildren().addAll(lbl1, locationMap, close);
+		locationContainer.setPadding(new Insets(10, 10, 10, 10));
+		locationContainer.setSpacing(10);
+
+		popupLocation = new JFXPopup(locationContainer);
+		locationChooser.setOnMouseClicked(e -> {
+			popupLocation.show(locationChooser, PopupVPosition.BOTTOM, PopupHPosition.LEFT);
+		});
+		
 
 		radioButtonContainerManageCatalogProduct.addRadioButtons(
 				Arrays.asList(new RadioButton[] { addCatalogProductRadioButton, removeCatalogProductRadioButton }));
