@@ -306,9 +306,10 @@ public class ManageSalesTab implements Initializable {
 		
 		try {
 			manager.getAllSales().forEach((i, val) -> {
-				singles.put(val.getProduct().getBarcode(), i);
+				//TODO Shimon fix here
+				//singles.put(val.getProduct().getBarcode(), i);
 				// TODO change Sale class to return Type of sale
-				dataSingle.add("Product: " + val.getProduct().getName());
+				//dataSingle.add("Product: " + val.getProduct().getName());
 			});
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			log.fatal(e);
@@ -330,9 +331,10 @@ public class ManageSalesTab implements Initializable {
 		
 		try {
 			manager.getAllSales().forEach((i, val) -> {
-				groups.put(val.getProduct().getBarcode(), i);
+				//TODO Shimon fix here
+				//groups.put(val.getProduct().getBarcode(), i);
 				// TODO change Sale class to return Type of sale
-				dataGroup.add("Product: " + val.getProduct().getName());
+				//dataGroup.add("Product: " + val.getProduct().getName());
 			});
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			log.fatal(e);

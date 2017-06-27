@@ -1,7 +1,5 @@
 package BasicCommonClasses;
 
-import org.joda.time.LocalDate;
-
 /**
  * Sale - This class represents a sale.
  * 
@@ -9,40 +7,24 @@ import org.joda.time.LocalDate;
  * @since 2017-06-07
  */
 public class Sale {
-	Integer id;
-	CatalogProduct product;
-	Double discount;
-	LocalDate startTime;
-	LocalDate endTime;
-	SaleType type;
 	
-	public SaleType getType() {
-		return type;
+	Integer id;
+	Long productBarcode;
+	Integer amountOfProducts;
+	Double price;
+	
+	public Sale(Integer id, Long productBarcode, Integer amountOfProducts, Double price) {
+		this.id = id;
+		this.productBarcode = productBarcode;
+		this.amountOfProducts = amountOfProducts;
+		this.price = price;
 	}
-
-	public void setType(SaleType type) {
-		this.type = type;
-	}
-
-	public LocalDate getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(LocalDate startTime) {
-		this.startTime = startTime;
-	}
-
-	public LocalDate getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(LocalDate endTime) {
-		this.endTime = endTime;
-	}
-
-	public enum SaleType {
-		OnePlusOneDiscount,
-		PercentageDiscount,
+	
+	public Sale() {
+		id = -1;
+		productBarcode = Long.valueOf(0);
+		amountOfProducts = 0;
+		price = (double) 0;
 	}
 	
 	public Integer getId() {
@@ -52,20 +34,32 @@ public class Sale {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	public CatalogProduct getProduct() {
-		return product;
+	public Long getProductBarcode() {
+		return productBarcode;
 	}
 
-	public void setProduct(CatalogProduct product) {
-		this.product = product;
+	public void setProductBarcode(Long productBarcode) {
+		this.productBarcode = productBarcode;
 	}
 
-	public Double getDiscount() {
-		return discount;
+	public Integer getAmountOfProducts() {
+		return amountOfProducts;
 	}
 
-	public void setDiscount(Double discount) {
-		this.discount = discount;
+	public void setAmountOfProducts(Integer amountOfProducts) {
+		this.amountOfProducts = amountOfProducts;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+	
+	String getSaleAsString() {
+		return id == -1 ? "No sale avaiable for this item"
+				: "Great Sale: Buy " + amountOfProducts + " In " + price + " NIS";
 	}
 }
