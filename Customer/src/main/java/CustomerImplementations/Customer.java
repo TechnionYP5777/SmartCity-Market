@@ -16,7 +16,6 @@ import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.GroceryList;
-import BasicCommonClasses.GroupBuying;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.ProductPackage;
@@ -668,7 +667,7 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 	}
 
 	@Override
-	public List<Sale> getSalesForProduct(Long barcode)
+	public Sale getSaleForProduct(Long barcode)
 			throws CriticalError, CustomerNotConnected, InvalidParameter, ProductCatalogDoesNotExist {
 		String serverResponse;
 
@@ -678,7 +677,7 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 
 		try {
 			serverResponse = sendRequestWithRespondToServer(
-					new CommandWrapper(id, CommandDescriptor.GET_SALES_FOR_PRODUCT).serialize());
+					new CommandWrapper(id, CommandDescriptor.GET_SALE_FOR_PRODUCT).serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 
@@ -700,77 +699,6 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 
 		log.info("getSalesForProduct command succeed.");
 
-		return new Gson().fromJson(commandWrapper.getData(), new TypeToken<List<Sale>>() {}.getType());
-	}
-
-	@Override
-	public List<GroupBuying> getAllGroupBuying() throws CriticalError, CustomerNotConnected {
-		String serverResponse;
-
-		log.info("Creating getAllGroupBuying command wrapper");
-
-		establishCommunication(CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
-
-		try {
-			serverResponse = sendRequestWithRespondToServer(
-					new CommandWrapper(id, CommandDescriptor.GET_ALL_GROUP_BUYING).serialize());
-		} catch (SocketTimeoutException e) {
-			log.fatal("Critical bug: failed to get respond from server");
-
-			throw new CriticalError();
-		}
-
-		terminateCommunication();
-
-		CommandWrapper commandWrapper = getCommandWrapper(serverResponse);
-
-		try {
-			resultDescriptorHandler(commandWrapper.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | CriticalError | AmountBiggerThanAvailable | ProductPackageDoesNotExist
-				| GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists | ForgotPasswordWrongAnswer |
-				InvalidParameter | ProductCatalogDoesNotExist ¢) {
-			log.fatal("Critical bug: this command result isn't supposed to return here");
-
-			throw new CriticalError();
-		}
-
-		log.info("getAllGroupBuying command succeed.");
-
-		return new Gson().fromJson(commandWrapper.getData(), new TypeToken<List<GroupBuying>>() {}.getType());
-	}
-
-	@Override
-	public void applyGroupBuyingSale(int saleID) throws CriticalError, CustomerNotConnected, InvalidParameter {
-		String serverResponse;
-
-		log.info("Creating applyGroupBuyingSale command wrapper to customer with saleID: " + saleID);
-
-		establishCommunication(CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
-
-		try {
-			serverResponse = sendRequestWithRespondToServer(
-					new CommandWrapper(id, CommandDescriptor.APPLY_GROUP_BUYING_SALE, Serialization.serialize(saleID))
-							.serialize());
-		} catch (SocketTimeoutException e) {
-			log.fatal("Critical bug: failed to get respond from server");
-
-			throw new CriticalError();
-		}
-
-		terminateCommunication();
-
-		CommandWrapper $ = getCommandWrapper(serverResponse);
-
-		try {
-			resultDescriptorHandler($.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | CriticalError | AmountBiggerThanAvailable | ProductPackageDoesNotExist
-				| GroceryListIsEmpty | AuthenticationError | ProductCatalogDoesNotExist | ForgotPasswordWrongAnswer
-				| UsernameAlreadyExists ¢) {
-			log.fatal("Critical bug: this command result isn't supposed to return here");
-
-			throw new CriticalError();
-		}
-
-		log.info("applyGroupBuyingSale command succeed.");
+		return Serialization.deserialize(commandWrapper.getData(), Sale.class);
 	}
 }

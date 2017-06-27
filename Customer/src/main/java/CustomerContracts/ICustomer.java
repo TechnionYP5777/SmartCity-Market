@@ -122,9 +122,5 @@ public interface ICustomer {
 	
 	Boolean isFreeUsername(String username) throws CriticalError;
 	
-	List<Sale> getSalesForProduct(Long barcode) throws CriticalError, CustomerNotConnected, InvalidParameter, ProductCatalogDoesNotExist;
-
-	List<GroupBuying> getAllGroupBuying() throws CriticalError, CustomerNotConnected;
-	
-	void applyGroupBuyingSale(int saleID) throws CriticalError, CustomerNotConnected, InvalidParameter;
+	Sale getSaleForProduct(Long barcode) throws CriticalError, CustomerNotConnected, InvalidParameter, ProductCatalogDoesNotExist;
 }

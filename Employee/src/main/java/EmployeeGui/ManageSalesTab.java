@@ -361,7 +361,7 @@ public class ManageSalesTab implements Initializable {
 
 		@Override
 		public void onYes() {
-			removeGroupHandle();
+			//TODO Shimon remove this
 		}
 
 		@Override
@@ -370,25 +370,6 @@ public class ManageSalesTab implements Initializable {
 
 	}
 	
-	private void removeGroupHandle() {
-		selectedGroup.forEach(sale -> {
-			
-		try {
-			manager.removeGroupBuying(groups.get(getBarcodeFromTextCell(sale)));
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e) {
-			log.fatal(e);
-			log.debug(StackTraceUtil.stackTraceToStr(e));
-			e.showInfoToUser();
-		}
-				
-		
-		});
-		selectedGroup.clear();
-		createGroupList();
-		enableRemoveButtons();
-		
-	}
-
 	class removeSingleHandler implements IConfiramtionDialog {
 
 		@Override

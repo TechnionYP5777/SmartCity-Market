@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
@@ -200,17 +199,17 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	
 	private void showSalePane(CatalogProduct p) {
 		try {
-			List<Sale> sales = customer.getSalesForProduct(p.getBarcode());
+			Sale sale = customer.getSaleForProduct(p.getBarcode());
 			salesCombo.getItems().clear();
 			
-			sales.forEach(sale -> {
-				if (sale.getType().equals(Sale.SaleType.PercentageDiscount)) {
-					salesCombo.getItems().add(sale.getDiscount() + " % Discount");
-				} else if (sale.getType().equals(Sale.SaleType.OnePlusOneDiscount)) {
-					salesCombo.getItems().add("1 + 1");
-				} 
-				// TODO group sale
-			});			
+			//TODO Shimon continue from here
+//			sales.forEach(sale -> {
+//				if (sale.getType().equals(Sale.SaleType.PercentageDiscount)) {
+//					salesCombo.getItems().add(sale.getDiscount() + " % Discount");
+//				} else if (sale.getType().equals(Sale.SaleType.OnePlusOneDiscount)) {
+//					salesCombo.getItems().add("1 + 1");
+//				} 
+//			});			
 		} catch (CriticalError | CustomerNotConnected | InvalidParameter | ProductCatalogDoesNotExist e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.stackTraceToStr(e));

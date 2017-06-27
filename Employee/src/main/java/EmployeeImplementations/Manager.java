@@ -11,7 +11,6 @@ import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
 
 import BasicCommonClasses.CatalogProduct;
-import BasicCommonClasses.GroupBuying;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
@@ -465,79 +464,5 @@ public class Manager extends Worker implements IManager {
 		log.info("getAllSales command succeed.");
 		
 		return new Gson().fromJson(commandDescriptor.getData(), new TypeToken<HashMap<Integer, Sale>>(){}.getType());
-	}
-	
-	@Override
-	public GroupBuying createNewGroupBuying(GroupBuying groupBuying)
-			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure {
-		log.info("Creating createNewGroupBuying command wrapper with Group Buying: " + groupBuying);
-		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(getClientId(), CommandDescriptor.CREATE_NEW_GROUP_BUYING, Serialization.serialize(groupBuying)))
-						.serialize());
-
-		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
-
-		try {
-			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
-				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
-			    | WorkerAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse |
-			    ParamIDAlreadyExists ¢) {
-			log.fatal("Critical bug: this command result isn't supposed to return here");
-			
-			throw new CriticalError();
-		}
-
-		log.info("createNewGroupBuying command succeed.");
-		
-		return Serialization.deserialize(commandDescriptor.getData(), GroupBuying.class);
-	}
-	
-	@Override
-	public void removeGroupBuying(Integer id)
-			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist {
-		log.info("Creating removeGroupBuying command wrapper with GroupBuying id: " + id);
-		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(getClientId(), CommandDescriptor.REMOVE_GROUP_BUYING, Serialization.serialize(id)))
-						.serialize());
-
-		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
-
-		try {
-			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
-				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
-			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
-			log.fatal("Critical bug: this command result isn't supposed to return here");
-			
-			throw new CriticalError();
-		}
-
-		log.info("removeGroupBuying command succeed.");
-	}
-	
-	@Override
-	public Map<Integer, GroupBuying> getAllGroupBuyings()
-			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure {
-		log.info("Creating getAllGroupBuyings command wrapper");
-		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(getClientId(), CommandDescriptor.GET_ALL_GROUP_BUYING, Serialization.serialize("")))
-						.serialize());
-
-		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);
-
-		try {
-			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
-				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
-			    | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse |
-			    InvalidParameter ¢) {
-			log.fatal("Critical bug: this command result isn't supposed to return here");
-			
-			throw new CriticalError();		}
-		
-		log.info("getAllGroupBuyings command succeed.");
-		
-		return new Gson().fromJson(commandDescriptor.getData(), new TypeToken<HashMap<Integer, GroupBuying>>(){}.getType());
 	}
 }

@@ -575,60 +575,6 @@ public enum CommandDescriptor {
 	GET_ALL_SALES,
 	
 	/**
-	 * Description: Create new group sale in the system.
-	 * param1: GroupBuying.
-	 * retval: Integer - group buying id.
-	 *
-	 * result_codes:
-	 * 		success:
-	 * 			SM_OK,
-	 * 		
-	 * 		failure:
-	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *	 		SM_INVALID_PARAMETER,
-	 *
-	 *	 ***** NOTES *****
-	 * 1. Only Manager can create sales.
-	 */
-	CREATE_NEW_GROUP_BUYING,
-	
-	/**
-	 * Description: remove sale from the system.
-	 * param1: Integer.
-	 * retval: void.
-	 *
-	 * result_codes:
-	 * 		success:
-	 * 			SM_OK,
-	 * 		
-	 * 		failure:
-	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *	 		SM_INVALID_PARAMETER,
-	 *			PARAM_ID_IS_NOT_EXIST,
-	 *
-	 *	 ***** NOTES *****
-	 * 1. Only Manager can create sales.
-	 */
-	REMOVE_GROUP_BUYING,
-	
-	/**
-	 * Description: get all group buying in the system.
-	 * param1: void.
-	 * retval: List of GroupBuying.
-	 *
-	 * result_codes:
-	 * 		success:
-	 * 			SM_OK,
-	 * 		
-	 * 		failure:
-	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *	 		SM_INVALID_PARAMETER,
-	 *
-	 *	 ***** NOTES *****
-	 */
-	GET_ALL_GROUP_BUYING,
-	
-	/**
 	 * Description: get all expired product packages in the system
 	 * param1: void.
 	 * retval: List of product packages.
@@ -780,9 +726,9 @@ public enum CommandDescriptor {
 	FORCE_REMOVE_INGREDIENT,
 		
 	/**
-	 * Description: get all sales which relevant for the product.
+	 * Description: get sale for product.
 	 * param1: barcode.
-	 * retval: List of sales.
+	 * retval: sale.
 	 *
 	 * result_codes:
 	 * 		success:
@@ -795,23 +741,5 @@ public enum CommandDescriptor {
 	 *
 	 *	 ***** NOTES *****
 	 */
-	GET_SALES_FOR_PRODUCT,
-	
-	/**
-	 * Description: if customer want to use group buying sale / remove himself from sale he sends this command.
-	 * param1: int saleID - group buying sale id to enable / disable
-	 * retval: List of sales.
-	 *
-	 * result_codes:
-	 * 		success:
-	 * 			SM_OK,
-	 * 		
-	 * 		failure:
-	 *			SM_SENDER_IS_NOT_CONNECTED,
-	 *	 		SM_INVALID_PARAMETER,
-	 *			PARAM_ID_IS_NOT_EXIST,
-	 *
-	 *	 ***** NOTES *****
-	 */
-	APPLY_GROUP_BUYING_SALE,
+	GET_SALE_FOR_PRODUCT,
 }

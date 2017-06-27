@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import BasicCommonClasses.CatalogProduct;
-import BasicCommonClasses.GroupBuying;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
@@ -262,41 +261,4 @@ public interface IManager extends IWorker {
 	 * @throws ConnectionFailure 
 	 */
 	Map<Integer, Sale> getAllSales() throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure;
-	
-	/**
-	 * Manager creates new group buying.
-	 * 
-	 * @param sale - sale to create
-	 * @return Integer - Sale with ID
-	 * @throws EmployeeNotConnected 
-	 * @throws InvalidParameter 
-	 * @throws CriticalError 
-	 * @throws ConnectionFailure 
-	 */
-	GroupBuying createNewGroupBuying(GroupBuying GroupBuying) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure;
-	
-	/**
-	 * Manager removes group buying
-	 *g
-	 * @param sale - sale to create
-	 * @return Integer - Sale with ID
-	 * @throws EmployeeNotConnected 
-	 * @throws InvalidParameter 
-	 * @throws CriticalError 
-	 * @throws ConnectionFailure 
-	 * @throws ParamIDDoesNotExist 
-	 */
-	void removeGroupBuying(Integer id) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist;
-	
-	/**
-	 * Manager get all group buying.
-	 * 
-	 * @param void
-	 * @return Map<Integer, Sale> 
-	 * @throws EmployeeNotConnected 
-	 * @throws InvalidParameter 
-	 * @throws CriticalError 
-	 * @throws ConnectionFailure 
-	 */
-	Map<Integer, GroupBuying> getAllGroupBuyings() throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure;
 }
