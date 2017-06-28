@@ -6,7 +6,6 @@ import java.util.List;
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
-import BasicCommonClasses.GroupBuying;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
@@ -67,6 +66,7 @@ public interface ICustomer {
 	 * addPtoductToCart - Adds product with amount to the customer
 	 * 
 	 * @param SmartCode c
+	 * @param CatalogProduct catalogProduct
 	 * @param int amount
 	 * @throws CriticalError 
 	 * @throws CustomerNotConnected 
@@ -74,7 +74,7 @@ public interface ICustomer {
 	 * @throws AmountBiggerThanAvailable 
 	 * @throws InvalidParameter 
 	 */
-	void addProductToCart(SmartCode c, int amount) throws CriticalError, CustomerNotConnected, AmountBiggerThanAvailable, ProductPackageDoesNotExist, InvalidParameter;
+	void addProductToCart(SmartCode c, CatalogProduct catalogProduct, int amount) throws CriticalError, CustomerNotConnected, AmountBiggerThanAvailable, ProductPackageDoesNotExist, InvalidParameter;
 	
 	/**
 	 * returnProductToShelf - removes product with amount from the customer

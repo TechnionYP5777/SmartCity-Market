@@ -311,21 +311,12 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 	}
 
 	@Override
-	public void addProductToCart(SmartCode c, int amount) throws CriticalError, CustomerNotConnected,
+	public void addProductToCart(SmartCode c, CatalogProduct p, int amount) throws CriticalError, CustomerNotConnected,
 			AmountBiggerThanAvailable, ProductPackageDoesNotExist, InvalidParameter {
 		String serverResponse;
 
 		log.info("Creating viewProductFromCatalog (in order to addPtoductToCart) command wrapper to customer with id: "
 				+ id);
-
-		CatalogProduct catalogProduct;
-		try {
-			catalogProduct = viewCatalogProduct(c);
-		} catch (ProductCatalogDoesNotExist e1) {
-			log.fatal("Critical bug: failed to get catalog product from server");
-
-			throw new CriticalError();
-		}
 
 		establishCommunication(CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
 
@@ -354,7 +345,7 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 				productPackage2 = new ProductPackage(c, amount, null);
 		groceryList.addProduct(productPackage1);
 
-		addProductToCacheAndUpdateCartData(productPackage2, catalogProduct);
+		addProductToCacheAndUpdateCartData(productPackage2, p);
 
 		log.info("addProductToGroceryList command succeed.");
 	}

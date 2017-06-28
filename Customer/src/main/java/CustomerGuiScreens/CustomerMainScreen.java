@@ -19,11 +19,7 @@ import com.jfoenix.controls.JFXTextField;
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
-import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
-import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
-import CustomerContracts.ACustomerExceptions.InvalidParameter;
-import CustomerContracts.ACustomerExceptions.ProductCatalogDoesNotExist;
 import CustomerContracts.ICustomer;
 import CustomerContracts.IRegisteredCustomer;
 import CustomerGuiHelpers.CustomerProductCellFormat;
@@ -317,7 +313,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	@FXML
 	public void addButtonPressed(MouseEvent __) {
 		try {
-			customer.addProductToCart(scannedSmartCode, 1);
+			customer.addProductToCart(scannedSmartCode, catalogProduct, 1);
 		} catch (SMException e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.stackTraceToStr(e));
