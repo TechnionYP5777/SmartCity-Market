@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
+<StackPane  fx:id="rootPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
 	minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
 	prefWidth="1280.0" styleClass="background" xmlns="http://javafx.com/javafx/8.0.111"
 	xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeMenuScreen">

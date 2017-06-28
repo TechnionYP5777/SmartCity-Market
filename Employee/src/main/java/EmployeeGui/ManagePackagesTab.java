@@ -285,7 +285,7 @@ public class ManagePackagesTab implements Initializable {
 		
 		Label lbl1 = new Label("Expired Products");
 		JFXButton remove = new JFXButton("Remove Selected Products From System");
-		JFXButton close = new JFXButton("Remove Selected Products From System");
+		JFXButton close = new JFXButton("Close");
 		remove.getStyleClass().add("JFXButton");
 		close.getStyleClass().add("JFXButton");
 		remove.setOnAction(new EventHandler<ActionEvent>() {

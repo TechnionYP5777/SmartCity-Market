@@ -19,13 +19,13 @@
    <children>
       <VBox fx:id="rootPane" spacing="15.0">
       	<children>
-      		<Label styleClass="chooseOprationHeader" text="Choose operation:" />
+      		<Label styleClass="header" text="Choose operation:" />
             <JFXRadioButton fx:id="addCatalogProductRadioButton" onAction="#addCatalogProductRadioButtonPressed" selected="true" styleClass="JFXRadioButton" text="Add Catalog Product" />
             <JFXRadioButton fx:id="removeCatalogProductRadioButton" onAction="#removeCatalogProductRadioButtonPressed" styleClass="JFXRadioButton" text="Remove Catalog Product" />
       		<Separator />
       		<GridPane>
       			<columnConstraints>
-      				<ColumnConstraints hgrow="SOMETIMES" percentWidth="15.0" />
+      				<ColumnConstraints hgrow="SOMETIMES" percentWidth="25.0" />
       				<ColumnConstraints hgrow="SOMETIMES" />
       			</columnConstraints>
       			<rowConstraints>
@@ -37,7 +37,7 @@
       						<Label text="Barcode:" />
       					</children>
                      <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                      </padding>
       				</HBox>
       				<HBox GridPane.columnIndex="1">
@@ -45,7 +45,7 @@
                         <JFXTextField fx:id="barcodeTextField" promptText="Required Field" styleClass="JFXTextField" />
       					</children>
                      <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                      </padding>
       				</HBox>
       			</children>
@@ -54,7 +54,7 @@
       			<children>
       				<GridPane fx:id="addCatalogProductParamPane">
       					<columnConstraints>
-      						<ColumnConstraints hgrow="SOMETIMES" percentWidth="15.0" />
+      						<ColumnConstraints hgrow="SOMETIMES" percentWidth="25.0" />
       						<ColumnConstraints hgrow="SOMETIMES" />
       					</columnConstraints>
       					<rowConstraints>
@@ -63,7 +63,7 @@
       						<RowConstraints vgrow="SOMETIMES" />
       						<RowConstraints vgrow="SOMETIMES" />
                         <RowConstraints vgrow="SOMETIMES" />
-                        <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints vgrow="SOMETIMES" />
       					</rowConstraints>
       					<children>
       						<HBox>
@@ -71,7 +71,7 @@
       								<Label text="Product Name:" />
       							</children>
       							<padding>
-      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      								<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
       							</padding>
       						</HBox>
       						<HBox GridPane.rowIndex="1">
@@ -79,7 +79,7 @@
       								<Label text="Product Description:" />
       							</children>
       							<padding>
-      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      								<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
       							</padding>
       						</HBox>
       						<HBox GridPane.rowIndex="2">
@@ -87,7 +87,7 @@
       								<Label text="Product manufacturer:" />
       							</children>
       							<padding>
-      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      								<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
       							</padding>
       						</HBox>
       						<HBox GridPane.rowIndex="3">
@@ -95,12 +95,12 @@
       								<Label text="Product Price (Nis):" />
       							</children>
       							<padding>
-      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      								<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
       							</padding>
       						</HBox>
       						<HBox GridPane.columnIndex="1">
       							<padding>
-      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      								<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
       							</padding>
       							<children>
                               <JFXTextField fx:id="productNameTextField" promptText="Required Field" styleClass="JFXTextField" />
@@ -108,7 +108,7 @@
       						</HBox>
       						<HBox styleClass="JFXTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
       							<padding>
-      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      								<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
       							</padding>
       							<children>
                               <JFXTextField fx:id="productDescriptionTextField" promptText="Optional" styleClass="JFXTextField" />
@@ -116,7 +116,7 @@
       						</HBox>
       						<HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
       							<padding>
-      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      								<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
       							</padding>
                            <children>
                               <JFXComboBox fx:id="productManufacturerCombo" prefWidth="155.0" styleClass="JFXComboBox" />
@@ -124,7 +124,7 @@
       						</HBox>
       						<HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
       							<padding>
-      								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      								<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
       							</padding>
       							<children>
                               <JFXTextField fx:id="productPriceTextField" promptText="Required Field" styleClass="JFXTextField" />
@@ -135,12 +135,12 @@
                               <Label text="Ingridients:" />
                            </children>
                            <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </padding>
                         </HBox>
                         <HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
                            <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </padding>
                            <children>
                               <JFXButton fx:id="ingrChooser" styleClass="JFXButton" text="Click To Choose Ingredients" />
@@ -148,7 +148,7 @@
                         </HBox>
                         <HBox GridPane.rowIndex="5">
                            <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </padding>
                            <children>
                               <Label text="Location:" />
@@ -156,7 +156,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                            <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </padding>
                            <children>
                               <JFXButton fx:id="locationChooser" styleClass="JFXButton" text="Click To Choose Location" />

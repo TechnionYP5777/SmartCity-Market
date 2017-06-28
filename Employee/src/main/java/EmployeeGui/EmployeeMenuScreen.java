@@ -29,7 +29,9 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+
 
 /**
  * WorkerMenuScreen - Controller for menu screen which holds the operations
@@ -43,6 +45,9 @@ import javafx.stage.Stage;
 public class EmployeeMenuScreen implements Initializable {
 
 	protected static Logger log = Logger.getLogger(EmployeeMenuScreen.class.getName());
+	
+	@FXML 
+	StackPane rootPane;
 
 	@FXML
 	GridPane workerMenuScreenPane;
