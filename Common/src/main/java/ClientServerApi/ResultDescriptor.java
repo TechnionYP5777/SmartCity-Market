@@ -225,6 +225,14 @@ public enum ResultDescriptor {
 	PARAM_ID_IS_NOT_EXIST,
 	
 	/**
+	 * The parameter ID is still
+	 * 
+	 * How to fix:
+	 * 
+	 */
+	PARAM_ID_STILL_IN_USE,
+	
+	/**
 	 * The ingredient is still in use in the system
 	 * 
 	 * How to fix:

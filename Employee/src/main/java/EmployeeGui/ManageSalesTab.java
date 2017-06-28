@@ -20,6 +20,7 @@ import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
+import EmployeeDefs.AEmployeeException.ParamIDStillInUse;
 import EmployeeImplementations.Manager;
 import GuiUtils.DialogMessagesService;
 import SMExceptions.CommonExceptions.CriticalError;
@@ -390,7 +391,7 @@ public class ManageSalesTab implements Initializable {
 			
 		try {
 			manager.removeSale(singles.get(getBarcodeFromTextCell(sale)));
-		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e) {
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist | ParamIDStillInUse e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();

@@ -531,6 +531,7 @@ public enum CommandDescriptor {
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
 	 *	 		SM_INVALID_PARAMETER,
+	 *			PARAM_ID_ALREADY_EXISTS,
 	 *
 	 *	 ***** NOTES *****
 	 * 1. Only Manager can create sales.
@@ -550,6 +551,7 @@ public enum CommandDescriptor {
 	 *			SM_SENDER_IS_NOT_CONNECTED,
 	 *	 		SM_INVALID_PARAMETER,
 	 *			PARAM_ID_IS_NOT_EXIST,
+	 *			PARAM_ID_STILL_IN_USE,
 	 *
 	 *	 ***** NOTES *****
 	 * 1. Only Manager can create sales.
@@ -568,7 +570,7 @@ public enum CommandDescriptor {
 	 * 		failure:
 	 *			SM_SENDER_IS_NOT_CONNECTED,
 	 *	 		SM_INVALID_PARAMETER,
-	 *
+	 *		    	 *
 	 *	 ***** NOTES *****
 	 * 1. Only Manager can create sales.
 	 */

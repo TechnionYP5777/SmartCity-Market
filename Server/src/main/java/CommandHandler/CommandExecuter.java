@@ -1140,7 +1140,6 @@ public class CommandExecuter {
 		log.info("Trying to force remove ingredient " + ingredient + " from system");
 
 		try {
-			//TODO noam call here to force remove ingredient
 			c.removeIngredient(inCommandWrapper.getSenderID(), ingredient);
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
 		} catch (CriticalError e) {
@@ -1508,7 +1507,7 @@ public class CommandExecuter {
 		} catch (SaleAlreadyExist e) {
 			log.info("Create new sale command failed, sale for this product already exists");
 
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR); //TODO: fix that to specific value
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.PARAM_ID_ALREADY_EXISTS);
 		}
 		
 
@@ -1551,7 +1550,7 @@ public class CommandExecuter {
 		} catch (SaleStillUsed e) {
 			log.info("Remove sale command failed, sale still used by clients");
 
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR); //TODO fix that to specific error
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.PARAM_ID_IS_NOT_EXIST);
 		}
 		
 

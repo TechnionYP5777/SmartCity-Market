@@ -91,6 +91,8 @@ public class GuiCommonDefs {
 	
 	public static final String itemIsNotInSys = "The item is not in the system.";
 	
+	public static final String itemStillInUse = "The item is still in use.";
+	
 	public static final String ingIsInUse = "The ingredient is still in use.";
 	
 	public static final String manuIsInUse = "The manufacturer is still in use.";

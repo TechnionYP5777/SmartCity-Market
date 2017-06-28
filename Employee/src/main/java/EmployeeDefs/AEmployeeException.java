@@ -240,6 +240,21 @@ public class AEmployeeException extends SMException {
 	}
 	
 	/**
+	 * Thrown when trying to remove item which it's ID still in use
+	 *
+	 */
+	public static class ParamIDStillInUse extends AEmployeeException {
+		
+		private static final long serialVersionUID = 0x325BBEA38C862AC2L;
+
+		@Override
+		public void showInfoToUser() {
+			DialogMessagesService.showErrorDialog(GuiCommonDefs.managerOprDialofTitle, null, 
+					GuiCommonDefs.itemStillInUse);
+		}
+	}
+	
+	/**
 	 * Thrown when trying to remove ingredient which still in use.
 	 *
 	 */

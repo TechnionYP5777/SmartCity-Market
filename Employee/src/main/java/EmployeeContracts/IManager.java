@@ -14,6 +14,7 @@ import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ManfacturerStillInUse;
 import EmployeeDefs.AEmployeeException.ParamIDAlreadyExists;
 import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
+import EmployeeDefs.AEmployeeException.ParamIDStillInUse;
 import EmployeeDefs.AEmployeeException.ProductAlreadyExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductStillForSale;
@@ -234,8 +235,9 @@ public interface IManager extends IWorker {
 	 * @throws InvalidParameter 
 	 * @throws CriticalError 
 	 * @throws ConnectionFailure 
+	 * @throws ParamIDAlreadyExists 
 	 */
-	Sale createNewSale(Sale sale) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure;
+	Sale createNewSale(Sale sale) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDAlreadyExists;
 	
 	/**
 	 * Manager removes sale..
@@ -247,8 +249,9 @@ public interface IManager extends IWorker {
 	 * @throws CriticalError 
 	 * @throws ConnectionFailure 
 	 * @throws ParamIDDoesNotExist 
+	 * @throws ParamIDStillInUse 
 	 */
-	void removeSale(Integer saleID) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist;
+	void removeSale(Integer saleID) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist, ParamIDStillInUse;
 	
 	/**
 	 * Manager get all sales.

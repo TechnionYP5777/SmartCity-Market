@@ -18,6 +18,7 @@ import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ManfacturerStillInUse;
 import EmployeeDefs.AEmployeeException.ParamIDAlreadyExists;
 import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
+import EmployeeDefs.AEmployeeException.ParamIDStillInUse;
 import EmployeeDefs.AEmployeeException.ProductAlreadyExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductPackageDoesNotExist;
@@ -97,7 +98,7 @@ public abstract class AEmployee {
 			throws InvalidCommandDescriptor, InvalidParameter, CriticalError, EmployeeNotConnected,
 			EmployeeAlreadyConnected, AuthenticationError, ProductNotExistInCatalog, ProductAlreadyExistInCatalog,
 			ProductStillForSale, AmountBiggerThanAvailable, ProductPackageDoesNotExist, WorkerAlreadyExists, ParamIDAlreadyExists,
-			ParamIDDoesNotExist, WorkerDoesNotExist, IngredientStillInUse, ManfacturerStillInUse {
+			ParamIDDoesNotExist, WorkerDoesNotExist, IngredientStillInUse, ManfacturerStillInUse, ParamIDStillInUse {
 
 		switch (¢) {
 
@@ -180,7 +181,12 @@ public abstract class AEmployee {
 			log.info("Command execution failed, param ID does not exist");
 
 			throw new AEmployeeException.ParamIDDoesNotExist();
-			
+
+		case PARAM_ID_STILL_IN_USE:
+			log.info("Command execution failed, param ID still in use");
+
+			throw new AEmployeeException.ParamIDStillInUse();
+						
 		case SM_PRODUCT_PACKAGE_DOES_NOT_EXIST:
 			log.fatal("Command execution failed, product package does not exist");
 
@@ -248,7 +254,7 @@ public abstract class AEmployee {
 					| EmployeeAlreadyConnected | AuthenticationError | ProductNotExistInCatalog
 					| ProductAlreadyExistInCatalog | ProductStillForSale | AmountBiggerThanAvailable
 					| ProductPackageDoesNotExist | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist
-					| WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse e1) {
+					| WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse | ParamIDStillInUse e1) {
 
 				log.fatal("Critical bug: this command result isn't supposed to return here");
 				throw new RuntimeException();

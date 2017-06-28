@@ -28,6 +28,7 @@ import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ManfacturerStillInUse;
 import EmployeeDefs.AEmployeeException.ParamIDAlreadyExists;
 import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
+import EmployeeDefs.AEmployeeException.ParamIDStillInUse;
 import EmployeeDefs.AEmployeeException.ProductAlreadyExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
 import EmployeeDefs.AEmployeeException.ProductPackageDoesNotExist;
@@ -73,7 +74,7 @@ public class Manager extends Worker implements IManager {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductNotExistInCatalog | WorkerAlreadyExists 
-				| ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
+				| ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();
@@ -95,7 +96,7 @@ public class Manager extends Worker implements IManager {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | AmountBiggerThanAvailable
 				| ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | WorkerAlreadyExists | ParamIDAlreadyExists 
-				| ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
+				| ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();
@@ -119,7 +120,7 @@ public class Manager extends Worker implements IManager {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | WorkerAlreadyExists 
-				| ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
+				| ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();
@@ -142,7 +143,7 @@ public class Manager extends Worker implements IManager {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
-				| ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
+				| ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();
@@ -165,7 +166,7 @@ public class Manager extends Worker implements IManager {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
-				| ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerAlreadyExists | IngredientStillInUse | ManfacturerStillInUse ¢) {
+				| ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerAlreadyExists | IngredientStillInUse | ManfacturerStillInUse | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();
@@ -189,7 +190,7 @@ public class Manager extends Worker implements IManager {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
-			    | ParamIDDoesNotExist | WorkerAlreadyExists | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
+			    | ParamIDDoesNotExist | WorkerAlreadyExists | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();
@@ -214,7 +215,7 @@ public class Manager extends Worker implements IManager {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
-			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist | ManfacturerStillInUse ¢) {
+			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist | ManfacturerStillInUse | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();
@@ -237,7 +238,7 @@ public class Manager extends Worker implements IManager {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
-			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
+			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();
@@ -260,7 +261,7 @@ public class Manager extends Worker implements IManager {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
-			    | WorkerAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
+			    | WorkerAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();
@@ -285,7 +286,7 @@ public class Manager extends Worker implements IManager {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
-			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist | IngredientStillInUse ¢) {
+			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist | IngredientStillInUse | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();
@@ -308,7 +309,7 @@ public class Manager extends Worker implements IManager {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
-			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
+			    | WorkerAlreadyExists | ParamIDAlreadyExists | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();
@@ -331,7 +332,7 @@ public class Manager extends Worker implements IManager {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
-			    | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse ¢) {
+			    | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();
@@ -356,7 +357,7 @@ public class Manager extends Worker implements IManager {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
-			    | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse | EmployeeNotConnected ¢) {
+			    | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse | EmployeeNotConnected | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();
@@ -382,7 +383,7 @@ public class Manager extends Worker implements IManager {
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
 			    | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse |
-			    InvalidParameter ¢) {
+			    InvalidParameter | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();		}
@@ -394,7 +395,7 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public Sale createNewSale(Sale sale)
-			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure {
+			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDAlreadyExists {
 		log.info("Creating createNewSale command wrapper with Sale: " + sale);
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(getClientId(), CommandDescriptor.CREATE_NEW_SALE, Serialization.serialize(sale)))
@@ -407,7 +408,7 @@ public class Manager extends Worker implements IManager {
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
 			    | WorkerAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse |
-			    ParamIDAlreadyExists ¢) {
+			    ParamIDAlreadyExists | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();
@@ -420,7 +421,7 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public void removeSale(Integer saleID)
-			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist {
+			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDDoesNotExist, ParamIDStillInUse {
 		log.info("Creating removeSale command wrapper with Sale id: " + saleID);
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(getClientId(), CommandDescriptor.REMOVE_SALE, Serialization.serialize(saleID)))
@@ -456,7 +457,7 @@ public class Manager extends Worker implements IManager {
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
 			    | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse |
-			    InvalidParameter ¢) {
+			    InvalidParameter | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();		}
