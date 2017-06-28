@@ -1,6 +1,8 @@
 package EmployeeGui;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -48,6 +50,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -150,7 +153,9 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	IEventBus eventBus;
 
 	void renameIngrPressed() {
-		long id = ingredients.get(selectedIngr.iterator().next()).getId();
+		String prevName= selectedIngr.iterator().next();
+		long id = ingredients.get(prevName).getId();
+		String newName = renameIngrLbl.getText();
 		eventBus.post(new IngredientEvent());
 		try {
 			manager.editIngredient(new Ingredient(id, renameIngrLbl.getText()));
@@ -163,13 +168,20 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		createIngredientList();
 		enableButtons();
 		enableAddButtons();
-
+		
+		
+		String logMessage = "rename Ingredient: from " + prevName +" to " + newName + " succeeded.";
+//		DialogMessagesService.showInfoDialog("log", null, logMessage);
+		
+		printToSuccessLog(logMessage);
 	}
 
 	void renameManuPressed() {
+		String prevName= selectedManu.iterator().next();
 		long id = manufacturars.get(selectedManu.iterator().next()).getId();
+		String newName = renameManuLbl.getText();
 		try {
-			manager.editManufacturer(new Manufacturer(id, renameManuLbl.getText()));
+			manager.editManufacturer(new Manufacturer(id, newName));
 			eventBus.post(new ManufacturerEvent());
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist e) {
 			log.fatal(e);
@@ -180,6 +192,11 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		createManufacturerList();
 		enableButtons();
 		enableAddButtons();
+		
+//		String logMessage = "rename Manufacturer: from " + prevName +" to " + newName + " succeeded.";
+////		DialogMessagesService.showInfoDialog("log", null, logMessage);
+//		
+//		printToSuccessLog(logMessage);
 	}
 
 	void addIngPressed() {
@@ -577,6 +594,12 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		renameIngr.setDisable(selectedIngr.isEmpty() || selectedIngr.size() > 1);
 
 	}
+	
+	private void printToSuccessLog(String msg) {
+		((TextArea) rootPane.getScene().lookup("#successLogArea"))
+				.appendText(new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss").format(new Date()) + " :: " + msg + "\n");
+	}
+
 
 	class removeManuHandler implements IConfiramtionDialog {
 
