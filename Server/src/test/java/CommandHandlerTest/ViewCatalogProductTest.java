@@ -13,6 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 
+import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.SmartCode;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
@@ -44,7 +45,7 @@ public class ViewCatalogProductTest {
 		CommandWrapper out;
 		
 		try {
-			Mockito.when(sqlDatabaseConnection.getProductFromCatalog(senderID, smartCode.getBarcode())).thenReturn("");
+			Mockito.when(sqlDatabaseConnection.getProductFromCatalog(senderID, smartCode.getBarcode())).thenReturn(new CatalogProduct());
 		} catch (ClientNotConnected | ProductNotExistInCatalog | CriticalError e) {
 			fail();
 		}

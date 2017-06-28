@@ -304,7 +304,7 @@ public class CommandExecuter {
 
 		try {
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK,
-					c.getProductFromCatalog(inCommandWrapper.getSenderID(), smartCode.getBarcode()));
+					Serialization.serialize(c.getProductFromCatalog(inCommandWrapper.getSenderID(), smartCode.getBarcode())));
 
 			log.info("Get product from catalog command secceeded with barcode " + smartCode.getBarcode());
 		} catch (ProductNotExistInCatalog e) {

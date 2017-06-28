@@ -17,6 +17,19 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 class SQLQueryGenerator {
 
 	/**
+	 * Generate string of select all table query.
+	 * 
+	 * @param tabel
+	 *            The table to select
+	 * @return string of select query.
+	 */
+	public static String generateSelectAllTable(DbTable tabel) {
+
+		return generateSelectOrderByQuery1Table(tabel, null, new Condition[]{});
+
+	}
+	
+	/**
 	 * Generate string of select query.
 	 * 
 	 * @param tabel

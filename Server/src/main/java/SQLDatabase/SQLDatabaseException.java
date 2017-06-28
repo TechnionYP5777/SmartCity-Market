@@ -92,6 +92,36 @@ public class SQLDatabaseException extends Exception {
 	public static class ManufacturerStillUsed extends SQLDatabaseException {
 		private static final long serialVersionUID = 0x2AE961B8D3DD32C9L;
 	}
+	
+	/**
+	 * Thrown when try to do operation on non-existed sale.
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class SaleNotExist extends SQLDatabaseException {
+		private static final long serialVersionUID = 0x2AE961B8D3DD32C9L;
+	}
+	
+	/**
+	 * Thrown when try to do operation on already-existing sale (for given product).
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class SaleAlreadyExist extends SQLDatabaseException {
+		private static final long serialVersionUID = 0x2AE961B8D3DD32C9L;
+	}
+
+	/**
+	 * Thrown when try to remove sale that still used in the system
+	 * 
+	 * @author Noam Yefet
+	 *
+	 */
+	public static class SaleStillUsed extends SQLDatabaseException {
+		private static final long serialVersionUID = 0x2AE961B8D3DD32C9L;
+	}
 
 	/**
 	 * Thrown when try to remove ingredient that still used in the system

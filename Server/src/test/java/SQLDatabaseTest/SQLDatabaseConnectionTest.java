@@ -148,8 +148,8 @@ public class SQLDatabaseConnectionTest {
 		String milkImage = "";
 		try {
 			assertEquals(sqlConnection.getProductFromCatalog(null, 1234567890),
-					new Gson().toJson(new CatalogProduct(1234567890L, "חלב", ingredients, new Manufacturer(1, "תנובה"),
-							"", 10.5, milkImage, locations)));
+					new CatalogProduct(1234567890L, "חלב", ingredients, new Manufacturer(1, "תנובה"),
+							"", 10.5, milkImage, locations));
 		} catch (ProductNotExistInCatalog | ClientNotConnected | CriticalError e) {
 			fail();
 		}
@@ -166,7 +166,7 @@ public class SQLDatabaseConnectionTest {
 		CatalogProduct product = null;
 
 		try {
-			product = new Gson().fromJson(sqlConnection.getProductFromCatalog(null, barcodeNum), CatalogProduct.class);
+			product = sqlConnection.getProductFromCatalog(null, barcodeNum);
 		} catch (ProductNotExistInCatalog | ClientNotConnected | CriticalError e) {
 			fail();
 		}
@@ -257,7 +257,7 @@ public class SQLDatabaseConnectionTest {
 		try {
 			sqlConnection.addProductToCatalog(null, newProduct);
 			assertEquals(sqlConnection.getProductFromCatalog(null, newProduct.getBarcode()),
-					new Gson().toJson(newProduct));
+					newProduct);
 			sqlConnection.removeProductFromCatalog(null, new SmartCode(newProduct.getBarcode(), null));
 		} catch (SQLDatabaseException e) {
 			fail();
@@ -286,7 +286,7 @@ public class SQLDatabaseConnectionTest {
 		try {
 			sqlConnection.addProductToCatalog(null, newProduct);
 			assertEquals(sqlConnection.getProductFromCatalog(null, newProduct.getBarcode()),
-					new Gson().toJson(newProduct));
+					newProduct);
 			sqlConnection.removeProductFromCatalog(null, new SmartCode(newProduct.getBarcode(), null));
 		} catch (SQLDatabaseException e) {
 			fail();
@@ -297,6 +297,38 @@ public class SQLDatabaseConnectionTest {
 			fail();
 		} catch (ProductNotExistInCatalog e) {
 		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		}
+
+	}
+	
+	@Test
+	public void testCanRemoveProductCatalogEvenInHistory() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+
+		HashSet<Ingredient> ingredients = new HashSet<Ingredient>();
+		HashSet<Location> locations = new HashSet<Location>();
+
+		CatalogProduct newProduct = new CatalogProduct(barcodeDebug + 10L, "thi", ingredients,
+				new Manufacturer(1, "תנובה"), "", 20, "", locations);
+		ProductPackage pack = new ProductPackage(
+				new SmartCode(newProduct.getBarcode(), date232015), 2, locationWarehouse);
+		
+		try {
+			sqlConnection.addProductToCatalog(null, newProduct);
+			sqlConnection.addProductPackageToWarehouse(null, pack);
+			sqlConnection.placeProductPackageOnShelves(null, pack);
+			
+			int sessionId = sqlConnection.loginCustomer(ClientServerDefs.anonymousCustomerUsername, ClientServerDefs.anonymousCustomerPassword);
+			sqlConnection.addProductToGroceryList(sessionId, pack);
+			sqlConnection.cartCheckout(sessionId);
+			
+			
+			sqlConnection.removeProductFromCatalog(null, new SmartCode(newProduct.getBarcode(), null));
+			
+			sqlConnection.clearGroceryListsHistory();
+		} catch (SQLDatabaseException e) {
 			fail();
 		}
 
@@ -315,7 +347,7 @@ public class SQLDatabaseConnectionTest {
 		try {
 			sqlConnection.addProductToCatalog(null, newProduct);
 			assertEquals(sqlConnection.getProductFromCatalog(null, newProduct.getBarcode()),
-					new Gson().toJson(newProduct));
+					newProduct);
 			sqlConnection.addProductPackageToWarehouse(null, newPackage);
 			assertEquals("5", sqlConnection.getProductPackageAmonutInWarehouse(null, newPackage));
 		} catch (SQLDatabaseException e) {
@@ -2100,5 +2132,304 @@ public class SQLDatabaseConnectionTest {
 		}
 		
 	}
+	/*
+	@Test
+	public void testAddRemoveSale() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		HashSet<Location> locations = new HashSet<>();
+		HashSet<Ingredient> ingredients = new HashSet<>();
+		CatalogProduct newProduct = new CatalogProduct(barcodeDebug + 10L, "thi", ingredients,
+				new Manufacturer(1, "תנובה"), "", 20, "", locations);
+		final Sale sale = new Sale();
+		sale.setDiscount(1);
+		sale.setProduct(newProduct);
+		sale.set(1);
+		sale.setDiscount(1);
+		
+		String result = null;
+		Manufacturer manufacturer = null;
+		
+		//test add ingredient
+		try {
+			String tempID = sqlConnection.addManufacturer(null, manufacturerName);
+			manufacturer = Serialization.deserialize(tempID, Manufacturer.class);
+			
+			result = sqlConnection.getManufacturersList(null);
+		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		}
+		
+		assert result != null;
+		HashSet<Manufacturer> set = Serialization.deserializeManufacturersHashSet(result);
+		assert set != null;	
+		assert set.contains(manufacturer);
+		
+		//test remove ingredient
+		try {
+			sqlConnection.removeManufacturer(null, manufacturer);
+			
+			result = sqlConnection.getManufacturersList(null);
+		} catch (CriticalError | ClientNotConnected | ManufacturerNotExist | ManufacturerStillUsed e) {
+			fail();
+		}
+		
+		assert result != null;
+		set = Serialization.deserializeManufacturersHashSet(result);
+		assert set != null;
+		assert !set.contains(manufacturer);
+	}
+	
+	@Test
+	public void testAddRemoveTwoManufacturers() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String manufacturerName = "manydebug";
+		final String manufacturerName2 = "manydebug";
+		String result = null;
+		Manufacturer manufacturer = null;
+		Manufacturer manufacturer2 = null;
+		
+		//test add ingredient
+		try {
+			String tempID = sqlConnection.addManufacturer(null, manufacturerName);
+			manufacturer = Serialization.deserialize(tempID, Manufacturer.class);
+			String tempID2 = sqlConnection.addManufacturer(null, manufacturerName2);
+			manufacturer2 = Serialization.deserialize(tempID2, Manufacturer.class);
+			
+			result = sqlConnection.getManufacturersList(null);
+		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		}
+		
+		assert result != null;
+		HashSet<Manufacturer> set = Serialization.deserializeManufacturersHashSet(result);
+		assert set != null;	
+		assert set.contains(manufacturer);
+		assert set.contains(manufacturer2);
+		
+		//test remove ingredient
+		try {
+			sqlConnection.removeManufacturer(null, manufacturer);
+			sqlConnection.removeManufacturer(null, manufacturer2);
+			
+			result = sqlConnection.getManufacturersList(null);
+		} catch (CriticalError | ClientNotConnected | ManufacturerNotExist | ManufacturerStillUsed e) {
+			fail();
+		}
+		
+		assert result != null;
+		set = Serialization.deserializeManufacturersHashSet(result);
+		assert set != null;
+		assert !set.contains(manufacturer);
+		assert !set.contains(manufacturer2);
+	}
+	
+	@Test
+	public void testGetManufacturersList() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		String result = null;
+		
+		try {		
+			result = sqlConnection.getManufacturersList(null);
+		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		}
+		
+		assert result != null;
+		HashSet<Manufacturer> set = Serialization.deserializeManufacturersHashSet(result);
+		assert set != null;	
+	}
+	
+	@Test
+	public void testEditManufacturer() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String manufacturerName = "manydebug";
+		String result = null;
+		Manufacturer manufacturer = null;
+		
+		try {
+			String tempID = sqlConnection.addManufacturer(null, manufacturerName);
+			manufacturer = Serialization.deserialize(tempID, Manufacturer.class);
+			manufacturer.setName("newManufacturer");
+			sqlConnection.editManufacturer(null, manufacturer);
+			
+			result = sqlConnection.getManufacturersList(null);
+		} catch (CriticalError | ClientNotConnected | ManufacturerNotExist e) {
+			fail();
+		}
+		
+		assert result != null;
+		HashSet<Manufacturer> set = Serialization.deserializeManufacturersHashSet(result);
+		assert set != null;	
+		assert set.contains(manufacturer);
+		
+		try {
+			sqlConnection.removeManufacturer(null, manufacturer);
+		} catch (CriticalError | ClientNotConnected | ManufacturerNotExist | ManufacturerStillUsed e) {
+			fail();
+		}
+
+	}
+	
+	@Test
+	public void testCantEditNotExistedManufacturer() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String manufacturerName = "manydebug";
+		Manufacturer manufacturer = new Manufacturer(999,manufacturerName);
+		
+			try {
+				sqlConnection.editManufacturer(null, manufacturer);
+				fail();
+			} catch (CriticalError | ClientNotConnected e) {
+				fail();
+			} catch (ManufacturerNotExist e) {
+			} 
+		
+
+	}
+	
+	@Test
+	public void testCantRemoveNotExistedManufacturer() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		final String manufacturerName = "manydebug";
+		Manufacturer manufacturer = new Manufacturer(999,manufacturerName);
+		
+			try {
+				sqlConnection.removeManufacturer(null, manufacturer);
+				fail();
+			} catch (CriticalError | ClientNotConnected | ManufacturerStillUsed e) {
+				fail();
+			} catch (ManufacturerNotExist e) {
+			} 
+		
+
+	}
+	
+	@Test
+	public void testAddRemoveWorker() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		String result = null;
+		
+		//test add worker
+		try {
+			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgotPasswordData("", ""));
+			
+			result = sqlConnection.getWorkersList(null);
+		} catch (CriticalError | ClientNotConnected | ClientAlreadyExist e) {
+			fail();
+		}
+		
+		assert result != null;
+		HashMap<String, Boolean> map = Serialization.deserializeWorkersHashMap(result);
+		assert map != null;	
+		assert map.containsKey(workerName);
+		assertEquals(false, map.get(workerName));
+		
+		//test remove worker
+		try {
+			sqlConnection.removeWorker(null, workerName);
+			
+			result = sqlConnection.getWorkersList(null);
+		} catch (CriticalError | ClientNotConnected | ClientNotExist  e) {
+			fail();
+		}
+		
+		
+		assert result != null;
+		map = Serialization.deserializeWorkersHashMap(result);
+		assert map != null;	
+		assert !map.containsKey(workerName);
+
+	}
+	
+	@Test
+	public void testGetWorkersList() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		String result = null;
+		
+		//test add worker
+		try {
+			result = sqlConnection.getWorkersList(null);
+		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		}
+		
+		assert result != null;
+		HashMap<String, Boolean> map = Serialization.deserializeWorkersHashMap(result);
+		assert map != null;	
+
+	}
+	
+	@Test
+	public void testCantRemoveNotExistedWorker() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			sqlConnection.removeWorker(null, workerName);
+			fail();
+		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		} catch (ClientNotExist e) {
+		}
+		
+	}
+	
+	@Test
+	public void testCantAddWorkerAlreadyExisted() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		String result = null;
+		
+		//test add worker
+		try {
+			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgotPasswordData("", ""));
+			
+			result = sqlConnection.getWorkersList(null);
+		} catch (CriticalError | ClientNotConnected | ClientAlreadyExist e) {
+			fail();
+		}
+		
+		assert result != null;
+		HashMap<String, Boolean> map = Serialization.deserializeWorkersHashMap(result);
+		assert map != null;	
+		assert map.containsKey(workerName);
+		assertEquals(false, map.get(workerName));
+		
+		//test add again the same worker
+		try {
+			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgotPasswordData("", ""));
+			fail();
+		} catch (CriticalError | ClientNotConnected e) {
+			fail();
+		}
+		catch (ClientAlreadyExist e) {
+		}
+		
+		//remove worker
+		try {
+			sqlConnection.removeWorker(null, workerName);
+			
+			result = sqlConnection.getWorkersList(null);
+		} catch (CriticalError | ClientNotConnected | ClientNotExist e) {
+			fail();
+		}
+		
+		
+		assert result != null;
+		map = Serialization.deserializeWorkersHashMap(result);
+		assert map != null;	
+		assert !map.containsKey(workerName);
+
+	}
+	*/
 	
 }

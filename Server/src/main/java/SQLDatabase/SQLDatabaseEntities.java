@@ -10,6 +10,9 @@ import SQLDatabase.SQLDatabaseStrings.CUSTOMERS_INGREDIENTS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.CUSTOMERS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.FREE_IDS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.GROCERIES_LISTS_HISTORY_TABLE;
+import SQLDatabase.SQLDatabaseStrings.GROCERIES_LISTS_PRODUCTS_HISTORY_TABLE;
+import SQLDatabase.SQLDatabaseStrings.GROCERIES_LISTS_SALES_HISTORY_TABLE;
+import SQLDatabase.SQLDatabaseStrings.GROCERIES_LISTS_SALES_TABLE;
 import SQLDatabase.SQLDatabaseStrings.GROCERIES_LISTS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.INGREDIENTS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.LOCATIONS_TABLE;
@@ -18,6 +21,7 @@ import SQLDatabase.SQLDatabaseStrings.PRODUCTS_CATALOG_INGREDIENTS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.PRODUCTS_CATALOG_LOCATIONS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.PRODUCTS_CATALOG_TABLE;
 import SQLDatabase.SQLDatabaseStrings.PRODUCTS_PACKAGES_TABLE;
+import SQLDatabase.SQLDatabaseStrings.SALES_CATALOG_TABLE;
 import SQLDatabase.SQLDatabaseStrings.WORKERS_TABLE;
 
 /**
@@ -49,6 +53,7 @@ class SQLDatabaseEntities {
 	 * Table
 	 * 
 	 * @author noam
+	 * @since 9.1.16
 	 *
 	 */
 	static class IngredientsTable {
@@ -76,6 +81,7 @@ class SQLDatabaseEntities {
 	 * Table
 	 * 
 	 * @author noam
+	 * @since 9.1.16
 	 *
 	 */
 	static class ManufacturerTable {
@@ -104,6 +110,7 @@ class SQLDatabaseEntities {
 	 * Table
 	 * 
 	 * @author noam
+	 * @since 9.1.16
 	 *
 	 */
 	static class LocationsTable {
@@ -137,6 +144,7 @@ class SQLDatabaseEntities {
 	 * ProductsCatalog Table
 	 * 
 	 * @author noam
+	 * @since 9.1.16
 	 *
 	 */
 	static class ProductsCatalogTable {
@@ -180,6 +188,7 @@ class SQLDatabaseEntities {
 	 * ProductsCatalogIngredients Table
 	 * 
 	 * @author noam
+	 * @since 9.1.16
 	 *
 	 */
 	static class ProductsCatalogIngredientsTable {
@@ -206,6 +215,7 @@ class SQLDatabaseEntities {
 	 * ProductsCatalogLocations Table
 	 * 
 	 * @author noam
+	 * @since 9.1.16
 	 *
 	 */
 	static class ProductsCatalogLocationsTable {
@@ -232,6 +242,7 @@ class SQLDatabaseEntities {
 	 * ProductsPackages Table
 	 * 
 	 * @author noam
+	 * @since 9.1.16
 	 *
 	 */
 	static class ProductsPackagesTable {
@@ -267,6 +278,7 @@ class SQLDatabaseEntities {
 	 * GroceriesLists Table
 	 * 
 	 * @author noam
+	 * @since 9.1.16
 	 *
 	 */
 	static class GroceriesListsTable {
@@ -296,15 +308,75 @@ class SQLDatabaseEntities {
 					GroceriesListsTable.listIDCol.getName());
 		}
 	}
+	
+	/**
+	 * this class contains all the objects used buy SQLBuilder for
+	 * GroceriesListsSales Table
+	 * 
+	 * @author noam
+	 * @since 26.6.17
+	 *
+	 */
+	static class GroceriesListsSalesTable {
+		static DbTable table;
 
+		static DbColumn listIDCol;
+		static DbColumn saleIDCol;
+
+		
+		static {
+			/*
+			 * initialize the GroceriesLists Table
+			 */
+			GroceriesListsSalesTable.table = databaseSchema.addTable(GROCERIES_LISTS_SALES_TABLE.GROCERIES_LISTS_SALES_TABLE);
+
+			GroceriesListsSalesTable.listIDCol = GroceriesListsSalesTable.table.addColumn(GROCERIES_LISTS_SALES_TABLE.ATTR_LIST_ID,
+					TYPE_ID, null);
+			GroceriesListsSalesTable.saleIDCol = GroceriesListsSalesTable.table.addColumn(GROCERIES_LISTS_SALES_TABLE.ATTR_SALE_ID,
+					TYPE_ID, null);
+		}
+	}
+	
 	/**
 	 * this class contains all the objects used buy SQLBuilder for
 	 * GroceriesListsHistory Table
 	 * 
 	 * @author noam
+	 * @since 26.6.17
 	 *
 	 */
 	static class GroceriesListsHistoryTable {
+		static DbTable table;
+
+		static DbColumn listIDCol;
+		static DbColumn purchaseDateCol;
+		static DbColumn customerusernameCol;
+		
+		static {
+			/*
+			 * initialize the GroceriesListsHistory Table
+			 */
+			GroceriesListsHistoryTable.table = databaseSchema
+					.addTable(GROCERIES_LISTS_HISTORY_TABLE.GROCERIES_LISTS_HISTORY_TABLE);
+			GroceriesListsHistoryTable.listIDCol = GroceriesListsHistoryTable.table.addColumn(
+					GROCERIES_LISTS_HISTORY_TABLE.ATTR_LIST_ID, TYPE_ID, null);
+			GroceriesListsHistoryTable.customerusernameCol = GroceriesListsHistoryTable.table.addColumn(
+					GROCERIES_LISTS_HISTORY_TABLE.ATTR_CUSTOMER_USERNAME, TYPE_TEXT, null);
+			GroceriesListsHistoryTable.purchaseDateCol = GroceriesListsHistoryTable.table
+					.addColumn(GROCERIES_LISTS_HISTORY_TABLE.ATTR_PURCHASE_DATE, TYPE_DATE, null);
+			
+		}
+	}
+	
+	/**
+	 * this class contains all the objects used buy SQLBuilder for
+	 * GroceriesListsProductsHistory Table
+	 * 
+	 * @author noam
+	 * @since 9.1.16
+	 *
+	 */
+	static class GroceriesListsProductsHistoryTable {
 		static DbTable table;
 
 		static DbColumn listIDCol;
@@ -316,28 +388,58 @@ class SQLDatabaseEntities {
 			/*
 			 * initialize the GroceriesListsHistory Table
 			 */
-			GroceriesListsHistoryTable.table = databaseSchema
-					.addTable(GROCERIES_LISTS_HISTORY_TABLE.GROCERIES_LISTS_HISTORY_TABLE);
-			GroceriesListsHistoryTable.barcodeCol = GroceriesListsHistoryTable.table
-					.addColumn(GROCERIES_LISTS_HISTORY_TABLE.ATTR_BARCODE, TYPE_LONG, null);
-			GroceriesListsHistoryTable.amountCol = GroceriesListsHistoryTable.table
-					.addColumn(GROCERIES_LISTS_HISTORY_TABLE.ATTR_AMOUNT, TYPE_INTEGER, null);
-			GroceriesListsHistoryTable.expirationDateCol = GroceriesListsHistoryTable.table
-					.addColumn(GROCERIES_LISTS_HISTORY_TABLE.ATTR_EXPIRATION_DATE, TYPE_DATE, null);
-			GroceriesListsHistoryTable.listIDCol = GroceriesListsHistoryTable.table
-					.addColumn(GROCERIES_LISTS_HISTORY_TABLE.ATTR_LIST_ID, TYPE_ID, null);
+			GroceriesListsProductsHistoryTable.table = databaseSchema
+					.addTable(GROCERIES_LISTS_PRODUCTS_HISTORY_TABLE.GROCERIES_LISTS_PRODUCTS_HISTORY_TABLE);
+			GroceriesListsProductsHistoryTable.barcodeCol = GroceriesListsProductsHistoryTable.table
+					.addColumn(GROCERIES_LISTS_PRODUCTS_HISTORY_TABLE.ATTR_BARCODE, TYPE_LONG, null);
+			GroceriesListsProductsHistoryTable.amountCol = GroceriesListsProductsHistoryTable.table
+					.addColumn(GROCERIES_LISTS_PRODUCTS_HISTORY_TABLE.ATTR_AMOUNT, TYPE_INTEGER, null);
+			GroceriesListsProductsHistoryTable.expirationDateCol = GroceriesListsProductsHistoryTable.table
+					.addColumn(GROCERIES_LISTS_PRODUCTS_HISTORY_TABLE.ATTR_EXPIRATION_DATE, TYPE_DATE, null);
+			GroceriesListsProductsHistoryTable.listIDCol = GroceriesListsProductsHistoryTable.table
+					.addColumn(GROCERIES_LISTS_PRODUCTS_HISTORY_TABLE.ATTR_LIST_ID, TYPE_ID, null);
 			// set primary key
-			GroceriesListsHistoryTable.table.primaryKey(GroceriesListsHistoryTable.table.getName(),
-					GroceriesListsHistoryTable.barcodeCol.getName(), GroceriesListsHistoryTable.expirationDateCol.getName(),
-					GroceriesListsHistoryTable.listIDCol.getName());
+			GroceriesListsProductsHistoryTable.table.primaryKey(GroceriesListsProductsHistoryTable.table.getName(),
+					GroceriesListsProductsHistoryTable.barcodeCol.getName(), GroceriesListsProductsHistoryTable.expirationDateCol.getName(),
+					GroceriesListsProductsHistoryTable.listIDCol.getName());
+		}
+	}
+	
+	/**
+	 * this class contains all the objects used buy SQLBuilder for
+	 * GroceriesListsSalesHistory Table
+	 * 
+	 * @author noam
+	 * @since 26.6.17
+	 *
+	 */
+	static class GroceriesListsSalesHistoryTable {
+		static DbTable table;
+
+		static DbColumn listIDCol;
+		static DbColumn saleIDCol;
+
+		
+		static {
+			/*
+			 * initialize the GroceriesLists Table
+			 */
+			GroceriesListsSalesHistoryTable.table = databaseSchema.addTable(
+					GROCERIES_LISTS_SALES_HISTORY_TABLE.GROCERIES_LISTS_SALES_HISTORY_TABLE);
+
+			GroceriesListsSalesHistoryTable.listIDCol = GroceriesListsSalesHistoryTable.table.addColumn(
+					GROCERIES_LISTS_SALES_HISTORY_TABLE.ATTR_LIST_ID, TYPE_ID, null);
+			GroceriesListsSalesHistoryTable.saleIDCol = GroceriesListsSalesHistoryTable.table.addColumn(
+					GROCERIES_LISTS_SALES_HISTORY_TABLE.ATTR_SALE_ID, TYPE_ID, null);
 		}
 	}
 
 	/**
 	 * this class contains all the objects used buy SQLBuilder for CartsList Table
-	 * Table
+	 * 
 	 * 
 	 * @author noam
+	 * @since 9.1.16
 	 *
 	 */
 	static class CartsListTable {
@@ -362,6 +464,7 @@ class SQLDatabaseEntities {
 	 * this abstract class contains all the objects used by SQLBuilder for any registered client Table
 	 * 
 	 * @author  noam
+	 * @since 26.6.17
 	 * 
 	 */
 	abstract static class ClientsTable {
@@ -384,6 +487,7 @@ class SQLDatabaseEntities {
 	 * this class contains all the objects used buy SQLBuilder for Workers Table
 	 * 
 	 * @author noam
+	 * @since 9.1.16
 	 *
 	 */
 	static class WorkersTable extends ClientsTable{
@@ -437,6 +541,7 @@ class SQLDatabaseEntities {
 	 * this class contains all the objects used buy SQLBuilder for Customers Table
 	 * 
 	 * @author noam
+	 * @since 20.4.17
 	 *
 	 */
 	static class CustomersTable extends ClientsTable{
@@ -513,6 +618,7 @@ class SQLDatabaseEntities {
 	 * CustomersIngredients Table
 	 * 
 	 * @author noam
+	 * @since 9.1.16
 	 *
 	 */
 	static class CustomersIngredientsTable {
@@ -534,10 +640,62 @@ class SQLDatabaseEntities {
 	}
 	
 	/**
+	 * this class contains all the objects used buy SQLBuilder for SalesCatalog Table
+	 * 
+	 * @author noam
+	 * @since 20.4.17
+	 *
+	 */
+	static class SalesCatalogTable {
+		static DbTable table;
+		
+		static DbColumn saleIdCol;
+		static DbColumn saleOriginCol;
+		static DbColumn barcodeCol;
+		static DbColumn amountCol;
+		static DbColumn discountCol;
+		static DbColumn startTimeCol;
+		static DbColumn endTimeCol;
+		static DbColumn maxBuyersCol;
+
+		
+		static {
+			/*
+			 * initialize the Sales Table
+			 */
+			SalesCatalogTable.table = databaseSchema.addTable(SALES_CATALOG_TABLE.SALES_CATALOG_TABLE);
+			SalesCatalogTable.saleIdCol = SalesCatalogTable.table.addColumn(
+					SALES_CATALOG_TABLE.ATTR_SALE_ID, TYPE_ID, null);
+			SalesCatalogTable.saleOriginCol = SalesCatalogTable.table.addColumn(
+					SALES_CATALOG_TABLE.ATTR_SALE_ORIGIN, TYPE_INTEGER, null);
+			SalesCatalogTable.barcodeCol = SalesCatalogTable.table
+					.addColumn(SALES_CATALOG_TABLE.ATTR_BARCODE, TYPE_LONG, null);
+
+			SalesCatalogTable.amountCol = SalesCatalogTable.table.addColumn(
+					SALES_CATALOG_TABLE.ATTR_AMOUNT, TYPE_INTEGER, null);
+			
+			SalesCatalogTable.discountCol = SalesCatalogTable.table.addColumn(
+					SALES_CATALOG_TABLE.ATTR_DISCOUNT, TYPE_REAL, null);
+			SalesCatalogTable.startTimeCol = SalesCatalogTable.table.addColumn(
+					SALES_CATALOG_TABLE.ATTR_START_TIME, TYPE_DATE, null);
+			SalesCatalogTable.endTimeCol = SalesCatalogTable.table.addColumn(
+					SALES_CATALOG_TABLE.ATTR_END_TIME, TYPE_DATE, null);
+			
+			SalesCatalogTable.maxBuyersCol = SalesCatalogTable.table.addColumn(
+					SALES_CATALOG_TABLE.ATTR_MAX_BUYERS, TYPE_INTEGER, null);
+
+			
+			SalesCatalogTable.table.primaryKey(SalesCatalogTable.table.getName(),
+					SalesCatalogTable.saleIdCol.getName());
+		}
+	}
+	
+	/**
 	 * This class contains all the free id's in all the table
 	 * (when removing row - the id will go here) 
 	 * 
 	 * @author noam
+	 * @since 9.1.16
 	 *
 	 */
 	static class FreeIDsTable {

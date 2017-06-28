@@ -1,12 +1,16 @@
 package SQLDatabase;
 
+import java.util.List;
+
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.ForgotPasswordData;
+import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.ProductPackage;
+import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
 import SQLDatabase.SQLDatabaseException.AuthenticationError;
 import SQLDatabase.SQLDatabaseException.CriticalError;
@@ -22,6 +26,9 @@ import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
+import SQLDatabase.SQLDatabaseException.SaleAlreadyExist;
+import SQLDatabase.SQLDatabaseException.SaleNotExist;
+import SQLDatabase.SQLDatabaseException.SaleStillUsed;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyExist;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
@@ -54,7 +61,7 @@ public interface ISQLDatabaseConnection {
 
 	boolean isWorkerLoggedIn(String username) throws CriticalError;
 
-	String getProductFromCatalog(Integer sessionID, long barcode)
+	CatalogProduct getProductFromCatalog(Integer sessionID, long barcode)
 			throws ProductNotExistInCatalog, ClientNotConnected, CriticalError;
 
 	void addProductPackageToWarehouse(Integer sessionID, ProductPackage p)
@@ -110,6 +117,7 @@ public interface ISQLDatabaseConnection {
 	void close() throws CriticalError;
 
 	void logoutAllUsers() throws CriticalError;
+	
 	void clearGroceryListsHistory() throws CriticalError;
 
 	void registerCustomer(String username, String password) throws CriticalError, ClientAlreadyExist;
@@ -156,5 +164,26 @@ public interface ISQLDatabaseConnection {
 	String getSecurityQuestionWorker(String username) throws CriticalError, ClientNotExist;
 
 	boolean verifySecurityAnswerWorker(String username, String givenAnswer) throws CriticalError, ClientNotExist;
+	
+	int addSale(Integer sessionID, Sale s, boolean isRegular) throws ClientNotConnected, CriticalError, SaleAlreadyExist;
+
+	void removeSale(Integer sessionID, int SaleID) throws CriticalError, ClientNotConnected, SaleNotExist, SaleStillUsed;
+	
+	void takeSale(Integer cartID, int SaleID) throws ClientNotConnected, CriticalError, SaleNotExist;
+
+	void dropSale(Integer cartID, int SaleID) throws ClientNotConnected, CriticalError, SaleNotExist;
+
+	
+	Sale getSaleForProduct(long barcode) throws ClientNotConnected, CriticalError;
+	
+	List<Sale> getAllSales() throws CriticalError;
+	
+	List<ProductPackage> getExpiredProductPackages() throws CriticalError;
+	
+	List<CatalogProduct> getAllProductsInCatalog();
+	
+	List<ProductPackage> getAllProductPackages() throws CriticalError;
+	
+	List<GroceryList> getGroceryListHistory();
 
 }

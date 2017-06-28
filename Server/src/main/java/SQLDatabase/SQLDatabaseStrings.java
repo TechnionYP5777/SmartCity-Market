@@ -125,13 +125,43 @@ public class SQLDatabaseStrings {
 		public static final String ATTR_EXPIRATION_DATE = "ExpirationDate";
 		public static final String ATTR_AMOUNT = "Amount";
 	}
-
+	
+	//////////////////////////////////////////////////////////////VXZ
+	
 	/*
-	 * GROCERIES LISTS HISTORY TABLE
+	 * GROCERIES LISTS SALES TABLE
+	 */
+	public static class GROCERIES_LISTS_SALES_TABLE {
+		// table name
+		public static final String GROCERIES_LISTS_SALES_TABLE = "GroceriesListsSalesTable";
+
+		// table attributes
+		public static final String ATTR_LIST_ID = "ListID";
+		public static final String ATTR_SALE_ID = SALES_CATALOG_TABLE.ATTR_SALE_ID;
+	}
+
+	//////////////////////////////////////////////////////////////////
+	/*
+	 * GROCERIES LISTS HISTORY TABLE//VXZ
 	 */
 	public static class GROCERIES_LISTS_HISTORY_TABLE {
 		// table name
 		public static final String GROCERIES_LISTS_HISTORY_TABLE = "GroceriesListsHistoryTable";
+
+		// table attributes
+		public static final String ATTR_CUSTOMER_USERNAME = CUSTOMERS_TABLE.ATTR_CUSTOMER_USERNAME;
+		public static final String ATTR_LIST_ID = GROCERIES_LISTS_TABLE.ATTR_LIST_ID;
+		public static final String ATTR_PURCHASE_DATE = "PurchaseDate";
+	}
+	
+	
+	/////////////////////////////////////////////////////////////VXZ
+	/*
+	 * GROCERIES LISTS PRODUCTS HISTORY TABLE
+	 */
+	public static class GROCERIES_LISTS_PRODUCTS_HISTORY_TABLE {
+		// table name
+		public static final String GROCERIES_LISTS_PRODUCTS_HISTORY_TABLE = "GroceriesListsProductsHistoryTable";
 
 		// table attributes
 		public static final String ATTR_LIST_ID = GROCERIES_LISTS_TABLE.ATTR_LIST_ID;
@@ -139,6 +169,20 @@ public class SQLDatabaseStrings {
 		public static final String ATTR_EXPIRATION_DATE = GROCERIES_LISTS_TABLE.ATTR_EXPIRATION_DATE;
 		public static final String ATTR_AMOUNT = GROCERIES_LISTS_TABLE.ATTR_AMOUNT;
 	}
+	
+	////////////////////////////////////////VXZ
+	/*
+	 * GROCERIES LISTS SALES HISTORY TABLE
+	 */
+	public static class GROCERIES_LISTS_SALES_HISTORY_TABLE {
+		// table name
+		public static final String GROCERIES_LISTS_SALES_HISTORY_TABLE = "GroceriesListsSalesHistoryTable";
+
+		// table attributes
+		public static final String ATTR_LIST_ID = GROCERIES_LISTS_TABLE.ATTR_LIST_ID;
+		public static final String ATTR_SALE_ID = SALES_CATALOG_TABLE.ATTR_SALE_ID;
+	}
+	//////////////////////////////////////////////////////////////////^
 
 	/*
 	 * ACTIVE CUSTOMER LIST TABLE
@@ -222,6 +266,31 @@ public class SQLDatabaseStrings {
 		// table attributes
 		public static final String ATTR_ID = "ID";
 		public static final String ATTR_FROM_TABLE_NAME = "FromTableName";
+	}
+	
+	
+	///////////////////////////////////////////////////////////////////////////////V
+	/*
+	 * SALES CATALOG TABLE
+	 */
+	public static class SALES_CATALOG_TABLE {
+		// table name
+		public static final String SALES_CATALOG_TABLE = "SalesCatalogTable";
+
+		// table attributes
+		public static final String ATTR_SALE_ID = "SaleId";
+		public static final String ATTR_SALE_ORIGIN = "SaleOrigin";
+		public static final String ATTR_BARCODE = PRODUCTS_CATALOG_TABLE.ATTR_BARCODE;
+		public static final String ATTR_AMOUNT = "Amount";
+		public static final String ATTR_DISCOUNT = "Discount";
+		public static final String ATTR_START_TIME = "StartTime";
+		public static final String ATTR_END_TIME = "EndTime";
+		public static final String ATTR_MAX_BUYERS = "SaleMaxBuyers";
+		
+		// table values	
+		public static final Integer VALUE_ORIGIN_REGULAR = 100;
+		public static final Integer VALUE_ORIGIN_SUGGESTION = 101;
+		public static final Integer VALUE_ORIGIN_OFFER = 102;
 	}
 
 }

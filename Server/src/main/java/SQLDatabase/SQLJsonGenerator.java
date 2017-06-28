@@ -3,7 +3,13 @@ package SQLDatabase;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.AbstractMap.SimpleEntry;
+
+import org.apache.log4j.Logger;
 
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 
@@ -15,6 +21,7 @@ import BasicCommonClasses.Location;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
+import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
 import SQLDatabase.SQLDatabaseEntities.CustomersIngredientsTable;
 import SQLDatabase.SQLDatabaseEntities.CustomersTable;
@@ -25,9 +32,15 @@ import SQLDatabase.SQLDatabaseEntities.ManufacturerTable;
 import SQLDatabase.SQLDatabaseEntities.ProductsCatalogIngredientsTable;
 import SQLDatabase.SQLDatabaseEntities.ProductsCatalogLocationsTable;
 import SQLDatabase.SQLDatabaseEntities.ProductsCatalogTable;
+import SQLDatabase.SQLDatabaseEntities.ProductsPackagesTable;
+import SQLDatabase.SQLDatabaseEntities.SalesCatalogTable;
 import SQLDatabase.SQLDatabaseEntities.WorkersTable;
+import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 import SQLDatabase.SQLDatabaseException.CriticalError;
+import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseStrings.LOCATIONS_TABLE;
+import SQLDatabase.SQLDatabaseStrings.PRODUCTS_PACKAGES_TABLE;
+import SQLDatabase.SQLDatabaseStrings.SALES_CATALOG_TABLE;
 import UtilsImplementations.Serialization;
 
 /**
@@ -39,6 +52,8 @@ import UtilsImplementations.Serialization;
  */
 class SQLJsonGenerator {
 
+	static Logger log = Logger.getLogger(SQLJsonGenerator.class.getName());
+	
 	/**
 	 * Get string from Resultset. This method make sure we always get string
 	 * (and not null)
@@ -63,7 +78,7 @@ class SQLJsonGenerator {
 	}
 
 	/**
-	 * convert product from ResultSet to Json representation of product
+	 * convert product from ResultSet to Object representation of product
 	 * 
 	 * @param product
 	 *            - ResultSet of the product\s joined with manufactures table
@@ -83,7 +98,7 @@ class SQLJsonGenerator {
 	 * @return
 	 * @throws CriticalError
 	 */
-	static String ProductToJson(ResultSet product, ResultSet productIngredients, ResultSet productLocations)
+	static CatalogProduct resultSetToProduct(ResultSet product, ResultSet productIngredients, ResultSet productLocations)
 			throws CriticalError {
 
 		HashSet<Location> locations;
@@ -107,9 +122,9 @@ class SQLJsonGenerator {
 			double productPrice = product.getDouble(ProductsCatalogTable.productPriceCol.getColumnNameSQL());
 
 			product.next();
-			return Serialization.serialize(new CatalogProduct(productBarcode, productName, ingredients,
+			return new CatalogProduct(productBarcode, productName, ingredients,
 					new Manufacturer(productManufacturerID, productManufacturerName), productDescription, productPrice,
-					productPicture, locations));
+					productPicture, locations);
 
 		} catch (SQLException e) {
 			throw new SQLDatabaseException.CriticalError();
@@ -267,14 +282,14 @@ class SQLJsonGenerator {
 		
 		// extracting the ingredient
 		int ingredientId = ingredients.getInt(IngredientsTable.ingredientIDCol.getColumnNameSQL());
-		if (!ingredients.wasNull()) {
-			String ingdientName = getStringFromResultset(ingredients,
-					IngredientsTable.ingredientNameCol);
-
-			// adding the ingredient to set
-			result = new Ingredient(ingredientId, ingdientName);
-		}
+		if (ingredients.wasNull())
+			return result;
 		
+		String ingdientName = getStringFromResultset(ingredients,
+				IngredientsTable.ingredientNameCol);
+
+		// adding the ingredient to set
+		result = new Ingredient(ingredientId, ingdientName);
 		return result;
 	}
 	
@@ -395,6 +410,44 @@ class SQLJsonGenerator {
 		return $;
 
 	}
+	
+	/**
+	 * convert productPackages from ResultSet to productPackages object list
+	 * 
+	 * @param productPackageList
+	 *            - ResultSet of the productPackages List. the ResultSet need to point to
+	 *            the beginning of the first row to convert. at returning, this object
+	 *            will point the next row after the last row of the pointed
+	 *            productPackages returning.
+	 * @return productPackages list with the packages from the resultset
+	 * @throws CriticalError
+	 */
+	static List<ProductPackage> productsPackgesResultSetToList(ResultSet productPackageList) throws CriticalError {
+		List<ProductPackage> $ = new ArrayList<>();
+
+		try {
+			if (productPackageList.getRow() != 0)
+				while (!productPackageList.isAfterLast()){ 
+					long barcode = productPackageList.getLong(ProductsPackagesTable.barcodeCol.getColumnNameSQL());
+					int amount = productPackageList.getInt(ProductsPackagesTable.amountCol.getColumnNameSQL());
+					LocalDate expirationDate = productPackageList
+							.getDate(ProductsPackagesTable.expirationDateCol.getColumnNameSQL()).toLocalDate();
+					
+					String locationType = getStringFromResultset(productPackageList, ProductsPackagesTable.placeInStoreCol); 
+					
+					$.add(new ProductPackage(new SmartCode(barcode, expirationDate), amount, 
+							 PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE.equals(locationType) ? new Location(0, 0, PlaceInMarket.STORE) : 
+								new Location(0, 0, PlaceInMarket.WAREHOUSE)));
+					
+					productPackageList.next();
+				}
+		} catch (SQLException e) {
+			throw new SQLDatabaseException.CriticalError();
+		}
+
+		return $;
+
+	}
 
 	/**
 	 * convert manufacturers list from ResultSet to Json representation of list
@@ -424,6 +477,48 @@ class SQLJsonGenerator {
 		}
 
 		return Serialization.serialize($);
+
+	}
+	
+	/**
+	 * convert sales list from ResultSet to list of sales
+	 * of manufacturers list
+	 * 
+	 * @param salesList
+	 *            - ResultSet of the SalesCatalog table. The ResultSet should
+	 *            point the first row. At returning, this object will point the
+	 *            next row after the last row.
+	 * @return Json representation of the manufacturers list
+	 * @throws CriticalError
+	 * @throws ClientNotConnected 
+	 * @throws ProductNotExistInCatalog 
+	 */
+	static List<Map.Entry<Sale, Boolean>> salesResultSetToList(ResultSet salesList) throws CriticalError {
+		List<Map.Entry<Sale, Boolean>> $ = new ArrayList<>();
+	
+		try {
+			if (salesList.getRow() != 0)
+				while (!salesList.isAfterLast()) {
+					int saleID = salesList.getInt(SalesCatalogTable.saleIdCol.getColumnNameSQL());
+					long barcode = salesList.getLong(SalesCatalogTable.barcodeCol.getColumnNameSQL());
+					int amount = salesList.getInt(SalesCatalogTable.amountCol.getColumnNameSQL());
+					double discount = salesList.getDouble(SalesCatalogTable.discountCol.getColumnNameSQL());
+					int origin = salesList.getInt(SalesCatalogTable.saleOriginCol.getColumnNameSQL());
+					
+					Sale sale = new Sale(saleID, barcode, amount, discount);
+
+					//sale.setAmount(amount)
+					
+					$.add(new SimpleEntry<>(sale, origin == SALES_CATALOG_TABLE.VALUE_ORIGIN_REGULAR));
+					salesList.next();
+				}
+		} catch (SQLException e) {
+			log.debug(e.getStackTrace());
+			log.fatal(e.getMessage());
+			throw new SQLDatabaseException.CriticalError();
+		}
+
+		return $;
 
 	}
 	

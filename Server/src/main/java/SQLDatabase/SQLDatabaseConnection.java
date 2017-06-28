@@ -12,7 +12,10 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 
@@ -40,6 +43,7 @@ import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
+import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
 import ClientServerApi.ClientServerDefs;
 import CommonDefs.CLIENT_TYPE;
@@ -50,6 +54,9 @@ import SQLDatabase.SQLDatabaseEntities.CustomersIngredientsTable;
 import SQLDatabase.SQLDatabaseEntities.CustomersTable;
 import SQLDatabase.SQLDatabaseEntities.FreeIDsTable;
 import SQLDatabase.SQLDatabaseEntities.GroceriesListsHistoryTable;
+import SQLDatabase.SQLDatabaseEntities.GroceriesListsProductsHistoryTable;
+import SQLDatabase.SQLDatabaseEntities.GroceriesListsSalesHistoryTable;
+import SQLDatabase.SQLDatabaseEntities.GroceriesListsSalesTable;
 import SQLDatabase.SQLDatabaseEntities.GroceriesListsTable;
 import SQLDatabase.SQLDatabaseEntities.IngredientsTable;
 import SQLDatabase.SQLDatabaseEntities.LocationsTable;
@@ -58,10 +65,12 @@ import SQLDatabase.SQLDatabaseEntities.ProductsCatalogIngredientsTable;
 import SQLDatabase.SQLDatabaseEntities.ProductsCatalogLocationsTable;
 import SQLDatabase.SQLDatabaseEntities.ProductsCatalogTable;
 import SQLDatabase.SQLDatabaseEntities.ProductsPackagesTable;
+import SQLDatabase.SQLDatabaseEntities.SalesCatalogTable;
 import SQLDatabase.SQLDatabaseEntities.WorkersTable;
 import SQLDatabase.SQLDatabaseException.*;
 import SQLDatabase.SQLDatabaseStrings.LOCATIONS_TABLE;
 import SQLDatabase.SQLDatabaseStrings.PRODUCTS_PACKAGES_TABLE;
+import SQLDatabase.SQLDatabaseStrings.SALES_CATALOG_TABLE;
 import SQLDatabase.SQLDatabaseStrings.WORKERS_TABLE;
 import UtilsImplementations.Serialization;
 
@@ -162,7 +171,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			statement.executeUpdate(createTableString);
 			createTableString = new CreateTableQuery(GroceriesListsTable.table, true).validate() + "";
 			statement.executeUpdate(createTableString);
-			createTableString = new CreateTableQuery(GroceriesListsHistoryTable.table, true).validate() + "";
+			createTableString = new CreateTableQuery(GroceriesListsProductsHistoryTable.table, true).validate() + "";
 			statement.executeUpdate(createTableString);
 			createTableString = new CreateTableQuery(CartsListTable.table, true).validate() + "";
 			statement.executeUpdate(createTableString);
@@ -174,6 +183,15 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			statement.executeUpdate(createTableString);
 			createTableString = new CreateTableQuery(CustomersIngredientsTable.table, true).validate() + "";
 			statement.executeUpdate(createTableString);
+			createTableString = new CreateTableQuery(GroceriesListsSalesTable.table, true).validate() + "";
+			statement.executeUpdate(createTableString);
+			createTableString = new CreateTableQuery(GroceriesListsHistoryTable.table, true).validate() + "";
+			statement.executeUpdate(createTableString);
+			createTableString = new CreateTableQuery(GroceriesListsSalesHistoryTable.table, true).validate() + "";
+			statement.executeUpdate(createTableString);
+			createTableString = new CreateTableQuery(SalesCatalogTable.table, true).validate() + "";
+			statement.executeUpdate(createTableString);
+
 
 		} catch (SQLException e) {
 			throw new RuntimeException();
@@ -892,7 +910,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		String maxListIDQuery = new SelectQuery()
 				.addCustomColumns(FunctionCall.max().addColumnParams(CartsListTable.listIDCol)).validate() + "",
 				maxHistoryListIDQuery = new SelectQuery()
-						.addCustomColumns(FunctionCall.max().addColumnParams(GroceriesListsHistoryTable.listIDCol))
+						.addCustomColumns(FunctionCall.max().addColumnParams(GroceriesListsProductsHistoryTable.listIDCol))
 						.validate() + "";
 		ResultSet maxListIDResult = null, maxHistoryListIDResult = null;
 		try {
@@ -1041,7 +1059,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		// READ part of transaction
 		int listID = getCartListId(cartID);
 
-		PreparedStatement deleteGroceryList = null, deleteCart = null;
+		PreparedStatement deleteGroceryProductsList = null, deleteGrocerySalesList = null, deleteCart = null;
 		try {
 			// WRITE part of transaction
 
@@ -1053,14 +1071,19 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				for (ProductPackage p : groceryList.getList().values())
 					moveProductPackage(cartID, LOCATIONS_TYPES.CART, LOCATIONS_TYPES.STORE, p, p.getAmount());
 
-			// delete grocery list and cart
-			deleteGroceryList = getParameterizedQuery(generateDeleteQuery(GroceriesListsTable.table,
+			// delete grocery list, sales and cart
+			deleteGroceryProductsList = getParameterizedQuery(generateDeleteQuery(GroceriesListsTable.table,
 					BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK)), listID);
 			deleteCart = getParameterizedQuery(generateDeleteQuery(CartsListTable.table,
 					BinaryCondition.equalTo(CartsListTable.listIDCol, PARAM_MARK)), listID);
+			deleteGrocerySalesList = getParameterizedQuery(generateDeleteQuery(GroceriesListsSalesTable.table,
+					BinaryCondition.equalTo(GroceriesListsSalesTable.listIDCol, PARAM_MARK)), listID);
 
-			log.debug("logoutAsCart: delete groceryList " + listID + ".\n by run query: " + deleteGroceryList);
-			deleteGroceryList.executeUpdate();
+			log.debug("logoutAsCart: delete products of groceryList " + listID + ".\n by run query: " + deleteGroceryProductsList);
+			deleteGroceryProductsList.executeUpdate();
+			
+			log.debug("logoutAsCart: delete sales of groceryList " + listID + ".\n by run query: " + deleteGrocerySalesList);
+			deleteGrocerySalesList.executeUpdate();
 
 			log.debug("logoutAsCart: disconnect cart " + cartID + ".\n by run query: " + deleteCart);
 			deleteCart.executeUpdate();
@@ -1075,7 +1098,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			log.error("logoutAsCart: trying to return product to shelf but product package not exist in grocery list");
 			throw new CriticalError();
 		} finally {
-			closeResources(deleteGroceryList, deleteCart);
+			closeResources(deleteGroceryProductsList, deleteGrocerySalesList, deleteCart);
 		}
 	}
 
@@ -1343,6 +1366,30 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		productStatement.executeUpdate();
 		closeResources(productStatement);
 
+	}
+	
+	/**
+	 * Remove sale from catalog, history and free its id
+	 * 
+	 * @param SaleID The id of the sale to remove
+	 * 
+	 * @throws CriticalError
+	 * @throws SQLException
+	 */
+	private void removeSaleById(int SaleID) throws CriticalError, SQLException{
+		
+		//free sale id
+		freeIDOfTable(SalesCatalogTable.table, SaleID);
+		
+		//remove sale from catalog
+		PreparedStatement removeProductSalesStatement = getParameterizedQuery(generateDeleteQuery(SalesCatalogTable.table,
+				BinaryCondition.equalTo(SalesCatalogTable.saleIdCol, PARAM_MARK)), SaleID);
+		removeProductSalesStatement.executeUpdate();
+		
+		//remove sale from history
+		removeProductSalesStatement = getParameterizedQuery(generateDeleteQuery(GroceriesListsSalesHistoryTable.table,
+				BinaryCondition.equalTo(GroceriesListsSalesHistoryTable.saleIDCol, PARAM_MARK)), SaleID);
+		removeProductSalesStatement.executeUpdate();
 	}
 
 	/**
@@ -1640,6 +1687,28 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		return isSuchRowExist(IngredientsTable.table, IngredientsTable.ingredientIDCol, l);
 	}
 	
+	private boolean isSaleExist(Integer saleID) throws CriticalError {
+		return isSuchRowExist(SalesCatalogTable.table, SalesCatalogTable.saleIdCol, saleID);
+	}
+	
+	private boolean isRegularSaleExistForProduct(long barcode) throws CriticalError {
+		String productsTableQuery = generateSelectQuery1Table(SalesCatalogTable.table,
+				BinaryCondition.equalTo(SalesCatalogTable.barcodeCol, PARAM_MARK),
+				BinaryCondition.equalTo(SalesCatalogTable.saleOriginCol, PARAM_MARK));
+
+		PreparedStatement productStatement = getParameterizedReadQuery(productsTableQuery, barcode, SALES_CATALOG_TABLE.VALUE_ORIGIN_REGULAR);
+
+		ResultSet productResult = null;
+		try {
+			productResult = productStatement.executeQuery();
+			return !isResultSetEmpty(productResult);
+		} catch (SQLException e) {
+			throw new RuntimeException();
+		} finally {
+			closeResources(productStatement, productResult);
+		}
+	}
+	
 	/**
 	 * Check if all the ingredients in the set exist in the database
 	 * 
@@ -1675,6 +1744,20 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				} catch (Exception e) {
 					throw new RuntimeException();
 				}
+	}
+	
+	
+	private List<Entry<Sale, Boolean>> getAllSalesFromAllOrigins() throws SQLException, CriticalError {
+		
+		ResultSet salesResultSet = getParameterizedReadQuery(
+				generateSelectAllTable(SalesCatalogTable.table), (Object[]) null)
+						.executeQuery();
+		salesResultSet.first();
+
+		List<Entry<Sale, Boolean>> salesList = SQLJsonGenerator.salesResultSetToList(salesResultSet);		
+		
+		return salesList;
+		
 	}
 
 	/**
@@ -2299,8 +2382,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 					CustomersIngredientsTable.ingredientIDCol, CustomersIngredientsTable.customerUsernameCol,
 					BinaryCondition.equalTo(CustomersIngredientsTable.customerUsernameCol, PARAM_MARK));
 			
-			selectCustomerStatement = getParameterizedQuery(selectCustomerQuery + "", username);
-			selectCustomerIngredientsStatement = getParameterizedQuery(selectCustomerIngredientsQuery + "", username);
+			selectCustomerStatement = getParameterizedQuery(selectCustomerQuery, username);
+			selectCustomerIngredientsStatement = getParameterizedQuery(selectCustomerIngredientsQuery, username);
  
 			selectCustomerResult = selectCustomerStatement.executeQuery();
 			selectCustomerResult.first();
@@ -2473,7 +2556,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	 * Integer, long)
 	 */
 	@Override
-	public String getProductFromCatalog(Integer sessionID, long barcode)
+	public CatalogProduct getProductFromCatalog(Integer sessionID, long barcode)
 			throws ProductNotExistInCatalog, ClientNotConnected, CriticalError {
 
 		log.debug("SQL Public getProductFromCatalog: Trying to get product: " + barcode + " (SESSION: " + sessionID
@@ -2512,7 +2595,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			productResult.next();
 			ingredientResult.next();
 			locationsResult.next();
-			return SQLJsonGenerator.ProductToJson(productResult, ingredientResult, locationsResult);
+			return SQLJsonGenerator.resultSetToProduct(productResult, ingredientResult, locationsResult);
 
 		} catch (SQLException e) {
 			connectionRollbackTransaction();
@@ -2653,6 +2736,10 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		validateSessionEstablished(sessionID);
 
+		ResultSet result = null;
+		PreparedStatement removeProductSalesStatement = null;
+		PreparedStatement removeProductHistoryStatement = null;
+		
 		try {
 			// START transaction
 			connectionStartTransaction();
@@ -2664,14 +2751,31 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			// check if the product is in the system
 			if (isSuchRowExist(ProductsPackagesTable.table, ProductsPackagesTable.barcodeCol,
 					productToRemove.getBarcode())
-					|| isSuchRowExist(GroceriesListsTable.table, GroceriesListsTable.barcodeCol,
-							productToRemove.getBarcode())
-					|| isSuchRowExist(GroceriesListsHistoryTable.table, GroceriesListsHistoryTable.barcodeCol,
-							productToRemove.getBarcode()))
+				|| isSuchRowExist(GroceriesListsTable.table, GroceriesListsTable.barcodeCol,
+						productToRemove.getBarcode())
+					/*|| isSuchRowExist(GroceriesListsProductsHistoryTable.table, GroceriesListsProductsHistoryTable.barcodeCol,
+							productToRemove.getBarcode())*/)
 				throw new ProductStillForSale();
 
 			// WRITE part of transaction
 			removeCatalogProduct(productToRemove);
+			
+			
+			//remove product sales (and free their's id)
+			String selectSalesQuery = generateSelectQuery1Table(SalesCatalogTable.table,
+					BinaryCondition.equalTo(SalesCatalogTable.barcodeCol, PARAM_MARK));
+
+			PreparedStatement statement = getParameterizedReadQuery(selectSalesQuery, productToRemove.getBarcode());
+			result = statement.executeQuery();
+			while (result.next())
+				removeSaleById(result.getInt(SalesCatalogTable.saleIdCol.getColumnNameSQL()));
+
+			
+			//remove product from history
+			removeProductHistoryStatement = getParameterizedQuery(
+					generateDeleteQuery(GroceriesListsProductsHistoryTable.table,
+					BinaryCondition.equalTo(GroceriesListsProductsHistoryTable.barcodeCol, PARAM_MARK)), productToRemove.getBarcode());
+			removeProductHistoryStatement.executeUpdate();
 
 			// END transaction
 			connectionCommitTransaction();
@@ -2680,6 +2784,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			throw new CriticalError();
 		} finally {
 			connectionEndTransaction();
+			closeResources(result, removeProductSalesStatement, removeProductHistoryStatement);
 		}
 
 	}
@@ -2933,7 +3038,9 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		// START transaction
 		connectionStartTransaction();
 
-		PreparedStatement copyStatement = null, deleteGroceryList = null;
+		PreparedStatement copyProductsStatement = null, deleteGroceryListProducts = null;
+		PreparedStatement copySalesStatement = null, deleteGroceryListSales = null;
+		PreparedStatement insertGroceryListStatement = null;
 		ResultSet cartGroceryList = null;
 
 		try {
@@ -2946,28 +3053,65 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			// everything ok - perform checkout
 			int listID = getCartListId(cartID);
+			String username = getClientTypeBySessionID(cartID) == CLIENT_TYPE.CART ? null :
+				getValueForRegisteredClient(new CustomersTable(), CustomersTable.customersessionIDCol,
+						cartID, CustomersTable.customerusernameCol);
 
 			// WRITE part of transaction
-			// moving grocery list to history
-			String copyQuery = "INSERT " + GroceriesListsHistoryTable.table.getTableNameSQL() + "( "
-					+ GroceriesListsHistoryTable.listIDCol.getColumnNameSQL() + " , "
-					+ GroceriesListsHistoryTable.barcodeCol.getColumnNameSQL() + " , "
-					+ GroceriesListsHistoryTable.expirationDateCol.getColumnNameSQL() + " , "
-					+ GroceriesListsHistoryTable.amountCol.getColumnNameSQL() + " ) "
+		
+			//create history list
+			String insertQuery = new InsertQuery(GroceriesListsHistoryTable.table)
+					.addColumn(GroceriesListsHistoryTable.listIDCol, PARAM_MARK)
+					.addColumn(GroceriesListsHistoryTable.customerusernameCol, PARAM_MARK)
+					.addColumn(GroceriesListsHistoryTable.purchaseDateCol,
+							JdbcEscape.date(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant())))
+					.validate() + "";
+
+			insertGroceryListStatement = getParameterizedQuery(insertQuery, listID, username);
+			
+			log.debug("cartCheckout: move groceryList " + listID + " to history.\n by run query: " + insertGroceryListStatement);
+			
+			
+			// moving sales of grocery list to history
+			String copySalesQuery = "INSERT " + GroceriesListsSalesHistoryTable.table.getTableNameSQL() + "( "
+					+ GroceriesListsSalesHistoryTable.listIDCol.getColumnNameSQL() + " , "
+					+ GroceriesListsSalesHistoryTable.saleIDCol.getColumnNameSQL() + " ) "
+					+ new SelectQuery()
+							.addColumns(GroceriesListsSalesTable.listIDCol, GroceriesListsSalesTable.saleIDCol)
+							.addCondition(BinaryCondition.equalTo(GroceriesListsSalesTable.listIDCol, PARAM_MARK))
+							.validate();
+
+			copySalesStatement = getParameterizedQuery(copySalesQuery, listID);
+			deleteGroceryListSales = getParameterizedQuery(generateDeleteQuery(GroceriesListsSalesTable.table,
+					BinaryCondition.equalTo(GroceriesListsSalesTable.listIDCol, PARAM_MARK)), listID);
+
+			log.debug("cartCheckout: move sales of groceryList " + listID + " to history.\n by run query: " + copySalesStatement
+					+ "\n and: " + deleteGroceryListSales);
+			
+			copySalesStatement.executeUpdate();
+			deleteGroceryListSales.executeUpdate();
+			
+			
+			// moving products of grocery list to history
+			String copyQuery = "INSERT " + GroceriesListsProductsHistoryTable.table.getTableNameSQL() + "( "
+					+ GroceriesListsProductsHistoryTable.listIDCol.getColumnNameSQL() + " , "
+					+ GroceriesListsProductsHistoryTable.barcodeCol.getColumnNameSQL() + " , "
+					+ GroceriesListsProductsHistoryTable.expirationDateCol.getColumnNameSQL() + " , "
+					+ GroceriesListsProductsHistoryTable.amountCol.getColumnNameSQL() + " ) "
 					+ new SelectQuery()
 							.addColumns(GroceriesListsTable.listIDCol, GroceriesListsTable.barcodeCol,
 									GroceriesListsTable.expirationDateCol, GroceriesListsTable.amountCol)
 							.addCondition(BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK))
 							.validate();
 
-			copyStatement = getParameterizedQuery(copyQuery, listID);
-			deleteGroceryList = getParameterizedQuery(generateDeleteQuery(GroceriesListsTable.table,
+			copyProductsStatement = getParameterizedQuery(copyQuery, listID);
+			deleteGroceryListProducts = getParameterizedQuery(generateDeleteQuery(GroceriesListsTable.table,
 					BinaryCondition.equalTo(GroceriesListsTable.listIDCol, PARAM_MARK)), listID);
 
-			log.debug("cartCheckout: move groceryList " + listID + " to history.\n by run query: " + copyStatement
-					+ "\n and: " + deleteGroceryList);
-			copyStatement.executeUpdate();
-			deleteGroceryList.executeUpdate();
+			log.debug("cartCheckout: move products of groceryList " + listID + " to history.\n by run query: " + copyProductsStatement
+					+ "\n and: " + deleteGroceryListProducts);
+			copyProductsStatement.executeUpdate();
+			deleteGroceryListProducts.executeUpdate();
 
 			// logout cart
 			logoutAsCart(cartID);
@@ -2979,7 +3123,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			throw new CriticalError();
 		} finally {
 			connectionEndTransaction();
-			closeResources(copyStatement, cartGroceryList, deleteGroceryList);
+			closeResources(copyProductsStatement, cartGroceryList, deleteGroceryListProducts, copySalesStatement,
+					deleteGroceryListSales, insertGroceryListStatement);
 		}
 
 	}
@@ -3112,11 +3257,13 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	
 	@Override
 	public String getManufacturersList(Integer sessionID) throws ClientNotConnected, CriticalError {
+		log.debug("SQL Public getManufacturersList (SESSION: " + sessionID + " )");
+		
 		validateSessionEstablished(sessionID);
 
 		try {
 			ResultSet manufacturerResultSet = getParameterizedReadQuery(
-					new SelectQuery().addAllTableColumns(ManufacturerTable.table).validate() + "", (Object[]) null)
+					generateSelectAllTable(ManufacturerTable.table), (Object[]) null)
 							.executeQuery();
 			manufacturerResultSet.first();
 
@@ -3239,10 +3386,11 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	
 	@Override
 	public String getIngredientsList() throws CriticalError {
-
+		log.debug("SQL Public getIngredientsList");
+		
 		try {
 			ResultSet ingredientsResultSet = getParameterizedReadQuery(
-					new SelectQuery().addAllTableColumns(IngredientsTable.table).validate() + "", (Object[]) null)
+					generateSelectAllTable(IngredientsTable.table), (Object[]) null)
 							.executeQuery();
 			
 			ingredientsResultSet.first();
@@ -3358,6 +3506,18 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			log.debug("logoutAllUsers: delete grocery lists in history .\n by using query: " + statement);
 			statement.executeUpdate();
 			closeResources(statement);
+			
+			// deletes all products in grocery lists in the history
+			statement = getParameterizedQuery(generateDeleteQuery(GroceriesListsProductsHistoryTable.table));
+			log.debug("logoutAllUsers: delete products of grocery lists in history .\n by using query: " + statement);
+			statement.executeUpdate();
+			closeResources(statement);
+			
+			// deletes all sales of grocery lists in the history
+			statement = getParameterizedQuery(generateDeleteQuery(GroceriesListsSalesHistoryTable.table));
+			log.debug("logoutAllUsers: delete sales of grocery lists in history .\n by using query: " + statement);
+			statement.executeUpdate();
+			closeResources(statement);
 
 			// END transaction
 			connectionCommitTransaction();
@@ -3369,6 +3529,242 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			closeResources(statement);
 		}
 
+	}
+
+	@Override
+	public int addSale(Integer sessionID, Sale s, boolean isRegular) throws ClientNotConnected, CriticalError, SaleAlreadyExist {
+		log.debug("SQL Public addSale: sale: " + s + " (SESSION: " + sessionID
+				+ " )");
+
+		validateSessionEstablished(sessionID);
+
+		int $;
+		// START transaction
+		connectionStartTransaction();
+		try {
+			// READ part of transaction
+			// if already exist sale for that product
+			if (isRegular && isRegularSaleExistForProduct(s.getProductBarcode()))
+				throw new SaleAlreadyExist();
+			
+			// WRITE part of transaction
+			// get "fresh" id for the new manufacturer
+			$ = allocateIDToTable(SalesCatalogTable.table, SalesCatalogTable.saleIdCol);
+
+			String insertQuery = new InsertQuery(SalesCatalogTable.table)
+					.addColumn(SalesCatalogTable.saleIdCol, PARAM_MARK)
+					.addColumn(SalesCatalogTable.amountCol, PARAM_MARK)
+					.addColumn(SalesCatalogTable.barcodeCol, PARAM_MARK)
+					.addColumn(SalesCatalogTable.discountCol, PARAM_MARK)
+					.addColumn(SalesCatalogTable.saleOriginCol, PARAM_MARK).validate() + "";
+
+			getParameterizedQuery(insertQuery, $, s.getAmountOfProducts(), s.getProductBarcode(),
+					s.getPrice(), isRegular ? SALES_CATALOG_TABLE.VALUE_ORIGIN_REGULAR : SALES_CATALOG_TABLE.VALUE_ORIGIN_SUGGESTION )
+			.executeUpdate();
+
+			// END transaction
+			connectionCommitTransaction();
+		} catch (CriticalError | SQLException e) {
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
+		}
+		
+		return $;
+	}
+
+	@Override
+	public void removeSale(Integer sessionID, int SaleID) throws CriticalError, ClientNotConnected, SaleNotExist, SaleStillUsed {
+		log.debug("SQL Public removeSale: sale with ID: " + SaleID + " (SESSION: " + sessionID + " )");
+
+		validateSessionEstablished(sessionID);
+
+		// START transaction
+		connectionStartTransaction();
+		try {
+			// READ part of transaction
+			if (!isSaleExist(SaleID))
+				throw new SaleNotExist();
+
+			// if the sale still used in catalog - throw exception
+			if (isSuchRowExist(GroceriesListsSalesTable.table, GroceriesListsSalesTable.saleIDCol, SaleID))
+				throw new SaleStillUsed();
+
+			// WRITE part of transaction
+			// delete manufacturer
+			removeSaleById(SaleID);
+
+			// END transaction
+			connectionCommitTransaction();
+		} catch (CriticalError | SQLException e) {
+			connectionRollbackTransaction();
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
+		}
+		
+	}
+
+	@Override
+	public void takeSale(Integer cartID, int saleID) throws ClientNotConnected, CriticalError, SaleNotExist {
+		log.debug("SQL Public takeSale: take sale " + saleID + " (SESSION: " + cartID + " )");
+
+		validateCartSessionEstablished(cartID);
+
+		try {
+			// START transaction
+			connectionStartTransaction();
+
+			// READ part of transaction
+			if (!isSaleExist(saleID))
+				throw new SaleNotExist();
+
+			int listID = getCartListId(cartID);
+					
+			
+			// WRITE part of transaction
+			String insertQuery = new InsertQuery(GroceriesListsSalesTable.table)
+					.addColumn(GroceriesListsSalesTable.listIDCol, PARAM_MARK)
+					.addColumn(GroceriesListsSalesTable.saleIDCol, PARAM_MARK).validate() + "";
+
+			getParameterizedQuery(insertQuery, listID, saleID).executeUpdate();
+
+			// END transaction
+			connectionCommitTransaction();
+		} catch (CriticalError  e) {
+			connectionRollbackTransaction();
+			throw e;
+		} catch (SQLException e) {
+			connectionRollbackTransaction();
+			log.debug(e.getStackTrace()); log.fatal(e.getMessage()); 
+		} finally {
+			connectionEndTransaction();
+		}
+	}
+
+	@Override
+	public void dropSale(Integer cartID, int saleID) throws ClientNotConnected, CriticalError, SaleNotExist {
+		log.debug("SQL Public dropSale: drop sale " + saleID + " (SESSION: " + cartID + " )");
+
+		validateCartSessionEstablished(cartID);
+		
+		PreparedStatement removeProductSalesStatement;
+
+		try {
+			// START transaction
+			connectionStartTransaction();
+
+			// READ part of transaction
+			if (!isSaleExist(saleID))
+				throw new SaleNotExist();
+
+			int listID = getCartListId(cartID);
+					
+			// WRITE part of transaction
+			removeProductSalesStatement = getParameterizedQuery(
+					generateDeleteQuery(GroceriesListsSalesTable.table,
+							BinaryCondition.equalTo(GroceriesListsSalesTable.listIDCol, PARAM_MARK),
+							BinaryCondition.equalTo(GroceriesListsSalesTable.saleIDCol, PARAM_MARK)), 
+					listID, saleID);
+			
+			log.debug("SQL Public dropSale: drop sale with id: " + saleID + "\nby running query: " + removeProductSalesStatement);
+			removeProductSalesStatement.executeUpdate();
+
+			// END transaction
+			connectionCommitTransaction();
+		} catch (CriticalError  e) {
+			connectionRollbackTransaction();
+			throw e;
+		} catch (SQLException e) {
+			connectionRollbackTransaction();
+			log.debug(e.getStackTrace()); log.fatal(e.getMessage()); 
+		} finally {
+			connectionEndTransaction();
+		}
+		
+	}
+
+	@Override
+	public List<Sale> getAllSales() throws CriticalError {
+		log.debug("SQL Public getAllSales");
+		
+		try {
+			return getAllSalesFromAllOrigins().stream()
+					.filter((Entry<Sale, Boolean> e) -> e.getValue())
+					.map((Entry<Sale, Boolean> e) -> e.getKey())
+					.collect(Collectors.toList());
+		} catch (SQLException e) {
+			log.debug(e.getStackTrace());
+			log.error(e.getMessage());
+			throw new CriticalError();
+		}
+	}
+
+	@Override
+	public Sale getSaleForProduct(long barcode) throws ClientNotConnected, CriticalError {
+		log.debug("SQL Public getSaleForProduct: get all sales for product barcode: " + barcode);
+		
+		try {
+			
+			List<Sale> productSale = getAllSalesFromAllOrigins().stream()
+					.filter((Entry<Sale, Boolean> e) -> e.getValue() && e.getKey().getProductBarcode() == barcode)
+					.map((Entry<Sale, Boolean> e) -> e.getKey())
+					.collect(Collectors.toList());
+			
+			return productSale.isEmpty() ? new Sale() : productSale.get(0);
+			
+		} catch (SQLException e) {
+			log.debug(e.getStackTrace());
+			log.error(e.getMessage());
+			throw new CriticalError();
+		}
+	}
+
+	@Override
+	public List<ProductPackage> getExpiredProductPackages() throws CriticalError {
+		log.debug("SQL Public getAllProductPackages");
+		
+		List<ProductPackage> allProductPackages = getAllProductPackages();
+		
+		return allProductPackages.stream()
+				.filter((ProductPackage p) -> p.getSmartCode().getExpirationDate().isAfter(LocalDate.now()))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<CatalogProduct> getAllProductsInCatalog() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ProductPackage> getAllProductPackages() throws CriticalError {
+		log.debug("SQL Public getAllProductPackages");
+		
+		ResultSet packagesResultSet = null;
+		
+		try {
+			
+			packagesResultSet = getParameterizedReadQuery(
+					generateSelectAllTable(ProductsPackagesTable.table), (Object[]) null).executeQuery();
+			packagesResultSet.first();
+
+			return  SQLJsonGenerator.productsPackgesResultSetToList(packagesResultSet);		
+			
+		} catch (SQLException e) {
+			log.debug(e.getStackTrace());
+			log.error(e.getMessage());
+			throw new CriticalError();
+		} finally {
+			closeResources(packagesResultSet);
+		}
+	}
+
+	@Override
+	public List<GroceryList> getGroceryListHistory() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
