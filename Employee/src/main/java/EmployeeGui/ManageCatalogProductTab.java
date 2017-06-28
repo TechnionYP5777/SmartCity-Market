@@ -1,5 +1,9 @@
 package EmployeeGui;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -7,6 +11,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ResourceBundle;
+
+import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 
@@ -274,22 +280,18 @@ public class ManageCatalogProductTab implements Initializable {
 		ImageView locationMap = new ImageView("/ManageCatalogProductTab/storeMap.png");
 		locationMap.setFitHeight(400);
 		locationMap.setFitWidth(400);
-		locationMap.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-			int xLocation = (int) e.getX(), yLocation = (int) e.getY();
-			for (Line line: createDot(xLocation, yLocation)){
-                line.setFill(null);
-                line.setStroke(Color.RED);
-                line.setStrokeWidth(2);
-                rootPane.getChildren().add(line);
-			}
-			chosenLocation = new Location(xLocation, yLocation, PlaceInMarket.STORE);
-			locationLbl.setText("(col=" + xLocation + ", row=" + yLocation + ")");
-		});
 
 		VBox locationContainer = new VBox();
 		locationContainer.getChildren().addAll(lbl1, locationMap, close);
 		locationContainer.setPadding(new Insets(10, 10, 10, 10));
 		locationContainer.setSpacing(10);
+
+		locationMap.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+			int xLocation = (int) e.getX(), yLocation = (int) e.getY();
+			(new createStoreMapImageWithDot(xLocation, yLocation)).start();
+			chosenLocation = new Location(xLocation, yLocation, PlaceInMarket.STORE);
+			locationLbl.setText("(col=" + xLocation + ", row=" + yLocation + ")");
+		});
 
 		popupLocation = new JFXPopup(locationContainer);
 		popupLocation.setOnShowing(e -> rootPane.getScene().setCursor(Cursor.CROSSHAIR));
@@ -338,14 +340,44 @@ public class ManageCatalogProductTab implements Initializable {
 		enableRunOperation();
 	}
 	
-	private HashSet<Line> createDot(int startX, int startY){
-		int radius = 2;
-		HashSet<Line> lines = new HashSet<>();
-		lines.add(new Line(startX, startY, startX, startY + radius)); //line up
-		lines.add(new Line(startX, startY, startX, startY - radius)); //line bottom
-		lines.add(new Line(startX, startY, startX + radius, startY)); //line right
-		lines.add(new Line(startX, startY, startX - radius, startY)); //line left
-		return lines;
+	public class createStoreMapImageWithDot extends Thread {
+		int x;
+		int y;
+		static final int radius = 10;
+		
+		createStoreMapImageWithDot(int x, int y){
+			this.x=x;
+			this.y=y;
+		}
+		
+		@Override
+		public void run(){
+			BufferedImage img = null;
+			try {
+			    img = ImageIO.read(new File(getClass().getResource("/ManageCatalogProductTab/storeMap.png").toURI()));
+			} catch (IOException e) {
+				log.error("ERROR while trying to read the storeMap pic");
+				log.error(e + "");
+				return;
+			} catch (URISyntaxException e) {
+				log.error("ERROR URL error");
+				log.error(e + "");
+			}
+			for (int hieght = img.getHeight(), width = img.getWidth(), radius = 10, i = 0; i < width; ++i)
+				for (int j = 0; j < hieght; ++j)
+					if (Math.abs(x - i) <= radius && Math.abs(y - j) <= radius)
+						img.setRGB(i, j, 0xFF0000);
+			try {
+				ImageIO.write(img, "jpg", new File("storeMapWithDot.jpg"));
+			} catch (IOException e) {
+				log.error("ERROR while trying to create the sotoreMapWithDot pic");
+				log.error(e + "");
+			}
+//			} catch (URISyntaxException e) {
+//				log.error("ERROR URL error");
+//				log.error(e + "");
+//			}
+		}
 	}
 
 	private void createIngredientList() {
