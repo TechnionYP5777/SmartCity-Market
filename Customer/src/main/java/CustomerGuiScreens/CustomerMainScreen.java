@@ -53,6 +53,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -131,6 +132,9 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	
 	@FXML
 	JFXCheckBox offerSalesChk;
+	
+	@FXML 
+	JFXListView<String> allerList;
 	
 	SmartCode scannedSmartCode;
 
@@ -211,6 +215,10 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		priceLabel.setText(String.format("%1$.2f", p.getPrice()));
 		amountLabel.setText(amount + "");
 		descriptionTextArea.setText(scannedSmartCode.getExpirationDate() + "");
+		allerList.getItems().clear();
+		p.getIngredients().forEach( ingr -> {
+			allerList.getItems().add(ingr.getName());
+		});
 		Sale sale = new Sale();	
 		try {
 			sale = customer.getSaleForProduct(p.getBarcode());
@@ -292,6 +300,12 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 		productsListView.depthProperty().set(1);
 		productsListView.setExpanded(true);
+		
+		allerList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		allerList.setStyle("-fx-background-color: transparent;");
+		
+		allerList.depthProperty().set(1);
+		allerList.setExpanded(true);
 		
 		
 		setAbilityAndVisibilityOfProductInfoPane(false);
@@ -431,6 +445,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	@FXML
 	void forceScanProduct2(ActionEvent __) {
-		smartcodeScanned(new SmartcodeScanEvent(new SmartCode(423324, LocalDate.now())));
+		smartcodeScanned(new SmartcodeScanEvent(new SmartCode(1234, LocalDate.now())));
 	}
 }

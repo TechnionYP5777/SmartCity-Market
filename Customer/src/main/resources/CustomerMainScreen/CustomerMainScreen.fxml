@@ -64,6 +64,7 @@
                         <RowConstraints vgrow="SOMETIMES" />
                         <RowConstraints vgrow="SOMETIMES" />
                         <RowConstraints vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
@@ -186,6 +187,22 @@
                            </padding>
                            <children>
                               <Label fx:id="saleLbl" styleClass="productDetailsLabel" text="N/A" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="6">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                           <children>
+                              <Label styleClass="productDetailsLabel" text="Ingredients:" />
+                           </children>
+                        </HBox>
+                        <HBox GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                           <children>
+                              <JFXListView fx:id="allerList" orientation="HORIZONTAL" />
                            </children>
                         </HBox>
                      </children>
