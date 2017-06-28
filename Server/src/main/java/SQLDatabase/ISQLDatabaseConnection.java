@@ -180,7 +180,7 @@ public interface ISQLDatabaseConnection {
 	
 	List<ProductPackage> getExpiredProductPackages() throws CriticalError;
 	
-	List<CatalogProduct> getAllProductsInCatalog();
+	List<CatalogProduct> getAllProductsInCatalog() throws CriticalError;
 	
 	List<ProductPackage> getAllProductPackages() throws CriticalError;
 	

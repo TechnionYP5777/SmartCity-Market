@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -3734,9 +3735,56 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	}
 
 	@Override
-	public List<CatalogProduct> getAllProductsInCatalog() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CatalogProduct> getAllProductsInCatalog() throws CriticalError {
+		
+		log.debug("SQL Public getAllProductsInCatalog)");
+
+
+		String prodctsIngredientsQuery = generateSelectLeftJoinWithQuery2Tables(ProductsCatalogIngredientsTable.table,
+				IngredientsTable.table, IngredientsTable.ingredientIDCol, ProductsCatalogIngredientsTable.barcodeCol,
+				new BinaryCondition[]{});
+		String prodctsLocationsQuery = generateSelectLeftJoinWithQuery2Tables(ProductsCatalogLocationsTable.table,
+				LocationsTable.table, LocationsTable.locationIDCol, ProductsCatalogLocationsTable.barcodeCol,
+				new BinaryCondition[]{});
+		String prodctsTableQuery = generateSelectLeftJoinWithQuery2Tables(ProductsCatalogTable.table,
+				ManufacturerTable.table, ManufacturerTable.manufacturerIDCol, ProductsCatalogTable.barcodeCol,
+				new BinaryCondition[]{});
+
+		PreparedStatement productStatement = getParameterizedReadQuery(prodctsTableQuery, new Object[]{});
+		PreparedStatement productIngredientsStatement = getParameterizedReadQuery(prodctsIngredientsQuery, new Object[]{});
+		PreparedStatement productLocationsStatement = getParameterizedReadQuery(prodctsLocationsQuery, new Object[]{});
+		
+		ResultSet productResult = null, ingredientResult = null, locationsResult = null;
+		try {
+			// START transaction
+			connectionStartTransaction();
+			productResult = productStatement.executeQuery();
+			ingredientResult = productIngredientsStatement.executeQuery();
+			locationsResult = productLocationsStatement.executeQuery();
+
+			// END transaction
+			connectionCommitTransaction();
+
+			ingredientResult.next();
+			locationsResult.next();
+			
+			List<CatalogProduct> resultList = new ArrayList<>();
+			while (productResult.next())
+				resultList.add(SQLJsonGenerator.resultSetToProduct(productResult, ingredientResult, locationsResult));
+
+			
+			return resultList;
+
+		} catch (SQLException e) {
+			connectionRollbackTransaction();
+			log.debug(e.getStackTrace());
+			log.error(e.getMessage());
+			throw new CriticalError();
+		} finally {
+			connectionEndTransaction();
+			closeResources(productResult, ingredientResult, locationsResult);
+		}
+		
 	}
 
 	@Override
