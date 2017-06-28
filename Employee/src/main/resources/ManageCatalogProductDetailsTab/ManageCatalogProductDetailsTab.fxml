@@ -22,8 +22,8 @@
                         <JFXListView fx:id="manufacturerList" minHeight="500.0" minWidth="250.0" style="-fx-background-color: transparent;" verticalGap="10.0" />
                         <VBox spacing="10.0">
                            <children>
-                              <JFXButton fx:id="addManuBtn" prefHeight="39.0" prefWidth="290.0" styleClass="JFXButton" text="Add Manufacturer" />
-                              <JFXButton fx:id="removeManuBtn" onAction="#removeManuPress" prefHeight="39.0" prefWidth="290.0" styleClass="JFXButton" text="Remove Manufacturers" />
+                              <JFXButton fx:id="addManuBtn" prefWidth="290.0" styleClass="JFXButton" text="Add Manufacturer" />
+                              <JFXButton fx:id="removeManuBtn" onAction="#removeManuPress" prefWidth="290.0" styleClass="JFXButton" text="Remove Manufacturers" />
                               <JFXTextField fx:id="filterManu" promptText="Search Manufacturer" styleClass="JFXTextField" />
                               <JFXButton fx:id="renameManu" prefWidth="290.0" styleClass="JFXButton" text="Rename" />
                            </children>

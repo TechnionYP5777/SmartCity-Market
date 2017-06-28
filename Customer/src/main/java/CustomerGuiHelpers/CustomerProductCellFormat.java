@@ -67,8 +67,12 @@ public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 		}
 		Image image = new Image(imageUrl + "", 100, 100, true, false);
 		ImageView productImage = new ImageView(image);
+
 		
 		ImageView sale = new ImageView("/CustomerMainScreen/sale.png");
+		
+		sale.setFitHeight(80);
+		sale.setFitWidth(80);
 				
 		hbx.setSpacing(230);
 		

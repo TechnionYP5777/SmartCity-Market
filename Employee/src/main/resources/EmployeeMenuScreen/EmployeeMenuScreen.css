@@ -7,12 +7,6 @@
    
 }
 
-.radio-button { 
-	-fx-font-family: "serif";
-    -fx-text-fill: darkslateblue;
-    -fx-opacity: 1.0;
-    -fx-font-weight: bold;	
-}
 
 #logout {
 	-fx-background-image: url("logout.png");
@@ -24,18 +18,12 @@
 	-fx-effect: dropshadow(three-pass-box , cornflowerblue  , 50.0, 0.7 , 0.0 , 0.0);
 }
 
-.radio-button .dot {
-  -fx-mark-highlight-color: midnightblue;
-  -fx-mark-color: midnightblue; 
+#recentActivityLbl {
+	-fx-text-fill: Azure;
 }
 
 
-.check-box { 
-	-fx-font-family: "serif";
-	-fx-text-fill: darkslateblue;
-	-fx-opacity: 1.0;
-	-fx-font-weight: bold;	
-}
+
 
 
 
