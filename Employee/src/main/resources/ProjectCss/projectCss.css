@@ -2,7 +2,7 @@
     -fx-font-family: "serif";
     -fx-text-fill: #164F4F;
     -fx-opacity: 1;
-    -fx-font-size: 20;
+    -fx-font-size: 15;
 
 }
 
@@ -10,19 +10,19 @@
     -fx-background-color: rgba(63, 191, 191,0.7);
     -fx-text-fill: #E1F5FE;
     -fx-font-family: "serif";
-    -fx-font-size: 20;
+    -fx-font-size: 15;
 }
 
 .JFXButton:hover{
     -fx-background-color: rgba(170, 237, 237,0.7);
-    -fx-font-size: 20;
+    -fx-font-size: 15;
 }
 
 .JFXTextField {
 	-fx-font-family: "serif";
 	-fx-prompt-text-fill: #164F4F;
 	-fx-text-fill: #164F4F;
-	-fx-font-size: 20;
+	-fx-font-size: 15;
 }
 
 .JFXPasswordField {
@@ -36,7 +36,7 @@
 	-fx-text-fill: #164F4F;
 	-jfx-selected-color: #5E89B5;
     -jfx-unselected-color: #164F4F;
-    -fx-font-size: 20;
+    -fx-font-size: 15;
 }
 
 .JFXCheckBox {
@@ -44,7 +44,7 @@
 	-fx-text-fill: #164F4F;
 	-jfx-selected-color: #E1F5FE;
     -jfx-unselected-color: #164F4F;
-    -fx-font-size: 20;
+    -fx-font-size: 15;
 }
 
 .JFXDatePicker {
@@ -55,7 +55,7 @@
 .JFXComboBox {
 	-fx-font-family: "serif";
 	-fx-text-fill: #164F4F;
-	   -fx-font-size: 20;
+	   -fx-font-size: 15;
 }
 
 .icon {
