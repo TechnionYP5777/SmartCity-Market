@@ -73,8 +73,6 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 	 */
 	HashMap<Long, CartProduct> cartProductCache = new HashMap<Long, CartProduct>();
 
-	Double totalSum = Double.valueOf(0);
-
 	Integer totalProductsAmount = 0;
 
 	private int loadCartProductsAmount() {
@@ -104,7 +102,6 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 
 		cartProductCache.put(catalogProduct.getBarcode(), cartProduct);
 		totalProductsAmount += p.getAmount();
-		totalSum += p.getAmount() * catalogProduct.getPrice();
 	}
 
 	public CommandWrapper getCommandWrapper(String serverResponse) throws CriticalError {
@@ -415,13 +412,26 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 			cartProductCache.put(barcode, cartProduct);
 
 		totalProductsAmount -= amount;
-		totalSum -= amount * cartProduct.getCatalogProduct().getPrice();
 
 		log.info("REMOVE_PRODUCT_FROM_GROCERY_LIST command succeed.");
 	}
 
 	@Override
 	public Double getTotalSum() {
+		Double totalSum = Double.valueOf(0);
+		
+		for (CartProduct cartProduct : cartProductCache.values())
+			if (cartProduct.getCatalogProduct().getSale().isValid()) {
+				int cartProductAmount = cartProduct.getTotalAmount(),
+						saleAmount = cartProduct.getCatalogProduct().getSale().getAmountOfProducts(),
+						numberOfActiveSales = cartProductAmount / saleAmount;
+				
+				totalSum += numberOfActiveSales * cartProduct.getCatalogProduct().getSale().getPrice()
+						+ (cartProductAmount % saleAmount) * cartProduct.getCatalogProduct().getPrice();
+			} else {
+				totalSum += cartProduct.getTotalAmount() * cartProduct.getCatalogProduct().getPrice();
+			}
+		
 		return totalSum;
 	}
 
@@ -433,7 +443,7 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 	@Override
 	public Double checkOutGroceryList() throws CriticalError, CustomerNotConnected, GroceryListIsEmpty {
 		String serverResponse;
-		Double $ = totalSum;
+		Double totalSum = getTotalSum();
 
 		log.info("Creating CHECKOUT_GROCERY_LIST command wrapper to customer with id: " + id);
 
@@ -462,11 +472,10 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 		/* update customer data: groceryList, cartProductCache, totalSum */
 		groceryList = new GroceryList();
 		cartProductCache = new HashMap<Long, CartProduct>();
-		totalSum = Double.valueOf(0);
 		totalProductsAmount = 0;
 		log.info("CHECKOUT_GROCERY_LIST command succeed.");
 
-		return $;
+		return totalSum;
 	}
 
 	@Override
