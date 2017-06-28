@@ -41,7 +41,7 @@ public class CartProduct {
 	public void setTotalAmount(int totalAmount) {
 		this.totalAmount = totalAmount;
 	}
-	
+		
 	public void addProductPackage(ProductPackage p) {
 		SmartCode sc = p.getSmartCode();
 		ProductPackage inCartProductPackage = packages.get(sc);

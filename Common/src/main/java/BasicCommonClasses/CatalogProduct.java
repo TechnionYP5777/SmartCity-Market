@@ -21,6 +21,7 @@ public class CatalogProduct {
 	double price;
 	String imageUrl;
 	HashSet<Location> locations;
+	Sale sale;
 	
 	public CatalogProduct(long barcode, String name, HashSet<Ingredient> ingredients, Manufacturer manufacturer,
 			String description, double price, String imageUrl, HashSet<Location> locations) {
@@ -32,6 +33,7 @@ public class CatalogProduct {
 		this.price = price;
 		this.imageUrl = imageUrl;
 		this.locations = locations;
+		this.sale = new Sale();
 	}
 
 	public CatalogProduct() {
@@ -101,7 +103,7 @@ public class CatalogProduct {
 	public void setLocations(HashSet<Location> ¢) {
 		this.locations = ¢;
 	}
-	
+		
 	public void addIngredient(Ingredient ¢) {
 		if (ingredients == null)
 			ingredients = new HashSet<Ingredient>();
@@ -133,6 +135,14 @@ public class CatalogProduct {
 	public void removeLocation (int passage, int column, PlaceInMarket m) {
 		if (locations != null)
 			locations.remove(new Location(passage, column, m));
+	}
+	
+	public Sale getSale() {
+		return sale;
+	}
+
+	public void setSale(Sale sale) {
+		this.sale = sale;
 	}
 
 	@Override

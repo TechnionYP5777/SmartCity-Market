@@ -7,6 +7,7 @@ import java.net.URL;
 import com.jfoenix.controls.JFXListCell;
 
 import BasicCommonClasses.CartProduct;
+import BasicCommonClasses.Sale;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -24,6 +25,10 @@ import javafx.scene.layout.VBox;
  */
 public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 
+	private boolean shouldEnableSale(CartProduct item) {
+		return item.getCatalogProduct().getSale().getAmountOfProducts() == item.getTotalAmount();
+	}
+	
 	@Override
 	public void updateItem(CartProduct item, boolean empty) {
 		super.updateItem(item, empty);
@@ -34,6 +39,9 @@ public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 			return;
 		}
 
+		boolean enableSale = shouldEnableSale(item);
+		//TODO - Shimon use enableSale to decide how to show the item information
+		
 		HBox hbx = new HBox(280);
 		VBox vbx = new VBox(5); // spacing = 5
 	

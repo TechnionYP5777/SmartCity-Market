@@ -219,15 +219,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		p.getIngredients().forEach( ingr -> {
 			allerList.getItems().add(ingr.getName());
 		});
-		Sale sale = new Sale();	
-		try {
-			sale = customer.getSaleForProduct(p.getBarcode());
-		} catch (CriticalError | CustomerNotConnected | InvalidParameter | ProductCatalogDoesNotExist e1) {
-			log.fatal(e1);
-			log.debug(StackTraceUtil.stackTraceToStr(e1));
-			e1.showInfoToUser();
-		}
-		saleLbl.setText(sale.getSaleAsString());
+		saleLbl.setText(p.getSale().getSaleAsString());
 		URL imageUrl = null;
 		try {
 			imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI()
@@ -373,6 +365,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		} else {
 			try {
 				catalogProduct = customer.viewCatalogProduct(scannedSmartCode);
+				catalogProduct.setSale(customer.getSaleForProduct(catalogProduct.getBarcode()));
 				//checkIngredients(catalogProduct);
 				if (TempCustomerPassingData.customer == null)
 					checkIngredients(catalogProduct);

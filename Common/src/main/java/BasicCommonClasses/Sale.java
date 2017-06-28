@@ -62,4 +62,8 @@ public class Sale {
 		return id == -1 ? "No sale avaiable for this item"
 				: "Great Sale: Buy " + amountOfProducts + " In " + price + " NIS";
 	}
+	
+	public boolean isValid() {
+		return id != -1;
+	}
 }
