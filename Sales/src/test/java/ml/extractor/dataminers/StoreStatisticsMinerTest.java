@@ -18,6 +18,7 @@ import api.types.StoreData;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireStorePackageProperty;
 import ml.common.property.basicproperties.storestatistics.HealthyRatedProductProperty;
+import ml.common.property.basicproperties.storestatistics.LastPopularProductProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularManufacturerProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
 import testmocks.DBMock;
@@ -82,6 +83,22 @@ public class StoreStatisticsMinerTest {
 			assertTrue(result.contains(new MostPopularProductProperty(DBMock.getProduct(i), 2)));
 
 		assertEquals(MostPopularProductProperty.numOfTop, numOfRightAmount);
+
+	}
+	
+	@Test
+	public void test50LastPopularProductsProperty() {
+		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
+				new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+
+		long numOfRightAmount = result.stream().filter(
+				p -> p instanceof MostPopularProductProperty && ((MostPopularProductProperty) p).getAmount() == 2)
+				.count();
+
+		for (long i = 1; i <= LastPopularProductProperty.numOfBottom; i++)
+			assertTrue(result.contains(new LastPopularProductProperty(DBMock.getProduct(50 +i), 1)));
+
+		assertEquals(LastPopularProductProperty.numOfBottom, numOfRightAmount);
 
 	}
 
