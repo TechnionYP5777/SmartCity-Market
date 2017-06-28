@@ -275,7 +275,7 @@ public class ManageCatalogProductTab implements Initializable {
 		locationMap.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
 			int xLocation = (int) e.getX(), yLocation = (int) e.getY();
 			chosenLocation = new Location(xLocation, yLocation, PlaceInMarket.STORE);
-			locationLbl.setText(xLocation + ", " + yLocation);
+			locationLbl.setText("(col=" + xLocation + ", row=" + yLocation + ")");
 		});
 
 		VBox locationContainer = new VBox();
@@ -397,12 +397,16 @@ public class ManageCatalogProductTab implements Initializable {
 
 		try {
 			if (addCatalogProductRadioButton.isSelected()) {
+				HashSet<Location> locationSet = new HashSet<>();
+				if (chosenLocation != null)
+					 locationSet.add(chosenLocation);
+
 				manager.addProductToCatalog(
 						new CatalogProduct(Long.parseLong(barcodeTextField.getText()), productNameTextField.getText(),
 								getSelectedIngr(), manufacturars.get(productManufacturerCombo.getValue()),
 								productDescriptionTextField.getText().isEmpty() ? "N/A"
 										: productDescriptionTextField.getText(),
-								Double.parseDouble(productPriceTextField.getText()), "", new HashSet<Location>()));
+								Double.parseDouble(productPriceTextField.getText()), "", locationSet));
 
 				printToSuccessLog("Added new product '" + productNameTextField.getText() + "' to catalog");
 
