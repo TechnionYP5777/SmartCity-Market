@@ -19,7 +19,6 @@ import com.jfoenix.controls.JFXTextField;
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
-import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
 import CustomerContracts.ICustomer;
 import CustomerContracts.IRegisteredCustomer;
@@ -28,7 +27,6 @@ import CustomerGuiHelpers.TempCustomerPassingData;
 import CustomerGuiHelpers.TempRegisteredCustomerPassingData;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
-import SMExceptions.CommonExceptions.CriticalError;
 import SMExceptions.SMException;
 import UtilsContracts.IBarcodeEventHandler;
 import UtilsContracts.IConfiramtionDialog;
@@ -362,7 +360,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		} else {
 			try {
 				catalogProduct = customer.viewCatalogProduct(scannedSmartCode);
-				Sale sale = customer.getSaleForProduct(catalogProduct.getBarcode());
 				catalogProduct.setSale(customer.getSaleForProduct(catalogProduct.getBarcode()));
 				if (TempCustomerPassingData.customer == null)
 					

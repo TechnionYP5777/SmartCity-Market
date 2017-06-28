@@ -25,7 +25,7 @@ import javafx.scene.layout.VBox;
 public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 
 	private boolean shouldEnableSale(CartProduct item) {
-		return item.getCatalogProduct().getSale().getAmountOfProducts() == item.getTotalAmount();
+		return item.getCatalogProduct().getSale().isValid() && item.getCatalogProduct().getSale().getAmountOfProducts() == item.getTotalAmount();
 	}
 	
 	@Override
@@ -39,7 +39,7 @@ public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 		}
 
 		boolean enableSale = shouldEnableSale(item);
-		//TODO - Shimon use enableSale to decide how to show the item information
+		
 		
 		HBox hbx = new HBox(280);
 		VBox vbx = new VBox(5); // spacing = 5
@@ -67,9 +67,17 @@ public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 		}
 		Image image = new Image(imageUrl + "", 100, 100, true, false);
 		ImageView productImage = new ImageView(image);
+		
+		ImageView sale = new ImageView("/CustomerMainScreen/sale.png");
 				
 		hbx.setSpacing(230);
-	    hbx.getChildren().addAll(vbx, productImage);
+		
+		if (enableSale) {					
+		    hbx.getChildren().addAll(vbx, productImage, sale);		
+		} else {
+		    hbx.getChildren().addAll(vbx, productImage);
+		}
+	
 
 		setGraphic(hbx);
 	}
