@@ -364,9 +364,14 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 				catalogProduct = customer.viewCatalogProduct(scannedSmartCode);
 				Sale sale = customer.getSaleForProduct(catalogProduct.getBarcode());
 				catalogProduct.setSale(customer.getSaleForProduct(catalogProduct.getBarcode()));
-				//checkIngredients(catalogProduct);
 				if (TempCustomerPassingData.customer == null)
-					checkIngredients(catalogProduct);
+					
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							checkIngredients(catalogProduct);
+						}
+					});
 			} catch (SMException e) {
 				log.fatal(e);
 				log.debug(StackTraceUtil.stackTraceToStr(e));
@@ -383,16 +388,24 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		});
 	}
 
-	private void checkIngredients(CatalogProduct catalogProduct) throws CriticalError  {
+	private void checkIngredients(CatalogProduct catalogProduct) /*throws CriticalError*/ {
 		ArrayList<String> markedIngredients = new ArrayList<String>();
 		HashSet<Ingredient> productIngredients = catalogProduct.getIngredients();
 		HashSet<Ingredient> customerAllergens = ((IRegisteredCustomer)customer).getCustomerAllergens();
 		for (Ingredient ingredient:  customerAllergens) 
 			if (productIngredients.contains(ingredient))
 				markedIngredients.add(ingredient.getName());
-		if (!markedIngredients.isEmpty()) {
-			String alert = "This product contains some of your marked Ingredients:\n" + markedIngredients.toString();
-			DialogMessagesService.showInfoDialog("Marked Ingredients Alert", null, alert);
+		if (!(markedIngredients.isEmpty())) {
+			StringBuilder markedIngredientsSB =  new StringBuilder();
+			Integer i =1;
+			for (String ing : markedIngredients) {
+				if (i>1)
+					markedIngredientsSB.append(", ");
+				markedIngredientsSB.append(i++ + ". "+ ing);
+			}
+			DialogMessagesService.showInfoDialog("Marked Ingredients Alert", 
+					"This product contains some of your marked Ingredients:\n", 
+					markedIngredientsSB.toString());
 		}
 	}
 
