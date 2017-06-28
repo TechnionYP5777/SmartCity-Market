@@ -1,7 +1,9 @@
 package EmployeeGui;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -48,6 +50,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
@@ -110,9 +113,12 @@ public class ManageEmployeesTab implements Initializable {
 
 	@FXML
 	void finishBtnPressed(ActionEvent __) {
+		String userName = userTxt.getText();
 		try {
-			manager.registerNewWorker(new Login(userTxt.getText(), passTxt.getText(), new ForgotPasswordData(
+			manager.registerNewWorker(new Login(userName, passTxt.getText(), new ForgotPasswordData(
 					securityCombo.getSelectionModel().getSelectedItem(), securityAnswerTxt.getText())));
+			String logMessage = "registration Employee: " + userName + " succeeded.";
+			printToSuccessLog(logMessage);
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | WorkerAlreadyExists e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.stackTraceToStr(e));
@@ -310,9 +316,13 @@ public class ManageEmployeesTab implements Initializable {
 	}
 
 	void removeEmployeesHandle() {
+		StringBuilder emlNames = new StringBuilder(); 
 		selectedEmployees.forEach(eml -> {
 			try {
 				manager.removeWorker(eml);
+				if (emlNames.length() >0)
+					emlNames.append(", ");
+				emlNames.append(eml);
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure
 					| WorkerDoesNotExist e) {
 				log.fatal(e);
@@ -322,6 +332,15 @@ public class ManageEmployeesTab implements Initializable {
 		});
 		createEmployeesList();
 		enableRemoveButton();
+		if (emlNames.length() > 0) {
+			String logMessage = "remove Employees: " + emlNames.toString() + " succeeded.";
+			printToSuccessLog(logMessage);
+		}
+	}
+	
+	private void printToSuccessLog(String msg) {
+		((TextArea) rootPane.getScene().lookup("#successLogArea"))
+				.appendText(new SimpleDateFormat("yyyy/MM/dd-HH:mm:ss").format(new Date()) + " :: " + msg + "\n");
 	}
 
 	class removeEmployeesHandler implements IConfiramtionDialog {
