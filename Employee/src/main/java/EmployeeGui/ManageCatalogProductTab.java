@@ -74,6 +74,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
 /**
  * ManageCatalogProductTab - This class is the controller for the Manage catalog
@@ -274,6 +276,12 @@ public class ManageCatalogProductTab implements Initializable {
 		locationMap.setFitWidth(400);
 		locationMap.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
 			int xLocation = (int) e.getX(), yLocation = (int) e.getY();
+			for (Line line: createDot(xLocation, yLocation)){
+                line.setFill(null);
+                line.setStroke(Color.RED);
+                line.setStrokeWidth(2);
+                rootPane.getChildren().add(line);
+			}
 			chosenLocation = new Location(xLocation, yLocation, PlaceInMarket.STORE);
 			locationLbl.setText("(col=" + xLocation + ", row=" + yLocation + ")");
 		});
@@ -328,6 +336,16 @@ public class ManageCatalogProductTab implements Initializable {
 		changeRunOprBtnTxt();
 
 		enableRunOperation();
+	}
+	
+	private HashSet<Line> createDot(int startX, int startY){
+		int radius = 2;
+		HashSet<Line> lines = new HashSet<>();
+		lines.add(new Line(startX, startY, startX, startY + radius)); //line up
+		lines.add(new Line(startX, startY, startX, startY - radius)); //line bottom
+		lines.add(new Line(startX, startY, startX + radius, startY)); //line right
+		lines.add(new Line(startX, startY, startX - radius, startY)); //line left
+		return lines;
 	}
 
 	private void createIngredientList() {
