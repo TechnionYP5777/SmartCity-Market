@@ -53,6 +53,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -70,7 +71,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	IManager manager = InjectionFactory.getInstance(Manager.class);
 
 	@FXML
-	private VBox rootPane;
+	private StackPane rootPane;
 
 	@FXML
 	private JFXListView<String> manufacturerList;

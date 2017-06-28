@@ -49,6 +49,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 
 /**
  * ManageEmployeesTab - manages the employee tab
@@ -57,6 +58,9 @@ import javafx.scene.input.MouseEvent;
  * @since 2017-01-04
  */
 public class ManageEmployeesTab implements Initializable {
+	
+	@FXML
+	private StackPane rootPane;
 
 	@FXML
 	private JFXListView<String> employeesList;
