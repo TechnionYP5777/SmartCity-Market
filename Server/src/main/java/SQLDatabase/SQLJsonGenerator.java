@@ -179,7 +179,7 @@ class SQLJsonGenerator {
 	 * @param customerIngredients
 	 *            - ResultSet of the customer\s ingredients (assuming the
 	 *            ResultSet ordered by username column) the ResultSet should
-	 *            pointing the product to convert, if it has ingredients. if so,
+	 *            pointing the customer to convert, if it has ingredients. if so,
 	 *            this object will point the next customer (or after last line) after returning.
 	 * @return
 	 * @throws CriticalError

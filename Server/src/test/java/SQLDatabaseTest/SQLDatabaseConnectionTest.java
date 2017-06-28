@@ -59,6 +59,7 @@ public class SQLDatabaseConnectionTest {
 	final LocalDate date232015 = LocalDate.of(2015, 3, 2);
 	final Location locationWarehouse = new Location(0, 0, PlaceInMarket.WAREHOUSE);
 	final Location locationStore = new Location(0, 0, PlaceInMarket.STORE);
+	private static final String ingredientNameDebug = "glotendebug";
 
 	private CatalogProduct createDummyProduct(long barcode, String name, int manufacturerId, String manufacturerName,
 			double price) {
@@ -1225,13 +1226,12 @@ public class SQLDatabaseConnectionTest {
 	public void testAddRemoveIngredient() {
 
 		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		final String ingredientName = "glotendebug";
 		String result = null;
 		Ingredient ingredient = null;
 		
 		//test add ingredient
 		try {
-			String tempID = sqlConnection.addIngredient(null, ingredientName);
+			String tempID = sqlConnection.addIngredient(null, ingredientNameDebug);
 			ingredient = Serialization.deserialize(tempID, Ingredient.class);
 			
 			result = sqlConnection.getIngredientsList();
@@ -1931,6 +1931,60 @@ public class SQLDatabaseConnectionTest {
 		assertEquals(p.getPhoneNumber(), result.getPhoneNumber());
 		assertEquals(p.getStreet(), result.getStreet());
 		assertEquals(p.getUserName(), result.getUserName());
+	}
+	
+	@Test
+	public void testCustomerCanSetAndGetProfileWithIngredients() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		Ingredient ingredient = null;
+		CustomerProfile p = null;
+		CustomerProfile result = null;
+		
+		try {
+			String tempID = sqlConnection.addIngredient(null, ingredientNameDebug);
+			ingredient = Serialization.deserialize(tempID, Ingredient.class);
+			
+			
+			sqlConnection.registerCustomer(customerName, customerName);
+			
+		} catch (CriticalError | ClientAlreadyExist | ClientNotConnected e) {
+			fail();
+		}
+		
+		try {
+			HashSet<Ingredient> allergens = new HashSet<>();
+			allergens.add(ingredient);
+			
+			p = new CustomerProfile(customerName, customerName, "name", "last", "number", "email", "city", "street",
+					date112000, allergens, new ForgotPasswordData("question", "answer"));
+			
+			sqlConnection.setCustomerProfile(customerName, p);
+			sqlConnection.setSecurityQACustomer(customerName, new ForgotPasswordData());
+			result = Serialization.deserialize(sqlConnection.getCustomerProfile(customerName), CustomerProfile.class);
+
+		} catch (CriticalError | ClientNotExist | IngredientNotExist e1) {
+			fail();
+		} finally{
+			try {
+				sqlConnection.removeCustomer(customerName);
+				sqlConnection.removeIngredient(null, ingredient);
+			} catch (CriticalError | ClientNotExist | ClientNotConnected | IngredientNotExist | IngredientStillUsed e) {
+				e.printStackTrace();
+			}
+		}
+		
+		assertEquals(p.getBirthdate(), result.getBirthdate());
+		assertEquals(p.getCity(), result.getCity());
+		assertEquals(p.getEmailAddress(), result.getEmailAddress());
+		assertEquals(p.getFirstName(), result.getFirstName());
+		assertEquals(p.getLastName(), result.getLastName());
+		assertEquals(p.getPhoneNumber(), result.getPhoneNumber());
+		assertEquals(p.getStreet(), result.getStreet());
+		assertEquals(p.getUserName(), result.getUserName());
+		assertEquals(p.getAllergens().size(), result.getAllergens().size());
+		assertTrue(result.getAllergens().contains(ingredient));
 	}
 	
 	@Test

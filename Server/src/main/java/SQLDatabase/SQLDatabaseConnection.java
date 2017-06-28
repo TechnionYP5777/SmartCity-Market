@@ -1537,7 +1537,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				
 				statement = getParameterizedQuery(insertIngredientQuery, username, ingredient.getId());
 				
-				log.debug("updateIngredientsForCustomer: add igredient: " + ingredient + " to customer: " + username + "\nby running query: statement");
+				log.debug("updateIngredientsForCustomer: add igredient: " + ingredient + " to customer: " + username + "\nby running query: " + statement);
 				statement.executeUpdate();
 				closeResources(statement);
 			}
@@ -2388,6 +2388,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			selectCustomerResult = selectCustomerStatement.executeQuery();
 			selectCustomerResult.first();
 			selectCustomerIngredientsResult = selectCustomerIngredientsStatement.executeQuery();
+			selectCustomerIngredientsResult.first();
 
 			String result = SQLJsonGenerator.CostumerProfileToJson(selectCustomerResult, selectCustomerIngredientsResult);
 			log.debug("SQL Public setCustomerProfile: Success getting profile for username: " + username);
