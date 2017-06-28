@@ -172,8 +172,6 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		
 		
 		String logMessage = "rename Ingredient: from " + prevName +" to " + newName + " succeeded.";
-//		DialogMessagesService.showInfoDialog("log", null, logMessage);
-		
 		printToSuccessLog(logMessage);
 	}
 
@@ -194,18 +192,18 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		enableButtons();
 		enableAddButtons();
 		
-//		String logMessage = "rename Manufacturer: from " + prevName +" to " + newName + " succeeded.";
-////		DialogMessagesService.showInfoDialog("log", null, logMessage);
-//		
-//		printToSuccessLog(logMessage);
+		String logMessage = "rename Manufacturer: from " + prevName +" to " + newName + " succeeded.";
+		printToSuccessLog(logMessage);
 	}
 
 	void addIngPressed() {
+		String newName = "";
 		try {
 			if (ingredients.containsKey(newIngr.getText())) {
 				throw new ParamIDAlreadyExists();
 			}
-			manager.addIngredient(new Ingredient(0, newIngr.getText()));
+			newName = newIngr.getText();
+			manager.addIngredient(new Ingredient(0, newName));
 			eventBus.post(new IngredientEvent());
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
 			log.fatal(e);
@@ -216,14 +214,19 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		createIngredientList();
 		enableButtons();
 		enableAddButtons();
+		
+		String logMessage = "add Ingredient: " + newName + " succeeded.";
+		printToSuccessLog(logMessage);
 	}
 
 	void addManuPressed() {
+		String newName = "";
 		try {
 			if (manufacturars.containsKey(newManu.getText())) {
 				throw new ParamIDAlreadyExists();
 			}
-			manager.addManufacturer(new Manufacturer(0, newManu.getText()));
+			newName = newManu.getText();
+			manager.addManufacturer(new Manufacturer(0, newName));
 			eventBus.post(new ManufacturerEvent());
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
 			log.fatal(e);
@@ -234,6 +237,9 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		createManufacturerList();
 		enableButtons();
 		enableAddButtons();
+		
+		String logMessage = "add Manufacturer: " + newName + " succeeded.";
+		printToSuccessLog(logMessage);
 	}
 
 	@FXML
@@ -243,10 +249,14 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	}
 
 	private void removeIngrHandle() {
+		StringBuilder ingNames = new StringBuilder();
 		selectedIngr.forEach(ing -> {
 			try {
 				manager.removeIngredient(ingredients.get(ing), false);
 				eventBus.post(new IngredientEvent());
+				if (ingNames.length() >0)
+					ingNames.append(", ");
+				ingNames.append(ing);
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist
 					| IngredientStillInUse e) {
 				log.fatal(e);
@@ -258,6 +268,10 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		createIngredientList();
 		enableButtons();
 		enableAddButtons();
+		if (ingNames.length() > 0) {
+			String logMessage = "remove Ingredients: " + ingNames.toString() + " succeeded.";
+			printToSuccessLog(logMessage);
+		}
 	}
 
 	@FXML
@@ -267,10 +281,14 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	}
 
 	private void removeManuHandle() {
+		StringBuilder manuNames = new StringBuilder();
 		selectedManu.forEach(man -> {
 			try {
 				manager.removeManufacturer(manufacturars.get(man));
 				eventBus.post(new ManufacturerEvent());
+				if (manuNames.length() >0)
+					manuNames.append(", ");
+				manuNames.append(man);
 			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist
 					| ManfacturerStillInUse e) {
 				log.fatal(e);
@@ -282,6 +300,10 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		createManufacturerList();
 		enableButtons();
 		enableAddButtons();
+		if (manuNames.length() > 0) {
+			String logMessage = "remove Manufacturers: " + manuNames.toString() + " succeeded.";
+			printToSuccessLog(logMessage);
+		}
 	}
 
 	@Override
