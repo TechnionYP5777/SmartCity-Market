@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 
@@ -42,16 +43,25 @@ import UtilsImplementations.InjectionFactory;
 import UtilsImplementations.ProjectEventBus;
 import UtilsImplementations.StackTraceUtil;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
@@ -197,6 +207,15 @@ public class ManagePackagesTab implements Initializable {
 	JFXDatePicker datePickerForSmartCode;
 
 	IEventBus eventBus;
+	
+	JFXPopup popupExpired;
+	
+	JFXListView<String> expiredList;
+	
+	HashSet<String> selectedExpireds = new HashSet<String>();
+	
+	@FXML
+	private JFXButton showExpiredProducts;
 
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
@@ -262,10 +281,106 @@ public class ManagePackagesTab implements Initializable {
 
 		radioButtonContainerBarcodeOperations
 				.addRadioButtons(Arrays.asList(new RadioButton[] { addPakageToWarhouseRadioButton }));
+		
+		
+		Label lbl1 = new Label("Expired Products");
+		JFXButton remove = new JFXButton("Remove Selected Products From System");
+		JFXButton close = new JFXButton("Remove Selected Products From System");
+		remove.getStyleClass().add("JFXButton");
+		close.getStyleClass().add("JFXButton");
+		remove.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent __) {
+				popupExpired.hide();
+			}
+		});
+
+		expiredList = new JFXListView<String>();
+		expiredList.setMaxHeight(100);
+
+		HBox manubtnContanier = new HBox();
+		manubtnContanier.getChildren().addAll(remove, close);
+		manubtnContanier.setSpacing(10);
+		manubtnContanier.setAlignment(Pos.CENTER);
+		VBox manuContainer = new VBox();
+		manuContainer.getChildren().addAll(lbl1, expiredList, manubtnContanier);
+		manuContainer.setPadding(new Insets(10, 50, 50, 50));
+		manuContainer.setSpacing(10);
+
+		popupExpired = new JFXPopup(manuContainer);
+		showExpiredProducts.setOnMouseClicked(e -> {
+			popupExpired.show(showExpiredProducts, PopupVPosition.TOP, PopupHPosition.LEFT);
+		});
+		
+		expiredList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+		// for multiple selection
+		expiredList.addEventFilter(MouseEvent.MOUSE_PRESSED, evt -> {
+			Node node = evt.getPickResult().getIntersectedNode();
+			while (node != null && node != expiredList && !(node instanceof ListCell)) {
+				node = node.getParent();
+			}
+			if (node instanceof ListCell) {
+				evt.consume();
+
+				ListCell<?> cell = (ListCell<?>) node;
+				ListView<?> lv = cell.getListView();
+
+				lv.requestFocus();
+
+				if (!cell.isEmpty()) {
+					int index = cell.getIndex();
+					if (cell.isSelected()) {
+						lv.getSelectionModel().clearSelection(index);
+					} else {
+						lv.getSelectionModel().select(index);
+					}
+				}
+
+				ObservableList<String> selectedItems = expiredList.getSelectionModel().getSelectedItems();
+
+				selectedExpireds.clear();
+				selectedExpireds.addAll(selectedItems);
+
+			}
+		});
+
+		expiredList.setDepth(1);
+		expiredList.setExpanded(true);
+
+		createExpiredList();
+		
 
 		resetParams();
 		showScanCodePane(true);
 
+	}
+	
+	HashMap<String, Ingredient> expireds;
+	
+	ObservableList<String> dataExpireds;
+
+	FilteredList<String> filteredDataExpireds;
+	
+	private void createExpiredList() {
+		expireds = new HashMap<String, Ingredient>();
+//		try {
+//			worker.getAllIngredients().forEach(ingredient -> expireds.put(ingredient.getName(), ingredient));
+//		} catch (InvalidParameter | CriticalError | ConnectionFailure e) {
+//			log.fatal(e);
+//			log.debug(StackTraceUtil.stackTraceToStr(e));
+//			e.showInfoToUser();
+//		}
+
+		dataExpireds = FXCollections.observableArrayList();
+
+		dataExpireds.setAll(expireds.keySet());
+
+		filteredDataExpireds = new FilteredList<>(dataExpireds, s -> true);
+
+		expiredList.setItems(filteredDataExpireds);
+
+		selectedExpireds.clear();
 	}
 
 	@FXML
