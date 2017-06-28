@@ -677,7 +677,7 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 
 		try {
 			serverResponse = sendRequestWithRespondToServer(
-					new CommandWrapper(id, CommandDescriptor.GET_SALE_FOR_PRODUCT).serialize());
+					new CommandWrapper(id, CommandDescriptor.GET_SALE_FOR_PRODUCT, Serialization.serialize(barcode)).serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 

@@ -19,6 +19,7 @@ import com.jfoenix.controls.JFXTextField;
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
+import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
 import CustomerContracts.ICustomer;
 import CustomerContracts.IRegisteredCustomer;
@@ -361,6 +362,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		} else {
 			try {
 				catalogProduct = customer.viewCatalogProduct(scannedSmartCode);
+				Sale sale = customer.getSaleForProduct(catalogProduct.getBarcode());
 				catalogProduct.setSale(customer.getSaleForProduct(catalogProduct.getBarcode()));
 				//checkIngredients(catalogProduct);
 				if (TempCustomerPassingData.customer == null)
