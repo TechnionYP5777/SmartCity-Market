@@ -37,6 +37,9 @@ import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
+import SQLDatabase.SQLDatabaseException.SaleAlreadyExist;
+import SQLDatabase.SQLDatabaseException.SaleNotExist;
+import SQLDatabase.SQLDatabaseException.SaleStillUsed;
 import UtilsImplementations.Packing;
 import UtilsImplementations.Serialization;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
@@ -1490,7 +1493,24 @@ public class CommandExecuter {
 
 		log.info("Trying to create new sale " + sale + " to system");
 
-		//TODO Noam - call sql here
+		String SaleId;
+		try {
+			SaleId = Serialization.serialize(c.addSale(inCommandWrapper.getSenderID(), sale, true));
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, SaleId);	
+		} catch (ClientNotConnected e) {
+			log.info("Create new sale command failed, client is not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		} catch (CriticalError e) {
+			log.fatal("Create new sale command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (SaleAlreadyExist e) {
+			log.info("Create new sale command failed, sale for this product already exists");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR); //TODO: fix that to specific value
+		}
+		
 
 		log.info("Create new sale " + sale + " to system finished");
 	}
@@ -1512,7 +1532,28 @@ public class CommandExecuter {
 
 		log.info("Trying to remove sale with id " + saleID + " from system");
 
-		//TODO Noam - call SQL here
+		
+		try {
+			c.removeSale(inCommandWrapper.getSenderID(), saleID);
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);	
+		} catch (CriticalError e) {
+			log.fatal("Remove sale command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientNotConnected e) {
+			log.info("Remove sale command failed, client is not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		} catch (SaleNotExist e) {
+			log.info("Remove sale command failed, sale is not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.PARAM_ID_IS_NOT_EXIST);
+		} catch (SaleStillUsed e) {
+			log.info("Remove sale command failed, sale still used by clients");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR); //TODO fix that to specific error
+		}
+		
 
 		log.info("Remove Sale " + saleID + " from system finished");
 	}
@@ -1520,7 +1561,16 @@ public class CommandExecuter {
 	private void getAllSales(SQLDatabaseConnection c) {
 		log.info("Get all sales from serderID " + inCommandWrapper.getSenderID() + " command called");
 		
-		//TODO Noam - call sql here
+		String salesList;
+		try {
+			salesList = Serialization.serialize(c.getAllSales());
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, salesList);
+		} catch (CriticalError e) {
+			log.fatal("Get all sales command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		}
+		
 				
 		log.info("Get all sales from system finished");
 	}
@@ -1540,7 +1590,19 @@ public class CommandExecuter {
 			return;
 		}
 		
-		//TODO Noam - call SQL here
+		String salesList;
+		try {
+			salesList = Serialization.serialize(c.getSaleForProduct(barcode));
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, salesList);
+		} catch (CriticalError e) {
+			log.fatal("Get sale for product command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (ClientNotConnected e) {
+			log.info("Get sale for product command failed, client is not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		}
 
 		log.info("Get sale for product command system finished for barcode " + barcode);
 	}
@@ -1548,7 +1610,16 @@ public class CommandExecuter {
 	private void getAllExpiredProductPackages(SQLDatabaseConnection c) {
 		log.info("Get all expired product packages from serderID " + inCommandWrapper.getSenderID() + " command called");
 		
-		//TODO Noam - call sql here
+		String expiredPackagesList;
+		try {
+			expiredPackagesList = Serialization.serialize(c.getExpiredProductPackages());
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, expiredPackagesList);
+		} catch (CriticalError e) {
+			log.fatal("Get all expired product packages command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		}
+		
 				
 		log.info("Get all expired product packages from system finished");
 	}
