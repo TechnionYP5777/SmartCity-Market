@@ -74,7 +74,7 @@ public class AddProductToCartTest {
 		}
 		
 		try {
-			customer.addProductToCart(sc, amount);
+			customer.addProductToCart(sc, catalogProduct, amount);
 		} catch (CriticalError | CustomerNotConnected | AmountBiggerThanAvailable | ProductPackageDoesNotExist
 				| InvalidParameter e1) {
 			fail();
@@ -102,7 +102,7 @@ public class AddProductToCartTest {
 		}
 		
 		try {
-			customer.addProductToCart(sc, amount);
+			customer.addProductToCart(sc, catalogProduct, amount);
 		} catch (CustomerNotConnected | AmountBiggerThanAvailable | ProductPackageDoesNotExist
 				| InvalidParameter e) {
 			fail();
@@ -132,7 +132,7 @@ public class AddProductToCartTest {
 		}
 		
 		try {
-			customer.addProductToCart(sc, amount);
+			customer.addProductToCart(sc, catalogProduct, amount);
 		} catch (CriticalError | AmountBiggerThanAvailable | ProductPackageDoesNotExist
 				| InvalidParameter e) {
 			fail();
@@ -162,7 +162,7 @@ public class AddProductToCartTest {
 		}
 		
 		try {
-			customer.addProductToCart(sc, amount);
+			customer.addProductToCart(sc, catalogProduct, amount);
 		} catch (CriticalError | CustomerNotConnected | ProductPackageDoesNotExist
 				| InvalidParameter e) {
 			fail();
@@ -192,7 +192,7 @@ public class AddProductToCartTest {
 		}
 		
 		try {
-			customer.addProductToCart(sc, amount);
+			customer.addProductToCart(sc, catalogProduct, amount);
 		} catch (CriticalError | CustomerNotConnected | AmountBiggerThanAvailable
 				| InvalidParameter e) {
 			fail();
@@ -222,7 +222,7 @@ public class AddProductToCartTest {
 		}
 		
 		try {
-			customer.addProductToCart(sc, amount);
+			customer.addProductToCart(sc, catalogProduct, amount);
 		} catch (CriticalError | CustomerNotConnected | AmountBiggerThanAvailable
 				| ProductPackageDoesNotExist e) {
 			fail();
@@ -252,7 +252,7 @@ public class AddProductToCartTest {
 		}
 		
 		try {
-			customer.addProductToCart(sc, amount);
+			customer.addProductToCart(sc, catalogProduct, amount);
 		} catch (CustomerNotConnected | AmountBiggerThanAvailable | ProductPackageDoesNotExist
 				| InvalidParameter e) {
 			fail();
@@ -282,7 +282,7 @@ public class AddProductToCartTest {
 		}
 		
 		try {
-			customer.addProductToCart(sc, amount);
+			customer.addProductToCart(sc, catalogProduct, amount);
 		} catch (InvalidParameter | CustomerNotConnected | AmountBiggerThanAvailable
 				| ProductPackageDoesNotExist e) {
 			fail();

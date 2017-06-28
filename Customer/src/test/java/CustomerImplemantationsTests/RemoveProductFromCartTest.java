@@ -71,7 +71,7 @@ public class RemoveProductFromCartTest {
 		}
 		
 		try {
-			customer.addProductToCart(sc, amount);
+			customer.addProductToCart(sc, catalogProduct, amount);
 		} catch (CriticalError | CustomerNotConnected | AmountBiggerThanAvailable | ProductPackageDoesNotExist
 				| InvalidParameter e1) {
 			fail();

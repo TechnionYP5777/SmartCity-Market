@@ -67,7 +67,7 @@ public class ViewProductFromCartTest {
 		}
 		
 		try {
-			customer.addProductToCart(sc, amount);
+			customer.addProductToCart(sc, catalogProduct, amount);
 		} catch (InvalidParameter | CustomerNotConnected | AmountBiggerThanAvailable
 				| ProductPackageDoesNotExist e) {
 			fail();
@@ -89,7 +89,7 @@ public class ViewProductFromCartTest {
 		}
 		
 		try {
-			customer.addProductToCart(sc, amount);
+			customer.addProductToCart(sc, catalogProduct, amount);
 		} catch (InvalidParameter | CustomerNotConnected | AmountBiggerThanAvailable
 				| ProductPackageDoesNotExist e) {
 			fail();
