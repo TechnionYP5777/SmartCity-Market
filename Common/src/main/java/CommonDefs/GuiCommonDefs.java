@@ -115,5 +115,5 @@ public class GuiCommonDefs {
 	
 	public static String productsCustomerPicturesFolderZipFile = String.valueOf("../Common/src/main/resources/PicturesZipFile/customer_pictures.zip");
 	
-	public static String storeMapPicPath = String.valueOf("../Common/src/main/resources/storeMap.png");
+	public static String storeMapPicPath = String.valueOf("https://github.com/TechnionYP5777/SmartCity-Market/blob/master/Common/src/main/resources/storeMap.png");
 }
