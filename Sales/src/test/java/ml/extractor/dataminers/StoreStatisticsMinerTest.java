@@ -16,7 +16,7 @@ import org.junit.Test;
 import api.contracts.IStorePackage;
 import api.types.StoreData;
 import ml.common.property.basicproperties.ABasicProperty;
-import ml.common.property.basicproperties.storestatistics.AboutToExpireStorePackageProperty;
+import ml.common.property.basicproperties.storestatistics.AboutToExpireSoonStorePackageProperty;
 import ml.common.property.basicproperties.storestatistics.HealthyRatedProductProperty;
 import ml.common.property.basicproperties.storestatistics.LastPopularProductProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularManufacturerProperty;
@@ -50,7 +50,7 @@ public class StoreStatisticsMinerTest {
 
 		// testAboutToExpireProperty
 		for (long i = 1; i <= DBMock.NUM_OF_PRODUCTS; i++) {
-			if (i <= DBMock.NUM_OF_PRODUCTS - AboutToExpireStorePackageProperty.numOfTop)
+			if (i <= DBMock.NUM_OF_PRODUCTS - AboutToExpireSoonStorePackageProperty.numOfTop)
 				stock.add(new StorePackageMock(i, LocalDate.MAX)); // far E.D
 			else
 				stock.add(new StorePackageMock(i, LocalDate.now())); // close E.D
@@ -103,21 +103,21 @@ public class StoreStatisticsMinerTest {
 	}
 
 	@Test
-	public void testAboutToExpireProperty() {
+	public void testAboutToExpireSoonProperty() {
 		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
 				new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
 
 		long totalAboutToExpireStorePackages = result.stream()
-				.filter(p -> p instanceof AboutToExpireStorePackageProperty).count();
+				.filter(p -> p instanceof AboutToExpireSoonStorePackageProperty).count();
 
-		assertEquals(AboutToExpireStorePackageProperty.numOfTop, totalAboutToExpireStorePackages);
+		assertEquals(AboutToExpireSoonStorePackageProperty.numOfTop, totalAboutToExpireStorePackages);
 		
 		for (IStorePackage spm : stock) {
 		    long currSpmBarcode = spm.getProduct().getBarcode();
-			 if (currSpmBarcode <= DBMock.NUM_OF_PRODUCTS - AboutToExpireStorePackageProperty.numOfTop)
-				 assertFalse(result.contains(new AboutToExpireStorePackageProperty(spm)));
+			 if (currSpmBarcode <= DBMock.NUM_OF_PRODUCTS - AboutToExpireSoonStorePackageProperty.numOfTop)
+				 assertFalse(result.contains(new AboutToExpireSoonStorePackageProperty(spm)));
 			 else
-				 assertTrue(result.contains(new AboutToExpireStorePackageProperty(spm)));
+				 assertTrue(result.contains(new AboutToExpireSoonStorePackageProperty(spm)));
 		}
 
 	}

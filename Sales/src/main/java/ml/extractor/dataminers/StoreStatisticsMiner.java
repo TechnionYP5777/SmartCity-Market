@@ -18,7 +18,7 @@ import api.contracts.IStorePackage;
 import api.preferences.InputPreferences;
 import api.types.StoreData;
 import ml.common.property.basicproperties.ABasicProperty;
-import ml.common.property.basicproperties.storestatistics.AboutToExpireStorePackageProperty;
+import ml.common.property.basicproperties.storestatistics.AboutToExpireSoonStorePackageProperty;
 import ml.common.property.basicproperties.storestatistics.HealthyRatedProductProperty;
 import ml.common.property.basicproperties.storestatistics.LastPopularProductProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularManufacturerProperty;
@@ -44,7 +44,7 @@ public class StoreStatisticsMiner extends AMiner {
 
 		result.addAll(extractMostPopularProducts());
 		result.addAll(extractLastPopularProducts());
-		result.addAll(extractAboutToExpireStorePackages());
+		result.addAll(extractAboutToExpireSoonStorePackages());
 		result.addAll(extractMostPopularManufacturers());
 		result.addAll(extractHealthyRatedProducts());
 		
@@ -108,21 +108,21 @@ public class StoreStatisticsMiner extends AMiner {
 	/**
 	 * this methods generate property of the products that are about to expire
 	 * (the number of "about to expire products" to extract,
-	 * as well as the threshold that defines what is "about to be expire" is in {@link AboutToExpireStorePackageProperty}
+	 * as well as the threshold that defines what is "about to be expire" is in {@link AboutToExpireSoonStorePackageProperty}
 	 * 
 	 * @return
 	 */
-	private Set<? extends ABasicProperty> extractAboutToExpireStorePackages() {
+	private Set<? extends ABasicProperty> extractAboutToExpireSoonStorePackages() {
 
 		LocalDate currentDate = LocalDate.now();
 
 		List<? extends IStorePackage> aboutToExpireStorePackages = 
 				getStock()
 					.stream()
-					.filter(sp -> Period.between(currentDate, sp.getExpirationDate()).getDays() <= AboutToExpireStorePackageProperty.threshold)
+					.filter(sp -> Period.between(currentDate, sp.getExpirationDate()).getDays() <= AboutToExpireSoonStorePackageProperty.threshold)
 					.collect(Collectors.toList());
 		
-		List<AboutToExpireStorePackageProperty> storePackagesOrderedByDiff =
+		List<AboutToExpireSoonStorePackageProperty> storePackagesOrderedByDiff =
 				aboutToExpireStorePackages
 					.stream()
 					.sorted(new Comparator<IStorePackage>() {
@@ -140,11 +140,11 @@ public class StoreStatisticsMiner extends AMiner {
 					})
 					.map(sp -> {
 					IStorePackage storePackage = sp;
-					return new AboutToExpireStorePackageProperty(storePackage);
+					return new AboutToExpireSoonStorePackageProperty(storePackage);
 					})
 					.collect(Collectors.toList());
 
-		return new HashSet<>(storePackagesOrderedByDiff.subList(0, AboutToExpireStorePackageProperty.numOfTop));
+		return new HashSet<>(storePackagesOrderedByDiff.subList(0, AboutToExpireSoonStorePackageProperty.numOfTop));
 	}
 	
 	/**

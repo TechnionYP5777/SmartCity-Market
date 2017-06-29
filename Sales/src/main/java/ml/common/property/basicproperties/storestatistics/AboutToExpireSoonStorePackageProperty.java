@@ -14,21 +14,21 @@ import ml.deducer.deductionrules.ADeductionRule;
  * 
  *        This class represents a property of an "about to expire" product.
  */
-public class AboutToExpireStorePackageProperty extends ABasicProperty {
+public class AboutToExpireSoonStorePackageProperty extends ABasicProperty {
 
-	public static int threshold = 2; // 2 days time
+	public static int threshold = 14; // 2 days time
 	public static int numOfTop = 25;
 
 	int diff; //holds the diff (in days) between the current date and the product's E.D (the ABS value)
 	IStorePackage storePackage;
 
-	public AboutToExpireStorePackageProperty(IStorePackage storePackage) {
+	public AboutToExpireSoonStorePackageProperty(IStorePackage storePackage) {
 		super();
 		this.diff = Period.between(LocalDate.now(), storePackage.getExpirationDate()).getDays();
 		this.storePackage = storePackage;
 	}
 	
-	public AboutToExpireStorePackageProperty(IStorePackage storePackage, ADeductionRule rule) {
+	public AboutToExpireSoonStorePackageProperty(IStorePackage storePackage, ADeductionRule rule) {
 		super(rule);
 		this.diff = Period.between(LocalDate.now(), storePackage.getExpirationDate()).getDays();
 		this.storePackage = storePackage;
@@ -59,7 +59,7 @@ public class AboutToExpireStorePackageProperty extends ABasicProperty {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AboutToExpireStorePackageProperty other = (AboutToExpireStorePackageProperty) obj;
+		AboutToExpireSoonStorePackageProperty other = (AboutToExpireSoonStorePackageProperty) obj;
 		if (diff != other.diff)
 			return false;
 		if (storePackage == null) {
