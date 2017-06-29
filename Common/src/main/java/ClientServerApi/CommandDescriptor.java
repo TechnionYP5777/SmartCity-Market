@@ -780,4 +780,19 @@ public enum CommandDescriptor {
 	 *	 ***** NOTES *****
 	 */
 	OFFER_SPECIAL_SALE_FOR_PRODUCT,
+
+	/**
+	 * Description: the customer fetches the entire Catalog from the server. (used for searching products locations)
+	 * retval: HashSet<CatalogProduct> - the market catalog.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *
+	 *	 ***** NOTES *****
+	 */
+	GET_MARKET_CATALOG,
 }
