@@ -114,4 +114,6 @@ public class GuiCommonDefs {
 	public static String productsPicturesFolderZipFile = String.valueOf("../Common/src/main/resources/PicturesZipFile/pictures.zip");
 	
 	public static String productsCustomerPicturesFolderZipFile = String.valueOf("../Common/src/main/resources/PicturesZipFile/customer_pictures.zip");
+	
+	public static String storeMapPicPath = String.valueOf("../Common/src/main/resources/storeMap.png");
 }

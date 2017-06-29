@@ -1,9 +1,5 @@
 package EmployeeGui;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -11,8 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ResourceBundle;
-
-import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 
@@ -42,6 +36,7 @@ import EmployeeGuiContracts.CatalogProductEvent;
 import EmployeeGuiContracts.IngredientEvent;
 import EmployeeGuiContracts.ManufacturerEvent;
 import EmployeeImplementations.Manager;
+import GuiUtils.MarkLocationOnStoreMap;
 import GuiUtils.DialogMessagesService;
 import GuiUtils.RadioButtonEnabler;
 import SMExceptions.SMException;
@@ -68,6 +63,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -75,7 +71,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -257,10 +252,6 @@ public class ManageCatalogProductTab implements Initializable {
 		ingredientList.setExpanded(true);
 
 		createIngredientList();
-
-		// productLocationTextField.textProperty().addListener((observable,
-		// oldValue, newValue) -> {
-		// });
 		
 		Label lbl1 = new Label("Choose Location");
 		JFXButton close = new JFXButton("Close");
@@ -271,9 +262,8 @@ public class ManageCatalogProductTab implements Initializable {
 				popupLocation.hide();
 			}
 		});
-		ImageView locationMap = new ImageView("/ManageCatalogProductTab/storeMap.png");
-		locationMap.setFitHeight(400);
-		locationMap.setFitWidth(400);
+
+		Group locationMap = new MarkLocationOnStoreMap().run();
 
 		VBox locationContainer = new VBox();
 		locationContainer.getChildren().addAll(lbl1, locationMap, close);
@@ -282,7 +272,6 @@ public class ManageCatalogProductTab implements Initializable {
 
 		locationMap.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
 			int xLocation = (int) e.getX(), yLocation = (int) e.getY();
-			(new createStoreMapImageWithDot(xLocation, yLocation)).start();
 			chosenLocation = new Location(xLocation, yLocation, PlaceInMarket.STORE);
 			locationLbl.setText("(col=" + xLocation + ", row=" + yLocation + ")");
 		});
@@ -291,7 +280,6 @@ public class ManageCatalogProductTab implements Initializable {
 		popupLocation.setOnShowing(e -> rootPane.getScene().setCursor(Cursor.CROSSHAIR));
 		popupLocation.setOnHidden(e -> rootPane.getScene().setCursor(Cursor.DEFAULT));
 		locationChooser.setOnMouseClicked(e -> popupLocation.show(locationChooser, PopupVPosition.BOTTOM, PopupHPosition.LEFT));
-		
 
 		radioButtonContainerManageCatalogProduct.addRadioButtons(
 				Arrays.asList(new RadioButton[] { addCatalogProductRadioButton, removeCatalogProductRadioButton }));
@@ -332,46 +320,6 @@ public class ManageCatalogProductTab implements Initializable {
 		changeRunOprBtnTxt();
 
 		enableRunOperation();
-	}
-	
-	public class createStoreMapImageWithDot extends Thread {
-		int x;
-		int y;
-		static final int radius = 10;
-		
-		createStoreMapImageWithDot(int x, int y){
-			this.x=x;
-			this.y=y;
-		}
-		
-		@Override
-		public void run(){
-			BufferedImage img = null;
-			try {
-			    img = ImageIO.read(new File(getClass().getResource("/ManageCatalogProductTab/storeMap.png").toURI()));
-			} catch (IOException e) {
-				log.error("ERROR while trying to read the storeMap pic");
-				log.error(e + "");
-				return;
-			} catch (URISyntaxException e) {
-				log.error("ERROR URL error");
-				log.error(e + "");
-			}
-			for (int hieght = img.getHeight(), width = img.getWidth(), radius = 10, i = 0; i < width; ++i)
-				for (int j = 0; j < hieght; ++j)
-					if (Math.abs(x - i) <= radius && Math.abs(y - j) <= radius)
-						img.setRGB(i, j, 0xFF0000);
-			try {
-				ImageIO.write(img, "jpg", new File("storeMapWithDot.jpg"));
-			} catch (IOException e) {
-				log.error("ERROR while trying to create the sotoreMapWithDot pic");
-				log.error(e + "");
-			}
-//			} catch (URISyntaxException e) {
-//				log.error("ERROR URL error");
-//				log.error(e + "");
-//			}
-		}
 	}
 
 	private void createIngredientList() {
