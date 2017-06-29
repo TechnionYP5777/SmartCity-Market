@@ -123,7 +123,7 @@ public class ManageSalesTab implements Initializable {
 			
 				log.fatal(e);
 				log.debug(StackTraceUtil.stackTraceToStr(e));
-				// TODO
+				// TODO aviad should fix the exceptions
 				//e.showInfoToUser();
 			
 			}

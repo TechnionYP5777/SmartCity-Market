@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import com.google.common.eventbus.Subscribe;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXPopup;
@@ -28,9 +29,12 @@ import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import EmployeeContracts.IWorker;
+import EmployeeDefs.AEmployeeException.AmountBiggerThanAvailable;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
+import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
+import EmployeeDefs.AEmployeeException.ProductPackageDoesNotExist;
 import EmployeeGuiContracts.CatalogProductEvent;
 import EmployeeImplementations.Manager;
 import GuiUtils.DialogMessagesService;
@@ -40,6 +44,7 @@ import SMExceptions.SMException;
 import SmartcodeParser.SmartcodePrint;
 import UtilsContracts.BarcodeScanEvent;
 import UtilsContracts.IBarcodeEventHandler;
+import UtilsContracts.IConfiramtionDialog;
 import UtilsContracts.IEventBus;
 import UtilsContracts.SmartcodeScanEvent;
 import UtilsImplementations.BarcodeEventHandler;
@@ -56,16 +61,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
@@ -211,13 +212,15 @@ public class ManagePackagesTab implements Initializable {
 	JFXDatePicker datePickerForSmartCode;
 
 	IEventBus eventBus;
-	
+
 	JFXPopup popupExpired;
-	
+
 	JFXListView<String> expiredList;
-	
-	HashSet<String> selectedExpireds = new HashSet<String>();
-	
+
+	JFXButton remove;
+
+	JFXCheckBox showMapOnClick;
+
 	@FXML
 	private JFXButton showExpiredProducts;
 
@@ -285,17 +288,20 @@ public class ManagePackagesTab implements Initializable {
 
 		radioButtonContainerBarcodeOperations
 				.addRadioButtons(Arrays.asList(new RadioButton[] { addPakageToWarhouseRadioButton }));
-		
-		
+
 		Label lbl1 = new Label("Expired Products");
-		JFXButton remove = new JFXButton("Remove Selected Products From System");
+		remove = new JFXButton("Remove Selected From System");
 		JFXButton close = new JFXButton("Close");
 		remove.getStyleClass().add("JFXButton");
 		close.getStyleClass().add("JFXButton");
+		showMapOnClick = new JFXCheckBox();
+		showMapOnClick.setText("Show Product Location On Click");
+		showMapOnClick.getStyleClass().add("JFXCheckBox");
 		remove.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent __) {
-				// TODO remove
+				DialogMessagesService.showConfirmationDialog("Remove Expired Product From System", null,
+						"Are You Sure?", new ExpiredProductRemove());
 				popupExpired.hide();
 			}
 		});
@@ -308,52 +314,36 @@ public class ManagePackagesTab implements Initializable {
 		});
 
 		expiredList = new JFXListView<String>();
-		expiredList.setMaxHeight(100);
+		expiredList.setMinWidth(600);
+		expiredList.setMaxWidth(600);
+		expiredList.setMaxHeight(400);
 
 		HBox manubtnContanier = new HBox();
 		manubtnContanier.getChildren().addAll(remove, close);
 		manubtnContanier.setSpacing(10);
 		manubtnContanier.setAlignment(Pos.CENTER);
 		VBox manuContainer = new VBox();
-		manuContainer.getChildren().addAll(lbl1, expiredList, manubtnContanier);
+		manuContainer.getChildren().addAll(lbl1, showMapOnClick, expiredList, manubtnContanier);
 		manuContainer.setPadding(new Insets(10, 50, 50, 50));
 		manuContainer.setSpacing(10);
 
 		popupExpired = new JFXPopup(manuContainer);
 		showExpiredProducts.setOnMouseClicked(e -> {
+			remove.setDisable(true);
 			popupExpired.show(showExpiredProducts, PopupVPosition.TOP, PopupHPosition.LEFT);
 		});
-		
-		expiredList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-		// for multiple selection
-		expiredList.addEventFilter(MouseEvent.MOUSE_PRESSED, evt -> {
-			Node node = evt.getPickResult().getIntersectedNode();
-			while (node != null && node != expiredList && !(node instanceof ListCell)) {
-				node = node.getParent();
-			}
-			if (node instanceof ListCell) {
-				evt.consume();
+		expiredList.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
-				ListCell<?> cell = (ListCell<?>) node;
-				ListView<?> lv = cell.getListView();
+			@Override
+			public void handle(MouseEvent event) {
+				remove.setDisable(false);
 
-				lv.requestFocus();
-
-				if (!cell.isEmpty()) {
-					int index = cell.getIndex();
-					if (cell.isSelected()) {
-						lv.getSelectionModel().clearSelection(index);
-					} else {
-						lv.getSelectionModel().select(index);
-					}
+				if (showMapOnClick.isSelected()) {
+					// TODO show map
 				}
-
-				ObservableList<String> selectedItems = expiredList.getSelectionModel().getSelectedItems();
-
-				selectedExpireds.clear();
-				selectedExpireds.addAll(selectedItems);
-
+				// System.out.println("clicked on " +
+				// lv.getSelectionModel().getSelectedItem());
 			}
 		});
 
@@ -361,42 +351,85 @@ public class ManagePackagesTab implements Initializable {
 		expiredList.setExpanded(true);
 
 		createExpiredList();
-		
 
 		resetParams();
 		showScanCodePane(true);
 
 	}
-	
-	HashMap<SmartCode, ProductPackage> expireds;
-	
+
+	class ExpiredProductRemove implements IConfiramtionDialog {
+
+		@Override
+		public void onYes() {
+			removeExpiredProduct();
+		}
+
+		@Override
+		public void onNo() {
+			// Nothing to do
+
+		}
+
+	}
+
+	void removeExpiredProduct() {
+		try {
+			worker.removeProductPackageFromStore(expireds.get(expiredList.getSelectionModel().getSelectedItem()));
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog
+				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ConnectionFailure e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.stackTraceToStr(e));
+			e.showInfoToUser();
+		}
+
+		createExpiredList();
+		remove.setDisable(true);
+
+	}
+
+	HashMap<String, ProductPackage> expireds;
+
 	ObservableList<String> dataExpireds;
 
 	FilteredList<String> filteredDataExpireds;
-	
-	private void createExpiredList() {
-		expireds = new HashMap<SmartCode, ProductPackage>();
 
-			try {
-				worker.getAllExpiredProductPackages().forEach(expired -> {
-					expireds.put(expired.getSmartCode(), expired);
-				});
-			} catch (ConnectionFailure | CriticalError | InvalidParameter | EmployeeNotConnected e) {
-				log.fatal(e);
-				log.debug(StackTraceUtil.stackTraceToStr(e));
-				e.showInfoToUser();;
-			}
-	
+	private void createExpiredList() {
+
+		expireds = new HashMap<String, ProductPackage>();
+
+		try {
+			worker.getAllExpiredProductPackages().forEach(expired -> {
+				expireds.put(generateExpiredLayoutKey(expired), expired);
+			});
+		} catch (ConnectionFailure | CriticalError | InvalidParameter | EmployeeNotConnected e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.stackTraceToStr(e));
+			e.showInfoToUser();
+		}
 
 		dataExpireds = FXCollections.observableArrayList();
 
-		//dataExpireds.setAll(expireds.keySet());
+		dataExpireds.setAll(expireds.keySet());
 
 		filteredDataExpireds = new FilteredList<>(dataExpireds, s -> true);
 
 		expiredList.setItems(filteredDataExpireds);
+	}
 
-		selectedExpireds.clear();
+	private String generateExpiredLayoutKey(ProductPackage pr) {
+		String ret = "Error with expired product: ";
+		try {
+			CatalogProduct p = worker.viewProductFromCatalog(pr.getSmartCode().getBarcode());
+			ret = p.getName() + " with barcode " + p.getBarcode() + " expired on "
+					+ pr.getSmartCode().getExpirationDate();
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog
+				| ConnectionFailure e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.stackTraceToStr(e));
+			e.showInfoToUser();
+			return ret + pr.getSmartCode().toString();
+		}
+		return ret;
 	}
 
 	@FXML
