@@ -401,7 +401,7 @@ public class ManagePackagesTab implements Initializable {
 			worker.getAllExpiredProductPackages().forEach(expired -> {
 				expireds.put(generateExpiredLayoutKey(expired), expired);
 			});
-		} catch (ConnectionFailure | CriticalError | InvalidParameter | EmployeeNotConnected e) {
+		} catch (ConnectionFailure | CriticalError | EmployeeNotConnected e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
