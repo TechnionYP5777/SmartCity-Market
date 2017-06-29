@@ -22,7 +22,7 @@ public class AnyDeductionRule extends ADeductionRule {
 	}
 
 	@Override
-	public Set<AProperty> deduceProperties(Set<AProperty> properties) {
+	public Set<? extends AProperty> deduceProperties(Set<AProperty> properties) {
 		throw new UnsupportedOperationException();
 	}
 

@@ -26,7 +26,7 @@ public abstract class ADeductionRule {
 		return (getClass() == obj.getClass());
 	}
 	
-	public abstract Set<AProperty> deduceProperties(Set<AProperty> properties);
+	public abstract Set<? extends AProperty> deduceProperties(Set<AProperty> properties);
 	
 	public abstract boolean canDeduceProperty(AProperty property);
 	
