@@ -25,6 +25,7 @@ import CustomerContracts.ACustomerExceptions.GroceryListIsEmpty;
 import CustomerImplementations.Customer;
 import CustomerImplementations.CustomerDefs;
 import UtilsContracts.IClientRequestHandler;
+import UtilsImplementations.Serialization;
 
 @RunWith(MockitoJUnitRunner.class)
 
@@ -44,7 +45,7 @@ public class CheckoutGroceryListTest {
 	public void checkoutGroceryListSuccessfulTest() {	
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST).serialize()))
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST, Serialization.serialize(new HashMap<Sale, Boolean>())).serialize()))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
 		} catch (IOException ¢) {
 			fail();
@@ -61,7 +62,7 @@ public class CheckoutGroceryListTest {
 	public void checkoutGroceryListCriticalErrorTest() {	
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST).serialize()))
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST, Serialization.serialize(new HashMap<Sale, Boolean>())).serialize()))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_ERR).serialize());
 		} catch (IOException ¢) {
 			fail();
@@ -80,8 +81,8 @@ public class CheckoutGroceryListTest {
 	public void checkoutGroceryListCustomerNotConnectedTest() {	
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST).serialize()))
-				.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED).serialize());
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST, Serialization.serialize(new HashMap<Sale, Boolean>())).serialize()))
+				.thenReturn(new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED, Serialization.serialize(new HashMap<Sale, Boolean>())).serialize());
 		} catch (IOException ¢) {
 			fail();
 		}
@@ -99,7 +100,7 @@ public class CheckoutGroceryListTest {
 	public void checkoutGroceryListGroceryListIsEmptyTest() {	
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST).serialize()))
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST,  Serialization.serialize(new HashMap<Sale, Boolean>())).serialize()))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_GROCERY_LIST_IS_EMPTY).serialize());
 		} catch (IOException ¢) {
 			fail();
@@ -118,7 +119,7 @@ public class CheckoutGroceryListTest {
 	public void checkoutGroceryListConnectionFailureTest() {	
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST).serialize()))
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST, Serialization.serialize(new HashMap<Sale, Boolean>())).serialize()))
 			.thenThrow(new SocketTimeoutException());
 		} catch (IOException ¢) {
 			fail();
@@ -137,7 +138,7 @@ public class CheckoutGroceryListTest {
 	public void checkoutGroceryListIllegalResultTest() {	
 		try {
 			Mockito.when(
-				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST).serialize()))
+				clientRequestHandler.sendRequestWithRespond(new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.CHECKOUT_GROCERY_LIST, Serialization.serialize(new HashMap<Sale, Boolean>())).serialize()))
 				.thenReturn(new CommandWrapper(ResultDescriptor.SM_FOROGT_PASSWORD_WRONG_ANSWER).serialize());
 		} catch (IOException ¢) {
 			fail();
