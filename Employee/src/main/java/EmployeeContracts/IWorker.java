@@ -149,10 +149,9 @@ public interface IWorker {
 	 * worker get all expired product packages.
 	 * 
 	 * @return expiredProductPackages 
-	 * @throws ConnectionFailure 
 	 * @throws CriticalError 
 	 * @throws EmployeeNotConnected 
-	 * @throws InvalidParameter 
+	 * @throws ConnectionFailure 
 	 */
-	HashSet<ProductPackage> getAllExpiredProductPackages() throws ConnectionFailure, CriticalError, InvalidParameter, EmployeeNotConnected; 
+	HashSet<ProductPackage> getAllExpiredProductPackages() throws CriticalError, EmployeeNotConnected, ConnectionFailure; 
 }

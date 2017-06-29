@@ -86,7 +86,7 @@ public class LogoutTest {
 	}
 	
 	@Test
-	public void logoutIllegalResultTest() {
+	public void logoutIllegalResultTest_IngredientStillInUse() {
 		try {
 			Mockito.when(
 					clientRequestHandler.sendRequestWithRespond(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT,
@@ -108,4 +108,30 @@ public class LogoutTest {
 			/* Test Passed */
 		}
 	}
+	
+	@Test
+	public void logoutIllegalResultTest_InvalidCommandDescriptor() {
+		try {
+			Mockito.when(
+					clientRequestHandler.sendRequestWithRespond(new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.LOGOUT,
+							Serialization.serialize(null)).serialize()))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_INVALID_CMD_DESCRIPTOR).serialize());
+		} catch (IOException ¢) {
+			
+			fail();
+		}
+		
+		try {
+			worker.logout();
+			
+			fail();
+		} catch (InvalidParameter | EmployeeNotConnected | ConnectionFailure ¢) {
+			
+			fail();
+		} catch (CriticalError e) {
+			/* Test Passed */
+		}
+	}
+	
+	
 }

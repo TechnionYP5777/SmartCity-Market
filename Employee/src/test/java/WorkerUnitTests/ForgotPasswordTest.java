@@ -71,6 +71,25 @@ public class ForgotPasswordTest {
 	}
 	
 	@Test
+	public void getAuthQuestionFailTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(new CommandWrapper(WorkerDefs.loginCommandSenderId,
+					CommandDescriptor.FORGOT_PASSWORD_GET_QUESTION, Serialization.serialize(username)).serialize()))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_FOROGT_PASSWORD_WRONG_ANSWER, authQuestion).serialize());
+		} catch (IOException ¢) {
+			fail();
+		}
+		String question = null;
+		try {
+			// TODO Check this username 
+			question = ((IForgotPasswordHandler)worker).getForgotPasswordQuestion(username);
+		} catch (NoSuchUserName e) {
+			fail();
+		}
+		assert(question == null);
+	}
+	
+	@Test
 	public void sendWrongAnswerWithNewPassword(){
 		ForgotPasswordData forgotPassData = new ForgotPasswordData(null, authQuestionAnswer + "bla");
 		Login ansAndPassContainer = new Login(worker.getUsername(), newPass, forgotPassData);

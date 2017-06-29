@@ -299,7 +299,7 @@ public class Worker extends AEmployee implements IWorker, IForgotPasswordHandler
 	}
 	
 	@Override
-	public HashSet<ProductPackage> getAllExpiredProductPackages() throws ConnectionFailure, CriticalError, InvalidParameter, EmployeeNotConnected {
+	public HashSet<ProductPackage> getAllExpiredProductPackages() throws CriticalError, EmployeeNotConnected, ConnectionFailure {
 		log.info("Creating getAllExpiredProductPackages command wrapper.");
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(getClientId(), CommandDescriptor.GET_ALL_EXPIRED_PRODUCT_PACKAGES)).serialize());
@@ -308,7 +308,7 @@ public class Worker extends AEmployee implements IWorker, IForgotPasswordHandler
 
 		try {
 			resultDescriptorHandler(commandDescriptor.getResultDescriptor());
-		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
+		} catch ( InvalidParameter |InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
 			    | WorkerAlreadyExists | ParamIDAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse | ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
