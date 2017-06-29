@@ -7,6 +7,7 @@ coverage:
      - "Employee/src/main/java/EmployeeGui/"
      - "Employee/src/main/java/EmployeeDefs/"
      - "Employee/src/main/java/EmployeeDI/"
+     - "Employee/src/main/java/EmployeeImplementations/Manager.java"
      - "Common/src/main/java/BasicCommonClasses/CartProduct.java"
      - "Common/src/main/java/BasicCommonClasses/CatalogProduct.java"
      - "Common/src/main/java/BasicCommonClasses/CustomerProfile.java"
