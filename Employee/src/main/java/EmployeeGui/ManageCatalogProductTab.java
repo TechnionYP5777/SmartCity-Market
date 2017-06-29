@@ -220,18 +220,15 @@ public class ManageCatalogProductTab implements Initializable {
 		manuContainer.setSpacing(10);
 
 		popupIngr = new JFXPopup(manuContainer);
-		ingrChooser.setOnMouseClicked(e -> {
-			popupIngr.show(ingrChooser, PopupVPosition.TOP, PopupHPosition.LEFT);
-		});
+		ingrChooser.setOnMouseClicked(e -> popupIngr.show(ingrChooser, PopupVPosition.TOP, PopupHPosition.LEFT));
 
 		ingredientList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 		// for multiple selection
 		ingredientList.addEventFilter(MouseEvent.MOUSE_PRESSED, evt -> {
 			Node node = evt.getPickResult().getIntersectedNode();
-			while (node != null && node != ingredientList && !(node instanceof ListCell)) {
+			while (node != null && node != ingredientList && !(node instanceof ListCell))
 				node = node.getParent();
-			}
 			if (node instanceof ListCell) {
 				evt.consume();
 
@@ -242,11 +239,10 @@ public class ManageCatalogProductTab implements Initializable {
 
 				if (!cell.isEmpty()) {
 					int index = cell.getIndex();
-					if (cell.isSelected()) {
-						lv.getSelectionModel().clearSelection(index);
-					} else {
+					if (!cell.isSelected())
 						lv.getSelectionModel().select(index);
-					}
+					else
+						lv.getSelectionModel().clearSelection(index);
 				}
 
 				ObservableList<String> selectedItems = ingredientList.getSelectionModel().getSelectedItems();
@@ -444,26 +440,22 @@ public class ManageCatalogProductTab implements Initializable {
 	void runTheOperationButtonPressed(ActionEvent __) {
 
 		try {
-			if (addCatalogProductRadioButton.isSelected()) {
+			if (!addCatalogProductRadioButton.isSelected()) {
+				if (removeCatalogProductRadioButton.isSelected())
+					DialogMessagesService.showConfirmationDialog("Remove Catalog Product", null, "Are You Sure?",
+							new removeProductHandler());
+			} else {
 				HashSet<Location> locationSet = new HashSet<>();
 				if (chosenLocation != null)
-					 locationSet.add(chosenLocation);
-
+					locationSet.add(chosenLocation);
 				manager.addProductToCatalog(
 						new CatalogProduct(Long.parseLong(barcodeTextField.getText()), productNameTextField.getText(),
 								getSelectedIngr(), manufacturars.get(productManufacturerCombo.getValue()),
 								productDescriptionTextField.getText().isEmpty() ? "N/A"
 										: productDescriptionTextField.getText(),
 								Double.parseDouble(productPriceTextField.getText()), "", locationSet));
-
 				printToSuccessLog("Added new product '" + productNameTextField.getText() + "' to catalog");
-
 				cleanFields();
-
-			} else if (removeCatalogProductRadioButton.isSelected()) {
-
-				DialogMessagesService.showConfirmationDialog("Remove Catalog Product", null, "Are You Sure?",
-						new removeProductHandler());
 			}
 
 		} catch (SMException e) {
@@ -477,9 +469,7 @@ public class ManageCatalogProductTab implements Initializable {
 
 	private HashSet<Ingredient> getSelectedIngr() {
 		tempIngr = new HashSet<Ingredient>();
-		selectedIngr.forEach(ingr -> {
-			tempIngr.add(ingredients.get(ingr));
-		});
+		selectedIngr.forEach(ingr -> tempIngr.add(ingredients.get(ingr)));
 		return tempIngr;
 	}
 
@@ -533,13 +523,13 @@ public class ManageCatalogProductTab implements Initializable {
 	}
 
 	@Subscribe
-	public void onIngredientEvent(IngredientEvent event) {
+	public void onIngredientEvent(IngredientEvent __) {
 		createIngredientList();
 		enableRunOperation();
 	}
 
 	@Subscribe
-	public void onManufacturerEvent(ManufacturerEvent event) {
+	public void onManufacturerEvent(ManufacturerEvent __) {
 		createManufacturerMap();
 		productManufacturerCombo.getItems().clear();
 		productManufacturerCombo.getItems().addAll(manufacturars.keySet());
