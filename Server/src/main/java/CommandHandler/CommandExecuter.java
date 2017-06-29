@@ -1673,6 +1673,21 @@ public class CommandExecuter {
 		log.info("Get all expired product packages from system finished");
 	}
 	
+	private void getMarketCatalog(SQLDatabaseConnection c) {
+		log.info("Get market catalog from serderID " + inCommandWrapper.getSenderID() + " command called");
+		
+		try {
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(c.getAllProductsInCatalog()));
+		} catch (CriticalError e) {
+			log.fatal("Get market catalog command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		}
+		
+				
+		log.info("Get market catalog from system finished");
+	}
+	
 	public CommandWrapper execute(SQLDatabaseConnection c) {
 		if (c == null) {
 			log.fatal("Failed to get SQL Database Connection");
@@ -1895,6 +1910,11 @@ public class CommandExecuter {
 
 		case OFFER_SPECIAL_SALE_FOR_PRODUCT:
 			offerSpecialSaleForProduct(c);
+			
+			break;
+			
+		case GET_MARKET_CATALOG:
+			getMarketCatalog(c);
 			
 			break;
 			
