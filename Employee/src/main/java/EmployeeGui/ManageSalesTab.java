@@ -42,6 +42,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -59,9 +60,15 @@ public class ManageSalesTab implements Initializable {
 
 	@FXML
 	private HBox discountPane;
+	
+	@FXML
+	private ImageView searchIcon;
 
 	@FXML
 	private Label productNamelbl;
+	
+	@FXML
+	private Label barcodeLbl;
 
 	@FXML
 	private VBox minBuyPane;
@@ -114,12 +121,10 @@ public class ManageSalesTab implements Initializable {
 			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
 		}
-		
-		clearData();
 		createSingleList();
 		enableAddSaleButton();
 		enableRemoveButtons();
-		
+		clearData();
 	}
 
 	@FXML
@@ -132,6 +137,14 @@ public class ManageSalesTab implements Initializable {
 
 		eventBus = InjectionFactory.getInstance(ProjectEventBus.class);
 		eventBus.register(this);
+		
+		barcodeField.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.matches("\\d*")) 
+				barcodeField.setText(newValue.replaceAll("[^\\d]", ""));
+			clearData();
+			enableAddSaleButton();
+			searchIcon.setDisable(barcodeField.getText().isEmpty());
+		});
 
 		manager = InjectionFactory.getInstance(Manager.class);
 
@@ -177,26 +190,29 @@ public class ManageSalesTab implements Initializable {
 
 		createSingleList();
 
-//		amount.textProperty().addListener((observable, oldValue, newValue) -> {
-//			if (!newValue.matches("\\d+\\\\d*"))
-//				amount.setText(oldValue);
-//
-//		});
-//
-//		price.textProperty().addListener((observable, oldValue, newValue) -> {
-//			if (!newValue.matches("((\\d*)|(\\d+\\.\\d*))"))
-//				price.setText(oldValue);
-//		});
+		amount.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.matches("[1-9]\\d*"))
+				amount.setText(oldValue);
+			enableAddSaleButton();
+		});
+
+		price.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.matches("((\\d*)|(\\d+\\.\\d*))"))
+				price.setText(oldValue);
+			enableAddSaleButton();
+		});
 
 		enableAddSaleButton();
 		enableRemoveButtons();
+		searchIcon.setDisable(barcodeField.getText().isEmpty());
 	}
 	
 	private void clearData() {
+		currentCatalogProduct = null;
 		amount.setText("");
 		price.setText("");
 		productNamelbl.setText("N/A");
-		
+		barcodeLbl.setText("N/A");	
 	}
 
 	private void createSingleList() {
@@ -223,13 +239,24 @@ public class ManageSalesTab implements Initializable {
 
 	}
 
-	private String generateKey(Sale sale) {		
-		return "Product: " + currentCatalogProduct.getName() + " with barcode: " + currentCatalogProduct.getBarcode() + " as " + sale.getSaleAsString();
+	private String generateKey(Sale sale) {	
+		String ret = "Error with sale id: ";
+		try {
+			CatalogProduct p = manager.viewProductFromCatalog(sale.getProductBarcode());
+			ret = "Product: " + p.getName() + " with barcode: " + p.getBarcode() + "Has " + sale.getSaleAsString();
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog
+				| ConnectionFailure e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.stackTraceToStr(e));
+			e.showInfoToUser();
+			return ret + sale.getId();
+		}
+		return ret;
 	}
 
 	private void enableAddSaleButton() {
 
-		addProductSale.setDisable(currentCatalogProduct == null);
+		addProductSale.setDisable(currentCatalogProduct == null || amount.getText().isEmpty() || price.getText().isEmpty());
 	}
 
 	private void enableRemoveButtons() {
@@ -284,6 +311,7 @@ public class ManageSalesTab implements Initializable {
 		try {
 			currentCatalogProduct = manager.viewProductFromCatalog(Long.parseLong(barcodeField.getText()));
 			productNamelbl.setText(currentCatalogProduct.getName());
+			barcodeLbl.setText(currentCatalogProduct.getBarcode() + "");
 
 			enableAddSaleButton();
 			enableRemoveButtons();
