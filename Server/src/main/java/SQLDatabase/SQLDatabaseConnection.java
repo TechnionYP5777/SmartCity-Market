@@ -3730,7 +3730,7 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		List<ProductPackage> allProductPackages = getAllProductPackages();
 		
 		return allProductPackages.stream()
-				.filter((ProductPackage p) -> p.getSmartCode().getExpirationDate().isAfter(LocalDate.now()))
+				.filter((ProductPackage p) -> p.getSmartCode().getExpirationDate().isBefore(LocalDate.now()))
 				.collect(Collectors.toList());
 	}
 
