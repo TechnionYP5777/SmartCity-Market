@@ -20,6 +20,7 @@ import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
 import EmployeeDefs.AEmployeeException.ParamIDStillInUse;
+import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
 import EmployeeImplementations.Manager;
 import GuiUtils.DialogMessagesService;
 import SMExceptions.CommonExceptions.CriticalError;

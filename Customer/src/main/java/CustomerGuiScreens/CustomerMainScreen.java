@@ -19,7 +19,6 @@ import com.jfoenix.controls.JFXTextField;
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
-import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
 import CustomerContracts.ICustomer;
 import CustomerContracts.IRegisteredCustomer;
