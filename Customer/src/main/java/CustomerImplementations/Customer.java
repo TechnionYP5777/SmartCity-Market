@@ -443,7 +443,7 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 
 		try {
 			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(id, CommandDescriptor.CHECKOUT_GROCERY_LIST)).serialize());
+					(new CommandWrapper(id, CommandDescriptor.CHECKOUT_GROCERY_LIST, Serialization.serialize(specialSaleTaken))).serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 

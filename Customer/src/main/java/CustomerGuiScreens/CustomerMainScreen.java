@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
@@ -72,6 +73,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	Stage primeStage = CustomerApplicationScreen.stage;
 
 	ICustomer customer;
+	IRegisteredCustomer registeredCustomer;
 
 	// Main screen panes
 	@FXML
@@ -255,6 +257,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(customerMainScreenPane);
 		barcodeEventHandler.register(this);
+		registeredCustomer = TempRegisteredCustomerPassingData.regCustomer;
 		customer = TempCustomerPassingData.customer != null ? TempCustomerPassingData.customer
 				: TempRegisteredCustomerPassingData.regCustomer;
 
@@ -361,6 +364,26 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		setAbilityAndVisibilityOfProductInfoPane(false);
 	}
 
+	class SpecialSaleHandler implements IConfiramtionDialog {
+
+		Sale sale;
+		
+		SpecialSaleHandler(Sale sale) {
+			this.sale = sale;
+		}
+		
+		@Override
+		public void onYes() {
+			registeredCustomer.addSpecialSale(sale, true);
+		}
+
+		@Override
+		public void onNo() {
+			registeredCustomer.addSpecialSale(sale, false);
+		}
+		
+	}
+	
 	private void smartcodeScannedHandler() {
 		Integer amount;
 		CartProduct cartPtoduct = customer.getCartProduct(scannedSmartCode);
@@ -371,7 +394,21 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			try {
 				catalogProduct = customer.viewCatalogProduct(scannedSmartCode);
 				catalogProduct.setSale(customer.getSaleForProduct(catalogProduct.getBarcode()));
-				if (TempCustomerPassingData.customer == null)
+				if (registeredCustomer != null) {
+					/* Checking for special sell */
+					Sale specialSale = registeredCustomer.getSpecailSaleForProduct(catalogProduct.getBarcode());
+					
+					if (specialSale.isValid()) {
+						DialogMessagesService.showConfirmationDialog("Special Sale just for you!",
+																	 null,
+																	 specialSale.getSaleAsString() + "\n" + 
+																	 "If you want to take the sale, click 'Yes' " +
+																	 "add the products to your grocery list",
+																	 new SpecialSaleHandler(specialSale));
+						catalogProduct.setSpecialSale(specialSale);
+					}
+				}
+				if (registeredCustomer != null)
 					
 					Platform.runLater(new Runnable() {
 						@Override
@@ -423,13 +460,33 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		smartcodeScannedHandler();
 	}
 
+	Map<Sale, Boolean> getTakenSales() {
+		if (registeredCustomer != null) {
+			HashMap<Long, CartProduct> shoppingList = customer.getCartProductCache();
+			HashMap<Sale, Boolean> specialSales = registeredCustomer.getSpecialSales();
+			
+			for (Sale sale : specialSales.keySet()) {
+				if (shoppingList.containsKey(sale.getProductBarcode()) &&
+					shoppingList.get(sale.getProductBarcode()).getTotalAmount() > sale.getAmountOfProducts()) {
+					specialSales.put(sale, true);
+				} else {
+					specialSales.put(sale, false);
+				}
+			}
+			
+			return specialSales;
+		}
+		return new HashMap<Sale, Boolean>();
+	}
+	
 	@Override
 	public void onYes() {
 		try {
 			if (flag) 
 				customer.logout();
-			else 
-				customer.checkOutGroceryList(new HashMap<Sale, Boolean>());
+			else {
+				customer.checkOutGroceryList(getTakenSales());
+			}
 			
 		} catch (SMException e) {
 			log.fatal(e);

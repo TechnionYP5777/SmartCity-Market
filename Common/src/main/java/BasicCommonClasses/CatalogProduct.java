@@ -22,6 +22,7 @@ public class CatalogProduct {
 	String imageUrl;
 	HashSet<Location> locations;
 	Sale sale;
+	Sale specialSale;
 	
 	public CatalogProduct(long barcode, String name, HashSet<Ingredient> ingredients, Manufacturer manufacturer,
 			String description, double price, String imageUrl, HashSet<Location> locations) {
@@ -34,6 +35,7 @@ public class CatalogProduct {
 		this.imageUrl = imageUrl;
 		this.locations = locations;
 		this.sale = new Sale();
+		this.specialSale = new Sale();
 	}
 
 	public CatalogProduct() {
@@ -143,6 +145,14 @@ public class CatalogProduct {
 
 	public void setSale(Sale sale) {
 		this.sale = sale;
+	}
+	
+	public Sale getSpecialSale() {
+		return specialSale;
+	}
+
+	public void setSpecialSale(Sale specialSale) {
+		this.specialSale = specialSale;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package CustomerContracts;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import BasicCommonClasses.CustomerProfile;
@@ -50,4 +51,8 @@ public interface IRegisteredCustomer extends ICustomer {
 	Sale getSpecailSaleForProduct(Long barcode) throws CriticalError, CustomerNotConnected, InvalidParameter, ProductCatalogDoesNotExist;
 	
 	Sale offerSpecailSaleForProduct(Sale s) throws CriticalError, CustomerNotConnected, InvalidParameter, ProductCatalogDoesNotExist;
+	
+	void addSpecialSale(Sale sale, Boolean isTaken);
+
+	HashMap<Sale, Boolean> getSpecialSales();
 }

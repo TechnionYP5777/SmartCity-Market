@@ -3,9 +3,14 @@ package CommandHandler;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipFile;
 
 import org.apache.log4j.Logger;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
@@ -809,9 +814,13 @@ public class CommandExecuter {
 	}
 
 	private void checkoutGroceryList(SQLDatabaseConnection c) {
+		Map<Sale, Boolean> specialSaleTaken;
+
 		log.info("Checkout Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
 
 		try {
+			specialSaleTaken = new Gson().fromJson(inCommandWrapper.getData(), new TypeToken<Map<Sale, Boolean>>() {}.getType());
+			
 			c.cartCheckout(inCommandWrapper.getSenderID());
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);
@@ -906,7 +915,7 @@ public class CommandExecuter {
 		log.info("Remove worker " + username + " from system finished");
 	}
 	
-	private void getAllWorkers(SQLDatabaseConnection c) {
+	private void getAllWorkers(SQLDatabaseConnection c) {		
 		log.info("Get all workers from serderID " + inCommandWrapper.getSenderID() + " command called");
 		
 		try {

@@ -1,6 +1,7 @@
 package CustomerImplementations;
 
 import java.net.SocketTimeoutException;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import com.google.inject.Inject;
@@ -28,6 +29,8 @@ import SMExceptions.CommonExceptions.CriticalError;
  */
 public class RegisteredCustomer extends Customer implements IRegisteredCustomer {
 
+	HashMap<Sale, Boolean> specialSales = new HashMap<Sale, Boolean>();
+	
 	@Inject
 	public RegisteredCustomer(IClientRequestHandler clientRequestHandler) {
 		super(clientRequestHandler);
@@ -182,5 +185,15 @@ public class RegisteredCustomer extends Customer implements IRegisteredCustomer 
 		log.info("offerSpecailSaleForProduct command succeed.");
 
 		return Serialization.deserialize(commandWrapper.getData(), Sale.class);
+	}
+	
+	@Override
+	public void addSpecialSale(Sale s, Boolean isTaken) {
+		specialSales.put(s, isTaken);
+	}
+	
+	@Override
+	public HashMap<Sale, Boolean> getSpecialSales() {
+		return specialSales;
 	}
 }

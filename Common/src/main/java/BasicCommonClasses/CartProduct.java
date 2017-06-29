@@ -10,7 +10,7 @@ public class CartProduct {
 	CatalogProduct catalogProduct;
 	HashMap<SmartCode,ProductPackage> packages;
 	int totalAmount;
-	
+
 	public CartProduct(CatalogProduct catalogProduct, HashMap<SmartCode,ProductPackage> packages,
 			int totalAmount) {
 		this.catalogProduct = catalogProduct;
@@ -68,7 +68,7 @@ public class CartProduct {
 		totalAmount -= p.getAmount();
 		return true;
 	}
-	
+		
 	public double getTotalSum() {
 		return totalAmount * catalogProduct.getPrice();
 	}

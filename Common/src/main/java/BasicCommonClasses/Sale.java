@@ -66,4 +66,14 @@ public class Sale {
 	public boolean isValid() {
 		return id != -1;
 	}
+	
+	@Override
+	public int hashCode() {
+		return Integer.hashCode(id);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return o == this || (o != null && getClass() == o.getClass() && id == ((Sale) o).id);
+	}
 }
