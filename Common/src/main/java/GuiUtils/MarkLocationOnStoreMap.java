@@ -29,7 +29,9 @@ public class MarkLocationOnStoreMap {
     private GraphicsContext gc2;
     private ChoiceBox<?> cb;
     private int width = 400;
-    private int hieght = width;    
+    private int hieght = width;
+    private Integer x;
+    private Integer y;
 
     private void createLayers(){
 
@@ -47,22 +49,24 @@ public class MarkLocationOnStoreMap {
     }
 
     private void handleLayers(){
-        // Handler for Layer 1
-        layer1.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {          
-                gc1.fillOval(e.getX(),e.getY(),20,20);
-            }
-        });
-
-         // Handler for Layer 2
-        layer2.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-            	gc2.clearRect(0, 0, width, hieght);
-                gc2.fillOval(e.getX() - 10, e.getY() - 10, 20, 20);
-            }
-        });
+    	if (x != null || y != null) {
+			gc2.clearRect(0, 0, width, hieght);
+			gc2.fillOval(x - 10, y - 10, 20, 20);
+		} else {
+			layer1.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent e) {
+					gc1.fillOval(e.getX(), e.getY(), 20, 20);
+				}
+			});
+			layer2.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent e) {
+					gc2.clearRect(0, 0, width, hieght);
+					gc2.fillOval(e.getX() - 10, e.getY() - 10, 20, 20);
+				}
+			});
+		}
     }
 
     private void addLayers(){
@@ -76,10 +80,15 @@ public class MarkLocationOnStoreMap {
         root.getChildren().add(borderPane);
     }
 
+    public Group run(int xLocation, int yLocation){
+    	this.x = Integer.valueOf(xLocation);
+    	this.y = Integer.valueOf(yLocation);
+    	return run();
+    }
+
     public Group run() {
-        
-    	System.out.println(System.getProperty("user.dir")+"");
-        // Build GUI
+
+    	// Build GUI
         borderPane = new BorderPane();  
         root = new Group();
         createLayers();
