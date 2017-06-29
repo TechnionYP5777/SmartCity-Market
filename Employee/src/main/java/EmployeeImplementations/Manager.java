@@ -394,8 +394,8 @@ public class Manager extends Worker implements IManager {
 	}
 
 	@Override
-	public Sale createNewSale(Sale sale)
-			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDAlreadyExists {
+	public Integer createNewSale(Sale sale)
+			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure {
 		log.info("Creating createNewSale command wrapper with Sale: " + sale);
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(getClientId(), CommandDescriptor.CREATE_NEW_SALE, Serialization.serialize(sale)))
@@ -416,7 +416,7 @@ public class Manager extends Worker implements IManager {
 
 		log.info("createNewSale command succeed.");
 		
-		return Serialization.deserialize(commandDescriptor.getData(), Sale.class);
+		return Serialization.deserialize(commandDescriptor.getData(), Integer.class);
 	}
 
 	@Override
@@ -443,7 +443,7 @@ public class Manager extends Worker implements IManager {
 	}
 
 	@Override
-	public Map<Integer, Sale> getAllSales()
+	public List<Sale> getAllSales()
 			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure {
 		log.info("Creating getAllSales command wrapper");
 		String serverResponse = sendRequestWithRespondToServer(
@@ -464,6 +464,6 @@ public class Manager extends Worker implements IManager {
 		
 		log.info("getAllSales command succeed.");
 		
-		return new Gson().fromJson(commandDescriptor.getData(), new TypeToken<HashMap<Integer, Sale>>(){}.getType());
+		return new Gson().fromJson(commandDescriptor.getData(), new TypeToken<List<Sale>>(){}.getType());
 	}
 }

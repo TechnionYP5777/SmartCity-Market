@@ -237,7 +237,8 @@ public interface IManager extends IWorker {
 	 * @throws ConnectionFailure 
 	 * @throws ParamIDAlreadyExists 
 	 */
-	Sale createNewSale(Sale sale) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDAlreadyExists;
+
+	Integer createNewSale(Sale sale) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure;
 	
 	/**
 	 * Manager removes sale..
@@ -263,5 +264,5 @@ public interface IManager extends IWorker {
 	 * @throws CriticalError 
 	 * @throws ConnectionFailure 
 	 */
-	Map<Integer, Sale> getAllSales() throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure;
+	List<Sale> getAllSales() throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure;
 }
