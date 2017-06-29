@@ -17,8 +17,8 @@ public class AboutToExpireLateStorePackageProperty extends ABasicProperty {
 	public static int maxDaysThreshold = minDaysThreshold + 30; // days time
 	
 
-	long diff; //holds the diff (in days) between the current date and the product's E.D (the ABS value)
-	IStorePackage storePackage;
+	private long diff; //holds the diff (in days) between the current date and the product's E.D (the ABS value)
+	private IStorePackage storePackage;
 	
 	
 	public AboutToExpireLateStorePackageProperty(long diff, IStorePackage storePackage) {
@@ -31,6 +31,14 @@ public class AboutToExpireLateStorePackageProperty extends ABasicProperty {
 		super(rule);
 		this.diff = diff;
 		this.storePackage = storePackage;
+	}
+
+	public long getDiff() {
+		return diff;
+	}
+
+	public IStorePackage getStorePackage() {
+		return storePackage;
 	}
 
 	@Override

@@ -19,8 +19,8 @@ public class AboutToExpireSoonStorePackageProperty extends ABasicProperty {
 	public static int threshold = 14; // 2 days time
 	public static int numOfTop = 25;
 
-	int diff; //holds the diff (in days) between the current date and the product's E.D (the ABS value)
-	IStorePackage storePackage;
+	private int diff; //holds the diff (in days) between the current date and the product's E.D (the ABS value)
+	private IStorePackage storePackage;
 
 	public AboutToExpireSoonStorePackageProperty(IStorePackage storePackage) {
 		super();

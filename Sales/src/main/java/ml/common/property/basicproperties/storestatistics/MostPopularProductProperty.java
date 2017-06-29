@@ -14,8 +14,8 @@ public class MostPopularProductProperty extends ABasicProperty  {
 
 	public static int numOfTop = 50;
 	
-	long amount;
-	IProduct product;
+	private long amount;
+	private IProduct product;
 	
 	
 	public MostPopularProductProperty(IProduct product, long amount) {

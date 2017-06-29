@@ -15,8 +15,8 @@ public class MostPopularManufacturerProperty extends ABasicProperty {
 	
 	public static int numOfTop = 25;
 	
-	long amount;
-	IManufacturer manufacturer;
+	private long amount;
+	private IManufacturer manufacturer;
 
 	public MostPopularManufacturerProperty(IManufacturer manufacturer, long amount) {
 		super();

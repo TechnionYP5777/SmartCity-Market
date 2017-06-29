@@ -7,8 +7,8 @@ import ml.deducer.deductionrules.ADeductionRule;
 public class LastPopularProductProperty extends ABasicProperty {
 public static int numOfBottom = 50;
 	
-	long amount;
-	IProduct product;
+	private long amount;
+	private IProduct product;
 	
 	
 	public LastPopularProductProperty(IProduct product, long amount) {

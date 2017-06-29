@@ -29,7 +29,7 @@ public class HealthyRatedProductProperty extends ABasicProperty {
 
 	private static int intersectionSizeToBeRatedHealthy = 1;
 	
-	IProduct product;
+	private IProduct product;
 	
 	public HealthyRatedProductProperty(IProduct product) {
 		this.product = product;
