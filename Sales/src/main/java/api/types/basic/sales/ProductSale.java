@@ -1,4 +1,4 @@
-package api.types.sales;
+package api.types.basic.sales;
 
 import api.contracts.IProduct;
 

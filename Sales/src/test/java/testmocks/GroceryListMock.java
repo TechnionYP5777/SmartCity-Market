@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import api.contracts.IGroceryList;
-import api.types.sales.ASale;
+import api.types.basic.sales.ASale;
 
 public class GroceryListMock implements IGroceryList {
 

@@ -3,10 +3,12 @@ package ml.extractor.dataminers;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
@@ -19,10 +21,12 @@ import api.contracts.IProduct;
 import api.contracts.IStorePackage;
 import api.preferences.InputPreferences;
 import api.types.StoreData;
+import api.types.basic.CombinedStorePackage;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireLateStorePackageProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireSoonStorePackageProperty;
 import ml.common.property.basicproperties.storestatistics.HealthyRatedProductProperty;
+import ml.common.property.basicproperties.storestatistics.HighRatioAmountExpirationTimeProperty;
 import ml.common.property.basicproperties.storestatistics.LastPopularProductProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularManufacturerProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
@@ -50,6 +54,7 @@ public class StoreStatisticsMiner extends AMiner {
 		result.addAll(extractLastPopularProducts());
 		result.addAll(extractAboutToExpireSoonStorePackages());
 		result.addAll(extractAboutToExpireLateStorePackages());
+		result.addAll(extractHighRatioAmountExpirationTime());
 		result.addAll(extractMostPopularManufacturers());
 		result.addAll(extractHealthyRatedProducts());
 		
@@ -177,6 +182,44 @@ public class StoreStatisticsMiner extends AMiner {
 					.collect(Collectors.toSet());
 
 		return aboutToExpireStorePackages;
+	}
+	
+	/**
+	 * this methods generate property of the products that have high ratio of (amount in store/time to expire)
+	 * (the threshold of ratio is in {@link HighRatioAmountExpirationTimeProperty}
+	 * 
+	 * @return
+	 */
+	private Set<? extends ABasicProperty> extractHighRatioAmountExpirationTime() {
+
+		LocalDate currentDate = LocalDate.now();
+
+		//canceling the difference of place  
+		List <CombinedStorePackage> storePackages = getStock().stream()
+				.map((IStorePackage sp) -> new CombinedStorePackage(sp))
+				.collect(Collectors.toList());
+		
+		//summarize the packages with the same barcode and expiration date
+		Map<CombinedStorePackage, IntSummaryStatistics> storePackagesSum  = storePackages.stream()
+				.collect(Collectors.groupingBy((CombinedStorePackage sp) -> sp, 
+						Collectors.summarizingInt((CombinedStorePackage sp) -> sp.getAmount())));
+		
+		storePackages = storePackages.stream().map((sp) ->
+			new CombinedStorePackage(sp.getProduct(), sp.getExpirationDate(), (int) storePackagesSum.get(sp).getSum()))
+				.collect(Collectors.toList());
+		
+		
+		Set<HighRatioAmountExpirationTimeProperty> highRatioPackages = 
+				storePackages.stream()
+					.map(sp -> {
+						long periodInDays = ChronoUnit.DAYS.between(currentDate, sp.getExpirationDate());
+						double ratio = periodInDays == 0 ? 0 : sp.getAmount() / (double) periodInDays;
+						return new HighRatioAmountExpirationTimeProperty(ratio, sp);
+					})
+					.filter((p) -> p.getRatio() >= HighRatioAmountExpirationTimeProperty.ratioThreshold)
+					.collect(Collectors.toSet());
+
+		return highRatioPackages;
 	}
 	
 	/**

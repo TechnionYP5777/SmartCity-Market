@@ -16,17 +16,21 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import api.contracts.IStorePackage;
+import api.types.Place;
 import api.types.StoreData;
+import api.types.basic.CombinedStorePackage;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireLateStorePackageProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireSoonStorePackageProperty;
 import ml.common.property.basicproperties.storestatistics.HealthyRatedProductProperty;
+import ml.common.property.basicproperties.storestatistics.HighRatioAmountExpirationTimeProperty;
 import ml.common.property.basicproperties.storestatistics.LastPopularProductProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularManufacturerProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
 import testmocks.DBMock;
 import testmocks.GroceryListMock;
 import testmocks.GroceryPackageMock;
+import testmocks.ProductMock;
 import testmocks.StockMockBuilder;
 import testmocks.StorePackageMock;
 
@@ -131,8 +135,7 @@ public class StoreStatisticsMinerTest {
 		
 		StorePackageMock packageAboutToExpiredLate = new StorePackageMock(
 				2, LocalDate.now().plusDays(AboutToExpireLateStorePackageProperty.minDaysThreshold + 5));
-		long diffOfProduct = ChronoUnit.DAYS.between(LocalDate.now(),
-				LocalDate.now().plusDays(AboutToExpireLateStorePackageProperty.minDaysThreshold + 5));
+		long diffOfProduct = ChronoUnit.DAYS.between(LocalDate.now(), packageAboutToExpiredLate.getExpirationDate());
 		
 		List<StorePackageMock> stock = new StockMockBuilder()
 				.addPackage(1, LocalDate.now().plusDays(2))
@@ -148,6 +151,70 @@ public class StoreStatisticsMinerTest {
 
 		assertEquals(1, totalAboutToExpireLatePackages);
 		assertTrue(result.contains(new AboutToExpireLateStorePackageProperty(diffOfProduct, packageAboutToExpiredLate)));
+
+	}
+	
+	@Test
+	public void testHighRatioAmountExpirationProperty() {
+		
+		StorePackageMock highRatioPackage = new StorePackageMock(2,
+				5, LocalDate.now().plusDays(5), Place.STORE);
+		double ratio = (double) highRatioPackage.getAmount() /
+				ChronoUnit.DAYS.between(LocalDate.now(),highRatioPackage.getExpirationDate());
+		
+		List<StorePackageMock> stock = new StockMockBuilder()
+				.addPackage(1, LocalDate.now().plusDays(10))
+				.addPackage(highRatioPackage)
+				.build();
+		
+		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDateByStock(stock),
+				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+
+		long totalAboutToExpireLatePackages = result.stream()
+				.filter(p -> p instanceof HighRatioAmountExpirationTimeProperty).count();
+
+		assertEquals(1, totalAboutToExpireLatePackages);
+		assertTrue(result.contains(new HighRatioAmountExpirationTimeProperty(ratio,
+				new CombinedStorePackage(highRatioPackage))));
+
+	}
+	
+	@Test
+	public void testHighRatioCombinePackages() {
+		
+		StorePackageMock highRatioStorePackage = new StorePackageMock(2,
+				5, LocalDate.now().plusDays(5), Place.STORE);
+		StorePackageMock highRatioWarehousePackage = new StorePackageMock(2,
+				5, LocalDate.now().plusDays(5), Place.WAREHOUSE);
+		double ratio = ((double) highRatioStorePackage.getAmount() + highRatioWarehousePackage.getAmount()) /
+				ChronoUnit.DAYS.between(LocalDate.now(),highRatioStorePackage.getExpirationDate());
+		
+		List<StorePackageMock> stock = new StockMockBuilder()
+				.addPackage(1, LocalDate.now().plusDays(10))
+				.addPackage(highRatioStorePackage)
+				.addPackage(highRatioWarehousePackage)
+				.build();
+		
+		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDateByStock(stock),
+				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+
+		long totalAboutToExpireLatePackages = result.stream()
+				.filter(p -> p instanceof HighRatioAmountExpirationTimeProperty).count();
+
+		assertEquals(1, totalAboutToExpireLatePackages);
+		for (ABasicProperty aBasicProperty : result) {
+			if (aBasicProperty instanceof HighRatioAmountExpirationTimeProperty){
+				int am;
+				am = ((HighRatioAmountExpirationTimeProperty)aBasicProperty).getCombinedPackage().getAmount();
+				aBasicProperty.equals(new HighRatioAmountExpirationTimeProperty(ratio,
+				new CombinedStorePackage(highRatioStorePackage.getProduct(), highRatioStorePackage.getExpirationDate(),
+						10)));
+			}
+			
+		}
+		assertTrue(result.contains(new HighRatioAmountExpirationTimeProperty(ratio,
+				new CombinedStorePackage(highRatioStorePackage.getProduct(), highRatioStorePackage.getExpirationDate(),
+						10))));
 
 	}
 	
