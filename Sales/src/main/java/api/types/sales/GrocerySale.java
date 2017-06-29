@@ -1,4 +1,4 @@
-package api.types.basic.sales;
+package api.types.sales;
 
 public class GrocerySale extends ASale {
 

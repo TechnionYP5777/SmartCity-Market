@@ -7,7 +7,7 @@ import api.contracts.IGroceryPackage;
 import api.contracts.IProduct;
 import api.contracts.IStorePackage;
 import api.types.StoreData;
-import api.types.basic.sales.ASale;
+import api.types.sales.ASale;
 
 public class Suggestor {
 	private volatile static StoreData storeData;

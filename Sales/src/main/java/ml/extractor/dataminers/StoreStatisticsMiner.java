@@ -21,7 +21,7 @@ import api.contracts.IProduct;
 import api.contracts.IStorePackage;
 import api.preferences.InputPreferences;
 import api.types.StoreData;
-import api.types.basic.CombinedStorePackage;
+import ml.common.basiccalsses.CombinedStorePackage;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireLateStorePackageProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireSoonStorePackageProperty;

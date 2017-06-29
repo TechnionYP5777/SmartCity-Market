@@ -3,7 +3,7 @@ package api.contracts;
 import java.time.LocalDate;
 import java.util.Set;
 
-import api.types.basic.sales.ASale;
+import api.types.sales.ASale;
 
 public interface IGroceryList {
 	String getBuyer();

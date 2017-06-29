@@ -1,4 +1,4 @@
-package api.types.basic;
+package ml.common.basiccalsses;
 
 import java.time.LocalDate;
 

@@ -1,7 +1,7 @@
 package ml.common.property.basicproperties.storestatistics;
 
 import api.contracts.IStorePackage;
-import api.types.basic.CombinedStorePackage;
+import ml.common.basiccalsses.CombinedStorePackage;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.deducer.deductionrules.ADeductionRule;
 
