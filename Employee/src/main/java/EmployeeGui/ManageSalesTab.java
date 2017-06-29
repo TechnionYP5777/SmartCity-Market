@@ -115,13 +115,19 @@ public class ManageSalesTab implements Initializable {
 	
 	@FXML
 	private void addProductSalePressed(ActionEvent event) {
-		try {
-			manager.createNewSale(new Sale(-1, currentCatalogProduct.getBarcode(), Integer.parseInt(amount.getText()),Double.parseDouble(price.getText())));
-		} catch (SMException e) {
-			log.fatal(e);
-			log.debug(StackTraceUtil.stackTraceToStr(e));
-			e.showInfoToUser();
-		}
+	
+			try {
+				manager.createNewSale(new Sale(-1, currentCatalogProduct.getBarcode(), Integer.parseInt(amount.getText()),Double.parseDouble(price.getText())));
+			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure
+					| NumberFormatException e) {
+			
+				log.fatal(e);
+				log.debug(StackTraceUtil.stackTraceToStr(e));
+				// TODO
+				//e.showInfoToUser();
+			
+			}
+	
 		createSingleList();
 		enableAddSaleButton();
 		enableRemoveButtons();
@@ -131,6 +137,7 @@ public class ManageSalesTab implements Initializable {
 	@FXML
 	void searchClicked(MouseEvent event) {
 		showProductDetails();
+		enableProductDetailAndSale(true);
 	}
 
 	@Override
@@ -142,6 +149,7 @@ public class ManageSalesTab implements Initializable {
 		barcodeField.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (!newValue.matches("\\d*")) 
 				barcodeField.setText(newValue.replaceAll("[^\\d]", ""));
+			enableProductDetailAndSale(false);
 			clearData();
 			enableAddSaleButton();
 			searchIcon.setDisable(barcodeField.getText().isEmpty());
@@ -192,7 +200,7 @@ public class ManageSalesTab implements Initializable {
 		createSingleList();
 
 		amount.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (!newValue.matches("[1-9]\\d*"))
+			if (!newValue.matches("[1-9]\\d*") && !newValue.isEmpty())
 				amount.setText(oldValue);
 			enableAddSaleButton();
 		});
@@ -206,10 +214,17 @@ public class ManageSalesTab implements Initializable {
 		enableAddSaleButton();
 		enableRemoveButtons();
 		searchIcon.setDisable(barcodeField.getText().isEmpty());
+		enableProductDetailAndSale(false);
+	}
+	
+	private void enableProductDetailAndSale(boolean enable) {
+		amount.setDisable(!enable);
+		price.setDisable(!enable);
 	}
 	
 	private void clearData() {
 		currentCatalogProduct = null;
+		barcodeField.setText("");
 		amount.setText("");
 		price.setText("");
 		productNamelbl.setText("N/A");
@@ -244,7 +259,7 @@ public class ManageSalesTab implements Initializable {
 		String ret = "Error with sale id: ";
 		try {
 			CatalogProduct p = manager.viewProductFromCatalog(sale.getProductBarcode());
-			ret = "Product: " + p.getName() + " with barcode: " + p.getBarcode() + "Has " + sale.getSaleAsString();
+			ret = "Product: " + p.getName() + " with barcode: " + p.getBarcode() + " Has " + sale.getSaleAsString();
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog
 				| ConnectionFailure e) {
 			log.fatal(e);
