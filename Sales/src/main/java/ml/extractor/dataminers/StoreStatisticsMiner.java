@@ -174,7 +174,7 @@ public class StoreStatisticsMiner extends AMiner {
 						return periodInDays >= AboutToExpireLateStorePackageProperty.minDaysThreshold  && 
 								periodInDays <= AboutToExpireLateStorePackageProperty.maxDaysThreshold;
 					}).map(sp -> new AboutToExpireLateStorePackageProperty(
-							ChronoUnit.DAYS.between(currentDate, sp.getExpirationDate()), sp))
+							sp))
 					.collect(Collectors.toSet());
 
 		return aboutToExpireStorePackages;

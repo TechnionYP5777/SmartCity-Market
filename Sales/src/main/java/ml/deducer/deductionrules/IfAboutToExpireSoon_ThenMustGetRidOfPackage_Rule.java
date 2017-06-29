@@ -26,7 +26,7 @@ public class IfAboutToExpireSoon_ThenMustGetRidOfPackage_Rule extends ADeduction
 
 	@Override
 	public boolean canDeduceProperty(AProperty property) {
-		return property instanceof AboutToExpireSoonStorePackageProperty;
+		return property instanceof MustGetRidOfPackageProperty;
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class IfAboutToExpireSoon_ThenMustGetRidOfPackage_Rule extends ADeduction
 		if (!canDeduceProperty(property))
 			return null;
 		
-		AboutToExpireSoonStorePackageProperty actualProperty = (AboutToExpireSoonStorePackageProperty) property;
+		MustGetRidOfPackageProperty actualProperty = (MustGetRidOfPackageProperty) property;
 		
 		Set<AProperty> result = new HashSet<>();
 		result.add(new AboutToExpireSoonStorePackageProperty(actualProperty.getStorePackage()));
@@ -42,7 +42,7 @@ public class IfAboutToExpireSoon_ThenMustGetRidOfPackage_Rule extends ADeduction
 		return result;
 	}
 	
-	private double difftoUrgency(double diff){
+	private static double difftoUrgency(double diff){
 		double urgency = diff / AboutToExpireSoonStorePackageProperty.threshold;
 		urgency = 1 - urgency;
 		return urgency;

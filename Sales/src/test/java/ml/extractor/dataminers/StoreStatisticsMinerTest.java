@@ -148,7 +148,7 @@ public class StoreStatisticsMinerTest {
 				.filter(p -> p instanceof AboutToExpireLateStorePackageProperty).count();
 
 		assertEquals(1, totalAboutToExpireLatePackages);
-		assertTrue(result.contains(new AboutToExpireLateStorePackageProperty(diffOfProduct, packageAboutToExpiredLate)));
+		assertTrue(result.contains(new AboutToExpireLateStorePackageProperty(packageAboutToExpiredLate)));
 
 	}
 	

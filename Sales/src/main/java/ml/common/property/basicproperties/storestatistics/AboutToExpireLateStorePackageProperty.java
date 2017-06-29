@@ -1,5 +1,8 @@
 package ml.common.property.basicproperties.storestatistics;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 import api.contracts.IStorePackage;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.deducer.deductionrules.ADeductionRule;
@@ -21,15 +24,15 @@ public class AboutToExpireLateStorePackageProperty extends ABasicProperty {
 	private IStorePackage storePackage;
 	
 	
-	public AboutToExpireLateStorePackageProperty(long diff, IStorePackage storePackage) {
+	public AboutToExpireLateStorePackageProperty(IStorePackage storePackage) {
 		super();
-		this.diff = diff;
+		this.diff = ChronoUnit.DAYS.between(LocalDate.now(), storePackage.getExpirationDate());
 		this.storePackage = storePackage;
 	}
 	
-	public AboutToExpireLateStorePackageProperty(long diff, IStorePackage storePackage, ADeductionRule rule) {
+	public AboutToExpireLateStorePackageProperty(IStorePackage storePackage, ADeductionRule rule) {
 		super(rule);
-		this.diff = diff;
+		this.diff = ChronoUnit.DAYS.between(LocalDate.now(), storePackage.getExpirationDate());;
 		this.storePackage = storePackage;
 	}
 

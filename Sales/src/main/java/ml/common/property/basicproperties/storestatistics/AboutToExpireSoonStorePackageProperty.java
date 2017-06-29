@@ -2,6 +2,7 @@ package ml.common.property.basicproperties.storestatistics;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 
 import api.contracts.IStorePackage;
 import ml.common.property.basicproperties.ABasicProperty;
@@ -24,13 +25,13 @@ public class AboutToExpireSoonStorePackageProperty extends ABasicProperty {
 
 	public AboutToExpireSoonStorePackageProperty(IStorePackage storePackage) {
 		super();
-		this.diff = Period.between(LocalDate.now(), storePackage.getExpirationDate()).getDays();
+		this.diff = (int) ChronoUnit.DAYS.between(LocalDate.now(), storePackage.getExpirationDate());
 		this.storePackage = storePackage;
 	}
 	
 	public AboutToExpireSoonStorePackageProperty(IStorePackage storePackage, ADeductionRule rule) {
 		super(rule);
-		this.diff = Period.between(LocalDate.now(), storePackage.getExpirationDate()).getDays();
+		this.diff = (int) ChronoUnit.DAYS.between(LocalDate.now(), storePackage.getExpirationDate());
 		this.storePackage = storePackage;
 	}
 
