@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +29,6 @@ import ml.common.property.basicproperties.storestatistics.MostPopularProductProp
 import testmocks.DBMock;
 import testmocks.GroceryListMock;
 import testmocks.GroceryPackageMock;
-import testmocks.ProductMock;
 import testmocks.StockMockBuilder;
 import testmocks.StorePackageMock;
 
@@ -202,16 +200,6 @@ public class StoreStatisticsMinerTest {
 				.filter(p -> p instanceof HighRatioAmountExpirationTimeProperty).count();
 
 		assertEquals(1, totalAboutToExpireLatePackages);
-		for (ABasicProperty aBasicProperty : result) {
-			if (aBasicProperty instanceof HighRatioAmountExpirationTimeProperty){
-				int am;
-				am = ((HighRatioAmountExpirationTimeProperty)aBasicProperty).getCombinedPackage().getAmount();
-				aBasicProperty.equals(new HighRatioAmountExpirationTimeProperty(ratio,
-				new CombinedStorePackage(highRatioStorePackage.getProduct(), highRatioStorePackage.getExpirationDate(),
-						10)));
-			}
-			
-		}
 		assertTrue(result.contains(new HighRatioAmountExpirationTimeProperty(ratio,
 				new CombinedStorePackage(highRatioStorePackage.getProduct(), highRatioStorePackage.getExpirationDate(),
 						10))));
@@ -249,7 +237,6 @@ public class StoreStatisticsMinerTest {
 		assertEquals(expectedAmountOfHealthyRatedProductProperties, numOfHealthyRatedProductProperties);
 	}
 
-	@SuppressWarnings("unused")
 	@Test
 	public void testStoreStatisticsMiner() {
 		new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),

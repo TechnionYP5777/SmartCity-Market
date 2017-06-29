@@ -1,6 +1,5 @@
 package ml.extractor.dataminers;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.IntSummaryStatistics;
@@ -8,9 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.time.LocalDate;
 
@@ -30,7 +27,6 @@ import ml.common.property.basicproperties.storestatistics.HighRatioAmountExpirat
 import ml.common.property.basicproperties.storestatistics.LastPopularProductProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularManufacturerProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
-import testmocks.StorePackageMock;
 
 /**
  * 
