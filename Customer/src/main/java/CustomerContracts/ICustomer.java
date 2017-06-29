@@ -2,6 +2,7 @@ package CustomerContracts;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
@@ -108,7 +109,7 @@ public interface ICustomer {
 	 * @throws CustomerNotConnected 
 	 * @throws GroceryListIsEmpty 
 	 */
-	Double checkOutGroceryList() throws CriticalError, CustomerNotConnected, GroceryListIsEmpty;
+	Double checkOutGroceryList(Map<Sale, Boolean> specialSaleTaken) throws CriticalError, CustomerNotConnected, GroceryListIsEmpty;
 
 	CartProduct getCartProduct(SmartCode c);
 

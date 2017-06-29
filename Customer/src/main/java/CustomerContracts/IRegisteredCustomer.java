@@ -4,6 +4,7 @@ import java.util.HashSet;
 
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.Ingredient;
+import BasicCommonClasses.Sale;
 import CustomerContracts.ACustomerExceptions.*;
 import SMExceptions.CommonExceptions.CriticalError;
 
@@ -45,4 +46,8 @@ public interface IRegisteredCustomer extends ICustomer {
 	 * 
 	 */
 	HashSet<Ingredient> getCustomerAllergens();
+	
+	Sale getSpecailSaleForProduct(Long barcode) throws CriticalError, CustomerNotConnected, InvalidParameter, ProductCatalogDoesNotExist;
+	
+	Sale offerSpecailSaleForProduct(Sale s) throws CriticalError, CustomerNotConnected, InvalidParameter, ProductCatalogDoesNotExist;
 }

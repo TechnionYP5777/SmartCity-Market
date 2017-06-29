@@ -744,4 +744,40 @@ public enum CommandDescriptor {
 	 *	 ***** NOTES *****
 	 */
 	GET_SALE_FOR_PRODUCT,
+	
+	/**
+	 * Description: get special sale for product - the sale is activated only for the given customer..
+	 * param1: barcode.
+	 * retval: sale.
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *			PARAM_ID_IS_NOT_EXIST,
+	 *
+	 *	 ***** NOTES *****
+	 */
+	GET_SPECIAL_SALE_FOR_PRODUCT,
+	
+	/**
+	 * Description: the customer offer the system a special sale for product - the sale is activated only for the given customer.
+	 * param1: Sale.
+	 * retval: Sale - with valid ID if the system accept the offer, else returns Sale().
+	 *
+	 * result_codes:
+	 * 		success:
+	 * 			SM_OK,
+	 * 		
+	 * 		failure:
+	 *			SM_SENDER_IS_NOT_CONNECTED,
+	 *	 		SM_INVALID_PARAMETER,
+	 *			PARAM_ID_IS_NOT_EXIST, (when product doesn't exist)
+	 *
+	 *	 ***** NOTES *****
+	 */
+	OFFER_SPECIAL_SALE_FOR_PRODUCT,
 }

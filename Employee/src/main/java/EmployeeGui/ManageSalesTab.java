@@ -308,8 +308,6 @@ public class ManageSalesTab implements Initializable {
 		enableRemoveButtons();
 	}
 
-
-
 	@Subscribe
 	public void barcodeScanned(BarcodeScanEvent ¢) {
 		Platform.runLater(new Runnable() {

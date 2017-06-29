@@ -19,6 +19,7 @@ import com.jfoenix.controls.JFXTextField;
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
+import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
 import CustomerContracts.ICustomer;
 import CustomerContracts.IRegisteredCustomer;
@@ -419,7 +420,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			if (flag) 
 				customer.logout();
 			else 
-				customer.checkOutGroceryList();
+				customer.checkOutGroceryList(new HashMap<Sale, Boolean>());
 			
 		} catch (SMException e) {
 			log.fatal(e);

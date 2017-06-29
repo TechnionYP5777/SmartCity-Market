@@ -1606,6 +1606,47 @@ public class CommandExecuter {
 		log.info("Get sale for product command system finished for barcode " + barcode);
 	}
 	
+	private void getSpecialSaleForProduct(SQLDatabaseConnection c) {
+		Long barcode;
+		
+		log.info("Get special sale for product command called with from serderID " + inCommandWrapper.getSenderID() + " command called");
+		
+		try {
+			barcode = Serialization.deserialize(inCommandWrapper.getData(), Long.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Is free customer username command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+		
+		//TODO Noam - call SQL here
+
+
+		log.info("Get special sale for product command system finished for barcode " + barcode);
+	}
+	
+	private void offerSpecialSaleForProduct(SQLDatabaseConnection c) {
+		Sale sale;
+		
+		log.info("Offer special sale for product command called with from serderID " + inCommandWrapper.getSenderID() + " command called");
+		
+		try {
+			sale = Serialization.deserialize(inCommandWrapper.getData(), Sale.class);
+		} catch (java.lang.RuntimeException e) {
+			log.fatal("Failed to parse data for Is free customer username command");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+
+			return;
+		}
+		
+		//TODO Noam - call SQL here
+
+		log.info("Offer special sale for product command system finished for sale " + sale);
+	}
+	
 	private void getAllExpiredProductPackages(SQLDatabaseConnection c) {
 		log.info("Get all expired product packages from serderID " + inCommandWrapper.getSenderID() + " command called");
 		
@@ -1836,7 +1877,17 @@ public class CommandExecuter {
 		case GET_ALL_EXPIRED_PRODUCT_PACKAGES:
 			getAllExpiredProductPackages(c);
 			
-			break;		
+			break;
+			
+		case GET_SPECIAL_SALE_FOR_PRODUCT:
+			getSpecialSaleForProduct(c);
+			
+			break;
+
+		case OFFER_SPECIAL_SALE_FOR_PRODUCT:
+			offerSpecialSaleForProduct(c);
+			
+			break;
 			
 		default:
 			try {

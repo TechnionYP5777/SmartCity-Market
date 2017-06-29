@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.util.HashMap;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import BasicCommonClasses.Sale;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
@@ -49,7 +51,7 @@ public class CheckoutGroceryListTest {
 		}
 		
 		try {
-			customer.checkOutGroceryList();
+			customer.checkOutGroceryList(new HashMap<Sale, Boolean>());
 		} catch (CriticalError | CustomerNotConnected | GroceryListIsEmpty e) {
 			fail();
 		}
@@ -66,7 +68,7 @@ public class CheckoutGroceryListTest {
 		}
 		
 		try {
-			customer.checkOutGroceryList();
+			customer.checkOutGroceryList(new HashMap<Sale, Boolean>());
 		} catch (CustomerNotConnected | GroceryListIsEmpty e) {
 			fail();
 		} catch (CriticalError __) {
@@ -85,7 +87,7 @@ public class CheckoutGroceryListTest {
 		}
 		
 		try {
-			customer.checkOutGroceryList();
+			customer.checkOutGroceryList(new HashMap<Sale, Boolean>());
 		} catch (CriticalError | GroceryListIsEmpty e) {
 			fail();
 		} catch (CustomerNotConnected __) {
@@ -104,7 +106,7 @@ public class CheckoutGroceryListTest {
 		}
 		
 		try {
-			customer.checkOutGroceryList();
+			customer.checkOutGroceryList(new HashMap<Sale, Boolean>());
 		} catch (CriticalError | CustomerNotConnected e) {
 			fail();
 		} catch (GroceryListIsEmpty __) {
@@ -123,7 +125,7 @@ public class CheckoutGroceryListTest {
 		}
 		
 		try {
-			customer.checkOutGroceryList();
+			customer.checkOutGroceryList(new HashMap<Sale, Boolean>());
 		} catch (GroceryListIsEmpty | CustomerNotConnected e) {
 			fail();
 		} catch (CriticalError __) {
@@ -142,7 +144,7 @@ public class CheckoutGroceryListTest {
 		}
 		
 		try {
-			customer.checkOutGroceryList();
+			customer.checkOutGroceryList(new HashMap<Sale, Boolean>());
 		} catch (GroceryListIsEmpty | CustomerNotConnected e) {
 			fail();
 		} catch (CriticalError __) {

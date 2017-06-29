@@ -5,6 +5,7 @@ import java.net.SocketTimeoutException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -432,7 +433,7 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 	}
 
 	@Override
-	public Double checkOutGroceryList() throws CriticalError, CustomerNotConnected, GroceryListIsEmpty {
+	public Double checkOutGroceryList(Map<Sale, Boolean> specialSaleTaken) throws CriticalError, CustomerNotConnected, GroceryListIsEmpty {
 		String serverResponse;
 		Double totalSum = getTotalSum();
 
