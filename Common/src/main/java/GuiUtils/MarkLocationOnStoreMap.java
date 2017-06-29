@@ -32,11 +32,11 @@ public class MarkLocationOnStoreMap {
     private int hieght = width;    
 
     private void createLayers(){
-        
+
         // Layers 1&2 are the same size
         layer1 = new Canvas(width, hieght);
         layer2 = new Canvas(width,hieght);
-        
+
         // Obtain Graphics Contexts
         gc1 = layer1.getGraphicsContext2D();
         Image img = new Image(GuiCommonDefs.storeMapPicPath, width, hieght, true, true);
@@ -45,7 +45,7 @@ public class MarkLocationOnStoreMap {
         gc2.setFill(Color.BLUE);
         gc2.fillOval(100,100,20,20);
     }
-    
+
     private void handleLayers(){
         // Handler for Layer 1
         layer1.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
@@ -54,7 +54,7 @@ public class MarkLocationOnStoreMap {
                 gc1.fillOval(e.getX(),e.getY(),20,20);
             }
         });
-        
+
          // Handler for Layer 2
         layer2.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -64,7 +64,7 @@ public class MarkLocationOnStoreMap {
             }
         });
     }
-    
+
     private void addLayers(){
         // Add Layers
         borderPane.setTop(cb);        
