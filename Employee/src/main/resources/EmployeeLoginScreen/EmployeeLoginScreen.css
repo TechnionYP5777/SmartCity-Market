@@ -52,17 +52,6 @@
 	-fx-text-fill: blue;
 }
 
-.thisJFXButton {
-	-fx-font-size: 20px;
-}
-
-.thisJFXTextField {
-	-fx-font-size: 20;
-}
-
-.thisJFXPasswordField {
-	-fx-font-size: 20;
-}
 
 #inputGridPane {
 	-fx-background-radius: 16px, 0 ;

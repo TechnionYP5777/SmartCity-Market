@@ -3,7 +3,6 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
@@ -21,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeLoginScreen">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmployeeGui.EmployeeLoginScreen">
    <children>
       <GridPane fx:id="loginScreenPane" alignment="CENTER">
          <columnConstraints>
@@ -61,18 +60,8 @@
                         </Lighting>
                      </effect>
                   </Separator>
-                  <JFXTextField fx:id="userNameTextField" onAction="#loginButtonPressed" promptText="User Name">
-                     <styleClass>
-                        <String fx:value="thisJFXTextField" />
-                        <String fx:value="JFXTextField" />
-                     </styleClass>
-                  </JFXTextField>
-                  <JFXPasswordField fx:id="passwordField" onAction="#loginButtonPressed" promptText="Password">
-                     <styleClass>
-                        <String fx:value="JFXPasswordField" />
-                        <String fx:value="thisJFXPasswordField" />
-                     </styleClass>
-                  </JFXPasswordField>
+                  <JFXTextField fx:id="userNameTextField" onAction="#loginButtonPressed" promptText="User Name" styleClass="JFXTextField" />
+                  <JFXPasswordField fx:id="passwordField" onAction="#loginButtonPressed" promptText="Password" styleClass="JFXPasswordField" />
                   <GridPane>
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -97,12 +86,7 @@
                               </Label>
                            </children>
                         </VBox>
-                        <JFXButton fx:id="loginButton" onAction="#loginButtonPressed" text="Login" GridPane.columnIndex="1">
-                           <styleClass>
-                              <String fx:value="JFXButton" />
-                              <String fx:value="thisJFXButton" />
-                           </styleClass>
-                        </JFXButton>
+                        <JFXButton fx:id="loginButton" onAction="#loginButtonPressed" styleClass="JFXButton" text="Login" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                   <JFXButton onAction="#loginAsAdmin" styleClass="JFXButton" text="Login as admin" />

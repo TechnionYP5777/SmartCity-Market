@@ -29,6 +29,7 @@
 	-fx-font-family: "serif";
 	-fx-prompt-text-fill: #164F4F;
 	-fx-text-fill: #164F4F;
+	-fx-font-size: 15;
 }
 
 .JFXRadioButton {
