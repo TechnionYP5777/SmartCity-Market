@@ -23,7 +23,7 @@ public class StorePackageMock implements IStorePackage {
 	public StorePackageMock(long barcode, LocalDate ed){
 		super();
 		this.product = new ProductMock(barcode);
-		this.amount = -1;
+		this.amount = 1;
 		this.expirationDate = ed;
 		this.place = null;
 	}

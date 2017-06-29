@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import api.contracts.IStorePackage;
 import api.preferences.InputPreferences;
+import api.types.StoreData;
 
 public class DBMock {
 
@@ -50,4 +52,17 @@ public class DBMock {
 	public static InputPreferences getInputPref(){
 		return new InputPreferences();
 	}
+	
+	public static StoreData getStoreDateByHistory(List<GroceryListMock> history){
+		return new StoreData(history, new ArrayList<StorePackageMock>(), DBMock.getCatalog());
+	}
+	
+	public static StoreData getStoreDateByStock(List<StorePackageMock> stock){
+		return new StoreData(new ArrayList<GroceryListMock>(), stock, DBMock.getCatalog());
+	}
+	
+	public static StoreData getStoreDate(List<GroceryListMock> history ,List<StorePackageMock> stock){
+		return new StoreData(history, stock, DBMock.getCatalog());
+	}
+	
 }

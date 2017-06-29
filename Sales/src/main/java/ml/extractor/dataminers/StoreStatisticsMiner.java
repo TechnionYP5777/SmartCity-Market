@@ -1,5 +1,6 @@
 package ml.extractor.dataminers;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.time.LocalDate;
 
 import api.contracts.IGroceryList;
@@ -18,11 +20,13 @@ import api.contracts.IStorePackage;
 import api.preferences.InputPreferences;
 import api.types.StoreData;
 import ml.common.property.basicproperties.ABasicProperty;
+import ml.common.property.basicproperties.storestatistics.AboutToExpireLateStorePackageProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireSoonStorePackageProperty;
 import ml.common.property.basicproperties.storestatistics.HealthyRatedProductProperty;
 import ml.common.property.basicproperties.storestatistics.LastPopularProductProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularManufacturerProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
+import testmocks.StorePackageMock;
 
 /**
  * 
@@ -45,6 +49,7 @@ public class StoreStatisticsMiner extends AMiner {
 		result.addAll(extractMostPopularProducts());
 		result.addAll(extractLastPopularProducts());
 		result.addAll(extractAboutToExpireSoonStorePackages());
+		result.addAll(extractAboutToExpireLateStorePackages());
 		result.addAll(extractMostPopularManufacturers());
 		result.addAll(extractHealthyRatedProducts());
 		
@@ -74,7 +79,8 @@ public class StoreStatisticsMiner extends AMiner {
 					return new MostPopularProductProperty(entry.getKey(), entry.getValue());
 				}).collect(Collectors.toList());
 
-		return new HashSet<>(ProductsOrederdByPopularity.subList(0, MostPopularProductProperty.numOfTop));
+		return new HashSet<>(ProductsOrederdByPopularity.subList(0, 
+				Math.min(MostPopularProductProperty.numOfTop, ProductsOrederdByPopularity.size())));
 
 	}
 	
@@ -101,7 +107,8 @@ public class StoreStatisticsMiner extends AMiner {
 					return new LastPopularProductProperty(entry.getKey(), entry.getValue());
 				}).collect(Collectors.toList());
 
-		return new HashSet<>(ProductsOrederdByPopularity.subList(0, LastPopularProductProperty.numOfBottom));
+		return new HashSet<>(ProductsOrederdByPopularity.subList(0, 
+				Math.min(LastPopularProductProperty.numOfBottom, ProductsOrederdByPopularity.size())));
 
 	}
 
@@ -119,7 +126,7 @@ public class StoreStatisticsMiner extends AMiner {
 		List<? extends IStorePackage> aboutToExpireStorePackages = 
 				getStock()
 					.stream()
-					.filter(sp -> Period.between(currentDate, sp.getExpirationDate()).getDays() <= AboutToExpireSoonStorePackageProperty.threshold)
+					.filter(sp -> ChronoUnit.DAYS.between(currentDate, sp.getExpirationDate()) <= AboutToExpireSoonStorePackageProperty.threshold)
 					.collect(Collectors.toList());
 		
 		List<AboutToExpireSoonStorePackageProperty> storePackagesOrderedByDiff =
@@ -144,7 +151,32 @@ public class StoreStatisticsMiner extends AMiner {
 					})
 					.collect(Collectors.toList());
 
-		return new HashSet<>(storePackagesOrderedByDiff.subList(0, AboutToExpireSoonStorePackageProperty.numOfTop));
+		return new HashSet<>(storePackagesOrderedByDiff.subList(0, 
+				Math.min(AboutToExpireSoonStorePackageProperty.numOfTop, storePackagesOrderedByDiff.size())));
+	}
+	
+	/**
+	 * this methods generate property of the products that are about to expire late
+	 * (the threshold of "about to expire products late" to extract is in {@link AboutToExpireLateStorePackageProperty}
+	 * 
+	 * @return
+	 */
+	private Set<? extends ABasicProperty> extractAboutToExpireLateStorePackages() {
+
+		LocalDate currentDate = LocalDate.now();
+
+		Set<AboutToExpireLateStorePackageProperty> aboutToExpireStorePackages = 
+				getStock()
+					.stream()
+					.filter(sp -> {
+						long periodInDays = ChronoUnit.DAYS.between(currentDate, sp.getExpirationDate());
+						return periodInDays >= AboutToExpireLateStorePackageProperty.minDaysThreshold  && 
+								periodInDays <= AboutToExpireLateStorePackageProperty.maxDaysThreshold;
+					}).map(sp -> new AboutToExpireLateStorePackageProperty(
+							ChronoUnit.DAYS.between(currentDate, sp.getExpirationDate()), sp))
+					.collect(Collectors.toSet());
+
+		return aboutToExpireStorePackages;
 	}
 	
 	/**
@@ -174,7 +206,8 @@ public class StoreStatisticsMiner extends AMiner {
 					return new MostPopularManufacturerProperty(entry.getKey(), entry.getValue());
 				}).collect(Collectors.toList());
 
-		return new HashSet<>(manufacturersOrederdByPopularity.subList(0, MostPopularManufacturerProperty.numOfTop));
+		return new HashSet<>(manufacturersOrederdByPopularity.subList(0, 
+				Math.min(MostPopularManufacturerProperty.numOfTop, manufacturersOrederdByPopularity.size())));
 	}
 	
 	

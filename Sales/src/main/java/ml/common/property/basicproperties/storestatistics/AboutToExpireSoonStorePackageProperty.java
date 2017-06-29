@@ -12,7 +12,7 @@ import ml.deducer.deductionrules.ADeductionRule;
  *
  * @since Jun 13, 2017
  * 
- *        This class represents a property of an "about to expire" product.
+ *        This class represents a property of an "about to expire soon" product.
  */
 public class AboutToExpireSoonStorePackageProperty extends ABasicProperty {
 

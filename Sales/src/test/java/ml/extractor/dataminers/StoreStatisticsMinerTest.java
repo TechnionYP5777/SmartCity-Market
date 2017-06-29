@@ -3,7 +3,9 @@ package ml.extractor.dataminers;
 import static org.junit.Assert.*;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -16,6 +18,7 @@ import org.junit.Test;
 import api.contracts.IStorePackage;
 import api.types.StoreData;
 import ml.common.property.basicproperties.ABasicProperty;
+import ml.common.property.basicproperties.storestatistics.AboutToExpireLateStorePackageProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireSoonStorePackageProperty;
 import ml.common.property.basicproperties.storestatistics.HealthyRatedProductProperty;
 import ml.common.property.basicproperties.storestatistics.LastPopularProductProperty;
@@ -24,6 +27,7 @@ import ml.common.property.basicproperties.storestatistics.MostPopularProductProp
 import testmocks.DBMock;
 import testmocks.GroceryListMock;
 import testmocks.GroceryPackageMock;
+import testmocks.StockMockBuilder;
 import testmocks.StorePackageMock;
 
 /**
@@ -119,6 +123,31 @@ public class StoreStatisticsMinerTest {
 			 else
 				 assertTrue(result.contains(new AboutToExpireSoonStorePackageProperty(spm)));
 		}
+
+	}
+	
+	@Test
+	public void testAboutToExpireLateProperty() {
+		
+		StorePackageMock packageAboutToExpiredLate = new StorePackageMock(
+				2, LocalDate.now().plusDays(AboutToExpireLateStorePackageProperty.minDaysThreshold + 5));
+		long diffOfProduct = ChronoUnit.DAYS.between(LocalDate.now(),
+				LocalDate.now().plusDays(AboutToExpireLateStorePackageProperty.minDaysThreshold + 5));
+		
+		List<StorePackageMock> stock = new StockMockBuilder()
+				.addPackage(1, LocalDate.now().plusDays(2))
+				.addPackage(packageAboutToExpiredLate)
+				.addPackage(3, LocalDate.now().plusDays(AboutToExpireLateStorePackageProperty.maxDaysThreshold + 5))
+				.build();
+		
+		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDateByStock(stock),
+				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+
+		long totalAboutToExpireLatePackages = result.stream()
+				.filter(p -> p instanceof AboutToExpireLateStorePackageProperty).count();
+
+		assertEquals(1, totalAboutToExpireLatePackages);
+		assertTrue(result.contains(new AboutToExpireLateStorePackageProperty(diffOfProduct, packageAboutToExpiredLate)));
 
 	}
 	
