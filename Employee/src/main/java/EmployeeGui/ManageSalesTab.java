@@ -18,6 +18,7 @@ import EmployeeContracts.IManager;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
 import EmployeeDefs.AEmployeeException.InvalidParameter;
+import EmployeeDefs.AEmployeeException.ParamIDAlreadyExists;
 import EmployeeDefs.AEmployeeException.ParamIDDoesNotExist;
 import EmployeeDefs.AEmployeeException.ParamIDStillInUse;
 import EmployeeDefs.AEmployeeException.ProductNotExistInCatalog;
@@ -118,8 +119,7 @@ public class ManageSalesTab implements Initializable {
 	
 			try {
 				manager.createNewSale(new Sale(-1, currentCatalogProduct.getBarcode(), Integer.parseInt(amount.getText()),Double.parseDouble(price.getText())));
-			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure
-					| NumberFormatException e) {
+			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
 			
 				log.fatal(e);
 				log.debug(StackTraceUtil.stackTraceToStr(e));

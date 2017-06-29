@@ -229,7 +229,7 @@ public interface IManager extends IWorker {
 	/**
 	 * Manager creates new sale..
 	 * 
-	 * @param sale - sale to create
+	 * @param s - sale to create
 	 * @return Integer - Sale with ID
 	 * @throws EmployeeNotConnected 
 	 * @throws InvalidParameter 
@@ -238,7 +238,7 @@ public interface IManager extends IWorker {
 	 * @throws ParamIDAlreadyExists 
 	 */
 
-	Integer createNewSale(Sale sale) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure;
+	Integer createNewSale(Sale s) throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDAlreadyExists;
 	
 	/**
 	 * Manager removes sale..

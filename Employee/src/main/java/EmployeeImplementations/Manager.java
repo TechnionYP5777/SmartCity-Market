@@ -394,7 +394,7 @@ public class Manager extends Worker implements IManager {
 
 	@Override
 	public Integer createNewSale(Sale sale)
-			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure {
+			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDAlreadyExists {
 		log.info("Creating createNewSale command wrapper with Sale: " + sale);
 		String serverResponse = sendRequestWithRespondToServer(
 				(new CommandWrapper(getClientId(), CommandDescriptor.CREATE_NEW_SALE, Serialization.serialize(sale)))
@@ -407,7 +407,7 @@ public class Manager extends Worker implements IManager {
 		} catch (InvalidCommandDescriptor | EmployeeAlreadyConnected | AuthenticationError | ProductStillForSale
 				| AmountBiggerThanAvailable | ProductPackageDoesNotExist | ProductAlreadyExistInCatalog | ProductNotExistInCatalog 
 			    | WorkerAlreadyExists | ParamIDDoesNotExist | WorkerDoesNotExist | IngredientStillInUse | ManfacturerStillInUse |
-			    ParamIDAlreadyExists | ParamIDStillInUse ¢) {
+			      ParamIDStillInUse ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 			
 			throw new CriticalError();
