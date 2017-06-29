@@ -49,7 +49,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -251,6 +250,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		DialogMessagesService.showConfirmationDialog("Already Leaving?", null, "", this);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(customerMainScreenPane);
@@ -288,12 +288,21 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 		productsListView.depthProperty().set(1);
 		productsListView.setExpanded(true);
-		
-		allerList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		allerList.setStyle("-fx-background-color: transparent;");
-		
+				
 		allerList.depthProperty().set(1);
 		allerList.setExpanded(true);
+		allerList.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                    	allerList.getSelectionModel().select(-1);
+
+                    }
+                });
+
+            }
+        });
 		
 		
 		setAbilityAndVisibilityOfProductInfoPane(false);

@@ -28,10 +28,14 @@ import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.SmartCode;
 import EmployeeContracts.IWorker;
+import EmployeeDefs.AEmployeeException.ConnectionFailure;
+import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
+import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeGuiContracts.CatalogProductEvent;
 import EmployeeImplementations.Manager;
 import GuiUtils.DialogMessagesService;
 import GuiUtils.RadioButtonEnabler;
+import SMExceptions.CommonExceptions.CriticalError;
 import SMExceptions.SMException;
 import SmartcodeParser.SmartcodePrint;
 import UtilsContracts.BarcodeScanEvent;
@@ -291,6 +295,14 @@ public class ManagePackagesTab implements Initializable {
 		remove.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent __) {
+				// TODO remove
+				popupExpired.hide();
+			}
+		});
+
+		close.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent __) {
 				popupExpired.hide();
 			}
 		});
@@ -356,25 +368,29 @@ public class ManagePackagesTab implements Initializable {
 
 	}
 	
-	HashMap<String, Ingredient> expireds;
+	HashMap<SmartCode, ProductPackage> expireds;
 	
 	ObservableList<String> dataExpireds;
 
 	FilteredList<String> filteredDataExpireds;
 	
 	private void createExpiredList() {
-		expireds = new HashMap<String, Ingredient>();
-//		try {
-//			worker.getAllIngredients().forEach(ingredient -> expireds.put(ingredient.getName(), ingredient));
-//		} catch (InvalidParameter | CriticalError | ConnectionFailure e) {
-//			log.fatal(e);
-//			log.debug(StackTraceUtil.stackTraceToStr(e));
-//			e.showInfoToUser();
-//		}
+		expireds = new HashMap<SmartCode, ProductPackage>();
+
+			try {
+				worker.getAllExpiredProductPackages().forEach(expired -> {
+					expireds.put(expired.getSmartCode(), expired);
+				});
+			} catch (ConnectionFailure | CriticalError | InvalidParameter | EmployeeNotConnected e) {
+				log.fatal(e);
+				log.debug(StackTraceUtil.stackTraceToStr(e));
+				e.showInfoToUser();;
+			}
+	
 
 		dataExpireds = FXCollections.observableArrayList();
 
-		dataExpireds.setAll(expireds.keySet());
+		//dataExpireds.setAll(expireds.keySet());
 
 		filteredDataExpireds = new FilteredList<>(dataExpireds, s -> true);
 
