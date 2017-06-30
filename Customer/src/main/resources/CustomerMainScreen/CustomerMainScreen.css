@@ -14,3 +14,8 @@
 .productDetailsLabel {
 	-fx-font-size: 15;
 }
+
+
+.listNoBorder {
+	-fx-padding: 0px;
+}

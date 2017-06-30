@@ -24,6 +24,7 @@ import com.jfoenix.controls.JFXPopup.PopupVPosition;
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.Ingredient;
+import BasicCommonClasses.Location;
 import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
 import CustomerContracts.ICustomer;
@@ -33,6 +34,7 @@ import CustomerGuiHelpers.TempCustomerPassingData;
 import CustomerGuiHelpers.TempRegisteredCustomerPassingData;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
+import GuiUtils.MarkLocationOnStoreMap;
 import SMExceptions.CommonExceptions.CriticalError;
 import SMExceptions.SMException;
 import UtilsContracts.IBarcodeEventHandler;
@@ -144,7 +146,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	@FXML
 	JFXTextField searchCatalogProduct;
-	
+
 	@FXML
 	HBox toShowCatalog;
 
@@ -166,31 +168,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	IBarcodeEventHandler barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
 
 	HashSet<CatalogProduct> marketCatalog;
-
-	/**
-	 * 
-	 * @author idan atias
-	 *
-	 * @since Jun 30, 2017
-	 * 
-	 * this class is used for fetching the catalog from server async
-	 */
-
-	
-//TODO	private class FetchMarketCatalog extends Thread{ 
-//
-//		@Override
-//		public void run(){
-//			if (customer != null)
-//				try {
-//					marketCatalog = customer.getMarketCatalog();
-//				} catch (CriticalError e) {
-//					log.error("ERROR while trying to fetch market catalog from server");
-//					log.error(e + "");
-//				}
-//		}
-//	}
-
 
 	/**
 	 * the productInfoPane has three visible mode: 0 - Invisible (default) 1 -
@@ -253,7 +230,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			manufacturerLabel.setText(p.getManufacturer().getName());
 			priceLabel.setText(String.format("%1$.2f", p.getPrice()));
 			amountLabel.setText(amount != null ? amount + "" : "N/A");
-			descriptionTextArea.setText(scannedSmartCode.getExpirationDate() + "");
+			descriptionTextArea.setText(amount != null ? scannedSmartCode.getExpirationDate() + "" : "N/A");
 			allerList.getItems().clear();
 			p.getIngredients().forEach(ingr -> {
 				allerList.getItems().add(ingr.getName());
@@ -272,18 +249,10 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			productNameLabel.setText("N/A");
 			manufacturerLabel.setText("N/A");
 			priceLabel.setText("N/A");
-			amountLabel.setText(amount + "");
+			amountLabel.setText("N/A");
 			descriptionTextArea.setText("N/A");
 			allerList.getItems().clear();
 			saleLbl.setText("N/A");
-			URL imageUrl = null;
-//			try {
-//				imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI()
-//						.toURL();
-//			} catch (MalformedURLException e) {
-//				throw new RuntimeException();
-//			}
-//			productInfoImage.setImage(new Image(imageUrl + "", 290, 230, true, false));
 			showLocation.setDisable(true);
 		}
 	}
@@ -326,10 +295,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		registeredCustomer = TempRegisteredCustomerPassingData.regCustomer;
 		customer = TempCustomerPassingData.customer != null ? TempCustomerPassingData.customer
 				: TempRegisteredCustomerPassingData.regCustomer;
-
-//		//fetch catalog product from server async TODO
-//		new FetchMarketCatalog().start();
-
+		
 		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
 
 		searchField.textProperty().addListener(obs -> {
@@ -352,7 +318,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 			@Override
 			public void changed(ObservableValue<? extends CartProduct> __, CartProduct oldValue, CartProduct newValue) {
-				updateProductInfoPaine(newValue.getCatalogProduct(), newValue.getTotalAmount(),
+				catalogProduct = newValue.getCatalogProduct();
+				updateProductInfoPaine(catalogProduct, newValue.getTotalAmount(),
 						ProductInfoPaneVisibleMode.PRESSED_PRODUCT);
 
 			}
@@ -375,6 +342,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 			}
 		});
+		
 
 		Label lbl1 = new Label("Expired Products");
 		JFXButton close = new JFXButton("Close");
@@ -407,38 +375,30 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 			@Override
 			public void handle(MouseEvent event) {
-				CatalogProduct p = null;
-				p = catalogs.get(catalogList.getSelectionModel().getSelectedItem());
-	
-				// Location loc = p.getLocations().iterator().next();
-				// DialogMessagesService.showConfirmationWithCloseDialog("Product
-				// Location Is: " + "(col=" + loc.getX() + ", row=" + loc.getY()
-				// + ")", null ,
-				// new MarkLocationOnStoreMap().run(loc.getX(), loc.getY()), new
-				// LocationMapClose());
+				catalogProduct = catalogs.get(catalogList.getSelectionModel().getSelectedItem());
 				catalogPopup.hide();
-				// TODO Show details
+				updateProductInfoPaine(catalogProduct, null, ProductInfoPaneVisibleMode.FROM_CATALOG);
 			}
-
 		});
 
 		catalogList.setDepth(1);
 		catalogList.setExpanded(true);
-		
+
 		searchCatalogProduct.textProperty().addListener(obs -> {
 			String filter = searchCatalogProduct.getText();
-			filteredDataCatalogs.setPredicate(filter == null || filter.length() == 0 ? s -> true : s -> s.contains(filter));
+			filteredDataCatalogs
+					.setPredicate(filter == null || filter.length() == 0 ? s -> true : s -> s.contains(filter));
 			if (filter.isEmpty() || catalogList.getItems().isEmpty()) {
 				catalogPopup.hide();
 			} else {
 				catalogPopup.show(toShowCatalog, PopupVPosition.TOP, PopupHPosition.LEFT);
 			}
-			
+
 		});
-	
+
 		createCatalogList();
 	}
-	
+
 	private void createCatalogList() {
 
 		catalogs = new HashMap<String, CatalogProduct>();
@@ -460,6 +420,14 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		filteredDataCatalogs = new FilteredList<>(dataCatalogs, s -> true);
 
 		catalogList.setItems(filteredDataCatalogs);
+	}
+
+	@FXML
+	void onLocationPressed(ActionEvent event) {
+		Location loc = catalogProduct.getLocations().iterator().next();
+		DialogMessagesService.showConfirmationWithCloseDialog(
+				"Product Location Is: " + "(col=" + loc.getX() + ", row=" + loc.getY() + ")", null,
+				new MarkLocationOnStoreMap().run(loc.getX(), loc.getY()), null);
 	}
 
 	@FXML
@@ -606,6 +574,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	public void smartcodeScanned(SmartcodeScanEvent ¢) {
 		SmartCode smartCode = ¢.getSmarCode();
 		scannedSmartCode = smartCode;
+ 
 		smartcodeScannedHandler();
 	}
 
@@ -661,6 +630,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	@FXML
 	void forceScanProduct2(ActionEvent __) {
-		smartcodeScanned(new SmartcodeScanEvent(new SmartCode(1234, LocalDate.now())));
+		smartcodeScanned(new SmartcodeScanEvent(new SmartCode(0000, LocalDate.now())));
 	}
 }
