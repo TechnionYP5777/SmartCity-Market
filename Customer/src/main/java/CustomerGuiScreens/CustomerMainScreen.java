@@ -125,6 +125,9 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	@FXML
 	ImageView removeButton;
+	
+	@FXML 
+	ImageView specialSaleImg;
 
 	@FXML
 	Button removeAllButton;
@@ -149,6 +152,9 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	@FXML
 	HBox toShowCatalog;
+	
+	@FXML
+	Label saleTxtLbl;
 
 	@FXML
 	JFXButton showLocation;
@@ -221,7 +227,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 					.containsKey(scannedSmartCode);
 		removeButton.setDisable(!flag);
 		removeButton.setVisible(flag);
-
 	}
 
 	private void updateProductInfoTexts(CatalogProduct p, Integer amount) {
@@ -235,7 +240,15 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			p.getIngredients().forEach(ingr -> {
 				allerList.getItems().add(ingr.getName());
 			});
-			saleLbl.setText(p.getSale().getSaleAsString());
+			
+			if (p.getSpecialSale().getSaleAsString().equals("No sale avaiable for this item")) {
+				saleLbl.setText(p.getSale().getSaleAsString());
+				specialSaleImg.setVisible(true);
+			} else {
+				saleLbl.setText(p.getSpecialSale().getSaleAsString());
+				specialSaleImg.setVisible(false);
+			}
+			productInfoImage.setVisible(true);
 			URL imageUrl = null;
 			try {
 				imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI()
@@ -252,7 +265,9 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			amountLabel.setText("N/A");
 			descriptionTextArea.setText("N/A");
 			allerList.getItems().clear();
+			productInfoImage.setVisible(false);
 			saleLbl.setText("N/A");
+			specialSaleImg.setVisible(false);
 			showLocation.setDisable(true);
 		}
 	}
@@ -344,7 +359,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		});
 		
 
-		Label lbl1 = new Label("Expired Products");
+		Label lbl1 = new Label("Catalog Products");
 		JFXButton close = new JFXButton("Close");
 		close.getStyleClass().add("JFXButton");
 
@@ -494,6 +509,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		@Override
 		public void onYes() {
 			registeredCustomer.addSpecialSale(sale, true);
+			
 		}
 
 		@Override

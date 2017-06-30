@@ -67,22 +67,24 @@ public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 		}
 		Image image = new Image(imageUrl + "", 100, 100, true, false);
 		ImageView productImage = new ImageView(image);
-
-		
-		ImageView sale = new ImageView("/CustomerMainScreen/sale.png");
+		ImageView sale;
+		if (enableSpecialSale) {
+			sale = new ImageView("/CustomerMainScreen/ylDRTR05sy6M.gif");
+		} else {
+			 sale = new ImageView("/CustomerMainScreen/sale.png");	
+		}
 		
 		sale.setFitHeight(80);
 		sale.setFitWidth(80);
 				
 		hbx.setSpacing(230);
 		
-		if (enableSale) {					
-		    hbx.getChildren().addAll(vbx, productImage, sale);		
+		if (enableSpecialSale || enableSale) {
+			sale.setVisible(true);
 		} else {
-		    hbx.getChildren().addAll(vbx, productImage);
+			sale.setVisible(false);	
 		}
-	
-
+		hbx.getChildren().addAll(vbx, productImage, sale);		
 		setGraphic(hbx);
 	}
 }
