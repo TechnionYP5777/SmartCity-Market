@@ -29,10 +29,8 @@ import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
 
 /**
- * 
  * @author Lior Ben Ami
  * @since  2017-06-30
- *
  */
 @RunWith(MockitoJUnitRunner.class)
 public class ViewCatalogProduct {
@@ -83,7 +81,7 @@ public class ViewCatalogProduct {
 			fail();
 		}
 		try {
-			testCatalogProduct = customer.viewCatalogProduct(sc);
+			customer.viewCatalogProduct(sc);
 		} catch (CriticalError | CustomerNotConnected  e) {
 			fail();
 		} catch (ProductCatalogDoesNotExist e) {
@@ -104,7 +102,7 @@ public class ViewCatalogProduct {
 		}
 		
 		try {
-			testCatalogProduct = customer.viewCatalogProduct(sc);
+			customer.viewCatalogProduct(sc);
 		} catch (CriticalError | ProductCatalogDoesNotExist e) {
 			fail();
 		} catch (CustomerNotConnected e) {
@@ -123,10 +121,8 @@ public class ViewCatalogProduct {
 			
 			fail();
 		}
-		
-	
 		try {
-			testCatalogProduct = customer.viewCatalogProduct(sc);
+			customer.viewCatalogProduct(sc);
 		} catch (CustomerNotConnected | ProductCatalogDoesNotExist e) {
 			fail();
 		} catch (CriticalError e) {
