@@ -423,7 +423,7 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 				totalSum += numberOfActiveSales * cartProduct.getCatalogProduct().getSale().getPrice()
 						+ (cartProductAmount % saleAmount) * cartProduct.getCatalogProduct().getPrice();
 			} else {
-				totalSum += cartProduct.getTotalAmount() * cartProduct.getCatalogProduct().getPrice();
+				totalSum += (double)cartProduct.getTotalAmount() * cartProduct.getCatalogProduct().getPrice();
 			}
 		
 		return totalSum;
