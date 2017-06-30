@@ -52,9 +52,6 @@ public class ViewCatalogProduct {
 
 	@Test
 	public void ViewCatalogProductSuccessfulTest() {
-		
-		CommandWrapper commandWrapper = new CommandWrapper(ResultDescriptor.SM_OK,
-				Serialization.serialize(catalogProduct));
 		try {
 			Mockito.when(clientRequestHandler.sendRequestWithRespond(
 					new CommandWrapper(CustomerDefs.loginCommandSenderId, CommandDescriptor.VIEW_PRODUCT_FROM_CATALOG,
