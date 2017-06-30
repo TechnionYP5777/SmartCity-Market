@@ -126,5 +126,5 @@ public interface ICustomer {
 	
 	Sale getSaleForProduct(Long barcode) throws CriticalError, CustomerNotConnected, InvalidParameter, ProductCatalogDoesNotExist;
 
-	HashSet<CatalogProduct> getMarketCatalog() throws CriticalError;
+	List<CatalogProduct> getMarketCatalog() throws CriticalError;
 }

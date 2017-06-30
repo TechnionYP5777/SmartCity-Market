@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +59,6 @@ import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 public class Customer extends ACustomer implements ICustomer, IForgotPasswordHandler {
 	
 	protected ForgotPasswordHandler fpHandler;
-	private HashSet<CatalogProduct> catalog;
 	
 	@Inject
 	public Customer(IClientRequestHandler clientRequestHandler) {
@@ -706,24 +704,16 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 	}
 
 	@Override
-	public HashSet<CatalogProduct> getMarketCatalog() throws CriticalError{
-		if (catalog == null)
-			fetchMarketCatalogFromServer();
-		return catalog;
-	}
-
-	@SuppressWarnings("unchecked")
-	private void fetchMarketCatalogFromServer() throws CriticalError {
-		CommandWrapper $ = null;
+	public List<CatalogProduct> getMarketCatalog() throws CriticalError{
 		String serverResponse;
 
-		log.info("Creating customer get market catalog command wrapper with id: " + id);
+		log.info("Creating getMarketCatalog command wrapper");
 
 		establishCommunication(CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
 
 		try {
 			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(id, CommandDescriptor.GET_MARKET_CATALOG)).serialize());
+					new CommandWrapper(id, CommandDescriptor.GET_MARKET_CATALOG).serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 
@@ -732,19 +722,20 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 
 		terminateCommunication();
 
+		CommandWrapper commandWrapper = getCommandWrapper(serverResponse);
+
 		try {
-			$ = getCommandWrapper(serverResponse);
-
-			resultDescriptorHandler($.getResultDescriptor());
-
-			this.catalog = Serialization.deserialize($.getData(), HashSet.class);
-		} catch (InvalidCommandDescriptor | InvalidParameter | ProductCatalogDoesNotExist | AmountBiggerThanAvailable
-				| ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists | ForgotPasswordWrongAnswer | CustomerNotConnected ¢) {
+			resultDescriptorHandler(commandWrapper.getResultDescriptor());
+		} catch (InvalidCommandDescriptor | CriticalError | AmountBiggerThanAvailable | ProductPackageDoesNotExist
+				| GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists | ForgotPasswordWrongAnswer | InvalidParameter |
+				CustomerNotConnected | ProductCatalogDoesNotExist ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");
 
 			throw new CriticalError();
 		}
 
-		log.info("load market catalog from server succeed.");
+		log.info("getMarketCatalog command succeed.");
+
+		return new Gson().fromJson(commandWrapper.getData(), new TypeToken<List<CatalogProduct>>() {}.getType());
 	}
 }

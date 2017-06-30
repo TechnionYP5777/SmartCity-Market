@@ -163,7 +163,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		public void run(){
 			if (customer != null)
 				try {
-					marketCatalog = customer.getMarketCatalog();
+					marketCatalog = new HashSet<CatalogProduct>(customer.getMarketCatalog());
 				} catch (CriticalError e) {
 					log.error("ERROR while trying to fetch market catalog from server");
 					log.error(e + "");
