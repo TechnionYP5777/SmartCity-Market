@@ -71,7 +71,8 @@ public class GetTotalSumAndProductsNumTest {
 		} catch (CriticalError | CustomerNotConnected | AmountBiggerThanAvailable | ProductPackageDoesNotExist | InvalidParameter e) {
 			fail();
 		}
-		assert(customer.getTotalSum().equals(220.0));
+		Double res = customer.getTotalSum(); 
+		assert(res.equals(220.0));
 	}
 	
 	@Test
@@ -90,7 +91,8 @@ public class GetTotalSumAndProductsNumTest {
 		} catch (CriticalError | CustomerNotConnected | AmountBiggerThanAvailable | ProductPackageDoesNotExist | InvalidParameter e) {
 			fail();
 		}
-		assert(customer.getCartProductsNum().equals(10));
+		Integer res = customer.getCartProductsNum();  
+		assert(res.equals(10));
 	}
 
 }
