@@ -737,7 +737,7 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 
 			resultDescriptorHandler($.getResultDescriptor());
 
-			this.catalog = Serialization.deserialize($.getData(), catalog.getClass());
+			this.catalog = Serialization.deserialize($.getData(), HashSet.class);
 		} catch (InvalidCommandDescriptor | InvalidParameter | ProductCatalogDoesNotExist | AmountBiggerThanAvailable
 				| ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists | ForgotPasswordWrongAnswer | CustomerNotConnected ¢) {
 			log.fatal("Critical bug: this command result isn't supposed to return here");

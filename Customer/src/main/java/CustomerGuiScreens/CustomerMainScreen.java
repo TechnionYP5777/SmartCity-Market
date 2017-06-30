@@ -29,6 +29,7 @@ import CustomerGuiHelpers.TempCustomerPassingData;
 import CustomerGuiHelpers.TempRegisteredCustomerPassingData;
 import GuiUtils.AbstractApplicationScreen;
 import GuiUtils.DialogMessagesService;
+import SMExceptions.CommonExceptions.CriticalError;
 import SMExceptions.SMException;
 import UtilsContracts.IBarcodeEventHandler;
 import UtilsContracts.IConfiramtionDialog;
@@ -146,6 +147,30 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	IBarcodeEventHandler barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
 
+	HashSet<CatalogProduct> marketCatalog;
+
+	/**
+	 * 
+	 * @author idan atias
+	 *
+	 * @since Jun 30, 2017
+	 * 
+	 * this class is used for fetching the catalog from server async
+	 */
+	private class FetchMarketCatalog extends Thread{
+
+		@Override
+		public void run(){
+			if (customer != null)
+				try {
+					marketCatalog = customer.getMarketCatalog();
+				} catch (CriticalError e) {
+					log.error("ERROR while trying to fetch market catalog from server");
+					log.error(e + "");
+				}
+		}
+	}
+
 	/**
 	 * the productInfoPane has three visible mode: 0 - Invisible (default) 1 -
 	 * SCANNED_PRODUCT: when the pane present scanned product info and actions 2
@@ -183,7 +208,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		}
 		setAbilityAndVisibilityOfProductInfoPane(true);
 	}
-		
 
 	private void enableRemoveButton() {
 		boolean flag = false;
@@ -250,6 +274,9 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		registeredCustomer = TempRegisteredCustomerPassingData.regCustomer;
 		customer = TempCustomerPassingData.customer != null ? TempCustomerPassingData.customer
 				: TempRegisteredCustomerPassingData.regCustomer;
+
+		//fetch catalog product from server async
+		new FetchMarketCatalog().start();
 
 		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
 
