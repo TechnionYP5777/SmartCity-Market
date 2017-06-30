@@ -19,7 +19,7 @@ public class IfMustGetRidOf_ThenMulFactorSale extends ADeductionRule {
 				.map((MustGetRidOfPackageProperty p) -> {
 					
 					return new ProductSaleByMulFactorProperty(p.getStorePackage(), 1, 
-							p.getUrgency(), preferences.getMaxDiscount());
+							p.getUrgency(), preferences.getMaxDiscount(), this);
 				}).collect(Collectors.toSet());
 		
 		return result;

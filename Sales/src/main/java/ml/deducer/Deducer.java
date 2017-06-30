@@ -9,7 +9,9 @@ import api.preferences.SalesPreferences;
 import ml.common.property.AProperty;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.deducer.deductionrules.ADeductionRule;
+import ml.deducer.deductionrules.IfAboutToExpireLate_ThenMayGetRidOf_Rule;
 import ml.deducer.deductionrules.IfAboutToExpireSoon_ThenMustGetRidOfPackage_Rule;
+import ml.deducer.deductionrules.IfMustGetRidOf_ThenMulFactorSale;
 
 public class Deducer {
 
@@ -19,6 +21,8 @@ public class Deducer {
 		List<ADeductionRule> deductionRules = new ArrayList<>();
 		
 		deductionRules.add(new IfAboutToExpireSoon_ThenMustGetRidOfPackage_Rule());
+		deductionRules.add(new IfAboutToExpireLate_ThenMayGetRidOf_Rule());
+		deductionRules.add(new IfMustGetRidOf_ThenMulFactorSale());
 		
 		return deductionRules;
 	}

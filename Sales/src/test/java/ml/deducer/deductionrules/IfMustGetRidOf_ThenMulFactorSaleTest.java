@@ -12,8 +12,6 @@ import org.junit.Test;
 import api.types.Place;
 import api.types.sales.ProductSale;
 import ml.common.property.AProperty;
-import ml.common.property.basicproperties.storestatistics.AboutToExpireLateStorePackageProperty;
-import ml.common.property.deducedproperties.MayGetRidOfPackageProperty;
 import ml.common.property.deducedproperties.MustGetRidOfPackageProperty;
 import ml.common.property.saleproperty.ProductSaleByMulFactorProperty;
 import testmocks.DBMock;

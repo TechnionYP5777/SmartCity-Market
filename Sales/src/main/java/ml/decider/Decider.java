@@ -8,6 +8,12 @@ import ml.common.property.saleproperty.ASaleProperty;
 public class Decider {
 
 	public static ASaleProperty decideBestSale(SalesPreferences salesPreferences, Set<ASaleProperty> properties){
+		
+		for (ASaleProperty aSaleProperty : properties) {
+			return aSaleProperty;
+		}
+		
+		
 		return null;
 	}
 }
