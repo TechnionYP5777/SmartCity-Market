@@ -63,6 +63,7 @@
                   <HBox alignment="CENTER">
                      <children>
                         <JFXTextField fx:id="searchCatalogProduct" prefHeight="24.0" prefWidth="180.0" promptText="Search Product In Catalog" styleClass="JFXTextField" />
+                        <HBox fx:id="toShowCatalog" />
                      </children>
                      <padding>
                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />

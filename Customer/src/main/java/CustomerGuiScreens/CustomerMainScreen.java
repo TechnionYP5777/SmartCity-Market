@@ -18,6 +18,8 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXPopup.PopupHPosition;
+import com.jfoenix.controls.JFXPopup.PopupVPosition;
 
 import BasicCommonClasses.CartProduct;
 import BasicCommonClasses.CatalogProduct;
@@ -142,6 +144,9 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	@FXML
 	JFXTextField searchCatalogProduct;
+	
+	@FXML
+	HBox toShowCatalog;
 
 	@FXML
 	JFXButton showLocation;
@@ -170,19 +175,22 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	 * 
 	 * this class is used for fetching the catalog from server async
 	 */
-	private class FetchMarketCatalog extends Thread{
 
-		@Override
-		public void run(){
-			if (customer != null)
-				try {
-					marketCatalog = new HashSet<CatalogProduct>(customer.getMarketCatalog());
-				} catch (CriticalError e) {
-					log.error("ERROR while trying to fetch market catalog from server");
-					log.error(e + "");
-				}
-		}
-	}
+	
+//TODO	private class FetchMarketCatalog extends Thread{ 
+//
+//		@Override
+//		public void run(){
+//			if (customer != null)
+//				try {
+//					marketCatalog = customer.getMarketCatalog();
+//				} catch (CriticalError e) {
+//					log.error("ERROR while trying to fetch market catalog from server");
+//					log.error(e + "");
+//				}
+//		}
+//	}
+
 
 	/**
 	 * the productInfoPane has three visible mode: 0 - Invisible (default) 1 -
@@ -191,7 +199,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	 * product info and actions
 	 */
 	private enum ProductInfoPaneVisibleMode {
-		SCANNED_PRODUCT, PRESSED_PRODUCT
+		SCANNED_PRODUCT, PRESSED_PRODUCT, FROM_CATALOG
 	}
 
 	private void addOrRemoveScannedProduct(CatalogProduct p, Integer amount) {
@@ -218,8 +226,14 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			removeButton.setVisible(false);
 			break;
 		}
+		case FROM_CATALOG:
+			removeAllButton.setDisable(false);
+			removeAllButton.setVisible(false);
+			addButton.setDisable(false);
+			addButton.setVisible(false);
+			removeButton.setDisable(false);
+			removeButton.setVisible(false);
 		}
-		setAbilityAndVisibilityOfProductInfoPane(true);
 	}
 
 	private void enableRemoveButton() {
@@ -234,29 +248,44 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	}
 
 	private void updateProductInfoTexts(CatalogProduct p, Integer amount) {
-		productNameLabel.setText(p.getName());
-		manufacturerLabel.setText(p.getManufacturer().getName());
-		priceLabel.setText(String.format("%1$.2f", p.getPrice()));
-		amountLabel.setText(amount + "");
-		descriptionTextArea.setText(scannedSmartCode.getExpirationDate() + "");
-		allerList.getItems().clear();
-		p.getIngredients().forEach(ingr -> {
-			allerList.getItems().add(ingr.getName());
-		});
-		saleLbl.setText(p.getSale().getSaleAsString());
-		URL imageUrl = null;
-		try {
-			imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI()
-					.toURL();
-		} catch (MalformedURLException e) {
-			throw new RuntimeException();
+		if (p != null) {
+			productNameLabel.setText(p.getName());
+			manufacturerLabel.setText(p.getManufacturer().getName());
+			priceLabel.setText(String.format("%1$.2f", p.getPrice()));
+			amountLabel.setText(amount != null ? amount + "" : "N/A");
+			descriptionTextArea.setText(scannedSmartCode.getExpirationDate() + "");
+			allerList.getItems().clear();
+			p.getIngredients().forEach(ingr -> {
+				allerList.getItems().add(ingr.getName());
+			});
+			saleLbl.setText(p.getSale().getSaleAsString());
+			URL imageUrl = null;
+			try {
+				imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI()
+						.toURL();
+			} catch (MalformedURLException e) {
+				throw new RuntimeException();
+			}
+			productInfoImage.setImage(new Image(imageUrl + "", 290, 230, true, false));
+			showLocation.setDisable(false);
+		} else {
+			productNameLabel.setText("N/A");
+			manufacturerLabel.setText("N/A");
+			priceLabel.setText("N/A");
+			amountLabel.setText(amount + "");
+			descriptionTextArea.setText("N/A");
+			allerList.getItems().clear();
+			saleLbl.setText("N/A");
+			URL imageUrl = null;
+//			try {
+//				imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI()
+//						.toURL();
+//			} catch (MalformedURLException e) {
+//				throw new RuntimeException();
+//			}
+//			productInfoImage.setImage(new Image(imageUrl + "", 290, 230, true, false));
+			showLocation.setDisable(true);
 		}
-		productInfoImage.setImage(new Image(imageUrl + "", 290, 230, true, false));
-	}
-
-	private void setAbilityAndVisibilityOfProductInfoPane(boolean visibilty) {
-		productInfoPane.setDisable(!visibilty);
-		productInfoPane.setVisible(visibilty);
 	}
 
 	private void updateCartProductsInfo() {
@@ -298,8 +327,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		customer = TempCustomerPassingData.customer != null ? TempCustomerPassingData.customer
 				: TempRegisteredCustomerPassingData.regCustomer;
 
-		//fetch catalog product from server async
-		new FetchMarketCatalog().start();
+//		//fetch catalog product from server async TODO
+//		new FetchMarketCatalog().start();
 
 		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
 
@@ -395,15 +424,34 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 		catalogList.setDepth(1);
 		catalogList.setExpanded(true);
-
-		setAbilityAndVisibilityOfProductInfoPane(false);
+		
+		searchCatalogProduct.textProperty().addListener(obs -> {
+			String filter = searchCatalogProduct.getText();
+			filteredDataCatalogs.setPredicate(filter == null || filter.length() == 0 ? s -> true : s -> s.contains(filter));
+			if (filter.isEmpty() || catalogList.getItems().isEmpty()) {
+				catalogPopup.hide();
+			} else {
+				catalogPopup.show(toShowCatalog, PopupVPosition.TOP, PopupHPosition.LEFT);
+			}
+			
+		});
+	
+		createCatalogList();
 	}
 	
 	private void createCatalogList() {
 
 		catalogs = new HashMap<String, CatalogProduct>();
 
-		
+		try {
+			customer.getMarketCatalog().forEach(cat -> {
+				catalogs.put(cat.getName() + " Barcode: " + cat.getBarcode(), cat);
+			});
+		} catch (CriticalError e) {
+			log.fatal(e);
+			log.debug(StackTraceUtil.stackTraceToStr(e));
+			e.showInfoToUser();
+		}
 
 		dataCatalogs = FXCollections.observableArrayList();
 
@@ -436,7 +484,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			return;
 		}
 		updateCartProductsInfo();
-		setAbilityAndVisibilityOfProductInfoPane(false);
+		updateProductInfoTexts(null, null);
 	}
 
 	@FXML
@@ -450,7 +498,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			return;
 		}
 		updateCartProductsInfo();
-		setAbilityAndVisibilityOfProductInfoPane(false);
+		updateProductInfoTexts(null, null);
 	}
 
 	@FXML
@@ -464,7 +512,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			return;
 		}
 		updateCartProductsInfo();
-		setAbilityAndVisibilityOfProductInfoPane(false);
+		updateProductInfoTexts(null, null);
 	}
 
 	class SpecialSaleHandler implements IConfiramtionDialog {
