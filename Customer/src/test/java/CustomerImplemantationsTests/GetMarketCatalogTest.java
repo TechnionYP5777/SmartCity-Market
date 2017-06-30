@@ -16,14 +16,10 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import BasicCommonClasses.CatalogProduct;
-import BasicCommonClasses.Sale;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
 import CustomerContracts.ICustomer;
-import CustomerContracts.ACustomerExceptions.CustomerNotConnected;
-import CustomerContracts.ACustomerExceptions.InvalidParameter;
-import CustomerContracts.ACustomerExceptions.ProductCatalogDoesNotExist;
 import CustomerImplementations.Customer;
 import CustomerImplementations.CustomerDefs;
 import SMExceptions.CommonExceptions.CriticalError;
