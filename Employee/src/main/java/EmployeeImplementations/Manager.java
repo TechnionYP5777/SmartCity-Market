@@ -44,7 +44,7 @@ import UtilsImplementations.Serialization;
 /**
  * Manager - This class represent the manager functionality implementation.
  * 
- * @author Aviad Cohen
+ * @author Aviad Cohen, Shimon Azulay
  * @since 2016-12-27
  */
 
