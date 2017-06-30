@@ -4,23 +4,22 @@ import api.contracts.IProduct;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.deducer.deductionrules.ADeductionRule;
 
-public class LastPopularProductProperty extends ABasicProperty {
-	public static int numOfBottom = 50;
+public class LastPopularProductOfCustomerProperty extends ABasicProperty {
+	public static int numOfBottom = 15;
 	
 	private long amount;
 	private IProduct product;
 	
-	
-	public LastPopularProductProperty(IProduct product, long amount) {
-		super();
-		this.amount = amount;
+	public LastPopularProductOfCustomerProperty(IProduct product, long amount, ADeductionRule deducer) {
+		super(deducer);
 		this.product = product;
+		this.amount = amount;
 	}
 	
-	public LastPopularProductProperty(IProduct product, long amount, ADeductionRule rule) {
-		super(rule);
-		this.amount = amount;
+	public LastPopularProductOfCustomerProperty(IProduct product, long amount) {
+		super();
 		this.product = product;
+		this.amount = amount;
 	}
 
 	public long getAmount() {
@@ -47,7 +46,7 @@ public class LastPopularProductProperty extends ABasicProperty {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		LastPopularProductProperty other = (LastPopularProductProperty) obj;
+		LastPopularProductOfCustomerProperty other = (LastPopularProductOfCustomerProperty) obj;
 		if (product == null) {
 			if (other.product != null)
 				return false;
