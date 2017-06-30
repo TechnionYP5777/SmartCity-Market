@@ -108,6 +108,8 @@ public class AddProductToCatalogTest {
 		}
 	}
 	
+	
+	
 	@Test
 	public void AddProductToCatalogEmployeeNotConnectedTest() {
 		try {

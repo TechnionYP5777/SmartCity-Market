@@ -65,6 +65,26 @@ public class RemoveIngredientTest {
 			fail();
 		}
 	}
+	
+	@Test
+	public void ForceRemoveIngredientSuccesfulTest() {
+		try {
+			Mockito.when(clientRequestHandler.sendRequestWithRespond(
+					new CommandWrapper(WorkerDefs.loginCommandSenderId, CommandDescriptor.FORCE_REMOVE_INGREDIENT,
+							Serialization.serialize(newIngredient)).serialize()))
+					.thenReturn(new CommandWrapper(ResultDescriptor.SM_OK).serialize());
+		} catch (IOException e) {
+			
+			fail();
+		}
+		
+		try {
+			manager.removeIngredient(newIngredient, true);
+		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDDoesNotExist | IngredientStillInUse e1) {
+			
+			fail();
+		}
+	}
 
 	@Test
 	public void RemoveIngredientInvalidParameterTest() {
