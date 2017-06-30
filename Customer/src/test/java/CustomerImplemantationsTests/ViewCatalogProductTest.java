@@ -33,7 +33,7 @@ import UtilsImplementations.Serialization;
  * @since  2017-06-30
  */
 @RunWith(MockitoJUnitRunner.class)
-public class ViewCatalogProduct {
+public class ViewCatalogProductTest {
 
 	private ICustomer customer;
 	static SmartCode sc = new SmartCode(111,LocalDate.now());
