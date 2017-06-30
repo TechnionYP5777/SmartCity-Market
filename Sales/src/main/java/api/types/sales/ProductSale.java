@@ -54,9 +54,44 @@ public class ProductSale implements ISale {
 		return amount;
 	}
 	
-	public static ISale makeSaleByDiscount(IProduct product, int amount, double discount){
-		return new ProductSale(product, amount, product.getPrice() * (1 - discount));
+	public static ProductSale makeSaleByDiscount(IProduct product, int amount, double discount){
+		return new ProductSale(product, amount, amount * product.getPrice() * (1 - discount));
 		
+	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + amount;
+		long temp;
+		temp = Double.doubleToLongBits(price);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((product == null) ? 0 : product.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProductSale other = (ProductSale) obj;
+		if (amount != other.amount)
+			return false;
+		if (Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price))
+			return false;
+		if (product == null) {
+			if (other.product != null)
+				return false;
+		} else if (!product.equals(other.product))
+			return false;
+		return true;
 	}
 
 }
