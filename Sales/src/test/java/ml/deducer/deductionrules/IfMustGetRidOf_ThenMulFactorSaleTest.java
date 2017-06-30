@@ -1,7 +1,6 @@
 package ml.deducer.deductionrules;
 
 import static org.junit.Assert.*;
-
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +21,7 @@ public class IfMustGetRidOf_ThenMulFactorSaleTest {
 	@Test
 	public void testDeduceProperties() {
 		MustGetRidOfPackageProperty property =
-				new MustGetRidOfPackageProperty(new StorePackageMock(DBMock.getProduct(1), 1, LocalDate.now().plusDays(20), Place.STORE),
+				new MustGetRidOfPackageProperty(new StorePackageMock(DBMock.getProduct(1), 1, LocalDate.now(), Place.STORE),
 						1);
 		
 		Set<AProperty> propertySet = new HashSet<>();
