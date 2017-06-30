@@ -13,14 +13,19 @@ import ml.deducer.deductionrules.IfAboutToExpireSoon_ThenMustGetRidOfPackage_Rul
 
 public class Deducer {
 
-	private static List<ADeductionRule> deductionRules = new ArrayList<>();
 	
-	static {
+	
+	private static List<ADeductionRule> createDeductionRules(){
+		List<ADeductionRule> deductionRules = new ArrayList<>();
+		
 		deductionRules.add(new IfAboutToExpireSoon_ThenMustGetRidOfPackage_Rule());
+		
+		return deductionRules;
 	}
 	
 	public static Set<AProperty> deduceProperties(SalesPreferences salesPreferences, Set<ABasicProperty> properties){
 		
+		List<ADeductionRule> deductionRules = createDeductionRules();
 		
 		Set<AProperty> result = new HashSet<>();
 		
@@ -32,7 +37,7 @@ public class Deducer {
 			oldSize = result.size();
 			
 			for (ADeductionRule rule : deductionRules) {
-				result.addAll(rule.deduceProperties(result));
+				result.addAll(rule.deduceProperties(salesPreferences, result));
 			}
 			
 		}

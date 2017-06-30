@@ -32,7 +32,7 @@ public class AboutToExpireLateStorePackageProperty extends ABasicProperty {
 	
 	public AboutToExpireLateStorePackageProperty(IStorePackage storePackage, ADeductionRule rule) {
 		super(rule);
-		this.diff = ChronoUnit.DAYS.between(LocalDate.now(), storePackage.getExpirationDate());;
+		this.diff = ChronoUnit.DAYS.between(LocalDate.now(), storePackage.getExpirationDate());
 		this.storePackage = storePackage;
 	}
 

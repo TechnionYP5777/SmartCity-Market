@@ -3,7 +3,6 @@ package api.contracts;
 import java.time.LocalDate;
 import java.util.Set;
 
-import api.types.sales.ASale;
 
 public interface IGroceryList {
 	String getBuyer();
@@ -12,6 +11,6 @@ public interface IGroceryList {
 	
 	Set<? extends IGroceryPackage> getProductsList();
 	
-	Set<ASale> getSalesList();
+	Set<? extends ISale> getSalesList();
 }
 

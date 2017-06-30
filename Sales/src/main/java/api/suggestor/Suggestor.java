@@ -5,9 +5,9 @@ import java.util.List;
 import api.contracts.IGroceryList;
 import api.contracts.IGroceryPackage;
 import api.contracts.IProduct;
+import api.contracts.ISale;
 import api.contracts.IStorePackage;
 import api.types.StoreData;
-import api.types.sales.ASale;
 
 public class Suggestor {
 	private volatile static StoreData storeData;
@@ -35,7 +35,7 @@ public class Suggestor {
 	 * @return sale if succeeded, null otherwise (note: the sale must be one of the
 	 *            types under {@link api.types.sales})
 	 */
-	public static ASale suggestSale(IGroceryList currentGrocery, IGroceryPackage purchasedProduct) {
+	public static ISale suggestSale(IGroceryList currentGrocery, IGroceryPackage purchasedProduct) {
 		@SuppressWarnings("unused")
 		StoreData currentData = storeData;
 		
@@ -52,7 +52,7 @@ public class Suggestor {
 	 *            types under {@link api.types.sales})
 	 * @return same sale if agreed, another suggest or null if not.
 	 */
-	public static ASale examineOffer(IGroceryList currentGrocery, ASale purchasedProduct) {
+	public static ISale examineOffer(IGroceryList currentGrocery, ISale purchasedProduct) {
 		@SuppressWarnings("unused")
 		StoreData currentData = storeData;
 		

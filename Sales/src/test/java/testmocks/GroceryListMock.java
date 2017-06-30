@@ -5,14 +5,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import api.contracts.IGroceryList;
-import api.types.sales.ASale;
+import api.types.sales.ProductSale;
 
 public class GroceryListMock implements IGroceryList {
 
 	String buyerName;
 	LocalDate purchaseDate;
 	Set<GroceryPackageMock> prodcutsSet;
-	Set<ASale> salesSet;
+	Set<ProductSale> salesSet;
 	
 	public GroceryListMock(String buyerName, LocalDate purchaseDate) {
 		super();
@@ -46,7 +46,7 @@ public class GroceryListMock implements IGroceryList {
 	}
 
 	@Override
-	public Set<ASale> getSalesList() {
+	public Set<ProductSale> getSalesList() {
 		return salesSet;
 	}
 
@@ -56,7 +56,7 @@ public class GroceryListMock implements IGroceryList {
 		return this;
 	}
 
-	public GroceryListMock setSalesSet(Set<ASale> salesSet) {
+	public GroceryListMock setSalesSet(Set<ProductSale> salesSet) {
 		this.salesSet = salesSet;
 		
 		return this;
@@ -80,7 +80,7 @@ public class GroceryListMock implements IGroceryList {
 		return this;
 	}
 
-	public GroceryListMock addSale(ASale sale) {
+	public GroceryListMock addSale(ProductSale sale) {
 		this.salesSet.add(sale);
 		
 		return this;

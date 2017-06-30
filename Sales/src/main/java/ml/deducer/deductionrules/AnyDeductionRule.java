@@ -2,6 +2,7 @@ package ml.deducer.deductionrules;
 
 import java.util.Set;
 
+import api.preferences.SalesPreferences;
 import ml.common.property.AProperty;
 
 public class AnyDeductionRule extends ADeductionRule {
@@ -22,7 +23,7 @@ public class AnyDeductionRule extends ADeductionRule {
 	}
 
 	@Override
-	public Set<? extends AProperty> deduceProperties(Set<AProperty> properties) {
+	public Set<? extends AProperty> deduceProperties(SalesPreferences preferences, Set<AProperty> properties) {
 		throw new UnsupportedOperationException();
 	}
 

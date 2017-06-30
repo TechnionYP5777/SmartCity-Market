@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import api.preferences.InputPreferences;
+import api.preferences.SalesPreferences;
 import api.types.StoreData;
 
 public class DBMock {
@@ -50,6 +51,10 @@ public class DBMock {
 	
 	public static InputPreferences getInputPref(){
 		return new InputPreferences();
+	}
+	
+	public static SalesPreferences getSalePref(){
+		return new SalesPreferences(0.5);
 	}
 	
 	public static StoreData getStoreDateByHistory(List<GroceryListMock> history){

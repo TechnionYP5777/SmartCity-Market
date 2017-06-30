@@ -12,6 +12,7 @@ import api.types.Place;
 import ml.common.property.AProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireSoonStorePackageProperty;
 import ml.common.property.deducedproperties.MustGetRidOfPackageProperty;
+import testmocks.DBMock;
 import testmocks.StorePackageMock;
 
 public class IfAboutToExpireSoon_ThenMustGetRidOfPackage_RuleTest {
@@ -25,7 +26,7 @@ public class IfAboutToExpireSoon_ThenMustGetRidOfPackage_RuleTest {
 		propertySet.add(property);
 		
 		Set<? extends AProperty> resultProperty = 
-				new IfAboutToExpireSoon_ThenMustGetRidOfPackage_Rule().deduceProperties(propertySet);
+				new IfAboutToExpireSoon_ThenMustGetRidOfPackage_Rule().deduceProperties(DBMock.getSalePref(), propertySet);
 		
 		assertEquals(1, resultProperty.size());
 		assertTrue(resultProperty.contains(
