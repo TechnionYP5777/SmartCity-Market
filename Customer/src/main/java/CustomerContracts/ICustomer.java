@@ -1,6 +1,7 @@
 package CustomerContracts;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -124,4 +125,6 @@ public interface ICustomer {
 	Boolean isFreeUsername(String username) throws CriticalError;
 	
 	Sale getSaleForProduct(Long barcode) throws CriticalError, CustomerNotConnected, InvalidParameter, ProductCatalogDoesNotExist;
+
+	HashSet<CatalogProduct> getMarketCatalog() throws CriticalError;
 }

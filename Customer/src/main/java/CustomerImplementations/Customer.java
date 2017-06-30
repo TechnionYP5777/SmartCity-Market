@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +60,7 @@ import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 public class Customer extends ACustomer implements ICustomer, IForgotPasswordHandler {
 	
 	protected ForgotPasswordHandler fpHandler;
+	private HashSet<CatalogProduct> catalog;
 	
 	@Inject
 	public Customer(IClientRequestHandler clientRequestHandler) {
@@ -701,5 +703,48 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 		log.info("getSalesForProduct command succeed.");
 
 		return Serialization.deserialize(commandWrapper.getData(), Sale.class);
+	}
+
+	@Override
+	public HashSet<CatalogProduct> getMarketCatalog() throws CriticalError{
+		if (catalog == null)
+			fetchMarketCatalogFromServer();
+		return catalog;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void fetchMarketCatalogFromServer() throws CriticalError {
+		CommandWrapper $ = null;
+		String serverResponse;
+
+		log.info("Creating customer get market catalog command wrapper with id: " + id);
+
+		establishCommunication(CustomerDefs.port, CustomerDefs.host, CustomerDefs.timeout);
+
+		try {
+			serverResponse = sendRequestWithRespondToServer(
+					(new CommandWrapper(id, CommandDescriptor.GET_MARKET_CATALOG)).serialize());
+		} catch (SocketTimeoutException e) {
+			log.fatal("Critical bug: failed to get respond from server");
+
+			throw new CriticalError();
+		}
+
+		terminateCommunication();
+
+		try {
+			$ = getCommandWrapper(serverResponse);
+
+			resultDescriptorHandler($.getResultDescriptor());
+
+			this.catalog = Serialization.deserialize($.getData(), catalog.getClass());
+		} catch (InvalidCommandDescriptor | InvalidParameter | ProductCatalogDoesNotExist | AmountBiggerThanAvailable
+				| ProductPackageDoesNotExist | GroceryListIsEmpty | AuthenticationError | UsernameAlreadyExists | ForgotPasswordWrongAnswer | CustomerNotConnected ¢) {
+			log.fatal("Critical bug: this command result isn't supposed to return here");
+
+			throw new CriticalError();
+		}
+
+		log.info("load market catalog from server succeed.");
 	}
 }
