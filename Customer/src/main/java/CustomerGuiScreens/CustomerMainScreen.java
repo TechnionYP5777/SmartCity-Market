@@ -13,8 +13,10 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 import com.google.common.eventbus.Subscribe;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXTextField;
 
 import BasicCommonClasses.CartProduct;
@@ -44,8 +46,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -54,6 +59,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -102,7 +109,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	@FXML
 	Label amountLabel;
-	
+
 	@FXML
 	Label saleLbl;
 
@@ -126,13 +133,19 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	@FXML
 	Label yourListHeader;
-	
+
 	@FXML
 	JFXCheckBox offerSalesChk;
-	
-	@FXML 
+
+	@FXML
 	JFXListView<String> allerList;
-	
+
+	@FXML
+	JFXTextField searchCatalogProduct;
+
+	@FXML
+	JFXButton showLocation;
+
 	SmartCode scannedSmartCode;
 
 	CatalogProduct catalogProduct;
@@ -227,7 +240,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		amountLabel.setText(amount + "");
 		descriptionTextArea.setText(scannedSmartCode.getExpirationDate() + "");
 		allerList.getItems().clear();
-		p.getIngredients().forEach( ingr -> {
+		p.getIngredients().forEach(ingr -> {
 			allerList.getItems().add(ingr.getName());
 		});
 		saleLbl.setText(p.getSale().getSaleAsString());
@@ -265,6 +278,16 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		flag = true;
 		DialogMessagesService.showConfirmationDialog("Already Leaving?", null, "", this);
 	}
+
+	JFXPopup catalogPopup;
+
+	JFXListView<String> catalogList;
+
+	HashMap<String, CatalogProduct> catalogs;
+
+	ObservableList<String> dataCatalogs;
+
+	FilteredList<String> filteredDataCatalogs;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
@@ -308,24 +331,87 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 		productsListView.depthProperty().set(1);
 		productsListView.setExpanded(true);
-				
+
 		allerList.depthProperty().set(1);
 		allerList.setExpanded(true);
 		allerList.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
-                Platform.runLater(new Runnable() {
-                    public void run() {
-                    	allerList.getSelectionModel().select(-1);
+			@Override
+			public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
+				Platform.runLater(new Runnable() {
+					public void run() {
+						allerList.getSelectionModel().select(-1);
 
-                    }
-                });
+					}
+				});
 
-            }
-        });
-		
-		
+			}
+		});
+
+		Label lbl1 = new Label("Expired Products");
+		JFXButton close = new JFXButton("Close");
+		close.getStyleClass().add("JFXButton");
+
+		close.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent __) {
+				catalogPopup.hide();
+			}
+		});
+
+		catalogList = new JFXListView<String>();
+		catalogList.setMinWidth(600);
+		catalogList.setMaxWidth(600);
+		catalogList.setMaxHeight(400);
+
+		HBox manubtnContanier = new HBox();
+		manubtnContanier.getChildren().addAll(close);
+		manubtnContanier.setSpacing(10);
+		manubtnContanier.setAlignment(Pos.CENTER_RIGHT);
+		VBox manuContainer = new VBox();
+		manuContainer.getChildren().addAll(lbl1, catalogList, manubtnContanier);
+		manuContainer.setPadding(new Insets(10, 50, 50, 50));
+		manuContainer.setSpacing(10);
+
+		catalogPopup = new JFXPopup(manuContainer);
+
+		catalogList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				CatalogProduct p = null;
+				p = catalogs.get(catalogList.getSelectionModel().getSelectedItem());
+	
+				// Location loc = p.getLocations().iterator().next();
+				// DialogMessagesService.showConfirmationWithCloseDialog("Product
+				// Location Is: " + "(col=" + loc.getX() + ", row=" + loc.getY()
+				// + ")", null ,
+				// new MarkLocationOnStoreMap().run(loc.getX(), loc.getY()), new
+				// LocationMapClose());
+				catalogPopup.hide();
+				// TODO Show details
+			}
+
+		});
+
+		catalogList.setDepth(1);
+		catalogList.setExpanded(true);
+
 		setAbilityAndVisibilityOfProductInfoPane(false);
+	}
+	
+	private void createCatalogList() {
+
+		catalogs = new HashMap<String, CatalogProduct>();
+
+		
+
+		dataCatalogs = FXCollections.observableArrayList();
+
+		dataCatalogs.setAll(catalogs.keySet());
+
+		filteredDataCatalogs = new FilteredList<>(dataCatalogs, s -> true);
+
+		catalogList.setItems(filteredDataCatalogs);
 	}
 
 	@FXML
@@ -384,11 +470,11 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	class SpecialSaleHandler implements IConfiramtionDialog {
 
 		Sale sale;
-		
+
 		SpecialSaleHandler(Sale sale) {
 			this.sale = sale;
 		}
-		
+
 		@Override
 		public void onYes() {
 			registeredCustomer.addSpecialSale(sale, true);
@@ -398,9 +484,9 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		public void onNo() {
 			registeredCustomer.addSpecialSale(sale, false);
 		}
-		
+
 	}
-	
+
 	private void smartcodeScannedHandler() {
 		Integer amount;
 		CartProduct cartPtoduct = customer.getCartProduct(scannedSmartCode);
@@ -414,19 +500,17 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 				if (registeredCustomer != null) {
 					/* Checking for special sell */
 					Sale specialSale = registeredCustomer.getSpecailSaleForProduct(catalogProduct.getBarcode());
-					
+
 					if (specialSale.isValid()) {
-						DialogMessagesService.showConfirmationDialog("Special Sale just for you!",
-																	 null,
-																	 specialSale.getSaleAsString() + "\n" + 
-																	 "If you want to take the sale, click 'Yes' " +
-																	 "add the products to your grocery list",
-																	 new SpecialSaleHandler(specialSale));
+						DialogMessagesService.showConfirmationDialog("Special Sale just for you!", null,
+								specialSale.getSaleAsString() + "\n" + "If you want to take the sale, click 'Yes' "
+										+ "add the products to your grocery list",
+								new SpecialSaleHandler(specialSale));
 						catalogProduct.setSpecialSale(specialSale);
 					}
 				}
 				if (registeredCustomer != null)
-					
+
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
@@ -449,24 +533,24 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		});
 	}
 
-	private void checkIngredients(CatalogProduct catalogProduct) /*throws CriticalError*/ {
+	private void checkIngredients(
+			CatalogProduct catalogProduct) /* throws CriticalError */ {
 		ArrayList<String> markedIngredients = new ArrayList<String>();
 		HashSet<Ingredient> productIngredients = catalogProduct.getIngredients();
-		HashSet<Ingredient> customerAllergens = ((IRegisteredCustomer)customer).getCustomerAllergens();
-		for (Ingredient ingredient:  customerAllergens) 
+		HashSet<Ingredient> customerAllergens = ((IRegisteredCustomer) customer).getCustomerAllergens();
+		for (Ingredient ingredient : customerAllergens)
 			if (productIngredients.contains(ingredient))
 				markedIngredients.add(ingredient.getName());
 		if (!(markedIngredients.isEmpty())) {
-			StringBuilder markedIngredientsSB =  new StringBuilder();
-			Integer i =1;
+			StringBuilder markedIngredientsSB = new StringBuilder();
+			Integer i = 1;
 			for (String ing : markedIngredients) {
-				if (i>1)
+				if (i > 1)
 					markedIngredientsSB.append(", ");
-				markedIngredientsSB.append(i++ + ". "+ ing);
+				markedIngredientsSB.append(i++ + ". " + ing);
 			}
-			DialogMessagesService.showInfoDialog("Marked Ingredients Alert", 
-					"This product contains some of your marked Ingredients:\n", 
-					markedIngredientsSB.toString());
+			DialogMessagesService.showInfoDialog("Marked Ingredients Alert",
+					"This product contains some of your marked Ingredients:\n", markedIngredientsSB.toString());
 		}
 	}
 
@@ -481,30 +565,30 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		if (registeredCustomer != null) {
 			HashMap<Long, CartProduct> shoppingList = customer.getCartProductCache();
 			HashMap<Sale, Boolean> specialSales = registeredCustomer.getSpecialSales();
-			
+
 			for (Sale sale : specialSales.keySet()) {
-				if (shoppingList.containsKey(sale.getProductBarcode()) &&
-					shoppingList.get(sale.getProductBarcode()).getTotalAmount() > sale.getAmountOfProducts()) {
+				if (shoppingList.containsKey(sale.getProductBarcode())
+						&& shoppingList.get(sale.getProductBarcode()).getTotalAmount() > sale.getAmountOfProducts()) {
 					specialSales.put(sale, true);
 				} else {
 					specialSales.put(sale, false);
 				}
 			}
-			
+
 			return specialSales;
 		}
 		return new HashMap<Sale, Boolean>();
 	}
-	
+
 	@Override
 	public void onYes() {
 		try {
-			if (flag) 
+			if (flag)
 				customer.logout();
 			else {
 				customer.checkOutGroceryList(getTakenSales());
 			}
-			
+
 		} catch (SMException e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.stackTraceToStr(e));
@@ -526,7 +610,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	void forceScanProduct(ActionEvent __) {
 		smartcodeScanned(new SmartcodeScanEvent(new SmartCode(1234567890, LocalDate.now())));
 	}
-	
 
 	@FXML
 	void forceScanProduct2(ActionEvent __) {

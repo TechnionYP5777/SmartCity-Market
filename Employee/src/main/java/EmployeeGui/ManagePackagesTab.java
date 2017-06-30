@@ -252,24 +252,24 @@ public class ManagePackagesTab implements Initializable {
 				enableRunTheOperationButton();
 			}
 		});
-
-		final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
-			@Override
-			public DateCell call(final DatePicker __) {
-				return new DateCell() {
-					@Override
-					public void updateItem(LocalDate item, boolean empty) {
-						super.updateItem(item, empty);
-
-						if (!item.isBefore(LocalDate.now()))
-							return;
-						setDisable(true);
-						setStyle("-fx-background-color: #EEEEEE;");
-					}
-				};
-			}
-		};
-		datePicker.setDayCellFactory(dayCellFactory);
+// 		TODO enable this
+//		final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+//			@Override
+//			public DateCell call(final DatePicker __) {
+//				return new DateCell() {
+//					@Override
+//					public void updateItem(LocalDate item, boolean empty) {
+//						super.updateItem(item, empty);
+//
+//						if (!item.isBefore(LocalDate.now()))
+//							return;
+//						setDisable(true);
+//						setStyle("-fx-background-color: #EEEEEE;");
+//					}
+//				};
+//			}
+//		};
+//		datePicker.setDayCellFactory(dayCellFactory);
 		datePicker.setValue(LocalDate.now());
 
 		VBox vbox = new VBox();
