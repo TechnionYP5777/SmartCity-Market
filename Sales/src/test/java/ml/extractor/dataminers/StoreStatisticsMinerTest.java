@@ -141,7 +141,6 @@ public class StoreStatisticsMinerTest {
 		
 		StorePackageMock packageAboutToExpiredLate = new StorePackageMock(
 				2, LocalDate.now().plusDays(AboutToExpireLateStorePackageProperty.minDaysThreshold + 5));
-		long diffOfProduct = ChronoUnit.DAYS.between(LocalDate.now(), packageAboutToExpiredLate.getExpirationDate());
 		
 		List<StorePackageMock> stock = new StockMockBuilder()
 				.addPackage(1, LocalDate.now().plusDays(2))
@@ -290,9 +289,6 @@ public class StoreStatisticsMinerTest {
 		long numOfBuyerPerMonthProperties = result.stream()
 				.filter(p -> p instanceof SumOfPurchasesPerMonthProperty).count();
 		
-		List<SumOfPurchasesPerMonthProperty> r = result.stream().filter(p -> p instanceof SumOfPurchasesPerMonthProperty)
-				.map(p -> (SumOfPurchasesPerMonthProperty) p).collect(Collectors.toList());
-		
 		assertEquals(SumOfPurchasesPerMonthProperty.goMonthesBackLimit, numOfBuyerPerMonthProperties);
 		
 		SumOfPurchasesPerMonthProperty foundMonth[] = new SumOfPurchasesPerMonthProperty[SumOfPurchasesPerMonthProperty.goMonthesBackLimit];
@@ -315,7 +311,7 @@ public class StoreStatisticsMinerTest {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void testHealthyRatedProductProperty(){
 		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
 				new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();

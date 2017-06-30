@@ -59,6 +59,7 @@ public class StoreStatisticsMiner extends AMiner {
 		result.addAll(extractMostPopularManufacturers());
 		result.addAll(extractNumberOfBuyersPerMonth());
 		result.addAll(extractSumOfPurcahsesPerMonth());
+		result.addAll(extractHealthyRatedProducts());
 		
 		return result;
 	}
