@@ -2,6 +2,7 @@ package GuiUtils;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -11,7 +12,7 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 
 import UtilsContracts.IConfiramtionDialog;
-import UtilsContracts.IConfiramtionWithAbortDialog;
+import UtilsContracts.IConfiramtionWithCloseDialog;
 
 /**
  * Use this class to create GUI Error, info, confirmation GUI dialogs.
@@ -25,41 +26,17 @@ import UtilsContracts.IConfiramtionWithAbortDialog;
 public class DialogMessagesService {
 
 	public static void showInfoDialog(String title, String header, String content) {
-		alertCreator(title, header, content);
+		alertCreator(title, header, content, null, null);
 	}
 
 	public static void showErrorDialog(String title, String header, String content) {
-		alertCreator(title, header, content);
+		alertCreator(title, header, content, null, null);
 	}
 	
-	
-	public static void showConfirmationWithAbortDialog(String title, String header, String content,
-			IConfiramtionWithAbortDialog d) {
-		JFXDialogLayout dialogContent = new JFXDialogLayout();
-		dialogContent.setHeading(new Text(header == null ? title : title + "\n" + header));
 
-		dialogContent.setBody(new Text(content));
-
-		JFXButton abort = new JFXButton("Abort");
-		abort.getStyleClass().add("JFXButton");
-
-		dialogContent.setActions(abort);
-
-		JFXDialog dialog = new JFXDialog((StackPane) AbstractApplicationScreen.stage.getScene().getRoot(),
-				dialogContent, JFXDialog.DialogTransition.CENTER);
-
-		abort.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent __) {
-
-				dialog.close();
-
-				d.abort();
-			}
-		});
-
-		dialog.show();
+	public static void showConfirmationWithCloseDialog(String title, String header, Node node,
+			IConfiramtionWithCloseDialog d) {
+		alertCreator(title, header, null, node, d);
 	}
 
 	public static void showConfirmationDialog(String title, String header, String content,
@@ -101,15 +78,19 @@ public class DialogMessagesService {
 				d.onNo();
 			}
 		});
-
+		
 		dialog.show();
+		dialog.toFront();
 	}
 
-	private static void alertCreator(String title, String header, String content) {
+	private static void alertCreator(String title, String header, String content, Node node, IConfiramtionWithCloseDialog d) {
 		JFXDialogLayout dialogContent = new JFXDialogLayout();
 		dialogContent.setHeading(new Text(header == null ? title : title + "\n" + header));
-
-		dialogContent.setBody(new Text(content));
+		if (content != null)
+			dialogContent.setBody(new Text(content));
+		
+		if (node != null)
+			dialogContent.setBody(node);
 
 		JFXButton close = new JFXButton("Close");
 		close.getStyleClass().add("JFXButton");
@@ -124,9 +105,14 @@ public class DialogMessagesService {
 			@Override
 			public void handle(ActionEvent __) {
 				dialog.close();
+				
+				if (d != null) {
+					d.onClose();
+				}
 			}
 		});
-
+		
 		dialog.show();
+		dialog.toFront();
 	}
 }

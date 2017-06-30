@@ -32,7 +32,6 @@ import GuiUtils.DialogMessagesService;
 import SMExceptions.SMException;
 import UtilsContracts.IBarcodeEventHandler;
 import UtilsContracts.IConfiramtionDialog;
-import UtilsContracts.IConfiramtionWithAbortDialog;
 import UtilsContracts.SmartcodeScanEvent;
 import UtilsImplementations.BarcodeEventHandler;
 import UtilsImplementations.InjectionFactory;
@@ -185,15 +184,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		setAbilityAndVisibilityOfProductInfoPane(true);
 	}
 		
-	class onePlusOnePopup implements IConfiramtionWithAbortDialog {
-
-		@Override
-		public void abort() {
-			// TODO Handle abort			
-		}
-
-
-	}
 
 	private void enableRemoveButton() {
 		boolean flag = false;

@@ -38,6 +38,7 @@ import EmployeeDefs.AEmployeeException.ProductPackageDoesNotExist;
 import EmployeeGuiContracts.CatalogProductEvent;
 import EmployeeImplementations.Manager;
 import GuiUtils.DialogMessagesService;
+import GuiUtils.MarkLocationOnStoreMap;
 import GuiUtils.RadioButtonEnabler;
 import SMExceptions.CommonExceptions.CriticalError;
 import SMExceptions.SMException;
@@ -45,6 +46,7 @@ import SmartcodeParser.SmartcodePrint;
 import UtilsContracts.BarcodeScanEvent;
 import UtilsContracts.IBarcodeEventHandler;
 import UtilsContracts.IConfiramtionDialog;
+import UtilsContracts.IConfiramtionWithCloseDialog;
 import UtilsContracts.IEventBus;
 import UtilsContracts.SmartcodeScanEvent;
 import UtilsImplementations.BarcodeEventHandler;
@@ -329,6 +331,7 @@ public class ManagePackagesTab implements Initializable {
 
 		popupExpired = new JFXPopup(manuContainer);
 		showExpiredProducts.setOnMouseClicked(e -> {
+			createExpiredList();
 			remove.setDisable(true);
 			popupExpired.show(showExpiredProducts, PopupVPosition.TOP, PopupHPosition.LEFT);
 		});
@@ -340,21 +343,39 @@ public class ManagePackagesTab implements Initializable {
 				remove.setDisable(false);
 
 				if (showMapOnClick.isSelected()) {
-					// TODO show map
+					CatalogProduct p = null;
+					try {
+						p = worker.viewProductFromCatalog(expireds.get(expiredList.getSelectionModel().getSelectedItem()).getSmartCode().getBarcode());
+					} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog
+							| ConnectionFailure e) {
+						log.fatal(e);
+						log.debug(StackTraceUtil.stackTraceToStr(e));
+						e.showInfoToUser();
+					}
+					Location loc = p.getLocations().iterator().next();
+					DialogMessagesService.showConfirmationWithCloseDialog("Product Location Is: " + "(col=" + loc.getX() + ", row=" + loc.getY() + ")", null ,
+							new MarkLocationOnStoreMap().run(loc.getX(), loc.getY()), new LocationMapClose());
+					popupExpired.hide();					
 				}
-				// System.out.println("clicked on " +
-				// lv.getSelectionModel().getSelectedItem());
 			}
 		});
 
 		expiredList.setDepth(1);
 		expiredList.setExpanded(true);
 
-		createExpiredList();
-
 		resetParams();
 		showScanCodePane(true);
 
+	}
+	
+	class LocationMapClose implements IConfiramtionWithCloseDialog {
+
+		@Override
+		public void onClose() {
+			remove.setDisable(true);
+			popupExpired.show(showExpiredProducts, PopupVPosition.TOP, PopupHPosition.LEFT);		
+		}
+		
 	}
 
 	class ExpiredProductRemove implements IConfiramtionDialog {

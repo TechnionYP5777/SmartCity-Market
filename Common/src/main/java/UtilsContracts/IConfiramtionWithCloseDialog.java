@@ -7,8 +7,8 @@ package UtilsContracts;
  * @since 26.6.17
  *
  */
-public interface IConfiramtionWithAbortDialog {
+public interface IConfiramtionWithCloseDialog {
 	
-	void abort();
+	void onClose();
 
 }
