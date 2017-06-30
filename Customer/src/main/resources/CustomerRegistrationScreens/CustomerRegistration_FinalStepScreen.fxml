@@ -14,8 +14,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerRegistration_FinalStepScreen">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerRegistration_FinalStepScreen">
    <children>
       <GridPane>
          <children>
@@ -41,7 +40,7 @@
                   <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </padding>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0" spacing="15.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="15.0" styleClass="inputGridPane" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="40.0" right="40.0" />
                </GridPane.margin>

@@ -1,9 +1,9 @@
 .header {
-	-fx-font-size: 30;
+	-fx-font-size: 50;
 	-fx-text-fill: midnightblue;
 }
 
 .subHeader {
- 	-fx-font-size: 20;
+ 	-fx-font-size: 40;
  	-fx-text-fill: indigo;
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -11,16 +12,14 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import org.controlsfx.control.CheckListView?>
 
-
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerRegistration_IngredientsScreen">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerRegistration_IngredientsScreen">
    <children>
       <GridPane fx:id="ingredientsScreenPane">
          <children>
             <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <CheckListView fx:id="ingredientsCheckListView" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+                  <JFXListView fx:id="ingredientList" />
                </children>
                <GridPane.margin>
                   <Insets left="15.0" right="15.0" />
@@ -70,9 +69,9 @@
             </HBox>
          </children>
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" percentWidth="20.0" />
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="30.0" />
             <ColumnConstraints hgrow="SOMETIMES" percentWidth="60.0" />
-            <ColumnConstraints hgrow="SOMETIMES" percentWidth="20.0" />
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="30.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints percentHeight="20.0" vgrow="SOMETIMES" />

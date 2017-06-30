@@ -1,6 +1,14 @@
 package CustomerGuiScreens;
 
+import java.net.URL;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.ResourceBundle;
+
+import org.apache.log4j.Logger;
+
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXListView;
 
 import BasicCommonClasses.Ingredient;
 import CustomerContracts.ICustomer;
@@ -12,17 +20,16 @@ import UtilsImplementations.InjectionFactory;
 import UtilsImplementations.StackTraceUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-
-import java.net.URL;
-import java.util.HashSet;
-import java.util.ResourceBundle;
-
-import org.apache.log4j.Logger;
-import org.controlsfx.control.CheckListView;
 
 /**
  * CustomerRegistration_IngredientsScreen - Controller for the second screen of the customer registration screens.
@@ -39,59 +46,97 @@ public class CustomerRegistration_IngredientsScreen implements Initializable {
 	private GridPane ingredientsScreenPane;
 	
     @FXML
-    private CheckListView<Ingredient> ingredientsCheckListView = new CheckListView<Ingredient>();
-
+    private JFXListView<String> ingredientList;
+ 
     @FXML
     private JFXButton ingridients_nextButton;
 
     @FXML
     private JFXButton ingridients_backButton;
+    
+    HashMap<String, Ingredient> ingredients;
 
-	ObservableList<Ingredient> ingredientsObservableList = FXCollections.<Ingredient>observableArrayList();
+	ObservableList<String> dataIngr;
 
-    private void updateIngredientsCheckList() {
-		ICustomer customer = InjectionFactory.getInstance(Customer.class);	
+	FilteredList<String> filteredDataIngr;
+	
+	ICustomer customer;	
+
+
+	@Override
+	public void initialize(URL location, ResourceBundle __) {
+		AbstractApplicationScreen.fadeTransition(ingredientsScreenPane);
+		customer = InjectionFactory.getInstance(Customer.class);
+		
+		ingredientList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+		// for multiple selection
+		ingredientList.addEventFilter(MouseEvent.MOUSE_PRESSED, evt -> {
+			Node node = evt.getPickResult().getIntersectedNode();
+			while (node != null && node != ingredientList && !(node instanceof ListCell))
+				node = node.getParent();
+			if (node instanceof ListCell) {
+				evt.consume();
+
+				ListCell<?> cell = (ListCell<?>) node;
+				ListView<?> lv = cell.getListView();
+
+				lv.requestFocus();
+
+				if (!cell.isEmpty()) {
+					int index = cell.getIndex();
+					if (!cell.isSelected())
+						lv.getSelectionModel().select(index);
+					else
+						lv.getSelectionModel().clearSelection(index);
+				}
+
+				ObservableList<String> selectedItems = ingredientList.getSelectionModel().getSelectedItems();
+
+		    	TempCustomerProfilePassingData.customerProfile.clearAllAllergens();
+		    	HashSet<Ingredient> checkedIngredientsHashSet = new HashSet<Ingredient>();
+		    	selectedItems.forEach(ing-> {
+		    		checkedIngredientsHashSet.add(ingredients.get(ing));
+		    	});
+		    	TempCustomerProfilePassingData.customerProfile.setAllergens(checkedIngredientsHashSet); 
+
+			}
+		});
+
+		ingredientList.setDepth(1);
+		ingredientList.setExpanded(true);
+		
+		createIngredientList();
+	}
+	
+	private void createIngredientList() {
+		ingredients = new HashMap<String, Ingredient>();
 		try {
-			ingredientsObservableList.addAll(customer.getAllIngredients());
+			customer.getAllIngredients().forEach(ingr -> {
+				ingredients.put(ingr.getName(), ingr);
+			});
     	} catch (SMException e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
     	}
-		ingredientsCheckListView.setItems(ingredientsObservableList);
 
-		HashSet<Ingredient> currentAllergans =  TempCustomerProfilePassingData.customerProfile.getAllergens();
-		if (currentAllergans != null && !currentAllergans.isEmpty())
-			updateListViewWithChosenIngreidients(currentAllergans);
-	}
+		dataIngr = FXCollections.observableArrayList();
 
-	private void updateListViewWithChosenIngreidients(HashSet<Ingredient> currentAllergans) {
-		HashSet<Ingredient> currentIngredientsHashSet = TempCustomerProfilePassingData.customerProfile.getAllergens();
-		for (Ingredient ingredient : currentIngredientsHashSet)
-			ingredientsCheckListView.getCheckModel().check(ingredient);
-	}
+		dataIngr.setAll(ingredients.keySet());
 
-    private void updateCurrentChosenIngredients() {
-    	TempCustomerProfilePassingData.customerProfile.clearAllAllergens();
-    	HashSet<Ingredient> checkedIngredientsHashSet = new HashSet<Ingredient>(ingredientsCheckListView.getCheckModel().getCheckedItems()); 
-    	TempCustomerProfilePassingData.customerProfile.setAllergens(checkedIngredientsHashSet);    	
-	}
+		filteredDataIngr = new FilteredList<>(dataIngr, s -> true);
 
-	@Override
-	public void initialize(URL location, ResourceBundle __) {
-		AbstractApplicationScreen.fadeTransition(ingredientsScreenPane);
-    	updateIngredientsCheckList();
+		ingredientList.setItems(filteredDataIngr);
 	}
 	
 	@FXML
     void ingridients_backButtonPressed(ActionEvent __) {
-		updateCurrentChosenIngredients();
 		AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_PersonalInfoScreen.fxml");
     }
 	
     @FXML
     void ingridients_nextButtonPressed(ActionEvent __) {
-		updateCurrentChosenIngredients();
     	AbstractApplicationScreen.setScene("/CustomerRegistrationScreens/CustomerRegistration_FinalStepScreen.fxml");
     }
     
