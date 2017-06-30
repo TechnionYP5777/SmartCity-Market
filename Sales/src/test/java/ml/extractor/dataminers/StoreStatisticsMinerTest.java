@@ -7,6 +7,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -26,11 +27,16 @@ import ml.common.property.basicproperties.storestatistics.HighRatioAmountExpirat
 import ml.common.property.basicproperties.storestatistics.LastPopularProductProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularManufacturerProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
+import ml.common.property.basicproperties.storestatistics.NumOfBuyersPerMonthProperty;
+import ml.common.property.basicproperties.storestatistics.SumOfPurchasesPerMonthProperty;
 import testmocks.DBMock;
 import testmocks.GroceryListMock;
 import testmocks.GroceryPackageMock;
+import testmocks.HistoryMockBuilder;
 import testmocks.StockMockBuilder;
 import testmocks.StorePackageMock;
+
+import static ml.utils.CollectionFunctions.findInCollection;
 
 /**
  * @author noam yefet
@@ -39,6 +45,8 @@ import testmocks.StorePackageMock;
  * @since Jun 11, 2017
  */
 public class StoreStatisticsMinerTest {
+
+	private static final double DELTA = 1e-15;
 
 	private static List<GroceryListMock> history = new ArrayList<>();
 	private static List<StorePackageMock> stock = new ArrayList<>();
@@ -223,6 +231,91 @@ public class StoreStatisticsMinerTest {
 	}
 	
 	@Test
+	public void testNumberOfBuyersPerMonthProperty(){
+		
+		List<GroceryListMock> history = new HistoryMockBuilder().addGrocery("alice", 
+				LocalDate.now(), DBMock.getProduct(1), 1)
+				.addGrocery("alice", 
+				LocalDate.now().minusMonths(1), DBMock.getProduct(1), 1)
+				.addGrocery("bob", 
+				LocalDate.now().minusMonths(1), DBMock.getProduct(1), 1)
+				.addGrocery("alice", 
+				LocalDate.now().minusMonths(2), DBMock.getProduct(1), 1).build();
+				
+		
+		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDateByHistory(history),
+				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+		
+		long numOfBuyerPerMonthProperties = result.stream()
+				.filter(p -> p instanceof NumOfBuyersPerMonthProperty).count();
+
+		assertEquals(6, numOfBuyerPerMonthProperties);
+		
+		NumOfBuyersPerMonthProperty foundMonth[] = new NumOfBuyersPerMonthProperty[NumOfBuyersPerMonthProperty.goMonthesBackLimit];
+		NumOfBuyersPerMonthProperty realMonth0 = new NumOfBuyersPerMonthProperty(0, 1);
+		NumOfBuyersPerMonthProperty realMonth1 = new NumOfBuyersPerMonthProperty(1, 2);
+		NumOfBuyersPerMonthProperty realMonth2 = new NumOfBuyersPerMonthProperty(2, 1);
+		foundMonth[0] = findInCollection(result, realMonth0);
+		foundMonth[1] = findInCollection(result, realMonth1);
+		foundMonth[2] = findInCollection(result, realMonth2);
+		assertNotNull(foundMonth[0]);
+		assertNotNull(foundMonth[1]);
+		assertNotNull(foundMonth[2]);
+		assertEquals(realMonth0.getNumOfBuyers(), foundMonth[0].getNumOfBuyers());
+		assertEquals(realMonth1.getNumOfBuyers(), foundMonth[1].getNumOfBuyers());
+		assertEquals(realMonth2.getNumOfBuyers(), foundMonth[2].getNumOfBuyers());
+		for (int i=3; i<NumOfBuyersPerMonthProperty.goMonthesBackLimit; i++){
+			NumOfBuyersPerMonthProperty temp = findInCollection(result, new NumOfBuyersPerMonthProperty(i, 0));
+			assertNotNull(temp);
+			assertEquals(temp.getNumOfBuyers(), 0);
+		}
+	}
+	
+	@Test
+	public void testSumOfPurchasesPerMonthProperty(){
+		
+		List<GroceryListMock> history = new HistoryMockBuilder().addGrocery("alice", 
+				LocalDate.now(), DBMock.getProduct(1), 1)
+				.addGrocery("alice", 
+				LocalDate.now().minusMonths(1), DBMock.getProduct(1), 1)
+				.addGrocery("bob", 
+				LocalDate.now().minusMonths(1), DBMock.getProduct(1), 1)
+				.addGrocery("alice", 
+				LocalDate.now().minusMonths(2), DBMock.getProduct(2), 1).build();
+				
+		
+		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDateByHistory(history),
+				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+		
+		long numOfBuyerPerMonthProperties = result.stream()
+				.filter(p -> p instanceof SumOfPurchasesPerMonthProperty).count();
+		
+		List<SumOfPurchasesPerMonthProperty> r = result.stream().filter(p -> p instanceof SumOfPurchasesPerMonthProperty)
+				.map(p -> (SumOfPurchasesPerMonthProperty) p).collect(Collectors.toList());
+		
+		assertEquals(SumOfPurchasesPerMonthProperty.goMonthesBackLimit, numOfBuyerPerMonthProperties);
+		
+		SumOfPurchasesPerMonthProperty foundMonth[] = new SumOfPurchasesPerMonthProperty[SumOfPurchasesPerMonthProperty.goMonthesBackLimit];
+		SumOfPurchasesPerMonthProperty realMonth0 = new SumOfPurchasesPerMonthProperty(0, 1.5);
+		SumOfPurchasesPerMonthProperty realMonth1 = new SumOfPurchasesPerMonthProperty(1, 3);
+		SumOfPurchasesPerMonthProperty realMonth2 = new SumOfPurchasesPerMonthProperty(2, 2.5);
+		foundMonth[0] = findInCollection(result, realMonth0);
+		foundMonth[1] = findInCollection(result, realMonth1);
+		foundMonth[2] = findInCollection(result, realMonth2);
+		assertNotNull(foundMonth[0]);
+		assertNotNull(foundMonth[1]);
+		assertNotNull(foundMonth[2]);
+		assertEquals(realMonth0.getSumOfPurchases(), foundMonth[0].getSumOfPurchases(), DELTA);
+		assertEquals(realMonth1.getSumOfPurchases(), foundMonth[1].getSumOfPurchases(), DELTA);
+		assertEquals(realMonth2.getSumOfPurchases(), foundMonth[2].getSumOfPurchases(), DELTA);
+		for (int i=3; i<NumOfBuyersPerMonthProperty.goMonthesBackLimit; i++){
+			SumOfPurchasesPerMonthProperty temp = findInCollection(result, new SumOfPurchasesPerMonthProperty(i, 0));
+			assertNotNull(temp);
+			assertEquals(temp.getSumOfPurchases(), 0, DELTA);
+		}
+	}
+	
+	//@Test
 	public void testHealthyRatedProductProperty(){
 		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
 				new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
@@ -242,5 +335,7 @@ public class StoreStatisticsMinerTest {
 		new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
 				new GroceryPackageMock(DBMock.getProduct(1)));
 	}
+	
+	
 
 }

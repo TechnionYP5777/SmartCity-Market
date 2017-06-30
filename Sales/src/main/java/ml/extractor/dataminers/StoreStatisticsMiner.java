@@ -1,15 +1,18 @@
 package ml.extractor.dataminers;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.ToDoubleFunction;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.time.temporal.ChronoUnit;
 import java.time.LocalDate;
+import java.time.Period;
 
 import api.contracts.IGroceryList;
 import api.contracts.IGroceryPackage;
@@ -27,6 +30,8 @@ import ml.common.property.basicproperties.storestatistics.HighRatioAmountExpirat
 import ml.common.property.basicproperties.storestatistics.LastPopularProductProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularManufacturerProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
+import ml.common.property.basicproperties.storestatistics.NumOfBuyersPerMonthProperty;
+import ml.common.property.basicproperties.storestatistics.SumOfPurchasesPerMonthProperty;
 
 /**
  * 
@@ -52,7 +57,8 @@ public class StoreStatisticsMiner extends AMiner {
 		result.addAll(extractAboutToExpireLateStorePackages());
 		result.addAll(extractHighRatioAmountExpirationTime());
 		result.addAll(extractMostPopularManufacturers());
-		result.addAll(extractHealthyRatedProducts());
+		result.addAll(extractNumberOfBuyersPerMonth());
+		result.addAll(extractSumOfPurcahsesPerMonth());
 		
 		return result;
 	}
@@ -178,6 +184,69 @@ public class StoreStatisticsMiner extends AMiner {
 					.collect(Collectors.toSet());
 
 		return aboutToExpireStorePackages;
+	}
+	
+	/**
+	 * this methods generate property of the number of buyers in given month {@link NumOfBuyersPerMonthProperty}
+	 * the limit of monthes back to look at is defined in {@link NumOfBuyersPerMonthProperty}
+	 * 
+	 * @return
+	 */
+	private Set<? extends ABasicProperty> extractNumberOfBuyersPerMonth() {
+
+		LocalDate currentDate = LocalDate.now();
+
+		Map<Integer, Long> numBuyersPerMonthMap = 
+				getHistory().stream()
+					.collect(Collectors.groupingBy( (IGroceryList t) -> {
+							return Period.between(t.getPurchaseDate(), currentDate).getMonths();
+						}, Collectors.counting()));
+
+		Set<NumOfBuyersPerMonthProperty> result = new HashSet<>();
+		
+		for (int i = 0; i < NumOfBuyersPerMonthProperty.goMonthesBackLimit; i++)
+			result.add(new NumOfBuyersPerMonthProperty(i, 
+					(int) (numBuyersPerMonthMap.containsKey(i) ? numBuyersPerMonthMap.get(i) : 0)));
+		
+		return result;
+	}
+	
+	/**
+	 * this methods generate property of the sum of purchases in given month {@link SumOfPurchasesPerMonthProperty}
+	 * the limit of monthes back to look at is defined in {@link SumOfPurchasesPerMonthProperty}
+	 * 
+	 * @return
+	 */
+	private Set<? extends ABasicProperty> extractSumOfPurcahsesPerMonth() {
+
+		LocalDate currentDate = LocalDate.now();
+
+		Map<Integer, List<IGroceryList>> purchasesPerMonthMap = 
+				getHistory().stream()
+				.map(gl -> (IGroceryList)gl)
+					.collect(Collectors.groupingBy( (IGroceryList t) -> {
+							return Period.between(t.getPurchaseDate(), currentDate).getMonths();
+						}));
+		
+		Map<Integer, Double> sumPerMonthMap = new HashMap<>();
+		for (Integer i : purchasesPerMonthMap.keySet()) {
+			sumPerMonthMap.put(i, purchasesPerMonthMap.get(i).stream()
+					.flatMap(gl -> gl.getProductsList().stream())
+					.collect(Collectors.summingDouble(new ToDoubleFunction<IGroceryPackage>() {
+						@Override
+						public double applyAsDouble(IGroceryPackage value) {
+							return value.getProduct().getPrice() * value.getAmount();
+						}
+					})));
+		}
+
+		Set<SumOfPurchasesPerMonthProperty> result = new HashSet<>();
+		
+		for (int i = 0; i < SumOfPurchasesPerMonthProperty.goMonthesBackLimit; i++)
+			result.add(new SumOfPurchasesPerMonthProperty(i, 
+					 (sumPerMonthMap.containsKey(i) ? sumPerMonthMap.get(i) : 0)));
+		
+		return result;
 	}
 	
 	/**

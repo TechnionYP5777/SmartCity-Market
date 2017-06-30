@@ -20,6 +20,13 @@ import ml.decider.Decider;
 import ml.deducer.Deducer;
 import ml.extractor.Extractor;
 
+/**
+ * 
+ * This class is the main class of the module. from here - the server will do all the operations its need
+ * 
+ * @author noam
+ *
+ */
 public class Suggestor {
 	private volatile static StoreData storeData = new StoreData();
 	

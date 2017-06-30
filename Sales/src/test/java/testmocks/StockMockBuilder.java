@@ -8,7 +8,7 @@ import api.types.Place;
 
 public class StockMockBuilder {
 
-	List<StorePackageMock> stock = new ArrayList<>();
+	private List<StorePackageMock> stock = new ArrayList<>();
 	
 	public StockMockBuilder addPackage(long barcode, LocalDate ed){
 		stock.add(new StorePackageMock(barcode, ed));
