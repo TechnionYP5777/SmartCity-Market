@@ -1,16 +1,30 @@
 package api.suggestor;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import api.contracts.IGroceryList;
 import api.contracts.IGroceryPackage;
 import api.contracts.IProduct;
 import api.contracts.ISale;
 import api.contracts.IStorePackage;
+import api.preferences.InputPreferences;
+import api.preferences.SalesPreferences;
 import api.types.StoreData;
+import ml.common.property.AProperty;
+import ml.common.property.basicproperties.ABasicProperty;
+import ml.common.property.saleproperty.ASaleProperty;
+import ml.decider.Decider;
+import ml.deducer.Deducer;
+import ml.extractor.Extractor;
 
 public class Suggestor {
-	private volatile static StoreData storeData;
+	private volatile static StoreData storeData = new StoreData();
+	
+	private volatile static InputPreferences inPref = new InputPreferences();
+	private volatile static SalesPreferences salePref = new SalesPreferences(0.5);
 
 	public static void updateHistory(List<? extends IGroceryList> history) {
 		storeData = new StoreData(history, storeData.getStock(), storeData.getCatalog());
@@ -36,10 +50,18 @@ public class Suggestor {
 	 *            types under {@link api.types.sales})
 	 */
 	public static ISale suggestSale(IGroceryList currentGrocery, IGroceryPackage purchasedProduct) {
-		@SuppressWarnings("unused")
 		StoreData currentData = storeData;
 		
-		return null;
+		Set<ABasicProperty> initialProperties = Extractor.extractProperties(inPref, currentData, currentGrocery, purchasedProduct);
+		
+		Set<AProperty> properties = Deducer.deduceProperties(salePref, initialProperties);
+		
+		Set<ASaleProperty> salesProperties = properties.stream()
+				.filter(p -> p instanceof ASaleProperty)
+				.map(p -> (ASaleProperty)p )
+				.collect(Collectors.toSet());
+		
+		return Decider.decideBestSale(salePref, salesProperties).getOffer();
 	}
 
 	/**

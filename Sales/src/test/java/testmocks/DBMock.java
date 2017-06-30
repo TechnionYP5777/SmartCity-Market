@@ -61,7 +61,7 @@ public class DBMock {
 		return new StoreData(history, new ArrayList<StorePackageMock>(), DBMock.getCatalog());
 	}
 	
-	public static StoreData getStoreDateByStock(List<StorePackageMock> stock){
+	public static StoreData getStoreDataByStock(List<StorePackageMock> stock){
 		return new StoreData(new ArrayList<GroceryListMock>(), stock, DBMock.getCatalog());
 	}
 	

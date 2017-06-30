@@ -141,7 +141,7 @@ public class StoreStatisticsMinerTest {
 				.addPackage(3, LocalDate.now().plusDays(AboutToExpireLateStorePackageProperty.maxDaysThreshold + 5))
 				.build();
 		
-		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDateByStock(stock),
+		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDataByStock(stock),
 				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
 
 		long totalAboutToExpireLatePackages = result.stream()
@@ -165,7 +165,7 @@ public class StoreStatisticsMinerTest {
 				.addPackage(highRatioPackage)
 				.build();
 		
-		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDateByStock(stock),
+		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDataByStock(stock),
 				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
 
 		long totalAboutToExpireLatePackages = result.stream()
@@ -193,7 +193,7 @@ public class StoreStatisticsMinerTest {
 				.addPackage(highRatioWarehousePackage)
 				.build();
 		
-		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDateByStock(stock),
+		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDataByStock(stock),
 				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
 
 		long totalAboutToExpireLatePackages = result.stream()

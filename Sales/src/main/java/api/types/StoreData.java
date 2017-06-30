@@ -1,5 +1,6 @@
 package api.types;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import api.contracts.IGroceryList;
@@ -8,7 +9,7 @@ import api.contracts.IStorePackage;
 
 public class StoreData {
 	
-	private List<? extends IGroceryList> history;
+	private List<? extends IGroceryList> history; 
 	private List<? extends IStorePackage> stock;
 	private List<? extends IProduct> catalog;
 
@@ -17,6 +18,13 @@ public class StoreData {
 		this.history = history;
 		this.stock = stock;
 		this.catalog = catalog;
+	}
+	
+	public StoreData() {
+		super();
+		this.history = new ArrayList<>();
+		this.stock = new ArrayList<>();
+		this.catalog = new ArrayList<>();
 	}
 
 	public List<? extends IGroceryList> getHistory() {
