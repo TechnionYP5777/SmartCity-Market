@@ -411,6 +411,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 		});
 
+		updateProductInfoPaine(null, null, ProductInfoPaneVisibleMode.FROM_CATALOG);
+		
 		createCatalogList();
 	}
 
