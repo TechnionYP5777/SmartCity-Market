@@ -46,7 +46,6 @@ public class AboutToExpireSoonStorePackageProperty extends ABasicProperty {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + diff;
 		result = prime * result + ((storePackage == null) ? 0 : storePackage.hashCode());
 		return result;
 	}
@@ -60,8 +59,6 @@ public class AboutToExpireSoonStorePackageProperty extends ABasicProperty {
 		if (getClass() != obj.getClass())
 			return false;
 		AboutToExpireSoonStorePackageProperty other = (AboutToExpireSoonStorePackageProperty) obj;
-		if (diff != other.diff)
-			return false;
 		if (storePackage == null) {
 			if (other.storePackage != null)
 				return false;

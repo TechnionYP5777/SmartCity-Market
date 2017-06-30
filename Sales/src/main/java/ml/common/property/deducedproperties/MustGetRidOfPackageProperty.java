@@ -40,9 +40,6 @@ public class MustGetRidOfPackageProperty extends ADeducedProperty {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((storePackage == null) ? 0 : storePackage.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(urgency);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -60,10 +57,9 @@ public class MustGetRidOfPackageProperty extends ADeducedProperty {
 				return false;
 		} else if (!storePackage.equals(other.storePackage))
 			return false;
-		if (Double.doubleToLongBits(urgency) != Double.doubleToLongBits(other.urgency))
-			return false;
 		return true;
 	}
+
 	
 	
 }

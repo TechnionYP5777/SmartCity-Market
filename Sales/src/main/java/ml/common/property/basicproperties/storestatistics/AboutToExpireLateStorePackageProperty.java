@@ -48,7 +48,6 @@ public class AboutToExpireLateStorePackageProperty extends ABasicProperty {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + (int) (diff ^ (diff >>> 32));
 		result = prime * result + ((storePackage == null) ? 0 : storePackage.hashCode());
 		return result;
 	}
@@ -62,8 +61,6 @@ public class AboutToExpireLateStorePackageProperty extends ABasicProperty {
 		if (getClass() != obj.getClass())
 			return false;
 		AboutToExpireLateStorePackageProperty other = (AboutToExpireLateStorePackageProperty) obj;
-		if (diff != other.diff)
-			return false;
 		if (storePackage == null) {
 			if (other.storePackage != null)
 				return false;
@@ -71,4 +68,6 @@ public class AboutToExpireLateStorePackageProperty extends ABasicProperty {
 			return false;
 		return true;
 	}
+
+	
 }
