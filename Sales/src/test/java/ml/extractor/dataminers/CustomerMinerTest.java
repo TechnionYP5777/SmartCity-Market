@@ -11,7 +11,6 @@ import org.junit.Test;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.common.property.basicproperties.storestatistics.LastPopularProductOfCustomerProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductOfCustomerProperty;
-import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
 import testmocks.DBMock;
 import testmocks.GroceryListMock;
 import testmocks.GroceryPackageMock;
@@ -37,9 +36,6 @@ public class CustomerMinerTest {
 		long numOfRightAmount = result.stream().filter(
 				p -> p instanceof MostPopularProductOfCustomerProperty && ((MostPopularProductOfCustomerProperty) p).getAmount() == 1)
 				.count();
-		
-		List<MostPopularProductOfCustomerProperty> r = result.stream().filter(p -> p instanceof MostPopularProductOfCustomerProperty)
-				.map(p -> (MostPopularProductOfCustomerProperty) p).collect(Collectors.toList());
 
 		for (long i = 10; i < 10 + MostPopularProductOfCustomerProperty.numOfTop; i++)
 			assertTrue(result.contains(new MostPopularProductOfCustomerProperty(DBMock.getProduct(i), 1)));
@@ -66,9 +62,7 @@ public class CustomerMinerTest {
 		long numOfRightAmount = result.stream().filter(
 				p -> p instanceof LastPopularProductOfCustomerProperty && ((LastPopularProductOfCustomerProperty) p).getAmount() == 1)
 				.count();
-		
-		List<LastPopularProductOfCustomerProperty> r = result.stream().filter(p -> p instanceof LastPopularProductOfCustomerProperty)
-				.map(p -> (LastPopularProductOfCustomerProperty) p).collect(Collectors.toList());
+
 
 		for (long i = LastPopularProductOfCustomerProperty.numOfBottom + 1; i <= 2*LastPopularProductOfCustomerProperty.numOfBottom ; i++)
 			assertTrue(result.contains(new LastPopularProductOfCustomerProperty(DBMock.getProduct(i), 1)));

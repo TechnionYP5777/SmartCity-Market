@@ -16,7 +16,6 @@ import api.types.StoreData;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.common.property.basicproperties.storestatistics.LastPopularProductOfCustomerProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductOfCustomerProperty;
-import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
 
 public class CustomerMiner extends AMiner {
 
