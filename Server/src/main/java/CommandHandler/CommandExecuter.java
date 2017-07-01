@@ -1559,7 +1559,7 @@ public class CommandExecuter {
 		} catch (SaleStillUsed e) {
 			log.info("Remove sale command failed, sale still used by clients");
 
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.PARAM_ID_IS_NOT_EXIST);
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.PARAM_ID_STILL_IN_USE);
 		}
 		
 
