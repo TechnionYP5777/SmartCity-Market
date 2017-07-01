@@ -44,7 +44,7 @@ public class CustomerWelcomeScreen implements Initializable {
 		width.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
 		height.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
 
-		mediaView.setPreserveRatio(true);
+		mediaView.setPreserveRatio(false);
 
 		customerWelcomeScreenPane.getChildren().add(mediaView);
 		player.setCycleCount(MediaPlayer.INDEFINITE);
