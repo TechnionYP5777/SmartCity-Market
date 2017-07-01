@@ -17,7 +17,7 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerMainScreen">
    <children>
-      <VBox alignment="CENTER">
+      <VBox alignment="CENTER" styleClass="root">
          <children>
             <HBox alignment="TOP_CENTER" spacing="200.0">
                <children>

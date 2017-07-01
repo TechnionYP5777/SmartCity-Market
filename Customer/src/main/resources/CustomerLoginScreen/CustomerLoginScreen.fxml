@@ -23,7 +23,7 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerLoginScreen">
    <children>
-      <GridPane fx:id="loginScreenPane" alignment="CENTER">
+      <GridPane fx:id="loginScreenPane" alignment="CENTER" styleClass="paneBack">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" percentWidth="10.0" />
             <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0" />
@@ -37,7 +37,7 @@
          </rowConstraints>
       
          <children>
-            <VBox alignment="CENTER" blendMode="MULTIPLY" spacing="20.0" GridPane.columnIndex="1" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
+            <VBox alignment="CENTER" spacing="20.0" GridPane.columnIndex="1" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
                <children>
                   <VBox prefHeight="84.0" prefWidth="896.0">
                      <children>
@@ -104,8 +104,11 @@
                         </VBox>
                         <VBox alignment="CENTER_RIGHT" GridPane.columnIndex="1">
                            <children>
-                              <JFXButton fx:id="loginButton" alignment="CENTER_RIGHT" onAction="#loginButtonPressed" styleClass="JFXButton" text="Login" GridPane.columnIndex="1">
-                  </JFXButton>
+                              <JFXButton fx:id="loginButton" alignment="CENTER_RIGHT" onAction="#loginButtonPressed" text="Login" GridPane.columnIndex="1">
+                                 <styleClass>
+                                    <String fx:value="JFXButton" />
+                                    <String fx:value="customJFXButton" />
+                                 </styleClass></JFXButton>
                            </children>
                         </VBox>
                      </children>
@@ -127,7 +130,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
-            <VBox alignment="CENTER" blendMode="MULTIPLY" spacing="15.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <VBox alignment="CENTER" spacing="15.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <children>
                   <VBox alignment="CENTER" prefHeight="84.0" prefWidth="896.0">
                      <children>
@@ -139,12 +142,18 @@
                      </children>
                    
                   </VBox>
-                  <JFXButton fx:id="registerButton" onAction="#registerButtonPressed" styleClass="JFXButton" text="Register">
-            </JFXButton>
-                  <Label text="OR">
+                  <JFXButton fx:id="registerButton" onAction="#registerButtonPressed" text="Register">
+                     <styleClass>
+                        <String fx:value="JFXButton" />
+                        <String fx:value="customJFXButton" />
+                     </styleClass></JFXButton>
+                  <Label styleClass="header" text="OR">
             </Label>
-                  <JFXButton fx:id="guestLoginButton" onAction="#guestLoginButtonPressed" styleClass="JFXButton" text="Enter As A Guest">
-            </JFXButton>
+                  <JFXButton fx:id="guestLoginButton" onAction="#guestLoginButtonPressed" text="Enter As A Guest">
+                     <styleClass>
+                        <String fx:value="JFXButton" />
+                        <String fx:value="customJFXButton" />
+                     </styleClass></JFXButton>
                </children>
             </VBox>
          </children>

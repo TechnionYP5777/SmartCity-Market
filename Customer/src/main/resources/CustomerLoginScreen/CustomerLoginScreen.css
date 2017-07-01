@@ -1,4 +1,10 @@
-
+.paneBack {
+   -fx-background-image: url("background.jpg");
+   -fx-background-position: center;
+   -fx-background-repeat: no-repeat;
+   -fx-background-size: cover;
+   
+}
 .WelcomeLbl {
 	-fx-font-size: 70;
 	-fx-text-fill: midnightblue;
@@ -24,6 +30,10 @@
 .forgotPassLbl {
 	-fx-text-fill: blue;
 	-fx-font-size: 15;
+}
+
+.customJFXButton {
+	-fx-font-size: 20;
 }
 
 

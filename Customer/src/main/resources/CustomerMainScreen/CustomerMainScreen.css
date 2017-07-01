@@ -1,3 +1,12 @@
+.root {
+   -fx-background-image: url("back.jpg");
+   -fx-background-position: center;
+   -fx-background-repeat: no-repeat;
+   -fx-background-size: cover;
+   -fx-background-color: white;
+   
+}
+
 .header {
 	-fx-font-size: 40;
  	-fx-text-fill: indigo;
