@@ -69,9 +69,9 @@ public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 		ImageView productImage = new ImageView(image);
 		ImageView sale;
 		if (enableSpecialSale) {
-			sale = new ImageView("/CustomerMainScreen/ylDRTR05sy6M.gif");
+			sale = new ImageView("/CustomerMainScreen/special.gif");
 		} else {
-			 sale = new ImageView("/CustomerMainScreen/sale.png");	
+			 sale = new ImageView("/CustomerMainScreen/sale.gif");	
 		}
 		
 		sale.setFitHeight(80);

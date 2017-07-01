@@ -244,11 +244,31 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 				allerList.getItems().add(ingr.getName());
 			});
 
-			if (p.getSpecialSale().getSaleAsString().equals("No sale avaiable for this item")) {
+			if (p.getSpecialSale().isValid()) {
+				URL imageSaleUrl = null;
+				try {
+					imageSaleUrl = new File("../Common/src/main/resources/CustomerMainScreen/special.gif").toURI()
+							.toURL();
+				} catch (MalformedURLException e) {
+					throw new RuntimeException();
+				}
+				saleLbl.setText(p.getSpecialSale().getSaleAsString());
+				specialSaleImg.setVisible(true);
+				specialSaleImg.setImage(new Image(imageSaleUrl + "", 290, 230, true, false));
+
+			} else if (p.getSale().isValid()) {
+				URL imageSaleUrl = null;
+				try {
+					imageSaleUrl = new File("../Common/src/main/resources/CustomerMainScreen/sale.gif").toURI().toURL();
+				} catch (MalformedURLException e) {
+					throw new RuntimeException();
+				}
+
 				saleLbl.setText(p.getSale().getSaleAsString());
 				specialSaleImg.setVisible(true);
+				specialSaleImg.setImage(new Image(imageSaleUrl + "", 290, 230, true, false));
 			} else {
-				saleLbl.setText(p.getSpecialSale().getSaleAsString());
+				saleLbl.setText(p.getSale().getSaleAsString());
 				specialSaleImg.setVisible(false);
 			}
 			productInfoImage.setVisible(true);
@@ -322,7 +342,10 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		registeredCustomer = TempRegisteredCustomerPassingData.regCustomer;
 		customer = TempCustomerPassingData.customer != null ? TempCustomerPassingData.customer
 				: TempRegisteredCustomerPassingData.regCustomer;
-
+		if (registeredCustomer == null) {
+			offerSalesChk.setVisible(false);
+			offerSalesChk.setDisable(true);
+		}
 		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
 
 		searchField.textProperty().addListener(obs -> {
@@ -614,7 +637,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	}
 
 	Map<Sale, Boolean> getTakenSales() {
-		if (registeredCustomer != null) {
+		if (registeredCustomer != null && offerSalesChk.isSelected()) {
 			HashMap<Long, CartProduct> shoppingList = customer.getCartProductCache();
 			HashMap<Sale, Boolean> specialSales = registeredCustomer.getSpecialSales();
 
