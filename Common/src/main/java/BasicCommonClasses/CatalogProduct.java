@@ -5,11 +5,7 @@ package BasicCommonClasses;
 
 import java.util.HashSet;
 
-//TODO: decide about the logic off add/remove location - PlaceInMarket
-
 /** CatalogProduct - The info of a product of the market's catalog. 
- * @param barcode - Is the unique key.
- * @param locations - A product may exists in different locations.  
  * @author Lior Ben Ami
  * @since 2016-12-09 */
 public class CatalogProduct {
@@ -38,6 +34,7 @@ public class CatalogProduct {
 		this.specialSale = new Sale();
 	}
 
+	/* Empty constructor - need for using map */
 	public CatalogProduct() {
 	}
 

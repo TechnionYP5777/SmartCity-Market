@@ -10,8 +10,7 @@ package BasicCommonClasses;
 public class ProductPackage {
 	SmartCode smartCode;
 	int amount;
-	// TODO: discuss if the location should be under control. maybe we want the
-	// package C'tor place it in the warehouse..
+
 	Location location;
 
 	public ProductPackage(SmartCode smartCode, int amount, Location location) {
@@ -54,7 +53,7 @@ public class ProductPackage {
 
 	@Override
 	public String toString(){
-		return "SmartCode: " + "[" + smartCode + "]" + ", amount: " + amount + ", location: " + "[" + location +"]";
+		return "SmartCode: [" + smartCode + "], amount: " + amount + ", location: [" + location + "]";
 	}
 
 	@Override

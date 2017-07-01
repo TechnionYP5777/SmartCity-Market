@@ -1,5 +1,9 @@
 package UtilsImplementations;
 
+/** PersistenceType - The project event bus
+ * @author Shimon Azulay
+ * @since 2016-03-30*/
+
 import javax.inject.Singleton;
 
 import com.google.common.eventbus.EventBus;

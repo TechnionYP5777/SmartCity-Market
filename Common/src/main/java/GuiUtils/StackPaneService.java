@@ -6,7 +6,6 @@ import javafx.scene.layout.StackPane;
 /**
  * StackPaneService - Service to handle the stack pane.
  * 
- * 
  * @author Shimon Azulay
  * @since 2016-12-10
  */

@@ -44,9 +44,6 @@ public class GuiCommonDefs {
 	public static final String registrationFieldFailureTitle = "Registartion field failure!";
 	//GUI dialog messages
 	
-	//final public static String userAlreadyConnectedFailureMessage = "The user is already connected.";
-	//TODO : (by idan to shimon) i think this case is for critical error, what do you say?
-	
 	public static final String userIsNotConnected = "The user is not connected.";
 	
 	public static final String invalidParamFailureMsg = "One or more inserted parameters are invalid.";
