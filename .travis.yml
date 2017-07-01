@@ -13,6 +13,9 @@ notifications:
  email:
   - smart.market.cs@gmail.com 
 
+install:
+ - sudo pip3 install html2text
+ 
 # add this if you use maven for your project and want to verify mvn build is successful and all unit tests pass.
 script:
  - mvn clean install -DskipTests=false
