@@ -62,7 +62,6 @@ public class ForgotPasswordTest {
 		}
 		String question = null;
 		try {
-			// TODO Check this username 
 			question = ((IForgotPasswordHandler)worker).getForgotPasswordQuestion(username);
 		} catch (NoSuchUserName e) {
 			fail();
@@ -81,7 +80,6 @@ public class ForgotPasswordTest {
 		}
 		String question = null;
 		try {
-			// TODO Check this username 
 			question = ((IForgotPasswordHandler)worker).getForgotPasswordQuestion(username);
 		} catch (NoSuchUserName e) {
 			fail();

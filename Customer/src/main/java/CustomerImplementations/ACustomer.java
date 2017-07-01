@@ -129,7 +129,6 @@ public abstract class ACustomer {
 			
 			throw new ForgotPasswordWrongAnswer();
 			
-		//TODO - ADD MORE CASES RELEVANT FOR REGISTERED-CUSTOMERS
 		default:
 			log.fatal("Command execution failed, failed to parse result description");
 			

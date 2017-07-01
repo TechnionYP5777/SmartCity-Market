@@ -61,9 +61,6 @@ public class LoginTest {
 		} catch (CriticalError | AuthenticationError ¢) {
 			fail();
 		}
-		//TODO lior - add getCartLoginDetails - issue #301
-//		assertEquals("test", customer.getCartLoginDetails().getUserName());
-//		assertEquals("test", customer.getCartLoginDetails().getPassword());
 	}
 	
 	@Test

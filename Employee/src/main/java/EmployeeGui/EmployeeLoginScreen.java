@@ -113,7 +113,6 @@ public class EmployeeLoginScreen implements Initializable {
 		} catch (Exception e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.stackTraceToStr(e));
-			//TODO
 		}
 	}
 

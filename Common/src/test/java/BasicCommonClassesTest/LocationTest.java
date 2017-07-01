@@ -26,7 +26,6 @@ public class LocationTest {
 		lo.setX(2);
 		lo.setY(2);
 		lo.setPlaceInMarket(PlaceInMarket.STORE);
-		//TODO: add null check?
 		if (lo.getX() != 2 || lo.getY() != 2 || lo.getPlaceInMarket() != PlaceInMarket.STORE)
 			fail();
 		Location lo2 = new Location(1,2,PlaceInMarket.STORE);
