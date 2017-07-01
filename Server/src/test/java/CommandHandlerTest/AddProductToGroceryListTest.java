@@ -164,4 +164,27 @@ public class AddProductToGroceryListTest {
 		
 		assertEquals(ResultDescriptor.SM_PRODUCT_PACKAGE_DOES_NOT_EXIST, out.getResultDescriptor());
 	}
+	
+	@Test
+	public void addProductToGroceryListClientNotConnectedTest() {
+		int cartID = 1;
+		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));
+		String command = new CommandWrapper(cartID, CommandDescriptor.ADD_PRODUCT_TO_GROCERY_LIST,
+				new Gson().toJson(productPackage, ProductPackage.class)).serialize();
+		CommandExecuter commandExecuter = new CommandExecuter(command);
+		CommandWrapper out;
+		
+		try {
+			Mockito.doThrow(new ClientNotConnected ()).when(sqlDatabaseConnection).addProductToGroceryList(cartID, productPackage);
+		} catch (ProductPackageNotExist | CriticalError | ProductNotExistInCatalog
+				| ProductPackageAmountNotMatch e) {
+			fail();
+		} catch (ClientNotConnected  __) {
+			/* Successful */
+		}
+		
+		out = commandExecuter.execute(sqlDatabaseConnection);
+		
+		assertEquals(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED, out.getResultDescriptor());
+	}
 }

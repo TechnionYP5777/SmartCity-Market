@@ -23,6 +23,12 @@ import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 
+
+/** 
+ * @author Aviad Cohen
+ * @author Lior Ben Ami
+ * @since 2017
+ * */
 @RunWith(MockitoJUnitRunner.class)
 public class LoginTest {
 		
@@ -170,4 +176,62 @@ public class LoginTest {
 						new Gson().toJson(new Login("admin", ""), Login.class)).serialize()))
 								.execute(sqlDatabaseConnection).getResultDescriptor());
 	}
+	
+	@Test
+	public void loginEmployeeAlreadyConnectedTest() {
+		Login login = new Login("unknown", "unknown");
+		String command = new CommandWrapper(0, CommandDescriptor.LOGIN_EMPLOYEE,
+				new Gson().toJson(login, Login.class)).serialize();
+		CommandExecuter commandExecuter = new CommandExecuter(command);
+		CommandWrapper out;
+		
+		try {
+			Mockito.when(sqlDatabaseConnection.loginWorker(login.getUserName(), login.getPassword()))
+					.thenThrow(new ClientAlreadyConnected());
+		} catch (NumberOfConnectionsExceeded | ClientAlreadyConnected | CriticalError | AuthenticationError e) {
+			fail();
+		}
+		
+		out = commandExecuter.execute(sqlDatabaseConnection);
+		
+		assertEquals(ResultDescriptor.SM_SENDER_IS_ALREADY_CONNECTED, out.getResultDescriptor());
+	}
+	
+	@Test
+	public void loginCustomerAlreadyConnectedTest() {
+		Login login = new Login("unknown", "unknown");
+		String command = new CommandWrapper(0, CommandDescriptor.LOGIN_CUSTOMER,
+				new Gson().toJson(login, Login.class)).serialize();
+		CommandExecuter commandExecuter = new CommandExecuter(command);
+		CommandWrapper out;
+		
+		try {
+			Mockito.when(sqlDatabaseConnection.loginCustomer(login.getUserName(), login.getPassword()))
+					.thenThrow(new ClientAlreadyConnected());
+		} catch (NumberOfConnectionsExceeded | ClientAlreadyConnected | CriticalError | AuthenticationError e) {
+			fail();
+		}
+		
+		out = commandExecuter.execute(sqlDatabaseConnection);
+		
+		assertEquals(ResultDescriptor.SM_SENDER_IS_ALREADY_CONNECTED, out.getResultDescriptor());
+	}
+	
+	@Test
+	public void loginCustomerIllegalLoginTest() {
+		assertEquals(ResultDescriptor.SM_ERR,
+				(new CommandExecuter(new CommandWrapper(1, CommandDescriptor.LOGIN_CUSTOMER,
+						new Gson().toJson("", String.class)).serialize())).execute(sqlDatabaseConnection)
+								.getResultDescriptor());
+	}
+	
+
+	@Test
+	public void loginEmployeeIllegalLoginTest() {
+		assertEquals(ResultDescriptor.SM_ERR,
+				(new CommandExecuter(new CommandWrapper(0, CommandDescriptor.LOGIN_EMPLOYEE,
+						new Gson().toJson("", String.class)).serialize())).execute(sqlDatabaseConnection)
+								.getResultDescriptor());
+	}
+	
 }

@@ -61,6 +61,29 @@ public class GetProductPackageAmountTest {
 	}
 	
 	@Test
+	public void getProductPackageAmountStoreSuccessfulTest() {
+		int senderID = 1;
+		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.STORE));
+		String command = new CommandWrapper(senderID, CommandDescriptor.GET_PRODUCT_PACKAGE_AMOUNT,
+				new Gson().toJson(productPackage, ProductPackage.class)).serialize();
+		CommandExecuter commandExecuter = new CommandExecuter(command);
+		CommandWrapper out;
+		
+		try {
+			Mockito.when(!productPackage.getLocation().equals(PlaceInMarket.STORE)
+					? sqlDatabaseConnection.getProductPackageAmonutOnShelves(senderID, productPackage)
+					: sqlDatabaseConnection.getProductPackageAmonutInWarehouse(senderID, productPackage))
+							.thenReturn("");
+		} catch (CriticalError | ClientNotConnected | ProductNotExistInCatalog e1) {
+			fail();
+		}
+		
+		out = commandExecuter.execute(sqlDatabaseConnection);
+		
+		assertEquals(ResultDescriptor.SM_OK, out.getResultDescriptor());
+	}
+	
+	@Test
 	public void getProductPackageAmountCriticalErrorTest() {
 		int senderID = 1;
 		ProductPackage productPackage = new ProductPackage(new SmartCode(1, null), 1, new Location(0, 0, PlaceInMarket.WAREHOUSE));
