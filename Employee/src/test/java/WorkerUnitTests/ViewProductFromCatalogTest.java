@@ -29,6 +29,10 @@ import SMExceptions.CommonExceptions.CriticalError;
 import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
 
+/**
+ * @author Aviad Cohen
+ * @since 2016-06-02 
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ViewProductFromCatalogTest {
 

@@ -32,7 +32,6 @@ import UtilsImplementations.Serialization;
  * 
  *        This tests the UpdateProductPictures functionality for Employee module
  */
-
 @RunWith(MockitoJUnitRunner.class)
 public class UpdateProductPicturesEmployeeTest {
 	Worker w;

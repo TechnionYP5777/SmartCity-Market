@@ -43,7 +43,6 @@ import UtilsImplementations.Serialization;
  * 
  * @since 2016-12-17
  */
-
 public abstract class AEmployee {
 
 	protected static Logger log = Logger.getLogger(AEmployee.class.getName());

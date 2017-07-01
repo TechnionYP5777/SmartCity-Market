@@ -3,8 +3,9 @@ package EmployeeDefs;
 /** WorkerDefs - This class holds worker implementation constants and definitions
  * 
  * @author Shimon Azulay
- * @since 2016-12-17 */
-
+ * @since 2016-12-17
+ * 
+ */
 public class WorkerDefs {
 	
 	public static final int port = 2000;

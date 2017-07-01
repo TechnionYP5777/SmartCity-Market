@@ -5,7 +5,6 @@ import static org.junit.Assert.fail;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -27,15 +26,11 @@ import ClientServerApi.ResultDescriptor;
 import EmployeeContracts.IWorker;
 import EmployeeDefs.AEmployeeException.ConnectionFailure;
 import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
-import EmployeeDefs.AEmployeeException.InvalidParameter;
 import EmployeeDefs.WorkerDefs;
 import EmployeeImplementations.Worker;
 import SMExceptions.CommonExceptions.CriticalError;
 import UtilsContracts.IClientRequestHandler;
-import UtilsContracts.IForgotPasswordHandler;
 import UtilsImplementations.Serialization;
-import UtilsImplementations.ForgotPasswordHandler.NoSuchUserName;
-import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
 
 /**
  * This class test worker.getAllExpiredProductPackages method 

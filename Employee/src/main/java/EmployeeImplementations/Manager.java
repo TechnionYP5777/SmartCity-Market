@@ -47,7 +47,6 @@ import UtilsImplementations.Serialization;
  * @author Aviad Cohen, Shimon Azulay
  * @since 2016-12-27
  */
-
 @Singleton
 public class Manager extends Worker implements IManager {
 

@@ -23,8 +23,8 @@ import javafx.stage.Stage;
  * 
  * @author Shimon Azulay
  * @since 2016-12-26
+ * 
  */
-
 @SuppressWarnings("restriction")
 public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 

@@ -27,8 +27,8 @@ import UtilsImplementations.Serialization;
 
 /**
  * @author Aviad Cohen
- * @since 2016-04-24 */
-
+ * @since 2016-04-24 
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class GetAllManufacturersTest {
 	private IManager manager;

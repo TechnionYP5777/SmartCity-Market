@@ -5,7 +5,7 @@ import CommonDefs.CLIENT_TYPE;
 /**
  * IEmployeeScreensParameterService - This class represents class chooses which screen to show - manager or worker
  * 
- * @author aviad
+ * @author Aviad Cohen
  * @since 2017-01-04
  *
  */

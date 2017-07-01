@@ -11,7 +11,6 @@ import CommonDefs.CLIENT_TYPE;
  * @since 2017-01-04
  *
  */
-
 @Singleton
 public class EmployeeScreensParameterService implements IEmployeeScreensParameterService {
 

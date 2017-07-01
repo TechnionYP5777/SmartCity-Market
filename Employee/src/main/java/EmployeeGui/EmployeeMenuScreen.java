@@ -41,7 +41,6 @@ import javafx.stage.Stage;
  * @author Shimon Azulay
  * @since 2016-12-27
  */
-//
 public class EmployeeMenuScreen implements Initializable {
 
 	protected static Logger log = Logger.getLogger(EmployeeMenuScreen.class.getName());

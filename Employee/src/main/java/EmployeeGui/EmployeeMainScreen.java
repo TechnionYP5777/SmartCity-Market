@@ -24,7 +24,6 @@ import javafx.scene.media.MediaView;
  * @author Shimon Azulay
  * @since 2016-12-26
  */
-
 @SuppressWarnings("unused")
 public class EmployeeMainScreen implements Initializable {
 

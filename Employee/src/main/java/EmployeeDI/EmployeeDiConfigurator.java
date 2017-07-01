@@ -16,8 +16,9 @@ import UtilsContracts.IForgotPasswordHandler;
  * EmployeeDiConfigurator - This class the dependencies configurator for Employee
  * 
  * @author Shimon Azulay
- * @since 2016-12-26 */ 
-
+ * @since 2016-12-26 
+ *
+ */ 
 public class EmployeeDiConfigurator extends AbstractModule {
 	
 	  @Override 

@@ -35,7 +35,8 @@ import UtilsImplementations.Serialization;
 
 /**
  * @author Lior Ben Ami
- * @since 2016-01-02 */
+ * @since 2017-01-02 
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class PlaceProductPackageOnShelvesTest {
 	private IWorker worker;

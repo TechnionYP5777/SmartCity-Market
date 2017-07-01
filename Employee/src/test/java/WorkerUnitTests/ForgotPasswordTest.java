@@ -28,8 +28,7 @@ import UtilsImplementations.Serialization;
 
 /**
  * @author idan atias
- *
- * @since May 23, 2017
+ * @since 2017-05-23
  * 
  *        this class is for testing the forgot password mechanism of an employee
  */

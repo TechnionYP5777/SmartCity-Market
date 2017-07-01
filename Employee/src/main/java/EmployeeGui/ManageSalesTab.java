@@ -49,6 +49,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/**
+ * ManageSalesTab - This class is the controller for the Manage Sales Tab
+ * all action of this tab should be here.
+ * 
+ * @author Shimon Azulay
+ * @since 2017-06-15
+ */
 public class ManageSalesTab implements Initializable {
 
 	@FXML

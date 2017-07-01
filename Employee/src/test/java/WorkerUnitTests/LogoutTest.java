@@ -25,6 +25,10 @@ import SMExceptions.CommonExceptions.CriticalError;
 import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
 
+/**
+ * @author Aviad Cohen
+ * @since 2017-06-02 
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class LogoutTest {
 

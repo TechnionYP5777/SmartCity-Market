@@ -88,7 +88,6 @@ import javafx.util.Callback;
  * @author Shimon Azulay
  * @since 2017-02-04
  */
-
 public class ManagePackagesTab implements Initializable {
 
 	static Logger log = Logger.getLogger(ManagePackagesTab.class.getName());
@@ -241,7 +240,7 @@ public class ManagePackagesTab implements Initializable {
 		editPackagesAmountSpinner.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
 
 		editPackagesAmountSpinner.valueProperty().addListener((obs, oldValue, newValue) -> {
-			if (newValue == null || newValue < 1)
+			if (newValue == null || newValue < 1)//
 				editPackagesAmountSpinner.getValueFactory().setValue(oldValue);
 			enableRunTheOperationButton();
 		});

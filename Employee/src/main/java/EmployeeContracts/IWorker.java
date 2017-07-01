@@ -20,8 +20,9 @@ import EmployeeDefs.AEmployeeException.EmployeeNotConnected;
  * 
  * @author Shimon Azulay
  * @author Aviad Cohen
- * @since 2016-12-17 */
-
+ * @since 2016-12-17 
+ *
+ */
 public interface IWorker {
 		
 	/**

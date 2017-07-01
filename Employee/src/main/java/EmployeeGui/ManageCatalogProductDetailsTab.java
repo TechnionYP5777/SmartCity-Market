@@ -63,7 +63,6 @@ import javafx.scene.layout.VBox;
  * @since 04.13.17
  * @author Shimon Azulay
  */
-
 public class ManageCatalogProductDetailsTab implements Initializable {
 
 	static Logger log = Logger.getLogger(ManageCatalogProductDetailsTab.class.getName());
@@ -574,7 +573,7 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		}
 
 		dataManu = FXCollections.observableArrayList();
-
+		//
 		dataManu.setAll(manufacturars.keySet());
 
 		// IntStream.range(0,

@@ -36,7 +36,6 @@ import javafx.scene.layout.GridPane;
  * @author Shimon Azulay
  * @since 2016-12-26
  */
-
 public class EmployeeLoginScreen implements Initializable {
 
 	protected static Logger log = Logger.getLogger(EmployeeLoginScreen.class.getName());

@@ -29,7 +29,8 @@ import UtilsImplementations.Serialization;
 
 /**
  * @author Lior Ben Ami,Aviad Cohen
- * @since 2016-01-03 */
+ * @since 2016-01-03 
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class EditProductFromCatalogTest {
 	private IManager manager;

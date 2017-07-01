@@ -51,7 +51,6 @@ import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
  * @author Aviad Cohen
  * @since 2016-12-17
  */
-
 @Singleton
 public class Worker extends AEmployee implements IWorker, IForgotPasswordHandler {
 	
