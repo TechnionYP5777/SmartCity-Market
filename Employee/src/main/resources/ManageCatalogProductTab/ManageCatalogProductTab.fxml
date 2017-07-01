@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
@@ -40,7 +41,7 @@
                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                      </padding>
       				</HBox>
-      				<HBox GridPane.columnIndex="1">
+      				<HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
       					<children>
                         <JFXTextField fx:id="barcodeTextField" promptText="Required Field" styleClass="JFXTextField" />
       					</children>
@@ -66,7 +67,7 @@
                         <RowConstraints vgrow="SOMETIMES" />
       					</rowConstraints>
       					<children>
-      						<HBox>
+      						<HBox alignment="CENTER_LEFT">
       							<children>
       								<Label text="Product Name:" />
       							</children>
@@ -74,7 +75,7 @@
       								<Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
       							</padding>
       						</HBox>
-      						<HBox GridPane.rowIndex="1">
+      						<HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
       							<children>
       								<Label text="Product Description:" />
       							</children>
@@ -82,7 +83,7 @@
       								<Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
       							</padding>
       						</HBox>
-      						<HBox GridPane.rowIndex="2">
+      						<HBox alignment="CENTER_LEFT" GridPane.rowIndex="2">
       							<children>
       								<Label text="Product manufacturer:" />
       							</children>
@@ -90,7 +91,7 @@
       								<Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
       							</padding>
       						</HBox>
-      						<HBox GridPane.rowIndex="3">
+      						<HBox alignment="CENTER_LEFT" GridPane.rowIndex="3">
       							<children>
       								<Label text="Product Price (Nis):" />
       							</children>
@@ -98,7 +99,7 @@
       								<Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
       							</padding>
       						</HBox>
-      						<HBox GridPane.columnIndex="1">
+      						<HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
       							<padding>
       								<Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
       							</padding>
@@ -106,7 +107,7 @@
                               <JFXTextField fx:id="productNameTextField" promptText="Required Field" styleClass="JFXTextField" />
       							</children>
       						</HBox>
-      						<HBox styleClass="JFXTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      						<HBox alignment="CENTER_LEFT" styleClass="JFXTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
       							<padding>
       								<Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
       							</padding>
@@ -114,15 +115,15 @@
                               <JFXTextField fx:id="productDescriptionTextField" promptText="Optional" styleClass="JFXTextField" />
       							</children>
       						</HBox>
-      						<HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+      						<HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="2">
       							<padding>
       								<Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
       							</padding>
                            <children>
-                              <JFXComboBox fx:id="productManufacturerCombo" prefWidth="155.0" styleClass="JFXComboBox" />
+                              <JFXComboBox fx:id="productManufacturerCombo" prefWidth="185.0" styleClass="JFXComboBox" />
                            </children>
       						</HBox>
-      						<HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
+      						<HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3">
       							<padding>
       								<Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
       							</padding>
@@ -130,7 +131,7 @@
                               <JFXTextField fx:id="productPriceTextField" promptText="Required Field" styleClass="JFXTextField" />
       							</children>
       						</HBox>
-                        <HBox GridPane.rowIndex="4">
+                        <HBox alignment="CENTER_LEFT" GridPane.rowIndex="4">
                            <children>
                               <Label text="Ingridients:" />
                            </children>
@@ -138,15 +139,16 @@
                               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                            </padding>
                         </HBox>
-                        <HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
+                        <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                            <padding>
                               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                            </padding>
                            <children>
                               <JFXButton fx:id="ingrChooser" styleClass="JFXButton" text="Click To Choose Ingredients" />
+                              <JFXListView fx:id="choosenIngrList" maxHeight="60.0" orientation="HORIZONTAL" prefWidth="300.0" />
                            </children>
                         </HBox>
-                        <HBox GridPane.rowIndex="5">
+                        <HBox alignment="CENTER_LEFT" GridPane.rowIndex="5">
                            <padding>
                               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                            </padding>

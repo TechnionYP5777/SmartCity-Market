@@ -98,6 +98,9 @@ public class ManageCatalogProductTab implements Initializable {
 
 	@FXML
 	private JFXButton ingrChooser;
+	
+	@FXML
+	private JFXListView<String> choosenIngrList;
 
 	@FXML
 	private JFXTextField barcodeTextField;
@@ -244,9 +247,14 @@ public class ManageCatalogProductTab implements Initializable {
 
 				selectedIngr.clear();
 				selectedIngr.addAll(selectedItems);
+				choosenIngrList.getItems().clear();
+				choosenIngrList.getItems().addAll(selectedItems);
 
 			}
 		});
+		
+		choosenIngrList.depthProperty().set(1);
+		choosenIngrList.setExpanded(true);
 
 		ingredientList.setDepth(1);
 		ingredientList.setExpanded(true);
@@ -321,6 +329,7 @@ public class ManageCatalogProductTab implements Initializable {
 
 		enableRunOperation();
 	}
+	
 
 	private void createIngredientList() {
 		ingredients = new HashMap<String, Ingredient>();
@@ -456,8 +465,7 @@ public class ManageCatalogProductTab implements Initializable {
 		productNameTextField.setText("");
 		productPriceTextField.setText("");
 		productManufacturerCombo.getSelectionModel().clearSelection();
-		// TODO
-		// Clear the ingredients
+		choosenIngrList.getItems().clear();
 	}
 
 	private void printToSuccessLog(String msg) {

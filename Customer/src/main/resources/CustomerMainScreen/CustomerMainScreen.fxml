@@ -11,229 +11,116 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerMainScreen">
    <children>
-      <GridPane fx:id="customerMainScreenPane" styleClass="list-cell">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
-          <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints percentHeight="80.0" vgrow="SOMETIMES" />
-          <RowConstraints percentHeight="20.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+      <VBox alignment="CENTER">
          <children>
-            <VBox alignment="TOP_CENTER" spacing="10.0" GridPane.columnIndex="1">
+            <HBox alignment="TOP_CENTER" spacing="200.0">
                <children>
-                  <Label fx:id="yourListHeader" styleClass="header" text="Your Grocery List" />
-                  <Separator prefWidth="200.0" />
-                  <HBox alignment="CENTER" spacing="20.0">
-                     <children>
-                        <JFXTextField fx:id="searchField" prefHeight="24.0" prefWidth="180.0" promptText="Search Product In List" styleClass="JFXTextField" />
-                        <Button fx:id="removeAllButton" mnemonicParsing="false" onAction="#removeAllButtonPressed" styleClass="JFXButton" text="Remove products from the list" />
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </HBox>
-               	  <JFXListView fx:id="productsListView" editable="true" style="-fx-background-color: TRANSPARENT;" verticalGap="10.0" />
-               </children>
-               <padding>
-                  <Insets top="20.0" />
-               </padding>
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
-            </VBox>
-            <VBox spacing="10.0">
-               <children>
-                  <HBox alignment="CENTER">
+                  <VBox spacing="10.0">
                      <children>
                         <Label styleClass="header" text="Products Dashboard" />
-                     </children>
-                  </HBox>
-                  <Separator />
-                  <HBox alignment="CENTER">
-                     <children>
-                        <JFXTextField fx:id="searchCatalogProduct" prefHeight="24.0" prefWidth="180.0" promptText="Search Product In Catalog" styleClass="JFXTextField" />
-                        <HBox fx:id="toShowCatalog" />
-                     </children>
-                     <padding>
-                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                     </padding>
-                  </HBox>
-                  <Separator prefWidth="200.0" />
-                  <HBox>
-                     <children>
-                        <Label text="Product Info" underline="true" />
-                     </children>
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                  </HBox>
-                  <GridPane fx:id="productInfoPane">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="25.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="35.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints vgrow="SOMETIMES" />
-                      <RowConstraints vgrow="SOMETIMES" />
-                      <RowConstraints vgrow="SOMETIMES" />
-                        <RowConstraints vgrow="SOMETIMES" />
-                        <RowConstraints vgrow="SOMETIMES" />
-                        <RowConstraints vgrow="SOMETIMES" />
-                        <RowConstraints vgrow="SOMETIMES" />
-                        <RowConstraints vgrow="SOMETIMES" />
-                        <RowConstraints vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                           <HBox.margin>
-                              <Insets left="50.0" />
-                           </HBox.margin>
+                        <Separator />
+                        <HBox alignment="CENTER">
                            <children>
-                              <Label fx:id="amountLabel" styleClass="productDetailsLabel" text="N/A" />
+                              <JFXTextField fx:id="searchCatalogProduct" prefHeight="24.0" prefWidth="210.0" promptText="Search Product In Catalog" styleClass="JFXTextField" />
+                              <HBox fx:id="toShowCatalog" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" GridPane.rowIndex="3">
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
+                        <Separator prefWidth="200.0" />
+                        <HBox>
                            <children>
-                              <Label styleClass="productDetailsLabel" text="Amount In Grocery List:" />
+                              <Label styleClass="thisLabels" text="Product Info" underline="true" />
                            </children>
                            <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" GridPane.rowIndex="2">
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                           <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" styleClass="productDetailsLabel" text="Price (Nis):" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <HBox.margin>
-                              <Insets left="69.0" />
-                           </HBox.margin>
-                           <children>
-                              <Label fx:id="priceLabel" styleClass="productDetailsLabel" text="N/A" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
-                           <HBox.margin>
                               <Insets left="10.0" />
-                           </HBox.margin>
-                           <children>
-                              <Label fx:id="productNameLabel" styleClass="productDetailsLabel" text="N/A" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <HBox.margin>
-                              <Insets left="19.0" />
-                           </HBox.margin>
+                        <HBox>
                            <children>
-                              <Label fx:id="manufacturerLabel" styleClass="productDetailsLabel" text="N/A" />
+                              <VBox>
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                       <children>
+                                          <Label styleClass="productDetailsLabel" text="Amount In Grocery List:" />
+                                          <Label fx:id="amountLabel" styleClass="productDetailsLabel" text="N/A" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                       <children>
+                                          <Label alignment="CENTER" contentDisplay="CENTER" styleClass="productDetailsLabel" text="Price (Nis):" />
+                                          <Label fx:id="priceLabel" styleClass="productDetailsLabel" text="N/A" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                       <children>
+                                          <Label styleClass="productDetailsLabel" text="Manufacturer:" />
+                                          <Label fx:id="manufacturerLabel" styleClass="productDetailsLabel" text="N/A" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                       <children>
+                                          <Label contentDisplay="CENTER" styleClass="productDetailsLabel" text="Expiration Date:" />
+                                          <Label fx:id="descriptionTextArea" styleClass="productDetailsLabel" text="N/A" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                       <children>
+                                          <Label styleClass="productDetailsLabel" text="Product Name:" />
+                                          <Label fx:id="productNameLabel" styleClass="productDetailsLabel" text="N/A" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <ImageView fx:id="productInfoImage" fitHeight="160.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                           <children>
-                              <Label styleClass="productDetailsLabel" text="Manufacturer:" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                           <HBox.margin>
-                              <Insets left="26.0" />
-                           </HBox.margin>
-                           <children>
-                              <Label fx:id="descriptionTextArea" styleClass="productDetailsLabel" text="N/A" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" GridPane.rowIndex="4">
-                           <children>
-                              <Label contentDisplay="CENTER" styleClass="productDetailsLabel" text="Expiration Date:" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT">
-                           <children>
-                              <Label styleClass="productDetailsLabel" text="Product Name:" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </HBox>
-                        <ImageView fx:id="productInfoImage" fitHeight="230.0" fitWidth="210.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowSpan="5" />
-                        <HBox alignment="CENTER_LEFT" GridPane.rowIndex="5">
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
                            <children>
                               <Label fx:id="saleTxtLbl" contentDisplay="CENTER" styleClass="productDetailsLabel" text="Available Sale:" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </HBox>
-                        <HBox GridPane.columnIndex="1" GridPane.rowIndex="5">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                           <children>
                               <Label fx:id="saleLbl" styleClass="productDetailsLabel" text="N/A" />
+                              <ImageView fx:id="specialSaleImg" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@ylDRTR05sy6M.gif" />
+                                 </image>
+                              </ImageView>
                            </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
                         </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="6">
+                        <HBox spacing="10.0">
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                            <children>
                               <Label styleClass="productDetailsLabel" text="Ingredients:" />
+                              <JFXListView fx:id="allerList" maxHeight="60.0" minHeight="60.0" orientation="HORIZONTAL" prefHeight="60.0" styleClass="listNoBorder" />
                            </children>
                         </HBox>
-                        <HBox GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                           <children>
-                              <JFXListView fx:id="allerList" maxHeight="60.0" orientation="HORIZONTAL" prefWidth="370.0" styleClass="listNoBorder" />
-                           </children>
-                        </HBox>
-                        <HBox GridPane.rowIndex="7">
+                        <HBox>
                            <children>
                               <JFXButton fx:id="showLocation" onAction="#onLocationPressed" styleClass="JFXButton" text="Show Location" />
                            </children>
@@ -241,133 +128,107 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                         </HBox>
-                        <HBox GridPane.columnIndex="2" GridPane.rowIndex="5">
+                        <VBox spacing="20.0">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" spacing="7.0">
+                     <children>
+                        <Label fx:id="yourListHeader" styleClass="header" text="Your Grocery List" />
+                        <Separator prefWidth="200.0" />
+                        <HBox alignment="CENTER" spacing="20.0">
                            <children>
-                              <ImageView fx:id="specialSaleImg" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                              <JFXTextField fx:id="searchField" prefWidth="210.0" promptText="Search Product In List" styleClass="JFXTextField" />
+                              <Button fx:id="removeAllButton" mnemonicParsing="false" onAction="#removeAllButtonPressed" styleClass="JFXButton" text="Remove products from the list" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                     	  <JFXListView fx:id="productsListView" editable="true" style="-fx-background-color: TRANSPARENT;" verticalGap="10.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <Separator prefWidth="200.0" />
+            <HBox alignment="TOP_CENTER" spacing="370.0">
+               <children>
+                  <VBox spacing="10.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT">
+                           <children>
+                              <Label styleClass="thisLabels" text="Product Actions" underline="true" />
+                           </children>
+                        </HBox>
+                        <JFXCheckBox fx:id="offerSalesChk" selected="true" styleClass="JFXCheckBox" text="Offer Me Sales" />
+                        <HBox alignment="CENTER_LEFT" spacing="40.0">
+                           <children>
+                              <ImageView fx:id="addButton" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#addButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                                  <image>
-                                    <Image url="@ylDRTR05sy6M.gif" />
+                                    <Image url="@add.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="removeButton" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#removeButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                                 <image>
+                                    <Image url="@remove.png" />
                                  </image>
                               </ImageView>
                            </children>
                         </HBox>
                      </children>
-                  </GridPane>
-                  <VBox spacing="20.0">
                      <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        <Insets bottom="10.0" left="10.0" />
                      </padding>
                   </VBox>
-               </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
-               </padding>
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
-            </VBox>
-            <VBox alignment="BOTTOM_LEFT" spacing="10.0" GridPane.rowIndex="1">
-               <children>
-                  <Separator prefWidth="200.0" />
-                  <HBox>
+                  <HBox alignment="CENTER" spacing="40.0">
                      <children>
-                        <Label text="Label" />
-                     </children>
-                     <padding>
-                        <Insets left="15.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER_LEFT" spacing="40.0">
-                     <children>
-                        <ImageView fx:id="addButton" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#addButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                        <VBox alignment="CENTER" spacing="10.0">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label styleClass="thisLabels" text="Total items in cart:" />
+                                    <Label fx:id="productsNumberTextField" styleClass="thisLabels" text="0" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                 <children>
+                                    <Label styleClass="thisLabels" text="Total Price (Nis):" />
+                                    <Label fx:id="totalSumTextField" styleClass="thisLabels" text="0.00" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" onMouseClicked="#cancelButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                            <image>
-                              <Image url="@add.png" />
+                              <Image url="@logout.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="removeButton" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#removeButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                        <ImageView fx:id="checkOut" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#purchaseButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                            <image>
-                              <Image url="@remove.png" />
+                              <Image url="@checkout.png" />
                            </image>
                         </ImageView>
+                        <VBox alignment="CENTER" spacing="10.0">
+                           <children>
+                              <JFXButton onAction="#forceScanProduct" styleClass="JFXButton" text="1" />
+                              <JFXButton onAction="#forceScanProduct2" styleClass="JFXButton" text="2" />
+                           </children>
+                        </VBox>
                      </children>
                   </HBox>
-                  <JFXCheckBox fx:id="offerSalesChk" styleClass="JFXCheckBox" text="Offer Me Sales" />
                </children>
                <padding>
-                  <Insets bottom="10.0" left="10.0" />
-               </padding>
-            </VBox>
-            <HBox alignment="BOTTOM_CENTER" prefHeight="157.0" prefWidth="483.0" spacing="40.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <children>
-                  <GridPane>
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="70.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" percentWidth="30.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints vgrow="SOMETIMES" />
-                      <RowConstraints vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <HBox alignment="CENTER_LEFT">
-                           <children>
-                              <Label styleClass="thisLabels" text="Total items in cart:" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
-                           <children>
-                              <Label styleClass="thisLabels" text="Total Price (Nis):" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
-                           <children>
-                              <Label fx:id="productsNumberTextField" styleClass="thisLabels" text="0" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <children>
-                              <Label fx:id="totalSumTextField" styleClass="thisLabels" text="0.00" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </HBox>
-                     </children>
-                  </GridPane>
-                  <ImageView fitHeight="60.0" fitWidth="60.0" onMouseClicked="#cancelButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-                     <image>
-                        <Image url="@logout.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="80.0" fitWidth="80.0" onMouseClicked="#purchaseButtonPressed" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-                     <image>
-                        <Image url="@checkout.png" />
-                     </image>
-                  </ImageView>
-                  <VBox alignment="CENTER" spacing="10.0">
-                     <children>
-                        <JFXButton onAction="#forceScanProduct" styleClass="JFXButton" text="1" />
-                        <JFXButton onAction="#forceScanProduct2" styleClass="JFXButton" text="2" />
-                     </children>
-                  </VBox>
-               </children>
-               <padding>
-                  <Insets bottom="20.0" right="1.0" top="20.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </HBox>
          </children>
-      </GridPane>
+      </VBox>
    </children>
    <stylesheets>
-      <URL value="@CustomerMainScreen.css" />
       <URL value="@../ProjectCss/projectCss.css" />
+      <URL value="@CustomerMainScreen.css" />
    </stylesheets>
 </StackPane>

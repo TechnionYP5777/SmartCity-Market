@@ -2,9 +2,11 @@ package GuiUtils;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import com.jfoenix.controls.JFXButton;
@@ -27,6 +29,10 @@ public class DialogMessagesService {
 
 	public static void showInfoDialog(String title, String header, String content) {
 		alertCreator(title, header, content, null, null);
+	}
+	
+	public static void showInfoDialog(String title, String header, String content, Node node) {
+		alertCreator(title, header, content, node, null);
 	}
 
 	public static void showErrorDialog(String title, String header, String content) {
@@ -85,12 +91,22 @@ public class DialogMessagesService {
 
 	private static void alertCreator(String title, String header, String content, Node node, IConfiramtionWithCloseDialog d) {
 		JFXDialogLayout dialogContent = new JFXDialogLayout();
+	
 		dialogContent.setHeading(new Text(header == null ? title : title + "\n" + header));
-		if (content != null)
+	
+		if (content != null && node != null) {
+			VBox vbox = new VBox(new Text(content), node);
+			vbox.setAlignment(Pos.CENTER);
+			vbox.setSpacing(10);
+			dialogContent.setBody(vbox);
+			
+		} else  if (content != null) {
 			dialogContent.setBody(new Text(content));
 		
-		if (node != null)
+		} else if (node != null) {
 			dialogContent.setBody(node);
+		
+		}
 
 		JFXButton close = new JFXButton("Close");
 		close.getStyleClass().add("JFXButton");

@@ -119,13 +119,10 @@ public class ManageSalesTab implements Initializable {
 	
 			try {
 				manager.createNewSale(new Sale(-1, currentCatalogProduct.getBarcode(), Integer.parseInt(amount.getText()),Double.parseDouble(price.getText())));
-			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {
-			
+			} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure | ParamIDAlreadyExists e) {			
 				log.fatal(e);
 				log.debug(StackTraceUtil.stackTraceToStr(e));
-				// TODO aviad should fix the exceptions
-				//e.showInfoToUser();
-			
+				e.showInfoToUser();			
 			}
 	
 		createSingleList();
@@ -224,7 +221,6 @@ public class ManageSalesTab implements Initializable {
 	
 	private void clearData() {
 		currentCatalogProduct = null;
-		barcodeField.setText("");
 		amount.setText("");
 		price.setText("");
 		productNamelbl.setText("N/A");

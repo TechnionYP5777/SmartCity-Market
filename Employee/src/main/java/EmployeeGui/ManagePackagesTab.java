@@ -236,7 +236,7 @@ public class ManagePackagesTab implements Initializable {
 				barcodeTextField.setText(newValue.replaceAll("[^\\d]", ""));
 			showScanCodePane(true);
 			resetParams();
-			searchCodeButton.setDisable(newValue.isEmpty());
+			// searchCodeButton.setDisable(newValue.isEmpty());
 		});
 		editPackagesAmountSpinner.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
 
@@ -252,24 +252,25 @@ public class ManagePackagesTab implements Initializable {
 				enableRunTheOperationButton();
 			}
 		});
-// 		TODO enable this
-//		final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
-//			@Override
-//			public DateCell call(final DatePicker __) {
-//				return new DateCell() {
-//					@Override
-//					public void updateItem(LocalDate item, boolean empty) {
-//						super.updateItem(item, empty);
-//
-//						if (!item.isBefore(LocalDate.now()))
-//							return;
-//						setDisable(true);
-//						setStyle("-fx-background-color: #EEEEEE;");
-//					}
-//				};
-//			}
-//		};
-//		datePicker.setDayCellFactory(dayCellFactory);
+		// TODO enable this
+		// final Callback<DatePicker, DateCell> dayCellFactory = new
+		// Callback<DatePicker, DateCell>() {
+		// @Override
+		// public DateCell call(final DatePicker __) {
+		// return new DateCell() {
+		// @Override
+		// public void updateItem(LocalDate item, boolean empty) {
+		// super.updateItem(item, empty);
+		//
+		// if (!item.isBefore(LocalDate.now()))
+		// return;
+		// setDisable(true);
+		// setStyle("-fx-background-color: #EEEEEE;");
+		// }
+		// };
+		// }
+		// };
+		// datePicker.setDayCellFactory(dayCellFactory);
 		datePicker.setValue(LocalDate.now());
 
 		VBox vbox = new VBox();
@@ -345,7 +346,8 @@ public class ManagePackagesTab implements Initializable {
 				if (showMapOnClick.isSelected()) {
 					CatalogProduct p = null;
 					try {
-						p = worker.viewProductFromCatalog(expireds.get(expiredList.getSelectionModel().getSelectedItem()).getSmartCode().getBarcode());
+						p = worker.viewProductFromCatalog(expireds
+								.get(expiredList.getSelectionModel().getSelectedItem()).getSmartCode().getBarcode());
 					} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog
 							| ConnectionFailure e) {
 						log.fatal(e);
@@ -353,9 +355,10 @@ public class ManagePackagesTab implements Initializable {
 						e.showInfoToUser();
 					}
 					Location loc = p.getLocations().iterator().next();
-					DialogMessagesService.showConfirmationWithCloseDialog("Product Location Is: " + "(col=" + loc.getX() + ", row=" + loc.getY() + ")", null ,
+					DialogMessagesService.showConfirmationWithCloseDialog(
+							"Product Location Is: " + "(col=" + loc.getX() + ", row=" + loc.getY() + ")", null,
 							new MarkLocationOnStoreMap().run(loc.getX(), loc.getY()), new LocationMapClose());
-					popupExpired.hide();					
+					popupExpired.hide();
 				}
 			}
 		});
@@ -367,15 +370,15 @@ public class ManagePackagesTab implements Initializable {
 		showScanCodePane(true);
 
 	}
-	
+
 	class LocationMapClose implements IConfiramtionWithCloseDialog {
 
 		@Override
 		public void onClose() {
 			remove.setDisable(true);
-			popupExpired.show(showExpiredProducts, PopupVPosition.TOP, PopupHPosition.LEFT);		
+			popupExpired.show(showExpiredProducts, PopupVPosition.TOP, PopupHPosition.LEFT);
 		}
-		
+
 	}
 
 	class ExpiredProductRemove implements IConfiramtionDialog {
@@ -514,7 +517,7 @@ public class ManagePackagesTab implements Initializable {
 
 		scanOrTypeCodePane.setVisible(show);
 		productAfterScanPane.setVisible(!show);
-		showDatePickerBtn.setVisible(show);
+		//showDatePickerBtn.setVisible(show);
 		(show ? scanOrTypeCodePane : datePickerForSmartCode).toFront();
 	}
 
@@ -539,16 +542,16 @@ public class ManagePackagesTab implements Initializable {
 
 	}
 
-	private void getProductCatalog(String barcode) throws SMException {
+	private void getProductCatalog() throws SMException {
 
 		catalogProduct = null;
 		catalogProduct = worker.viewProductFromCatalog(Long.parseLong(barcodeTextField.getText()));
 
 	}
 
-	private void barcodeEntered(String barcode) throws SMException {
+	private void barcodeEntered() throws SMException {
 
-		getProductCatalog(barcodeTextField.getText());
+		getProductCatalog();
 		showScanCodePane(false);
 		showSmartCodeOperationsPane(false);
 
@@ -556,22 +559,11 @@ public class ManagePackagesTab implements Initializable {
 
 	}
 
-	private void smartcodeEntered(SmartCode c) throws SMException {
+	private void smartcodeEntered() throws SMException {
 		log.info("===============================smartcodeEntered======================================");
-		getProductCatalog(barcodeTextField.getText());
+		getProductCatalog();
 
-		int amountInStore = worker
-				.getProductPackageAmount(new ProductPackage(c, 1, new Location(0, 0, PlaceInMarket.STORE))),
-				amountInWarehouse = worker
-						.getProductPackageAmount(new ProductPackage(c, 1, new Location(0, 0, PlaceInMarket.WAREHOUSE)));
-		this.amountInStore = amountInStore;
-		this.amountInWarehouse = amountInWarehouse;
-
-		showScanCodePane(false);
-		showSmartCodeOperationsPane(true);
-
-		addProductParametersToQuickView(catalogProduct.getName(), barcodeTextField.getText(),
-				c.getExpirationDate() + "", Integer.toString(amountInStore), Integer.toString(amountInWarehouse));
+		updateToSmartCode();
 		log.info("amount in store: " + amountInStore);
 		log.info("amount in werehouse: " + amountInWarehouse);
 		log.info("===============================smartcodeEntered======================================");
@@ -581,15 +573,14 @@ public class ManagePackagesTab implements Initializable {
 	@FXML
 	private void searchCodeButtonPressed(MouseEvent __) {
 		try {
-			LocalDate expirationDate = this.expirationDate != null ? this.expirationDate
-					: datePickerForSmartCode.getValue();
+			LocalDate expirationDate = datePickerForSmartCode.getValue();
 
 			if (expirationDate == null)
-				barcodeEntered(barcodeTextField.getText());
-			else
-				smartcodeEntered(new SmartCode(Long.parseLong(barcodeTextField.getText()), expirationDate));
-
-			this.expirationDate = expirationDate;
+				barcodeEntered();
+			else {
+				this.expirationDate = expirationDate;
+				smartcodeEntered();				
+			}
 
 		} catch (SMException e) {
 			log.fatal(e);
@@ -615,6 +606,21 @@ public class ManagePackagesTab implements Initializable {
 		runTheOprBtnTxt((JFXRadioButton) ¢.getSource());
 	}
 
+	private void updateToSmartCode() throws SMException {
+		SmartCode c = new SmartCode(catalogProduct.getBarcode(), expirationDate);
+		// TODO check location
+		this.amountInStore = worker
+				.getProductPackageAmount(new ProductPackage(c, 1, new Location(0, 0, PlaceInMarket.STORE)));
+		this.amountInWarehouse = worker
+				.getProductPackageAmount(new ProductPackage(c, 1, new Location(0, 0, PlaceInMarket.WAREHOUSE)));
+
+		showScanCodePane(false);
+		showSmartCodeOperationsPane(true);
+
+		addProductParametersToQuickView(catalogProduct.getName(), barcodeTextField.getText(),
+				c.getExpirationDate() + "", Integer.toString(amountInStore), Integer.toString(amountInWarehouse));
+	}
+
 	@FXML
 	private void runTheOperationButtonPressed(ActionEvent __) {
 
@@ -635,10 +641,16 @@ public class ManagePackagesTab implements Initializable {
 					// exec
 					worker.addProductToWarehouse(pp);
 
+					if (printTheSmartCodeCheckBox.isSelected()) {
+						new SmartcodePrint(smartcode, amountVal).print();
+					}
+
 					printToSuccessLog("Added (" + amountVal + ") " + "product packages (" + pp + ") to warehouse");
 
 					this.expirationDate = datePicker.getValue();
-					searchCodeButtonPressed(null);
+
+					updateToSmartCode();
+
 				}
 			} else if (addPackageToStoreRadioButton.isSelected()) {
 				log.info("addPackageToStoreRadioButton");
@@ -646,14 +658,14 @@ public class ManagePackagesTab implements Initializable {
 				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
 				worker.placeProductPackageOnShelves(pp);
 				printToSuccessLog("Added (" + amountVal + ") " + "product packages (" + pp + ") to store");
-				searchCodeButtonPressed(null);
+				updateToSmartCode();
 			} else if (removePackageFromStoreRadioButton.isSelected()) {
 				log.info("removePackageFromStoreRadioButton");
 				Location loc = new Location(0, 0, PlaceInMarket.STORE);
 				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
 				worker.removeProductPackageFromStore(pp);
 				printToSuccessLog("Removed (" + amountVal + ") " + "product packages (" + pp + ") from store");
-				searchCodeButtonPressed(null);
+				updateToSmartCode();
 			} else if (!removePackageFromWarhouseRadioButton.isSelected()) {
 				if (printSmartCodeRadioButton.isSelected())
 					new SmartcodePrint(smartcode, amountVal).print();
@@ -663,7 +675,7 @@ public class ManagePackagesTab implements Initializable {
 				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
 				worker.removeProductPackageFromStore(pp);
 				printToSuccessLog("Removed (" + amountVal + ") " + "product packages (" + pp + ") from warehouse");
-				searchCodeButtonPressed(null);
+				updateToSmartCode();
 			}
 
 		} catch (SMException e) {
@@ -682,11 +694,16 @@ public class ManagePackagesTab implements Initializable {
 	@FXML
 	private void showMoreDetailsButtonPressed(ActionEvent __) {
 
-		if (catalogProduct != null)
+		if (catalogProduct != null) {
+			int xLocation = catalogProduct.getLocations().iterator().next().getX();
+			int yLocation = catalogProduct.getLocations().iterator().next().getY();
 			DialogMessagesService.showInfoDialog(catalogProduct.getName(), null,
 					"Barcode: " + catalogProduct.getBarcode() + "\n" + "Description: " + catalogProduct.getDescription()
 							+ "\n" + "Manufacturer: " + catalogProduct.getManufacturer().getName() + "\n"
-							+ "Ingredients: " + getIngredients() + "Price: " + catalogProduct.getPrice() + " Nis");
+							+ "Ingredients: " + getIngredients() + "Price: " + catalogProduct.getPrice()
+							+ " Nis\nProduct Location " + "col=" + xLocation + ", row=" + yLocation + ")",
+					new MarkLocationOnStoreMap().run(xLocation, yLocation));
+		}
 
 	}
 

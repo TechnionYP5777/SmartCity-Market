@@ -125,8 +125,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	@FXML
 	ImageView removeButton;
-	
-	@FXML 
+
+	@FXML
 	ImageView specialSaleImg;
 
 	@FXML
@@ -137,6 +137,9 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	@FXML
 	JFXTextField searchField;
+
+	@FXML
+	ImageView checkOut;
 
 	@FXML
 	Label yourListHeader;
@@ -152,7 +155,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	@FXML
 	HBox toShowCatalog;
-	
+
 	@FXML
 	Label saleTxtLbl;
 
@@ -240,7 +243,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			p.getIngredients().forEach(ingr -> {
 				allerList.getItems().add(ingr.getName());
 			});
-			
+
 			if (p.getSpecialSale().getSaleAsString().equals("No sale avaiable for this item")) {
 				saleLbl.setText(p.getSale().getSaleAsString());
 				specialSaleImg.setVisible(true);
@@ -285,6 +288,15 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
 		productsListView.setItems(filteredProductList);
+		enableSearchAndCheckout();
+	}
+
+	private void enableSearchAndCheckout() {
+		boolean disable = productsListView.getItems().isEmpty();
+		searchField.setVisible(!disable);
+		searchField.setDisable(disable);
+		checkOut.setVisible(!disable);
+		checkOut.setDisable(disable);
 	}
 
 	private void logoutAndExit() {
@@ -310,7 +322,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		registeredCustomer = TempRegisteredCustomerPassingData.regCustomer;
 		customer = TempCustomerPassingData.customer != null ? TempCustomerPassingData.customer
 				: TempRegisteredCustomerPassingData.regCustomer;
-		
+
 		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
 
 		searchField.textProperty().addListener(obs -> {
@@ -333,9 +345,11 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 			@Override
 			public void changed(ObservableValue<? extends CartProduct> __, CartProduct oldValue, CartProduct newValue) {
-				catalogProduct = newValue.getCatalogProduct();
-				updateProductInfoPaine(catalogProduct, newValue.getTotalAmount(),
-						ProductInfoPaneVisibleMode.PRESSED_PRODUCT);
+				if (newValue != null) {
+					catalogProduct = newValue.getCatalogProduct();
+					updateProductInfoPaine(catalogProduct, newValue.getTotalAmount(),
+							ProductInfoPaneVisibleMode.PRESSED_PRODUCT);
+				}
 
 			}
 		});
@@ -357,7 +371,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 			}
 		});
-		
 
 		Label lbl1 = new Label("Catalog Products");
 		JFXButton close = new JFXButton("Close");
@@ -412,8 +425,10 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		});
 
 		updateProductInfoPaine(null, null, ProductInfoPaneVisibleMode.FROM_CATALOG);
-		
+
 		createCatalogList();
+
+		enableSearchAndCheckout();
 	}
 
 	private void createCatalogList() {
@@ -490,6 +505,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	public void removeAllButtonPressed(ActionEvent __) {
 		try {
 			customer.removeAllItemsOfCartProduct(scannedSmartCode);
+			removeAllButton.setVisible(false);
+			removeAllButton.setDisable(true);
 		} catch (SMException e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.stackTraceToStr(e));
@@ -511,7 +528,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		@Override
 		public void onYes() {
 			registeredCustomer.addSpecialSale(sale, true);
-			
+
 		}
 
 		@Override
@@ -592,7 +609,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	public void smartcodeScanned(SmartcodeScanEvent ¢) {
 		SmartCode smartCode = ¢.getSmarCode();
 		scannedSmartCode = smartCode;
- 
+
 		smartcodeScannedHandler();
 	}
 
@@ -648,6 +665,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	@FXML
 	void forceScanProduct2(ActionEvent __) {
-		smartcodeScanned(new SmartcodeScanEvent(new SmartCode(0000, LocalDate.now())));
+		smartcodeScanned(new SmartcodeScanEvent(new SmartCode(1234, LocalDate.now())));
 	}
 }
