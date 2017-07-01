@@ -32,6 +32,11 @@ public class MarkLocationOnStoreMap {
     private int hieght = width;
     private Integer x;
     private Integer y;
+ 
+    public MarkLocationOnStoreMap(){
+    	this.x = null;
+    	this.y = null;
+    }
 
     private void createLayers(){
 
@@ -45,7 +50,6 @@ public class MarkLocationOnStoreMap {
         gc1.drawImage(img, 0, 0);
         gc2 = layer2.getGraphicsContext2D();
         gc2.setFill(Color.BLUE);
-        gc2.fillOval(100,100,20,20);
     }
 
     private void handleLayers(){
@@ -80,13 +84,13 @@ public class MarkLocationOnStoreMap {
         root.getChildren().add(borderPane);
     }
 
-    public Group run(int xLocation, int yLocation){
+    public Group mark(int xLocation, int yLocation){
     	this.x = Integer.valueOf(xLocation);
     	this.y = Integer.valueOf(yLocation);
-    	return run();
+    	return mark();
     }
 
-    public Group run() {
+    public Group mark() {
 
     	// Build GUI
         borderPane = new BorderPane();  

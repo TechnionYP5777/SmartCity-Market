@@ -271,7 +271,7 @@ public class ManageCatalogProductTab implements Initializable {
 			}
 		});
 
-		Group locationMap = new MarkLocationOnStoreMap().run();
+		Group locationMap = new MarkLocationOnStoreMap().mark();
 
 		VBox locationContainer = new VBox();
 		locationContainer.getChildren().addAll(lbl1, locationMap, close);

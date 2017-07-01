@@ -357,7 +357,7 @@ public class ManagePackagesTab implements Initializable {
 					Location loc = p.getLocations().iterator().next();
 					DialogMessagesService.showConfirmationWithCloseDialog(
 							"Product Location Is: " + "(col=" + loc.getX() + ", row=" + loc.getY() + ")", null,
-							new MarkLocationOnStoreMap().run(loc.getX(), loc.getY()), new LocationMapClose());
+							new MarkLocationOnStoreMap().mark(loc.getX(), loc.getY()), new LocationMapClose());
 					popupExpired.hide();
 				}
 			}
@@ -702,7 +702,7 @@ public class ManagePackagesTab implements Initializable {
 							+ "\n" + "Manufacturer: " + catalogProduct.getManufacturer().getName() + "\n"
 							+ "Ingredients: " + getIngredients() + "Price: " + catalogProduct.getPrice()
 							+ " Nis\nProduct Location " + "col=" + xLocation + ", row=" + yLocation + ")",
-					new MarkLocationOnStoreMap().run(xLocation, yLocation));
+					new MarkLocationOnStoreMap().mark(xLocation, yLocation));
 		}
 
 	}

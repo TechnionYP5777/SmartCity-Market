@@ -471,7 +471,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		Location loc = catalogProduct.getLocations().iterator().next();
 		DialogMessagesService.showConfirmationWithCloseDialog(
 				"Product Location Is: " + "(col=" + loc.getX() + ", row=" + loc.getY() + ")", null,
-				new MarkLocationOnStoreMap().run(loc.getX(), loc.getY()), null);
+				new MarkLocationOnStoreMap().mark(loc.getX(), loc.getY()), null);
 	}
 
 	@FXML
