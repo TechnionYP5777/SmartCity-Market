@@ -26,8 +26,8 @@ script:
 
 after_script:
 # see surfire report (tests overview)
-- python html2text.py /home/travis/build/TechnionYP5777/SmartCity-Market/Server/target/surefire-reports/surefire-report.html
-- python html2text.py /home/travis/build/TechnionYP5777/SmartCity-Market/Customer/target/surefire-reports/surefire-report.html
+- python html2text.py /home/travis/build/TechnionYP5777/SmartCity-Market/Server/target/surefire-reports/*html
+- python html2text.py /home/travis/build/TechnionYP5777/SmartCity-Market/Customer/target/surefire-reports/*
 - python html2text.py /home/travis/build/TechnionYP5777/SmartCity-Market/Employee/target/surefire-reports/surefire-report.html
 - python html2text.py /home/travis/build/TechnionYP5777/SmartCity-Market/Sales/target/surefire-reports/surefire-report.html
 - python html2text.py /home/travis/build/TechnionYP5777/SmartCity-Market/Common/target/surefire-reports/surefire-report.html
