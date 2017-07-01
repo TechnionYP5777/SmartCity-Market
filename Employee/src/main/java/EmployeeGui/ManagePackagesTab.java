@@ -3,7 +3,10 @@ package EmployeeGui;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -415,12 +418,21 @@ public class ManagePackagesTab implements Initializable {
 
 	FilteredList<String> filteredDataExpireds;
 
+	class DatesComparator implements Comparator<ProductPackage> {
+
+		@Override
+		public int compare(ProductPackage p1, ProductPackage p2) {
+			return p1.getSmartCode().getExpirationDate().compareTo(p2.getSmartCode().getExpirationDate());
+		}
+		
+	}
+	
 	private void createExpiredList() {
 
 		expireds = new HashMap<String, ProductPackage>();
 
 		try {
-			worker.getAllExpiredProductPackages().forEach(expired -> {
+ 			worker.getAllExpiredProductPackages().forEach(expired -> {
 				expireds.put(generateExpiredLayoutKey(expired), expired);
 			});
 		} catch (ConnectionFailure | CriticalError | EmployeeNotConnected e) {
@@ -431,7 +443,12 @@ public class ManagePackagesTab implements Initializable {
 
 		dataExpireds = FXCollections.observableArrayList();
 
-		dataExpireds.setAll(expireds.keySet());
+		ArrayList<ProductPackage> expiredProductPackageSortedList= new ArrayList<ProductPackage> (expireds.values());
+		Collections.sort(expiredProductPackageSortedList, new DatesComparator());
+		ArrayList<String> expiredStringSortedList = new ArrayList<String>();
+		expiredProductPackageSortedList.forEach(expired -> expiredStringSortedList.add(generateExpiredLayoutKey(expired)));
+		
+		dataExpireds.setAll(expiredStringSortedList);
 
 		filteredDataExpireds = new FilteredList<>(dataExpireds, s -> true);
 
