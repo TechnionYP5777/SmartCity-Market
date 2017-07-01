@@ -276,8 +276,9 @@ public class CommandExecuter {
 		log.info("Is logged in command called with senderID " + inCommandWrapper.getSenderID());
 
 		try {
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK,
-					Serialization.serialize(c.isClientLoggedIn(inCommandWrapper.getSenderID())));
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, inCommandWrapper.getSenderID() != 0 ?
+					Serialization.serialize(c.isClientLoggedIn(inCommandWrapper.getSenderID())) :
+						Serialization.serialize(c.isWorkerLoggedIn(Serialization.deserialize(inCommandWrapper.getData(), String.class))));
 		} catch (CriticalError e) {
 			log.fatal("Is logged in command failed, critical error occured from SQL Database connection");
 
