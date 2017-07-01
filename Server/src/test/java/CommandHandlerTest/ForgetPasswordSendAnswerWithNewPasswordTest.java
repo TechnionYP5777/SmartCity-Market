@@ -23,6 +23,11 @@ import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException.ClientNotExist;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 
+/**
+ * @author Aviad Cohen
+ * @author Lior Ben Ami
+ * @since 2017-07-01 
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ForgetPasswordSendAnswerWithNewPasswordTest {
 
@@ -87,6 +92,27 @@ public class ForgetPasswordSendAnswerWithNewPasswordTest {
 		out = commandExecuter.execute(sqlDatabaseConnection);
 		
 		assertEquals(ResultDescriptor.SM_FOROGT_PASSWORD_WRONG_ANSWER, out.getResultDescriptor());
+	}
+	
+	@Test
+	public void forgetPasswordGetQuestionClientNotExistTest() {
+		String command = new CommandWrapper(senderIDWorker, CommandDescriptor.FORGOT_PASSWORD_SEND_ANSWER_WITH_NEW_PASSWORD,
+				new Gson().toJson(login, Login.class)).serialize();
+		CommandExecuter commandExecuter = new CommandExecuter(command);
+		CommandWrapper out;
+		
+		try {
+			Mockito.when(sqlDatabaseConnection.verifySecurityAnswerWorker(username, answer))
+			.thenThrow(new ClientNotExist());
+		} catch (CriticalError e) {
+			fail();
+		} catch (ClientNotExist e) {
+			/* success */
+		}
+		
+		out = commandExecuter.execute(sqlDatabaseConnection);
+
+		assertEquals(ResultDescriptor.SM_USERNAME_DOES_NOT_EXIST, out.getResultDescriptor());
 	}
 	
 	@Test
