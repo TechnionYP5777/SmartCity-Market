@@ -80,11 +80,20 @@ public class Suggestor {
 	 *            types under {@link api.types.sales})
 	 * @return same sale if agreed, another suggest or null if not.
 	 */
-	public static ISale examineOffer(IGroceryList currentGrocery, ISale purchasedProduct) {
-		@SuppressWarnings("unused")
+	public static ISale examineOffer(IGroceryList currentGrocery, ISale offer) {
 		StoreData currentData = storeData;
 		
-		return null;
+		Set<ABasicProperty> initialProperties = Extractor.extractProperties(inPref, currentData, currentGrocery, null);
+		
+		Set<AProperty> properties = Deducer.deduceProperties(salePref, initialProperties);
+		
+		Set<ASaleProperty> salesProperties = properties.stream()
+				.filter(p -> p instanceof ASaleProperty)
+				.map(p -> (ASaleProperty)p )
+				.collect(Collectors.toSet());
+		
+		return Decider.decideSaleSimilar(salePref, salesProperties, offer).getOffer();
+		
 	}
 
 }
