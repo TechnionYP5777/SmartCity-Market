@@ -89,6 +89,9 @@ public class ManageSalesTab implements Initializable {
 
 	@FXML
 	private JFXTextField amount;
+	
+	@FXML 
+	private Label productPrice;
 
 	@FXML
 	private JFXTextField price;
@@ -225,6 +228,7 @@ public class ManageSalesTab implements Initializable {
 		price.setText("");
 		productNamelbl.setText("N/A");
 		barcodeLbl.setText("N/A");	
+		productPrice.setText("N/A");
 	}
 
 	private void createSingleList() {
@@ -322,6 +326,7 @@ public class ManageSalesTab implements Initializable {
 			currentCatalogProduct = manager.viewProductFromCatalog(Long.parseLong(barcodeField.getText()));
 			productNamelbl.setText(currentCatalogProduct.getName());
 			barcodeLbl.setText(currentCatalogProduct.getBarcode() + "");
+			productPrice.setText(currentCatalogProduct.getPrice() + "");
 
 			enableAddSaleButton();
 			enableRemoveButtons();

@@ -98,7 +98,7 @@ public class ManageCatalogProductTab implements Initializable {
 
 	@FXML
 	private JFXButton ingrChooser;
-	
+
 	@FXML
 	private JFXListView<String> choosenIngrList;
 
@@ -116,8 +116,8 @@ public class ManageCatalogProductTab implements Initializable {
 
 	@FXML
 	private JFXComboBox<String> productManufacturerCombo;
-	
-	@FXML 
+
+	@FXML
 	private JFXButton locationChooser;
 
 	JFXListView<String> ingredientList;
@@ -132,7 +132,7 @@ public class ManageCatalogProductTab implements Initializable {
 
 	@FXML
 	private JFXTextField productPriceTextField;
-	
+
 	@FXML
 	private Label locationLbl;
 
@@ -145,7 +145,7 @@ public class ManageCatalogProductTab implements Initializable {
 
 	@FXML
 	private JFXButton runTheOperationButton;
-	
+
 	JFXPopup popupLocation;
 
 	IManager manager = InjectionFactory.getInstance(Manager.class);
@@ -252,7 +252,7 @@ public class ManageCatalogProductTab implements Initializable {
 
 			}
 		});
-		
+
 		choosenIngrList.depthProperty().set(1);
 		choosenIngrList.setExpanded(true);
 
@@ -260,7 +260,7 @@ public class ManageCatalogProductTab implements Initializable {
 		ingredientList.setExpanded(true);
 
 		createIngredientList();
-		
+
 		Label lbl1 = new Label("Choose Location");
 		JFXButton close = new JFXButton("Close");
 		close.getStyleClass().add("JFXTextField");
@@ -287,7 +287,8 @@ public class ManageCatalogProductTab implements Initializable {
 		popupLocation = new JFXPopup(locationContainer);
 		popupLocation.setOnShowing(e -> rootPane.getScene().setCursor(Cursor.CROSSHAIR));
 		popupLocation.setOnHidden(e -> rootPane.getScene().setCursor(Cursor.DEFAULT));
-		locationChooser.setOnMouseClicked(e -> popupLocation.show(locationChooser, PopupVPosition.BOTTOM, PopupHPosition.LEFT));
+		locationChooser.setOnMouseClicked(
+				e -> popupLocation.show(locationChooser, PopupVPosition.BOTTOM, PopupHPosition.LEFT));
 
 		radioButtonContainerManageCatalogProduct.addRadioButtons(
 				Arrays.asList(new RadioButton[] { addCatalogProductRadioButton, removeCatalogProductRadioButton }));
@@ -329,7 +330,6 @@ public class ManageCatalogProductTab implements Initializable {
 
 		enableRunOperation();
 	}
-	
 
 	private void createIngredientList() {
 		ingredients = new HashMap<String, Ingredient>();
@@ -359,7 +359,8 @@ public class ManageCatalogProductTab implements Initializable {
 	private void enableRunOperation() {
 		runTheOperationButton
 				.setDisable(barcodeTextField.getText().isEmpty() || (addCatalogProductRadioButton.isSelected()
-						&& (productNameTextField.getText().isEmpty() || productPriceTextField.getText().isEmpty())));
+						&& (productNameTextField.getText().isEmpty() || productPriceTextField.getText().isEmpty()
+								|| locationLbl.getText().equals("Location Not Defined Yet"))));
 	}
 
 	private void createManufacturerMap() {

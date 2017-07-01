@@ -30,7 +30,7 @@
                   <HBox alignment="CENTER" spacing="10.0">
                      <children>
                         <JFXTextField fx:id="barcodeField" prefHeight="27.0" prefWidth="229.0" promptText="Or Insert Barcode Manually" styleClass="JFXTextField" />
-                        <ImageView fx:id="searchIcon" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#searchClicked" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="searchIcon" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#searchClicked" pickOnBounds="true" preserveRatio="true" styleClass="thisSearchCodeButton">
                            <image>
                               <Image url="@search.png" />
                            </image>
@@ -51,6 +51,12 @@
                            <children>
                               <Label text="Product Barcode:" />
                               <Label fx:id="barcodeLbl" text="N/A" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="10.0">
+                           <children>
+                              <Label text="Product Price:" />
+                              <Label fx:id="productPrice" text="N/A" />
                            </children>
                         </HBox>
                      </children>

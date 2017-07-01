@@ -2,3 +2,7 @@
    -fx-font-size: 23;
 }
 
+.thisSearchCodeButton:hover {
+	-fx-effect: dropshadow(three-pass-box , cornflowerblue  , 50.0, 0.7 , 0.0 , 0.0);
+}
+
