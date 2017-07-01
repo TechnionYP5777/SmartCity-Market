@@ -9,7 +9,7 @@ import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeCommon.IEmployeeScreensParameterService;
 import EmployeeContracts.IWorker;
 import EmployeeDI.EmployeeDiConfigurator;
-import EmployeeImplementations.Worker;
+import EmployeeImplementations.Manager;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
 import UtilsImplementations.BarcodeEventHandler;
@@ -51,7 +51,7 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 
 			stage.setOnCloseRequest(event -> {
 				try {
-					IWorker worker = InjectionFactory.getInstance(Worker.class);
+					IWorker worker = InjectionFactory.getInstance(Manager.class);
 					if (worker.isLoggedIn())
 						worker.logout();
 					event.consume();
