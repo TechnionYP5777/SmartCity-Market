@@ -16,8 +16,18 @@ notifications:
 # add this if you use maven for your project and want to verify mvn build is successful and all unit tests pass.
 script:
  - mvn clean install -DskipTests=false
+ # run the coverage tool
  - mvn cobertura:cobertura
 
-# running coverage tool
+after_script:
+# see surfire report (tests overview)
+- python html2text.py /home/travis/build/TechnionYP5777/SmartCity-Market/Server/target/surefire-reports
+- python html2text.py /home/travis/build/TechnionYP5777/SmartCity-Market/Customer/target/surefire-reports
+- python html2text.py /home/travis/build/TechnionYP5777/SmartCity-Market/Employee/target/surefire-reports
+- python html2text.py /home/travis/build/TechnionYP5777/SmartCity-Market/Sales/target/surefire-reports
+- python html2text.py /home/travis/build/TechnionYP5777/SmartCity-Market/Common/target/surefire-reports
+
+# reporting the coverage report to codecov
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+ 
