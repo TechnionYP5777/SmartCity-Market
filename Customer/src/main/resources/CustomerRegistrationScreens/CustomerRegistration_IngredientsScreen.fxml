@@ -19,7 +19,7 @@
          <children>
             <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <JFXListView fx:id="ingredientList" />
+                  <JFXListView fx:id="ingredientList" styleClass="JFXListView" />
                </children>
                <GridPane.margin>
                   <Insets left="15.0" right="15.0" />

@@ -48,6 +48,10 @@
     -fx-font-size: 15;
 }
 
+.JFXListView {
+	-fx-background-color: transparent;
+}
+
 .JFXDatePicker {
 	-fx-font-family: "serif";
 	-fx-text-fill: #164F4F;

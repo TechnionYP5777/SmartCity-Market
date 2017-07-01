@@ -466,6 +466,7 @@ public class ManageCatalogProductTab implements Initializable {
 		productPriceTextField.setText("");
 		productManufacturerCombo.getSelectionModel().clearSelection();
 		choosenIngrList.getItems().clear();
+		locationLbl.setText("Location Not Defined Yet");
 	}
 
 	private void printToSuccessLog(String msg) {

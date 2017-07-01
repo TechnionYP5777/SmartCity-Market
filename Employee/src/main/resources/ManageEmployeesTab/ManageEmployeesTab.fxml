@@ -39,7 +39,7 @@
                   </HBox>
                   <HBox alignment="CENTER">
                      <children>
-                        <JFXListView fx:id="employeesList" depth="1" maxWidth="447.0" prefHeight="200.0" prefWidth="447.0" style="-fx-background-color: transparent;" verticalGap="10.0" />
+                        <JFXListView fx:id="employeesList" depth="1" maxWidth="447.0" prefHeight="200.0" prefWidth="447.0" styleClass="JFXListView" verticalGap="10.0" />
                      </children>
                   </HBox>
                </children>

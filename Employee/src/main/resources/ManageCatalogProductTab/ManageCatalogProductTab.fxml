@@ -145,7 +145,7 @@
                            </padding>
                            <children>
                               <JFXButton fx:id="ingrChooser" styleClass="JFXButton" text="Click To Choose Ingredients" />
-                              <JFXListView fx:id="choosenIngrList" maxHeight="60.0" orientation="HORIZONTAL" prefWidth="300.0" />
+                              <JFXListView fx:id="choosenIngrList" maxHeight="60.0" orientation="HORIZONTAL" prefWidth="300.0" styleClass="JFXListView" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" GridPane.rowIndex="5">

@@ -99,17 +99,8 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" spacing="10.0">
                            <children>
-                              <Label fx:id="saleTxtLbl" contentDisplay="CENTER" styleClass="productDetailsLabel" text="Available Sale:" />
+                              <Label fx:id="saleTxtLbl" contentDisplay="CENTER" styleClass="productDetailsLabel" text="Sale:" />
                               <Label fx:id="saleLbl" styleClass="productDetailsLabel" text="N/A" />
-<<<<<<< b8eca295724353b4a02b57ea4e91dfc960225b35
-                              <ImageView fx:id="specialSaleImg" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@ylDRTR05sy6M.gif" />
-                                 </image>
-                              </ImageView>
-=======
-                              <ImageView fx:id="specialSaleImg" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
->>>>>>> Bugs and Enhancements #538
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -121,7 +112,7 @@
                            </padding>
                            <children>
                               <Label styleClass="productDetailsLabel" text="Ingredients:" />
-                              <JFXListView fx:id="allerList" maxHeight="60.0" minHeight="60.0" orientation="HORIZONTAL" prefHeight="60.0" styleClass="listNoBorder" />
+                              <JFXListView fx:id="allerList" maxHeight="60.0" maxWidth="230.0" minHeight="60.0" minWidth="230.0" orientation="HORIZONTAL" prefHeight="60.0" prefWidth="230.0" styleClass="JFXListView" />
                            </children>
                         </HBox>
                         <HBox>
@@ -152,7 +143,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                         </HBox>
-                     	  <JFXListView fx:id="productsListView" editable="true" style="-fx-background-color: TRANSPARENT;" verticalGap="10.0" />
+                     	  <JFXListView fx:id="productsListView" editable="true" styleClass="JFXListView" verticalGap="10.0" />
                      </children>
                   </VBox>
                </children>

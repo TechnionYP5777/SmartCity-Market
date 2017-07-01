@@ -71,6 +71,10 @@
 	-fx-font-size: 40;
 }
 
+.JFXListView {
+	-fx-background-color: transparent;
+}
+
 
 
 

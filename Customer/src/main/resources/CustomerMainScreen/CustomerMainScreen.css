@@ -19,3 +19,7 @@
 .listNoBorder {
 	-fx-padding: 0px;
 }
+
+.sale {
+	-fx-text-fill: indigo;
+}

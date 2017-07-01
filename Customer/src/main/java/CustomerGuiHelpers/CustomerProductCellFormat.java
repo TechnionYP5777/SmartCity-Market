@@ -26,7 +26,7 @@ import javafx.scene.layout.VBox;
 public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 
 	private boolean shouldEnableSale(CartProduct item, Sale sale) {
-		return sale.isValid() && sale.getAmountOfProducts() == item.getTotalAmount();
+		return sale.isValid() && sale.getAmountOfProducts() <= item.getTotalAmount();
 	}
 	
 	@Override
@@ -41,7 +41,7 @@ public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 
 		boolean enableSale = shouldEnableSale(item, item.getCatalogProduct().getSale()),
 				enableSpecialSale = shouldEnableSale(item, item.getCatalogProduct().getSpecialSale());
-		HBox hbx = new HBox(280);
+		HBox hbx = new HBox();
 		VBox vbx = new VBox(5); // spacing = 5
 	
 		//vbox
@@ -71,13 +71,13 @@ public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 		if (enableSpecialSale) {
 			sale = new ImageView("/CustomerMainScreen/special.gif");
 		} else {
-			 sale = new ImageView("/CustomerMainScreen/sale.gif");	
+			sale = new ImageView("/CustomerMainScreen/sale.gif");	
 		}
 		
 		sale.setFitHeight(80);
-		sale.setFitWidth(80);
+		sale.setFitWidth(120);
 				
-		hbx.setSpacing(230);
+		hbx.setSpacing(10);
 		
 		if (enableSpecialSale || enableSale) {
 			sale.setVisible(true);

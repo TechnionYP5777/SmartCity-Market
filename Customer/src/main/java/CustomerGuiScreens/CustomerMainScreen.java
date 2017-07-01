@@ -126,8 +126,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	@FXML
 	ImageView removeButton;
 
-	@FXML
-	ImageView specialSaleImg;
 
 	@FXML
 	Button removeAllButton;
@@ -244,32 +242,19 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 				allerList.getItems().add(ingr.getName());
 			});
 
-			if (p.getSpecialSale().isValid()) {
-				URL imageSaleUrl = null;
-				try {
-					imageSaleUrl = new File("../Common/src/main/resources/CustomerMainScreen/special.gif").toURI()
-							.toURL();
-				} catch (MalformedURLException e) {
-					throw new RuntimeException();
-				}
+			if (p.getSpecialSale().isValid()) {		
 				saleLbl.setText(p.getSpecialSale().getSaleAsString());
-				specialSaleImg.setVisible(true);
-				specialSaleImg.setImage(new Image(imageSaleUrl + "", 290, 230, true, false));
-
+				saleLbl.getStyleClass().add("sale");
+				saleTxtLbl.setText("Special Sale Available:");
+				saleTxtLbl.getStyleClass().add("sale");
 			} else if (p.getSale().isValid()) {
-				URL imageSaleUrl = null;
-				try {
-					imageSaleUrl = new File("../Common/src/main/resources/CustomerMainScreen/sale.gif").toURI().toURL();
-				} catch (MalformedURLException e) {
-					throw new RuntimeException();
-				}
-
-				saleLbl.setText(p.getSale().getSaleAsString());
-				specialSaleImg.setVisible(true);
-				specialSaleImg.setImage(new Image(imageSaleUrl + "", 290, 230, true, false));
+				saleLbl.setText(p.getSale().getSaleAsString());;
+				saleLbl.getStyleClass().add("sale");
+				saleTxtLbl.setText("Regular Sale Available:");
+				saleTxtLbl.getStyleClass().add("sale");
 			} else {
 				saleLbl.setText(p.getSale().getSaleAsString());
-				specialSaleImg.setVisible(false);
+				saleLbl.getStyleClass().remove("sale");
 			}
 			productInfoImage.setVisible(true);
 			URL imageUrl = null;
@@ -289,8 +274,10 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			descriptionTextArea.setText("N/A");
 			allerList.getItems().clear();
 			productInfoImage.setVisible(false);
+			saleTxtLbl.setText("Sale:");
+			saleTxtLbl.getStyleClass().remove("sale");
+			saleLbl.getStyleClass().remove("sale");
 			saleLbl.setText("N/A");
-			specialSaleImg.setVisible(false);
 			showLocation.setDisable(true);
 		}
 	}
@@ -382,6 +369,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 		allerList.depthProperty().set(1);
 		allerList.setExpanded(true);
+	
+		
 		allerList.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener() {
 			@Override
 			public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
