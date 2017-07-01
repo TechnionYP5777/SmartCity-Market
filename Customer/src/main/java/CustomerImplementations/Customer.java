@@ -22,6 +22,7 @@ import BasicCommonClasses.Login;
 import BasicCommonClasses.ProductPackage;
 import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
+import ClientServerApi.ClientServerDefs;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
@@ -245,7 +246,8 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 
 		try {
 			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(id, CommandDescriptor.LOGOUT)).serialize());
+					(new CommandWrapper(id, CommandDescriptor.LOGOUT, customerProfile == null ? ClientServerDefs.anonymousCustomerUsername :
+							Serialization.serialize(customerProfile.getUserName()))).serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 
