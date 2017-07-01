@@ -26,8 +26,11 @@ import CustomerImplementations.RegisteredCustomer;
 import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
 
+/** 
+ * @author Lior Ben Ami
+ * @since 2017-06-30
+ */
 @RunWith(MockitoJUnitRunner.class)
-
 public class RemoveCustomerTest {
 	private RegisteredCustomer customer;
 

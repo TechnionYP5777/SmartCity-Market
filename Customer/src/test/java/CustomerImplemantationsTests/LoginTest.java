@@ -31,7 +31,6 @@ import UtilsImplementations.Serialization;
  * @author idan atias
  * @since 2017-03-25
  */
-
 @RunWith(MockitoJUnitRunner.class)
 public class LoginTest {
 	private ICustomer customer;

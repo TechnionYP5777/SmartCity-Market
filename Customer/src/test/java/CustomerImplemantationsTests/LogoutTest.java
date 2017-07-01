@@ -25,8 +25,11 @@ import CustomerImplementations.CustomerDefs;
 import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
 
+/** 
+ * @author Lior Ben Ami
+ * @since 2017-06-30
+ */
 @RunWith(MockitoJUnitRunner.class)
-
 public class LogoutTest {
 	private ICustomer customer;
 

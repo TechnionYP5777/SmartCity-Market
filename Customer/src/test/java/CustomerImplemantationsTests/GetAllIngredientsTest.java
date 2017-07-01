@@ -22,8 +22,11 @@ import CustomerImplementations.Customer;
 import CustomerImplementations.CustomerDefs;
 import UtilsContracts.IClientRequestHandler;
 
+/** 
+ * @author Lior Ben Ami
+ * @since 2017-06-30
+ * */
 @RunWith(MockitoJUnitRunner.class)
-
 public class GetAllIngredientsTest {
 	private ICustomer customer;
 	

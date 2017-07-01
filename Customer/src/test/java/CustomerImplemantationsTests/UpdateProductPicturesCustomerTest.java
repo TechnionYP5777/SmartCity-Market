@@ -26,13 +26,10 @@ import UtilsContracts.IClientRequestHandler;
 import UtilsImplementations.Serialization;
 
 /**
+ * UpdateProductPicturesCustomerTest - This tests the UpdateProductPictures functionality for Customer module
  * @author idan atias
- *
  * @since May 23, 2017
- * 
- *        This tests the UpdateProductPictures functionality for Customer module
  */
-
 @RunWith(MockitoJUnitRunner.class)
 public class UpdateProductPicturesCustomerTest {
 	Customer c;
