@@ -33,7 +33,7 @@ public class IsLoggedInTest {
 	
 	@Test
 	public void isLoggedInSuccessfulTest() {
-		int senderID = 0;
+		int senderID = 1;
 		String command = new CommandWrapper(senderID, CommandDescriptor.IS_LOGGED_IN).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
@@ -53,7 +53,7 @@ public class IsLoggedInTest {
 	
 	@Test
 	public void isLoggedInCriticalErrorTest() {
-		int senderID = 0;
+		int senderID = 1;
 		String command = new CommandWrapper(senderID, CommandDescriptor.IS_LOGGED_IN).serialize();
 		CommandExecuter commandExecuter = new CommandExecuter(command);
 		CommandWrapper out;
