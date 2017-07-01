@@ -28,6 +28,10 @@ import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 
+/**
+ * @author Aviad Cohen
+ * @since 2017
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class AddProductToGroceryListTest {
 

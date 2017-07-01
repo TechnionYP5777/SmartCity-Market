@@ -25,6 +25,10 @@ import SQLDatabase.SQLDatabaseException.IngredientNotExist;
 import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 
+/**
+ * @author Aviad Cohen
+ * @since 2017
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class EditProductFromCatalogTest {
 

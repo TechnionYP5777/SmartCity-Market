@@ -20,6 +20,10 @@ import CommandHandler.CommandExecuter;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 
+/**
+ * @author Aviad Cohen
+ * @since 2017
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class IsLoggedInTest {
 		

@@ -26,6 +26,10 @@ import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 
+/**
+ * @author Aviad Cohen
+ * @since 2017
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class GetProductPackageAmountTest {
 

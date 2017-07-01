@@ -25,6 +25,10 @@ import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
 import SQLDatabase.SQLDatabaseException.ProductAlreadyExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 
+/**
+ * @author Aviad Cohen
+ * @since 2017
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class AddProductToCatalogTest {
 

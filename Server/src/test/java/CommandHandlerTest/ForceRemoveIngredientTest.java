@@ -26,7 +26,7 @@ import SQLDatabase.SQLDatabaseException.IngredientStillUsed;
 
 /**
  * @author Lior Ben Ami
- * @since 2017-07-01
+ * @since 2017-06-30
  */
 @RunWith(MockitoJUnitRunner.class)
 public class ForceRemoveIngredientTest {

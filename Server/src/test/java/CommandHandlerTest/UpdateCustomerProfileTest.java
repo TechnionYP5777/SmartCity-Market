@@ -28,6 +28,10 @@ import SQLDatabase.SQLDatabaseException.ClientNotExist;
 import SQLDatabase.SQLDatabaseException.CriticalError;
 import SQLDatabase.SQLDatabaseException.IngredientNotExist;
 
+/**
+ * @author Aviad Cohen
+ * @since 2017
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class UpdateCustomerProfileTest {
 
