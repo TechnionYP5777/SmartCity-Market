@@ -3,7 +3,6 @@ package CustomerGuiScreens;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -126,7 +125,6 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	@FXML
 	ImageView removeButton;
 
-
 	@FXML
 	Button removeAllButton;
 
@@ -158,6 +156,9 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	Label saleTxtLbl;
 
 	@FXML
+	JFXButton offerASale;
+
+	@FXML
 	JFXButton showLocation;
 
 	SmartCode scannedSmartCode;
@@ -168,13 +169,21 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	FilteredList<CartProduct> filteredProductList;
 
-	// Lock smartCodeLocker;
+	CatalogProduct currentProduct;
 
 	boolean flag = true;
 
 	IBarcodeEventHandler barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
 
 	HashSet<CatalogProduct> marketCatalog;
+	
+	JFXButton offer;
+
+	JFXPopup popupOffer;
+
+	JFXTextField amount;
+
+	JFXTextField price;
 
 	/**
 	 * the productInfoPane has three visible mode: 0 - Invisible (default) 1 -
@@ -191,6 +200,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	}
 
 	private void updateProductInfoPaine(CatalogProduct p, Integer amount, ProductInfoPaneVisibleMode m) {
+		currentProduct = p;
 		updateProductInfoTexts(p, amount);
 		switch (m) {
 		case SCANNED_PRODUCT: {
@@ -242,13 +252,14 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 				allerList.getItems().add(ingr.getName());
 			});
 
-			if (p.getSpecialSale().isValid()) {		
+			if (p.getSpecialSale().isValid()) {
 				saleLbl.setText(p.getSpecialSale().getSaleAsString());
 				saleLbl.getStyleClass().add("sale");
 				saleTxtLbl.setText("Special Sale Available:");
 				saleTxtLbl.getStyleClass().add("sale");
 			} else if (p.getSale().isValid()) {
-				saleLbl.setText(p.getSale().getSaleAsString());;
+				saleLbl.setText(p.getSale().getSaleAsString());
+				;
 				saleLbl.getStyleClass().add("sale");
 				saleTxtLbl.setText("Regular Sale Available:");
 				saleTxtLbl.getStyleClass().add("sale");
@@ -280,6 +291,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			saleLbl.setText("N/A");
 			showLocation.setDisable(true);
 		}
+		offerASale.setDisable(p == null);
 	}
 
 	private void updateCartProductsInfo() {
@@ -332,6 +344,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		if (registeredCustomer == null) {
 			offerSalesChk.setVisible(false);
 			offerSalesChk.setDisable(true);
+			offerASale.setVisible(false);
+			offerASale.setDisable(true);
 		}
 		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
 
@@ -369,8 +383,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 		allerList.depthProperty().set(1);
 		allerList.setExpanded(true);
-	
-		
+
 		allerList.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener() {
 			@Override
 			public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
@@ -385,6 +398,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		});
 
 		Label lbl1 = new Label("Catalog Products");
+		lbl1.underlineProperty().set(true);
 		JFXButton close = new JFXButton("Close");
 		close.getStyleClass().add("JFXButton");
 
@@ -440,6 +454,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 		createCatalogList();
 
+		createOfferSalePopup();
+
 		enableSearchAndCheckout();
 	}
 
@@ -464,6 +480,88 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		filteredDataCatalogs = new FilteredList<>(dataCatalogs, s -> true);
 
 		catalogList.setItems(filteredDataCatalogs);
+	}
+
+	@FXML
+	void offerASalePressed(ActionEvent event) {
+
+	}
+
+	void createOfferSalePopup() {
+		Label lbl1 = new Label("Offer A Sale");
+		offer = new JFXButton("Offer!");
+		JFXButton close = new JFXButton("Close");
+		offer.getStyleClass().add("JFXButton");
+		close.getStyleClass().add("JFXButton");
+		offer.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent __) {
+				try {
+					Sale sale = registeredCustomer.offerSpecailSaleForProduct(new Sale(-1, currentProduct.getBarcode(),
+							Integer.parseInt(amount.getText()), Double.parseDouble(price.getText())));
+					if (sale.isValid()) {
+						DialogMessagesService.showConfirmationDialog("Offer A Sale", null, "Your Sale Offer Accepted!",
+								null);
+					} else {
+						DialogMessagesService.showConfirmationDialog("Offer A Sale", null,
+								"The System Don't Accept Your Sale Offer", null);
+					}
+				} catch (SMException e) {
+					log.fatal(e);
+					log.debug(StackTraceUtil.stackTraceToStr(e));
+					e.showInfoToUser();
+				}
+				popupOffer.hide();
+			}
+		});
+
+		close.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent __) {
+				popupOffer.hide();
+			}
+		});
+
+		HBox manubtnContanier = new HBox();
+		manubtnContanier.getChildren().addAll(offer, close);
+		manubtnContanier.setSpacing(10);
+		manubtnContanier.setAlignment(Pos.CENTER);
+
+		amount = new JFXTextField();
+		price = new JFXTextField();
+
+		amount.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.matches("[1-9]\\d*") && !newValue.isEmpty())
+				amount.setText(oldValue);
+			enableAddOfferButton();
+		});
+
+		price.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue.matches("((\\d*)|(\\d+\\.\\d*))"))
+				price.setText(oldValue);
+			enableAddOfferButton();
+		});
+
+		VBox manuContainer = new VBox();
+		manuContainer.getChildren().addAll(lbl1, new Label("Amount Of This Product:"), amount,
+				new Label("In Sale Price:"), price, manubtnContanier);
+		manuContainer.setPadding(new Insets(10, 50, 50, 50));
+		manuContainer.setSpacing(10);
+
+		popupOffer = new JFXPopup(manuContainer);
+		offerASale.setOnMouseClicked(e -> {
+			amount.setText("");
+			price.setText("");
+			enableAddOfferButton();
+			popupOffer.show(offerASale, PopupVPosition.BOTTOM, PopupHPosition.LEFT);
+
+		});
+		
+		enableAddOfferButton();
+	}
+
+	void enableAddOfferButton() {
+		offer.setDisable(amount.getText().isEmpty() || price.getText().isEmpty());
 	}
 
 	@FXML
@@ -589,12 +687,13 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			amount = 0;
 		}
 		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				addOrRemoveScannedProduct(catalogProduct, amount);
-			}
-		});
+
+	@Override
+	public void run() {
+		addOrRemoveScannedProduct(catalogProduct, amount);
 	}
+
+	});}
 
 	private void checkIngredients(
 			CatalogProduct catalogProduct) /* throws CriticalError */ {
@@ -668,15 +767,5 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	@Override
 	public void onNo() {
 		// Nothing to do
-	}
-
-	@FXML
-	void forceScanProduct(ActionEvent __) {
-		smartcodeScanned(new SmartcodeScanEvent(new SmartCode(1234567890, LocalDate.now())));
-	}
-
-	@FXML
-	void forceScanProduct2(ActionEvent __) {
-		smartcodeScanned(new SmartcodeScanEvent(new SmartCode(1234, LocalDate.now())));
 	}
 }

@@ -251,25 +251,24 @@ public class ManagePackagesTab implements Initializable {
 				enableRunTheOperationButton();
 			}
 		});
-		// TODO enable this
-		// final Callback<DatePicker, DateCell> dayCellFactory = new
-		// Callback<DatePicker, DateCell>() {
-		// @Override
-		// public DateCell call(final DatePicker __) {
-		// return new DateCell() {
-		// @Override
-		// public void updateItem(LocalDate item, boolean empty) {
-		// super.updateItem(item, empty);
-		//
-		// if (!item.isBefore(LocalDate.now()))
-		// return;
-		// setDisable(true);
-		// setStyle("-fx-background-color: #EEEEEE;");
-		// }
-		// };
-		// }
-		// };
-		// datePicker.setDayCellFactory(dayCellFactory);
+
+		final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+			@Override
+			public DateCell call(final DatePicker __) {
+				return new DateCell() {
+					@Override
+					public void updateItem(LocalDate item, boolean empty) {
+						super.updateItem(item, empty);
+
+						if (!item.isBefore(LocalDate.now()))
+							return;
+						setDisable(true);
+						setStyle("-fx-background-color: #EEEEEE;");
+					}
+				};
+			}
+		};
+		datePicker.setDayCellFactory(dayCellFactory);
 		datePicker.setValue(LocalDate.now());
 
 		VBox vbox = new VBox();
@@ -607,7 +606,6 @@ public class ManagePackagesTab implements Initializable {
 
 	private void updateToSmartCode() throws SMException {
 		SmartCode c = new SmartCode(catalogProduct.getBarcode(), expirationDate);
-		// TODO check location
 		this.amountInStore = worker
 				.getProductPackageAmount(new ProductPackage(c, 1, new Location(0, 0, PlaceInMarket.STORE)));
 		this.amountInWarehouse = worker

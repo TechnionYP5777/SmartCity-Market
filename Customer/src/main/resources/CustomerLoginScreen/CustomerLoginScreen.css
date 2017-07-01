@@ -33,7 +33,17 @@
 }
 
 .customJFXButton {
+	-fx-background-color: rgba(63, 191, 191,0.7);
+    -fx-text-fill: #E1F5FE;
+    -fx-font-family: "serif";
 	-fx-font-size: 20;
+}
+
+.customJFXButton:hover{
+    -fx-background-color: rgba(170, 237, 237,0.7);
+     -fx-text-fill: #E1F5FE;
+    -fx-font-family: "serif";
+    -fx-font-size: 20;
 }
 
 

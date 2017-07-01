@@ -89,7 +89,7 @@
                         <JFXButton fx:id="loginButton" onAction="#loginButtonPressed" styleClass="JFXButton" text="Login" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
-                  <JFXButton onAction="#loginAsAdmin" styleClass="JFXButton" text="Login as admin" />
+                  <JFXButton disable="true" onAction="#loginAsAdmin" styleClass="JFXButton" text="Login as admin" visible="false" />
                </children>
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

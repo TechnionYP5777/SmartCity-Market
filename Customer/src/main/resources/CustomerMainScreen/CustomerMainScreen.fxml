@@ -158,6 +158,7 @@
                               <Label styleClass="thisLabels" text="Product Actions" underline="true" />
                            </children>
                         </HBox>
+                        <JFXButton fx:id="offerASale" disable="true" onAction="#offerASalePressed" styleClass="JFXButton" text="Offer A Sale" />
                         <JFXCheckBox fx:id="offerSalesChk" selected="true" styleClass="JFXCheckBox" text="Offer Me Sales" />
                         <HBox alignment="CENTER_LEFT" spacing="40.0">
                            <children>
@@ -206,12 +207,6 @@
                               <Image url="@checkout.png" />
                            </image>
                         </ImageView>
-                        <VBox alignment="CENTER" spacing="10.0">
-                           <children>
-                              <JFXButton onAction="#forceScanProduct" styleClass="JFXButton" text="1" />
-                              <JFXButton onAction="#forceScanProduct2" styleClass="JFXButton" text="2" />
-                           </children>
-                        </VBox>
                      </children>
                   </HBox>
                </children>
