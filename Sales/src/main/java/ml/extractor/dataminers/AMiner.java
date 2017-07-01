@@ -13,13 +13,13 @@ import ml.common.property.basicproperties.ABasicProperty;
 
 public abstract class AMiner {
 
-	StoreData storeData;
+	private StoreData storeData;
 
-	InputPreferences inputPreferences;
+	private InputPreferences inputPreferences;
 	
-	IGroceryPackage currentProduct;
+	private IGroceryPackage currentProduct;
 	
-	IGroceryList currentGrocery;
+	private IGroceryList currentGrocery;
 	
 	public AMiner(InputPreferences inputPreferences, StoreData storeData, IGroceryList currentGrocery,
 			IGroceryPackage currentProduct) {
