@@ -13,8 +13,8 @@ import UtilsContracts.IForgotPasswordHandler;
  * CustomerDiConfigurator - This class the dependencies configurator for Customer business logic 
  * 
  * @author Lior Ben Ami
- * @since 2017-01-16 */ 
-
+ * @since 2017-01-16 
+ */ 
 public class CustomerDiConfigurator extends AbstractModule {
 	
  @Override 

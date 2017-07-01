@@ -4,7 +4,7 @@ package CustomerImplementations;
 /**
  * CustomerDefs - the common constants of Customer project
  * 
- * @author aviad
+ * @author Aviad Cohen
  * @since 2017-01-04
  */
 public class CustomerDefs {

@@ -55,7 +55,6 @@ import UtilsImplementations.ForgotPasswordHandler.WrongAnswer;
  * @author Lior Ben Ami, Aviad Cohen
  * @since 2017-01-02
  */
-
 @Singleton
 public class Customer extends ACustomer implements ICustomer, IForgotPasswordHandler {
 	

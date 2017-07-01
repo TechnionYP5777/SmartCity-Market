@@ -5,7 +5,7 @@ import CustomerContracts.IRegisteredCustomer;
 /**
  * @author idan atias
  *
- * @since Jun 7, 2017
+ * @since 2017-06-07
  * 
  * TempRegisteredCustomerPassingData - interface to temporary save data.
  */

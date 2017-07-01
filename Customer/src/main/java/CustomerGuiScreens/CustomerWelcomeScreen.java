@@ -21,7 +21,8 @@ import javafx.scene.media.MediaView;
  * 
  * @author Lior Ben Ami
  * @author Shimon Azulay
- * @since 2017-01-16 */
+ * @since 2017-01-16 
+ */
 public class CustomerWelcomeScreen implements Initializable {
 
 	@FXML

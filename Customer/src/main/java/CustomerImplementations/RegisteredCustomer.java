@@ -23,9 +23,7 @@ import SMExceptions.CommonExceptions.CriticalError;
  * 
  * @author idan atias
  * @author Aviad Cohen
- * 
- *         since March 31, 2017
- *
+ * @since 2017-03-05
  */
 public class RegisteredCustomer extends Customer implements IRegisteredCustomer {
 

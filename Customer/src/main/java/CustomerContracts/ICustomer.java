@@ -103,7 +103,8 @@ public interface ICustomer {
 	Integer getCartProductsNum();
 	
 	/**
-	 * checkOutGroceryList - returns the finale total sum of the shopping and initialize grocery list
+	 * checkOutGroceryList - returns the final total sum of the shopping and initialize grocery list, including the sales in its calculation
+	 * @param Map<Sale, Boolean> specialSaleTaken
 	 * @return Double
 	 * @throws CriticalError 
 	 * @throws CustomerNotConnected 
@@ -111,19 +112,75 @@ public interface ICustomer {
 	 */
 	Double checkOutGroceryList(Map<Sale, Boolean> specialSaleTaken) throws CriticalError, CustomerNotConnected, GroceryListIsEmpty;
 
+	/**
+	 * getCartProduct - returns the CartProduct in the cart by its SmartCode
+	 *  
+	 * @param SmartCode
+	 * @return CartProduct
+	 */
 	CartProduct getCartProduct(SmartCode c);
 
+	/**
+	 * viewCatalogProduct - returns product from the catalog by SmartCode.
+	 * 
+	 * @param SmartCode
+	 * @return CatalogProduct
+	 * @throws CriticalError 
+	 * @throws CustomerNotConnected 
+	 * @throws GroceryListIsEmpty 
+	 */
 	CatalogProduct viewCatalogProduct(SmartCode c) throws CriticalError, CustomerNotConnected, ProductCatalogDoesNotExist;
 	
+	/**
+	 * removeAllItemsOfCartProduct - remove all items of CartProduct from the cart.
+	 * 
+	 * @param SmartCode
+	 * @throws CriticalError 
+	 * @throws ProductNotInCart 
+	 */
 	void removeAllItemsOfCartProduct(SmartCode c) throws ProductNotInCart, CriticalError;
 	
+	/**
+	 * registerNewCustomer - register new customer to the system
+	 * 
+	 * @param CustomerProfile
+	 * @throws CriticalError 
+	 * @throws ProductNotInCart 
+	 */
 	void registerNewCustomer(CustomerProfile p) throws CriticalError, InvalidParameter, UsernameAlreadyExists;
 	
+	/**
+	 * getAllIngredients - returns all existing ingredients  in system
+	 * 
+	 * @return List<Ingredient>
+	 * @throws CriticalError 
+	 * @throws ProductNotInCart 
+	 */
 	List<Ingredient> getAllIngredients() throws CriticalError;
 	
+	/**
+	 * isFreeUsername - returns true if the chosen user name isn't in use
+	 * @param username
+	 * @return Boolean
+	 * @throws CriticalError
+	 */
 	Boolean isFreeUsername(String username) throws CriticalError;
 	
+	/**
+	 * getSaleForProduct - returns sale for catalog product (by its barcode)
+	 * @param Long barcode
+	 * @return Sale
+	 * @throws CriticalError
+	 * @throws CustomerNotConnected
+	 * @throws InvalidParameter
+	 * @throws ProductCatalogDoesNotExist
+	 */
 	Sale getSaleForProduct(Long barcode) throws CriticalError, CustomerNotConnected, InvalidParameter, ProductCatalogDoesNotExist;
 
+	/**
+	 * getMarketCatalog - return the products catlaog
+	 * @return List<CatalogProduct>
+	 * @throws CriticalError
+	 */
 	List<CatalogProduct> getMarketCatalog() throws CriticalError;
 }

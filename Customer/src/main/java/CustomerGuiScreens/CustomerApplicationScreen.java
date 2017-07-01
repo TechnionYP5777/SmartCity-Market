@@ -19,7 +19,8 @@ import javafx.stage.Stage;
  * CustomerApplicationScreen - This class is the stage GUI class for Customer
  * 
  * @author Lior Ben Ami
- * @since 2017-01-13 */
+ * @since 2017-01-13 
+ */
 public class CustomerApplicationScreen extends AbstractApplicationScreen {
 
 	BarcodeEventHandler barcodeEventHandler;

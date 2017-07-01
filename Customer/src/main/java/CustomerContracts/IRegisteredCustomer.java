@@ -45,14 +45,43 @@ public interface IRegisteredCustomer extends ICustomer {
 	/**
 	 * getCustomerAlergans - returns the customer allergens
 	 * 
+	 * @return HashSet<Ingredient>
 	 */
 	HashSet<Ingredient> getCustomerAllergens();
 	
+	/**
+	 * getSpecailSaleForProduct - returns special sale for product (by its barcode)
+	 * 
+	 * @param Long barcode
+	 * @return Sale
+	 * @throws CriticalError
+	 * @throws CustomerNotConnected
+	 * @throws InvalidParameter
+	 * @throws ProductCatalogDoesNotExist
+	 */
 	Sale getSpecailSaleForProduct(Long barcode) throws CriticalError, CustomerNotConnected, InvalidParameter, ProductCatalogDoesNotExist;
 	
+	/**
+	 * offerSpecailSaleForProduct - customer can offer special sale for and get responsive sale 
+	 * @param Sale
+	 * @return Sale
+	 * @throws CriticalError
+	 * @throws CustomerNotConnected
+	 * @throws InvalidParameter
+	 * @throws ProductCatalogDoesNotExist
+	 */
 	Sale offerSpecailSaleForProduct(Sale s) throws CriticalError, CustomerNotConnected, InvalidParameter, ProductCatalogDoesNotExist;
 	
+	/** 
+	 * addSpecialSale - customer can add special sale
+	 * @param Sale sale
+	 * @param Boolean isTaken
+	 */
 	void addSpecialSale(Sale sale, Boolean isTaken);
 
+	/**
+	 * getSpecialSales - returns all existing special sale in the system
+	 * @return HashMap<Sale, Boolean>
+	 */
 	HashMap<Sale, Boolean> getSpecialSales();
 }
