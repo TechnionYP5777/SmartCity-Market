@@ -54,4 +54,10 @@ public class LastPopularProductOfCustomerProperty extends ABasicProperty {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String getDescription() {
+		return "The product: " + product.getName() + " (bracode: " + product.getBarcode() + ")" +
+				" is not popular for the customer" ;
+	}
 }

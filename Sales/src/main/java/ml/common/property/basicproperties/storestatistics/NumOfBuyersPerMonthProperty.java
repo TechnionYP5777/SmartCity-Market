@@ -57,4 +57,12 @@ public class NumOfBuyersPerMonthProperty extends ABasicProperty {
 		return true;
 	}
 	
+	@Override
+	public String getDescription() {
+		return "The number of buyers " +
+				(monthAgo == 0 ? "this month " : 
+					monthAgo == 1 ? "1 month ago " : monthAgo + " months ago ") + 
+				"is: " + numOfBuyers;
+	}
+	
 }

@@ -69,5 +69,11 @@ public class AboutToExpireLateStorePackageProperty extends ABasicProperty {
 		return true;
 	}
 
+	@Override
+	public String getDescription() {
+		return "The product: " + storePackage.getProduct().getName() + " (bracode: " + storePackage.getProduct().getBarcode() + ")" +
+				" is about to expired (exp. " + storePackage.getExpirationDate() + ")";
+	}
+
 	
 }

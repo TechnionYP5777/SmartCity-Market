@@ -63,5 +63,9 @@ public class MostPopularProductProperty extends ABasicProperty  {
 		return true;
 	}
 
-	
+	@Override
+	public String getDescription() {
+		return "The product: " + product.getName() + " (bracode: " + product.getBarcode() + ")" +
+				" is very popular in the store" ;
+	}
 }

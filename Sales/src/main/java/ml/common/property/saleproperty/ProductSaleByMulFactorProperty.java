@@ -40,5 +40,12 @@ public class ProductSaleByMulFactorProperty extends ASaleProperty {
 	public ProductSale getOffer() {
 		return sale;
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Sale for product: " + sale.getProduct().getName() + " (barcode: " + sale.getProduct().getBarcode() + ")" +
+				" with amount of: " + sale.getTotalAmount() +
+				" in price of: " + sale.getTotalPrice() + " (discount of: " + ((int)(sale.getdiscount()*100)) + ")";
+	}
 
 }

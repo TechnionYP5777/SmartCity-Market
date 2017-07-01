@@ -52,4 +52,12 @@ public class AverageCartPricePerMonthProperty extends ADeducedProperty {
 		return true;
 	}
 	
+	@Override
+	public String getDescription() {
+		return "The average cart " +
+				(monthAgo == 0 ? "this month " : 
+					monthAgo == 1 ? "1 month ago " : monthAgo + " months ago ") + 
+				"spent: " + average;
+	}
+	
 }

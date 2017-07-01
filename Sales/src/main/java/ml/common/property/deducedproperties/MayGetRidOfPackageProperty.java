@@ -69,4 +69,11 @@ public class MayGetRidOfPackageProperty extends ADeducedProperty {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String getDescription() {
+		return "The packge of product: " + storePackage.getProduct().getName() + " (barcode: " + storePackage.getProduct().getBarcode() + ")" +
+				" with exp. date: " + storePackage.getExpirationDate() +
+				" needs gets rid off the store";
+	}
 }

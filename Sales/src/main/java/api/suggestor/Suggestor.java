@@ -67,7 +67,9 @@ public class Suggestor {
 				.map(p -> (ASaleProperty)p )
 				.collect(Collectors.toSet());
 		
-		return Decider.decideBestSale(salePref, salesProperties).getOffer();
+		ASaleProperty result = Decider.decideBestSale(salePref, salesProperties);
+		
+		return result.getOffer();
 	}
 
 	/**
@@ -92,7 +94,9 @@ public class Suggestor {
 				.map(p -> (ASaleProperty)p )
 				.collect(Collectors.toSet());
 		
-		return Decider.decideSaleSimilar(salePref, salesProperties, offer).getOffer();
+		ASaleProperty result = Decider.decideSaleSimilar(salePref, salesProperties, offer);
+				
+		return result.getOffer();
 		
 	}
 

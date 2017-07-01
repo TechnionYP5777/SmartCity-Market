@@ -80,4 +80,10 @@ public class HealthyRatedProductProperty extends ABasicProperty {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String getDescription() {
+		return "The product: " + product.getName() + " (bracode: " + product.getBarcode() + ")" +
+				" is healthy";
+	}
 }

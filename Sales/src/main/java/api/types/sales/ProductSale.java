@@ -54,6 +54,10 @@ public class ProductSale implements ISale {
 		return amount;
 	}
 	
+	public double getdiscount() {
+		return (amount * product.getPrice()) / price;
+	}
+	
 	public static ProductSale makeSaleByDiscount(IProduct product, int amount, double discount){
 		return new ProductSale(product, amount, amount * product.getPrice() * (1 - discount));
 		

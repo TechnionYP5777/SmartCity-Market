@@ -61,4 +61,10 @@ public class HighRatioAmountExpirationTimeProperty extends ABasicProperty {
 		return true;
 	}
 	
+	@Override
+	public String getDescription() {
+		return "The product: " + combinedPackage.getProduct().getName() + " (bracode: " + combinedPackage.getProduct().getBarcode() + ")" +
+				" has a high ratio of (amount/time left): " + ratio;
+	}
+	
 }

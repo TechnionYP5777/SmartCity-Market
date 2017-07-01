@@ -57,4 +57,12 @@ public class SumOfPurchasesPerMonthProperty extends ABasicProperty {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String getDescription() {
+		return "The sum of purchases " +
+				(monthAgo == 0 ? "this month " : 
+					monthAgo == 1 ? "1 month ago " : monthAgo + " months ago ") + 
+				"is: " + sumOfPurchases;
+	}
 }

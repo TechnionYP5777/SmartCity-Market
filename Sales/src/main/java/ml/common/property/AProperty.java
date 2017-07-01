@@ -44,5 +44,7 @@ public abstract class AProperty {
 		return deducer;
 	}
 	
+	public abstract String getDescription();
+	
 	
 }

@@ -62,5 +62,11 @@ public class MostPopularManufacturerProperty extends ABasicProperty {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String getDescription() {
+		return "The manufacturer: " + manufacturer.getName() + 
+				" is very popular in the store" ;
+	}
 
 }
