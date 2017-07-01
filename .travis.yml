@@ -20,9 +20,9 @@ install:
  
 # add this if you use maven for your project and want to verify mvn build is successful and all unit tests pass.
 script:
- - mvn clean install -DskipTests=false
+ - mvn clean install -DskipTests=false cobertura:cobertura surefire-report:report-only
  # run the coverage tool
- - mvn cobertura:cobertura
+ #- mvn cobertura:cobertura
 
 after_script:
 # see surfire report (tests overview)
