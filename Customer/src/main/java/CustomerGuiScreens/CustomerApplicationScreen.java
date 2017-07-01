@@ -1,6 +1,13 @@
 package CustomerGuiScreens;
 
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.log4j.PropertyConfigurator;
 
 import CustomerContracts.ICustomer;
@@ -67,19 +74,49 @@ public class CustomerApplicationScreen extends AbstractApplicationScreen {
 		}
 	}
 
+	private static boolean parseArguments(String[] args) {
+		CustomerDefs.port = 2000;
+		CustomerDefs.host = "127.0.0.1";
+		
+        Options options = new Options();
+
+        Option portOption = new Option("p", "port", true, "Server port");
+        options.addOption(portOption);
+        
+        Option ipOption = new Option("i", "serverIP", true, "The server ip (default = local host)");
+        options.addOption(ipOption);
+        
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
+        CommandLine cmd;
+
+        try {
+            cmd = parser.parse(options, args);
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+            formatter.printHelp("utility-name", options);
+
+            return false;
+        }
+
+        if (cmd.getOptionValue("port") != null)
+        	CustomerDefs.port = Integer.valueOf(cmd.getOptionValue("port"));
+        
+        if (cmd.getOptionValue("serverIP") != null)
+			CustomerDefs.host = cmd.getOptionValue("serverIP");
+        
+		return true;
+	}
+	
 	public static void main(String[] args) {
 		
+		/* Allowing to change IP and port from command line */
+		if (!parseArguments(args))
+			return;
 		
 		/* Setting log properties */
 		PropertyConfigurator.configure("../log4j.properties");
-		
-		/* Allowing to change IP and port from command line */
-		if (args.length >= 1)
-			CustomerDefs.host = args[0];
-		
-		if (args.length >= 2)
-			CustomerDefs.port = Integer.parseInt(args[1]);
-		
+				
 		launch(args);
 	}
 }
