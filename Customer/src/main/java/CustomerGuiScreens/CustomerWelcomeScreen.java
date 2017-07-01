@@ -4,12 +4,16 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import GuiUtils.AbstractApplicationScreen;
-
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.InputEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 
 /** 
  * CustomerWelcomeScreen - This class is the controller for the customer welcome screen
@@ -29,7 +33,24 @@ public class CustomerWelcomeScreen implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
-		AbstractApplicationScreen.fadeTransition(customerWelcomeScreenPane);   
+		AbstractApplicationScreen.fadeTransition(customerWelcomeScreenPane); 
+		MediaPlayer player = new MediaPlayer(
+				new Media(getClass().getResource("/CustomerWelcomeScreen/vid.mp4").toExternalForm()));
+		MediaView mediaView = new MediaView(player);
+		final DoubleProperty width = mediaView.fitWidthProperty();
+		final DoubleProperty height = mediaView.fitHeightProperty();
+
+		width.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
+		height.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
+
+		mediaView.setPreserveRatio(true);
+
+		customerWelcomeScreenPane.getChildren().add(mediaView);
+		player.setCycleCount(MediaPlayer.INDEFINITE);
+		player.play();
+		
+		vbox.toFront();
+		vbox.setFocusTraversable(true);
 	}
 	
 

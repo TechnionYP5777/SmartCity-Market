@@ -93,21 +93,6 @@ public class EmployeeMenuScreen implements Initializable {
 
 		tabsPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
-		tabsPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
-			@Override
-			public void changed(ObservableValue<? extends Tab> ov, Tab __, Tab t1) {
-				// if (t1 == managePackagesTab) {
-				// FXMLLoader loader = new FXMLLoader(
-				// getClass().getResource("/ManagePackagesTab/ManagePackagesTab.fxml"));
-				// try {
-				// loader.load();
-				// } catch (IOException e) {
-				// }
-				// ITabPaneHandler ctrl = loader.getController();
-				// ctrl.tabSelected();
-				// }
-			}
-		});
 
 		worker = InjectionFactory.getInstance(Manager.class);
 		AbstractApplicationScreen.fadeTransition(workerMenuScreenPane);

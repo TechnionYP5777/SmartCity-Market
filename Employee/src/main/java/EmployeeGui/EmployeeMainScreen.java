@@ -7,6 +7,8 @@ import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeCommon.IEmployeeScreensParameterService;
 import GuiUtils.AbstractApplicationScreen;
 import UtilsImplementations.InjectionFactory;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,17 +39,20 @@ public class EmployeeMainScreen implements Initializable {
 		AbstractApplicationScreen.fadeTransition(mainScreenPane);
 		IEmployeeScreensParameterService employeeScreensParameterService = InjectionFactory
 				.getInstance(EmployeeScreensParameterService.class);
-		
-		
+
 		if (employeeScreensParameterService.getNotShowMainScreenVideo()) {
 			MediaPlayer player = new MediaPlayer(
-					new Media(getClass().getResource("/EmployeeMainScreen/SmartMarketSplash.mp4").toExternalForm()));
+					new Media(getClass().getResource("/EmployeeMainScreen/vid.mp4").toExternalForm()));
 			MediaView mediaView = new MediaView(player);
-			mediaView.setFitWidth(1600);
-			mediaView.setFitHeight(900);
-			mediaView.setPreserveRatio(false);
+			final DoubleProperty width = mediaView.fitWidthProperty();
+			final DoubleProperty height = mediaView.fitHeightProperty();
+
+			width.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
+			height.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
+
+			mediaView.setPreserveRatio(true);
+
 			mainScreenPane.getChildren().add(mediaView);
-			player.setMute(true);
 			player.setCycleCount(MediaPlayer.INDEFINITE);
 			player.play();
 		}

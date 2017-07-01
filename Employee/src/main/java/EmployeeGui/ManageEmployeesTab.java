@@ -181,25 +181,6 @@ public class ManageEmployeesTab implements Initializable {
 					.setPredicate(filter == null || filter.length() == 0 ? s -> true : s -> s.contains(filter));
 		});
 
-		// employeesList.setCellFactory(CheckBoxListCell.forListView(new
-		// Callback<String, ObservableValue<Boolean>>() {
-		// @Override
-		// public ObservableValue<Boolean> call(String item) {
-		// BooleanProperty observable = new SimpleBooleanProperty();
-		// observable.set(selectedEmployees.contains(item));
-		//
-		// observable.addListener((obs, wasSelected, isNowSelected) -> {
-		// if (isNowSelected)
-		// selectedEmployees.add(item);
-		// else
-		// selectedEmployees.remove(item);
-		// enableRemoveButton();
-		//
-		// });
-		// return observable;
-		// }
-		// }));
-
 		employeesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 		// for multiple selection

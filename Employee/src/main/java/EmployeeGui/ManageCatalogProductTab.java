@@ -136,9 +136,6 @@ public class ManageCatalogProductTab implements Initializable {
 	@FXML
 	private Label locationLbl;
 
-	// @FXML
-	// private JFXTextField productLocationTextField;
-
 	private HashMap<String, Manufacturer> manufacturars;
 
 	private HashMap<String, Ingredient> ingredients;

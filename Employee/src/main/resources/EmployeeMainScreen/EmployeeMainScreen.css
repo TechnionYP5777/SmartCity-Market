@@ -1,6 +1,6 @@
 .label {
     -fx-font-family: "serif";
-    -fx-text-fill: midnightblue;
+    -fx-text-fill: white;
     -fx-opacity: 1;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
     -fx-font-weight: bold;
