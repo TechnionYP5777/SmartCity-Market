@@ -77,4 +77,10 @@ public class GroceryList implements IGroceryList{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Set<? extends IGroceryPackage> getProductsList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
