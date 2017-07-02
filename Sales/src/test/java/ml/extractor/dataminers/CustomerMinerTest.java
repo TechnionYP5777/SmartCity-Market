@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 
 import ml.common.property.basicproperties.ABasicProperty;
+import ml.common.property.basicproperties.storestatistics.AverageAmountOfProductForCustomerProperty;
 import ml.common.property.basicproperties.storestatistics.LastPopularProductOfCustomerProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductOfCustomerProperty;
 import ml.common.property.basicproperties.storestatistics.NumOfBuyersPerMonthProperty;
@@ -163,6 +164,45 @@ public class CustomerMinerTest {
 			assertNotNull(temp);
 			assertEquals(temp.getSumOfPurchases(), 0, DELTA);
 		}
+	}
+	
+	@Test
+	public void testAverageAmountOfProductForCustomerProperty(){
+		
+		List<GroceryListMock> history = new HistoryMockBuilder().addGrocery("alice", 
+				LocalDate.now(), DBMock.getProduct(1), 1)
+				.addGrocery("alice", 
+				LocalDate.now().minusMonths(1), DBMock.getProduct(1), 5)
+				.addGrocery("alice", 
+				LocalDate.now().minusMonths(1), DBMock.getProduct(1), 1)
+				.addGrocery("bob", 
+				LocalDate.now().minusMonths(1), DBMock.getProduct(1), 1)
+				.addGrocery("alice", 
+				LocalDate.now().minusMonths(2), DBMock.getProduct(2), 2).build();
+				
+		
+		Set<ABasicProperty> result = new CustomerMiner(DBMock.getInputPref(), DBMock.getStoreDateByHistory(history),
+				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+		
+		long numOfAmountAverageProperties = result.stream()
+				.filter(p -> p instanceof AverageAmountOfProductForCustomerProperty).count();
+		
+		assertEquals(2, numOfAmountAverageProperties);
+		
+		AverageAmountOfProductForCustomerProperty realproduct1 = new AverageAmountOfProductForCustomerProperty(
+				DBMock.getProduct(1), 7.0/3);
+		
+		AverageAmountOfProductForCustomerProperty realproduct2 = new AverageAmountOfProductForCustomerProperty(
+				DBMock.getProduct(2), 2);
+		
+		AverageAmountOfProductForCustomerProperty found1 = findInCollection(result, realproduct1);
+		AverageAmountOfProductForCustomerProperty found2 = findInCollection(result, realproduct2);
+		assertNotNull(found1);
+		assertNotNull(found2);
+
+		assertEquals(realproduct1.getAverageAmount(), found1.getAverageAmount(), DELTA);
+		assertEquals(realproduct2.getAverageAmount(), found2.getAverageAmount(), DELTA);
+
 	}
 
 }

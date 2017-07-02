@@ -18,12 +18,12 @@ import api.contracts.IProduct;
 import api.preferences.InputPreferences;
 import api.types.StoreData;
 import ml.common.property.basicproperties.ABasicProperty;
+import ml.common.property.basicproperties.storestatistics.AverageAmountOfProductForCustomerProperty;
 import ml.common.property.basicproperties.storestatistics.LastPopularProductOfCustomerProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductOfCustomerProperty;
 import ml.common.property.basicproperties.storestatistics.NumOfBuyersPerMonthProperty;
 import ml.common.property.basicproperties.storestatistics.NumOfCustomerPurchasesPerMonthProperty;
 import ml.common.property.basicproperties.storestatistics.SumOfCustomerPurchasesPerMonthProperty;
-import ml.common.property.basicproperties.storestatistics.SumOfPurchasesPerMonthProperty;
 
 public class CustomerMiner extends AMiner {
 
@@ -40,7 +40,7 @@ public class CustomerMiner extends AMiner {
 		result.addAll(extractLastPopularCustomerProducts());
 		result.addAll(extractNumberOfCustomerPurchasesPerMonth());
 		result.addAll(extractSumOfCustomerPurcahsesPerMonth());
-//		result.addAll(extractHighRatioAmountExpirationTime());
+		result.addAll(extractAverageAmountOfProductOfCustomer());
 //		result.addAll(extractMostPopularManufacturers());
 //		result.addAll(extractNumberOfBuyersPerMonth());
 //		result.addAll(extractSumOfPurcahsesPerMonth());
@@ -172,6 +172,51 @@ public class CustomerMiner extends AMiner {
 					 (sumPerMonthMap.containsKey(i) ? sumPerMonthMap.get(i) : 0)));
 		
 		return result;
+	}	
+	
+	/**
+	 * this methods generate property of the sum of purchases of the customer in given month {@link SumOfCustomerPurchasesPerMonthProperty}
+	 * the limit of monthes back to look at is defined in {@link SumOfCustomerPurchasesPerMonthProperty}
+	 * 
+	 * @return
+	 */
+	private Set<? extends ABasicProperty> extractAverageAmountOfProductOfCustomer() {
+
+		Set<AverageAmountOfProductForCustomerProperty> result = new HashSet<>();
+		
+		
+		
+		Set<IProduct> allProduct = getHistory().stream()
+				.filter(gl -> gl.getBuyer().equals(getCurrentGrocery().getBuyer()))
+				.flatMap(gl -> gl.getProductsList().stream())
+				.map((IGroceryPackage p) -> p.getProduct())
+				.distinct()
+				.collect(Collectors.toSet());
+		
+		for (IProduct iProduct : allProduct) {
+			
+			long num = getHistory().stream()
+					.filter(gl -> gl.getBuyer().equals(getCurrentGrocery().getBuyer()))
+					.filter(gl -> {
+						for (IGroceryPackage pack : gl.getProductsList())
+							if (pack.getProduct().equals(iProduct))
+								return true;
+						
+						return false;
+					}).count();
+			
+			long totalAmount = getHistory().stream()
+					.filter(gl -> gl.getBuyer().equals(getCurrentGrocery().getBuyer()))
+					.flatMap(gl -> gl.getProductsList().stream())
+					.filter(p -> p.getProduct().equals(iProduct)).collect(Collectors.summingLong(p -> p.getAmount()));
+					
+			result.add(new AverageAmountOfProductForCustomerProperty(iProduct, 
+					num == 0 ? 0 : (double)totalAmount/num));
+		}
+
+		return result;
 	}
+	
+	
 
 }
