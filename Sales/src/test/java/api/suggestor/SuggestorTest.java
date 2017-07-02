@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import BasicCommonClasses.PlaceInMarket;
 import api.contracts.ISale;
-import api.types.Place;
 import api.types.sales.ProductSale;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireLateStorePackageProperty;
 import testmocks.DBMock;
@@ -22,12 +22,12 @@ public class SuggestorTest {
 	@Test
 	public void testSimpleSuggest() {
 		StorePackageMock packageAboutToExpiredSoon = new StorePackageMock(
-				DBMock.getProduct(2), 1, LocalDate.now().plusDays(1), Place.STORE);
+				DBMock.getProduct(2), 1, LocalDate.now().plusDays(1), PlaceInMarket.STORE);
 		
 		List<StorePackageMock> stock = new StockMockBuilder()
 				.addPackage(packageAboutToExpiredSoon)
 				.addPackage(DBMock.getProduct(3), 2,
-						LocalDate.now().plusDays(AboutToExpireLateStorePackageProperty.maxDaysThreshold + 5), Place.STORE)
+						LocalDate.now().plusDays(AboutToExpireLateStorePackageProperty.maxDaysThreshold + 5), PlaceInMarket.STORE)
 				.build();
 		
 		Suggestor.updateCatalog(DBMock.getCatalog());

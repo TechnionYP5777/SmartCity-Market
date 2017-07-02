@@ -2,11 +2,13 @@ package BasicCommonClasses;
 
 import java.lang.String;
 
+import api.contracts.IIngredient;
+
 /** Ingredient - A product can contain special ingredient. 
  * 
  * @author Lior Ben Ami
  * @since 2016-12-09 */
-public class Ingredient {
+public class Ingredient implements IIngredient{
 	long id;
 	String name;
 	
@@ -27,6 +29,7 @@ public class Ingredient {
 		return id;
 	}
 	
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -44,6 +47,11 @@ public class Ingredient {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	@Override
+	public boolean isEqualTo(IIngredient other) {
+		return this.equals(other);
 	}
 		
 }

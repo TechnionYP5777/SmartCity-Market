@@ -1,9 +1,14 @@
 package BasicCommonClasses;
 
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Set;
 
 import CommonDefs.GroceryListExceptions.AmountIsBiggerThanAvailable;
 import CommonDefs.GroceryListExceptions.ProductNotInList;
+import api.contracts.IGroceryList;
+import api.contracts.IGroceryPackage;
+import api.contracts.ISale;
 
 /**
  * GroceryList class - represent the container of the CartProducts that added to the cart.
@@ -11,7 +16,7 @@ import CommonDefs.GroceryListExceptions.ProductNotInList;
  * @author Lior Ben Ami, Aviad Cohen
  * @since 2017-01-04
  */
-public class GroceryList {
+public class GroceryList implements IGroceryList{
 	HashMap<SmartCode, ProductPackage> groceryList = new HashMap<SmartCode, ProductPackage>();
 
 	public void addProduct(ProductPackage newProductPackage) {
@@ -53,5 +58,29 @@ public class GroceryList {
 	
 	public HashMap<SmartCode, ProductPackage> getList() {
 		return groceryList;
+	}
+
+	@Override
+	public String getBuyer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LocalDate getPurchaseDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Set<? extends IGroceryPackage> getProductsList() {
+		return (Set<? extends IGroceryPackage>) groceryList.values();
+	}
+
+	@Override
+	public Set<? extends ISale> getSalesList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

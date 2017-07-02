@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import api.types.Place;
+import BasicCommonClasses.PlaceInMarket;
 import api.types.sales.ProductSale;
 import ml.common.property.AProperty;
 import ml.common.property.deducedproperties.MustGetRidOfPackageProperty;
@@ -21,7 +21,7 @@ public class IfMustGetRidOf_ThenMulFactorSaleTest {
 	@Test
 	public void testDeduceProperties() {
 		MustGetRidOfPackageProperty property =
-				new MustGetRidOfPackageProperty(new StorePackageMock(DBMock.getProduct(1), 1, LocalDate.now(), Place.STORE),
+				new MustGetRidOfPackageProperty(new StorePackageMock(DBMock.getProduct(1), 1, LocalDate.now(), PlaceInMarket.STORE),
 						1);
 		
 		Set<AProperty> propertySet = new HashSet<>();

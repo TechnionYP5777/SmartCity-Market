@@ -4,11 +4,12 @@ package BasicCommonClasses;
  */
 
 import java.util.HashSet;
+import api.contracts.IProduct;
 
 /** CatalogProduct - The info of a product of the market's catalog. 
  * @author Lior Ben Ami
  * @since 2016-12-09 */
-public class CatalogProduct {
+public class CatalogProduct implements IProduct {
 	long barcode;
 	String name;
 	HashSet<Ingredient> ingredients;
@@ -38,6 +39,7 @@ public class CatalogProduct {
 	public CatalogProduct() {
 	}
 
+	@Override
 	public long getBarcode() {
 		return barcode;
 	}
@@ -46,6 +48,7 @@ public class CatalogProduct {
 		this.barcode = barcode;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -54,16 +57,13 @@ public class CatalogProduct {
 		this.name = name;
 	}
 
+	@Override
 	public HashSet<Ingredient> getIngredients() {
 		return ingredients;
 	}
 
 	public void setIngredients(HashSet<Ingredient> ¢) {
 		this.ingredients = ¢;
-	}
-
-	public Manufacturer getManufacturer() {
-		return manufacturer;
 	}
 
 	public void setManufacturer(Manufacturer ¢) {
@@ -78,6 +78,7 @@ public class CatalogProduct {
 		this.description = description;
 	}
 
+	@Override
 	public double getPrice() {
 		return price;
 	}
@@ -165,5 +166,15 @@ public class CatalogProduct {
 	public boolean isValid() {
 		return (barcode >= 0) && (!"".equals(name)) &&
 				(name != null) && (price > 0);
+	}
+
+	@Override
+	public Manufacturer getManufacturer() {
+		return manufacturer;
+	}
+
+	@Override
+	public double getNormalizeDistanceFrom(IProduct other) {
+		return 0;
 	}
 }

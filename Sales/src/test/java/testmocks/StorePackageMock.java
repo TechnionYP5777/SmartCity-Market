@@ -2,17 +2,17 @@ package testmocks;
 
 import java.time.LocalDate;
 
+import BasicCommonClasses.PlaceInMarket;
 import api.contracts.IStorePackage;
-import api.types.Place;
 
 public class StorePackageMock implements IStorePackage {
 
 	ProductMock product;
 	int amount;
 	LocalDate expirationDate;
-	Place place;
+	PlaceInMarket place;
 	
-	public StorePackageMock(ProductMock product, int amount, LocalDate expirationDate, Place place) {
+	public StorePackageMock(ProductMock product, int amount, LocalDate expirationDate, PlaceInMarket place) {
 		super();
 		this.product = product;
 		this.amount = amount;
@@ -20,7 +20,7 @@ public class StorePackageMock implements IStorePackage {
 		this.place = place;
 	}
 	
-	public StorePackageMock(long barcode, int amount, LocalDate expirationDate, Place place) {
+	public StorePackageMock(long barcode, int amount, LocalDate expirationDate, PlaceInMarket place) {
 		super();
 		this.product = new ProductMock(barcode);
 		this.amount = amount;
@@ -33,7 +33,7 @@ public class StorePackageMock implements IStorePackage {
 		this.product = new ProductMock(barcode);
 		this.amount = 1;
 		this.expirationDate = ed;
-		this.place = Place.STORE;
+		this.place = PlaceInMarket.STORE;
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class StorePackageMock implements IStorePackage {
 	}
 
 	@Override
-	public Place getPlace() {
+	public PlaceInMarket getPlace() {
 		return place;
 	}
 

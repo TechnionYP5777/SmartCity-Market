@@ -2,6 +2,7 @@ package ml.common.basiccalsses;
 
 import java.time.LocalDate;
 
+import BasicCommonClasses.PlaceInMarket;
 import api.contracts.IProduct;
 import api.contracts.IStorePackage;
 import api.types.Place;
@@ -76,7 +77,7 @@ public class CombinedStorePackage implements IStorePackage {
 	}
 
 	@Override
-	public Place getPlace() {
+	public PlaceInMarket getPlace() {
 		return null;
 	}
 	

@@ -2,11 +2,13 @@ package BasicCommonClasses;
 
 import java.lang.String;
 
+import api.contracts.IManufacturer;
+
 /** Manufacturer - represents manufacturer of a product.
  * 
  * @author Lior Ben Ami
  * @since 2016-12-09 */
-public class Manufacturer {
+public class Manufacturer implements IManufacturer{
 	long id;
 	String name;
 	
@@ -27,6 +29,7 @@ public class Manufacturer {
 		name = newName;
 	}
 	
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -39,5 +42,10 @@ public class Manufacturer {
 	@Override
 	public boolean equals(Object ¢) {
 		return ¢ == this || (¢ != null && getClass() == ¢.getClass() && id == ((Manufacturer) ¢).id);
+	}
+
+	@Override
+	public boolean isEqualTo(IManufacturer other) {
+		return this.equals(other);
 	}
 }

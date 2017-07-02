@@ -1,5 +1,8 @@
 package BasicCommonClasses;
 
+import api.contracts.IGroceryPackage;
+import api.contracts.IProduct;
+
 /**
  * ProductPackage - represents a package of the same products. All products have
  * the same Expiration Date and located in the same location in the market.
@@ -86,5 +89,9 @@ public class ProductPackage {
 
 	public boolean isValid() {
 		return smartCode.isValid() && amount > 0;
+	}
+
+	public IProduct getProduct() {
+		return null;
 	}
 }

@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import api.types.Place;
+import BasicCommonClasses.PlaceInMarket;
 import ml.common.property.AProperty;
 import ml.common.property.basicproperties.storestatistics.AboutToExpireSoonStorePackageProperty;
 import ml.common.property.deducedproperties.MustGetRidOfPackageProperty;
@@ -20,7 +20,7 @@ public class IfAboutToExpireSoon_ThenMustGetRidOfPackage_RuleTest {
 	@Test
 	public void testDeduceProperties() {
 		AboutToExpireSoonStorePackageProperty property =
-				new AboutToExpireSoonStorePackageProperty(new StorePackageMock(1, 1, LocalDate.now().plusDays(2), Place.STORE));
+				new AboutToExpireSoonStorePackageProperty(new StorePackageMock(1, 1, LocalDate.now().plusDays(2), PlaceInMarket.STORE));
 		
 		Set<AProperty> propertySet = new HashSet<>();
 		propertySet.add(property);

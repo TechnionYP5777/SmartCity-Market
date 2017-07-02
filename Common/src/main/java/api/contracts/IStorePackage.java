@@ -2,7 +2,7 @@ package api.contracts;
 
 import java.time.LocalDate;
 
-import api.types.Place;
+import BasicCommonClasses.PlaceInMarket;
 
 public interface IStorePackage {
 	
@@ -12,5 +12,5 @@ public interface IStorePackage {
 	
 	LocalDate getExpirationDate();
 	
-	Place getPlace();
+	PlaceInMarket getPlace();
 }

@@ -1,6 +1,6 @@
 package api.contracts;
 
-import java.util.Set;
+import java.util.HashSet;
 
 public interface IProduct {
 	long getBarcode();
@@ -19,7 +19,9 @@ public interface IProduct {
 	
 	double getPrice();
 	
-	Set<? extends IIngredient> getIngredients();
-	
+	//Set<? extends IIngredient> getIngredients();
+
+	HashSet<? extends IIngredient> getIngredients();
+
 	//TODO need to add getPicture()
 }

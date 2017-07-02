@@ -13,8 +13,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import BasicCommonClasses.PlaceInMarket;
 import api.contracts.IStorePackage;
-import api.types.Place;
 import api.types.StoreData;
 import ml.common.basiccalsses.CombinedStorePackage;
 import ml.common.property.basicproperties.ABasicProperty;
@@ -161,7 +161,7 @@ public class StoreStatisticsMinerTest {
 	public void testHighRatioAmountExpirationProperty() {
 		
 		StorePackageMock highRatioPackage = new StorePackageMock(2,
-				5, LocalDate.now().plusDays(5), Place.STORE);
+				5, LocalDate.now().plusDays(5), PlaceInMarket.STORE);
 		double ratio = (double) highRatioPackage.getAmount() /
 				ChronoUnit.DAYS.between(LocalDate.now(),highRatioPackage.getExpirationDate());
 		
@@ -186,9 +186,9 @@ public class StoreStatisticsMinerTest {
 	public void testHighRatioCombinePackages() {
 		
 		StorePackageMock highRatioStorePackage = new StorePackageMock(2,
-				5, LocalDate.now().plusDays(5), Place.STORE);
+				5, LocalDate.now().plusDays(5), PlaceInMarket.STORE);
 		StorePackageMock highRatioWarehousePackage = new StorePackageMock(2,
-				5, LocalDate.now().plusDays(5), Place.WAREHOUSE);
+				5, LocalDate.now().plusDays(5), PlaceInMarket.WAREHOUSE);
 		double ratio = ((double) highRatioStorePackage.getAmount() + highRatioWarehousePackage.getAmount()) /
 				ChronoUnit.DAYS.between(LocalDate.now(),highRatioStorePackage.getExpirationDate());
 		

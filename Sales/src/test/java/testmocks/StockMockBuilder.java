@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import api.types.Place;
+import BasicCommonClasses.PlaceInMarket;
 
 public class StockMockBuilder {
 
@@ -15,7 +15,7 @@ public class StockMockBuilder {
 		return this;
 	}
 	
-	public StockMockBuilder addPackage(ProductMock product, int amount, LocalDate ed, Place place){
+	public StockMockBuilder addPackage(ProductMock product, int amount, LocalDate ed, PlaceInMarket place){
 		stock.add(new StorePackageMock(product, amount, ed, place));
 		return this;
 	}

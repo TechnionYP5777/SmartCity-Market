@@ -3,6 +3,7 @@ package testmocks;
 import java.util.HashSet;
 import java.util.Set;
 
+import api.contracts.IIngredient;
 import api.contracts.IProduct;
 
 public class ProductMock implements IProduct {
@@ -45,8 +46,8 @@ public class ProductMock implements IProduct {
 	}
 
 	@Override
-	public Set<IngredientMock> getIngredients() {
-		return ingredients;
+	public HashSet<? extends IIngredient> getIngredients() {
+		return (HashSet<? extends IIngredient>) ingredients;
 	}
 
 	public ProductMock setName(String name) {
