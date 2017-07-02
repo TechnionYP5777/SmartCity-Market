@@ -1649,7 +1649,7 @@ public class CommandExecuter {
 			
 			List<ProductPackageMarshal> stock = c.getAllProductPackages().stream()
 					.map(p -> new ProductPackageMarshal(p, mapCatalog)).collect(Collectors.toList());
-			List<? extends IGroceryList> history = GroceryListHistory.getHistory(); 
+			List<? extends IGroceryList> history = GroceryListHistory.getHistory(mapCatalog); 
 			String username = c.getCustomerUsernameBySessionID(inCommandWrapper.getSenderID());
 			CatalogProduct product = mapCatalog.get(barcode);
 			
@@ -1707,7 +1707,7 @@ public class CommandExecuter {
 			
 			List<ProductPackageMarshal> stock = c.getAllProductPackages().stream()
 					.map(p -> new ProductPackageMarshal(p, mapCatalog)).collect(Collectors.toList());
-			List<? extends IGroceryList> history = GroceryListHistory.getHistory(); 
+			List<? extends IGroceryList> history = GroceryListHistory.getHistory(mapCatalog); 
 			String username = c.getCustomerUsernameBySessionID(inCommandWrapper.getSenderID());
 			
 			GroceryList currentGrocery = Serialization.deserialize(c.cartRestoreGroceryList(inCommandWrapper.getSenderID()),GroceryList.class);
