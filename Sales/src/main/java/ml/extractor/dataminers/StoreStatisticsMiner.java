@@ -43,7 +43,7 @@ import ml.common.property.basicproperties.storestatistics.SumOfPurchasesPerMonth
 public class StoreStatisticsMiner extends AMiner {
 
 	public StoreStatisticsMiner(InputPreferences inputPreferences, StoreData storeData, IGroceryList currentGrocery,
-			IGroceryPackage currentProduct) {
+			IProduct currentProduct) {
 		super(inputPreferences, storeData, currentGrocery, currentProduct);
 	}
 

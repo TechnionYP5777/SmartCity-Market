@@ -32,7 +32,7 @@ public class SuggestorTest {
 		
 		Suggestor.updateCatalog(DBMock.getCatalog());
 		Suggestor.updateStock(stock);
-		ISale sale = Suggestor.suggestSale(new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1)));
+		ISale sale = Suggestor.suggestSale(new GroceryListMock("alice"),DBMock.getProduct(1));
 		
 		
 		ProductSale realSale = new ProductSale(DBMock.getProduct(2), 1, 1.3392857142857142857142857142857);

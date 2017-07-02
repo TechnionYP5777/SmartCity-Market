@@ -85,7 +85,7 @@ public class StoreStatisticsMinerTest {
 	@Test
 	public void test50MostPopularProductsProperty() {
 		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
-				new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+				DBMock.getProduct(1)).extractProperties();
 
 		long numOfRightAmount = result.stream().filter(
 				p -> p instanceof MostPopularProductProperty && ((MostPopularProductProperty) p).getAmount() == 2)
@@ -101,7 +101,7 @@ public class StoreStatisticsMinerTest {
 	@Test
 	public void test50LastPopularProductsProperty() {
 		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
-				new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+				DBMock.getProduct(1)).extractProperties();
 
 		long numOfRightAmount = result.stream().filter(
 				p -> p instanceof MostPopularProductProperty && ((MostPopularProductProperty) p).getAmount() == 2)
@@ -117,7 +117,7 @@ public class StoreStatisticsMinerTest {
 	@Test
 	public void testAboutToExpireSoonProperty() {
 		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
-				new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+				DBMock.getProduct(1)).extractProperties();
 
 		long totalAboutToExpireStorePackages = result.stream()
 				.filter(p -> p instanceof AboutToExpireSoonStorePackageProperty).count();
@@ -147,7 +147,7 @@ public class StoreStatisticsMinerTest {
 				.build();
 		
 		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDataByStock(stock),
-				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+				new GroceryListMock("alice"), DBMock.getProduct(1)).extractProperties();
 
 		long totalAboutToExpireLatePackages = result.stream()
 				.filter(p -> p instanceof AboutToExpireLateStorePackageProperty).count();
@@ -171,7 +171,7 @@ public class StoreStatisticsMinerTest {
 				.build();
 		
 		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDataByStock(stock),
-				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+				new GroceryListMock("alice"), DBMock.getProduct(1)).extractProperties();
 
 		long totalAboutToExpireLatePackages = result.stream()
 				.filter(p -> p instanceof HighRatioAmountExpirationTimeProperty).count();
@@ -199,7 +199,7 @@ public class StoreStatisticsMinerTest {
 				.build();
 		
 		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDataByStock(stock),
-				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+				new GroceryListMock("alice"), DBMock.getProduct(1)).extractProperties();
 
 		long totalAboutToExpireLatePackages = result.stream()
 				.filter(p -> p instanceof HighRatioAmountExpirationTimeProperty).count();
@@ -214,7 +214,7 @@ public class StoreStatisticsMinerTest {
 	@Test
 	public void testMostPopularManufacturersProperty() {
 		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
-				new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+				DBMock.getProduct(1)).extractProperties();
 		
 		int expectedAmountOfMostPopularManufacturer = 3;
 		long numOfRightAmount = result.stream().filter(
@@ -241,7 +241,7 @@ public class StoreStatisticsMinerTest {
 				
 		
 		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDateByHistory(history),
-				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+				new GroceryListMock("alice"), DBMock.getProduct(1)).extractProperties();
 		
 		long numOfBuyerPerMonthProperties = result.stream()
 				.filter(p -> p instanceof NumOfBuyersPerMonthProperty).count();
@@ -282,7 +282,7 @@ public class StoreStatisticsMinerTest {
 				
 		
 		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), DBMock.getStoreDateByHistory(history),
-				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+				new GroceryListMock("alice"), DBMock.getProduct(1)).extractProperties();
 		
 		long numOfBuyerPerMonthProperties = result.stream()
 				.filter(p -> p instanceof SumOfPurchasesPerMonthProperty).count();
@@ -312,7 +312,7 @@ public class StoreStatisticsMinerTest {
 	@Test
 	public void testHealthyRatedProductProperty(){
 		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
-				new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+				DBMock.getProduct(1)).extractProperties();
 		
 		int expectedAmountOfHealthyRatedProductProperties = (int) (DBMock.NUM_OF_PRODUCTS * 0.8);
 		long numOfHealthyRatedProductProperties = 
@@ -327,7 +327,7 @@ public class StoreStatisticsMinerTest {
 	@Test
 	public void testStoreStatisticsMiner() {
 		new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
-				new GroceryPackageMock(DBMock.getProduct(1)));
+				DBMock.getProduct(1));
 	}
 	
 	

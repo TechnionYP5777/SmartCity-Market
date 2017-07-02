@@ -40,7 +40,7 @@ public class CustomerMinerTest {
 			history.add(new GroceryListMock("bob").addProdcut(DBMock.getProduct(i)));
 		
 		Set<ABasicProperty> result = new CustomerMiner(DBMock.getInputPref(), DBMock.getStoreDateByHistory(history), 
-				new GroceryListMock("bob"),new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+				new GroceryListMock("bob"),DBMock.getProduct(1)).extractProperties();
 
 		long numOfRightAmount = result.stream().filter(
 				p -> p instanceof MostPopularProductOfCustomerProperty && ((MostPopularProductOfCustomerProperty) p).getAmount() == 1)
@@ -66,7 +66,7 @@ public class CustomerMinerTest {
 			history.add(new GroceryListMock("bob").addProdcut(DBMock.getProduct(i)));
 		
 		Set<ABasicProperty> result = new CustomerMiner(DBMock.getInputPref(), DBMock.getStoreDateByHistory(history), 
-				new GroceryListMock("alice"),new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+				new GroceryListMock("alice"),DBMock.getProduct(1)).extractProperties();
 
 		long numOfRightAmount = result.stream().filter(
 				p -> p instanceof LastPopularProductOfCustomerProperty && ((LastPopularProductOfCustomerProperty) p).getAmount() == 1)
@@ -96,7 +96,7 @@ public class CustomerMinerTest {
 				
 		
 		Set<ABasicProperty> result = new CustomerMiner(DBMock.getInputPref(), DBMock.getStoreDateByHistory(history),
-				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+				new GroceryListMock("alice"), DBMock.getProduct(1)).extractProperties();
 		
 		long numOfBuyerPerMonthProperties = result.stream()
 				.filter(p -> p instanceof NumOfCustomerPurchasesPerMonthProperty).count();
@@ -139,7 +139,7 @@ public class CustomerMinerTest {
 				
 		
 		Set<ABasicProperty> result = new CustomerMiner(DBMock.getInputPref(), DBMock.getStoreDateByHistory(history),
-				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+				new GroceryListMock("alice"), DBMock.getProduct(1)).extractProperties();
 		
 		long numOfBuyerPerMonthProperties = result.stream()
 				.filter(p -> p instanceof SumOfCustomerPurchasesPerMonthProperty).count();
@@ -182,7 +182,7 @@ public class CustomerMinerTest {
 				
 		
 		Set<ABasicProperty> result = new CustomerMiner(DBMock.getInputPref(), DBMock.getStoreDateByHistory(history),
-				new GroceryListMock("alice"), new GroceryPackageMock(DBMock.getProduct(1))).extractProperties();
+				new GroceryListMock("alice"), DBMock.getProduct(1)).extractProperties();
 		
 		long numOfAmountAverageProperties = result.stream()
 				.filter(p -> p instanceof AverageAmountOfProductForCustomerProperty).count();

@@ -28,7 +28,7 @@ import ml.common.property.basicproperties.storestatistics.SumOfCustomerPurchases
 public class CustomerMiner extends AMiner {
 
 	public CustomerMiner(InputPreferences inputPreferences, StoreData storeData, IGroceryList currentGrocery,
-			IGroceryPackage currentProduct) {
+			IProduct currentProduct) {
 		super(inputPreferences, storeData, currentGrocery, currentProduct);
 	}
 	

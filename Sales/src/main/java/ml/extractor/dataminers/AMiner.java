@@ -17,12 +17,12 @@ public abstract class AMiner {
 
 	private InputPreferences inputPreferences;
 	
-	private IGroceryPackage currentProduct;
+	private IProduct currentProduct;
 	
 	private IGroceryList currentGrocery;
 	
 	public AMiner(InputPreferences inputPreferences, StoreData storeData, IGroceryList currentGrocery,
-			IGroceryPackage currentProduct) {
+			IProduct currentProduct) {
 		super();
 		this.storeData = storeData;
 		this.inputPreferences = inputPreferences;
@@ -37,7 +37,7 @@ public abstract class AMiner {
 		return inputPreferences;
 	}
 
-	public IGroceryPackage getPurchasedProduct() {
+	public IProduct getPurchasedProduct() {
 		return currentProduct;
 	}
 	

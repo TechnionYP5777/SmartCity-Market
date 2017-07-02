@@ -55,7 +55,7 @@ public class Suggestor {
 	 * @return sale if succeeded, null otherwise (note: the sale must be one of the
 	 *            types under {@link api.types.sales})
 	 */
-	public static ISale suggestSale(IGroceryList currentGrocery, IGroceryPackage purchasedProduct) {
+	public static ISale suggestSale(IGroceryList currentGrocery, IProduct purchasedProduct) {
 		StoreData currentData = storeData;
 		
 		Set<ABasicProperty> initialProperties = Extractor.extractProperties(inPref, currentData, currentGrocery, purchasedProduct);

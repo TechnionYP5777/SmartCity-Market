@@ -1,8 +1,12 @@
 package CommandHandler;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.ProductPackage;
 import api.contracts.IGroceryList;
@@ -14,11 +18,13 @@ public class GroceryListMarshal implements IGroceryList {
 	String buyer;
 	LocalDate date;
 	GroceryList list;
+	Map<Long, CatalogProduct> catalog;
 	
-	public GroceryListMarshal(String buyer, LocalDate date, GroceryList list) {
+	public GroceryListMarshal(String buyer, LocalDate date, GroceryList list, Map<Long, CatalogProduct> catalog) {
 		this.buyer = buyer;
 		this.date = date;
 		this.list = list;
+		this.catalog = catalog;
 	}
 	
 	public GroceryListMarshal(String buyer, LocalDate date) {
@@ -39,13 +45,17 @@ public class GroceryListMarshal implements IGroceryList {
 
 	@Override
 	public Set<? extends IGroceryPackage> getProductsList() {
-		//return new HashSet<ProductPackage>(list.getList().values());
-		return null;
+		
+		Set<ProductPackageMarshal> result;
+		
+		result = list.getList().values().stream().map(p -> new ProductPackageMarshal(p, catalog)).collect(Collectors.toSet());
+		
+		return result;
 	}
 	
 
 	public void addPackage(ProductPackage newProductPackage) {
-		//list.addProduct(newProductPackage);
+		list.addProduct(newProductPackage);
 	}
 	
 

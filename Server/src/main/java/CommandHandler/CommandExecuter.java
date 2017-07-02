@@ -3,8 +3,10 @@ package CommandHandler;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
 
 import org.apache.log4j.Logger;
@@ -49,6 +51,10 @@ import SQLDatabase.SQLDatabaseException.SaleStillUsed;
 import UtilsImplementations.Packing;
 import UtilsImplementations.Serialization;
 import api.contracts.IGroceryList;
+import api.contracts.ISale;
+import api.suggestor.Suggestor;
+import api.types.StoreData;
+import api.types.sales.ProductSale;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyExist;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
@@ -1633,33 +1639,39 @@ public class CommandExecuter {
 			return;
 		}
 		
-		
 		try {
 			//Get stock, catalog, and history from SQL
 			List<CatalogProduct> catalog = c.getAllProductsInCatalog();
-			List<ProductPackage> stock = c.getAllProductPackages();
+			Map<Long, CatalogProduct> mapCatalog = new HashMap<>();
+			
+			for (CatalogProduct catalogProduct : catalog) 
+				mapCatalog.put(catalogProduct.getBarcode(), catalogProduct);
+			
+			List<ProductPackageMarshal> stock = c.getAllProductPackages().stream()
+					.map(p -> new ProductPackageMarshal(p, mapCatalog)).collect(Collectors.toList());
 			List<? extends IGroceryList> history = GroceryListHistory.getHistory(); 
 			String username = c.getCustomerUsernameBySessionID(inCommandWrapper.getSenderID());
-			CatalogProduct product = c.getProductFromCatalog(null, barcode);
+			CatalogProduct product = mapCatalog.get(barcode);
 			
-
 			GroceryList currentGrocery = Serialization.deserialize(c.cartRestoreGroceryList(inCommandWrapper.getSenderID()),GroceryList.class);
-			//TODO building history
-//			StoreData data = new StoreData(history, stock, catalog);
-//			//TODO remove comments (also in GroceryListMarshal) when integration done
-//			Suggestor.suggestSale(new GroceryListMarshal(username, LocalDate.now(), currentGrocery) , product);
+
+
+			Suggestor.updateCatalog(catalog);
+			Suggestor.updateHistory(history);
+			Suggestor.updateStock(stock);
+			ISale iSale = Suggestor.suggestSale(new GroceryListMarshal(username, LocalDate.now(), currentGrocery, mapCatalog),
+					product);
 			
-			Sale sale = new Sale();
+			Sale offeredSale = new Sale(0,iSale.getProduct().getBarcode(), iSale.getTotalAmount(), iSale.getTotalPrice());
+			int saleID = c.addSale(null, offeredSale, false);
 			
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(sale));
+			offeredSale.setId(saleID);
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(offeredSale));
 		} catch (ClientNotConnected e) {
 			log.info("Get special sale for product command failed, client is not exist");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
-		} catch (ProductNotExistInCatalog | CriticalError e) {
-			log.fatal("Get special sale for product command failed, critical error occured from SQL Database connection");
-
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 		} catch (Exception e) {
 			log.fatal("Get special sale for product command failed, critical error occured");
 
@@ -1688,29 +1700,37 @@ public class CommandExecuter {
 		try {
 			//Get stock, catalog, and history from SQL
 			List<CatalogProduct> catalog = c.getAllProductsInCatalog();
-			List<ProductPackage> stock = c.getAllProductPackages();
+			Map<Long, CatalogProduct> mapCatalog = new HashMap<>();
+			
+			for (CatalogProduct catalogProduct : catalog) 
+				mapCatalog.put(catalogProduct.getBarcode(), catalogProduct);
+			
+			List<ProductPackageMarshal> stock = c.getAllProductPackages().stream()
+					.map(p -> new ProductPackageMarshal(p, mapCatalog)).collect(Collectors.toList());
 			List<? extends IGroceryList> history = GroceryListHistory.getHistory(); 
 			String username = c.getCustomerUsernameBySessionID(inCommandWrapper.getSenderID());
-			CatalogProduct product = c.getProductFromCatalog(null, sale.getProductBarcode());
 			
 			GroceryList currentGrocery = Serialization.deserialize(c.cartRestoreGroceryList(inCommandWrapper.getSenderID()),GroceryList.class);
 			
-			//TODO building history
-//			StoreData data = new StoreData(history, stock, catalog);
-//			//TODO remove comments (also in GroceryListMarshal) when integration done
-//			Suggestor.examineOffer(new GroceryListMarshal(username, LocalDate.now(), currentGrocery) , sale);
+			ProductSale pSale = new ProductSale(mapCatalog.get(sale.getProductBarcode()), sale.getAmountOfProducts(), 
+					sale.getPrice());
+
+			Suggestor.updateCatalog(catalog);
+			Suggestor.updateHistory(history);
+			Suggestor.updateStock(stock);
+
+			ISale iSale = Suggestor.examineOffer(new GroceryListMarshal(username, LocalDate.now(), currentGrocery, mapCatalog) , pSale);
 			
-			Sale offeredSale = new Sale();
+			Sale offeredSale = new Sale(0,iSale.getProduct().getBarcode(), iSale.getTotalAmount(), iSale.getTotalPrice());
+			int saleID = c.addSale(null, offeredSale, false);
+			
+			offeredSale.setId(saleID);
 			
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(offeredSale));
 		} catch (ClientNotConnected e) {
 			log.info("Get special sale for product command failed, client is not exist");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
-		} catch (ProductNotExistInCatalog | CriticalError e) {
-			log.fatal("Get special sale for product command failed, critical error occured from SQL Database connection");
-
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 		} catch (Exception e) {
 			log.fatal("Get special sale for product command failed, critical error occured");
 
