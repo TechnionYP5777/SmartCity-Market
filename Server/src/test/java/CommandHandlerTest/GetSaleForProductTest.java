@@ -3,9 +3,6 @@ package CommandHandlerTest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +13,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 
-import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Sale;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;

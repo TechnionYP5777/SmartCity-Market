@@ -3813,7 +3813,19 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 	@Override
 	public List<GroceryList> getGroceryListHistory() {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<>();
+	}
+	
+	public String getCustomerUsernameBySessionID(int cartID) throws ClientNotConnected, CriticalError{
+		validateCartSessionEstablished(cartID);
+		
+		String result = getValueForRegisteredClient(new CustomersTable(), CustomersTable.customersessionIDCol,
+				cartID, CustomersTable.customerusernameCol);
+		
+		if (result == null)
+			throw new CriticalError();
+		
+		return result;
 	}
 
 }

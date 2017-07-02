@@ -14,6 +14,7 @@ import com.google.gson.reflect.TypeToken;
 
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
+import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
@@ -47,6 +48,7 @@ import SQLDatabase.SQLDatabaseException.SaleNotExist;
 import SQLDatabase.SQLDatabaseException.SaleStillUsed;
 import UtilsImplementations.Packing;
 import UtilsImplementations.Serialization;
+import api.contracts.IGroceryList;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyExist;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
@@ -1631,7 +1633,38 @@ public class CommandExecuter {
 			return;
 		}
 		
-		//TODO Noam - call SQL here
+		
+		try {
+			//Get stock, catalog, and history from SQL
+			List<CatalogProduct> catalog = c.getAllProductsInCatalog();
+			List<ProductPackage> stock = c.getAllProductPackages();
+			List<? extends IGroceryList> history = GroceryListHistory.getHistory(); 
+			String username = c.getCustomerUsernameBySessionID(inCommandWrapper.getSenderID());
+			CatalogProduct product = c.getProductFromCatalog(null, barcode);
+			
+
+			GroceryList currentGrocery = Serialization.deserialize(c.cartRestoreGroceryList(inCommandWrapper.getSenderID()),GroceryList.class);
+			//TODO building history
+//			StoreData data = new StoreData(history, stock, catalog);
+//			//TODO remove comments (also in GroceryListMarshal) when integration done
+//			Suggestor.suggestSale(new GroceryListMarshal(username, LocalDate.now(), currentGrocery) , product);
+			
+			Sale sale = new Sale();
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(sale));
+		} catch (ClientNotConnected e) {
+			log.info("Get special sale for product command failed, client is not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		} catch (ProductNotExistInCatalog | CriticalError e) {
+			log.fatal("Get special sale for product command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (Exception e) {
+			log.fatal("Get special sale for product command failed, critical error occured");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		}
 
 
 		log.info("Get special sale for product command system finished for barcode " + barcode);
@@ -1652,7 +1685,37 @@ public class CommandExecuter {
 			return;
 		}
 		
-		//TODO Noam - call SQL here
+		try {
+			//Get stock, catalog, and history from SQL
+			List<CatalogProduct> catalog = c.getAllProductsInCatalog();
+			List<ProductPackage> stock = c.getAllProductPackages();
+			List<? extends IGroceryList> history = GroceryListHistory.getHistory(); 
+			String username = c.getCustomerUsernameBySessionID(inCommandWrapper.getSenderID());
+			CatalogProduct product = c.getProductFromCatalog(null, sale.getProductBarcode());
+			
+			GroceryList currentGrocery = Serialization.deserialize(c.cartRestoreGroceryList(inCommandWrapper.getSenderID()),GroceryList.class);
+			
+			//TODO building history
+//			StoreData data = new StoreData(history, stock, catalog);
+//			//TODO remove comments (also in GroceryListMarshal) when integration done
+//			Suggestor.examineOffer(new GroceryListMarshal(username, LocalDate.now(), currentGrocery) , sale);
+			
+			Sale offeredSale = new Sale();
+			
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(offeredSale));
+		} catch (ClientNotConnected e) {
+			log.info("Get special sale for product command failed, client is not exist");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
+		} catch (ProductNotExistInCatalog | CriticalError e) {
+			log.fatal("Get special sale for product command failed, critical error occured from SQL Database connection");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		} catch (Exception e) {
+			log.fatal("Get special sale for product command failed, critical error occured");
+
+			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
+		}
 
 		log.info("Offer special sale for product command system finished for sale " + sale);
 	}

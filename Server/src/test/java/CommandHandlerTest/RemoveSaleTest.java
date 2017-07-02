@@ -13,7 +13,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 
-import BasicCommonClasses.Sale;
 import ClientServerApi.CommandDescriptor;
 import ClientServerApi.CommandWrapper;
 import ClientServerApi.ResultDescriptor;
@@ -21,7 +20,6 @@ import CommandHandler.CommandExecuter;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
 import SQLDatabase.SQLDatabaseException.CriticalError;
-import SQLDatabase.SQLDatabaseException.SaleAlreadyExist;
 import SQLDatabase.SQLDatabaseException.SaleNotExist;
 import SQLDatabase.SQLDatabaseException.SaleStillUsed;
 

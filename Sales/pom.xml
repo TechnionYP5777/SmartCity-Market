@@ -20,4 +20,5 @@
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>
+  <version>1.0</version>
 </project>
