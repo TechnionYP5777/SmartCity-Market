@@ -11,8 +11,6 @@ import org.apache.log4j.PropertyConfigurator;
 import com.sun.javafx.application.LauncherImpl;
 
 import CommonDI.CommonDiConfigurator;
-import EmployeeCommon.EmployeeScreensParameterService;
-import EmployeeCommon.IEmployeeScreensParameterService;
 import EmployeeContracts.IWorker;
 import EmployeeDI.EmployeeDiConfigurator;
 import EmployeeDefs.WorkerDefs;
@@ -34,8 +32,6 @@ import javafx.stage.Stage;
  */
 @SuppressWarnings("restriction")
 public class EmployeeApplicationScreen extends AbstractApplicationScreen {
-
-	static Boolean disableVideo;
 	
 	BarcodeEventHandler barcodeEventHandler;
 
@@ -45,10 +41,6 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 			stage = primaryStage;
 			InjectionFactory.createInjector(new EmployeeDiConfigurator(), new CommonDiConfigurator());
 
-			IEmployeeScreensParameterService employeeScreensParameterService = InjectionFactory
-					.getInstance(EmployeeScreensParameterService.class);
-
-			employeeScreensParameterService.setNotShowMainScreenVideo(!disableVideo);
 			barcodeEventHandler = InjectionFactory.getInstance(BarcodeEventHandler.class);
 			barcodeEventHandler.initializeHandler();
 			barcodeEventHandler.startListening();
@@ -83,11 +75,16 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
 
 	private static boolean parseArguments(String[] args) {
 		WorkerDefs.port = 2000;
+		WorkerDefs.host = "127.0.0.1";
+		WorkerDefs.disableVid = false;
 		
         Options options = new Options();
 
         Option portOption = new Option("p", "port", true, "Server port");
         options.addOption(portOption);
+        
+        Option ipOption = new Option("i", "serverIP", true, "The server ip (default = local host)");
+        options.addOption(ipOption);
         
         Option disableVideoOption = new Option("d", "disableVideo", false, "Disable video on start");
         options.addOption(disableVideoOption);
@@ -108,7 +105,10 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
         if (cmd.getOptionValue("port") != null)
         	WorkerDefs.port = Integer.valueOf(cmd.getOptionValue("port"));
         
-        disableVideo = cmd.getOptionValue("disableVideo") != null;
+        if (cmd.getOptionValue("serverIP") != null)
+        	WorkerDefs.host = cmd.getOptionValue("serverIP");
+        
+        WorkerDefs.disableVid = cmd.getOptionValue("disableVideo") != null;
         
 		return true;
 	}

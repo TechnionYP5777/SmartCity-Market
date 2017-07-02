@@ -77,6 +77,7 @@ public class CustomerApplicationScreen extends AbstractApplicationScreen {
 	private static boolean parseArguments(String[] args) {
 		CustomerDefs.port = 2000;
 		CustomerDefs.host = "127.0.0.1";
+		CustomerDefs.disableVid = false;
 		
         Options options = new Options();
 
@@ -85,6 +86,9 @@ public class CustomerApplicationScreen extends AbstractApplicationScreen {
         
         Option ipOption = new Option("i", "serverIP", true, "The server ip (default = local host)");
         options.addOption(ipOption);
+        
+        Option disableVideoOption = new Option("d", "disableVideo", false, "Disable video on start");
+        options.addOption(disableVideoOption);
         
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
@@ -104,6 +108,8 @@ public class CustomerApplicationScreen extends AbstractApplicationScreen {
         
         if (cmd.getOptionValue("serverIP") != null)
 			CustomerDefs.host = cmd.getOptionValue("serverIP");
+        
+        CustomerDefs.disableVid = cmd.getOptionValue("disableVideo") != null;
         
 		return true;
 	}

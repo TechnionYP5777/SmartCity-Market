@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import EmployeeCommon.EmployeeScreensParameterService;
 import EmployeeCommon.IEmployeeScreensParameterService;
+import EmployeeDefs.WorkerDefs;
 import GuiUtils.AbstractApplicationScreen;
 import UtilsImplementations.InjectionFactory;
 import javafx.beans.binding.Bindings;
@@ -37,10 +38,8 @@ public class EmployeeMainScreen implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(mainScreenPane);
-		IEmployeeScreensParameterService employeeScreensParameterService = InjectionFactory
-				.getInstance(EmployeeScreensParameterService.class);
 
-		if (employeeScreensParameterService.getNotShowMainScreenVideo()) {
+		if (!WorkerDefs.disableVid) {
 			MediaPlayer player = new MediaPlayer(
 					new Media(getClass().getResource("/EmployeeMainScreen/vid.mp4").toExternalForm()));
 			MediaView mediaView = new MediaView(player);
