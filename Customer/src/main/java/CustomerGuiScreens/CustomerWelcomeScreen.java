@@ -36,7 +36,8 @@ public class CustomerWelcomeScreen implements Initializable {
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(customerWelcomeScreenPane);
 
-		if (!CustomerDefs.disableVid) {
+		if (CustomerDefs.showVideo) {
+
 			MediaPlayer player = new MediaPlayer(
 					new Media(getClass().getResource("/CustomerWelcomeScreen/vid.mp4").toExternalForm()));
 			MediaView mediaView = new MediaView(player);

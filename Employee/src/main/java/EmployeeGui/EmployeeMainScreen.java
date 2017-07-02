@@ -39,7 +39,9 @@ public class EmployeeMainScreen implements Initializable {
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(mainScreenPane);
 
-		if (!WorkerDefs.disableVid) {
+
+		if (WorkerDefs.showVideo) {
+
 			MediaPlayer player = new MediaPlayer(
 					new Media(getClass().getResource("/EmployeeMainScreen/vid.mp4").toExternalForm()));
 			MediaView mediaView = new MediaView(player);
