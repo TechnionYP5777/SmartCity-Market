@@ -72,12 +72,6 @@ public class GroceryList implements IGroceryList{
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Set<? extends IGroceryPackage> getProductsList() {
-		return (Set<? extends IGroceryPackage>) groceryList.values();
-	}
-
 	@Override
 	public Set<? extends ISale> getSalesList() {
 		// TODO Auto-generated method stub

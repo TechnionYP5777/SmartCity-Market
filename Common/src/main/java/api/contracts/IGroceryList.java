@@ -8,8 +8,8 @@ public interface IGroceryList {
 	String getBuyer();
 	
 	LocalDate getPurchaseDate();
-	
-	Set<? extends IGroceryPackage> getProductsList();
+
+//	Set<? extends IGroceryPackage> getProductsList();
 	
 	Set<? extends ISale> getSalesList();
 }
