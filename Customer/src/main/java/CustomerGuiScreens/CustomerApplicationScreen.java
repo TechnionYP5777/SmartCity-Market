@@ -12,6 +12,8 @@ import org.apache.log4j.PropertyConfigurator;
 
 import CustomerContracts.ICustomer;
 import CustomerDI.CustomerDiConfigurator;
+import CustomerGuiHelpers.TempCustomerPassingData;
+import CustomerGuiHelpers.TempRegisteredCustomerPassingData;
 import CustomerImplementations.Customer;
 import CustomerImplementations.CustomerDefs;
 import GuiUtils.AbstractApplicationScreen;
@@ -48,8 +50,13 @@ public class CustomerApplicationScreen extends AbstractApplicationScreen {
 			
 			stage.setOnCloseRequest(event -> { 
 				try {
-					ICustomer customer = InjectionFactory.getInstance(Customer.class);
-					customer.logout();
+					if (TempCustomerPassingData.customer != null) {
+						TempCustomerPassingData.customer.logout();
+						TempCustomerPassingData.customer = null;
+					} else {
+						TempRegisteredCustomerPassingData.regCustomer.logout();
+						TempRegisteredCustomerPassingData.regCustomer = null;
+					}
 					Platform.exit();
 					System.exit(0);
 				} catch (SMException e) {
@@ -109,7 +116,7 @@ public class CustomerApplicationScreen extends AbstractApplicationScreen {
         
         if (cmd.getOptionValue("serverIP") != null)
 			CustomerDefs.host = cmd.getOptionValue("serverIP");
-
+        https://github.com/TechnionYP5777
         if (cmd.getOptionValue("showVideo") != null) {
         	 CustomerDefs.showVideo = Boolean.parseBoolean(cmd.getOptionValue("showVideo"));
         }
