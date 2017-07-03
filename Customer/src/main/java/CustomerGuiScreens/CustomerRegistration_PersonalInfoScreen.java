@@ -62,22 +62,17 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 	@FXML
 	JFXTextField lastNameTextField;
 
-	
 	private JFXTextField phoneNumberTextField = new JFXTextField("1111");
 
 	@FXML
 	private JFXButton nextButton;
 
-	
 	private JFXTextField emailTextField = new JFXTextField("someEmail@gmail.com");
 
-	
 	private JFXTextField cityTextField = new JFXTextField("someCity");
 
-	
-	private JFXTextField streetTextField = new JFXTextField("someStreet") ;
+	private JFXTextField streetTextField = new JFXTextField("someStreet");
 
-	
 	private JFXDatePicker birthDatePicker = new JFXDatePicker(LocalDate.now());
 
 	@FXML
@@ -298,11 +293,19 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 			if (!newVal)
 				securityAnswerTextField.validate();
 		});
-
-		birthDatePicker.setValue(LocalDate.now());
+		
+		insertFields();
 
 		enableNextButton();
 
+	}
+
+	void insertFields() {
+		TempCustomerProfilePassingData.customerProfile.setStreet(streetTextField.getText());
+		TempCustomerProfilePassingData.customerProfile.setBirthdate(birthDatePicker.getValue());
+		TempCustomerProfilePassingData.customerProfile.setEmailAddress(emailTextField.getText());
+		TempCustomerProfilePassingData.customerProfile.setPhoneNumber(phoneNumberTextField.getText());
+		TempCustomerProfilePassingData.customerProfile.setCity(cityTextField.getText());
 	}
 
 	boolean validNewUserName(String username) {
@@ -329,7 +332,7 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 			userNameTextField.setText(TempCustomerProfilePassingData.customerProfile.getUserName());
 		if (TempCustomerProfilePassingData.password != null)
 			passwordField.setText(TempCustomerProfilePassingData.password);
-		
+
 		if (TempCustomerProfilePassingData.customerProfile.getFirstName() != null)
 			firstNameTextField.setText(TempCustomerProfilePassingData.customerProfile.getFirstName());
 
