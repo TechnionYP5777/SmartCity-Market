@@ -594,7 +594,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			return;
 		}
 		updateCartProductsInfo();
-		updateProductInfoTexts(null, null);
+		updateProductInfoPaine(null, null, ProductInfoPaneVisibleMode.SCANNED_PRODUCT);
 	}
 
 	@FXML
@@ -608,7 +608,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			return;
 		}
 		updateCartProductsInfo();
-		updateProductInfoTexts(null, null);
+		updateProductInfoPaine(null, null, ProductInfoPaneVisibleMode.SCANNED_PRODUCT);
 	}
 
 	@FXML
@@ -624,7 +624,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			return;
 		}
 		updateCartProductsInfo();
-		updateProductInfoTexts(null, null);
+		updateProductInfoPaine(null, null, ProductInfoPaneVisibleMode.SCANNED_PRODUCT);
 	}
 
 	class SpecialSaleHandler implements IConfiramtionDialog {
