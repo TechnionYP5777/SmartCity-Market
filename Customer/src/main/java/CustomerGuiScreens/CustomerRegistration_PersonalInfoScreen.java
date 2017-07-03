@@ -62,23 +62,23 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 	@FXML
 	JFXTextField lastNameTextField;
 
-	@FXML
-	private JFXTextField phoneNumberTextField;
+	
+	private JFXTextField phoneNumberTextField = new JFXTextField("1111");
 
 	@FXML
 	private JFXButton nextButton;
 
-	@FXML
-	private JFXTextField emailTextField;
+	
+	private JFXTextField emailTextField = new JFXTextField("someEmail@gmail.com");
 
-	@FXML
-	private JFXTextField cityTextField;
+	
+	private JFXTextField cityTextField = new JFXTextField("someCity");
 
-	@FXML
-	private JFXTextField streetTextField;
+	
+	private JFXTextField streetTextField = new JFXTextField("someStreet") ;
 
-	@FXML
-	private JFXDatePicker birthDatePicker;
+	
+	private JFXDatePicker birthDatePicker = new JFXDatePicker(LocalDate.now());
 
 	@FXML
 	private JFXComboBox<String> securityQuestionComboBox;

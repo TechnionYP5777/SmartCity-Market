@@ -2,7 +2,6 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
@@ -15,8 +14,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerRegistration_PersonalInfoScreen">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerGuiScreens.CustomerRegistration_PersonalInfoScreen">
    <children>
       <GridPane alignment="CENTER">
         <columnConstraints>
@@ -39,11 +37,6 @@
                   <RowConstraints vgrow="SOMETIMES" />
                   <RowConstraints vgrow="SOMETIMES" />
                   <RowConstraints vgrow="SOMETIMES" />
-                  <RowConstraints vgrow="SOMETIMES" />
-               	<RowConstraints vgrow="SOMETIMES" />
-                  <RowConstraints vgrow="SOMETIMES" />
-                	<RowConstraints vgrow="SOMETIMES" />
-               	<RowConstraints vgrow="SOMETIMES" />
                   <RowConstraints vgrow="SOMETIMES" />
                   <RowConstraints vgrow="SOMETIMES" />
               </rowConstraints>
@@ -81,53 +74,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </VBox>
-                  
-                  <VBox alignment="CENTER" GridPane.rowIndex="4">
-                     <children>
-                        <JFXTextField fx:id="phoneNumberTextField" alignment="CENTER" maxWidth="300.0" promptText="Phone Number" styleClass="JFXTextField" />
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </VBox>
-                  <VBox alignment="CENTER" GridPane.rowIndex="5">
-                     <children>
-                        <JFXTextField fx:id="emailTextField" alignment="CENTER" maxWidth="300.0" promptText="Email" styleClass="JFXTextField" />
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </VBox>
-                  <VBox alignment="CENTER" GridPane.rowIndex="6">
-                     <children>
-                        <JFXTextField fx:id="cityTextField" alignment="CENTER" maxWidth="300.0" promptText="City" styleClass="JFXTextField" />
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </VBox>
-                  <VBox alignment="CENTER" GridPane.rowIndex="7">
-                     <children>
-                        <JFXTextField fx:id="streetTextField" alignment="CENTER" maxWidth="300.0" promptText="Street" styleClass="JFXTextField" />
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </VBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="8">
-                     <children>
-                        <VBox alignment="CENTER">
-                           <children>
-                              <Label text="Birth Date:" />
-                           </children>
-                        </VBox>
-                        <JFXDatePicker fx:id="birthDatePicker" />
-                     </children>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER" spacing="10.0" GridPane.rowIndex="9">
+                  <HBox alignment="CENTER" spacing="10.0" GridPane.rowIndex="4">
                      <children>
                         <Label text="Security Question:" />
                         <JFXComboBox fx:id="securityQuestionComboBox" prefWidth="130.0" styleClass="JFXComboBox" />
@@ -136,7 +83,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </HBox>
-                  <VBox alignment="CENTER" GridPane.rowIndex="10">
+                  <VBox alignment="CENTER" GridPane.rowIndex="5">
                      <children>
                         <JFXTextField fx:id="securityAnswerTextField" alignment="CENTER" maxWidth="300.0" promptText="Security Answer" styleClass="JFXTextField" />
                      </children>

@@ -279,8 +279,9 @@ public class ManagePackagesTab implements Initializable {
 		vbox.setSpacing(10);
 
 		datePickerForSmartCode = new JFXDatePicker();
-		Label lbl = new Label("Choose Date");
-		vbox.getChildren().addAll(lbl, datePickerForSmartCode);
+		Label lbl = new Label("Add Expiration Date To Your Barcode");
+		Label lbl2 = new Label("Than Hit The Search Button");
+		vbox.getChildren().addAll(lbl,lbl2, datePickerForSmartCode);
 
 		JFXPopup popup = new JFXPopup(vbox);
 		showDatePickerBtn
@@ -424,15 +425,15 @@ public class ManagePackagesTab implements Initializable {
 		public int compare(ProductPackage p1, ProductPackage p2) {
 			return p1.getSmartCode().getExpirationDate().compareTo(p2.getSmartCode().getExpirationDate());
 		}
-		
+
 	}
-	
+
 	private void createExpiredList() {
 
 		expireds = new HashMap<String, ProductPackage>();
 
 		try {
- 			worker.getAllExpiredProductPackages().forEach(expired -> {
+			worker.getAllExpiredProductPackages().forEach(expired -> {
 				expireds.put(generateExpiredLayoutKey(expired), expired);
 			});
 		} catch (ConnectionFailure | CriticalError | EmployeeNotConnected e) {
@@ -443,11 +444,12 @@ public class ManagePackagesTab implements Initializable {
 
 		dataExpireds = FXCollections.observableArrayList();
 
-		ArrayList<ProductPackage> expiredProductPackageSortedList= new ArrayList<ProductPackage> (expireds.values());
+		ArrayList<ProductPackage> expiredProductPackageSortedList = new ArrayList<ProductPackage>(expireds.values());
 		Collections.sort(expiredProductPackageSortedList, new DatesComparator());
 		ArrayList<String> expiredStringSortedList = new ArrayList<String>();
-		expiredProductPackageSortedList.forEach(expired -> expiredStringSortedList.add(generateExpiredLayoutKey(expired)));
-		
+		expiredProductPackageSortedList
+				.forEach(expired -> expiredStringSortedList.add(generateExpiredLayoutKey(expired)));
+
 		dataExpireds.setAll(expiredStringSortedList);
 
 		filteredDataExpireds = new FilteredList<>(dataExpireds, s -> true);
@@ -532,7 +534,7 @@ public class ManagePackagesTab implements Initializable {
 
 		scanOrTypeCodePane.setVisible(show);
 		productAfterScanPane.setVisible(!show);
-		//showDatePickerBtn.setVisible(show);
+		// showDatePickerBtn.setVisible(show);
 		(show ? scanOrTypeCodePane : datePickerForSmartCode).toFront();
 	}
 
@@ -588,13 +590,15 @@ public class ManagePackagesTab implements Initializable {
 	@FXML
 	private void searchCodeButtonPressed(MouseEvent __) {
 		try {
-			LocalDate expirationDate = datePickerForSmartCode.getValue();
+
+			LocalDate expirationDate = this.expirationDate != null ? this.expirationDate
+					: datePickerForSmartCode.getValue();
 
 			if (expirationDate == null)
 				barcodeEntered();
 			else {
 				this.expirationDate = expirationDate;
-				smartcodeEntered();				
+				smartcodeEntered();
 			}
 
 		} catch (SMException e) {

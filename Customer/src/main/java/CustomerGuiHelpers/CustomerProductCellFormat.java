@@ -51,7 +51,22 @@ public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 		Label productAmount = new Label("Amount: " + item.getTotalAmount());
 		productAmount.getStyleClass().add("thisListLabel");
 		//productAmount.setFont(new Font(20));
-		Label productPrice = new Label("Price: " + Double.valueOf(item.getCatalogProduct().getPrice()) + " nis");
+		Label productPrice ;
+		if (enableSpecialSale) {
+			Sale sale = item.getCatalogProduct().getSpecialSale();
+			Double price = sale.getPrice() * (item.getTotalAmount() / sale.getAmountOfProducts()) + 
+					Double.valueOf(item.getCatalogProduct().getPrice()) * (item.getTotalAmount() % sale.getAmountOfProducts());
+			
+			productPrice = new Label("Price: " + price + " nis");
+		} else if (enableSale) {
+			Sale sale = item.getCatalogProduct().getSale();
+			Double price = sale.getPrice() * (item.getTotalAmount() / sale.getAmountOfProducts()) + 
+					Double.valueOf(item.getCatalogProduct().getPrice()) * (item.getTotalAmount() % sale.getAmountOfProducts());
+			
+			productPrice = new Label("Price: " + price + " nis");		
+			} else {
+			productPrice = new Label("Price: " + Double.valueOf(item.getCatalogProduct().getPrice()) * item.getTotalAmount() + " nis");
+		}
 		productPrice.getStyleClass().add("thisListLabel");
 		//productPrice.setFont(new Font(20));
 	    vbx.getChildren().addAll(productName, productAmount, productPrice);
