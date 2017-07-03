@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/TechnionYP5777/SmartCity-Market/branch/master/graph/badge.svg)](https://codecov.io/gh/TechnionYP5777/SmartCity-Market)
 
 
-@Authors: Aviad Cohen, Noam Yefet, Shimon Azulay, Idan Atias, Lior Ben Ami.
+## Authors: Aviad Cohen, Noam Yefet, Shimon Azulay, Idan Atias, Lior Ben Ami.
 
 SmartMarket is a software for managing the supermarket inventory easily and effectively.
 The software will also improve the costumer buying experience.
@@ -25,3 +25,8 @@ General Features:
 5. Notification for relevant deals according to the client buying history and the current shopping.
 
 6. Big Data - collect statiscs on products (Best sellers, favorite manufactures, etc)
+
+# Guides
+
+* To install the project please enter [Install Me](https://github.com/TechnionYP5777/SmartCity-Market/wiki/Install-Me)
+* For info about the Smart Market usages and features please enter [User Guide](https://github.com/TechnionYP5777/SmartCity-Market/wiki/User-Guide)
