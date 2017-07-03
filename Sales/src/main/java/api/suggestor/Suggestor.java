@@ -14,6 +14,7 @@ import api.contracts.IStorePackage;
 import api.preferences.InputPreferences;
 import api.preferences.SalesPreferences;
 import api.types.StoreData;
+import api.types.sales.ProductSale;
 import ml.common.property.AProperty;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.common.property.saleproperty.ASaleProperty;
@@ -125,7 +126,11 @@ public class Suggestor {
 			if (result == null)
 				return null;
 			
+			if (isSystemMoreProfitable(result.getOffer(), offer))
+				return offer;
+			
 			String explain = Explainer.explainSale(result, properties);
+
 			ISale saleResult = result.getOffer();
 			log.info("I agreee to similar sale: " + saleResult.getProduct().getName() + " with amount of: " + saleResult.getTotalAmount() +
 					" in total price of: " + saleResult.getTotalPrice() +
@@ -140,6 +145,13 @@ public class Suggestor {
 			return null;
 		}
 		
+	}
+	
+	private static boolean isSystemMoreProfitable(ProductSale systemSale, ISale userOffer){
+		double userDiscount = 1 - (userOffer.getTotalPrice() / 
+				(userOffer.getTotalAmount() * userOffer.getProduct().getPrice()));
+		
+		return systemSale.getdiscount() > userDiscount;
 	}
 
 }
