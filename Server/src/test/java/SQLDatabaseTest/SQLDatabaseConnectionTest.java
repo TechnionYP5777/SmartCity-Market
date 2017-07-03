@@ -2199,6 +2199,7 @@ public class SQLDatabaseConnectionTest {
 		
 	}
 	
+	/*
 	@Test
 	public void getAllProducts() {
 
@@ -2271,7 +2272,7 @@ public class SQLDatabaseConnectionTest {
 		}
 	}
 	
-	
+	*/
 	
 	/*
 	@Test
