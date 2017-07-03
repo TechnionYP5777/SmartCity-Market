@@ -3,6 +3,11 @@ package ml.common.property.basicproperties.storestatistics;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.deducer.deductionrules.ADeductionRule;
 
+/**
+ * This class represents the number of purchases of the customer in given month
+ * @author noam
+ *
+ */
 public class NumOfCustomerPurchasesPerMonthProperty extends ABasicProperty {
 
 	public static int goMonthesBackLimit = 6;

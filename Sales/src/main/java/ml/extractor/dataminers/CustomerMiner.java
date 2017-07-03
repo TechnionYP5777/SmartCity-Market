@@ -25,6 +25,12 @@ import ml.common.property.basicproperties.storestatistics.NumOfBuyersPerMonthPro
 import ml.common.property.basicproperties.storestatistics.NumOfCustomerPurchasesPerMonthProperty;
 import ml.common.property.basicproperties.storestatistics.SumOfCustomerPurchasesPerMonthProperty;
 
+/**
+ * This class extarcts basic properties from user
+ *  
+ * @author noam
+ *
+ */
 public class CustomerMiner extends AMiner {
 
 	public CustomerMiner(InputPreferences inputPreferences, StoreData storeData, IGroceryList currentGrocery,

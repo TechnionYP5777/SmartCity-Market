@@ -1,11 +1,13 @@
 package api.suggestor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
+
 import api.contracts.IGroceryList;
-import api.contracts.IGroceryPackage;
 import api.contracts.IProduct;
 import api.contracts.ISale;
 import api.contracts.IStorePackage;
@@ -27,6 +29,9 @@ import ml.extractor.Extractor;
  *
  */
 public class Suggestor {
+	
+	protected static Logger log = Logger.getLogger(Suggestor.class.getName());
+	
 	private volatile static StoreData storeData = new StoreData();
 	
 	private volatile static InputPreferences inPref = new InputPreferences();
@@ -58,18 +63,37 @@ public class Suggestor {
 	public static ISale suggestSale(IGroceryList currentGrocery, IProduct purchasedProduct) {
 		StoreData currentData = storeData;
 		
-		Set<ABasicProperty> initialProperties = Extractor.extractProperties(inPref, currentData, currentGrocery, purchasedProduct);
+		try{
+			Set<ABasicProperty> initialProperties = Extractor.extractProperties(inPref, currentData, currentGrocery, purchasedProduct);
+			
+			Set<AProperty> properties = Deducer.deduceProperties(salePref, initialProperties);
+			
+			Set<ASaleProperty> salesProperties = properties.stream()
+					.filter(p -> p instanceof ASaleProperty)
+					.map(p -> (ASaleProperty)p )
+					.collect(Collectors.toSet());
 		
-		Set<AProperty> properties = Deducer.deduceProperties(salePref, initialProperties);
 		
-		Set<ASaleProperty> salesProperties = properties.stream()
-				.filter(p -> p instanceof ASaleProperty)
-				.map(p -> (ASaleProperty)p )
-				.collect(Collectors.toSet());
+			ASaleProperty result = Decider.decideBestSale(salePref, salesProperties);
+			
+			if (result == null || result.getOffer().getProduct().getBarcode() != purchasedProduct.getBarcode())
+				return null;
+			
+			String explain = Explainer.explainSale(result, properties);
+			ISale saleResult = result.getOffer();
+			
+			log.info("I chose the sale: " + saleResult.getProduct().getName() + " with amount of: " + saleResult.getTotalAmount() +
+					" in total price of: " + saleResult.getTotalPrice() +
+					"\n And this is why: " + explain);
 		
-		ASaleProperty result = Decider.decideBestSale(salePref, salesProperties);
-		
-		return result.getOffer();
+			return result.getOffer();
+			
+		} catch (Exception e){
+			log.fatal(e.getMessage());
+			log.debug(e.getStackTrace());
+			
+			return null;
+		}
 	}
 
 	/**
@@ -85,18 +109,36 @@ public class Suggestor {
 	public static ISale examineOffer(IGroceryList currentGrocery, ISale offer) {
 		StoreData currentData = storeData;
 		
-		Set<ABasicProperty> initialProperties = Extractor.extractProperties(inPref, currentData, currentGrocery, null);
+		try {
+			
+			Set<ABasicProperty> initialProperties = Extractor.extractProperties(inPref, currentData, currentGrocery, null);
+			
+			Set<AProperty> properties = Deducer.deduceProperties(salePref, initialProperties);
+			
+			Set<ASaleProperty> salesProperties = properties.stream()
+					.filter(p -> p instanceof ASaleProperty)
+					.map(p -> (ASaleProperty)p )
+					.collect(Collectors.toSet());
+			
+			ASaleProperty result = Decider.decideSaleSimilar(salePref, salesProperties, offer);
+			
+			if (result == null)
+				return null;
+			
+			String explain = Explainer.explainSale(result, properties);
+			ISale saleResult = result.getOffer();
+			log.info("I agreee to similar sale: " + saleResult.getProduct().getName() + " with amount of: " + saleResult.getTotalAmount() +
+					" in total price of: " + saleResult.getTotalPrice() +
+					"\n And this is why: " + explain);
+			
+			return result.getOffer();
 		
-		Set<AProperty> properties = Deducer.deduceProperties(salePref, initialProperties);
-		
-		Set<ASaleProperty> salesProperties = properties.stream()
-				.filter(p -> p instanceof ASaleProperty)
-				.map(p -> (ASaleProperty)p )
-				.collect(Collectors.toSet());
-		
-		ASaleProperty result = Decider.decideSaleSimilar(salePref, salesProperties, offer);
-				
-		return result.getOffer();
+		} catch (Exception e){
+			log.fatal(e.getMessage());
+			log.debug(e.getStackTrace());
+			
+			return null;
+		}
 		
 	}
 

@@ -5,6 +5,12 @@ import java.util.Set;
 import api.preferences.SalesPreferences;
 import ml.common.property.AProperty;
 
+/**
+ * This class used for comparing properties deduced by different deduction rule
+ * 
+ * @author noam
+ * 
+ */
 public class AnyDeductionRule extends ADeductionRule {
 
 	@Override

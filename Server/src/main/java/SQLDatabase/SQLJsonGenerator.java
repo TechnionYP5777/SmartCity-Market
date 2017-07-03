@@ -343,7 +343,7 @@ class SQLJsonGenerator {
 								locationPointY = productLocations.getInt(LocationsTable.pointYCol.getColumnNameSQL());
 						// adding the location to set
 						$.add(new Location(locationPointX, locationPointY,
-								locationPlace == LOCATIONS_TABLE.VALUE_PLACE_STORE ? PlaceInMarket.STORE
+								locationPlace.equals(LOCATIONS_TABLE.VALUE_PLACE_STORE) ? PlaceInMarket.STORE
 										: PlaceInMarket.WAREHOUSE));
 					}
 
@@ -371,7 +371,8 @@ class SQLJsonGenerator {
 	 */
 	static String GroceryListToJson(ResultSet groceryList) throws CriticalError {
 
-		return Serialization.serialize(resultSetToGroceryList(groceryList));
+		GroceryList result = resultSetToGroceryList(groceryList);
+		return Serialization.serialize(result);
 
 	}
 

@@ -5,6 +5,12 @@ import java.util.Set;
 import api.preferences.SalesPreferences;
 import ml.common.property.AProperty;
 
+/**
+ * This is abstract of any Deduction rule
+ * 
+ * @author noam
+ * 
+ */
 public abstract class ADeductionRule {
 
 	@Override

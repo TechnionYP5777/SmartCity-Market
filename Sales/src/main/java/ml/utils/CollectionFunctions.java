@@ -2,7 +2,12 @@ package ml.utils;
 
 import java.util.Collection;
 
-
+/**
+ * This class contains helper functions to use in the Sales module
+ *  
+ * @author noam
+ *
+ */
 public class CollectionFunctions {
 
 	@SuppressWarnings("unchecked")

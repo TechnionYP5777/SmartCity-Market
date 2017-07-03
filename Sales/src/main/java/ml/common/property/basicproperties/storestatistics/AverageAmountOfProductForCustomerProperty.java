@@ -4,6 +4,12 @@ import api.contracts.IProduct;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.deducer.deductionrules.ADeductionRule;
 
+/**
+ * This class represents a property of "average amount bought by the customer"
+ *  
+ * @author noam
+ *
+ */
 public class AverageAmountOfProductForCustomerProperty extends ABasicProperty {
 
 	public static int goMonthesBackLimit = 6;

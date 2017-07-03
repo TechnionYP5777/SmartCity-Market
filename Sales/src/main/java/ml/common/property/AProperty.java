@@ -3,6 +3,12 @@ package ml.common.property;
 import ml.deducer.deductionrules.ADeductionRule;
 import ml.deducer.deductionrules.AnyDeductionRule;
 
+/**
+ * This class is abstract for all the properties 
+ *  
+ * @author noam
+ *
+ */
 public abstract class AProperty {
 	
 	ADeductionRule deducer;

@@ -2,6 +2,11 @@ package api.preferences;
 
 import java.io.Serializable;
 
+/**
+ * This class represents sale preferences used by the Sales modules 
+ * @author noam
+ *
+ */
 public class SalesPreferences implements Serializable {
 
 	/**

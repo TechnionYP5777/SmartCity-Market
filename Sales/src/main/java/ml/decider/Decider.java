@@ -1,6 +1,7 @@
 package ml.decider;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -9,12 +10,26 @@ import api.preferences.SalesPreferences;
 import api.types.sales.ProductSale;
 import ml.common.property.saleproperty.ASaleProperty;
 
+/**
+ * This class decide one sale from the collaction that deduced
+ * 
+ * @author noam
+ * 
+ */
 public class Decider {
 
 	public static ASaleProperty decideBestSale(SalesPreferences salesPreferences, Set<ASaleProperty> properties){
 		
+		Random rand = new Random();
+
+		int n = rand.nextInt(properties.size());
+		int i = 0;
+		
 		for (ASaleProperty aSaleProperty : properties) {
-			return aSaleProperty;
+			if (i == n)
+				return aSaleProperty;
+			
+			i++;
 		}
 		
 		

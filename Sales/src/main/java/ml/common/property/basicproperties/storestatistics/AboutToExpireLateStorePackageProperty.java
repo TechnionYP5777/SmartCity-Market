@@ -72,7 +72,7 @@ public class AboutToExpireLateStorePackageProperty extends ABasicProperty {
 	@Override
 	public String getDescription() {
 		return "The product: " + storePackage.getProduct().getName() + " (bracode: " + storePackage.getProduct().getBarcode() + ")" +
-				" is about to expired (exp. " + storePackage.getExpirationDate() + ")";
+				" is about to expired, but not urgently (exp. " + storePackage.getExpirationDate() + ")";
 	}
 
 	

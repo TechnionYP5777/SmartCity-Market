@@ -721,7 +721,13 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		SmartCode smartCode = ¢.getSmarCode();
 		scannedSmartCode = smartCode;
 
-		smartcodeScannedHandler();
+		
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+            	smartcodeScannedHandler();
+            }
+        });
+		
 	}
 
 	Map<Sale, Boolean> getTakenSales() {

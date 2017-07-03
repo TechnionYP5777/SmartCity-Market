@@ -5,6 +5,12 @@ import ml.common.basiccalsses.CombinedStorePackage;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.deducer.deductionrules.ADeductionRule;
 
+/**
+ * This class represents a property of "product with very much amount vs. time to expire"
+ *  
+ * @author noam
+ *
+ */
 public class HighRatioAmountExpirationTimeProperty extends ABasicProperty {
 	public static double ratioThreshold = 1.0; // days time
 	

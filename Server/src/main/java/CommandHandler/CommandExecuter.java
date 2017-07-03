@@ -1653,7 +1653,7 @@ public class CommandExecuter {
 			String username = c.getCustomerUsernameBySessionID(inCommandWrapper.getSenderID());
 			CatalogProduct product = mapCatalog.get(barcode);
 			
-			GroceryList currentGrocery = Serialization.deserialize(c.cartRestoreGroceryList(inCommandWrapper.getSenderID()),GroceryList.class);
+			GroceryList currentGrocery = new GroceryList();
 
 
 			Suggestor.updateCatalog(catalog);
@@ -1662,22 +1662,29 @@ public class CommandExecuter {
 			ISale iSale = Suggestor.suggestSale(new GroceryListMarshal(username, LocalDate.now(), currentGrocery, mapCatalog),
 					product);
 			
-			Sale offeredSale = new Sale(0,iSale.getProduct().getBarcode(), iSale.getTotalAmount(), iSale.getTotalPrice());
-			int saleID = c.addSale(null, offeredSale, false);
+			if (iSale == null){
+				Sale offeredSale = new Sale();
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(offeredSale));
+			} else {
 			
-			offeredSale.setId(saleID);
-			
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(offeredSale));
+				Sale offeredSale = new Sale(0,iSale.getProduct().getBarcode(), iSale.getTotalAmount(), iSale.getTotalPrice());
+				
+				int saleID = c.addSale(null, offeredSale, false);
+				
+				offeredSale.setId(saleID);
+				
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(offeredSale));
+			}
 		} catch (ClientNotConnected e) {
 			log.info("Get special sale for product command failed, client is not exist");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_SENDER_IS_NOT_CONNECTED);
-		} catch (Exception e) {
-			log.fatal("Get special sale for product command failed, critical error occured");
+		} 
+		catch (CriticalError | SaleAlreadyExist e) {
+			log.fatal("Get special sale for product command failed, critical error occured from SQL Database connection");
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_ERR);
 		}
-
 
 		log.info("Get special sale for product command system finished for barcode " + barcode);
 	}
@@ -1710,7 +1717,7 @@ public class CommandExecuter {
 			List<? extends IGroceryList> history = GroceryListHistory.getHistory(mapCatalog); 
 			String username = c.getCustomerUsernameBySessionID(inCommandWrapper.getSenderID());
 			
-			GroceryList currentGrocery = Serialization.deserialize(c.cartRestoreGroceryList(inCommandWrapper.getSenderID()),GroceryList.class);
+			GroceryList currentGrocery = new GroceryList();
 			
 			ProductSale pSale = new ProductSale(mapCatalog.get(sale.getProductBarcode()), sale.getAmountOfProducts(), 
 					sale.getPrice());
@@ -1721,12 +1728,17 @@ public class CommandExecuter {
 
 			ISale iSale = Suggestor.examineOffer(new GroceryListMarshal(username, LocalDate.now(), currentGrocery, mapCatalog) , pSale);
 			
-			Sale offeredSale = new Sale(0,iSale.getProduct().getBarcode(), iSale.getTotalAmount(), iSale.getTotalPrice());
-			int saleID = c.addSale(null, offeredSale, false);
-			
-			offeredSale.setId(saleID);
-			
-			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(offeredSale));
+			if (iSale == null){
+				Sale offeredSale = new Sale();
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(offeredSale));
+			} else { 
+				Sale offeredSale =  new Sale(0, iSale.getProduct().getBarcode(), iSale.getTotalAmount(), iSale.getTotalPrice());
+				int saleID = c.addSale(null, offeredSale, false);
+				
+				offeredSale.setId(saleID);
+				
+				outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK, Serialization.serialize(offeredSale));
+			}
 		} catch (ClientNotConnected e) {
 			log.info("Get special sale for product command failed, client is not exist");
 

@@ -5,6 +5,9 @@ import static org.junit.Assert.*;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.After;
@@ -16,14 +19,19 @@ import com.google.gson.Gson;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.ForgotPasswordData;
+import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
+import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
 import ClientServerApi.ClientServerDefs;
+import CommandHandler.GroceryListHistory;
+import CommandHandler.GroceryListMarshal;
+import CommandHandler.ProductPackageMarshal;
 import CommonDefs.CLIENT_TYPE;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException;
@@ -34,12 +42,16 @@ import SQLDatabase.SQLDatabaseException.IngredientNotExist;
 import SQLDatabase.SQLDatabaseException.IngredientStillUsed;
 import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
 import SQLDatabase.SQLDatabaseException.ManufacturerStillUsed;
+import SQLDatabase.SQLDatabaseException.NoGroceryListToRestore;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
 import UtilsImplementations.Serialization;
+import api.contracts.IGroceryList;
+import api.contracts.ISale;
+import api.suggestor.Suggestor;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyExist;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
@@ -2186,6 +2198,81 @@ public class SQLDatabaseConnectionTest {
 		}
 		
 	}
+	
+	@Test
+	public void getAllProducts() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			List<CatalogProduct> list = sqlConnection.getAllProductsInCatalog();
+			List<ProductPackage> list2 = sqlConnection.getAllProductPackages();
+			System.out.println(list2.size());
+		} catch (CriticalError e1) {
+			fail();
+		}
+		
+	}	
+	
+	@Test
+	public void SugSale() {
+
+		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
+		
+		try {
+			
+			sqlConnection.logoutAllUsers();
+
+			int sid = sqlConnection.loginCustomer("bob", "1234");
+			//Get stock, catalog, and history from SQL
+			List<CatalogProduct> catalog = sqlConnection.getAllProductsInCatalog();
+			Map<Long, CatalogProduct> mapCatalog = new HashMap<>();
+			
+			for (CatalogProduct catalogProduct : catalog) 
+				mapCatalog.put(catalogProduct.getBarcode(), catalogProduct);
+			
+			List<ProductPackageMarshal> stock = sqlConnection.getAllProductPackages().stream()
+					.map(p -> new ProductPackageMarshal(p, mapCatalog)).collect(Collectors.toList());
+			List<? extends IGroceryList> history = GroceryListHistory.getHistory(mapCatalog); 
+			String username = sqlConnection.getCustomerUsernameBySessionID(sid);
+			CatalogProduct product = mapCatalog.get(7290106724419L);
+			
+			GroceryList currentGrocery = Serialization.deserialize(
+					sqlConnection.cartRestoreGroceryList(sid),GroceryList.class);
+	
+	
+			Suggestor.updateCatalog(catalog);
+			Suggestor.updateHistory(history);
+			Suggestor.updateStock(stock);
+			ISale iSale = Suggestor.suggestSale(new GroceryListMarshal(username, LocalDate.now(), currentGrocery, mapCatalog),
+					product);
+			
+			Sale offeredSale = new Sale(0,iSale.getProduct().getBarcode(), iSale.getTotalAmount(), iSale.getTotalPrice());
+			//int saleID = c.addSale(null, offeredSale, false);
+			
+			//offeredSale.setId(saleID);
+		} catch (CriticalError e1) {
+			fail();
+		} catch (ClientNotConnected e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoGroceryListToRestore e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AuthenticationError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClientAlreadyConnected e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NumberOfConnectionsExceeded e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
 	/*
 	@Test
 	public void testAddRemoveSale() {

@@ -2,6 +2,12 @@ package ml.common.property.deducedproperties;
 
 import ml.deducer.deductionrules.ADeductionRule;
 
+/**
+ * This class represent the average amount of purchasing given product for customer
+ * 
+ * @author noam
+ * 
+ */
 public class AverageCartPricePerMonthProperty extends ADeducedProperty {
 
 	public static int goMonthesBackLimit = 6;

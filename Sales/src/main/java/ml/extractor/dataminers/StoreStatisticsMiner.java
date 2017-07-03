@@ -35,6 +35,8 @@ import ml.common.property.basicproperties.storestatistics.SumOfPurchasesPerMonth
 
 /**
  * 
+ * This class extarcts basic properties from history and stock
+ * 
  * @author noam yefet
  * @author idan atias
  *

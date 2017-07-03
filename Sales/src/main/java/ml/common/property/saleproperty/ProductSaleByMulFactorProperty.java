@@ -4,6 +4,12 @@ import api.contracts.IStorePackage;
 import api.types.sales.ProductSale;
 import ml.deducer.deductionrules.ADeductionRule;
 
+/**
+ * This class represent sale conclusion
+ * 
+ * @author noam
+ * 
+ */
 public class ProductSaleByMulFactorProperty extends ASaleProperty {
 
 	
@@ -45,7 +51,32 @@ public class ProductSaleByMulFactorProperty extends ASaleProperty {
 	public String getDescription() {
 		return "Sale for product: " + sale.getProduct().getName() + " (barcode: " + sale.getProduct().getBarcode() + ")" +
 				" with amount of: " + sale.getTotalAmount() +
-				" in price of: " + sale.getTotalPrice() + " (discount of: " + ((int)(sale.getdiscount()*100)) + ")";
+				" in price of: " + sale.getTotalPrice() + " (discount of: " + ((int)(sale.getdiscount()*100)) + "%)";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((sale == null) ? 0 : sale.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProductSaleByMulFactorProperty other = (ProductSaleByMulFactorProperty) obj;
+		if (sale == null) {
+			if (other.sale != null)
+				return false;
+		} else if (!sale.equals(other.sale))
+			return false;
+		return true;
 	}
 
 }

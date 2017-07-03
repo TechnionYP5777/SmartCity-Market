@@ -3742,13 +3742,13 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 		String prodctsIngredientsQuery = generateSelectLeftJoinWithQuery2Tables(ProductsCatalogIngredientsTable.table,
 				IngredientsTable.table, IngredientsTable.ingredientIDCol, ProductsCatalogIngredientsTable.barcodeCol,
-				new BinaryCondition[]{});
+				BinaryCondition.notEqualTo(ProductsCatalogIngredientsTable.barcodeCol, 423324));
 		String prodctsLocationsQuery = generateSelectLeftJoinWithQuery2Tables(ProductsCatalogLocationsTable.table,
 				LocationsTable.table, LocationsTable.locationIDCol, ProductsCatalogLocationsTable.barcodeCol,
-				new BinaryCondition[]{});
+				BinaryCondition.notEqualTo(ProductsCatalogLocationsTable.barcodeCol, 423324));
 		String prodctsTableQuery = generateSelectLeftJoinWithQuery2Tables(ProductsCatalogTable.table,
 				ManufacturerTable.table, ManufacturerTable.manufacturerIDCol, ProductsCatalogTable.barcodeCol,
-				new BinaryCondition[]{});
+				BinaryCondition.notEqualTo(ProductsCatalogTable.barcodeCol, 423324));
 
 		PreparedStatement productStatement = getParameterizedReadQuery(prodctsTableQuery, new Object[]{});
 		PreparedStatement productIngredientsStatement = getParameterizedReadQuery(prodctsIngredientsQuery, new Object[]{});
@@ -3767,10 +3767,15 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 
 			ingredientResult.next();
 			locationsResult.next();
+			productResult.first();
 			
 			List<CatalogProduct> resultList = new ArrayList<>();
-			while (productResult.next())
-				resultList.add(SQLJsonGenerator.resultSetToProduct(productResult, ingredientResult, locationsResult));
+			
+			//TODO fix
+			if (productResult.getRow() != 0)
+				// adding all ingredients
+				while (!productResult.isAfterLast())
+					resultList.add(SQLJsonGenerator.resultSetToProduct(productResult, ingredientResult, locationsResult));
 
 			
 			return resultList;

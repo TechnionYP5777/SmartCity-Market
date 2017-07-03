@@ -9,6 +9,12 @@ import ml.common.property.AProperty;
 import ml.common.property.deducedproperties.MustGetRidOfPackageProperty;
 import ml.common.property.saleproperty.ProductSaleByMulFactorProperty;
 
+/**
+ * This class represents the rule: if we must get rid of product (because exp. date) then suggest sale
+ *  
+ * @author noam
+ *
+ */
 public class IfMustGetRidOf_ThenMulFactorSale extends ADeductionRule {
 
 	@Override

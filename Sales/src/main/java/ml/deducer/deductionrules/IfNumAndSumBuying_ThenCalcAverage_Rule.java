@@ -12,6 +12,12 @@ import ml.common.property.basicproperties.storestatistics.NumOfBuyersPerMonthPro
 import ml.common.property.basicproperties.storestatistics.SumOfPurchasesPerMonthProperty;
 import ml.common.property.deducedproperties.AverageCartPricePerMonthProperty;
 
+/**
+ * This class calcs average buyer 
+ *  
+ * @author noam
+ *
+ */
 public class IfNumAndSumBuying_ThenCalcAverage_Rule extends ADeductionRule {
 
 	

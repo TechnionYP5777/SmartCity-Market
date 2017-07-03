@@ -11,8 +11,16 @@ import ml.common.property.basicproperties.ABasicProperty;
 import ml.deducer.deductionrules.ADeductionRule;
 import ml.deducer.deductionrules.IfAboutToExpireLate_ThenMayGetRidOf_Rule;
 import ml.deducer.deductionrules.IfAboutToExpireSoon_ThenMustGetRidOfPackage_Rule;
+import ml.deducer.deductionrules.IfMayExpiredAndCustomerPopular_ThenSale_Rule;
 import ml.deducer.deductionrules.IfMustGetRidOf_ThenMulFactorSale;
+import ml.deducer.deductionrules.Popularity_Rule;
 
+/**
+ * This class deduced properties ans sales 
+ * 
+ * @author noam
+ * 
+ */
 public class Deducer {
 
 	
@@ -23,6 +31,8 @@ public class Deducer {
 		deductionRules.add(new IfAboutToExpireSoon_ThenMustGetRidOfPackage_Rule());
 		deductionRules.add(new IfAboutToExpireLate_ThenMayGetRidOf_Rule());
 		deductionRules.add(new IfMustGetRidOf_ThenMulFactorSale());
+		deductionRules.add(new IfMayExpiredAndCustomerPopular_ThenSale_Rule());
+		deductionRules.add(new Popularity_Rule());
 		
 		return deductionRules;
 	}

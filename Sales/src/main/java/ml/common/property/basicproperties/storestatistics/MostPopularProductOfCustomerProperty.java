@@ -4,6 +4,12 @@ import api.contracts.IProduct;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.deducer.deductionrules.ADeductionRule;
 
+/**
+ * This class represents a property of "most popular product of customer"
+ *  
+ * @author noam
+ *
+ */
 public class MostPopularProductOfCustomerProperty extends ABasicProperty {
 
 	public static int numOfTop = 15;
