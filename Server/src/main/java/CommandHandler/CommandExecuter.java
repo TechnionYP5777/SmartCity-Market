@@ -11,9 +11,6 @@ import java.util.zip.ZipFile;
 
 import org.apache.log4j.Logger;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.GroceryList;
@@ -53,7 +50,6 @@ import UtilsImplementations.Serialization;
 import api.contracts.IGroceryList;
 import api.contracts.ISale;
 import api.suggestor.Suggestor;
-import api.types.StoreData;
 import api.types.sales.ProductSale;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyExist;
@@ -823,13 +819,9 @@ public class CommandExecuter {
 	}
 
 	private void checkoutGroceryList(SQLDatabaseConnection c) {
-		Map<Sale, Boolean> specialSaleTaken;
-
 		log.info("Checkout Grocery List from serderID " + inCommandWrapper.getSenderID() + " command called");
 
 		try {
-			specialSaleTaken = new Gson().fromJson(inCommandWrapper.getData(), new TypeToken<Map<Sale, Boolean>>() {}.getType());
-			
 			c.cartCheckout(inCommandWrapper.getSenderID());
 
 			outCommandWrapper = new CommandWrapper(ResultDescriptor.SM_OK);

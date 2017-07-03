@@ -7,7 +7,6 @@ public class ManufacturerMock implements IManufacturer {
 	String name;
 	
 	public ManufacturerMock(String name) {
-		super();
 		this.name = name;
 	}
 
@@ -23,21 +22,16 @@ public class ManufacturerMock implements IManufacturer {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+		return 31 + ((name == null) ? 0 : name.hashCode());
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (o == this)
 			return true;
-		if (obj == null)
+		if (o == null || getClass() != o.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ManufacturerMock other = (ManufacturerMock) obj;
+		ManufacturerMock other = (ManufacturerMock) o;
 		if (name == null) {
 			if (other.name != null)
 				return false;

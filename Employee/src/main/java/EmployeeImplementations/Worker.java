@@ -99,11 +99,10 @@ public class Worker extends AEmployee implements IWorker, IForgotPasswordHandler
 		this.password = password;
 		log.info("Login to server as " + $.getData() + " succeed. Client id is: " + getClientId());
 
-		if (updateProductPictures){
-			UpdateProductPictures UpdateProductPicturesThread = new UpdateProductPictures();
-			UpdateProductPicturesThread.start();
-		}
-
+		if (!updateProductPictures)
+			return CLIENT_TYPE.deserialize($.getData());
+		UpdateProductPictures UpdateProductPicturesThread = new UpdateProductPictures();
+		UpdateProductPicturesThread.start();
 		return CLIENT_TYPE.deserialize($.getData());
 	}
 

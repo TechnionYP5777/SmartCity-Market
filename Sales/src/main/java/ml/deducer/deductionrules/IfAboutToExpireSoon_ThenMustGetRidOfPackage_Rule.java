@@ -18,30 +18,24 @@ import ml.common.property.deducedproperties.MustGetRidOfPackageProperty;
 public class IfAboutToExpireSoon_ThenMustGetRidOfPackage_Rule extends ADeductionRule {
 
 	@Override
-	public Set<? extends AProperty> deduceProperties(SalesPreferences preferences, Set<AProperty> properties) {
+	public Set<? extends AProperty> deduceProperties(SalesPreferences preferences, Set<AProperty> ps) {
 		
-		Set<MustGetRidOfPackageProperty> result = properties.stream()
-				.filter(p -> p instanceof AboutToExpireSoonStorePackageProperty)
-				.map(p -> (AboutToExpireSoonStorePackageProperty)p)
-				.map((AboutToExpireSoonStorePackageProperty p) -> {
-					
-					return new MustGetRidOfPackageProperty(p.getStorePackage(), difftoUrgency(p.getDiff()), this);
-				}).collect(Collectors.toSet());
-		
-		return result;
+		return ps.stream().filter(p -> p instanceof AboutToExpireSoonStorePackageProperty)
+				.map(p -> (AboutToExpireSoonStorePackageProperty) p).map((AboutToExpireSoonStorePackageProperty p) -> new MustGetRidOfPackageProperty(p.getStorePackage(),
+						difftoUrgency(p.getDiff()), this)).collect(Collectors.toSet());
 	}
 
 	@Override
-	public boolean canDeduceProperty(AProperty property) {
-		return property instanceof MustGetRidOfPackageProperty;
+	public boolean canDeduceProperty(AProperty p) {
+		return p instanceof MustGetRidOfPackageProperty;
 	}
 
 	@Override
-	public Set<AProperty> whatNeedToDeduceProperty(AProperty property) {
-		if (!canDeduceProperty(property))
+	public Set<AProperty> whatNeedToDeduceProperty(AProperty p) {
+		if (!canDeduceProperty(p))
 			return null;
 		
-		MustGetRidOfPackageProperty actualProperty = (MustGetRidOfPackageProperty) property;
+		MustGetRidOfPackageProperty actualProperty = (MustGetRidOfPackageProperty) p;
 		
 		Set<AProperty> result = new HashSet<>();
 		result.add(new AboutToExpireSoonStorePackageProperty(actualProperty.getStorePackage()));
@@ -50,9 +44,7 @@ public class IfAboutToExpireSoon_ThenMustGetRidOfPackage_Rule extends ADeduction
 	}
 	
 	private static double difftoUrgency(double diff){
-		double urgency = diff / AboutToExpireSoonStorePackageProperty.threshold;
-		urgency = 1 - urgency;
-		return urgency;
+		return 1 - diff / AboutToExpireSoonStorePackageProperty.threshold;
 	}
 
 }

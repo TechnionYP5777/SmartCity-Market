@@ -245,8 +245,8 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 
 		try {
 			serverResponse = sendRequestWithRespondToServer(
-					(new CommandWrapper(id, CommandDescriptor.LOGOUT, customerProfile == null ? Serialization.serialize(ClientServerDefs.anonymousCustomerUsername) :
-							Serialization.serialize(customerProfile.getUserName()))).serialize());
+					(new CommandWrapper(id, CommandDescriptor.LOGOUT, customerProfile != null ? Serialization.serialize(customerProfile.getUserName())
+							: Serialization.serialize(ClientServerDefs.anonymousCustomerUsername))).serialize());
 		} catch (SocketTimeoutException e) {
 			log.fatal("Critical bug: failed to get respond from server");
 
@@ -414,18 +414,16 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 		Double totalSum = Double.valueOf(0);
 		
 		for (CartProduct cartProduct : cartProductCache.values()) {
-			Sale sale = cartProduct.getCatalogProduct().getSpecialSale().isValid() ? cartProduct.getCatalogProduct().getSpecialSale() :
-																					 cartProduct.getCatalogProduct().getSale();
+			Sale sale = !cartProduct.getCatalogProduct().getSpecialSale().isValid() ? cartProduct.getCatalogProduct().getSale()
+					: cartProduct.getCatalogProduct().getSpecialSale();
 			
-			if (sale.isValid()) {
-				int cartProductAmount = cartProduct.getTotalAmount(),
-						saleAmount = sale.getAmountOfProducts(),
+			if (!sale.isValid())
+				totalSum += cartProduct.getTotalAmount() * cartProduct.getCatalogProduct().getPrice();
+			else {
+				int cartProductAmount = cartProduct.getTotalAmount(), saleAmount = sale.getAmountOfProducts(),
 						numberOfActiveSales = cartProductAmount / saleAmount;
-				
 				totalSum += numberOfActiveSales * sale.getPrice()
-						+ (cartProductAmount % saleAmount) * cartProduct.getCatalogProduct().getPrice();
-			} else {
-				totalSum += (double)cartProduct.getTotalAmount() * cartProduct.getCatalogProduct().getPrice();
+						+ cartProductAmount % saleAmount * cartProduct.getCatalogProduct().getPrice();
 			}	
 		}
 		

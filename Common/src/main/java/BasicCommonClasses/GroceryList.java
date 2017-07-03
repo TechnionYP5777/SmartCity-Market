@@ -62,25 +62,25 @@ public class GroceryList implements IGroceryList{
 
 	@Override
 	public String getBuyer() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public LocalDate getPurchaseDate() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public Set<? extends ISale> getSalesList() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public Set<? extends IGroceryPackage> getProductsList() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 }

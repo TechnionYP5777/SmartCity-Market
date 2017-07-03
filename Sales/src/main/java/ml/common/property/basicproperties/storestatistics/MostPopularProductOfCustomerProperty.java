@@ -24,7 +24,6 @@ public class MostPopularProductOfCustomerProperty extends ABasicProperty {
 	}
 	
 	public MostPopularProductOfCustomerProperty(IProduct product, long amount) {
-		super();
 		this.product = product;
 		this.amount = amount;
 	}
@@ -39,21 +38,16 @@ public class MostPopularProductOfCustomerProperty extends ABasicProperty {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((product == null) ? 0 : product.hashCode());
-		return result;
+		return 31 * super.hashCode() + ((product == null) ? 0 : product.hashCode());
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (o == this)
 			return true;
-		if (!super.equals(obj))
+		if (!super.equals(o) || getClass() != o.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		MostPopularProductOfCustomerProperty other = (MostPopularProductOfCustomerProperty) obj;
+		MostPopularProductOfCustomerProperty other = (MostPopularProductOfCustomerProperty) o;
 		if (product == null) {
 			if (other.product != null)
 				return false;

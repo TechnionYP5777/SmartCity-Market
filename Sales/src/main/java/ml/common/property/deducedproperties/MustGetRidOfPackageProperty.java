@@ -22,7 +22,6 @@ public class MustGetRidOfPackageProperty extends ADeducedProperty {
 	}
 	
 	public MustGetRidOfPackageProperty(IStorePackage storePackage, double urgency) {
-		super();
 		this.storePackage = storePackage;
 		this.urgency = urgency;
 	}
@@ -37,21 +36,16 @@ public class MustGetRidOfPackageProperty extends ADeducedProperty {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((storePackage == null) ? 0 : storePackage.hashCode());
-		return result;
+		return 31 * super.hashCode() + ((storePackage == null) ? 0 : storePackage.hashCode());
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (o == this)
 			return true;
-		if (!super.equals(obj))
+		if (!super.equals(o) || getClass() != o.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		MustGetRidOfPackageProperty other = (MustGetRidOfPackageProperty) obj;
+		MustGetRidOfPackageProperty other = (MustGetRidOfPackageProperty) o;
 		if (storePackage == null) {
 			if (other.storePackage != null)
 				return false;

@@ -75,7 +75,7 @@ public interface ICustomer {
 	 * @throws AmountBiggerThanAvailable 
 	 * @throws InvalidParameter 
 	 */
-	void addProductToCart(SmartCode c, CatalogProduct catalogProduct, int amount) throws CriticalError, CustomerNotConnected, AmountBiggerThanAvailable, ProductPackageDoesNotExist, InvalidParameter;
+	void addProductToCart(SmartCode c, CatalogProduct p, int amount) throws CriticalError, CustomerNotConnected, AmountBiggerThanAvailable, ProductPackageDoesNotExist, InvalidParameter;
 	
 	/**
 	 * returnProductToShelf - removes product with amount from the customer

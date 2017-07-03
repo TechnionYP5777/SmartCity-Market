@@ -38,7 +38,7 @@ private ICustomer customer;
 	CatalogProduct cp1 = new CatalogProduct(111111111, "a", null, null, null, 10.0, null, null),
 			cp2 = new CatalogProduct(222222222, "b", null, null, null, 10.0, null, null);
 	
-	List<CatalogProduct> products = Arrays.asList(cp1, cp2), testProducts = null;
+	List<CatalogProduct> products = Arrays.asList(cp1, cp2), testProducts;
 	
 	@Mock
 	private IClientRequestHandler clientRequestHandler;

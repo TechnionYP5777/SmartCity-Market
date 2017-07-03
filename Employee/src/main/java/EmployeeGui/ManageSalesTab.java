@@ -115,12 +115,12 @@ public class ManageSalesTab implements Initializable {
 
 	IEventBus eventBus;
 
-	CatalogProduct currentCatalogProduct = null;
+	CatalogProduct currentCatalogProduct;
 
 	static Logger log = Logger.getLogger(ManageSalesTab.class.getName());
 
 	@FXML
-	void removeSinglePress(ActionEvent event) {
+	void removeSinglePress(ActionEvent e) {
 		DialogMessagesService.showConfirmationDialog("Remove Sale", null, "Are You Sure?", new removeSingleHandler());
 	}
 	
@@ -142,13 +142,13 @@ public class ManageSalesTab implements Initializable {
 	}
 
 	@FXML
-	void searchClicked(MouseEvent event) {
+	void searchClicked(MouseEvent e) {
 		showProductDetails();
 		enableProductDetailAndSale(true);
 	}
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL location, ResourceBundle b) {
 
 		eventBus = InjectionFactory.getInstance(ProjectEventBus.class);
 		eventBus.register(this);
@@ -175,9 +175,8 @@ public class ManageSalesTab implements Initializable {
 		// for multiple selection
 		singleList.addEventFilter(MouseEvent.MOUSE_PRESSED, evt -> {
 			Node node = evt.getPickResult().getIntersectedNode();
-			while (node != null && node != singleList && !(node instanceof ListCell)) {
+			while (node != null && node != singleList && !(node instanceof ListCell))
 				node = node.getParent();
-			}
 			if (node instanceof ListCell) {
 				evt.consume();
 				ListCell<?> cell = (ListCell<?>) node;
@@ -185,11 +184,10 @@ public class ManageSalesTab implements Initializable {
 				lv.requestFocus();
 				if (!cell.isEmpty()) {
 					int index = cell.getIndex();
-					if (cell.isSelected()) {
-						lv.getSelectionModel().clearSelection(index);
-					} else {
+					if (!cell.isSelected())
 						lv.getSelectionModel().select(index);
-					}
+					else
+						lv.getSelectionModel().clearSelection(index);
 				}
 
 				ObservableList<String> selectedItems = singleList.getSelectionModel().getSelectedItems();
@@ -245,9 +243,7 @@ public class ManageSalesTab implements Initializable {
 		dataSingle = FXCollections.observableArrayList();
 
 		try {
-			manager.getAllSales().forEach((val) -> {
-				singles.put(generateKey(val), val.getId());
-			});
+			manager.getAllSales().forEach(val -> singles.put(generateKey(val), val.getId()));
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ConnectionFailure e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.stackTraceToStr(e));
@@ -262,17 +258,17 @@ public class ManageSalesTab implements Initializable {
 
 	}
 
-	private String generateKey(Sale sale) {	
+	private String generateKey(Sale s) {	
 		String ret = "Error with sale id: ";
 		try {
-			CatalogProduct p = manager.viewProductFromCatalog(sale.getProductBarcode());
-			ret = "Product: " + p.getName() + " with barcode: " + p.getBarcode() + " Has " + sale.getSaleAsString();
+			CatalogProduct p = manager.viewProductFromCatalog(s.getProductBarcode());
+			ret = "Product: " + p.getName() + " with barcode: " + p.getBarcode() + " Has " + s.getSaleAsString();
 		} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog
 				| ConnectionFailure e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.stackTraceToStr(e));
 			e.showInfoToUser();
-			return ret + sale.getId();
+			return ret + s.getId();
 		}
 		return ret;
 	}

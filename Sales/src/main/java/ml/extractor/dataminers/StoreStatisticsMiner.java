@@ -51,9 +51,8 @@ public class StoreStatisticsMiner extends AMiner {
 
 	@Override
 	public Set<ABasicProperty> extractProperties() {
-		Set<ABasicProperty> result = new HashSet<>();
+		Set<ABasicProperty> result = new HashSet<>(extractMostPopularProducts());
 
-		result.addAll(extractMostPopularProducts());
 		result.addAll(extractLastPopularProducts());
 		result.addAll(extractAboutToExpireSoonStorePackages());
 		result.addAll(extractAboutToExpireLateStorePackages());
@@ -84,10 +83,7 @@ public class StoreStatisticsMiner extends AMiner {
 					public int compare(Entry<? extends IProduct, Long> arg0, Entry<? extends IProduct, Long> arg1) {
 						return Long.compare(arg1.getValue(), arg0.getValue());
 					}
-				}).map(e -> {
-					Entry<? extends IProduct, Long> entry = e;
-					return new MostPopularProductProperty(entry.getKey(), entry.getValue());
-				}).collect(Collectors.toList());
+				}).map(e -> new MostPopularProductProperty(e.getKey(), e.getValue())).collect(Collectors.toList());
 
 		return new HashSet<>(ProductsOrederdByPopularity.subList(0, 
 				Math.min(MostPopularProductProperty.numOfTop, ProductsOrederdByPopularity.size())));
@@ -112,10 +108,7 @@ public class StoreStatisticsMiner extends AMiner {
 					public int compare(Entry<? extends IProduct, Long> arg0, Entry<? extends IProduct, Long> arg1) {
 						return -Long.compare(arg1.getValue(), arg0.getValue());
 					}
-				}).map(e -> {
-					Entry<? extends IProduct, Long> entry = e;
-					return new LastPopularProductProperty(entry.getKey(), entry.getValue());
-				}).collect(Collectors.toList());
+				}).map(e -> new LastPopularProductProperty(e.getKey(), e.getValue())).collect(Collectors.toList());
 
 		return new HashSet<>(ProductsOrederdByPopularity.subList(0, 
 				Math.min(LastPopularProductProperty.numOfBottom, ProductsOrederdByPopularity.size())));
@@ -147,19 +140,11 @@ public class StoreStatisticsMiner extends AMiner {
 
 						@Override
 						public int compare(IStorePackage arg0, IStorePackage arg1) {
-							LocalDate arg0ed = arg0.getExpirationDate();
-							LocalDate arg1ed = arg1.getExpirationDate();
-							if (arg0ed.isAfter(arg1ed))
-								return 1;
-							if (arg0ed.isBefore(arg1ed))
-								return -1;
-							return 0;
+							LocalDate arg0ed = arg0.getExpirationDate(), arg1ed = arg1.getExpirationDate();
+							return arg0ed.isAfter(arg1ed) ? 1 : arg0ed.isBefore(arg1ed) ? -1 : 0;
 						}
 					})
-					.map(sp -> {
-					IStorePackage storePackage = sp;
-					return new AboutToExpireSoonStorePackageProperty(storePackage);
-					})
+					.map(sp -> new AboutToExpireSoonStorePackageProperty(sp))
 					.collect(Collectors.toList());
 
 		return new HashSet<>(storePackagesOrderedByDiff.subList(0, 
@@ -176,18 +161,11 @@ public class StoreStatisticsMiner extends AMiner {
 
 		LocalDate currentDate = LocalDate.now();
 
-		Set<AboutToExpireLateStorePackageProperty> aboutToExpireStorePackages = 
-				getStock()
-					.stream()
-					.filter(sp -> {
-						long periodInDays = ChronoUnit.DAYS.between(currentDate, sp.getExpirationDate());
-						return periodInDays >= AboutToExpireLateStorePackageProperty.minDaysThreshold  && 
-								periodInDays <= AboutToExpireLateStorePackageProperty.maxDaysThreshold;
-					}).map(sp -> new AboutToExpireLateStorePackageProperty(
-							sp))
-					.collect(Collectors.toSet());
-
-		return aboutToExpireStorePackages;
+		return getStock().stream().filter(sp -> {
+			long periodInDays = ChronoUnit.DAYS.between(currentDate, sp.getExpirationDate());
+			return periodInDays >= AboutToExpireLateStorePackageProperty.minDaysThreshold
+					&& periodInDays <= AboutToExpireLateStorePackageProperty.maxDaysThreshold;
+		}).map(sp -> new AboutToExpireLateStorePackageProperty(sp)).collect(Collectors.toSet());
 	}
 	
 	/**
@@ -202,15 +180,13 @@ public class StoreStatisticsMiner extends AMiner {
 
 		Map<Integer, Long> numBuyersPerMonthMap = 
 				getHistory().stream()
-					.collect(Collectors.groupingBy( (IGroceryList t) -> {
-							return Period.between(t.getPurchaseDate(), currentDate).getMonths();
-						}, Collectors.counting()));
+					.collect(Collectors.groupingBy( (IGroceryList t) -> Period.between(t.getPurchaseDate(), currentDate).getMonths(), Collectors.counting()));
 
 		Set<NumOfBuyersPerMonthProperty> result = new HashSet<>();
 		
-		for (int i = 0; i < NumOfBuyersPerMonthProperty.goMonthesBackLimit; i++)
+		for (int i = 0; i < NumOfBuyersPerMonthProperty.goMonthesBackLimit; ++i)
 			result.add(new NumOfBuyersPerMonthProperty(i, 
-					(int) (numBuyersPerMonthMap.containsKey(i) ? numBuyersPerMonthMap.get(i) : 0)));
+					(int) (!numBuyersPerMonthMap.containsKey(i) ? 0 : numBuyersPerMonthMap.get(i))));
 		
 		return result;
 	}
@@ -228,27 +204,23 @@ public class StoreStatisticsMiner extends AMiner {
 		Map<Integer, List<IGroceryList>> purchasesPerMonthMap = 
 				getHistory().stream()
 				.map(gl -> (IGroceryList)gl)
-					.collect(Collectors.groupingBy( (IGroceryList t) -> {
-							return Period.between(t.getPurchaseDate(), currentDate).getMonths();
-						}));
+					.collect(Collectors.groupingBy( (IGroceryList t) -> Period.between(t.getPurchaseDate(), currentDate).getMonths()));
 		
 		Map<Integer, Double> sumPerMonthMap = new HashMap<>();
-		for (Integer i : purchasesPerMonthMap.keySet()) {
-			sumPerMonthMap.put(i, purchasesPerMonthMap.get(i).stream()
-					.flatMap(gl -> gl.getProductsList().stream())
+		for (Integer i : purchasesPerMonthMap.keySet())
+			sumPerMonthMap.put(i, purchasesPerMonthMap.get(i).stream().flatMap(gl -> gl.getProductsList().stream())
 					.collect(Collectors.summingDouble(new ToDoubleFunction<IGroceryPackage>() {
 						@Override
 						public double applyAsDouble(IGroceryPackage value) {
-							return value.getProduct().getPrice() * value.getAmount();
+							return value.getAmount() * value.getProduct().getPrice();
 						}
 					})));
-		}
 
 		Set<SumOfPurchasesPerMonthProperty> result = new HashSet<>();
 		
-		for (int i = 0; i < SumOfPurchasesPerMonthProperty.goMonthesBackLimit; i++)
+		for (int i = 0; i < SumOfPurchasesPerMonthProperty.goMonthesBackLimit; ++i)
 			result.add(new SumOfPurchasesPerMonthProperty(i, 
-					 (sumPerMonthMap.containsKey(i) ? sumPerMonthMap.get(i) : 0)));
+					 (!sumPerMonthMap.containsKey(i) ? 0 : sumPerMonthMap.get(i))));
 		
 		return result;
 	}
@@ -273,22 +245,16 @@ public class StoreStatisticsMiner extends AMiner {
 				.collect(Collectors.groupingBy((CombinedStorePackage sp) -> sp, 
 						Collectors.summarizingInt((CombinedStorePackage sp) -> sp.getAmount())));
 		
-		storePackages = storePackages.stream().map((sp) ->
-			new CombinedStorePackage(sp.getProduct(), sp.getExpirationDate(), (int) storePackagesSum.get(sp).getSum()))
+		storePackages = storePackages.stream().map(sp -> new CombinedStorePackage(sp.getProduct(), sp.getExpirationDate(), (int) storePackagesSum.get(sp).getSum()))
 				.collect(Collectors.toList());
 		
 		
-		Set<HighRatioAmountExpirationTimeProperty> highRatioPackages = 
-				storePackages.stream()
-					.map(sp -> {
-						long periodInDays = ChronoUnit.DAYS.between(currentDate, sp.getExpirationDate());
-						double ratio = periodInDays == 0 ? 0 : sp.getAmount() / (double) periodInDays;
-						return new HighRatioAmountExpirationTimeProperty(ratio, sp);
-					})
-					.filter((p) -> p.getRatio() >= HighRatioAmountExpirationTimeProperty.ratioThreshold)
-					.collect(Collectors.toSet());
-
-		return highRatioPackages;
+		return storePackages.stream().map(sp -> {
+			long periodInDays = ChronoUnit.DAYS.between(currentDate, sp.getExpirationDate());
+			double ratio = periodInDays == 0 ? 0 :  (sp.getAmount() / periodInDays);
+			return new HighRatioAmountExpirationTimeProperty(ratio, sp);
+		}).filter(p -> p.getRatio() >= HighRatioAmountExpirationTimeProperty.ratioThreshold)
+				.collect(Collectors.toSet());
 	}
 	
 	/**
@@ -313,10 +279,7 @@ public class StoreStatisticsMiner extends AMiner {
 					public int compare(Entry<? extends IManufacturer, Long> arg0, Entry<? extends IManufacturer, Long> arg1) {
 						return Long.compare(arg1.getValue(), arg0.getValue());
 					}
-				}).map(e -> {
-					Entry<? extends IManufacturer, Long> entry = e;
-					return new MostPopularManufacturerProperty(entry.getKey(), entry.getValue());
-				}).collect(Collectors.toList());
+				}).map(e -> new MostPopularManufacturerProperty(e.getKey(), e.getValue())).collect(Collectors.toList());
 
 		return new HashSet<>(manufacturersOrederdByPopularity.subList(0, 
 				Math.min(MostPopularManufacturerProperty.numOfTop, manufacturersOrederdByPopularity.size())));
@@ -328,13 +291,8 @@ public class StoreStatisticsMiner extends AMiner {
 	 *
 	 */
 	private Set<? extends ABasicProperty> extractHealthyRatedProducts(){
-		Set<HealthyRatedProductProperty> healthyRatedProducts = 
-				getCatalog()
-				.stream()
-				.filter(p -> HealthyRatedProductProperty.isProductRatedHealthy(p))
-				.map(p -> new HealthyRatedProductProperty(p))
-				.collect(Collectors.toSet());
-		return healthyRatedProducts;
+		return getCatalog().stream().filter(p -> HealthyRatedProductProperty.isProductRatedHealthy(p))
+				.map(p -> new HealthyRatedProductProperty(p)).collect(Collectors.toSet());
 	}
 
 }

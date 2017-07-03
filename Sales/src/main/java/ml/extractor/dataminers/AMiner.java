@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 
 import api.contracts.IGroceryList;
-import api.contracts.IGroceryPackage;
 import api.contracts.IProduct;
 import api.contracts.IStorePackage;
 import api.preferences.InputPreferences;
@@ -23,7 +22,6 @@ public abstract class AMiner {
 	
 	public AMiner(InputPreferences inputPreferences, StoreData storeData, IGroceryList currentGrocery,
 			IProduct currentProduct) {
-		super();
 		this.storeData = storeData;
 		this.inputPreferences = inputPreferences;
 		this.currentProduct = currentProduct;

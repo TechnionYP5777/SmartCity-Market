@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import api.contracts.IGroceryList;
-import api.contracts.IGroceryPackage;
 import api.contracts.IProduct;
 import api.preferences.InputPreferences;
 import api.types.StoreData;
@@ -21,12 +20,11 @@ import ml.extractor.dataminers.StoreStatisticsMiner;
 public class Extractor {
 
 
-	public static Set<ABasicProperty> extractProperties(InputPreferences inputPreferences, StoreData storeData, 
+	public static Set<ABasicProperty> extractProperties(InputPreferences p, StoreData d, 
 			IGroceryList currentGrocery, IProduct currentProduct){
-		Set<ABasicProperty> result = new HashSet<>();
+		Set<ABasicProperty> result = new HashSet<>(new StoreStatisticsMiner(p, d, currentGrocery, currentProduct).extractProperties());
 		
-		result.addAll(new StoreStatisticsMiner(inputPreferences, storeData, currentGrocery, currentProduct).extractProperties());
-		result.addAll(new CustomerMiner(inputPreferences, storeData, currentGrocery, currentProduct).extractProperties());
+		result.addAll(new CustomerMiner(p, d, currentGrocery, currentProduct).extractProperties());
 		
 		return result;
 

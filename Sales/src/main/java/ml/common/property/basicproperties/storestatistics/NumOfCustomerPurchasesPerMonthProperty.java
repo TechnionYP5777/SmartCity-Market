@@ -18,9 +18,8 @@ public class NumOfCustomerPurchasesPerMonthProperty extends ABasicProperty {
 	
 	@Override
 	public String getDescription() {
-		return "The customer bought " + purchases + " times " +
-				(monthAgo == 0 ? "this month " : 
-					monthAgo == 1 ? "1 month ago " : monthAgo + " months ago ");
+		return "The customer bought " + purchases + " times "
+				+ (monthAgo == 0 ? "this month" : (monthAgo == 1 ? "1 month" : monthAgo + " months") + " ago") + " ";
 	}
 
 
@@ -31,7 +30,6 @@ public class NumOfCustomerPurchasesPerMonthProperty extends ABasicProperty {
 	}
 	
 	public NumOfCustomerPurchasesPerMonthProperty(int monthAgo, int numOfBuyers) {
-		super();
 		this.monthAgo = monthAgo;
 		this.purchases = numOfBuyers;
 	}
@@ -49,25 +47,14 @@ public class NumOfCustomerPurchasesPerMonthProperty extends ABasicProperty {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + monthAgo;
-		return result;
+		return monthAgo + 31 * super.hashCode();
 	}
 
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		NumOfCustomerPurchasesPerMonthProperty other = (NumOfCustomerPurchasesPerMonthProperty) obj;
-		if (monthAgo != other.monthAgo)
-			return false;
-		return true;
+	public boolean equals(Object o) {
+		return o == this || (super.equals(o) && getClass() == o.getClass()
+				&& monthAgo == ((NumOfCustomerPurchasesPerMonthProperty) o).monthAgo);
 	}
 
 }

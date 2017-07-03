@@ -8,12 +8,8 @@ import java.util.stream.Collectors;
 import api.preferences.SalesPreferences;
 import ml.common.basiccalsses.CombinedStorePackage;
 import ml.common.property.AProperty;
-import ml.common.property.basicproperties.storestatistics.AboutToExpireSoonStorePackageProperty;
-import ml.common.property.basicproperties.storestatistics.LastPopularProductOfCustomerProperty;
 import ml.common.property.basicproperties.storestatistics.LastPopularProductProperty;
 import ml.common.property.basicproperties.storestatistics.MostPopularProductOfCustomerProperty;
-import ml.common.property.basicproperties.storestatistics.MostPopularProductProperty;
-import ml.common.property.deducedproperties.MustGetRidOfPackageProperty;
 import ml.common.property.saleproperty.ProductSaleByMulFactorProperty;
 
 /**
@@ -26,15 +22,15 @@ import ml.common.property.saleproperty.ProductSaleByMulFactorProperty;
 public class Popularity_Rule extends ADeductionRule {
 
 	@Override
-	public Set<? extends AProperty> deduceProperties(SalesPreferences preferences, Set<AProperty> properties) {
+	public Set<? extends AProperty> deduceProperties(SalesPreferences preferences, Set<AProperty> ps) {
 		
 		Set<AProperty> result = new HashSet<>();
-		Set<MostPopularProductOfCustomerProperty> customer = properties.stream()
+		Set<MostPopularProductOfCustomerProperty> customer = ps.stream()
 				.filter(p -> p instanceof MostPopularProductOfCustomerProperty)
 				.map(p -> (MostPopularProductOfCustomerProperty)p)
 				.collect(Collectors.toSet());
 		
-		Set<LastPopularProductProperty> resultAll = properties.stream()
+		Set<LastPopularProductProperty> resultAll = ps.stream()
 				.filter(p -> p instanceof LastPopularProductProperty)
 				.map(p -> (LastPopularProductProperty)p)
 				.collect(Collectors.toSet());
@@ -48,16 +44,16 @@ public class Popularity_Rule extends ADeductionRule {
 	}
 
 	@Override
-	public boolean canDeduceProperty(AProperty property) {
-		return property instanceof ProductSaleByMulFactorProperty;
+	public boolean canDeduceProperty(AProperty p) {
+		return p instanceof ProductSaleByMulFactorProperty;
 	}
 
 	@Override
-	public Set<AProperty> whatNeedToDeduceProperty(AProperty property) {
-		if (!canDeduceProperty(property))
+	public Set<AProperty> whatNeedToDeduceProperty(AProperty p) {
+		if (!canDeduceProperty(p))
 			return null;
 		
-		ProductSaleByMulFactorProperty actualProperty = (ProductSaleByMulFactorProperty) property;
+		ProductSaleByMulFactorProperty actualProperty = (ProductSaleByMulFactorProperty) p;
 		
 		Set<AProperty> result = new HashSet<>();
 		

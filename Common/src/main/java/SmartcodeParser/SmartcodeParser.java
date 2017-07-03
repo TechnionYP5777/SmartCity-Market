@@ -59,7 +59,7 @@ public class SmartcodeParser implements Codex {
 				// check if the expiration date already inserted or the field is
 				// too small or not all digits
 				if (flgDateFilled || scannedCode.length() < 6
-						|| !scannedCode.matches("[0-9]{" + EXPIRATION_DATE_LEN + "}" + ".*"))
+						|| !scannedCode.matches("[0-9]{" + EXPIRATION_DATE_LEN + "}.*"))
 					return null;
 
 				// start parsing expiration date
@@ -70,7 +70,7 @@ public class SmartcodeParser implements Codex {
 				if (month > 12 || month < 1 || day > 31 || day < 1)
 					return null;
 
-				$.setExpirationDate(LocalDate.of(2000 + year, month, day));
+				$.setExpirationDate(LocalDate.of(year + 2000, month, day));
 
 				// eats the expiration date code
 				scannedCode = scannedCode.substring(EXPIRATION_DATE_LEN);
@@ -153,7 +153,7 @@ public class SmartcodeParser implements Codex {
 		int digit = Integer.parseInt(digitChar);
 		assert (digit >= 0 && digit <= 9);
 
-		return getCode128CharByIndex(DIGIT_0_INDEX + digit);
+		return getCode128CharByIndex(digit + DIGIT_0_INDEX);
 	}
 
 	/**
@@ -231,13 +231,11 @@ public class SmartcodeParser implements Codex {
 		// insert barcode itself
 		String barcode = Long.toString(c.getBarcode());
 
-		// convert barcode digits in pairs
-		while (barcode.length() >= 2) {
+		for (; barcode.length() >= 2; barcode = barcode.substring(2)) {
 			++positionMultiplier;
 			tempChar = codeCMap.get(barcode.substring(0, 2));
 			checksum += positionMultiplier * tempChar.index;
 			result.append(tempChar.binaryCode);
-			barcode = barcode.substring(2);
 		}
 
 		// if one digit left - move to Code B and print the relevant code

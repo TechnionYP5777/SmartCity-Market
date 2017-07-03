@@ -141,8 +141,8 @@ public class CatalogProduct implements IProduct {
 		return sale;
 	}
 
-	public void setSale(Sale sale) {
-		this.sale = sale;
+	public void setSale(Sale s) {
+		this.sale = s;
 	}
 	
 	public Sale getSpecialSale() {

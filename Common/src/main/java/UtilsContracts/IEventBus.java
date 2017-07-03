@@ -12,20 +12,20 @@ public interface IEventBus {
 	
 	/**
 	 * 
-	 * @param obj - the object to register to the event bus
+	 * @param o - the object to register to the event bus
 	 */
-	void register(Object obj);
+	void register(Object o);
 	
 	/**
 	 * 
-	 * @param obj - the object to unregister from the event bus
+	 * @param o - the object to unregister from the event bus
 	 */
-	void unRegister(Object obj);
+	void unRegister(Object o);
 	
 	/**
 	 * 
-	 * @param obj - the object to post to
+	 * @param o - the object to post to
 	 */
-	void post(Object obj);
+	void post(Object o);
 
 }

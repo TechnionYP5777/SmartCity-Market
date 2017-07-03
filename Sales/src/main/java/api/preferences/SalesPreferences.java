@@ -12,7 +12,7 @@ public class SalesPreferences implements Serializable {
 	/**
 	 * Serial number for Serialization
 	 */
-	private static final long serialVersionUID = 5961848032901517719L;
+	private static final long serialVersionUID = 0x52BCBD32DDF4D197L;
 
 	double maxDiscount = 0.5;
 
@@ -21,7 +21,6 @@ public class SalesPreferences implements Serializable {
 	}
 
 	public SalesPreferences(double maxDiscount) {
-		super();
 		this.maxDiscount = maxDiscount;
 	}
 	

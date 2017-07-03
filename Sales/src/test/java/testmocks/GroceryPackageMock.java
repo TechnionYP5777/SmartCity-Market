@@ -8,13 +8,11 @@ public class GroceryPackageMock implements IGroceryPackage {
 	int amount;
 	
 	public GroceryPackageMock(ProductMock product, int amount) {
-		super();
 		this.product = product;
 		this.amount = amount;
 	}
 	
 	public GroceryPackageMock(ProductMock product) {
-		super();
 		this.product = product;
 		this.amount = 1;
 	}
@@ -31,21 +29,16 @@ public class GroceryPackageMock implements IGroceryPackage {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((product == null) ? 0 : product.hashCode());
-		return result;
+		return 31 + ((product == null) ? 0 : product.hashCode());
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (o == this)
 			return true;
-		if (obj == null)
+		if (o == null || getClass() != o.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		GroceryPackageMock other = (GroceryPackageMock) obj;
+		GroceryPackageMock other = (GroceryPackageMock) o;
 		if (product == null) {
 			if (other.product != null)
 				return false;

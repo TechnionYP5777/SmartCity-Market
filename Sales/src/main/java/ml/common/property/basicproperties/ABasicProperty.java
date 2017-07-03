@@ -16,6 +16,5 @@ public abstract class ABasicProperty extends AProperty {
 	}
 	
 	public ABasicProperty() {
-		super();
 	}
 }

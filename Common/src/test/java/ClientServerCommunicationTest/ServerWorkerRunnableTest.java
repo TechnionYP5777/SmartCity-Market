@@ -126,7 +126,7 @@ public class ServerWorkerRunnableTest {
 		try {
 		    Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			assert(false);
+			assert false;
 		}
 	}
 	

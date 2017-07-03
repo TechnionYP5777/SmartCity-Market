@@ -241,43 +241,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	}
 
 	private void updateProductInfoTexts(CatalogProduct p, Integer amount) {
-		if (p != null) {
-			productNameLabel.setText(p.getName());
-			manufacturerLabel.setText(p.getManufacturer().getName());
-			priceLabel.setText(String.format("%1$.2f", p.getPrice()));
-			amountLabel.setText(amount != null ? amount + "" : "N/A");
-			descriptionTextArea.setText(amount != null ? scannedSmartCode.getExpirationDate() + "" : "N/A");
-			allerList.getItems().clear();
-			p.getIngredients().forEach(ingr -> {
-				allerList.getItems().add(ingr.getName());
-			});
-
-			if (p.getSpecialSale().isValid()) {
-				saleLbl.setText(p.getSpecialSale().getSaleAsString());
-				saleLbl.getStyleClass().add("sale");
-				saleTxtLbl.setText("Special Sale Available:");
-				saleTxtLbl.getStyleClass().add("sale");
-			} else if (p.getSale().isValid()) {
-				saleLbl.setText(p.getSale().getSaleAsString());
-				;
-				saleLbl.getStyleClass().add("sale");
-				saleTxtLbl.setText("Regular Sale Available:");
-				saleTxtLbl.getStyleClass().add("sale");
-			} else {
-				saleLbl.setText(p.getSale().getSaleAsString());
-				saleLbl.getStyleClass().remove("sale");
-			}
-			productInfoImage.setVisible(true);
-			URL imageUrl = null;
-			try {
-				imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI()
-						.toURL();
-			} catch (MalformedURLException e) {
-				throw new RuntimeException();
-			}
-			productInfoImage.setImage(new Image(imageUrl + "", 290, 230, true, false));
-			showLocation.setDisable(false);
-		} else {
+		if (p == null) {
 			productNameLabel.setText("N/A");
 			manufacturerLabel.setText("N/A");
 			priceLabel.setText("N/A");
@@ -290,6 +254,39 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			saleLbl.getStyleClass().remove("sale");
 			saleLbl.setText("N/A");
 			showLocation.setDisable(true);
+		} else {
+			productNameLabel.setText(p.getName());
+			manufacturerLabel.setText(p.getManufacturer().getName());
+			priceLabel.setText(String.format("%1$.2f", p.getPrice()));
+			amountLabel.setText(amount == null ? "N/A" : amount + "");
+			descriptionTextArea.setText(amount == null ? "N/A" : scannedSmartCode.getExpirationDate() + "");
+			allerList.getItems().clear();
+			p.getIngredients().forEach(ingr -> allerList.getItems().add(ingr.getName()));
+			if (p.getSpecialSale().isValid()) {
+				saleLbl.setText(p.getSpecialSale().getSaleAsString());
+				saleLbl.getStyleClass().add("sale");
+				saleTxtLbl.setText("Special Sale Available:");
+				saleTxtLbl.getStyleClass().add("sale");
+			} else {
+				saleLbl.setText(p.getSale().getSaleAsString());
+				if (!p.getSale().isValid())
+					saleLbl.getStyleClass().remove("sale");
+				else {
+					saleLbl.getStyleClass().add("sale");
+					saleTxtLbl.setText("Regular Sale Available:");
+					saleTxtLbl.getStyleClass().add("sale");
+				}
+			}
+			productInfoImage.setVisible(true);
+			URL imageUrl = null;
+			try {
+				imageUrl = new File("../Common/src/main/resources/ProductsPictures/" + p.getBarcode() + ".jpg").toURI()
+						.toURL();
+			} catch (MalformedURLException e) {
+				throw new RuntimeException();
+			}
+			productInfoImage.setImage(new Image(imageUrl + "", 290, 230, true, false));
+			showLocation.setDisable(false);
 		}
 		offerASale.setDisable(p == null);
 	}
@@ -333,8 +330,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 
 	FilteredList<String> filteredDataCatalogs;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void initialize(URL location, ResourceBundle __) {
 		AbstractApplicationScreen.fadeTransition(customerMainScreenPane);
 		barcodeEventHandler.register(this);
@@ -348,72 +345,57 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 			offerASale.setDisable(true);
 		}
 		filteredProductList = new FilteredList<>(productsObservableList, s -> true);
-
 		searchField.textProperty().addListener(obs -> {
 			String filter = searchField.getText();
-
 			filteredProductList.setPredicate((filter == null || filter.length() == 0) ? s -> true
 					: s -> s.getCatalogProduct().getName().contains(filter));
 		});
-
 		productsListView.setItems(filteredProductList);
 		productsListView.setCellFactory(new Callback<ListView<CartProduct>, ListCell<CartProduct>>() {
-
 			@Override
 			public ListCell<CartProduct> call(ListView<CartProduct> __) {
 				return new CustomerProductCellFormat();
 			}
 		});
-
 		productsListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CartProduct>() {
-
 			@Override
 			public void changed(ObservableValue<? extends CartProduct> __, CartProduct oldValue, CartProduct newValue) {
-				if (newValue != null) {
-					catalogProduct = newValue.getCatalogProduct();
-					updateProductInfoPaine(catalogProduct, newValue.getTotalAmount(),
-							ProductInfoPaneVisibleMode.PRESSED_PRODUCT);
-				}
-
+				if (newValue == null)
+					return;
+				catalogProduct = newValue.getCatalogProduct();
+				updateProductInfoPaine(catalogProduct, newValue.getTotalAmount(),
+						ProductInfoPaneVisibleMode.PRESSED_PRODUCT);
 			}
 		});
-
 		productsListView.depthProperty().set(1);
 		productsListView.setExpanded(true);
-
 		allerList.depthProperty().set(1);
 		allerList.setExpanded(true);
-
 		allerList.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener() {
 			@Override
-			public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
+			public void changed(ObservableValue v, Object oldvalue, Object newValue) {
 				Platform.runLater(new Runnable() {
+					@Override
 					public void run() {
 						allerList.getSelectionModel().select(-1);
-
 					}
 				});
-
 			}
 		});
-
 		Label lbl1 = new Label("Catalog Products");
 		lbl1.underlineProperty().set(true);
 		JFXButton close = new JFXButton("Close");
 		close.getStyleClass().add("JFXButton");
-
 		close.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent __) {
 				catalogPopup.hide();
 			}
 		});
-
 		catalogList = new JFXListView<String>();
 		catalogList.setMinWidth(600);
 		catalogList.setMaxWidth(600);
 		catalogList.setMaxHeight(400);
-
 		HBox manubtnContanier = new HBox();
 		manubtnContanier.getChildren().addAll(close);
 		manubtnContanier.setSpacing(10);
@@ -422,40 +404,29 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		manuContainer.getChildren().addAll(lbl1, catalogList, manubtnContanier);
 		manuContainer.setPadding(new Insets(10, 50, 50, 50));
 		manuContainer.setSpacing(10);
-
 		catalogPopup = new JFXPopup(manuContainer);
-
 		catalogList.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
 			@Override
-			public void handle(MouseEvent event) {
+			public void handle(MouseEvent e) {
 				catalogProduct = catalogs.get(catalogList.getSelectionModel().getSelectedItem());
 				catalogPopup.hide();
 				updateProductInfoPaine(catalogProduct, null, ProductInfoPaneVisibleMode.FROM_CATALOG);
 			}
 		});
-
 		catalogList.setDepth(1);
 		catalogList.setExpanded(true);
-
 		searchCatalogProduct.textProperty().addListener(obs -> {
 			String filter = searchCatalogProduct.getText();
 			filteredDataCatalogs
 					.setPredicate(filter == null || filter.length() == 0 ? s -> true : s -> s.contains(filter));
-			if (filter.isEmpty() || catalogList.getItems().isEmpty()) {
+			if (filter.isEmpty() || catalogList.getItems().isEmpty())
 				catalogPopup.hide();
-			} else {
+			else
 				catalogPopup.show(toShowCatalog, PopupVPosition.TOP, PopupHPosition.LEFT);
-			}
-
 		});
-
 		updateProductInfoPaine(null, null, ProductInfoPaneVisibleMode.FROM_CATALOG);
-
 		createCatalogList();
-
 		createOfferSalePopup();
-
 		enableSearchAndCheckout();
 	}
 
@@ -464,9 +435,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		catalogs = new HashMap<String, CatalogProduct>();
 
 		try {
-			customer.getMarketCatalog().forEach(cat -> {
-				catalogs.put(cat.getName() + " Barcode: " + cat.getBarcode(), cat);
-			});
+			customer.getMarketCatalog().forEach(cat -> catalogs.put(cat.getName() + " Barcode: " + cat.getBarcode(), cat));
 		} catch (CriticalError e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.stackTraceToStr(e));
@@ -483,7 +452,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	}
 
 	@FXML
-	void offerASalePressed(ActionEvent event) {
+	void offerASalePressed(ActionEvent e) {
 
 	}
 
@@ -499,14 +468,11 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 				try {
 					Sale sale = registeredCustomer.offerSpecailSaleForProduct(new Sale(-1, currentProduct.getBarcode(),
 							Integer.parseInt(amount.getText()), Double.parseDouble(price.getText())));
-					if (sale.isValid()) {
+					if (sale.isValid())
 						offerSpecialSale(sale, "This Is The Sale The System Offers");
-
-						
-					} else {
+					else
 						DialogMessagesService.showConfirmationDialog("Offer A Sale", null,
 								"The System Don't Accept Your Sale Offer", null);
-					}
 				} catch (SMException e) {
 					log.fatal(e);
 					log.debug(StackTraceUtil.stackTraceToStr(e));
@@ -566,10 +532,10 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	}
 
 	@FXML
-	void onLocationPressed(ActionEvent event) {
+	void onLocationPressed(ActionEvent e) {
 		Location loc = catalogProduct.getLocations().iterator().next();
 		DialogMessagesService.showConfirmationWithCloseDialog(
-				"Product Location Is: " + "(col=" + loc.getX() + ", row=" + loc.getY() + ")", null,
+				"Product Location Is: (col=" + loc.getX() + ", row=" + loc.getY() + ")", null,
 				new MarkLocationOnStoreMap().mark(loc.getX(), loc.getY()), null);
 	}
 
@@ -663,9 +629,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 					/* Checking for special sell */
 					Sale specialSale = registeredCustomer.getSpecailSaleForProduct(catalogProduct.getBarcode());
 
-					if (specialSale.isValid()) {
+					if (specialSale.isValid())
 						offerSpecialSale(specialSale, null);
-					}
 				}
 				if (registeredCustomer != null)
 
@@ -695,31 +660,31 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	private void offerSpecialSale(Sale specialSale, String txt) {
 		String sendTxt = txt != null ? txt : "Special Sale just for you!";
 		DialogMessagesService.showConfirmationDialog(sendTxt, null,
-				specialSale.getSaleAsString() + "\n" + "If you want to take the sale, click 'Yes' "
+				specialSale.getSaleAsString() + "\nIf you want to take the sale, click 'Yes' "
 						+ "add the products to your grocery list",
 				new SpecialSaleHandler(specialSale));
 		catalogProduct.setSpecialSale(specialSale);
 	}
 
 	private void checkIngredients(
-			CatalogProduct catalogProduct) /* throws CriticalError */ {
+			CatalogProduct p) /* throws CriticalError */ {
 		ArrayList<String> markedIngredients = new ArrayList<String>();
-		HashSet<Ingredient> productIngredients = catalogProduct.getIngredients();
+		HashSet<Ingredient> productIngredients = p.getIngredients();
 		HashSet<Ingredient> customerAllergens = ((IRegisteredCustomer) customer).getCustomerAllergens();
 		for (Ingredient ingredient : customerAllergens)
 			if (productIngredients.contains(ingredient))
 				markedIngredients.add(ingredient.getName());
-		if (!(markedIngredients.isEmpty())) {
-			StringBuilder markedIngredientsSB = new StringBuilder();
-			Integer i = 1;
-			for (String ing : markedIngredients) {
-				if (i > 1)
-					markedIngredientsSB.append(", ");
-				markedIngredientsSB.append(i++ + ". " + ing);
-			}
-			DialogMessagesService.showInfoDialog("Marked Ingredients Alert",
-					"This product contains some of your marked Ingredients:\n", markedIngredientsSB.toString());
+		if (markedIngredients.isEmpty())
+			return;
+		StringBuilder markedIngredientsSB = new StringBuilder();
+		Integer i = 1;
+		for (String ing : markedIngredients) {
+			if (i > 1)
+				markedIngredientsSB.append(", ");
+			markedIngredientsSB.append(i++ + ". " + ing);
 		}
+		DialogMessagesService.showInfoDialog("Marked Ingredients Alert",
+				"This product contains some of your marked Ingredients:\n", markedIngredientsSB.toString());
 	}
 
 	@Subscribe
@@ -737,22 +702,17 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	}
 
 	Map<Sale, Boolean> getTakenSales() {
-		if (registeredCustomer != null && offerSalesChk.isSelected()) {
-			HashMap<Long, CartProduct> shoppingList = customer.getCartProductCache();
-			HashMap<Sale, Boolean> specialSales = registeredCustomer.getSpecialSales();
-
-			for (Sale sale : specialSales.keySet()) {
-				if (shoppingList.containsKey(sale.getProductBarcode())
-						&& shoppingList.get(sale.getProductBarcode()).getTotalAmount() > sale.getAmountOfProducts()) {
-					specialSales.put(sale, true);
-				} else {
-					specialSales.put(sale, false);
-				}
-			}
-
-			return specialSales;
-		}
-		return new HashMap<Sale, Boolean>();
+		if (registeredCustomer == null || !offerSalesChk.isSelected())
+			return new HashMap<Sale, Boolean>();
+		HashMap<Long, CartProduct> shoppingList = customer.getCartProductCache();
+		HashMap<Sale, Boolean> specialSales = registeredCustomer.getSpecialSales();
+		for (Sale sale : specialSales.keySet())
+			if (shoppingList.containsKey(sale.getProductBarcode())
+					&& shoppingList.get(sale.getProductBarcode()).getTotalAmount() > sale.getAmountOfProducts())
+				specialSales.put(sale, true);
+			else
+				specialSales.put(sale, false);
+		return specialSales;
 	}
 
 	@Override
@@ -760,9 +720,8 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 		try {
 			if (flag)
 				customer.logout();
-			else {
+			else
 				customer.checkOutGroceryList(getTakenSales());
-			}
 
 		} catch (SMException e) {
 			log.fatal(e);

@@ -45,9 +45,7 @@ public class EmployeeMainScreen implements Initializable {
 			MediaPlayer player = new MediaPlayer(
 					new Media(getClass().getResource("/EmployeeMainScreen/vid.mp4").toExternalForm()));
 			MediaView mediaView = new MediaView(player);
-			final DoubleProperty width = mediaView.fitWidthProperty();
-			final DoubleProperty height = mediaView.fitHeightProperty();
-
+			final DoubleProperty width = mediaView.fitWidthProperty(), height = mediaView.fitHeightProperty();
 			width.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
 			height.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
 

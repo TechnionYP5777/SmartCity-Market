@@ -29,8 +29,8 @@ public class IfAboutToExpireSoon_ThenMustGetRidOfPackage_RuleTest {
 				new IfAboutToExpireSoon_ThenMustGetRidOfPackage_Rule().deduceProperties(DBMock.getSalePref(), propertySet);
 		
 		assertEquals(1, resultProperty.size());
-		assertTrue(resultProperty.contains(
-				new MustGetRidOfPackageProperty(property.getStorePackage(), 1 - (double) 2 / AboutToExpireSoonStorePackageProperty.threshold)));
+		assert resultProperty.contains(new MustGetRidOfPackageProperty(property.getStorePackage(),
+				1 - 2.0 / AboutToExpireSoonStorePackageProperty.threshold));
 	}
 
 }

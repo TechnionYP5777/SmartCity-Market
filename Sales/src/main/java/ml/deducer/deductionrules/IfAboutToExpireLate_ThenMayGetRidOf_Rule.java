@@ -18,30 +18,24 @@ import ml.common.property.deducedproperties.MayGetRidOfPackageProperty;
 public class IfAboutToExpireLate_ThenMayGetRidOf_Rule extends ADeductionRule {
 
 	@Override
-	public Set<? extends AProperty> deduceProperties(SalesPreferences preferences, Set<AProperty> properties) {
-		Set<MayGetRidOfPackageProperty> result = properties.stream()
-				.filter(p -> p instanceof AboutToExpireLateStorePackageProperty)
-				.map(p -> (AboutToExpireLateStorePackageProperty)p)
-				.map((AboutToExpireLateStorePackageProperty p) -> {
-					
-					return new MayGetRidOfPackageProperty(p.getStorePackage(), difftoUrgency(p.getDiff()), this);
-				}).collect(Collectors.toSet());
-		
-		return result;
+	public Set<? extends AProperty> deduceProperties(SalesPreferences preferences, Set<AProperty> ps) {
+		return ps.stream().filter(p -> p instanceof AboutToExpireLateStorePackageProperty)
+				.map(p -> (AboutToExpireLateStorePackageProperty) p).map((AboutToExpireLateStorePackageProperty p) -> new MayGetRidOfPackageProperty(p.getStorePackage(),
+						difftoUrgency(p.getDiff()), this)).collect(Collectors.toSet());
 	}
 
 	@Override
-	public boolean canDeduceProperty(AProperty property) {
+	public boolean canDeduceProperty(AProperty p) {
 
-		return property instanceof MayGetRidOfPackageProperty;
+		return p instanceof MayGetRidOfPackageProperty;
 	}
 
 	@Override
-	public Set<AProperty> whatNeedToDeduceProperty(AProperty property) {
-		if (!canDeduceProperty(property))
+	public Set<AProperty> whatNeedToDeduceProperty(AProperty p) {
+		if (!canDeduceProperty(p))
 			return null;
 		
-		MayGetRidOfPackageProperty actualProperty = (MayGetRidOfPackageProperty) property;
+		MayGetRidOfPackageProperty actualProperty = (MayGetRidOfPackageProperty) p;
 		
 		Set<AProperty> result = new HashSet<>();
 		result.add(new AboutToExpireLateStorePackageProperty(actualProperty.getStorePackage()));
@@ -50,9 +44,7 @@ public class IfAboutToExpireLate_ThenMayGetRidOf_Rule extends ADeductionRule {
 	}
 	
 	private static double difftoUrgency(double diff){
-		double urgency = diff / AboutToExpireLateStorePackageProperty.maxDaysThreshold;
-		urgency = 1 - urgency;
-		return urgency;
+		return 1 - diff / AboutToExpireLateStorePackageProperty.maxDaysThreshold;
 	}
 
 }

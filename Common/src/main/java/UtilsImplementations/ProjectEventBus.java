@@ -16,29 +16,26 @@ public class ProjectEventBus implements IEventBus {
 	private EventBus eventbus;
 
 	@Override
-	public void register(Object obj) {
-		if (eventbus == null) {
+	public void register(Object o) {
+		if (eventbus == null)
 			eventbus = new EventBus();
-		}
-		eventbus.register(obj);
+		eventbus.register(o);
 
 	}
 
 	@Override
-	public void unRegister(Object obj) {
-		if (eventbus == null) {
+	public void unRegister(Object o) {
+		if (eventbus == null)
 			eventbus = new EventBus();
-		}
-		eventbus.unregister(obj);
+		eventbus.unregister(o);
 
 	}
 
 	@Override
-	public void post(Object obj) {
-		if (eventbus == null) {
+	public void post(Object o) {
+		if (eventbus == null)
 			eventbus = new EventBus();
-		}
-		eventbus.post(obj);
+		eventbus.post(o);
 	}
 
 }

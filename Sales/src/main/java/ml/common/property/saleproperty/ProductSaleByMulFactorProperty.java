@@ -28,7 +28,6 @@ public class ProductSaleByMulFactorProperty extends ASaleProperty {
 	
 	public ProductSaleByMulFactorProperty(IStorePackage pack, int amount, double discountfactor,
 			double maxDiscount) {
-		super();
 		this.sale = ProductSale.makeSaleByDiscount(pack.getProduct(), amount, maxDiscount * discountfactor);
 		packageSale = pack;
 		multiplyFactor = discountfactor;
@@ -49,28 +48,23 @@ public class ProductSaleByMulFactorProperty extends ASaleProperty {
 	
 	@Override
 	public String getDescription() {
-		return "Sale for product: " + sale.getProduct().getName() + " (barcode: " + sale.getProduct().getBarcode() + ")" +
-				" with amount of: " + sale.getTotalAmount() +
-				" in price of: " + sale.getTotalPrice() + " (discount of: " + ((int)(sale.getdiscount()*100)) + "%)";
+		return "Sale for product: " + sale.getProduct().getName() + " (barcode: " + sale.getProduct().getBarcode() + ")"
+				+ " with amount of: " + sale.getTotalAmount() + " in price of: " + sale.getTotalPrice()
+				+ " (discount of: " + (int) (100 * sale.getdiscount()) + "%)";
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((sale == null) ? 0 : sale.hashCode());
-		return result;
+		return 31 * super.hashCode() + ((sale == null) ? 0 : sale.hashCode());
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (o == this)
 			return true;
-		if (!super.equals(obj))
+		if (!super.equals(o) || getClass() != o.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ProductSaleByMulFactorProperty other = (ProductSaleByMulFactorProperty) obj;
+		ProductSaleByMulFactorProperty other = (ProductSaleByMulFactorProperty) o;
 		if (sale == null) {
 			if (other.sale != null)
 				return false;

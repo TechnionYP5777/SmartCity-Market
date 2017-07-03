@@ -40,17 +40,12 @@ public class CustomerMiner extends AMiner {
 	
 	@Override
 	public Set<ABasicProperty> extractProperties() {
-		Set<ABasicProperty> result = new HashSet<>();
+		Set<ABasicProperty> result = new HashSet<>(extractMostPopularCustomerProducts());
 
-		result.addAll(extractMostPopularCustomerProducts());
 		result.addAll(extractLastPopularCustomerProducts());
 		result.addAll(extractNumberOfCustomerPurchasesPerMonth());
 		result.addAll(extractSumOfCustomerPurcahsesPerMonth());
 		result.addAll(extractAverageAmountOfProductOfCustomer());
-//		result.addAll(extractMostPopularManufacturers());
-//		result.addAll(extractNumberOfBuyersPerMonth());
-//		result.addAll(extractSumOfPurcahsesPerMonth());
-//		result.addAll(extractHealthyRatedProducts());
 		
 		return result;
 	}
@@ -75,10 +70,7 @@ public class CustomerMiner extends AMiner {
 					public int compare(Entry<? extends IProduct, Long> arg0, Entry<? extends IProduct, Long> arg1) {
 						return Long.compare(arg1.getValue(), arg0.getValue());
 					}
-				}).map(e -> {
-					Entry<? extends IProduct, Long> entry = e;
-					return new MostPopularProductOfCustomerProperty(entry.getKey(), entry.getValue());
-				}).collect(Collectors.toList());
+				}).map(e -> new MostPopularProductOfCustomerProperty(e.getKey(), e.getValue())).collect(Collectors.toList());
 
 		return new HashSet<>(ProductsOrederdByPopularity.subList(0, 
 				Math.min(MostPopularProductOfCustomerProperty.numOfTop, ProductsOrederdByPopularity.size())));
@@ -105,10 +97,7 @@ public class CustomerMiner extends AMiner {
 					public int compare(Entry<? extends IProduct, Long> arg0, Entry<? extends IProduct, Long> arg1) {
 						return -Long.compare(arg1.getValue(), arg0.getValue());
 					}
-				}).map(e -> {
-					Entry<? extends IProduct, Long> entry = e;
-					return new LastPopularProductOfCustomerProperty(entry.getKey(), entry.getValue());
-				}).collect(Collectors.toList());
+				}).map(e -> new LastPopularProductOfCustomerProperty(e.getKey(), e.getValue())).collect(Collectors.toList());
 
 		return new HashSet<>(ProductsOrederdByPopularity.subList(0, 
 				Math.min(LastPopularProductOfCustomerProperty.numOfBottom, ProductsOrederdByPopularity.size())));
@@ -128,15 +117,13 @@ public class CustomerMiner extends AMiner {
 		Map<Integer, Long> numBuyersPerMonthMap = 
 				getHistory().stream()
 					.filter(gl -> getCurrentGrocery().getBuyer().equals(gl.getBuyer()))
-					.collect(Collectors.groupingBy( (IGroceryList t) -> {
-							return Period.between(t.getPurchaseDate(), currentDate).getMonths();
-						}, Collectors.counting()));
+					.collect(Collectors.groupingBy( (IGroceryList t) -> Period.between(t.getPurchaseDate(), currentDate).getMonths(), Collectors.counting()));
 
 		Set<NumOfCustomerPurchasesPerMonthProperty> result = new HashSet<>();
 		
-		for (int i = 0; i < NumOfCustomerPurchasesPerMonthProperty.goMonthesBackLimit; i++)
+		for (int i = 0; i < NumOfCustomerPurchasesPerMonthProperty.goMonthesBackLimit; ++i)
 			result.add(new NumOfCustomerPurchasesPerMonthProperty(i, 
-					(int) (numBuyersPerMonthMap.containsKey(i) ? numBuyersPerMonthMap.get(i) : 0)));
+					(int) (!numBuyersPerMonthMap.containsKey(i) ? 0 : numBuyersPerMonthMap.get(i))));
 		
 		return result;
 	}
@@ -155,27 +142,23 @@ public class CustomerMiner extends AMiner {
 				getHistory().stream()
 				.filter(gl -> getCurrentGrocery().getBuyer().equals(gl.getBuyer()))
 				.map(gl -> (IGroceryList)gl)
-					.collect(Collectors.groupingBy( (IGroceryList t) -> {
-							return Period.between(t.getPurchaseDate(), currentDate).getMonths();
-						}));
+					.collect(Collectors.groupingBy( (IGroceryList t) -> Period.between(t.getPurchaseDate(), currentDate).getMonths()));
 		
 		Map<Integer, Double> sumPerMonthMap = new HashMap<>();
-		for (Integer i : purchasesPerMonthMap.keySet()) {
-			sumPerMonthMap.put(i, purchasesPerMonthMap.get(i).stream()
-					.flatMap(gl -> gl.getProductsList().stream())
+		for (Integer i : purchasesPerMonthMap.keySet())
+			sumPerMonthMap.put(i, purchasesPerMonthMap.get(i).stream().flatMap(gl -> gl.getProductsList().stream())
 					.collect(Collectors.summingDouble(new ToDoubleFunction<IGroceryPackage>() {
 						@Override
 						public double applyAsDouble(IGroceryPackage value) {
-							return value.getProduct().getPrice() * value.getAmount();
+							return value.getAmount() * value.getProduct().getPrice();
 						}
 					})));
-		}
 
 		Set<SumOfCustomerPurchasesPerMonthProperty> result = new HashSet<>();
 		
-		for (int i = 0; i < SumOfCustomerPurchasesPerMonthProperty.goMonthesBackLimit; i++)
+		for (int i = 0; i < SumOfCustomerPurchasesPerMonthProperty.goMonthesBackLimit; ++i)
 			result.add(new SumOfCustomerPurchasesPerMonthProperty(i, 
-					 (sumPerMonthMap.containsKey(i) ? sumPerMonthMap.get(i) : 0)));
+					 (!sumPerMonthMap.containsKey(i) ? 0 : sumPerMonthMap.get(i))));
 		
 		return result;
 	}	
@@ -201,23 +184,18 @@ public class CustomerMiner extends AMiner {
 		
 		for (IProduct iProduct : allProduct) {
 			
-			long num = getHistory().stream()
-					.filter(gl -> gl.getBuyer().equals(getCurrentGrocery().getBuyer()))
+			long num = getHistory().stream().filter(gl -> gl.getBuyer().equals(getCurrentGrocery().getBuyer()))
 					.filter(gl -> {
 						for (IGroceryPackage pack : gl.getProductsList())
 							if (pack.getProduct().equals(iProduct))
 								return true;
-						
 						return false;
 					}).count();
 			
-			long totalAmount = getHistory().stream()
-					.filter(gl -> gl.getBuyer().equals(getCurrentGrocery().getBuyer()))
-					.flatMap(gl -> gl.getProductsList().stream())
-					.filter(p -> p.getProduct().equals(iProduct)).collect(Collectors.summingLong(p -> p.getAmount()));
-					
-			result.add(new AverageAmountOfProductForCustomerProperty(iProduct, 
-					num == 0 ? 0 : (double)totalAmount/num));
+			result.add(new AverageAmountOfProductForCustomerProperty(iProduct, num == 0 ? 0
+					: 1. * getHistory().stream().filter(gl -> gl.getBuyer().equals(getCurrentGrocery().getBuyer()))
+							.flatMap(gl -> gl.getProductsList().stream()).filter(p -> p.getProduct().equals(iProduct))
+							.collect(Collectors.summingLong(p -> p.getAmount())) / num));
 		}
 
 		return result;

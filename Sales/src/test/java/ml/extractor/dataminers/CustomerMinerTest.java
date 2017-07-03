@@ -6,8 +6,6 @@ import static org.junit.Assert.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.junit.Test;
 
 import ml.common.property.basicproperties.ABasicProperty;
@@ -20,7 +18,6 @@ import ml.common.property.basicproperties.storestatistics.SumOfCustomerPurchases
 import ml.common.property.basicproperties.storestatistics.SumOfPurchasesPerMonthProperty;
 import testmocks.DBMock;
 import testmocks.GroceryListMock;
-import testmocks.GroceryPackageMock;
 import testmocks.HistoryMockBuilder;
 
 public class CustomerMinerTest {
@@ -31,12 +28,12 @@ public class CustomerMinerTest {
 	public void testMostPopularProductsOfCustomerProperty() {
 		List<GroceryListMock> history = new HistoryMockBuilder().build();
 		
-		for (long i = 1; i <= 10; i++)
+		for (long i = 1; i <= 10; ++i)
 			history.add(new GroceryListMock("alice").addProdcut(DBMock.getProduct(i)));
-		for (long i = 1; i <= 10; i++)
+		for (long i = 1; i <= 10; ++i)
 			history.add(new GroceryListMock("alice").addProdcut(DBMock.getProduct(i)));
 
-		for (long i = 10; i <= 10 + MostPopularProductOfCustomerProperty.numOfTop; i++)
+		for (long i = 10; i <= MostPopularProductOfCustomerProperty.numOfTop + 10; ++i)
 			history.add(new GroceryListMock("bob").addProdcut(DBMock.getProduct(i)));
 		
 		Set<ABasicProperty> result = new CustomerMiner(DBMock.getInputPref(), DBMock.getStoreDateByHistory(history), 
@@ -46,8 +43,8 @@ public class CustomerMinerTest {
 				p -> p instanceof MostPopularProductOfCustomerProperty && ((MostPopularProductOfCustomerProperty) p).getAmount() == 1)
 				.count();
 
-		for (long i = 10; i < 10 + MostPopularProductOfCustomerProperty.numOfTop; i++)
-			assertTrue(result.contains(new MostPopularProductOfCustomerProperty(DBMock.getProduct(i), 1)));
+		for (long i = 10; i < MostPopularProductOfCustomerProperty.numOfTop + 10; ++i)
+			assert result.contains(new MostPopularProductOfCustomerProperty(DBMock.getProduct(i), 1));
 
 		assertEquals(MostPopularProductOfCustomerProperty.numOfTop, numOfRightAmount);
 
@@ -57,12 +54,12 @@ public class CustomerMinerTest {
 	public void testLastPopularProductsOfCustomerProperty() {
 		List<GroceryListMock> history = new HistoryMockBuilder().build();
 		
-		for (long i = 1; i <= 2*LastPopularProductOfCustomerProperty.numOfBottom; i++)
+		for (long i = 1; i <= 2*LastPopularProductOfCustomerProperty.numOfBottom; ++i)
 			history.add(new GroceryListMock("alice").addProdcut(DBMock.getProduct(i)));
-		for (long i = 1; i <= LastPopularProductOfCustomerProperty.numOfBottom; i++)
+		for (long i = 1; i <= LastPopularProductOfCustomerProperty.numOfBottom; ++i)
 			history.add(new GroceryListMock("alice").addProdcut(DBMock.getProduct(i)));
 
-		for (long i = 10; i <= 10 + LastPopularProductOfCustomerProperty.numOfBottom; i++)
+		for (long i = 10; i <= LastPopularProductOfCustomerProperty.numOfBottom + 10; ++i)
 			history.add(new GroceryListMock("bob").addProdcut(DBMock.getProduct(i)));
 		
 		Set<ABasicProperty> result = new CustomerMiner(DBMock.getInputPref(), DBMock.getStoreDateByHistory(history), 
@@ -73,8 +70,8 @@ public class CustomerMinerTest {
 				.count();
 
 
-		for (long i = LastPopularProductOfCustomerProperty.numOfBottom + 1; i <= 2*LastPopularProductOfCustomerProperty.numOfBottom ; i++)
-			assertTrue(result.contains(new LastPopularProductOfCustomerProperty(DBMock.getProduct(i), 1)));
+		for (long i = LastPopularProductOfCustomerProperty.numOfBottom + 1; i <= 2*LastPopularProductOfCustomerProperty.numOfBottom ; ++i)
+			assert result.contains(new LastPopularProductOfCustomerProperty(DBMock.getProduct(i), 1));
 
 		assertEquals(LastPopularProductOfCustomerProperty.numOfBottom, numOfRightAmount);
 
@@ -98,15 +95,12 @@ public class CustomerMinerTest {
 		Set<ABasicProperty> result = new CustomerMiner(DBMock.getInputPref(), DBMock.getStoreDateByHistory(history),
 				new GroceryListMock("alice"), DBMock.getProduct(1)).extractProperties();
 		
-		long numOfBuyerPerMonthProperties = result.stream()
-				.filter(p -> p instanceof NumOfCustomerPurchasesPerMonthProperty).count();
-
-		assertEquals(6, numOfBuyerPerMonthProperties);
+		assertEquals(6, result.stream().filter(p -> p instanceof NumOfCustomerPurchasesPerMonthProperty).count());
 		
-		NumOfCustomerPurchasesPerMonthProperty foundMonth[] = new NumOfCustomerPurchasesPerMonthProperty[NumOfBuyersPerMonthProperty.goMonthesBackLimit];
-		NumOfCustomerPurchasesPerMonthProperty realMonth0 = new NumOfCustomerPurchasesPerMonthProperty(0, 1);
-		NumOfCustomerPurchasesPerMonthProperty realMonth1 = new NumOfCustomerPurchasesPerMonthProperty(1, 2);
-		NumOfCustomerPurchasesPerMonthProperty realMonth2 = new NumOfCustomerPurchasesPerMonthProperty(2, 1);
+		NumOfCustomerPurchasesPerMonthProperty foundMonth[] = new NumOfCustomerPurchasesPerMonthProperty[NumOfBuyersPerMonthProperty.goMonthesBackLimit],
+				realMonth0 = new NumOfCustomerPurchasesPerMonthProperty(0, 1),
+				realMonth1 = new NumOfCustomerPurchasesPerMonthProperty(1, 2),
+				realMonth2 = new NumOfCustomerPurchasesPerMonthProperty(2, 1);
 		foundMonth[0] = findInCollection(result, realMonth0);
 		foundMonth[1] = findInCollection(result, realMonth1);
 		foundMonth[2] = findInCollection(result, realMonth2);
@@ -116,7 +110,7 @@ public class CustomerMinerTest {
 		assertEquals(realMonth0.getNumOfBuyers(), foundMonth[0].getNumOfBuyers());
 		assertEquals(realMonth1.getNumOfBuyers(), foundMonth[1].getNumOfBuyers());
 		assertEquals(realMonth2.getNumOfBuyers(), foundMonth[2].getNumOfBuyers());
-		for (int i=3; i<NumOfCustomerPurchasesPerMonthProperty.goMonthesBackLimit; i++){
+		for (int i=3; i<NumOfCustomerPurchasesPerMonthProperty.goMonthesBackLimit; ++i){
 			NumOfCustomerPurchasesPerMonthProperty temp = findInCollection(result, new NumOfCustomerPurchasesPerMonthProperty(i, 0));
 			assertNotNull(temp);
 			assertEquals(temp.getNumOfBuyers(), 0);
@@ -141,15 +135,12 @@ public class CustomerMinerTest {
 		Set<ABasicProperty> result = new CustomerMiner(DBMock.getInputPref(), DBMock.getStoreDateByHistory(history),
 				new GroceryListMock("alice"), DBMock.getProduct(1)).extractProperties();
 		
-		long numOfBuyerPerMonthProperties = result.stream()
-				.filter(p -> p instanceof SumOfCustomerPurchasesPerMonthProperty).count();
+		assertEquals(SumOfCustomerPurchasesPerMonthProperty.goMonthesBackLimit, result.stream().filter(p -> p instanceof SumOfCustomerPurchasesPerMonthProperty).count());
 		
-		assertEquals(SumOfCustomerPurchasesPerMonthProperty.goMonthesBackLimit, numOfBuyerPerMonthProperties);
-		
-		SumOfCustomerPurchasesPerMonthProperty foundMonth[] = new SumOfCustomerPurchasesPerMonthProperty[SumOfPurchasesPerMonthProperty.goMonthesBackLimit];
-		SumOfCustomerPurchasesPerMonthProperty realMonth0 = new SumOfCustomerPurchasesPerMonthProperty(0, 1.5);
-		SumOfCustomerPurchasesPerMonthProperty realMonth1 = new SumOfCustomerPurchasesPerMonthProperty(1, 3);
-		SumOfCustomerPurchasesPerMonthProperty realMonth2 = new SumOfCustomerPurchasesPerMonthProperty(2, 2.5);
+		SumOfCustomerPurchasesPerMonthProperty foundMonth[] = new SumOfCustomerPurchasesPerMonthProperty[SumOfPurchasesPerMonthProperty.goMonthesBackLimit],
+				realMonth0 = new SumOfCustomerPurchasesPerMonthProperty(0, 1.5),
+				realMonth1 = new SumOfCustomerPurchasesPerMonthProperty(1, 3),
+				realMonth2 = new SumOfCustomerPurchasesPerMonthProperty(2, 2.5);
 		foundMonth[0] = findInCollection(result, realMonth0);
 		foundMonth[1] = findInCollection(result, realMonth1);
 		foundMonth[2] = findInCollection(result, realMonth2);
@@ -159,7 +150,7 @@ public class CustomerMinerTest {
 		assertEquals(realMonth0.getSumOfPurchases(), foundMonth[0].getSumOfPurchases(), DELTA);
 		assertEquals(realMonth1.getSumOfPurchases(), foundMonth[1].getSumOfPurchases(), DELTA);
 		assertEquals(realMonth2.getSumOfPurchases(), foundMonth[2].getSumOfPurchases(), DELTA);
-		for (int i=3; i<SumOfCustomerPurchasesPerMonthProperty.goMonthesBackLimit; i++){
+		for (int i=3; i<SumOfCustomerPurchasesPerMonthProperty.goMonthesBackLimit; ++i){
 			SumOfCustomerPurchasesPerMonthProperty temp = findInCollection(result, new SumOfCustomerPurchasesPerMonthProperty(i, 0));
 			assertNotNull(temp);
 			assertEquals(temp.getSumOfPurchases(), 0, DELTA);
@@ -184,19 +175,13 @@ public class CustomerMinerTest {
 		Set<ABasicProperty> result = new CustomerMiner(DBMock.getInputPref(), DBMock.getStoreDateByHistory(history),
 				new GroceryListMock("alice"), DBMock.getProduct(1)).extractProperties();
 		
-		long numOfAmountAverageProperties = result.stream()
-				.filter(p -> p instanceof AverageAmountOfProductForCustomerProperty).count();
-		
-		assertEquals(2, numOfAmountAverageProperties);
+		assertEquals(2, result.stream().filter(p -> p instanceof AverageAmountOfProductForCustomerProperty).count());
 		
 		AverageAmountOfProductForCustomerProperty realproduct1 = new AverageAmountOfProductForCustomerProperty(
-				DBMock.getProduct(1), 7.0/3);
+				DBMock.getProduct(1), 7.0 / 3),
+				realproduct2 = new AverageAmountOfProductForCustomerProperty(DBMock.getProduct(2), 2),
+				found1 = findInCollection(result, realproduct1), found2 = findInCollection(result, realproduct2);
 		
-		AverageAmountOfProductForCustomerProperty realproduct2 = new AverageAmountOfProductForCustomerProperty(
-				DBMock.getProduct(2), 2);
-		
-		AverageAmountOfProductForCustomerProperty found1 = findInCollection(result, realproduct1);
-		AverageAmountOfProductForCustomerProperty found2 = findInCollection(result, realproduct2);
 		assertNotNull(found1);
 		assertNotNull(found2);
 

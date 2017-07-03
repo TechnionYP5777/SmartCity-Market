@@ -183,7 +183,5 @@ public interface ISQLDatabaseConnection {
 	List<CatalogProduct> getAllProductsInCatalog() throws CriticalError;
 	
 	List<ProductPackage> getAllProductPackages() throws CriticalError;
-	
-	List<GroceryList> getGroceryListHistory();
 
 }

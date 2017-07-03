@@ -14,12 +14,10 @@ public abstract class AProperty {
 	ADeductionRule deducer;
 
 	public AProperty(ADeductionRule deducer) {
-		super();
 		this.deducer = deducer;
 	}
 	
 	public AProperty() {
-		super();
 		this.deducer = new AnyDeductionRule();
 	}
 
@@ -30,14 +28,12 @@ public abstract class AProperty {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (o == this)
 			return true;
-		if (obj == null)
+		if (o == null || getClass() != o.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AProperty other = (AProperty) obj;
+		AProperty other = (AProperty) o;
 		if (deducer == null) {
 			if (other.deducer != null)
 				return false;

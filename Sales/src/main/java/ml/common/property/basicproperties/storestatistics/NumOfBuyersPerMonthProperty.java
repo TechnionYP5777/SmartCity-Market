@@ -22,7 +22,6 @@ public class NumOfBuyersPerMonthProperty extends ABasicProperty {
 	}
 	
 	public NumOfBuyersPerMonthProperty(int monthAgo, int numOfBuyers) {
-		super();
 		this.monthAgo = monthAgo;
 		this.numOfBuyers = numOfBuyers;
 	}
@@ -37,32 +36,19 @@ public class NumOfBuyersPerMonthProperty extends ABasicProperty {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + monthAgo;
-		return result;
+		return monthAgo + 31 * super.hashCode();
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		NumOfBuyersPerMonthProperty other = (NumOfBuyersPerMonthProperty) obj;
-		if (monthAgo != other.monthAgo)
-			return false;
-		return true;
+	public boolean equals(Object o) {
+		return o == this || (super.equals(o) && getClass() == o.getClass() && monthAgo == ((NumOfBuyersPerMonthProperty) o).monthAgo);
 	}
 	
 	@Override
 	public String getDescription() {
-		return "The number of buyers " +
-				(monthAgo == 0 ? "this month " : 
-					monthAgo == 1 ? "1 month ago " : monthAgo + " months ago ") + 
-				"is: " + numOfBuyers;
+		return "The number of buyers "
+				+ (monthAgo == 0 ? "this month" : (monthAgo == 1 ? "1 month" : monthAgo + " months") + " ago") + " "
+				+ "is: " + numOfBuyers;
 	}
 	
 }

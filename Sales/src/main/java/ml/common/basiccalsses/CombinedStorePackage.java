@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import BasicCommonClasses.PlaceInMarket;
 import api.contracts.IProduct;
 import api.contracts.IStorePackage;
-import api.types.Place;
 
 public class CombinedStorePackage implements IStorePackage {
 
@@ -14,14 +13,12 @@ public class CombinedStorePackage implements IStorePackage {
 	int amount;
 	
 	public CombinedStorePackage(IStorePackage p) {
-		super();
 		this.product = p.getProduct();
 		this.expirationDate = p.getExpirationDate();
 		this.amount = p.getAmount();
 	}
 	
 	public CombinedStorePackage(IProduct product, LocalDate expirationDate, int amount) {
-		super();
 		this.product = product;
 		this.expirationDate = expirationDate;
 		this.amount = amount;
@@ -44,23 +41,17 @@ public class CombinedStorePackage implements IStorePackage {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + amount;
-		result = prime * result + ((expirationDate == null) ? 0 : expirationDate.hashCode());
-		result = prime * result + ((product == null) ? 0 : product.hashCode());
-		return result;
+		return 31 * (31 * (amount + 31) + ((expirationDate == null) ? 0 : expirationDate.hashCode()))
+				+ ((product == null) ? 0 : product.hashCode());
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (o == this)
 			return true;
-		if (obj == null)
+		if (o == null || getClass() != o.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CombinedStorePackage other = (CombinedStorePackage) obj;
+		CombinedStorePackage other = (CombinedStorePackage) o;
 		if (amount != other.amount)
 			return false;
 		if (expirationDate == null) {

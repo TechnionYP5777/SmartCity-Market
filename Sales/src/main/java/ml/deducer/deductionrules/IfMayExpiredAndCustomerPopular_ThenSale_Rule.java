@@ -22,15 +22,15 @@ import ml.utils.CollectionFunctions;
 public class IfMayExpiredAndCustomerPopular_ThenSale_Rule extends ADeductionRule {
 
 	@Override
-	public Set<? extends AProperty> deduceProperties(SalesPreferences preferences, Set<AProperty> properties) {
+	public Set<? extends AProperty> deduceProperties(SalesPreferences preferences, Set<AProperty> ps) {
 		Set<AProperty> result = new HashSet<>();
 		
-		Set<MostPopularProductOfCustomerProperty> customer = properties.stream()
+		Set<MostPopularProductOfCustomerProperty> customer = ps.stream()
 				.filter(p -> p instanceof MostPopularProductOfCustomerProperty)
 				.map(p -> (MostPopularProductOfCustomerProperty)p)
 				.collect(Collectors.toSet());
 		
-		Set<MayGetRidOfPackageProperty> resultAll = properties.stream()
+		Set<MayGetRidOfPackageProperty> resultAll = ps.stream()
 				.filter(p -> p instanceof MayGetRidOfPackageProperty)
 				.map(p -> (MayGetRidOfPackageProperty)p)
 				.collect(Collectors.toSet());
@@ -39,29 +39,28 @@ public class IfMayExpiredAndCustomerPopular_ThenSale_Rule extends ADeductionRule
 		for (MostPopularProductOfCustomerProperty propery : customer) 
 			for (MayGetRidOfPackageProperty mayProperty : resultAll)
 				if (mayProperty.getStorePackage().getProduct().equals(propery.getProduct())){
-					AverageAmountOfProductForCustomerProperty amountProperty = CollectionFunctions.findInCollection(properties,
+					AverageAmountOfProductForCustomerProperty amountProperty = CollectionFunctions.findInCollection(ps,
 							new AverageAmountOfProductForCustomerProperty(propery.getProduct(), 0));
 					
-					int amount = (int) Math.ceil((amountProperty == null) ? 1 : amountProperty.getAverageAmount());
-					
-					result.add(new ProductSaleByMulFactorProperty(mayProperty.getStorePackage(), amount, 
-							mayProperty.getUrgency() * 0.25, preferences.getMaxDiscount(), this));
+					result.add(new ProductSaleByMulFactorProperty(mayProperty.getStorePackage(),
+							(int) Math.ceil((amountProperty == null) ? 1 : amountProperty.getAverageAmount()),
+							0.25 * mayProperty.getUrgency(), preferences.getMaxDiscount(), this));
 				}
 	
 		return result;
 	}
 
 	@Override
-	public boolean canDeduceProperty(AProperty property) {
-		return property instanceof ProductSaleByMulFactorProperty;
+	public boolean canDeduceProperty(AProperty p) {
+		return p instanceof ProductSaleByMulFactorProperty;
 	}
 
 	@Override
-	public Set<AProperty> whatNeedToDeduceProperty(AProperty property) {
-		if (!canDeduceProperty(property))
+	public Set<AProperty> whatNeedToDeduceProperty(AProperty p) {
+		if (!canDeduceProperty(p))
 			return null;
 		
-		ProductSaleByMulFactorProperty actualProperty = (ProductSaleByMulFactorProperty) property;
+		ProductSaleByMulFactorProperty actualProperty = (ProductSaleByMulFactorProperty) p;
 		
 		Set<AProperty> result = new HashSet<>();
 		

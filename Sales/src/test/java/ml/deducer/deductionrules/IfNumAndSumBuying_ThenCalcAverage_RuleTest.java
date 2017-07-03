@@ -30,8 +30,7 @@ private static final double DELTA = 1e-15;
 				new IfNumAndSumBuying_ThenCalcAverage_Rule().deduceProperties(DBMock.getSalePref(), propertySet);
 		
 		assertEquals(AverageCartPricePerMonthProperty.goMonthesBackLimit, resultProperty.size());
-		assertTrue(resultProperty.contains(
-				new AverageCartPricePerMonthProperty(Numproperty.getMonthAgo(), 0)));
+		assert resultProperty.contains(new AverageCartPricePerMonthProperty(Numproperty.getMonthAgo(), 0));
 
 		AverageCartPricePerMonthProperty itemFound = findInCollection(resultProperty, new AverageCartPricePerMonthProperty(Numproperty.getMonthAgo(), 0));
 

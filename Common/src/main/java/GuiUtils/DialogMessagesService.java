@@ -31,8 +31,8 @@ public class DialogMessagesService {
 		alertCreator(title, header, content, null, null);
 	}
 	
-	public static void showInfoDialog(String title, String header, String content, Node node) {
-		alertCreator(title, header, content, node, null);
+	public static void showInfoDialog(String title, String header, String content, Node n) {
+		alertCreator(title, header, content, n, null);
 	}
 
 	public static void showErrorDialog(String title, String header, String content) {
@@ -40,9 +40,9 @@ public class DialogMessagesService {
 	}
 	
 
-	public static void showConfirmationWithCloseDialog(String title, String header, Node node,
+	public static void showConfirmationWithCloseDialog(String title, String header, Node n,
 			IConfiramtionWithCloseDialog d) {
-		alertCreator(title, header, null, node, d);
+		alertCreator(title, header, null, n, d);
 	}
 
 	public static void showConfirmationDialog(String title, String header, String content,
@@ -89,24 +89,21 @@ public class DialogMessagesService {
 		dialog.toFront();
 	}
 
-	private static void alertCreator(String title, String header, String content, Node node, IConfiramtionWithCloseDialog d) {
+	private static void alertCreator(String title, String header, String content, Node n, IConfiramtionWithCloseDialog d) {
 		JFXDialogLayout dialogContent = new JFXDialogLayout();
 	
 		dialogContent.setHeading(new Text(header == null ? title : title + "\n" + header));
 	
-		if (content != null && node != null) {
-			VBox vbox = new VBox(new Text(content), node);
+		if (content != null && n != null) {
+			VBox vbox = new VBox(new Text(content), n);
 			vbox.setAlignment(Pos.CENTER);
 			vbox.setSpacing(10);
 			dialogContent.setBody(vbox);
 			
-		} else  if (content != null) {
+		} else  if (content != null)
 			dialogContent.setBody(new Text(content));
-		
-		} else if (node != null) {
-			dialogContent.setBody(node);
-		
-		}
+		else if (n != null)
+			dialogContent.setBody(n);
 
 		JFXButton close = new JFXButton("Close");
 		close.getStyleClass().add("JFXButton");
@@ -122,9 +119,8 @@ public class DialogMessagesService {
 			public void handle(ActionEvent __) {
 				dialog.close();
 				
-				if (d != null) {
+				if (d != null)
 					d.onClose();
-				}
 			}
 		});
 		

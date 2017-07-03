@@ -19,9 +19,7 @@ public interface IProduct {
 	
 	double getPrice();
 	
-	//Set<? extends IIngredient> getIngredients();
 
 	HashSet<? extends IIngredient> getIngredients();
 
-	//TODO need to add getPicture()
 }

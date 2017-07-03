@@ -13,7 +13,6 @@ public class StorePackageMock implements IStorePackage {
 	PlaceInMarket place;
 	
 	public StorePackageMock(ProductMock product, int amount, LocalDate expirationDate, PlaceInMarket place) {
-		super();
 		this.product = product;
 		this.amount = amount;
 		this.expirationDate = expirationDate;
@@ -21,7 +20,6 @@ public class StorePackageMock implements IStorePackage {
 	}
 	
 	public StorePackageMock(long barcode, int amount, LocalDate expirationDate, PlaceInMarket place) {
-		super();
 		this.product = new ProductMock(barcode);
 		this.amount = amount;
 		this.expirationDate = expirationDate;
@@ -29,7 +27,6 @@ public class StorePackageMock implements IStorePackage {
 	}
 	
 	public StorePackageMock(long barcode, LocalDate ed){
-		super();
 		this.product = new ProductMock(barcode);
 		this.amount = 1;
 		this.expirationDate = ed;
@@ -62,23 +59,17 @@ public class StorePackageMock implements IStorePackage {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((expirationDate == null) ? 0 : expirationDate.hashCode());
-		result = prime * result + ((place == null) ? 0 : place.hashCode());
-		result = prime * result + ((product == null) ? 0 : product.hashCode());
-		return result;
+		return 31 * (((place == null) ? 0 : place.hashCode())
+				+ 31 * (((expirationDate == null) ? 0 : expirationDate.hashCode()) + 31)) + ((product == null) ? 0 : product.hashCode());
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (o == this)
 			return true;
-		if (obj == null)
+		if (o == null || getClass() != o.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		StorePackageMock other = (StorePackageMock) obj;
+		StorePackageMock other = (StorePackageMock) o;
 		if (expirationDate == null) {
 			if (other.expirationDate != null)
 				return false;

@@ -10,11 +10,9 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.PropertyConfigurator;
 
-import CustomerContracts.ICustomer;
 import CustomerDI.CustomerDiConfigurator;
 import CustomerGuiHelpers.TempCustomerPassingData;
 import CustomerGuiHelpers.TempRegisteredCustomerPassingData;
-import CustomerImplementations.Customer;
 import CustomerImplementations.CustomerDefs;
 import GuiUtils.AbstractApplicationScreen;
 import SMExceptions.SMException;
@@ -116,10 +114,8 @@ public class CustomerApplicationScreen extends AbstractApplicationScreen {
         
         if (cmd.getOptionValue("serverIP") != null)
 			CustomerDefs.host = cmd.getOptionValue("serverIP");
-        https://github.com/TechnionYP5777
-        if (cmd.getOptionValue("showVideo") != null) {
-        	 CustomerDefs.showVideo = Boolean.parseBoolean(cmd.getOptionValue("showVideo"));
-        }
+        if (cmd.getOptionValue("showVideo") != null)
+			CustomerDefs.showVideo = Boolean.parseBoolean(cmd.getOptionValue("showVideo"));
               
 		return true;
 	}

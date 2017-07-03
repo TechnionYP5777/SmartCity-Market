@@ -77,7 +77,7 @@ public interface IRegisteredCustomer extends ICustomer {
 	 * @param Sale sale
 	 * @param Boolean isTaken
 	 */
-	void addSpecialSale(Sale sale, Boolean isTaken);
+	void addSpecialSale(Sale s, Boolean isTaken);
 
 	/**
 	 * getSpecialSales - returns all existing special sale in the system

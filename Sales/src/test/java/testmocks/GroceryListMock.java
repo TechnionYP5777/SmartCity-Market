@@ -15,7 +15,6 @@ public class GroceryListMock implements IGroceryList {
 	Set<ProductSale> salesSet;
 	
 	public GroceryListMock(String buyerName, LocalDate purchaseDate) {
-		super();
 		this.buyerName = buyerName;
 		this.purchaseDate = purchaseDate;
 		prodcutsSet = new HashSet<>();
@@ -23,7 +22,6 @@ public class GroceryListMock implements IGroceryList {
 	}
 	
 	public GroceryListMock(String buyerName) {
-		super();
 		this.buyerName = buyerName;
 		this.purchaseDate = LocalDate.now();
 		prodcutsSet = new HashSet<>();
@@ -80,30 +78,25 @@ public class GroceryListMock implements IGroceryList {
 		return this;
 	}
 
-	public GroceryListMock addSale(ProductSale sale) {
-		this.salesSet.add(sale);
+	public GroceryListMock addSale(ProductSale s) {
+		this.salesSet.add(s);
 		
 		return this;
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((buyerName == null) ? 0 : buyerName.hashCode());
-		result = prime * result + ((purchaseDate == null) ? 0 : purchaseDate.hashCode());
-		return result;
+		return 31 * (((buyerName == null) ? 0 : buyerName.hashCode()) + 31)
+				+ ((purchaseDate == null) ? 0 : purchaseDate.hashCode());
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (o == this)
 			return true;
-		if (obj == null)
+		if (o == null || getClass() != o.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		GroceryListMock other = (GroceryListMock) obj;
+		GroceryListMock other = (GroceryListMock) o;
 		if (buyerName == null) {
 			if (other.buyerName != null)
 				return false;

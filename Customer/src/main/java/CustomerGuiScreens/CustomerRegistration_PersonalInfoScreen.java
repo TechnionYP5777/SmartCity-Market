@@ -270,7 +270,7 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 			protected void updateItem(String item, boolean empty) {
 				super.updateItem(item, empty);
 				if (!empty && item != null)
-					setText(item + "");
+					setText(item);
 				else {
 					setStyle(null);
 					setText(null);
@@ -354,8 +354,6 @@ public class CustomerRegistration_PersonalInfoScreen implements Initializable {
 		if (TempCustomerProfilePassingData.customerProfile.getBirthdate() != null)
 			birthDatePicker.valueProperty().setValue(TempCustomerProfilePassingData.customerProfile.getBirthdate());
 
-		if (TempCustomerProfilePassingData.sequrityQuestion != null)
-			;
 		securityQuestionComboBox.setValue(TempCustomerProfilePassingData.sequrityQuestion);
 
 		if (TempCustomerProfilePassingData.sequrityAnswer != null)

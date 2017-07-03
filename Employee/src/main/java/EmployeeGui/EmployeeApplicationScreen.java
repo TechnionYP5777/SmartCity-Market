@@ -109,9 +109,8 @@ public class EmployeeApplicationScreen extends AbstractApplicationScreen {
         if (cmd.getOptionValue("serverIP") != null)
         	WorkerDefs.host = cmd.getOptionValue("serverIP");
         
-        if (cmd.getOptionValue("showVideo") != null) {
-        	WorkerDefs.showVideo = Boolean.parseBoolean(cmd.getOptionValue("showVideo"));
-        }
+        if (cmd.getOptionValue("showVideo") != null)
+			WorkerDefs.showVideo = Boolean.parseBoolean(cmd.getOptionValue("showVideo"));
         
 		return true;
 	}

@@ -42,7 +42,7 @@ public class Location {
 
 	@Override
 	public String toString() {
-		return "(x,y)=" + "(" + x + "," + y + ")" + ", in " + placeInMarket;
+		return "(x,y)=(" + x + "," + y + "), in " + placeInMarket;
 	}
 	@Override
 	public int hashCode() {

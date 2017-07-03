@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 import ml.common.property.AProperty;
 import ml.common.property.basicproperties.ABasicProperty;
 import ml.common.property.saleproperty.ASaleProperty;
-import ml.deducer.deductionrules.ADeductionRule;
-
 import static ml.utils.CollectionFunctions.findInCollection;
 
 /**
@@ -19,13 +17,13 @@ import static ml.utils.CollectionFunctions.findInCollection;
  */
 public class Explainer {
 
-	public static String explainSale(ASaleProperty sale, Set<AProperty> properties){
+	public static String explainSale(ASaleProperty p, Set<AProperty> ps){
 		
 		StringBuilder explanation = new StringBuilder();
 		Set<AProperty> temp = new HashSet<>();
-		temp.add(sale);
+		temp.add(p);
 		
-		explainSetPropertiesRec(temp, properties, 0, explanation);
+		explainSetPropertiesRec(temp, ps, 0, explanation);
 		return explanation.toString();
 	}
 	
@@ -37,11 +35,8 @@ public class Explainer {
 			if (property instanceof ABasicProperty)
 				continue;
 			
-			ADeductionRule rule = property.getDeductionRule();
-			
-			Set<AProperty> dependIn = rule.whatNeedToDeduceProperty(property);
-			
-			dependIn = dependIn.stream().map(pl -> findInCollection(allDeducedProperties, pl)).collect(Collectors.toSet());
+			Set<AProperty> dependIn = property.getDeductionRule().whatNeedToDeduceProperty(property).stream()
+					.map(pl -> findInCollection(allDeducedProperties, pl)).collect(Collectors.toSet());
 			
 			explaination.append(indentationToTabs(indentation));
 			explaination.append("I deduced ").append(property.getDescription())
@@ -56,7 +51,7 @@ public class Explainer {
 	public static String indentationToTabs(int numOfTabs){
 		StringBuilder tabs = new StringBuilder();
 		
-		for (int i = 0; i < numOfTabs; i++)
+		for (int i = 0; i < numOfTabs; ++i)
 			tabs.append("\t");
 		
 		return tabs.toString();

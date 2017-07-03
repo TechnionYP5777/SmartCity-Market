@@ -5,10 +5,6 @@ import static org.junit.Assert.*;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.After;
 import org.junit.Before;
@@ -19,19 +15,14 @@ import com.google.gson.Gson;
 import BasicCommonClasses.CatalogProduct;
 import BasicCommonClasses.CustomerProfile;
 import BasicCommonClasses.ForgotPasswordData;
-import BasicCommonClasses.GroceryList;
 import BasicCommonClasses.Ingredient;
 import BasicCommonClasses.Location;
 import BasicCommonClasses.Login;
 import BasicCommonClasses.Manufacturer;
 import BasicCommonClasses.PlaceInMarket;
 import BasicCommonClasses.ProductPackage;
-import BasicCommonClasses.Sale;
 import BasicCommonClasses.SmartCode;
 import ClientServerApi.ClientServerDefs;
-import CommandHandler.GroceryListHistory;
-import CommandHandler.GroceryListMarshal;
-import CommandHandler.ProductPackageMarshal;
 import CommonDefs.CLIENT_TYPE;
 import SQLDatabase.SQLDatabaseConnection;
 import SQLDatabase.SQLDatabaseException;
@@ -42,16 +33,12 @@ import SQLDatabase.SQLDatabaseException.IngredientNotExist;
 import SQLDatabase.SQLDatabaseException.IngredientStillUsed;
 import SQLDatabase.SQLDatabaseException.ManufacturerNotExist;
 import SQLDatabase.SQLDatabaseException.ManufacturerStillUsed;
-import SQLDatabase.SQLDatabaseException.NoGroceryListToRestore;
 import SQLDatabase.SQLDatabaseException.NumberOfConnectionsExceeded;
 import SQLDatabase.SQLDatabaseException.ProductNotExistInCatalog;
 import SQLDatabase.SQLDatabaseException.ProductPackageAmountNotMatch;
 import SQLDatabase.SQLDatabaseException.ProductPackageNotExist;
 import SQLDatabase.SQLDatabaseException.ProductStillForSale;
 import UtilsImplementations.Serialization;
-import api.contracts.IGroceryList;
-import api.contracts.ISale;
-import api.suggestor.Suggestor;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyConnected;
 import SQLDatabase.SQLDatabaseException.ClientAlreadyExist;
 import SQLDatabase.SQLDatabaseException.ClientNotConnected;
@@ -733,7 +720,6 @@ public class SQLDatabaseConnectionTest {
 		}
 	}
 
-	// TODO: test manufacturers methods
 
 	@Test
 	public void testRemoveMoreThanHaveFromCart() {
@@ -2198,380 +2184,5 @@ public class SQLDatabaseConnectionTest {
 		}
 		
 	}
-	
-	/*
-	@Test
-	public void getAllProducts() {
-
-		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		
-		try {
-			List<CatalogProduct> list = sqlConnection.getAllProductsInCatalog();
-			List<ProductPackage> list2 = sqlConnection.getAllProductPackages();
-			System.out.println(list2.size());
-		} catch (CriticalError e1) {
-			fail();
-		}
-		
-	}	
-	
-	@Test
-	public void SugSale() {
-
-		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		
-		try {
-			
-			sqlConnection.logoutAllUsers();
-
-			int sid = sqlConnection.loginCustomer("bob", "1234");
-			//Get stock, catalog, and history from SQL
-			List<CatalogProduct> catalog = sqlConnection.getAllProductsInCatalog();
-			Map<Long, CatalogProduct> mapCatalog = new HashMap<>();
-			
-			for (CatalogProduct catalogProduct : catalog) 
-				mapCatalog.put(catalogProduct.getBarcode(), catalogProduct);
-			
-			List<ProductPackageMarshal> stock = sqlConnection.getAllProductPackages().stream()
-					.map(p -> new ProductPackageMarshal(p, mapCatalog)).collect(Collectors.toList());
-			List<? extends IGroceryList> history = GroceryListHistory.getHistory(mapCatalog); 
-			String username = sqlConnection.getCustomerUsernameBySessionID(sid);
-			CatalogProduct product = mapCatalog.get(7290106724419L);
-			
-			GroceryList currentGrocery = Serialization.deserialize(
-					sqlConnection.cartRestoreGroceryList(sid),GroceryList.class);
-	
-	
-			Suggestor.updateCatalog(catalog);
-			Suggestor.updateHistory(history);
-			Suggestor.updateStock(stock);
-			ISale iSale = Suggestor.suggestSale(new GroceryListMarshal(username, LocalDate.now(), currentGrocery, mapCatalog),
-					product);
-			
-			Sale offeredSale = new Sale(0,iSale.getProduct().getBarcode(), iSale.getTotalAmount(), iSale.getTotalPrice());
-			//int saleID = c.addSale(null, offeredSale, false);
-			
-			//offeredSale.setId(saleID);
-		} catch (CriticalError e1) {
-			fail();
-		} catch (ClientNotConnected e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoGroceryListToRestore e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (AuthenticationError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClientAlreadyConnected e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NumberOfConnectionsExceeded e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	*/
-	
-	/*
-	@Test
-	public void testAddRemoveSale() {
-
-		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		HashSet<Location> locations = new HashSet<>();
-		HashSet<Ingredient> ingredients = new HashSet<>();
-		CatalogProduct newProduct = new CatalogProduct(barcodeDebug + 10L, "thi", ingredients,
-				new Manufacturer(1, "תנובה"), "", 20, "", locations);
-		final Sale sale = new Sale();
-		sale.setDiscount(1);
-		sale.setProduct(newProduct);
-		sale.set(1);
-		sale.setDiscount(1);
-		
-		String result = null;
-		Manufacturer manufacturer = null;
-		
-		//test add ingredient
-		try {
-			String tempID = sqlConnection.addManufacturer(null, manufacturerName);
-			manufacturer = Serialization.deserialize(tempID, Manufacturer.class);
-			
-			result = sqlConnection.getManufacturersList(null);
-		} catch (CriticalError | ClientNotConnected e) {
-			fail();
-		}
-		
-		assert result != null;
-		HashSet<Manufacturer> set = Serialization.deserializeManufacturersHashSet(result);
-		assert set != null;	
-		assert set.contains(manufacturer);
-		
-		//test remove ingredient
-		try {
-			sqlConnection.removeManufacturer(null, manufacturer);
-			
-			result = sqlConnection.getManufacturersList(null);
-		} catch (CriticalError | ClientNotConnected | ManufacturerNotExist | ManufacturerStillUsed e) {
-			fail();
-		}
-		
-		assert result != null;
-		set = Serialization.deserializeManufacturersHashSet(result);
-		assert set != null;
-		assert !set.contains(manufacturer);
-	}
-	
-	@Test
-	public void testAddRemoveTwoManufacturers() {
-
-		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		final String manufacturerName = "manydebug";
-		final String manufacturerName2 = "manydebug";
-		String result = null;
-		Manufacturer manufacturer = null;
-		Manufacturer manufacturer2 = null;
-		
-		//test add ingredient
-		try {
-			String tempID = sqlConnection.addManufacturer(null, manufacturerName);
-			manufacturer = Serialization.deserialize(tempID, Manufacturer.class);
-			String tempID2 = sqlConnection.addManufacturer(null, manufacturerName2);
-			manufacturer2 = Serialization.deserialize(tempID2, Manufacturer.class);
-			
-			result = sqlConnection.getManufacturersList(null);
-		} catch (CriticalError | ClientNotConnected e) {
-			fail();
-		}
-		
-		assert result != null;
-		HashSet<Manufacturer> set = Serialization.deserializeManufacturersHashSet(result);
-		assert set != null;	
-		assert set.contains(manufacturer);
-		assert set.contains(manufacturer2);
-		
-		//test remove ingredient
-		try {
-			sqlConnection.removeManufacturer(null, manufacturer);
-			sqlConnection.removeManufacturer(null, manufacturer2);
-			
-			result = sqlConnection.getManufacturersList(null);
-		} catch (CriticalError | ClientNotConnected | ManufacturerNotExist | ManufacturerStillUsed e) {
-			fail();
-		}
-		
-		assert result != null;
-		set = Serialization.deserializeManufacturersHashSet(result);
-		assert set != null;
-		assert !set.contains(manufacturer);
-		assert !set.contains(manufacturer2);
-	}
-	
-	@Test
-	public void testGetManufacturersList() {
-
-		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		String result = null;
-		
-		try {		
-			result = sqlConnection.getManufacturersList(null);
-		} catch (CriticalError | ClientNotConnected e) {
-			fail();
-		}
-		
-		assert result != null;
-		HashSet<Manufacturer> set = Serialization.deserializeManufacturersHashSet(result);
-		assert set != null;	
-	}
-	
-	@Test
-	public void testEditManufacturer() {
-
-		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		final String manufacturerName = "manydebug";
-		String result = null;
-		Manufacturer manufacturer = null;
-		
-		try {
-			String tempID = sqlConnection.addManufacturer(null, manufacturerName);
-			manufacturer = Serialization.deserialize(tempID, Manufacturer.class);
-			manufacturer.setName("newManufacturer");
-			sqlConnection.editManufacturer(null, manufacturer);
-			
-			result = sqlConnection.getManufacturersList(null);
-		} catch (CriticalError | ClientNotConnected | ManufacturerNotExist e) {
-			fail();
-		}
-		
-		assert result != null;
-		HashSet<Manufacturer> set = Serialization.deserializeManufacturersHashSet(result);
-		assert set != null;	
-		assert set.contains(manufacturer);
-		
-		try {
-			sqlConnection.removeManufacturer(null, manufacturer);
-		} catch (CriticalError | ClientNotConnected | ManufacturerNotExist | ManufacturerStillUsed e) {
-			fail();
-		}
-
-	}
-	
-	@Test
-	public void testCantEditNotExistedManufacturer() {
-
-		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		final String manufacturerName = "manydebug";
-		Manufacturer manufacturer = new Manufacturer(999,manufacturerName);
-		
-			try {
-				sqlConnection.editManufacturer(null, manufacturer);
-				fail();
-			} catch (CriticalError | ClientNotConnected e) {
-				fail();
-			} catch (ManufacturerNotExist e) {
-			} 
-		
-
-	}
-	
-	@Test
-	public void testCantRemoveNotExistedManufacturer() {
-
-		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		final String manufacturerName = "manydebug";
-		Manufacturer manufacturer = new Manufacturer(999,manufacturerName);
-		
-			try {
-				sqlConnection.removeManufacturer(null, manufacturer);
-				fail();
-			} catch (CriticalError | ClientNotConnected | ManufacturerStillUsed e) {
-				fail();
-			} catch (ManufacturerNotExist e) {
-			} 
-		
-
-	}
-	
-	@Test
-	public void testAddRemoveWorker() {
-
-		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		String result = null;
-		
-		//test add worker
-		try {
-			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgotPasswordData("", ""));
-			
-			result = sqlConnection.getWorkersList(null);
-		} catch (CriticalError | ClientNotConnected | ClientAlreadyExist e) {
-			fail();
-		}
-		
-		assert result != null;
-		HashMap<String, Boolean> map = Serialization.deserializeWorkersHashMap(result);
-		assert map != null;	
-		assert map.containsKey(workerName);
-		assertEquals(false, map.get(workerName));
-		
-		//test remove worker
-		try {
-			sqlConnection.removeWorker(null, workerName);
-			
-			result = sqlConnection.getWorkersList(null);
-		} catch (CriticalError | ClientNotConnected | ClientNotExist  e) {
-			fail();
-		}
-		
-		
-		assert result != null;
-		map = Serialization.deserializeWorkersHashMap(result);
-		assert map != null;	
-		assert !map.containsKey(workerName);
-
-	}
-	
-	@Test
-	public void testGetWorkersList() {
-
-		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		String result = null;
-		
-		//test add worker
-		try {
-			result = sqlConnection.getWorkersList(null);
-		} catch (CriticalError | ClientNotConnected e) {
-			fail();
-		}
-		
-		assert result != null;
-		HashMap<String, Boolean> map = Serialization.deserializeWorkersHashMap(result);
-		assert map != null;	
-
-	}
-	
-	@Test
-	public void testCantRemoveNotExistedWorker() {
-
-		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		
-		try {
-			sqlConnection.removeWorker(null, workerName);
-			fail();
-		} catch (CriticalError | ClientNotConnected e) {
-			fail();
-		} catch (ClientNotExist e) {
-		}
-		
-	}
-	
-	@Test
-	public void testCantAddWorkerAlreadyExisted() {
-
-		SQLDatabaseConnection sqlConnection = new SQLDatabaseConnection();
-		
-		String result = null;
-		
-		//test add worker
-		try {
-			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgotPasswordData("", ""));
-			
-			result = sqlConnection.getWorkersList(null);
-		} catch (CriticalError | ClientNotConnected | ClientAlreadyExist e) {
-			fail();
-		}
-		
-		assert result != null;
-		HashMap<String, Boolean> map = Serialization.deserializeWorkersHashMap(result);
-		assert map != null;	
-		assert map.containsKey(workerName);
-		assertEquals(false, map.get(workerName));
-		
-		//test add again the same worker
-		try {
-			sqlConnection.addWorker(null, new Login(workerName, workerName), new ForgotPasswordData("", ""));
-			fail();
-		} catch (CriticalError | ClientNotConnected e) {
-			fail();
-		}
-		catch (ClientAlreadyExist e) {
-		}
-		
-		//remove worker
-		try {
-			sqlConnection.removeWorker(null, workerName);
-			
-			result = sqlConnection.getWorkersList(null);
-		} catch (CriticalError | ClientNotConnected | ClientNotExist e) {
-			fail();
-		}
-		
-		
-		assert result != null;
-		map = Serialization.deserializeWorkersHashMap(result);
-		assert map != null;	
-		assert !map.containsKey(workerName);
-
-	}
-	*/
 	
 }

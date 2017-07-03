@@ -40,12 +40,12 @@ public class GetSpecailSaleForProductTest {
 	private IRegisteredCustomer customer;
 	
 	long barcode = 1234567;
-	Sale sale = new Sale(1, barcode, 3, 22.0), testSale = null;
+	Sale sale = new Sale(1, barcode, 3, 22.0), testSale;
 	
 	static String username = "username";
 	static CustomerProfile customerProfile = new CustomerProfile(username);
 	HashSet<Ingredient> allergens = new  HashSet<Ingredient>(Arrays.asList(new Ingredient(1, "milk"), new Ingredient(2, "meat"))),
-			testAllergens = null;
+			testAllergens;
 	@Mock
 	private IClientRequestHandler clientRequestHandler;
 

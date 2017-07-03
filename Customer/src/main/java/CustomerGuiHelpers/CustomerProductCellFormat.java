@@ -25,8 +25,8 @@ import javafx.scene.layout.VBox;
  */
 public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 
-	private boolean shouldEnableSale(CartProduct item, Sale sale) {
-		return sale.isValid() && sale.getAmountOfProducts() <= item.getTotalAmount();
+	private boolean shouldEnableSale(CartProduct item, Sale s) {
+		return s.isValid() && s.getAmountOfProducts() <= item.getTotalAmount();
 	}
 	
 	@Override
@@ -54,18 +54,20 @@ public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 		Label productPrice ;
 		if (enableSpecialSale) {
 			Sale sale = item.getCatalogProduct().getSpecialSale();
-			Double price = sale.getPrice() * (item.getTotalAmount() / sale.getAmountOfProducts()) + 
-					Double.valueOf(item.getCatalogProduct().getPrice()) * (item.getTotalAmount() % sale.getAmountOfProducts());
+			Double price = sale.getPrice() * item.getTotalAmount() / sale.getAmountOfProducts()
+					+ item.getTotalAmount() * Double.valueOf(item.getCatalogProduct().getPrice())
+							% sale.getAmountOfProducts();
 			
 			productPrice = new Label("Price: " + price + " nis");
-		} else if (enableSale) {
+		} else if (!enableSale)
+			productPrice = new Label(
+					"Price: " + item.getTotalAmount() * Double.valueOf(item.getCatalogProduct().getPrice()) + " nis");
+		else {
 			Sale sale = item.getCatalogProduct().getSale();
-			Double price = sale.getPrice() * (item.getTotalAmount() / sale.getAmountOfProducts()) + 
-					Double.valueOf(item.getCatalogProduct().getPrice()) * (item.getTotalAmount() % sale.getAmountOfProducts());
-			
-			productPrice = new Label("Price: " + price + " nis");		
-			} else {
-			productPrice = new Label("Price: " + Double.valueOf(item.getCatalogProduct().getPrice()) * item.getTotalAmount() + " nis");
+			Double price = sale.getPrice() * item.getTotalAmount() / sale.getAmountOfProducts()
+					+ item.getTotalAmount() * Double.valueOf(item.getCatalogProduct().getPrice())
+							% sale.getAmountOfProducts();
+			productPrice = new Label("Price: " + price + " nis");
 		}
 		productPrice.getStyleClass().add("thisListLabel");
 		//productPrice.setFont(new Font(20));
@@ -83,22 +85,20 @@ public class CustomerProductCellFormat extends JFXListCell<CartProduct> {
 		Image image = new Image(imageUrl + "", 100, 100, true, false);
 		ImageView productImage = new ImageView(image);
 		ImageView sale;
-		if (enableSpecialSale) {
+		if (!enableSpecialSale)
+			sale = new ImageView("/CustomerMainScreen/sale2.gif");
+		else
 			sale = new ImageView("/CustomerMainScreen/special.gif");
-		} else {
-			sale = new ImageView("/CustomerMainScreen/sale2.gif");	
-		}
 		
 		sale.setFitHeight(80);
 		sale.setFitWidth(120);
 				
 		hbx.setSpacing(10);
 		
-		if (enableSpecialSale || enableSale) {
+		if (enableSpecialSale || enableSale)
 			sale.setVisible(true);
-		} else {
-			sale.setVisible(false);	
-		}
+		else
+			sale.setVisible(false);
 		hbx.getChildren().addAll(vbx, productImage, sale);		
 		setGraphic(hbx);
 	}

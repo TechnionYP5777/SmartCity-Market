@@ -1,6 +1,5 @@
 package BasicCommonClasses;
 
-import api.contracts.IGroceryPackage;
 import api.contracts.IProduct;
 
 /**

@@ -95,9 +95,7 @@ public class CustomerRegistration_IngredientsScreen implements Initializable {
 
 		    	TempCustomerProfilePassingData.customerProfile.clearAllAllergens();
 		    	HashSet<Ingredient> checkedIngredientsHashSet = new HashSet<Ingredient>();
-		    	selectedItems.forEach(ing-> {
-		    		checkedIngredientsHashSet.add(ingredients.get(ing));
-		    	});
+		    	selectedItems.forEach(ing -> checkedIngredientsHashSet.add(ingredients.get(ing)));
 		    	TempCustomerProfilePassingData.customerProfile.setAllergens(checkedIngredientsHashSet); 
 
 			}
@@ -112,9 +110,7 @@ public class CustomerRegistration_IngredientsScreen implements Initializable {
 	private void createIngredientList() {
 		ingredients = new HashMap<String, Ingredient>();
 		try {
-			customer.getAllIngredients().forEach(ingr -> {
-				ingredients.put(ingr.getName(), ingr);
-			});
+			customer.getAllIngredients().forEach(ingr -> ingredients.put(ingr.getName(), ingr));
     	} catch (SMException e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.stackTraceToStr(e));

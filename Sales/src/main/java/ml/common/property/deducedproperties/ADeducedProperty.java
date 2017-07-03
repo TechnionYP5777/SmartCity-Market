@@ -16,6 +16,5 @@ public abstract class ADeducedProperty extends AProperty {
 	}
 	
 	public ADeducedProperty() {
-		super();
 	}
 }

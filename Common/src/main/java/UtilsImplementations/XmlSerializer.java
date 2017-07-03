@@ -100,8 +100,7 @@ public class XmlSerializer<IClass> implements IXmlSerializer<IClass> {
 	
 	private Unmarshaller getUnmarshaller(Class<?> classType) throws JAXBException {
 		JAXBContext jaxbContext = JAXBContext.newInstance(classType);
-	    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-	    return jaxbUnmarshaller;
+	    return jaxbContext.createUnmarshaller();
 	}
 	
 }

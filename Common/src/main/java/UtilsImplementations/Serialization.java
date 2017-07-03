@@ -34,9 +34,7 @@ public class Serialization {
 
 		Type hashsetType = new TypeToken<HashSet<Ingredient>>(){}.getType();
 
-		HashSet<Ingredient> result = gson.fromJson(hashsetToDeserialize, hashsetType);
-		
-		return result;
+		return gson.fromJson(hashsetToDeserialize, hashsetType);
 	}
 	
 	public static HashSet<Manufacturer> deserializeManufacturersHashSet(String hashsetToDeserialize){
@@ -44,9 +42,7 @@ public class Serialization {
 
 		Type hashsetType = new TypeToken<HashSet<Manufacturer>>(){}.getType();
 
-		HashSet<Manufacturer> result = gson.fromJson(hashsetToDeserialize, hashsetType);
-		
-		return result;
+		return gson.fromJson(hashsetToDeserialize, hashsetType);
 	}
 	
 	public static HashMap<String,Boolean> deserializeWorkersHashMap(String hashmapToDeserialize){
@@ -54,9 +50,7 @@ public class Serialization {
 
 		Type hashsetType = new TypeToken<HashMap<String,Boolean>>(){}.getType();
 
-		HashMap<String,Boolean> result = gson.fromJson(hashmapToDeserialize, hashsetType);
-		
-		return result;
+		return gson.fromJson(hashmapToDeserialize, hashsetType);
 	}
 
 }

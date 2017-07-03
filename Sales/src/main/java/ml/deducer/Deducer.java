@@ -37,22 +37,21 @@ public class Deducer {
 		return deductionRules;
 	}
 	
-	public static Set<AProperty> deduceProperties(SalesPreferences salesPreferences, Set<ABasicProperty> properties){
+	public static Set<AProperty> deduceProperties(SalesPreferences p, Set<ABasicProperty> ps){
 		
 		List<ADeductionRule> deductionRules = createDeductionRules();
 		
 		Set<AProperty> result = new HashSet<>();
 		
 		int oldSize = result.size();
-		result.addAll(properties);
+		result.addAll(ps);
 		
 		
 		while (oldSize != result.size()){
 			oldSize = result.size();
 			
-			for (ADeductionRule rule : deductionRules) {
-				result.addAll(rule.deduceProperties(salesPreferences, result));
-			}
+			for (ADeductionRule rule : deductionRules)
+				result.addAll(rule.deduceProperties(p, result));
 			
 		}
 		

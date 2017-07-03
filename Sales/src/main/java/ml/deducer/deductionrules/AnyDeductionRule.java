@@ -19,27 +19,22 @@ public class AnyDeductionRule extends ADeductionRule {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		
-		return (obj instanceof ADeductionRule);
+	public boolean equals(Object o) {
+		return o == this || (o != null && o instanceof ADeductionRule);
 	}
 
 	@Override
-	public Set<? extends AProperty> deduceProperties(SalesPreferences preferences, Set<AProperty> properties) {
+	public Set<? extends AProperty> deduceProperties(SalesPreferences p, Set<AProperty> ps) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean canDeduceProperty(AProperty property) {
+	public boolean canDeduceProperty(AProperty p) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Set<AProperty> whatNeedToDeduceProperty(AProperty property) {
+	public Set<AProperty> whatNeedToDeduceProperty(AProperty p) {
 		throw new UnsupportedOperationException();
 	}
 }

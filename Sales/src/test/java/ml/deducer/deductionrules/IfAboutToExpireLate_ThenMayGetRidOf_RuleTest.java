@@ -29,9 +29,8 @@ public class IfAboutToExpireLate_ThenMayGetRidOf_RuleTest {
 				new IfAboutToExpireLate_ThenMayGetRidOf_Rule().deduceProperties(DBMock.getSalePref(), propertySet);
 		
 		assertEquals(1, resultProperty.size());
-		assertTrue(resultProperty.contains(
-				new MayGetRidOfPackageProperty(property.getStorePackage(),
-						1 - (double) 20 / AboutToExpireLateStorePackageProperty.maxDaysThreshold)));
+		assert resultProperty.contains(new MayGetRidOfPackageProperty(property.getStorePackage(),
+				1 - 20.0 / AboutToExpireLateStorePackageProperty.maxDaysThreshold));
 	}
 
 }

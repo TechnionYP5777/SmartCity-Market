@@ -357,7 +357,7 @@ public class ManageCatalogProductTab implements Initializable {
 		runTheOperationButton
 				.setDisable(barcodeTextField.getText().isEmpty() || (addCatalogProductRadioButton.isSelected()
 						&& (productNameTextField.getText().isEmpty() || productPriceTextField.getText().isEmpty()
-								|| locationLbl.getText().equals("Location Not Defined Yet"))));
+								|| "Location Not Defined Yet".equals(locationLbl.getText()))));
 	}
 
 	private void createManufacturerMap() {

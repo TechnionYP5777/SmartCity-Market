@@ -19,7 +19,6 @@ public class MostPopularManufacturerProperty extends ABasicProperty {
 	private IManufacturer manufacturer;
 
 	public MostPopularManufacturerProperty(IManufacturer manufacturer, long amount) {
-		super();
 		this.amount = amount;
 		this.manufacturer = manufacturer;
 	}
@@ -40,21 +39,16 @@ public class MostPopularManufacturerProperty extends ABasicProperty {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((manufacturer == null) ? 0 : manufacturer.hashCode());
-		return result;
+		return 31 + ((manufacturer == null) ? 0 : manufacturer.hashCode());
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (o == this)
 			return true;
-		if (obj == null)
+		if (o == null || getClass() != o.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		MostPopularManufacturerProperty other = (MostPopularManufacturerProperty) obj;
+		MostPopularManufacturerProperty other = (MostPopularManufacturerProperty) o;
 		if (manufacturer == null) {
 			if (other.manufacturer != null)
 				return false;

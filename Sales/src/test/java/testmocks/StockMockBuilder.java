@@ -15,13 +15,13 @@ public class StockMockBuilder {
 		return this;
 	}
 	
-	public StockMockBuilder addPackage(ProductMock product, int amount, LocalDate ed, PlaceInMarket place){
-		stock.add(new StorePackageMock(product, amount, ed, place));
+	public StockMockBuilder addPackage(ProductMock m, int amount, LocalDate ed, PlaceInMarket place){
+		stock.add(new StorePackageMock(m, amount, ed, place));
 		return this;
 	}
 	
-	public StockMockBuilder addPackage(StorePackageMock p){
-		stock.add(p);
+	public StockMockBuilder addPackage(StorePackageMock m){
+		stock.add(m);
 		return this;
 	}
 	

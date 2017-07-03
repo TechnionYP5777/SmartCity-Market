@@ -30,7 +30,6 @@ public class AverageAmountOfProductForCustomerProperty extends ABasicProperty {
 	}
 
 	public AverageAmountOfProductForCustomerProperty(IProduct product, double averageAmount) {
-		super();
 		this.product = product;
 		this.averageAmount = averageAmount;
 	}
@@ -41,21 +40,16 @@ public class AverageAmountOfProductForCustomerProperty extends ABasicProperty {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((product == null) ? 0 : product.hashCode());
-		return result;
+		return 31 * super.hashCode() + ((product == null) ? 0 : product.hashCode());
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (o == this)
 			return true;
-		if (!super.equals(obj))
+		if (!super.equals(o) || getClass() != o.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AverageAmountOfProductForCustomerProperty other = (AverageAmountOfProductForCustomerProperty) obj;
+		AverageAmountOfProductForCustomerProperty other = (AverageAmountOfProductForCustomerProperty) o;
 		if (product == null) {
 			if (other.product != null)
 				return false;

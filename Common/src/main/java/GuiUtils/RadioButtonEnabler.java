@@ -28,19 +28,15 @@ public class RadioButtonEnabler {
 
 	public void selectRadioButton(RadioButton b) {
 
-		radioButtonContainer.forEach(btn -> {
-			btn.setSelected(btn.getText().equals(b.getText()));
-
-		});
+		radioButtonContainer.forEach(btn -> btn.setSelected(btn.getText().equals(b.getText())));
 
 	}
 
 	public RadioButton getSelected() {
 
 		radioButtonContainer.forEach(btn -> {
-			if (btn.isSelected()) {
+			if (btn.isSelected())
 				selectedRadioButton = btn;
-			}
 		});
 		return selectedRadioButton;
 	}

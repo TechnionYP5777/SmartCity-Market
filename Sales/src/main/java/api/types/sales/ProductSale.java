@@ -15,7 +15,6 @@ public class ProductSale implements ISale {
 
 	
 	public ProductSale(IProduct product, int amount, double price) {
-		super();
 		date = LocalDate.now();
 		this.product = product;
 		this.amount = amount;
@@ -55,11 +54,11 @@ public class ProductSale implements ISale {
 	}
 	
 	public double getdiscount() {
-		return 1 - (price / (amount * product.getPrice()));
+		return 1 - price / (amount * product.getPrice());
 	}
 	
-	public static ProductSale makeSaleByDiscount(IProduct product, int amount, double discount){
-		return new ProductSale(product, amount, amount * product.getPrice() * (1 - discount));
+	public static ProductSale makeSaleByDiscount(IProduct p, int amount, double discount){
+		return new ProductSale(p, amount, amount * (1 - discount) * p.getPrice());
 		
 	}
 
@@ -67,28 +66,21 @@ public class ProductSale implements ISale {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
-		result = prime * result + amount;
-		long temp;
-		temp = Double.doubleToLongBits(price);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((product == null) ? 0 : product.hashCode());
-		return result;
+		int result = prime + amount;
+		long temp = Double.doubleToLongBits(price);
+		return result = prime * (prime * result + (int) (temp ^ (temp >>> 32)))
+				+ ((product == null) ? 0 : product.hashCode());
 	}
 
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (o == this)
 			return true;
-		if (obj == null)
+		if (o == null || getClass() != o.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ProductSale other = (ProductSale) obj;
-		if (amount != other.amount)
-			return false;
-		if (Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price))
+		ProductSale other = (ProductSale) o;
+		if (amount != other.amount || Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price))
 			return false;
 		if (product == null) {
 			if (other.product != null)

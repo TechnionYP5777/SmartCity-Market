@@ -7,13 +7,13 @@ import java.util.List;
 public class HistoryMockBuilder {
 	List<GroceryListMock> history = new ArrayList<>();
 	
-	public HistoryMockBuilder addGroceryToNow(String buyername, ProductMock product, int amount){
-		history.add(new GroceryListMock(buyername).addProdcut(product, amount));
+	public HistoryMockBuilder addGroceryToNow(String buyername, ProductMock m, int amount){
+		history.add(new GroceryListMock(buyername).addProdcut(m, amount));
 		return this;
 	}
 	
-	public HistoryMockBuilder addGrocery(String buyername, LocalDate date, ProductMock product, int amount){
-		history.add(new GroceryListMock(buyername, date).addProdcut(product, amount));
+	public HistoryMockBuilder addGrocery(String buyername, LocalDate d, ProductMock m, int amount){
+		history.add(new GroceryListMock(buyername, d).addProdcut(m, amount));
 		return this;
 	}
 	

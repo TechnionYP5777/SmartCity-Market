@@ -24,7 +24,6 @@ public class HighRatioAmountExpirationTimeProperty extends ABasicProperty {
 	}
 	
 	public HighRatioAmountExpirationTimeProperty(double ratio, CombinedStorePackage storePackage) {
-		super();
 		this.ratio = ratio;
 		this.combinedPackage = storePackage;
 	}
@@ -41,22 +40,18 @@ public class HighRatioAmountExpirationTimeProperty extends ABasicProperty {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		long temp;
-		temp = Double.doubleToLongBits(ratio);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((combinedPackage == null) ? 0 : combinedPackage.hashCode());
-		return result;
+		long temp = Double.doubleToLongBits(ratio);
+		return result = prime * (prime * result + (int) (temp ^ (temp >>> 32)))
+				+ ((combinedPackage == null) ? 0 : combinedPackage.hashCode());
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (o == this)
 			return true;
-		if (!super.equals(obj))
+		if (!super.equals(o) || getClass() != o.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		HighRatioAmountExpirationTimeProperty other = (HighRatioAmountExpirationTimeProperty) obj;
+		HighRatioAmountExpirationTimeProperty other = (HighRatioAmountExpirationTimeProperty) o;
 		if (Double.doubleToLongBits(ratio) != Double.doubleToLongBits(other.ratio))
 			return false;
 		if (combinedPackage == null) {

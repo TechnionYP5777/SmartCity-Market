@@ -31,16 +31,13 @@ public class IfMustGetRidOf_ThenMulFactorSaleTest {
 				new IfMustGetRidOf_ThenMulFactorSale().deduceProperties(DBMock.getSalePref(), propertySet);
 		
 		assertEquals(1, resultProperty.size());
-		assertTrue(resultProperty.contains(
-				new ProductSaleByMulFactorProperty(property.getStorePackage(), 1, 1, DBMock.getSalePref().getMaxDiscount())));
+		assert resultProperty.contains(new ProductSaleByMulFactorProperty(property.getStorePackage(), 1, 1,
+				DBMock.getSalePref().getMaxDiscount()));
 
-		ProductSale sale = resultProperty.stream()
-			.filter(p -> p instanceof ProductSaleByMulFactorProperty)
-			.map(p -> (ProductSaleByMulFactorProperty)p)
-			.map((ProductSaleByMulFactorProperty p) -> p.getOffer())
-			.collect(Collectors.toList()).get(0);
-		
-		assertEquals(new ProductSale(DBMock.getProduct(1), 1, DBMock.getProduct(1).getPrice()* 0.5) , sale);
+		assertEquals(new ProductSale(DBMock.getProduct(1), 1, 0.5 * DBMock.getProduct(1).getPrice()),
+				resultProperty.stream().filter(p -> p instanceof ProductSaleByMulFactorProperty)
+						.map(p -> (ProductSaleByMulFactorProperty) p)
+						.map((ProductSaleByMulFactorProperty p) -> p.getOffer()).collect(Collectors.toList()).get(0));
 			
 	}
 

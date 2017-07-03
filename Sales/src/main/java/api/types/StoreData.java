@@ -14,14 +14,12 @@ public class StoreData {
 	private List<? extends IProduct> catalog;
 
 	public StoreData(List<? extends IGroceryList> history, List<? extends IStorePackage> stock , List<? extends IProduct> catalog) {
-		super();
 		this.history = history;
 		this.stock = stock;
 		this.catalog = catalog;
 	}
 	
 	public StoreData() {
-		super();
 		this.history = new ArrayList<>();
 		this.stock = new ArrayList<>();
 		this.catalog = new ArrayList<>();

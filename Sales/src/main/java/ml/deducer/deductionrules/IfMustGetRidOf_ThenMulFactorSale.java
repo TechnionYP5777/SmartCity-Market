@@ -18,30 +18,23 @@ import ml.common.property.saleproperty.ProductSaleByMulFactorProperty;
 public class IfMustGetRidOf_ThenMulFactorSale extends ADeductionRule {
 
 	@Override
-	public Set<? extends AProperty> deduceProperties(SalesPreferences preferences, Set<AProperty> properties) {
-		Set<ProductSaleByMulFactorProperty> result = properties.stream()
-				.filter(p -> p instanceof MustGetRidOfPackageProperty)
-				.map(p -> (MustGetRidOfPackageProperty)p)
-				.map((MustGetRidOfPackageProperty p) -> {
-					
-					return new ProductSaleByMulFactorProperty(p.getStorePackage(), 1, 
-							p.getUrgency(), preferences.getMaxDiscount(), this);
-				}).collect(Collectors.toSet());
-		
-		return result;
+	public Set<? extends AProperty> deduceProperties(SalesPreferences preferences, Set<AProperty> ps) {
+		return ps.stream().filter(p -> p instanceof MustGetRidOfPackageProperty).map(p -> (MustGetRidOfPackageProperty) p)
+				.map((MustGetRidOfPackageProperty p) -> new ProductSaleByMulFactorProperty(p.getStorePackage(), 1,
+						p.getUrgency(), preferences.getMaxDiscount(), this)).collect(Collectors.toSet());
 	}
 
 	@Override
-	public boolean canDeduceProperty(AProperty property) {
-		return property instanceof ProductSaleByMulFactorProperty;
+	public boolean canDeduceProperty(AProperty p) {
+		return p instanceof ProductSaleByMulFactorProperty;
 	}
 
 	@Override
-	public Set<AProperty> whatNeedToDeduceProperty(AProperty property) {
-		if (!canDeduceProperty(property))
+	public Set<AProperty> whatNeedToDeduceProperty(AProperty p) {
+		if (!canDeduceProperty(p))
 			return null;
 		
-		ProductSaleByMulFactorProperty actualProperty = (ProductSaleByMulFactorProperty) property;
+		ProductSaleByMulFactorProperty actualProperty = (ProductSaleByMulFactorProperty) p;
 		
 		Set<AProperty> result = new HashSet<>();
 		result.add(new MustGetRidOfPackageProperty(actualProperty.getPackageSale(), actualProperty.getMultiplyFactor()));

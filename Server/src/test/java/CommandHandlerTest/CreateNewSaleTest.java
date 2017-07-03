@@ -49,8 +49,8 @@ public class CreateNewSaleTest {
 		CommandWrapper out;
 		
 		try {
-			Mockito.when((sqlDatabaseConnection).addSale(senderID, sale, true))
-			.thenReturn(new Integer(1));
+			Mockito.when(sqlDatabaseConnection.addSale(senderID, sale, true))
+			.thenReturn(Integer.valueOf(1));
 		} catch (CriticalError | ClientNotConnected | SaleAlreadyExist  e1) {
 			fail();
 		}
@@ -67,7 +67,7 @@ public class CreateNewSaleTest {
 		CommandWrapper out;
 		
 		try {
-			Mockito.when((sqlDatabaseConnection).addSale(senderID, sale, true))
+			Mockito.when(sqlDatabaseConnection.addSale(senderID, sale, true))
 			.thenThrow(new CriticalError());
 		} catch ( ClientNotConnected | SaleAlreadyExist  e1) {
 			fail();
@@ -87,7 +87,7 @@ public class CreateNewSaleTest {
 		CommandWrapper out;
 		
 		try {
-			Mockito.when((sqlDatabaseConnection).addSale(senderID, sale, true))
+			Mockito.when(sqlDatabaseConnection.addSale(senderID, sale, true))
 			.thenThrow(new ClientNotConnected());
 		} catch (CriticalError | SaleAlreadyExist e1) {
 			fail();
@@ -107,7 +107,7 @@ public class CreateNewSaleTest {
 		CommandWrapper out;
 		
 		try {
-			Mockito.when((sqlDatabaseConnection).addSale(senderID, sale, true))
+			Mockito.when(sqlDatabaseConnection.addSale(senderID, sale, true))
 			.thenThrow(new SaleAlreadyExist());
 		} catch (CriticalError | ClientNotConnected  e1) {
 			fail();

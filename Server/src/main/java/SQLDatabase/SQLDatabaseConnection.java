@@ -1622,17 +1622,17 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			case STORE: {
 				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE);
 				log.debug("moveProductPackage: (to) Store have " + currentAmount + ", set to: "
-						+ (currentAmount + amount));
+						+ (amount + currentAmount));
 				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_STORE, currentAmount,
-						currentAmount + amount);
+						amount + currentAmount);
 				break;
 			}
 			case WAREHOUSE: {
 				int currentAmount = getAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE);
 				log.debug("moveProductPackage: (to) Warehouse have " + currentAmount + ", set to: "
-						+ (currentAmount + amount));
+						+ (amount + currentAmount));
 				setNewAmountForStore(packageToMove, PRODUCTS_PACKAGES_TABLE.VALUE_PLACE_WAREHOUSE, currentAmount,
-						currentAmount + amount);
+						amount + currentAmount);
 				break;
 			}
 			case CART: {
@@ -1642,8 +1642,8 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 				}
 				int listID = getCartListId(sessionId), currentAmount = getAmountForCart(packageToMove, listID);
 				log.debug("moveProductPackage: (to) Cart have " + currentAmount + ", set to: "
-						+ (currentAmount + amount));
-				setNewAmountForCart(packageToMove, listID, currentAmount, currentAmount + amount);
+						+ (amount + currentAmount));
+				setNewAmountForCart(packageToMove, listID, currentAmount, amount + currentAmount);
 				break;
 			}
 			}
@@ -3771,7 +3771,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 			
 			List<CatalogProduct> resultList = new ArrayList<>();
 			
-			//TODO fix
 			if (productResult.getRow() != 0)
 				// adding all ingredients
 				while (!productResult.isAfterLast())
@@ -3815,11 +3814,6 @@ public class SQLDatabaseConnection implements ISQLDatabaseConnection {
 		}
 	}
 
-	@Override
-	public List<GroceryList> getGroceryListHistory() {
-		// TODO Auto-generated method stub
-		return new ArrayList<>();
-	}
 	
 	public String getCustomerUsernameBySessionID(int cartID) throws ClientNotConnected, CriticalError{
 		validateCartSessionEstablished(cartID);

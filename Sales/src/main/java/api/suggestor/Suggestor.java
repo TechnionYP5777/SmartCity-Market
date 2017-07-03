@@ -1,6 +1,5 @@
 package api.suggestor;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,7 +15,6 @@ import api.preferences.SalesPreferences;
 import api.types.StoreData;
 import api.types.sales.ProductSale;
 import ml.common.property.AProperty;
-import ml.common.property.basicproperties.ABasicProperty;
 import ml.common.property.saleproperty.ASaleProperty;
 import ml.decider.Decider;
 import ml.deducer.Deducer;
@@ -33,10 +31,10 @@ public class Suggestor {
 	
 	protected static Logger log = Logger.getLogger(Suggestor.class.getName());
 	
-	private volatile static StoreData storeData = new StoreData();
+	private static volatile StoreData storeData = new StoreData();
 	
-	private volatile static InputPreferences inPref = new InputPreferences();
-	private volatile static SalesPreferences salePref = new SalesPreferences(0.5);
+	private static volatile InputPreferences inPref = new InputPreferences();
+	private static volatile SalesPreferences salePref = new SalesPreferences(0.5);
 
 	public static void updateHistory(List<? extends IGroceryList> history) {
 		storeData = new StoreData(history, storeData.getStock(), storeData.getCatalog());
@@ -65,17 +63,10 @@ public class Suggestor {
 		StoreData currentData = storeData;
 		
 		try{
-			Set<ABasicProperty> initialProperties = Extractor.extractProperties(inPref, currentData, currentGrocery, purchasedProduct);
+			Set<AProperty> properties = Deducer.deduceProperties(salePref, Extractor.extractProperties(inPref, currentData, currentGrocery, purchasedProduct));
 			
-			Set<AProperty> properties = Deducer.deduceProperties(salePref, initialProperties);
-			
-			Set<ASaleProperty> salesProperties = properties.stream()
-					.filter(p -> p instanceof ASaleProperty)
-					.map(p -> (ASaleProperty)p )
-					.collect(Collectors.toSet());
-		
-		
-			ASaleProperty result = Decider.decideBestSale(salePref, salesProperties);
+			ASaleProperty result = Decider.decideBestSale(salePref, properties.stream().filter(p -> p instanceof ASaleProperty).map(p -> (ASaleProperty) p)
+					.collect(Collectors.toSet()));
 			
 			if (result == null || result.getOffer().getProduct().getBarcode() != purchasedProduct.getBarcode())
 				return null;
@@ -112,16 +103,10 @@ public class Suggestor {
 		
 		try {
 			
-			Set<ABasicProperty> initialProperties = Extractor.extractProperties(inPref, currentData, currentGrocery, null);
+			Set<AProperty> properties = Deducer.deduceProperties(salePref, Extractor.extractProperties(inPref, currentData, currentGrocery, null));
 			
-			Set<AProperty> properties = Deducer.deduceProperties(salePref, initialProperties);
-			
-			Set<ASaleProperty> salesProperties = properties.stream()
-					.filter(p -> p instanceof ASaleProperty)
-					.map(p -> (ASaleProperty)p )
-					.collect(Collectors.toSet());
-			
-			ASaleProperty result = Decider.decideSaleSimilar(salePref, salesProperties, offer);
+			ASaleProperty result = Decider.decideSaleSimilar(salePref, properties.stream().filter(p -> p instanceof ASaleProperty).map(p -> (ASaleProperty) p)
+					.collect(Collectors.toSet()), offer);
 			
 			if (result == null)
 				return null;
@@ -148,10 +133,7 @@ public class Suggestor {
 	}
 	
 	private static boolean isSystemMoreProfitable(ProductSale systemSale, ISale userOffer){
-		double userDiscount = 1 - (userOffer.getTotalPrice() / 
-				(userOffer.getTotalAmount() * userOffer.getProduct().getPrice()));
-		
-		return systemSale.getdiscount() > userDiscount;
+		return systemSale.getdiscount() > 1 - userOffer.getTotalPrice() / (userOffer.getTotalAmount() * userOffer.getProduct().getPrice());
 	}
 
 }

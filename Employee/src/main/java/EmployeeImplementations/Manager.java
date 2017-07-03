@@ -392,11 +392,11 @@ public class Manager extends Worker implements IManager {
 	}
 
 	@Override
-	public Integer createNewSale(Sale sale)
+	public Integer createNewSale(Sale s)
 			throws InvalidParameter, CriticalError, EmployeeNotConnected, ConnectionFailure, ParamIDAlreadyExists {
-		log.info("Creating createNewSale command wrapper with Sale: " + sale);
+		log.info("Creating createNewSale command wrapper with Sale: " + s);
 		String serverResponse = sendRequestWithRespondToServer(
-				(new CommandWrapper(getClientId(), CommandDescriptor.CREATE_NEW_SALE, Serialization.serialize(sale)))
+				(new CommandWrapper(getClientId(), CommandDescriptor.CREATE_NEW_SALE, Serialization.serialize(s)))
 						.serialize());
 
 		CommandWrapper commandDescriptor = getCommandWrapper(serverResponse);

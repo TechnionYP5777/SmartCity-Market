@@ -37,7 +37,7 @@ public class GetSalesForProductTest {
 	private ICustomer customer;
 	
 	long barcode = 1234567;
-	Sale sale = new Sale(1, barcode, 3, 22.0), testSale = null;
+	Sale sale = new Sale(1, barcode, 3, 22.0), testSale;
 	
 	@Mock
 	private IClientRequestHandler clientRequestHandler;

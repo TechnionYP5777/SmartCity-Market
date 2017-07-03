@@ -24,7 +24,7 @@ public class Sale {
 		id = -1;
 		productBarcode = Long.valueOf(0);
 		amountOfProducts = 0;
-		price = (double) 0;
+		price = 0.0;
 	}
 	
 	public Integer getId() {

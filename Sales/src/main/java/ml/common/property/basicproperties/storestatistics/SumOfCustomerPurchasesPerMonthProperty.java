@@ -17,10 +17,9 @@ public class SumOfCustomerPurchasesPerMonthProperty extends ABasicProperty {
 	
 	@Override
 	public String getDescription() {
-		return "The customer purchased " +
-				(monthAgo == 0 ? "this month " : 
-					monthAgo == 1 ? "1 month ago " : monthAgo + " months ago ") + 
-				"with total price of: " + sumOfPurchases;
+		return "The customer purchased "
+				+ (monthAgo == 0 ? "this month" : (monthAgo == 1 ? "1 month" : monthAgo + " months") + " ago") + " "
+				+ "with total price of: " + sumOfPurchases;
 	}
 
 	public SumOfCustomerPurchasesPerMonthProperty(int monthAgo, double sumOfPurchases, ADeductionRule deducer) {
@@ -30,7 +29,6 @@ public class SumOfCustomerPurchasesPerMonthProperty extends ABasicProperty {
 	}
 	
 	public SumOfCustomerPurchasesPerMonthProperty(int monthAgo, double sumOfPurchases) {
-		super();
 		this.monthAgo = monthAgo;
 		this.sumOfPurchases = sumOfPurchases;
 	}
@@ -45,24 +43,13 @@ public class SumOfCustomerPurchasesPerMonthProperty extends ABasicProperty {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + monthAgo;
-		return result;
+		return monthAgo + 31 * super.hashCode();
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SumOfCustomerPurchasesPerMonthProperty other = (SumOfCustomerPurchasesPerMonthProperty) obj;
-		if (monthAgo != other.monthAgo)
-			return false;
-		return true;
+	public boolean equals(Object o) {
+		return o == this || (super.equals(o) && getClass() == o.getClass()
+				&& monthAgo == ((SumOfCustomerPurchasesPerMonthProperty) o).monthAgo);
 	}
 	
 	

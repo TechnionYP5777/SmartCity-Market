@@ -97,8 +97,8 @@ public class ThreadPooledServerTest {
 		Thread client;
 		new Thread(server).start();
 		
-		/* waiting for server to run */
-		while (server.isStopped()) {}
+		while (server.isStopped())
+			;
 		
 		client = new Thread(new ClientRunner(SERVER_HOST_NAME_LOCAL));
 		client.start();
@@ -125,7 +125,7 @@ public class ThreadPooledServerTest {
 		
 		/* waiting for server to run */
 		
-		while (server.isStopped()) {}
+		while (server.isStopped());
 		
 		client = new Thread(new ClientRunner(SERVER_HOST_IP));
 		client.start();

@@ -37,7 +37,7 @@ public class ViewCatalogProductTest {
 
 	private ICustomer customer;
 	static SmartCode sc = new SmartCode(111,LocalDate.now());
-	CatalogProduct testCatalogProduct = null, catalogProduct = new CatalogProduct(1234567890, "name", null,
+	CatalogProduct testCatalogProduct, catalogProduct = new CatalogProduct(1234567890, "name", null,
 			new Manufacturer(1, "Manufacturer"), "description", 22.0, null, null);
 	@Mock
 	private IClientRequestHandler clientRequestHandler;

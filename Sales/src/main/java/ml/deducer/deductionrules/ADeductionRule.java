@@ -19,25 +19,15 @@ public abstract class ADeductionRule {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		
-		boolean isComparedWithAnyRuleQualifier = obj.getClass() == AnyDeductionRule.class;
-		if (isComparedWithAnyRuleQualifier){
-			return true;
-		}
-
-		return (getClass() == obj.getClass());
+	public boolean equals(Object o) {
+		return o == this || (o != null && (o.getClass() == AnyDeductionRule.class || getClass() == o.getClass()));
 	}
 	
-	public abstract Set<? extends AProperty> deduceProperties(SalesPreferences preferences, Set<AProperty> properties);
+	public abstract Set<? extends AProperty> deduceProperties(SalesPreferences p, Set<AProperty> ps);
 	
-	public abstract boolean canDeduceProperty(AProperty property);
+	public abstract boolean canDeduceProperty(AProperty p);
 	
-	public abstract Set<AProperty> whatNeedToDeduceProperty(AProperty property);
+	public abstract Set<AProperty> whatNeedToDeduceProperty(AProperty p);
 	
 }
 	

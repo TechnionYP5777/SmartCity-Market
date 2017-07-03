@@ -19,7 +19,6 @@ public abstract class ASaleProperty extends AProperty {
 	}
 	
 	public ASaleProperty() {
-		super();
 	}
 	
 	public abstract ProductSale getOffer();

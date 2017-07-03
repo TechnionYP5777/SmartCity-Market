@@ -279,8 +279,7 @@ public class ManagePackagesTab implements Initializable {
 		vbox.setSpacing(10);
 
 		datePickerForSmartCode = new JFXDatePicker();
-		Label lbl = new Label("Add Expiration Date To Your Barcode");
-		Label lbl2 = new Label("Than Hit The Search Button");
+		Label lbl = new Label("Add Expiration Date To Your Barcode"), lbl2 = new Label("Than Hit The Search Button");
 		vbox.getChildren().addAll(lbl,lbl2, datePickerForSmartCode);
 
 		JFXPopup popup = new JFXPopup(vbox);
@@ -345,23 +344,23 @@ public class ManagePackagesTab implements Initializable {
 			public void handle(MouseEvent event) {
 				remove.setDisable(false);
 
-				if (showMapOnClick.isSelected()) {
-					CatalogProduct p = null;
-					try {
-						p = worker.viewProductFromCatalog(expireds
-								.get(expiredList.getSelectionModel().getSelectedItem()).getSmartCode().getBarcode());
-					} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog
-							| ConnectionFailure e) {
-						log.fatal(e);
-						log.debug(StackTraceUtil.stackTraceToStr(e));
-						e.showInfoToUser();
-					}
-					Location loc = p.getLocations().iterator().next();
-					DialogMessagesService.showConfirmationWithCloseDialog(
-							"Product Location Is: " + "(col=" + loc.getX() + ", row=" + loc.getY() + ")", null,
-							new MarkLocationOnStoreMap().mark(loc.getX(), loc.getY()), new LocationMapClose());
-					popupExpired.hide();
+				if (!showMapOnClick.isSelected())
+					return;
+				CatalogProduct p = null;
+				try {
+					p = worker.viewProductFromCatalog(expireds.get(expiredList.getSelectionModel().getSelectedItem())
+							.getSmartCode().getBarcode());
+				} catch (InvalidParameter | CriticalError | EmployeeNotConnected | ProductNotExistInCatalog
+						| ConnectionFailure e) {
+					log.fatal(e);
+					log.debug(StackTraceUtil.stackTraceToStr(e));
+					e.showInfoToUser();
 				}
+				Location loc = p.getLocations().iterator().next();
+				DialogMessagesService.showConfirmationWithCloseDialog(
+						"Product Location Is: (col=" + loc.getX() + ", row=" + loc.getY() + ")", null,
+						new MarkLocationOnStoreMap().mark(loc.getX(), loc.getY()), new LocationMapClose());
+				popupExpired.hide();
 			}
 		});
 
@@ -433,9 +432,7 @@ public class ManagePackagesTab implements Initializable {
 		expireds = new HashMap<String, ProductPackage>();
 
 		try {
-			worker.getAllExpiredProductPackages().forEach(expired -> {
-				expireds.put(generateExpiredLayoutKey(expired), expired);
-			});
+			worker.getAllExpiredProductPackages().forEach(expired -> expireds.put(generateExpiredLayoutKey(expired), expired));
 		} catch (ConnectionFailure | CriticalError | EmployeeNotConnected e) {
 			log.fatal(e);
 			log.debug(StackTraceUtil.stackTraceToStr(e));
@@ -551,17 +548,15 @@ public class ManagePackagesTab implements Initializable {
 		barcodeOperationsPane.setVisible(!show);
 		(!show ? barcodeOperationsPane : smartcodeOperationsPane).toFront();
 
-		if (show) {
+		if (show)
 			runTheOprBtnTxt((JFXRadioButton) radioButtonContainerSmarcodeOperations.getSelected());
-		} else {
+		else
 			runTheOprBtnTxt((JFXRadioButton) radioButtonContainerBarcodeOperations.getSelected());
-		}
 
 	}
 
 	private void getProductCatalog() throws SMException {
 
-		catalogProduct = null;
 		catalogProduct = worker.viewProductFromCatalog(Long.parseLong(barcodeTextField.getText()));
 
 	}
@@ -659,11 +654,10 @@ public class ManagePackagesTab implements Initializable {
 					// exec
 					worker.addProductToWarehouse(pp);
 
-					if (printTheSmartCodeCheckBox.isSelected()) {
+					if (printTheSmartCodeCheckBox.isSelected())
 						new SmartcodePrint(smartcode, amountVal).print();
-					}
 
-					printToSuccessLog("Added (" + amountVal + ") " + "product packages (" + pp + ") to warehouse");
+					printToSuccessLog("Added (" + amountVal + ") product packages (" + pp + ") to warehouse");
 
 					this.expirationDate = datePicker.getValue();
 
@@ -675,14 +669,14 @@ public class ManagePackagesTab implements Initializable {
 				Location loc = new Location(0, 0, PlaceInMarket.STORE);
 				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
 				worker.placeProductPackageOnShelves(pp);
-				printToSuccessLog("Added (" + amountVal + ") " + "product packages (" + pp + ") to store");
+				printToSuccessLog("Added (" + amountVal + ") product packages (" + pp + ") to store");
 				updateToSmartCode();
 			} else if (removePackageFromStoreRadioButton.isSelected()) {
 				log.info("removePackageFromStoreRadioButton");
 				Location loc = new Location(0, 0, PlaceInMarket.STORE);
 				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
 				worker.removeProductPackageFromStore(pp);
-				printToSuccessLog("Removed (" + amountVal + ") " + "product packages (" + pp + ") from store");
+				printToSuccessLog("Removed (" + amountVal + ") product packages (" + pp + ") from store");
 				updateToSmartCode();
 			} else if (!removePackageFromWarhouseRadioButton.isSelected()) {
 				if (printSmartCodeRadioButton.isSelected())
@@ -692,7 +686,7 @@ public class ManagePackagesTab implements Initializable {
 				Location loc = new Location(0, 0, PlaceInMarket.WAREHOUSE);
 				ProductPackage pp = new ProductPackage(smartcode, amountVal, loc);
 				worker.removeProductPackageFromStore(pp);
-				printToSuccessLog("Removed (" + amountVal + ") " + "product packages (" + pp + ") from warehouse");
+				printToSuccessLog("Removed (" + amountVal + ") product packages (" + pp + ") from warehouse");
 				updateToSmartCode();
 			}
 
@@ -712,16 +706,16 @@ public class ManagePackagesTab implements Initializable {
 	@FXML
 	private void showMoreDetailsButtonPressed(ActionEvent __) {
 
-		if (catalogProduct != null) {
-			int xLocation = catalogProduct.getLocations().iterator().next().getX();
-			int yLocation = catalogProduct.getLocations().iterator().next().getY();
-			DialogMessagesService.showInfoDialog(catalogProduct.getName(), null,
-					"Barcode: " + catalogProduct.getBarcode() + "\n" + "Description: " + catalogProduct.getDescription()
-							+ "\n" + "Manufacturer: " + catalogProduct.getManufacturer().getName() + "\n"
-							+ "Ingredients: " + getIngredients() + "Price: " + catalogProduct.getPrice()
-							+ " Nis\nProduct Location " + "col=" + xLocation + ", row=" + yLocation + ")",
-					new MarkLocationOnStoreMap().mark(xLocation, yLocation));
-		}
+		if (catalogProduct == null)
+			return;
+		int xLocation = catalogProduct.getLocations().iterator().next().getX(),
+				yLocation = catalogProduct.getLocations().iterator().next().getY();
+		DialogMessagesService.showInfoDialog(catalogProduct.getName(), null,
+				"Barcode: " + catalogProduct.getBarcode() + "\nDescription: " + catalogProduct.getDescription()
+						+ "\nManufacturer: " + catalogProduct.getManufacturer().getName() + "\nIngredients: "
+						+ getIngredients() + "Price: " + catalogProduct.getPrice() + " Nis\nProduct Location col="
+						+ xLocation + ", row=" + yLocation + ")",
+				new MarkLocationOnStoreMap().mark(xLocation, yLocation));
 
 	}
 
@@ -771,15 +765,14 @@ public class ManagePackagesTab implements Initializable {
 	}
 
 	@Subscribe
-	public void onCatalogProductEvent(CatalogProductEvent event) {
+	public void onCatalogProductEvent(CatalogProductEvent e) {
 		mouseClikedOnBarcodeField(null);
 	}
 
 	@FXML
-	void enterSearchPressed(KeyEvent event) {
-		if (event.getCode().equals(KeyCode.ENTER)) {
+	void enterSearchPressed(KeyEvent e) {
+		if (e.getCode().equals(KeyCode.ENTER))
 			searchCodeButtonPressed(null);
-		}
 
 	}
 

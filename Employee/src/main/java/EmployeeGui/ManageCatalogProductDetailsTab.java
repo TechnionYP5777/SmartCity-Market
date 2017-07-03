@@ -198,9 +198,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	void addIngPressed() {
 		String newName = "";
 		try {
-			if (ingredients.containsKey(newIngr.getText())) {
+			if (ingredients.containsKey(newIngr.getText()))
 				throw new ParamIDAlreadyExists();
-			}
 			newName = newIngr.getText();
 			manager.addIngredient(new Ingredient(0, newName));
 			eventBus.post(new IngredientEvent());
@@ -221,9 +220,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 	void addManuPressed() {
 		String newName = "";
 		try {
-			if (manufacturars.containsKey(newManu.getText())) {
+			if (manufacturars.containsKey(newManu.getText()))
 				throw new ParamIDAlreadyExists();
-			}
 			newName = newManu.getText();
 			manager.addManufacturer(new Manufacturer(0, newName));
 			eventBus.post(new ManufacturerEvent());
@@ -267,10 +265,10 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		createIngredientList();
 		enableButtons();
 		enableAddButtons();
-		if (ingNames.length() > 0) {
-			String logMessage = "remove Ingredients: " + ingNames.toString() + " succeeded.";
-			printToSuccessLog(logMessage);
-		}
+		if (ingNames.length() <= 0)
+			return;
+		String logMessage = "remove Ingredients: " + ingNames.toString() + " succeeded.";
+		printToSuccessLog(logMessage);
 	}
 
 	@FXML
@@ -299,10 +297,10 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		createManufacturerList();
 		enableButtons();
 		enableAddButtons();
-		if (manuNames.length() > 0) {
-			String logMessage = "remove Manufacturers: " + manuNames.toString() + " succeeded.";
-			printToSuccessLog(logMessage);
-		}
+		if (manuNames.length() <= 0)
+			return;
+		String logMessage = "remove Manufacturers: " + manuNames.toString() + " succeeded.";
+		printToSuccessLog(logMessage);
 	}
 
 	@Override
@@ -323,9 +321,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		// for multiple selection
 		manufacturerList.addEventFilter(MouseEvent.MOUSE_PRESSED, evt -> {
 			Node node = evt.getPickResult().getIntersectedNode();
-			while (node != null && node != manufacturerList && !(node instanceof ListCell)) {
+			while (node != null && node != manufacturerList && !(node instanceof ListCell))
 				node = node.getParent();
-			}
 			if (node instanceof ListCell) {
 				evt.consume();
 				ListCell<?> cell = (ListCell<?>) node;
@@ -333,11 +330,10 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 				lv.requestFocus();
 				if (!cell.isEmpty()) {
 					int index = cell.getIndex();
-					if (cell.isSelected()) {
-						lv.getSelectionModel().clearSelection(index);
-					} else {
+					if (!cell.isSelected())
 						lv.getSelectionModel().select(index);
-					}
+					else
+						lv.getSelectionModel().clearSelection(index);
 				}
 
 				ObservableList<String> selectedItems = manufacturerList.getSelectionModel().getSelectedItems();
@@ -362,9 +358,8 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 		// for multiple selection
 		ingredientsList.addEventFilter(MouseEvent.MOUSE_PRESSED, evt -> {
 			Node node = evt.getPickResult().getIntersectedNode();
-			while (node != null && node != ingredientsList && !(node instanceof ListCell)) {
+			while (node != null && node != ingredientsList && !(node instanceof ListCell))
 				node = node.getParent();
-			}
 			if (node instanceof ListCell) {
 				evt.consume();
 
@@ -375,11 +370,10 @@ public class ManageCatalogProductDetailsTab implements Initializable {
 
 				if (!cell.isEmpty()) {
 					int index = cell.getIndex();
-					if (cell.isSelected()) {
-						lv.getSelectionModel().clearSelection(index);
-					} else {
+					if (!cell.isSelected())
 						lv.getSelectionModel().select(index);
-					}
+					else
+						lv.getSelectionModel().clearSelection(index);
 				}
 
 				ObservableList<String> selectedItems = ingredientsList.getSelectionModel().getSelectedItems();

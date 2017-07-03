@@ -8,7 +8,7 @@ import api.contracts.IProduct;
 
 public class ProductMock implements IProduct {
 
-	final private static int NUM_OF_PRODUCTS = 100; 
+	private static final int NUM_OF_PRODUCTS = 100; 
 	long barcode;
 	String name;
 	ManufacturerMock manufacturer;
@@ -16,7 +16,6 @@ public class ProductMock implements IProduct {
 	Set<IngredientMock> ingredients = new HashSet<>();
 	
 	public ProductMock(long barcode) {
-		super();
 		this.barcode = barcode;
 	}
 	
@@ -56,8 +55,8 @@ public class ProductMock implements IProduct {
 		return this;
 	}
 
-	public ProductMock setManufacturer(ManufacturerMock manufacturer) {
-		this.manufacturer = manufacturer;
+	public ProductMock setManufacturer(ManufacturerMock m) {
+		this.manufacturer = m;
 		
 		return this;
 	}
@@ -74,8 +73,8 @@ public class ProductMock implements IProduct {
 		return this;
 	}
 
-	public ProductMock addIngredients(IngredientMock ingredient) {
-		this.ingredients.add(ingredient);
+	public ProductMock addIngredients(IngredientMock m) {
+		this.ingredients.add(m);
 		
 		return this;
 	}
@@ -88,24 +87,12 @@ public class ProductMock implements IProduct {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (barcode ^ (barcode >>> 32));
-		return result;
+		return (int) (barcode ^ (barcode >>> 32)) + 31;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ProductMock other = (ProductMock) obj;
-		if (barcode != other.barcode)
-			return false;
-		return true;
+	public boolean equals(Object o) {
+		return o == this || (o != null && getClass() == o.getClass() && barcode == ((ProductMock) o).barcode);
 	}
 
 }

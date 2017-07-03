@@ -22,15 +22,15 @@ public class IfNumAndSumBuying_ThenCalcAverage_Rule extends ADeductionRule {
 
 	
 	@Override
-	public Set<? extends AProperty> deduceProperties(SalesPreferences preferences, Set<AProperty> properties) {
+	public Set<? extends AProperty> deduceProperties(SalesPreferences preferences, Set<AProperty> ps) {
 
-		Map<Integer, Integer> buyersCount =  properties.stream()
+		Map<Integer, Integer> buyersCount =  ps.stream()
 				.filter(p -> p instanceof NumOfBuyersPerMonthProperty)
 				.map(p -> (NumOfBuyersPerMonthProperty) p)
 				.collect(Collectors.groupingBy((NumOfBuyersPerMonthProperty p) ->  p.getMonthAgo(),
 						Collectors.summingInt((NumOfBuyersPerMonthProperty p) ->  p.getNumOfBuyers())));
 		
-		Map<Integer, Double> buyersSum =  properties.stream()
+		Map<Integer, Double> buyersSum =  ps.stream()
 				.filter(p -> p instanceof SumOfPurchasesPerMonthProperty)
 				.map(p -> (SumOfPurchasesPerMonthProperty) p)
 				.collect(Collectors.groupingBy((SumOfPurchasesPerMonthProperty p) ->  p.getMonthAgo(),
@@ -38,7 +38,7 @@ public class IfNumAndSumBuying_ThenCalcAverage_Rule extends ADeductionRule {
 		
 		Set<AverageCartPricePerMonthProperty> result = new HashSet<>();
 		
-		for (int i = 0; i < AverageCartPricePerMonthProperty.goMonthesBackLimit; i++)
+		for (int i = 0; i < AverageCartPricePerMonthProperty.goMonthesBackLimit; ++i)
 			result.add(new AverageCartPricePerMonthProperty(i,
 					!buyersCount.containsKey(i) || !buyersSum.containsKey(i) ||
 					buyersCount.get(i) == 0 ? 0 : buyersSum.get(i)/buyersCount.get(i)));
@@ -47,16 +47,16 @@ public class IfNumAndSumBuying_ThenCalcAverage_Rule extends ADeductionRule {
 	}
 	
 	@Override
-	public boolean canDeduceProperty(AProperty property) {
-		return property instanceof AverageCartPricePerMonthProperty;
+	public boolean canDeduceProperty(AProperty p) {
+		return p instanceof AverageCartPricePerMonthProperty;
 	}
 
 	@Override
-	public Set<AProperty> whatNeedToDeduceProperty(AProperty property) {
-		if (!canDeduceProperty(property))
+	public Set<AProperty> whatNeedToDeduceProperty(AProperty p) {
+		if (!canDeduceProperty(p))
 			return null;
 		
-		AverageCartPricePerMonthProperty actualProperty = (AverageCartPricePerMonthProperty) property;
+		AverageCartPricePerMonthProperty actualProperty = (AverageCartPricePerMonthProperty) p;
 		
 		Set<AProperty> result = new HashSet<>();
 		result.add(new NumOfBuyersPerMonthProperty(actualProperty.getMonthAgo(), 0));

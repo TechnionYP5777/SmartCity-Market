@@ -40,15 +40,10 @@ public class HealthyRatedProductProperty extends ABasicProperty {
 		this.product = product;
 	}
 	
-	public static boolean isProductRatedHealthy(IProduct product){
-		Set<String> productIngredientsNames = 
-				product.getIngredients()
-				.stream()
-				.map(i -> i.getName())
-				.collect(Collectors.toSet());
-
+	public static boolean isProductRatedHealthy(IProduct p){
 		Set<String> intersection = new HashSet<String>(healthyRatedIngredientsNames);
-		intersection.retainAll(productIngredientsNames);
+
+		intersection.retainAll(p.getIngredients().stream().map(i -> i.getName()).collect(Collectors.toSet()));
 		return intersection.size() >= intersectionSizeToBeRatedHealthy;
 	}
 
@@ -58,21 +53,16 @@ public class HealthyRatedProductProperty extends ABasicProperty {
 	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((product == null) ? 0 : product.hashCode());
-		return result;
+		return 31 * super.hashCode() + ((product == null) ? 0 : product.hashCode());
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object o) {
+		if (o == this)
 			return true;
-		if (!super.equals(obj))
+		if (!super.equals(o) || getClass() != o.getClass())
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		HealthyRatedProductProperty other = (HealthyRatedProductProperty) obj;
+		HealthyRatedProductProperty other = (HealthyRatedProductProperty) o;
 		if (product == null) {
 			if (other.product != null)
 				return false;
