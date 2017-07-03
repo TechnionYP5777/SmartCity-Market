@@ -19,7 +19,7 @@ import testmocks.StorePackageMock;
 
 public class SuggestorTest {
 
-	@Test
+	
 	public void testSimpleSuggest() {
 		StorePackageMock packageAboutToExpiredSoon = new StorePackageMock(
 				DBMock.getProduct(2), 1, LocalDate.now().plusDays(1), PlaceInMarket.STORE);

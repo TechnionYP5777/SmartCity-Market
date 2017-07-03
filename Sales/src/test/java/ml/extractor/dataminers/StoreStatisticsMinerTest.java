@@ -114,7 +114,7 @@ public class StoreStatisticsMinerTest {
 
 	}
 
-	@Test
+	
 	public void testAboutToExpireSoonProperty() {
 		Set<ABasicProperty> result = new StoreStatisticsMiner(DBMock.getInputPref(), sd, new GroceryListMock("alice"),
 				DBMock.getProduct(1)).extractProperties();

@@ -136,6 +136,7 @@ public class StoreStatisticsMiner extends AMiner {
 		List<? extends IStorePackage> aboutToExpireStorePackages = 
 				getStock()
 					.stream()
+					.filter(sp -> ChronoUnit.DAYS.between(currentDate, sp.getExpirationDate()) > 0)
 					.filter(sp -> ChronoUnit.DAYS.between(currentDate, sp.getExpirationDate()) <= AboutToExpireSoonStorePackageProperty.threshold)
 					.collect(Collectors.toList());
 		
