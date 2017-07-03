@@ -500,8 +500,9 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 					Sale sale = registeredCustomer.offerSpecailSaleForProduct(new Sale(-1, currentProduct.getBarcode(),
 							Integer.parseInt(amount.getText()), Double.parseDouble(price.getText())));
 					if (sale.isValid()) {
-						DialogMessagesService.showConfirmationDialog("Offer A Sale", null, "Your Sale Offer Accepted!",
-								null);
+						offerSpecialSale(sale, "This Is The Sale The System Offers");
+
+						
 					} else {
 						DialogMessagesService.showConfirmationDialog("Offer A Sale", null,
 								"The System Don't Accept Your Sale Offer", null);
@@ -663,11 +664,7 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 					Sale specialSale = registeredCustomer.getSpecailSaleForProduct(catalogProduct.getBarcode());
 
 					if (specialSale.isValid()) {
-						DialogMessagesService.showConfirmationDialog("Special Sale just for you!", null,
-								specialSale.getSaleAsString() + "\n" + "If you want to take the sale, click 'Yes' "
-										+ "add the products to your grocery list",
-								new SpecialSaleHandler(specialSale));
-						catalogProduct.setSpecialSale(specialSale);
+						offerSpecialSale(specialSale, null);
 					}
 				}
 				if (registeredCustomer != null)
@@ -694,6 +691,15 @@ public class CustomerMainScreen implements Initializable, IConfiramtionDialog {
 	}
 
 	});}
+	
+	private void offerSpecialSale(Sale specialSale, String txt) {
+		String sendTxt = txt != null ? txt : "Special Sale just for you!";
+		DialogMessagesService.showConfirmationDialog(sendTxt, null,
+				specialSale.getSaleAsString() + "\n" + "If you want to take the sale, click 'Yes' "
+						+ "add the products to your grocery list",
+				new SpecialSaleHandler(specialSale));
+		catalogProduct.setSpecialSale(specialSale);
+	}
 
 	private void checkIngredients(
 			CatalogProduct catalogProduct) /* throws CriticalError */ {
