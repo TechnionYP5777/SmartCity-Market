@@ -413,17 +413,21 @@ public class Customer extends ACustomer implements ICustomer, IForgotPasswordHan
 	public Double getTotalSum() {
 		Double totalSum = Double.valueOf(0);
 		
-		for (CartProduct cartProduct : cartProductCache.values())
-			if (cartProduct.getCatalogProduct().getSale().isValid()) {
+		for (CartProduct cartProduct : cartProductCache.values()) {
+			Sale sale = cartProduct.getCatalogProduct().getSpecialSale().isValid() ? cartProduct.getCatalogProduct().getSpecialSale() :
+																					 cartProduct.getCatalogProduct().getSale();
+			
+			if (sale.isValid()) {
 				int cartProductAmount = cartProduct.getTotalAmount(),
-						saleAmount = cartProduct.getCatalogProduct().getSale().getAmountOfProducts(),
+						saleAmount = sale.getAmountOfProducts(),
 						numberOfActiveSales = cartProductAmount / saleAmount;
 				
-				totalSum += numberOfActiveSales * cartProduct.getCatalogProduct().getSale().getPrice()
+				totalSum += numberOfActiveSales * sale.getPrice()
 						+ (cartProductAmount % saleAmount) * cartProduct.getCatalogProduct().getPrice();
 			} else {
 				totalSum += (double)cartProduct.getTotalAmount() * cartProduct.getCatalogProduct().getPrice();
-			}
+			}	
+		}
 		
 		return totalSum;
 	}
