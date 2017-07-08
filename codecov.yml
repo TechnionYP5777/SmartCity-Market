@@ -36,4 +36,3 @@ coverage:
      - "Customer/src/main/java/CustomerGuiScreens/"
      - "Customer/src/main/java/CustomerDI/"
      - "Server/src/main/java/ServerRunner/"
-     - "Server/src/main/java/CommandHandler/CommandExecuter.java"
